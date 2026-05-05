@@ -321,7 +321,7 @@ All product custom metafields with non-empty values:
             {%- if how_video != blank -%}
               {{ how_video | video_tag: image_size: '1100x', controls: true, loop: true, muted: true, autoplay: false }}
             {%- elsif section.settings.how_poster != blank -%}
-              <img src="{{ section.settings.how_poster | image_url: width: 1200 }}" alt="How to make sprouts" loading="lazy">
+              <img src="{{ section.settings.how_poster | image_url: width: 1200 }}" alt="How to make sprouts" loading="lazy" width="1200" height="1200">
             {%- endif -%}
             {%- if section.settings.how_pill != blank -%}
               <span class="hm-watch-pill">{{ section.settings.how_pill }}</span>
@@ -388,12 +388,12 @@ All product custom metafields with non-empty values:
           <div class="compare-images">
             <div class="compare-image">
               {%- if cmp_left != blank -%}
-                <img src="{{ cmp_left | image_url: width: 800 }}" alt="{{ section.settings.compare_left_label }}" loading="lazy">
+                <img src="{{ cmp_left | image_url: width: 800 }}" alt="{{ section.settings.compare_left_label }}" loading="lazy" width="800" height="600">
               {%- else -%}{{ section.settings.compare_left_emoji }}{%- endif -%}
             </div>
             <div class="compare-image">
               {%- if cmp_right != blank -%}
-                <img src="{{ cmp_right | image_url: width: 800 }}" alt="{{ section.settings.compare_right_label }}" loading="lazy">
+                <img src="{{ cmp_right | image_url: width: 800 }}" alt="{{ section.settings.compare_right_label }}" loading="lazy" width="800" height="600">
               {%- else -%}{{ section.settings.compare_right_emoji }}{%- endif -%}
             </div>
           </div>
@@ -494,7 +494,7 @@ All product custom metafields with non-empty values:
                 {%- if reel.video != blank -%}
                   {{ reel.video | video_tag: image_size: '600x', controls: false, loop: true, muted: true, autoplay: true }}
                 {%- elsif reel.poster != blank -%}
-                  <img src="{{ reel.poster | image_url: width: 600 }}" alt="{{ reel.caption | default: reel.author_handle | default: 'Customer reel' | escape }}" loading="lazy">
+                  <img src="{{ reel.poster | image_url: width: 600 }}" alt="{{ reel.caption | default: reel.author_handle | default: 'Customer reel' | escape }}" loading="lazy" width="600" height="1067">
                 {%- else -%}📷{%- endif -%}
                 {%- if reel.author_handle != blank -%}
                   <span class="reels-handle">{{ reel.author_handle }}</span>
@@ -511,7 +511,7 @@ All product custom metafields with non-empty values:
                 {%- if block.settings.video != blank -%}
                   {{ block.settings.video | video_tag: image_size: '600x', controls: false, loop: true, muted: true, autoplay: true }}
                 {%- elsif block.settings.poster != blank -%}
-                  <img src="{{ block.settings.poster | image_url: width: 600 }}" alt="{{ block.settings.caption | default: 'Customer reel' | escape }}" loading="lazy">
+                  <img src="{{ block.settings.poster | image_url: width: 600 }}" alt="{{ block.settings.caption | default: 'Customer reel' | escape }}" loading="lazy" width="600" height="1067">
                 {%- else -%}📷{%- endif -%}
               </div>
             {%- endfor -%}
@@ -534,7 +534,7 @@ All product custom metafields with non-empty values:
         <div class="box-grid">
           <div class="box-image">
             {%- if box_img != blank -%}
-              <img src="{{ box_img | image_url: width: 1200 }}" alt="What is in the box" loading="lazy">
+              <img src="{{ box_img | image_url: width: 1200 }}" alt="What is in the box" loading="lazy" width="1200" height="750">
             {%- else -%}🫙{%- endif -%}
           </div>
           <div>
@@ -600,7 +600,7 @@ All product custom metafields with non-empty values:
                 </div>
                 <div class="rev-photo">
                   {%- if review.photo != blank -%}
-                    <img src="{{ review.photo | image_url: width: 800 }}" alt="{{ review.name }}" loading="lazy">
+                    <img src="{{ review.photo | image_url: width: 800 }}" alt="{{ review.name }}" loading="lazy" width="800" height="800">
                   {%- else -%}
                     <span class="photo-placeholder">📷</span>
                   {%- endif -%}
@@ -620,7 +620,7 @@ All product custom metafields with non-empty values:
                 </div>
                 <div class="rev-photo">
                   {%- if block.settings.photo != blank -%}
-                    <img src="{{ block.settings.photo | image_url: width: 800 }}" alt="{{ block.settings.name }}" loading="lazy">
+                    <img src="{{ block.settings.photo | image_url: width: 800 }}" alt="{{ block.settings.name }}" loading="lazy" width="800" height="800">
                   {%- else -%}
                     <span class="photo-placeholder">📷</span>
                   {%- endif -%}
