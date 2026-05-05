@@ -56,6 +56,30 @@
 
 <div data-kit="sprouts" class="sprout-pdp">
 
+  {%- if request.url contains 'gbdebug=1' -%}
+    <pre style="position:fixed;bottom:0;left:0;right:0;max-height:40vh;overflow:auto;background:#1f1f1d;color:#e8f4dc;font:11px/1.4 monospace;padding:14px;z-index:99999;border-top:3px solid #ff7300;white-space:pre-wrap;word-break:break-all;">[GB DEBUG · append ?gbdebug=1]
+featured_reviews         exists?       {% if p.metafields.custom.featured_reviews %}YES{% else %}NO{% endif %}
+featured_reviews.type                = {{ p.metafields.custom.featured_reviews.type | default: 'nil' }}
+featured_reviews.value.size          = {{ p.metafields.custom.featured_reviews.value.size | default: 0 }}
+mf_reviews assigned blank?           = {% if mf_reviews == blank %}YES (won't render){% else %}NO{% endif %}
+
+featured_reviews.value (first entry):
+  type:    {{ p.metafields.custom.featured_reviews.value.first.type | default: 'nil' }}
+  handle:  {{ p.metafields.custom.featured_reviews.value.first.system.handle | default: 'nil' }}
+  quote:   {{ p.metafields.custom.featured_reviews.value.first.quote | default: '(empty)' }}
+  name:    {{ p.metafields.custom.featured_reviews.value.first.name | default: '(empty)' }}
+  meta:    {{ p.metafields.custom.featured_reviews.value.first.meta | default: '(empty)' }}
+  photo:   {% if p.metafields.custom.featured_reviews.value.first.photo %}{{ p.metafields.custom.featured_reviews.value.first.photo | image_url: width: 80 }}{% else %}(empty){% endif %}
+
+All product custom metafields with non-empty values:
+{%- for mf in p.metafields.custom -%}
+  {%- if mf[1] != blank %}
+  • custom.{{ mf[0] }} ({{ mf[1].type }}) — list size: {{ mf[1].value.size | default: '—' }}
+  {%- endif -%}
+{%- endfor %}
+</pre>
+  {%- endif -%}
+
   {%- comment %} ============== 1. HERO ============== {% endcomment -%}
   <section class="pdp-hero">
     <div class="container">
