@@ -1,3 +1,3 @@
 Handle,Command,Metafield: custom.companion_size_product [product_reference],Metafield: custom.cross_sell_products [list.product_reference]
-sprout-maker-700ml,UPDATE,gid://shopify/Product/REPLACE_WITH_1000ML_ID,"[""gid://shopify/Product/REPLACE_WITH_REFILL_ID_1"",""gid://shopify/Product/REPLACE_WITH_REFILL_ID_2"",""gid://shopify/Product/REPLACE_WITH_RECIPE_BOOK_ID""]"
-sprout-maker-1000ml,UPDATE,gid://shopify/Product/REPLACE_WITH_700ML_ID,"[""gid://shopify/Product/REPLACE_WITH_REFILL_ID_1"",""gid://shopify/Product/REPLACE_WITH_REFILL_ID_2"",""gid://shopify/Product/REPLACE_WITH_RECIPE_BOOK_ID""]"
+sprout-making-jar,UPDATE,gid://shopify/Product/9271679877353,
+sprout-maker-1-l,UPDATE,gid://shopify/Product/9271675977961,
