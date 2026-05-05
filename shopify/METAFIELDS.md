@@ -92,16 +92,41 @@ Then create entries in **Content → Metaobjects → Kit Review** and reference 
 
 ---
 
-## C. Matrixify import — 3 steps
+## C. Matrixify import (`shopify/matrixify/`)
 
 ```
-shopify/matrixify/
-├── build_final_csv.py                       # Regenerator (read-only of the user CSV → enriched CSV)
-├── Sprout-Maker-Shopify-Products-FINAL.csv  # ★ STEP 1 — upload this in Matrixify
-└── sprout-maker-references.csv              # STEP 2 — product references (after IDs exist)
+matrixify/
+├── build_final_csv.py                       # Regenerator for the products CSV
+├── Sprout-Maker-Shopify-Products-FINAL.csv  # PASS 2 — products + variants + simple metafields
+├── sprout-maker-references.csv              # PASS 3 — product references (after IDs exist)
+├── Sprout-Maker-Metafield-Definitions.csv   # Reference list — NOT importable via Matrixify (see Pass 1)
+└── create_definitions_via_api.py            # PASS 1 — creates definitions via Shopify GraphQL API
 ```
 
-### Step 1 — Import products (`Sprout-Maker-Shopify-Products-FINAL.csv`)
+> ⚠️ **Matrixify does NOT support metafield definitions import.** It only handles metafield *values*. To create the definitions, run `create_definitions_via_api.py` (uses Shopify's Admin GraphQL API directly), or switch to a Matrixify-compatible alternative like Altera. The `*Definitions.csv` is kept as a human-readable reference only.
+
+### Pass 1 — Create metafield definitions via the Shopify Admin API
+
+`create_definitions_via_api.py` creates the `kit_review` metaobject + all 17 metafield definitions in one shot. Idempotent (re-running skips existing definitions).
+
+**One-time setup (5 minutes):**
+
+1. **Settings → Apps and sales channels → Develop apps** → enable custom app development if prompted, then **Create an app** → name it "Sprout Maker Setup".
+2. **Configure Admin API scopes** → tick `read_products`, `write_products`, `read_metaobjects`, `write_metaobjects` → Save.
+3. **Install app** → **Reveal token once** → copy the `shpat_...` token.
+
+**Run:**
+
+```bash
+cd shopify/matrixify
+SHOP_DOMAIN=ferment-jar.myshopify.com \
+ADMIN_TOKEN=shpat_xxxxxxxxxxxxxxxx \
+python3 create_definitions_via_api.py
+```
+
+The script prints one line per definition; expect `Summary: 17 created, 0 skipped, 0 failed` on a fresh store, or `0 created, 17 skipped, 0 failed` if everything already exists.
+
+### Pass 2 — Import products (`Sprout-Maker-Shopify-Products-FINAL.csv`)
 
 Drop this file into **Matrixify → Import**. It mirrors your original CSV's structure (65 columns total: 58 of yours + 7 new) with all metafield values pre-filled.
 
@@ -126,7 +151,7 @@ Variant tags filled by the script:
 | SM-1000-2J | Families | TOP SELLER |
 | SM-1000-4J | Big families / Workplace pantry | BEST VALUE |
 
-### Step 2 — Set product references (`sprout-maker-references.csv`)
+### Pass 3 — Set product references (`sprout-maker-references.csv`)
 
 Once Step 1 completes, find the new product IDs (Shopify Admin URL or a Matrixify products export) and replace the `REPLACE_WITH_*_ID` placeholders in `sprout-maker-references.csv`. Then upload it to set:
 
