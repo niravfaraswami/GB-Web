@@ -1,0 +1,50 @@
+<section class="faq-section" data-kit="sprouts">
+  <div class="container">
+    <div class="section-header centered">
+      <div class="eyebrow">{{ section.settings.eyebrow }}</div>
+      <h2>{{ section.settings.heading }}<br><em>{{ section.settings.heading_em }}</em></h2>
+    </div>
+    <div class="faq-list">
+      {%- for block in section.blocks -%}
+        <div class="faq-item {% if forloop.first %}open{% endif %}" data-faq {{ block.shopify_attributes }}>
+          <div class="faq-q">
+            <span>{{ block.settings.question }}</span>
+            <span class="faq-toggle">+</span>
+          </div>
+          <div class="faq-a">{{ block.settings.answer }}</div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll('[data-faq]').forEach(item => {
+    item.addEventListener('click', () => item.classList.toggle('open'));
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Sprout — FAQ",
+  "tag": "section",
+  "class": "section--sprout-faq",
+  "max_blocks": 20,
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "QUESTIONS?" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "COMMON" },
+    { "type": "text", "id": "heading_em", "label": "Heading (highlighted)", "default": "QUESTIONS." }
+  ],
+  "blocks": [
+    {
+      "type": "faq",
+      "name": "FAQ item",
+      "settings": [
+        { "type": "text", "id": "question", "label": "Question" },
+        { "type": "richtext", "id": "answer", "label": "Answer" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Sprout — FAQ" }]
+}
+{% endschema %}

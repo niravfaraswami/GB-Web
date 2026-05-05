@@ -1,0 +1,236 @@
+{{ 'sprout-maker.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign p = product
+  assign tagline = p.metafields.custom.tagline | default: 'Fresh, crunchy sprouts in 2–3 days. No smell. No mess. Just water and a jar.'
+  assign save_badge = p.metafields.custom.save_badge_text
+  assign rating = p.metafields.custom.review_rating | default: 4.85
+  assign review_count = p.metafields.custom.review_count | default: 0
+  assign jar_capacity = p.metafields.custom.jar_capacity | default: '700ml'
+  assign best_for = p.metafields.custom.best_for | default: 'Solo / Trial'
+  assign companion = p.metafields.custom.companion_size_product.value
+  assign jar_chart = p.metafields.custom.jar_size_chart_image
+-%}
+
+<section class="pdp-hero" data-kit="sprouts">
+  <div class="container">
+    {%- if section.settings.show_breadcrumb -%}
+      <div class="breadcrumb">
+        <a href="{{ routes.root_url }}">Home</a> /
+        {%- if collection -%}<a href="{{ collection.url }}">{{ collection.title }}</a> /{%- endif -%}
+        <span>{{ p.title }}</span>
+      </div>
+    {%- endif -%}
+
+    <div class="hero-title-block">
+      <h1 class="product-name">{{ p.title }}</h1>
+      <p class="product-tagline">{{ tagline }}</p>
+    </div>
+
+    <div class="hero-grid">
+      <div class="gallery-stack">
+        <div class="gallery-main">
+          {%- if save_badge != blank -%}
+            <span class="save-badge">{{ save_badge }}</span>
+          {%- endif -%}
+          {%- if p.featured_media -%}
+            {{ p.featured_media | image_url: width: 1200 | image_tag:
+               loading: 'eager',
+               width: p.featured_media.width,
+               height: p.featured_media.height,
+               alt: p.featured_media.alt | default: p.title,
+               class: 'gallery-main-img' }}
+          {%- else -%}
+            <div class="gallery-illustration">🌱</div>
+          {%- endif -%}
+        </div>
+        {%- if p.media.size > 1 -%}
+          <div class="gallery-thumbs">
+            {%- for media in p.media limit: 6 -%}
+              <button class="gallery-thumb {% if forloop.first %}active{% endif %}"
+                      type="button"
+                      data-media-id="{{ media.id }}"
+                      aria-label="View image {{ forloop.index }}">
+                {{ media | image_url: width: 180 | image_tag:
+                   loading: 'lazy',
+                   width: 90, height: 90,
+                   alt: media.alt | default: p.title }}
+              </button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      <div class="product-info">
+        {%- if review_count > 0 -%}
+          <div class="rating-row">
+            <span class="stars" aria-label="{{ rating }} out of 5">★★★★★</span>
+            <a href="#judgeme-reviews" class="rating-link">{{ rating }} ({{ review_count }} reviews)</a>
+          </div>
+        {%- endif -%}
+
+        {%- assign activity = p.metafields.custom.activity_items.value -%}
+        {%- if activity != blank -%}
+          <div class="activity-row">
+            {%- for item in activity -%}
+              {%- assign parts = item | split: '|' -%}
+              <div class="item">
+                <span>{{ parts[0] }}</span>
+                <span>{{ parts[1] }}</span>
+              </div>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+
+        {%- assign benefits = p.metafields.custom.benefits_items.value -%}
+        {%- if benefits != blank -%}
+          <div class="benefits-block">
+            <div class="label">Why this kit</div>
+            <div class="benefits-grid">
+              {%- for b in benefits -%}
+                {%- assign parts = b | split: '|' -%}
+                <div class="benefit-item">
+                  <span class="benefit-icon">{{ parts[0] }}</span>
+                  <span>{{ parts[1] }}</span>
+                </div>
+              {%- endfor -%}
+            </div>
+          </div>
+        {%- endif -%}
+
+        <product-form>
+          {%- form 'product', p, id: 'sprout-product-form', class: 'sprout-form' -%}
+            <input type="hidden" name="id" value="{{ p.selected_or_first_available_variant.id }}">
+
+            <div class="variant-block">
+              <div class="variant-label">Select Size</div>
+              <div class="variant-grid">
+                <div class="variant active" aria-current="true">
+                  <span class="variant-tag">YOU'RE VIEWING</span>
+                  <span class="variant-radio"></span>
+                  <div class="variant-pack">{{ jar_capacity | upcase }}</div>
+                  <div class="variant-rationale">
+                    <div class="vr-row"><span class="vr-label">BEST FOR</span><span class="vr-text">{{ best_for }}</span></div>
+                  </div>
+                  <div class="variant-price">
+                    <span>{{ p.price | money }}</span>
+                    {%- if p.compare_at_price > p.price -%}
+                      <span class="variant-compare">{{ p.compare_at_price | money }}</span>
+                    {%- endif -%}
+                  </div>
+                  {%- if p.compare_at_price > p.price -%}
+                    <span class="variant-save">You save {{ p.compare_at_price | minus: p.price | money }}</span>
+                  {%- endif -%}
+                </div>
+
+                {%- if companion -%}
+                  {%- assign other_capacity = companion.metafields.custom.jar_capacity | default: 'Other size' -%}
+                  {%- assign other_best_for = companion.metafields.custom.best_for | default: '' -%}
+                  <a class="variant variant--link" href="{{ companion.url }}">
+                    <span class="variant-radio"></span>
+                    <div class="variant-pack">{{ other_capacity | upcase }}</div>
+                    <div class="variant-rationale">
+                      <div class="vr-row"><span class="vr-label">BEST FOR</span><span class="vr-text">{{ other_best_for }}</span></div>
+                    </div>
+                    <div class="variant-price">
+                      <span>{{ companion.price | money }}</span>
+                      {%- if companion.compare_at_price > companion.price -%}
+                        <span class="variant-compare">{{ companion.compare_at_price | money }}</span>
+                      {%- endif -%}
+                    </div>
+                    {%- if companion.compare_at_price > companion.price -%}
+                      <span class="variant-save">You save {{ companion.compare_at_price | minus: companion.price | money }}</span>
+                    {%- endif -%}
+                  </a>
+                {%- endif -%}
+              </div>
+
+              {%- if jar_chart != blank or p.metafields.custom.help_note != blank -%}
+                <div class="variant-help-note">
+                  <span class="vhn-text">{{ p.metafields.custom.help_note | default: 'Choose the size that fits your household.' }}</span>
+                  {%- if jar_chart != blank -%}
+                    <button type="button" class="vhn-link" data-open-size-modal>Jar Size Chart →</button>
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+            </div>
+
+            <button type="submit"
+                    name="add"
+                    class="atc-btn"
+                    {% unless p.available %}disabled{% endunless %}>
+              {%- if p.available -%}
+                ADD TO CART · {{ p.price | money }}
+              {%- else -%}
+                SOLD OUT
+              {%- endif -%}
+            </button>
+          {%- endform -%}
+        </product-form>
+
+        <div class="trust-strip">
+          {%- assign trust = p.metafields.custom.hero_trust_strip.value -%}
+          {%- if trust != blank -%}
+            {%- for t in trust -%}
+              <div class="item"><span class="check">✓</span> {{ t }}</div>
+            {%- endfor -%}
+          {%- else -%}
+            <div class="item"><span class="check">✓</span> Free Shipping</div>
+            <div class="item"><span class="check">✓</span> Sprouting-grade seeds</div>
+            <div class="item"><span class="check">✓</span> FSSAI Licensed</div>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{%- if jar_chart != blank -%}
+  <div class="size-modal" id="jar-size-modal" data-size-modal>
+    <div class="size-modal-card">
+      <button type="button" class="size-modal-close" data-close-size-modal aria-label="Close">×</button>
+      <div class="size-modal-eyebrow">JAR SIZE COMPARISON</div>
+      <h3 class="size-modal-title">{{ jar_capacity }} sprout maker.</h3>
+      <div class="size-modal-image">
+        {{ jar_chart | image_url: width: 1200 | image_tag:
+           loading: 'lazy',
+           width: 1200, height: 900,
+           alt: 'Sprout maker jar size comparison' }}
+      </div>
+      <p class="size-modal-caption">Shown next to a standard 250ml drinking glass for scale.</p>
+    </div>
+  </div>
+{%- endif -%}
+
+<script>
+  (function () {
+    const modal = document.querySelector('[data-size-modal]');
+    if (!modal) return;
+    document.querySelectorAll('[data-open-size-modal]').forEach(btn =>
+      btn.addEventListener('click', () => modal.classList.add('open')));
+    modal.addEventListener('click', e => {
+      if (e.target === modal || e.target.closest('[data-close-size-modal]')) {
+        modal.classList.remove('open');
+      }
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Sprout Maker — Hero",
+  "tag": "section",
+  "class": "section--sprout-hero",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_breadcrumb",
+      "label": "Show breadcrumb",
+      "default": true
+    }
+  ],
+  "presets": [
+    { "name": "Sprout Maker — Hero" }
+  ]
+}
+{% endschema %}

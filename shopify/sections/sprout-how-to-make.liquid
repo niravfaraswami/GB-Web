@@ -1,0 +1,59 @@
+<section class="how-make-section" data-kit="sprouts">
+  <div class="container">
+    <div class="section-header centered">
+      <div class="eyebrow">{{ section.settings.eyebrow }}</div>
+      <h2>{{ section.settings.heading }}<br><em>{{ section.settings.heading_em }}</em></h2>
+    </div>
+    <div class="how-make-grid">
+      <div class="hm-video-hero">
+        {%- if section.settings.video_url != blank -%}
+          {{ section.settings.video_url | video_tag: image_size: '1100x', controls: true, loop: true, muted: true, autoplay: false, class: 'hm-video' }}
+        {%- elsif section.settings.poster != blank -%}
+          {{ section.settings.poster | image_url: width: 1200 | image_tag: loading: 'lazy', alt: 'How to make sprouts' }}
+        {%- endif -%}
+        {%- if section.settings.watch_pill != blank -%}
+          <span class="hm-watch-pill">{{ section.settings.watch_pill }}</span>
+        {%- endif -%}
+      </div>
+      <div class="hm-steps">
+        {%- for block in section.blocks -%}
+          <div class="hm-step" {{ block.shopify_attributes }}>
+            <div class="hm-num">{{ forloop.index }}</div>
+            <div class="hm-step-body">
+              <div class="hm-title">{{ block.settings.title }}</div>
+              <div class="hm-desc">{{ block.settings.description }}</div>
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Sprout — How to Make",
+  "tag": "section",
+  "class": "section--sprout-how",
+  "max_blocks": 6,
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "HOW TO MAKE" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "4 STEPS." },
+    { "type": "text", "id": "heading_em", "label": "Heading (highlighted)", "default": "FRESH SPROUTS." },
+    { "type": "video", "id": "video_url", "label": "Demo video" },
+    { "type": "image_picker", "id": "poster", "label": "Poster image (fallback)" },
+    { "type": "text", "id": "watch_pill", "label": "Pill text", "default": "▶ WATCH · 60 SEC" }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Step",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Step title" },
+        { "type": "textarea", "id": "description", "label": "Step description" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Sprout — How to Make" }]
+}
+{% endschema %}

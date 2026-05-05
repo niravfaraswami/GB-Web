@@ -1,0 +1,170 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product-sprout-maker",
+      "settings": {
+        "show_breadcrumb": true
+      }
+    },
+    "trust-row": {
+      "type": "sprout-trust-row",
+      "blocks": {
+        "t1": { "type": "trust_card", "settings": { "icon": "🌱", "heading": "Beginner Friendly", "description": "Step-by-step guide included — first batch, first try." } },
+        "t2": { "type": "trust_card", "settings": { "icon": "💨", "heading": "No Smell, No Mess", "description": "Self-draining mesh lid keeps sprouts clean. No daily cloth changes." } },
+        "t3": { "type": "trust_card", "settings": { "icon": "💬", "heading": "WhatsApp Help", "description": "Stuck on a batch? Message us — we reply same-day." } },
+        "t4": { "type": "trust_card", "settings": { "icon": "♻️", "heading": "Seed Refills", "description": "Reuse your jar — just buy seed packs next time." } }
+      },
+      "block_order": ["t1","t2","t3","t4"]
+    },
+    "how-to-make": {
+      "type": "sprout-how-to-make",
+      "settings": {
+        "eyebrow": "HOW TO MAKE",
+        "heading": "4 STEPS.",
+        "heading_em": "FRESH SPROUTS.",
+        "watch_pill": "▶ WATCH · 60 SEC"
+      },
+      "blocks": {
+        "s1": { "type": "step", "settings": { "title": "SOAK THE SEEDS", "description": "Add 2 tbsp seeds to the jar. Cover with water. Soak 6–8 hours overnight." } },
+        "s2": { "type": "step", "settings": { "title": "DRAIN + RINSE", "description": "Tilt jar to drain through the sprouting lid. Rinse twice. Lay jar at angle on the stand." } },
+        "s3": { "type": "step", "settings": { "title": "RINSE TWICE DAILY", "description": "Morning + evening. Drain fully each time. Keep at room temp, no direct sunlight." } },
+        "s4": { "type": "step", "settings": { "title": "HARVEST IN 2–3 DAYS", "description": "Sprouts are ready when tails are 1–2 cm long. Refrigerate. Eat over a week." } }
+      },
+      "block_order": ["s1","s2","s3","s4"]
+    },
+    "comparison": {
+      "type": "sprout-comparison",
+      "settings": {
+        "eyebrow": "WHY UPGRADE",
+        "heading": "SPROUT MAKER",
+        "heading_em": "VS TRADITIONAL CLOTH.",
+        "intro": "A wet cloth holds moisture against seeds, breeding mould and that musty smell. The mesh-lid jar drains every rinse completely — clean airflow, faster sprouts, no surprises.",
+        "left_label": "CLOTH METHOD",
+        "right_label": "SPROUT MAKER",
+        "left_emoji": "🧺",
+        "right_emoji": "🫙"
+      },
+      "blocks": {
+        "r1": { "type": "row", "settings": { "left_h": "Smell: Often sour or musty", "left_s": "Cloth retains moisture, breeds bacteria", "right_h": "Smell: None", "right_s": "Mesh drains fully, airflow stays clean" } },
+        "r2": { "type": "row", "settings": { "left_h": "Mess: Daily wet cloth", "left_s": "Drips on the counter, soaks the surface", "right_h": "Mess: Zero", "right_s": "Self-draining jar sits on the stand" } },
+        "r3": { "type": "row", "settings": { "left_h": "Time: 3–5 days", "left_s": "Inconsistent, depends on cloth condition", "right_h": "Time: 2–3 days", "right_s": "Same speed, every batch" } },
+        "r4": { "type": "row", "settings": { "left_h": "Mould risk: High", "left_s": "Cloth + standing water = mould", "right_h": "Mould risk: Negligible", "right_s": "Proper rinsing and drainage prevents it" } },
+        "r5": { "type": "row", "settings": { "left_h": "Reusable: Limited", "left_s": "Cloth wears out, replace often", "right_h": "Reusable: Forever", "right_s": "Glass jar + steel mesh last for years" } }
+      },
+      "block_order": ["r1","r2","r3","r4","r5"]
+    },
+    "benefits": {
+      "type": "sprout-benefits",
+      "settings": {
+        "eyebrow": "QUICK BENEFITS",
+        "heading": "WHY SPROUTS ARE",
+        "heading_em": "NUTRITIONAL POWERHOUSES."
+      },
+      "blocks": {
+        "b1": { "type": "benefit", "settings": { "icon": "💪", "heading": "10× MORE ENZYMES", "description": "Sprouting activates dormant enzymes in seeds — making nutrients more bioavailable than the dry seed." } },
+        "b2": { "type": "benefit", "settings": { "icon": "🌿", "heading": "FRESH IN 2–3 DAYS", "description": "From dry seed to crunchy sprout in under 72 hours. No soil, no sun, no waiting weeks for a plant." } },
+        "b3": { "type": "benefit", "settings": { "icon": "🥗", "heading": "PROTEIN-DENSE", "description": "Mung, chickpea, and alfalfa sprouts pack 3–4× more protein per calorie than the same weight of cooked rice." } }
+      },
+      "block_order": ["b1","b2","b3"]
+    },
+    "reels": {
+      "type": "sprout-reels",
+      "settings": {
+        "eyebrow": "REAL CUSTOMERS",
+        "heading": "SPROUTS IN",
+        "heading_em": "REAL KITCHENS."
+      },
+      "blocks": {
+        "v1": { "type": "reel", "settings": {} },
+        "v2": { "type": "reel", "settings": {} },
+        "v3": { "type": "reel", "settings": {} },
+        "v4": { "type": "reel", "settings": {} }
+      },
+      "block_order": ["v1","v2","v3","v4"]
+    },
+    "box": {
+      "type": "sprout-whats-in-box",
+      "settings": {
+        "eyebrow": "WHAT'S IN THE BOX",
+        "heading": "3 PARTS.",
+        "heading_em": "ONE KIT.",
+        "note": "Just add water and a kitchen counter. The kit handles the rest."
+      },
+      "blocks": {
+        "p1": { "type": "component", "settings": { "name": "Glass Sprouting Jar", "description": "Wide-mouth borosilicate, dishwasher-safe" } },
+        "p2": { "type": "component", "settings": { "name": "Stainless Mesh Lid", "description": "Drains fully without losing seeds" } },
+        "p3": { "type": "component", "settings": { "name": "Mixed Seed Pack (500g)", "description": "Moong, chickpea, alfalfa, fenugreek, mustard" } },
+        "p4": { "type": "component", "settings": { "name": "Drainage Stand", "description": "Holds jar at the right tilt for airflow" } }
+      },
+      "block_order": ["p1","p2","p3","p4"]
+    },
+    "reviews": {
+      "type": "sprout-reviews",
+      "settings": {
+        "eyebrow": "REAL RESULTS",
+        "heading": "WHAT OUR",
+        "heading_em": "CUSTOMERS SAY."
+      },
+      "blocks": {
+        "r1": { "type": "review", "settings": { "quote": "Day 3, fluffy moong sprouts, zero smell.", "name": "Priya R.", "meta": "28, Pune · First-time sprouter" } },
+        "r2": { "type": "review", "settings": { "quote": "My mother-in-law said why didn't we have this earlier.", "name": "Arjun T.", "meta": "34, Bangalore · Cloth-method convert" } },
+        "r3": { "type": "review", "settings": { "quote": "Crunchier than the supermarket sprouts. Daily routine now.", "name": "Deepa S.", "meta": "42, Delhi · Health-focused buyer" } }
+      },
+      "block_order": ["r1","r2","r3"]
+    },
+    "faq": {
+      "type": "sprout-faq",
+      "settings": {
+        "eyebrow": "QUESTIONS?",
+        "heading": "COMMON",
+        "heading_em": "QUESTIONS."
+      },
+      "blocks": {
+        "q1": { "type": "faq", "settings": { "question": "How is this different from sprouting in cloth?", "answer": "Cloth holds moisture against the seeds, which causes mould and that musty smell. The mesh lid drains water completely after every rinse — seeds get airflow, no standing water. Cleaner, faster, no smell." } },
+        "q2": { "type": "faq", "settings": { "question": "Do I need sunlight?", "answer": "No. Sprouts grow best at room temperature, away from direct sunlight. A kitchen counter works perfectly." } },
+        "q3": { "type": "faq", "settings": { "question": "Which seeds can I sprout in this jar?", "answer": "Moong, chickpea, alfalfa, fenugreek (methi), mustard, broccoli, radish, lentils. Avoid kidney beans (toxic when raw-sprouted) and any seed not labeled sprouting-grade." } },
+        "q4": { "type": "faq", "settings": { "question": "How often do I rinse?", "answer": "Twice a day — morning and evening. Drain fully each time. The whole process takes under 30 seconds per rinse." } },
+        "q5": { "type": "faq", "settings": { "question": "How long do harvested sprouts last?", "answer": "Refrigerated, 5–7 days. Rinse before storing and pat dry. Eat raw in salads, stir-fry briefly, or add to khichdi at the end." } },
+        "q6": { "type": "faq", "settings": { "question": "Is the jar dishwasher-safe?", "answer": "Yes — borosilicate glass and stainless steel mesh both go in the dishwasher. Hand-wash also works." } },
+        "q7": { "type": "faq", "settings": { "question": "Can kids do this?", "answer": "Yes — it's a great kitchen science project. The transformation from seed to sprout in 2–3 days is genuinely fun to watch." } },
+        "q8": { "type": "faq", "settings": { "question": "What if my seeds don't sprout?", "answer": "Most often the seeds were too old or stored in heat. We replace any non-germinating seed pack within 30 days — just write to support@gutbasket.com with a photo." } }
+      },
+      "block_order": ["q1","q2","q3","q4","q5","q6","q7","q8"]
+    },
+    "cross-sell": {
+      "type": "sprout-cross-sell",
+      "settings": {
+        "eyebrow": "PAIR IT WITH",
+        "heading": "COMPLETE THE",
+        "heading_em": "SPROUT KITCHEN."
+      },
+      "blocks": {
+        "c1": { "type": "product", "settings": {} },
+        "c2": { "type": "product", "settings": {} },
+        "c3": { "type": "product", "settings": {} }
+      },
+      "block_order": ["c1","c2","c3"]
+    },
+    "judgeme": {
+      "type": "sprout-judgeme",
+      "settings": {
+        "eyebrow": "ALL REVIEWS",
+        "heading": "VERIFIED",
+        "heading_em": "CUSTOMER REVIEWS."
+      }
+    }
+  },
+  "order": [
+    "main",
+    "trust-row",
+    "how-to-make",
+    "comparison",
+    "benefits",
+    "reels",
+    "box",
+    "reviews",
+    "faq",
+    "cross-sell",
+    "judgeme"
+  ]
+}
