@@ -16,6 +16,14 @@
   assign bought_today = p.metafields.custom.bought_today
   assign days_subtitle = p.metafields.custom.days_subtitle
   assign days_to_ferment = p.metafields.custom.days_to_ferment
+
+  assign mf_compare_left  = p.metafields.custom.comparison_left_image
+  assign mf_compare_right = p.metafields.custom.comparison_right_image
+  assign mf_box_image     = p.metafields.custom.box_image
+  assign mf_how_video     = p.metafields.custom.how_to_make_video
+  assign mf_hero_icons    = p.metafields.custom.hero_benefits_icons.value
+  assign mf_benefit_icons = p.metafields.custom.benefits_icons.value
+  assign mf_reviews       = p.metafields.custom.featured_reviews.value
 -%}
 
 <div data-kit="sprouts" class="sprout-pdp">
@@ -40,24 +48,29 @@
         <div class="gallery-stack">
           <div class="gallery-main">
             {%- if save_badge != blank -%}<span class="save-badge">{{ save_badge }}</span>{%- endif -%}
-            {%- if p.featured_media -%}
-              {{ p.featured_media | image_url: width: 1200 | image_tag:
-                 loading: 'eager', width: p.featured_media.width, height: p.featured_media.height,
-                 alt: p.featured_media.alt | default: p.title, class: 'gallery-main-img' }}
+            {%- if p.featured_image -%}
+              <img class="gallery-main-img"
+                   src="{{ p.featured_image | image_url: width: 1200 }}"
+                   srcset="{{ p.featured_image | image_url: width: 600 }} 600w, {{ p.featured_image | image_url: width: 1200 }} 1200w, {{ p.featured_image | image_url: width: 1800 }} 1800w"
+                   sizes="(min-width: 768px) 50vw, 100vw"
+                   alt="{{ p.featured_image.alt | default: p.title | escape }}"
+                   loading="eager"
+                   width="{{ p.featured_image.width }}"
+                   height="{{ p.featured_image.height }}">
             {%- else -%}
               <div class="gallery-illustration">🌱</div>
             {%- endif -%}
           </div>
-          {%- if p.media.size > 1 -%}
+          {%- if p.images.size > 1 -%}
             <div class="gallery-thumbs">
-              {%- for media in p.media limit: 8 -%}
+              {%- for image in p.images limit: 8 -%}
                 <button class="gallery-thumb {% if forloop.first %}active{% endif %}" type="button"
-                        data-media-id="{{ media.id }}"
-                        data-full-src="{{ media | image_url: width: 1200 }}"
-                        data-full-alt="{{ media.alt | default: p.title | escape }}"
+                        data-full-src="{{ image | image_url: width: 1200 }}"
+                        data-full-alt="{{ image.alt | default: p.title | escape }}"
                         aria-label="View image {{ forloop.index }}">
-                  {{ media | image_url: width: 180 | image_tag:
-                     loading: 'lazy', width: 90, height: 90, alt: media.alt | default: p.title }}
+                  <img src="{{ image | image_url: width: 180 }}"
+                       alt="{{ image.alt | default: p.title | escape }}"
+                       loading="lazy" width="90" height="90">
                 </button>
               {%- endfor -%}
             </div>
@@ -95,8 +108,15 @@
               <div class="benefits-grid">
                 {%- for b in benefits -%}
                   {%- assign parts = b | split: '|' -%}
+                  {%- assign mf_icon = mf_hero_icons[forloop.index0] -%}
                   <div class="benefit-item">
-                    <span class="benefit-icon">{{ parts[0] }}</span>
+                    <span class="benefit-icon{% if mf_icon != blank %} benefit-icon--img{% endif %}">
+                      {%- if mf_icon != blank -%}
+                        <img src="{{ mf_icon | image_url: width: 48 }}" alt="" loading="lazy" width="24" height="24">
+                      {%- else -%}
+                        {{ parts[0] }}
+                      {%- endif -%}
+                    </span>
                     <span>{{ parts[1] }}</span>
                   </div>
                 {%- endfor -%}
@@ -226,12 +246,13 @@
           <div class="eyebrow">{{ section.settings.how_eyebrow }}</div>
           <h2>{{ section.settings.how_heading }}<br><em>{{ section.settings.how_heading_em }}</em></h2>
         </div>
+        {%- assign how_video = mf_how_video | default: section.settings.how_video -%}
         <div class="how-make-grid">
           <div class="hm-video-hero">
-            {%- if section.settings.how_video != blank -%}
-              {{ section.settings.how_video | video_tag: image_size: '1100x', controls: true, loop: true, muted: true, autoplay: false }}
+            {%- if how_video != blank -%}
+              {{ how_video | video_tag: image_size: '1100x', controls: true, loop: true, muted: true, autoplay: false }}
             {%- elsif section.settings.how_poster != blank -%}
-              {{ section.settings.how_poster | image_url: width: 1200 | image_tag: loading: 'lazy', alt: 'How to make sprouts' }}
+              <img src="{{ section.settings.how_poster | image_url: width: 1200 }}" alt="How to make sprouts" loading="lazy">
             {%- endif -%}
             {%- if section.settings.how_pill != blank -%}
               <span class="hm-watch-pill">{{ section.settings.how_pill }}</span>
@@ -270,16 +291,18 @@
             <p style="margin-top:18px;">{{ section.settings.compare_intro }}</p>
           {%- endif -%}
         </div>
+        {%- assign cmp_left  = mf_compare_left  | default: section.settings.compare_left_image -%}
+        {%- assign cmp_right = mf_compare_right | default: section.settings.compare_right_image -%}
         <div class="compare-block">
           <div class="compare-images">
             <div class="compare-image">
-              {%- if section.settings.compare_left_image != blank -%}
-                {{ section.settings.compare_left_image | image_url: width: 800 | image_tag: loading: 'lazy', alt: section.settings.compare_left_label }}
+              {%- if cmp_left != blank -%}
+                <img src="{{ cmp_left | image_url: width: 800 }}" alt="{{ section.settings.compare_left_label }}" loading="lazy">
               {%- else -%}{{ section.settings.compare_left_emoji }}{%- endif -%}
             </div>
             <div class="compare-image">
-              {%- if section.settings.compare_right_image != blank -%}
-                {{ section.settings.compare_right_image | image_url: width: 800 | image_tag: loading: 'lazy', alt: section.settings.compare_right_label }}
+              {%- if cmp_right != blank -%}
+                <img src="{{ cmp_right | image_url: width: 800 }}" alt="{{ section.settings.compare_right_label }}" loading="lazy">
               {%- else -%}{{ section.settings.compare_right_emoji }}{%- endif -%}
             </div>
           </div>
@@ -316,10 +339,13 @@
         </div>
         <div class="qb-grid">
           {%- for block in benefit_blocks -%}
+            {%- assign mf_icon = mf_benefit_icons[forloop.index0] -%}
             <div class="qb-card" {{ block.shopify_attributes }}>
               <div class="qb-icon">
-                {%- if block.settings.icon_image != blank -%}
-                  {{ block.settings.icon_image | image_url: width: 112 | image_tag: loading: 'lazy', width: 56, height: 56, alt: block.settings.heading, class: 'qb-icon-img' }}
+                {%- if mf_icon != blank -%}
+                  <img src="{{ mf_icon | image_url: width: 112 }}" alt="{{ block.settings.heading }}" loading="lazy" width="56" height="56" class="qb-icon-img">
+                {%- elsif block.settings.icon_image != blank -%}
+                  <img src="{{ block.settings.icon_image | image_url: width: 112 }}" alt="{{ block.settings.heading }}" loading="lazy" width="56" height="56" class="qb-icon-img">
                 {%- else -%}
                   {{ block.settings.icon }}
                 {%- endif -%}
@@ -368,10 +394,11 @@
           <div class="eyebrow">{{ section.settings.box_eyebrow }}</div>
           <h2>{{ section.settings.box_heading }}<br><em>{{ section.settings.box_heading_em }}</em></h2>
         </div>
+        {%- assign box_img = mf_box_image | default: section.settings.box_image -%}
         <div class="box-grid">
           <div class="box-image">
-            {%- if section.settings.box_image != blank -%}
-              {{ section.settings.box_image | image_url: width: 1200 | image_tag: loading: 'lazy', alt: 'What is in the box' }}
+            {%- if box_img != blank -%}
+              <img src="{{ box_img | image_url: width: 1200 }}" alt="What is in the box" loading="lazy">
             {%- else -%}🫙{%- endif -%}
           </div>
           <div>
@@ -399,8 +426,8 @@
     </section>
   {%- endif -%}
 
-  {%- comment %} 8. UGC REVIEWS {% endcomment -%}
-  {%- if review_blocks.size > 0 -%}
+  {%- comment %} 8. UGC REVIEWS — metaobject list overrides blocks {% endcomment -%}
+  {%- if mf_reviews != blank or review_blocks.size > 0 -%}
     <section class="reviews-section">
       <div class="container">
         <div class="section-header">
@@ -408,25 +435,47 @@
           <h2>{{ section.settings.reviews_heading }}<br><em>{{ section.settings.reviews_heading_em }}</em></h2>
         </div>
         <div class="reviews-grid">
-          {%- for block in review_blocks -%}
-            <div class="review-card" {{ block.shopify_attributes }}>
-              <div class="rev-content">
-                <h3 class="rev-title">"{{ block.settings.quote }}"</h3>
-                <div class="rev-foot">
-                  <div class="rev-stars">★★★★★</div>
-                  <div class="rev-name">{{ block.settings.name }}</div>
-                  <div class="rev-meta">{{ block.settings.meta }}</div>
+          {%- if mf_reviews != blank -%}
+            {%- for review in mf_reviews limit: 6 -%}
+              <div class="review-card">
+                <div class="rev-content">
+                  <h3 class="rev-title">"{{ review.quote }}"</h3>
+                  <div class="rev-foot">
+                    <div class="rev-stars">★★★★★</div>
+                    <div class="rev-name">{{ review.name }}</div>
+                    <div class="rev-meta">{{ review.meta }}</div>
+                  </div>
+                </div>
+                <div class="rev-photo">
+                  {%- if review.photo != blank -%}
+                    <img src="{{ review.photo | image_url: width: 800 }}" alt="{{ review.name }}" loading="lazy">
+                  {%- else -%}
+                    <span class="photo-placeholder">📷</span>
+                  {%- endif -%}
                 </div>
               </div>
-              <div class="rev-photo">
-                {%- if block.settings.photo != blank -%}
-                  {{ block.settings.photo | image_url: width: 800 | image_tag: loading: 'lazy', alt: block.settings.name }}
-                {%- else -%}
-                  <span class="photo-placeholder">📷</span>
-                {%- endif -%}
+            {%- endfor -%}
+          {%- else -%}
+            {%- for block in review_blocks -%}
+              <div class="review-card" {{ block.shopify_attributes }}>
+                <div class="rev-content">
+                  <h3 class="rev-title">"{{ block.settings.quote }}"</h3>
+                  <div class="rev-foot">
+                    <div class="rev-stars">★★★★★</div>
+                    <div class="rev-name">{{ block.settings.name }}</div>
+                    <div class="rev-meta">{{ block.settings.meta }}</div>
+                  </div>
+                </div>
+                <div class="rev-photo">
+                  {%- if block.settings.photo != blank -%}
+                    <img src="{{ block.settings.photo | image_url: width: 800 }}" alt="{{ block.settings.name }}" loading="lazy">
+                  {%- else -%}
+                    <span class="photo-placeholder">📷</span>
+                  {%- endif -%}
+                </div>
               </div>
-            </div>
-          {%- endfor -%}
+            {%- endfor -%}
+          {%- endif -%}
         </div>
       </div>
     </section>
@@ -527,56 +576,82 @@
 
 <script>
   (function () {
-    // FAQ accordion
-    document.querySelectorAll('[data-faq]').forEach(item => {
-      item.addEventListener('click', () => item.classList.toggle('open'));
-    });
+    function initSproutPDP(scope) {
+      var root = scope || document;
+      var pdp = root.querySelector ? (root.matches && root.matches('.sprout-pdp') ? root : root.querySelector('.sprout-pdp')) : null;
+      if (!pdp) return;
 
-    // Jar size modal
-    const modal = document.querySelector('[data-size-modal]');
-    if (modal) {
-      document.querySelectorAll('[data-open-size-modal]').forEach(btn =>
-        btn.addEventListener('click', () => modal.classList.add('open')));
-      modal.addEventListener('click', e => {
-        if (e.target === modal || e.target.closest('[data-close-size-modal]')) {
-          modal.classList.remove('open');
-        }
+      // FAQ accordion
+      pdp.querySelectorAll('[data-faq]').forEach(function (item) {
+        if (item.dataset.bound) return;
+        item.dataset.bound = '1';
+        item.addEventListener('click', function () { item.classList.toggle('open'); });
       });
-    }
 
-    // Variant picker
-    const grid = document.querySelector('.sprout-pdp .variant-grid');
-    const atcPrice = document.querySelector('.sprout-pdp [data-atc-price]');
-    if (grid) {
-      grid.addEventListener('change', e => {
-        if (!e.target.matches('.variant-input')) return;
-        grid.querySelectorAll('.variant').forEach(v => v.classList.remove('active'));
-        const card = e.target.closest('.variant');
-        card.classList.add('active');
-        if (atcPrice && card.dataset.variantPrice) atcPrice.textContent = card.dataset.variantPrice;
-        const url = new URL(window.location.href);
-        url.searchParams.set('variant', e.target.value);
-        history.replaceState({}, '', url);
-      });
-    }
-
-    // Gallery thumb → main image swap
-    const mainImg = document.querySelector('.sprout-pdp .gallery-main-img');
-    const thumbs = document.querySelectorAll('.sprout-pdp .gallery-thumb');
-    if (mainImg && thumbs.length) {
-      thumbs.forEach(thumb => {
-        thumb.addEventListener('click', () => {
-          const fullSrc = thumb.dataset.fullSrc;
-          const fullAlt = thumb.dataset.fullAlt;
-          if (!fullSrc) return;
-          mainImg.src = fullSrc;
-          if (fullAlt) mainImg.alt = fullAlt;
-          mainImg.removeAttribute('srcset');
-          thumbs.forEach(t => t.classList.remove('active'));
-          thumb.classList.add('active');
+      // Jar size modal
+      var modal = pdp.querySelector('[data-size-modal]');
+      if (modal && !modal.dataset.bound) {
+        modal.dataset.bound = '1';
+        pdp.querySelectorAll('[data-open-size-modal]').forEach(function (btn) {
+          btn.addEventListener('click', function () { modal.classList.add('open'); });
         });
-      });
+        modal.addEventListener('click', function (e) {
+          if (e.target === modal || (e.target.closest && e.target.closest('[data-close-size-modal]'))) {
+            modal.classList.remove('open');
+          }
+        });
+      }
+
+      // Variant picker
+      var grid = pdp.querySelector('.variant-grid');
+      var atcPrice = pdp.querySelector('[data-atc-price]');
+      if (grid && !grid.dataset.bound) {
+        grid.dataset.bound = '1';
+        grid.addEventListener('change', function (e) {
+          if (!e.target.classList.contains('variant-input')) return;
+          grid.querySelectorAll('.variant').forEach(function (v) { v.classList.remove('active'); });
+          var card = e.target.closest('.variant');
+          if (!card) return;
+          card.classList.add('active');
+          if (atcPrice && card.dataset.variantPrice) atcPrice.textContent = card.dataset.variantPrice;
+          try {
+            var url = new URL(window.location.href);
+            url.searchParams.set('variant', e.target.value);
+            history.replaceState({}, '', url);
+          } catch (err) {}
+        });
+      }
+
+      // Gallery thumb → main image swap
+      var mainImg = pdp.querySelector('.gallery-main-img');
+      var thumbs = pdp.querySelectorAll('.gallery-thumb');
+      if (mainImg && thumbs.length) {
+        thumbs.forEach(function (thumb) {
+          if (thumb.dataset.bound) return;
+          thumb.dataset.bound = '1';
+          thumb.addEventListener('click', function (e) {
+            e.preventDefault();
+            var fullSrc = thumb.getAttribute('data-full-src');
+            var fullAlt = thumb.getAttribute('data-full-alt');
+            if (!fullSrc) return;
+            mainImg.removeAttribute('srcset');
+            mainImg.removeAttribute('sizes');
+            mainImg.setAttribute('src', fullSrc);
+            if (fullAlt) mainImg.setAttribute('alt', fullAlt);
+            thumbs.forEach(function (t) { t.classList.remove('active'); });
+            thumb.classList.add('active');
+          });
+        });
+      }
     }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function () { initSproutPDP(); });
+    } else {
+      initSproutPDP();
+    }
+    // Re-init when the section reloads in the Theme Editor
+    document.addEventListener('shopify:section:load', function (e) { initSproutPDP(e.target); });
   })();
 </script>
 

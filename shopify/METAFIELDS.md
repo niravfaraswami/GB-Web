@@ -45,7 +45,21 @@ The first block re-uses keys that already exist in your Shopify store (preserved
 | Jar Capacity | `custom` | `jar_capacity` | Single line text — `700ml` / `1000ml` |
 | Help Note | `custom` | `help_note` | Multi-line text — beside the Jar Size Chart link |
 
-### Manual / pass-2
+### Per-product images, video, and SVG icons (override section/block settings)
+
+| Display name | Namespace | Key | Type | Used in |
+|---|---|---|---|---|
+| Comparison Left Image | `custom` | `comparison_left_image` | File reference | Comparison section — left card (cloth method) |
+| Comparison Right Image | `custom` | `comparison_right_image` | File reference | Comparison section — right card (sprout maker) |
+| Box / Kit Image | `custom` | `box_image` | File reference | What's in the Box section |
+| How to Make Video | `custom` | `how_to_make_video` | File reference (video) | How to Make 1:1 video panel |
+| Hero Benefits Icons (SVG) | `custom` | `hero_benefits_icons` | List · File references | Hero "Why this kit" 2x2 — same order as `benefits_items` |
+| Benefits Icons (SVG) | `custom` | `benefits_icons` | List · File references | Quick Benefits 3-card section — same order as benefit blocks |
+| Featured Reviews | `custom` | `featured_reviews` | List · Metaobject references → `kit_review` | UGC Reviews section — overrides block reviews |
+
+Each of these is **optional**; if not set, the section falls back to its theme-editor block / section image. Set them to override per-product.
+
+### Manual / pass-2 (product references)
 
 These can't be filled in pass 1 because they reference other products that don't yet have IDs.
 
@@ -54,6 +68,20 @@ These can't be filled in pass 1 because they reference other products that don't
 | Companion Size Product | `custom` | `companion_size_product` | Product reference (700ml ↔ 1L) |
 | Cross-Sell Products | `custom` | `cross_sell_products` | List · Product references — up to 3 in "Pair It With" |
 | Jar Size Chart Image | `custom` | `jar_size_chart_image` | File reference (image) |
+
+### Metaobject (for `featured_reviews`)
+
+If you use the per-product `featured_reviews` metafield, define a metaobject in **Settings → Custom data → Metaobjects → Add definition**:
+
+- **Type:** `kit_review`
+- **Name:** Kit Review
+- **Fields:**
+  - `photo` — File (Image)
+  - `quote` — Single line text
+  - `name` — Single line text
+  - `meta` — Single line text — e.g. "28, Pune · First-time sprouter"
+
+Then create entries in **Content → Metaobjects → Kit Review** and reference them from each product's `featured_reviews` list metafield.
 
 ## B. Variant metafields
 
