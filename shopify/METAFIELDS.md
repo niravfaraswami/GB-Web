@@ -105,18 +105,32 @@ matrixify/
 
 > ⚠️ **Matrixify does NOT support metafield definitions import.** It only handles metafield *values*. To create the definitions, run `create_definitions_via_api.py` (uses Shopify's Admin GraphQL API directly), or switch to a Matrixify-compatible alternative like Altera. The `*Definitions.csv` is kept as a human-readable reference only.
 
+### Architecture: why metaobjects, not field-by-field metafields
+
+Each PDP has ~100 text/image elements (4 trust cards × 3 fields, 4 steps × 3, 5 comparison rows × 4, 8 FAQs × 2, 3 reviews × 4, etc.). One metafield per element across 6 templates would be ~600 definitions — well over Shopify's 200-per-resource limit.
+
+The fix is metaobjects: one `kit_faq` metaobject definition lets a product reference *any number* of FAQ entries via a single `featured_faqs` list metafield. Same for steps, reviews, components, trust cards, quick benefits, comparison rows, UGC reels.
+
+| Resource | Shopify limit | We use |
+|---|---|---|
+| Product metafield definitions | 200 | ~30 (15%) |
+| Variant metafield definitions | 200 | 2 (1%) |
+| Metaobject definitions | 50 | 8 (16%) |
+
+Adding a 7th, 8th, … kit template typically needs **zero new definitions** — you just create more metaobject *entries* per product.
+
 ### Pass 1 — Create metafield + metaobject definitions via the Shopify Admin API
 
 `create_definitions_via_api.py` is the single source of truth for ALL kit templates (sprout-maker today; baking, cultures, fermentation-kit, prebiotic, spice-refill next). Definitions are split into four groups:
 
-| Scope | What | Count |
+| Scope | Count | What |
 |---|---|---|
-| `metaobjects` | `kit_review`, `kit_faq`, `kit_step`, `kit_component` | 4 |
-| `shared` | Product metafields used by **every** kit (hero copy, comparison images, How-to-Make video, icon overrides, featured_* metaobject lists, …) | 19 |
-| `sprout` | Sprout-maker-specific extras (`jar_capacity`, `jar_size_chart_image`) | 2 |
-| `variants` | Per-variant metafields (`best_for`, `tag`) | 2 |
+| `metaobjects` | **8** | `kit_review`, `kit_faq`, `kit_step`, `kit_component`, `kit_trust_card`, `kit_quick_benefit`, `kit_comparison_row`, `kit_reel` |
+| `shared` | **28** | Hero copy (6), Cross-product refs (2), Section image/video overrides (4), Section copy overrides (2), Icon list overrides (4), Featured-content metaobject list refs (8), SEO overrides (2) |
+| `sprout` | **2** | Sprout-maker legacy keys (`jar_capacity`, `jar_size_chart_image`) |
+| `variants` | **2** | Per-variant `best_for`, `tag` |
 
-**Total: 27 definitions** created in one run. Idempotent — re-running skips anything that already exists.
+**Total: 40 definitions** created in one run. Idempotent — re-running skips anything that already exists.
 
 **One-time setup (5 minutes):**
 
@@ -146,19 +160,25 @@ python3 create_definitions_via_api.py --scope variants      # only variant-level
 
 ### Featured-content metaobjects
 
-Four metaobject types let each product have its own structured content (instead of sharing block-based content across all products on the template):
+Eight metaobject types let each product carry its own structured content (instead of sharing block-based content across all products on the template):
 
 | Metaobject | Fields | Referenced by |
 |---|---|---|
 | `kit_review` | `photo` (Image), `quote`, `name`, `meta` | `custom.featured_reviews` |
-| `kit_faq` | `question`, `answer` | `custom.featured_faqs` |
+| `kit_faq` | `question`, `answer` (multi-line) | `custom.featured_faqs` |
 | `kit_step` | `title`, `description`, `icon` (Image) | `custom.featured_steps` |
 | `kit_component` | `name`, `description`, `icon` (Image) | `custom.featured_components` |
+| `kit_trust_card` | `heading`, `description`, `icon` (Image) | `custom.featured_trust_cards` |
+| `kit_quick_benefit` | `heading`, `description`, `icon` (Image) | `custom.featured_quick_benefits` |
+| `kit_comparison_row` | `left_heading`, `left_subtext`, `right_heading`, `right_subtext` | `custom.featured_comparison_rows` |
+| `kit_reel` | `video` (Video), `poster` (Image), `caption`, `handle` | `custom.featured_reels` |
 
 Workflow per product:
-1. **Content → Metaobjects → Kit Review** → create entries for that product.
-2. Open the product → **Featured Reviews** metafield → pick the entries.
+1. **Content → Metaobjects → Kit Review (or any other type)** → create entries.
+2. Open the product → corresponding `featured_*` metafield → pick the entries (and reorder them).
 3. Section liquid renders the metaobject list when set; otherwise falls back to the section's block-based content.
+
+Adding a new kit template later? You typically don't need to define new metaobjects — just create new entries of the existing types and reference them from the new product's `featured_*` metafields.
 
 ### Pass 2 — Import products (`Sprout-Maker-Shopify-Products-FINAL.csv`)
 
