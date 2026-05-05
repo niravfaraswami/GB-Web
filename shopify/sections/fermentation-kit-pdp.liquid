@@ -167,6 +167,19 @@ recipe_tag[0]:       {{ p.metafields.custom.featured_recipe_tags.value.first.emo
   • custom.{{ mf[0] }} ({{ mf[1].type }})
   {%- endif -%}
 {%- endfor %}
+
+# === ICON URL DIAGNOSTICS (hero_benefits_icons) ===
+{%- assign hbi = p.metafields.custom.hero_benefits_icons.value -%}
+{%- for ic in hbi limit: 4 -%}
+[{{ forloop.index0 }}]
+  raw                       = {{ ic }}
+  ic.url                    = {{ ic.url | default: '(nil)' }}
+  ic.src                    = {{ ic.src | default: '(nil)' }}
+  ic.preview_image.src      = {{ ic.preview_image.src | default: '(nil)' }}
+  ic | image_url:48         = {{ ic | image_url: width: 48 | default: '(nil)' }}
+  ic | file_url             = {{ ic | file_url | default: '(nil)' }}
+  resolved (with fallback)  = {{ ic | image_url: width: 48 | default: ic.url | default: ic.src | default: ic.preview_image.src | default: '(nil)' }}
+{%- endfor %}
 </pre>
   <script>if (location.search.indexOf('gbdebug=1') !== -1) { var p=document.getElementById('gb-debug-panel'); if (p) p.style.display='block'; }</script>
 
@@ -267,7 +280,7 @@ recipe_tag[0]:       {{ p.metafields.custom.featured_recipe_tags.value.first.emo
                   <div class="benefit-item">
                     <span class="benefit-icon{% if mf_icon != blank %} benefit-icon--img{% endif %}">
                       {%- if mf_icon != blank -%}
-                        <img src="{{ mf_icon | image_url: width: 48 | default: mf_icon.url }}" alt="" loading="lazy" width="24" height="24">
+                        <img src="{{ mf_icon | image_url: width: 48 | default: mf_icon.url | default: mf_icon.src | default: mf_icon.preview_image.src }}" alt="" loading="lazy" width="24" height="24">
                       {%- else -%}{{ parts[0] }}{%- endif -%}
                     </span>
                     <span>{{ parts[1] }}</span>
@@ -409,7 +422,7 @@ recipe_tag[0]:       {{ p.metafields.custom.featured_recipe_tags.value.first.emo
             {%- for tc in mf_trust_cards -%}
               <div class="tr-card">
                 <div class="tr-icon">
-                  {%- if tc.icon != blank -%}<img src="{{ tc.icon | image_url: width: 88 | default: tc.icon.url }}" alt="{{ tc.heading | escape }}" loading="lazy" width="44" height="44" class="tr-icon-img">{%- endif -%}
+                  {%- if tc.icon != blank -%}<img src="{{ tc.icon | image_url: width: 88 | default: tc.icon.url | default: tc.icon.src | default: tc.icon.preview_image.src }}" alt="{{ tc.heading | escape }}" loading="lazy" width="44" height="44" class="tr-icon-img">{%- endif -%}
                 </div>
                 <div class="tr-h">{{ tc.heading }}</div>
                 <div class="tr-d">{{ tc.description }}</div>
@@ -420,8 +433,8 @@ recipe_tag[0]:       {{ p.metafields.custom.featured_recipe_tags.value.first.emo
               {%- assign mf_icon = mf_trust_icons[forloop.index0] -%}
               <div class="tr-card" {{ block.shopify_attributes }}>
                 <div class="tr-icon">
-                  {%- if mf_icon != blank -%}<img src="{{ mf_icon | image_url: width: 88 | default: mf_icon.url }}" alt="{{ block.settings.heading | escape }}" loading="lazy" width="44" height="44" class="tr-icon-img">
-                  {%- elsif block.settings.icon_image != blank -%}<img src="{{ block.settings.icon_image | image_url: width: 88 | default: block.settings.icon_image.url }}" alt="{{ block.settings.heading | escape }}" loading="lazy" width="44" height="44" class="tr-icon-img">
+                  {%- if mf_icon != blank -%}<img src="{{ mf_icon | image_url: width: 88 | default: mf_icon.url | default: mf_icon.src | default: mf_icon.preview_image.src }}" alt="{{ block.settings.heading | escape }}" loading="lazy" width="44" height="44" class="tr-icon-img">
+                  {%- elsif block.settings.icon_image != blank -%}<img src="{{ block.settings.icon_image | image_url: width: 88 | default: block.settings.icon_image.url | default: block.settings.icon_image.src | default: block.settings.icon_image.preview_image.src }}" alt="{{ block.settings.heading | escape }}" loading="lazy" width="44" height="44" class="tr-icon-img">
                   {%- else -%}{{ block.settings.icon }}{%- endif -%}
                 </div>
                 <div class="tr-h">{{ block.settings.heading }}</div>
@@ -458,7 +471,7 @@ recipe_tag[0]:       {{ p.metafields.custom.featured_recipe_tags.value.first.emo
             {%- if mf_steps != blank -%}
               {%- for step in mf_steps -%}
                 <div class="hm-step">
-                  <div class="hm-num">{%- if step.icon != blank -%}<img src="{{ step.icon | image_url: width: 72 | default: step.icon.url }}" alt="" loading="lazy" width="36" height="36" class="hm-num-img">{%- else -%}{{ forloop.index }}{%- endif -%}</div>
+                  <div class="hm-num">{%- if step.icon != blank -%}<img src="{{ step.icon | image_url: width: 72 | default: step.icon.url | default: step.icon.src | default: step.icon.preview_image.src }}" alt="" loading="lazy" width="36" height="36" class="hm-num-img">{%- else -%}{{ forloop.index }}{%- endif -%}</div>
                   <div class="hm-step-body"><div class="hm-title">{{ step.title }}</div><div class="hm-desc">{{ step.description }}</div></div>
                 </div>
               {%- endfor -%}
@@ -466,7 +479,7 @@ recipe_tag[0]:       {{ p.metafields.custom.featured_recipe_tags.value.first.emo
               {%- for block in step_blocks -%}
                 {%- assign mf_icon = mf_step_icons[forloop.index0] -%}
                 <div class="hm-step" {{ block.shopify_attributes }}>
-                  <div class="hm-num">{%- if mf_icon != blank -%}<img src="{{ mf_icon | image_url: width: 72 | default: mf_icon.url }}" alt="" loading="lazy" width="36" height="36" class="hm-num-img">{%- else -%}{{ forloop.index }}{%- endif -%}</div>
+                  <div class="hm-num">{%- if mf_icon != blank -%}<img src="{{ mf_icon | image_url: width: 72 | default: mf_icon.url | default: mf_icon.src | default: mf_icon.preview_image.src }}" alt="" loading="lazy" width="36" height="36" class="hm-num-img">{%- else -%}{{ forloop.index }}{%- endif -%}</div>
                   <div class="hm-step-body"><div class="hm-title">{{ block.settings.title }}</div><div class="hm-desc">{{ block.settings.description }}</div></div>
                 </div>
               {%- endfor -%}
@@ -533,7 +546,7 @@ recipe_tag[0]:       {{ p.metafields.custom.featured_recipe_tags.value.first.emo
             {%- if mf_quick_bens != blank -%}
               {%- for qb in mf_quick_bens -%}
                 <div class="qb-card">
-                  <div class="qb-icon">{%- if qb.icon != blank -%}<img src="{{ qb.icon | image_url: width: 112 | default: qb.icon.url }}" alt="{{ qb.heading | escape }}" loading="lazy" width="56" height="56" class="qb-icon-img">{%- endif -%}</div>
+                  <div class="qb-icon">{%- if qb.icon != blank -%}<img src="{{ qb.icon | image_url: width: 112 | default: qb.icon.url | default: qb.icon.src | default: qb.icon.preview_image.src }}" alt="{{ qb.heading | escape }}" loading="lazy" width="56" height="56" class="qb-icon-img">{%- endif -%}</div>
                   <div class="qb-h">{{ qb.heading }}</div>
                   <div class="qb-d">{{ qb.description }}</div>
                 </div>
@@ -542,8 +555,8 @@ recipe_tag[0]:       {{ p.metafields.custom.featured_recipe_tags.value.first.emo
               {%- for block in benefit_blocks -%}
                 {%- assign mf_icon = mf_benefit_icons[forloop.index0] -%}
                 <div class="qb-card" {{ block.shopify_attributes }}>
-                  <div class="qb-icon">{%- if mf_icon != blank -%}<img src="{{ mf_icon | image_url: width: 112 | default: mf_icon.url }}" alt="" loading="lazy" width="56" height="56" class="qb-icon-img">
-                  {%- elsif block.settings.icon_image != blank -%}<img src="{{ block.settings.icon_image | image_url: width: 112 | default: block.settings.icon_image.url }}" alt="" loading="lazy" width="56" height="56" class="qb-icon-img">
+                  <div class="qb-icon">{%- if mf_icon != blank -%}<img src="{{ mf_icon | image_url: width: 112 | default: mf_icon.url | default: mf_icon.src | default: mf_icon.preview_image.src }}" alt="" loading="lazy" width="56" height="56" class="qb-icon-img">
+                  {%- elsif block.settings.icon_image != blank -%}<img src="{{ block.settings.icon_image | image_url: width: 112 | default: block.settings.icon_image.url | default: block.settings.icon_image.src | default: block.settings.icon_image.preview_image.src }}" alt="" loading="lazy" width="56" height="56" class="qb-icon-img">
                   {%- else -%}{{ block.settings.icon }}{%- endif -%}</div>
                   <div class="qb-h">{{ block.settings.heading }}</div>
                   <div class="qb-d">{{ block.settings.description }}</div>
@@ -618,11 +631,11 @@ recipe_tag[0]:       {{ p.metafields.custom.featured_recipe_tags.value.first.emo
             <div class="box-pills">
               {%- if mf_components != blank -%}
                 {%- for c in mf_components -%}
-                  <div class="box-pill"><span class="bp-icon">{%- if c.icon != blank -%}<img src="{{ c.icon | image_url: width: 56 | default: c.icon.url }}" alt="" loading="lazy" width="28" height="28" class="bp-icon-img">{%- else -%}{{ forloop.index }}{%- endif -%}</span><span class="bp-name">{{ c.name }}</span><span class="bp-sub">{{ c.description }}</span></div>
+                  <div class="box-pill"><span class="bp-icon">{%- if c.icon != blank -%}<img src="{{ c.icon | image_url: width: 56 | default: c.icon.url | default: c.icon.src | default: c.icon.preview_image.src }}" alt="" loading="lazy" width="28" height="28" class="bp-icon-img">{%- else -%}{{ forloop.index }}{%- endif -%}</span><span class="bp-name">{{ c.name }}</span><span class="bp-sub">{{ c.description }}</span></div>
                 {%- endfor -%}
               {%- else -%}
                 {%- for block in component_blocks -%}
-                  <div class="box-pill" {{ block.shopify_attributes }}><span class="bp-icon">{%- if block.settings.icon_image != blank -%}<img src="{{ block.settings.icon_image | image_url: width: 56 | default: block.settings.icon_image.url }}" alt="" loading="lazy" width="28" height="28" class="bp-icon-img">{%- else -%}{{ forloop.index }}{%- endif -%}</span><span class="bp-name">{{ block.settings.name }}</span><span class="bp-sub">{{ block.settings.description }}</span></div>
+                  <div class="box-pill" {{ block.shopify_attributes }}><span class="bp-icon">{%- if block.settings.icon_image != blank -%}<img src="{{ block.settings.icon_image | image_url: width: 56 | default: block.settings.icon_image.url | default: block.settings.icon_image.src | default: block.settings.icon_image.preview_image.src }}" alt="" loading="lazy" width="28" height="28" class="bp-icon-img">{%- else -%}{{ forloop.index }}{%- endif -%}</span><span class="bp-name">{{ block.settings.name }}</span><span class="bp-sub">{{ block.settings.description }}</span></div>
                 {%- endfor -%}
               {%- endif -%}
             </div>
