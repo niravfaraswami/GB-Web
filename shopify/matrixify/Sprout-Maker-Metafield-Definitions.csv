@@ -6,7 +6,7 @@ Metaobject,Metaobject,—,kit_component,Kit Component,metaobject_definition,"Fie
 Metaobject,Metaobject,—,kit_trust_card,Kit Trust Card,metaobject_definition,"Fields: heading, description, icon (Image). Used by featured_trust_cards."
 Metaobject,Metaobject,—,kit_quick_benefit,Kit Quick Benefit,metaobject_definition,"Fields: heading, description, icon (Image). Used by featured_quick_benefits."
 Metaobject,Metaobject,—,kit_comparison_row,Kit Comparison Row,metaobject_definition,"Fields: left_heading, left_subtext, right_heading, right_subtext. Used by featured_comparison_rows."
-Metaobject,Metaobject,—,kit_reel,Kit Reel,metaobject_definition,"Fields: video, poster, caption, handle. Used by featured_reels."
+Metaobject,Metaobject,—,kit_reel,Kit Reel,metaobject_definition,"Fields: video, poster, caption, author_handle. Used by featured_reels. (`handle` is reserved by Shopify.)"
 Shared,Product,custom,activity_items,Activity Items,list.single_line_text_field,"Hero activity items. Each entry: ""<emoji>|<text>""."
 Shared,Product,custom,benefits_items,Benefits Items,list.single_line_text_field,"Hero ""Why this kit"" 2x2 entries: ""<emoji>|<label>""."
 Shared,Product,custom,hero_trust_strip,Hero Trust Strip,list.single_line_text_field,"Short trust items below the ATC button."

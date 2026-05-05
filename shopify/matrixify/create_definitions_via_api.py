@@ -159,10 +159,10 @@ METAOBJECTS = [
         "kit_reel", "Kit Reel",
         "UGC vertical video reel (9:16).",
         [
-            ("video",   "Video",   "file_reference", VID),
-            ("poster",  "Poster",  "file_reference", IMG),
-            ("caption", "Caption", "single_line_text_field", []),
-            ("handle",  "Handle",  "single_line_text_field", []),
+            ("video",         "Video",         "file_reference", VID),
+            ("poster",        "Poster",        "file_reference", IMG),
+            ("caption",       "Caption",       "single_line_text_field", []),
+            ("author_handle", "Author Handle", "single_line_text_field", []),
         ],
     ),
 ]

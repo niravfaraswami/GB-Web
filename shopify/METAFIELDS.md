@@ -171,7 +171,7 @@ Eight metaobject types let each product carry its own structured content (instea
 | `kit_trust_card` | `heading`, `description`, `icon` (Image) | `custom.featured_trust_cards` |
 | `kit_quick_benefit` | `heading`, `description`, `icon` (Image) | `custom.featured_quick_benefits` |
 | `kit_comparison_row` | `left_heading`, `left_subtext`, `right_heading`, `right_subtext` | `custom.featured_comparison_rows` |
-| `kit_reel` | `video` (Video), `poster` (Image), `caption`, `handle` | `custom.featured_reels` |
+| `kit_reel` | `video` (Video), `poster` (Image), `caption`, `author_handle` | `custom.featured_reels` |
 
 Workflow per product:
 1. **Content → Metaobjects → Kit Review (or any other type)** → create entries.
