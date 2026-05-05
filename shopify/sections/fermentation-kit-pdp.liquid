@@ -85,6 +85,91 @@
 
 <div data-kit="fermentation" class="ferment-pdp">
 
+  <pre id="gb-debug-panel" style="display:none;position:fixed;bottom:0;left:0;right:0;max-height:50vh;overflow:auto;background:#1f1f1d;color:#e8f4dc;font:11px/1.4 monospace;padding:14px;z-index:99999;border-top:3px solid #ff7300;white-space:pre-wrap;word-break:break-all;">[GB DEBUG · ?gbdebug=1 — fermentation-kit]
+Product: {{ p.title }} ({{ p.handle }})
+
+# === SHARED ===
+hero_tagline                   = {{ p.metafields.custom.hero_tagline | default: '(empty)' }}
+discount_badge                 = {{ p.metafields.custom.discount_badge | default: '(empty)' }}
+rating                         = {{ p.metafields.custom.rating | default: '(empty)' }}
+review_count                   = {{ p.metafields.custom.review_count | default: '(empty)' }}
+bought_today                   = {{ p.metafields.custom.bought_today | default: '(empty)' }}
+days_subtitle                  = {{ p.metafields.custom.days_subtitle | default: '(empty)' }}
+days_to_ferment                = {{ p.metafields.custom.days_to_ferment | default: '(empty)' }}
+capacity                       = {{ p.metafields.custom.capacity | default: '(empty)' }}
+companion_size_product         = {% if p.metafields.custom.companion_size_product %}{{ p.metafields.custom.companion_size_product.value.title }}{% else %}(empty){% endif %}
+cross_sell_products    .size   = {{ p.metafields.custom.cross_sell_products.value.size | default: 0 }}
+activity_items         .size   = {{ p.metafields.custom.activity_items.value.size | default: 0 }}
+benefits_items         .size   = {{ p.metafields.custom.benefits_items.value.size | default: 0 }}
+hero_trust_strip       .size   = {{ p.metafields.custom.hero_trust_strip.value.size | default: 0 }}
+hero_benefits_icons    .size   = {{ p.metafields.custom.hero_benefits_icons.value.size | default: 0 }}
+benefits_icons         .size   = {{ p.metafields.custom.benefits_icons.value.size | default: 0 }}
+trust_strip_icons      .size   = {{ p.metafields.custom.trust_strip_icons.value.size | default: 0 }}
+step_icons             .size   = {{ p.metafields.custom.step_icons.value.size | default: 0 }}
+
+# === SHARED METAOBJECT LISTS ===
+featured_reviews          .size = {{ p.metafields.custom.featured_reviews.value.size | default: 0 }}
+featured_faqs             .size = {{ p.metafields.custom.featured_faqs.value.size | default: 0 }}
+featured_steps            .size = {{ p.metafields.custom.featured_steps.value.size | default: 0 }}
+featured_components       .size = {{ p.metafields.custom.featured_components.value.size | default: 0 }}
+featured_trust_cards      .size = {{ p.metafields.custom.featured_trust_cards.value.size | default: 0 }}
+featured_quick_benefits   .size = {{ p.metafields.custom.featured_quick_benefits.value.size | default: 0 }}
+featured_comparison_rows  .size = {{ p.metafields.custom.featured_comparison_rows.value.size | default: 0 }}
+featured_reels            .size = {{ p.metafields.custom.featured_reels.value.size | default: 0 }}
+
+# === FERMENTATION-KIT-SPECIFIC ===
+coupon_text                    = {{ p.metafields.custom.coupon_text | default: '(empty)' }}
+coupon_code                    = {{ p.metafields.custom.coupon_code | default: '(empty)' }}
+timeline_subtitle              = {{ p.metafields.custom.timeline_subtitle | default: '(empty)' | truncate: 80 }}
+itk_intro                      = {{ p.metafields.custom.itk_intro | default: '(empty)' | truncate: 80 }}
+refill_note_heading            = {{ p.metafields.custom.refill_note_heading | default: '(empty)' }}
+refill_cta_label               = {{ p.metafields.custom.refill_cta_label | default: '(empty)' }}
+refill_cta_url                 = {{ p.metafields.custom.refill_cta_url | default: '(empty)' }}
+science_stats_caption          = {{ p.metafields.custom.science_stats_caption | default: '(empty)' | truncate: 80 }}
+science_stats_disclaimer       = {{ p.metafields.custom.science_stats_disclaimer | default: '(empty)' | truncate: 80 }}
+dosage_amount                  = {{ p.metafields.custom.dosage_amount | default: '(empty)' }}
+dosage_label                   = {{ p.metafields.custom.dosage_label | default: '(empty)' }}
+dosage_caption                 = {{ p.metafields.custom.dosage_caption | default: '(empty)' | truncate: 80 }}
+recipe_count                   = {{ p.metafields.custom.recipe_count | default: '(empty)' }}
+recipe_h_label                 = {{ p.metafields.custom.recipe_h_label | default: '(empty)' }}
+recipe_h_text                  = {{ p.metafields.custom.recipe_h_text | default: '(empty)' }}
+recipe_banner_image            = {% if p.metafields.custom.recipe_banner_image %}{{ p.metafields.custom.recipe_banner_image.url | default: p.metafields.custom.recipe_banner_image | image_url: width: 80 }}{% else %}(empty){% endif %}
+
+# === FERMENTATION METAOBJECT LISTS ===
+featured_outcomes_stats       .size = {{ p.metafields.custom.featured_outcomes_stats.value.size | default: 0 }}
+featured_science_cards        .size = {{ p.metafields.custom.featured_science_cards.value.size | default: 0 }}
+featured_timeline_steps       .size = {{ p.metafields.custom.featured_timeline_steps.value.size | default: 0 }}
+featured_consumables          .size = {{ p.metafields.custom.featured_consumables.value.size | default: 0 }}
+featured_science_stats        .size = {{ p.metafields.custom.featured_science_stats.value.size | default: 0 }}
+featured_consumption_methods  .size = {{ p.metafields.custom.featured_consumption_methods.value.size | default: 0 }}
+featured_recipe_tags          .size = {{ p.metafields.custom.featured_recipe_tags.value.size | default: 0 }}
+
+# === FIRST ENTRY OF EACH METAOBJECT LIST (sanity check) ===
+review[0]:           quote={{ p.metafields.custom.featured_reviews.value.first.quote | default: '(empty)' | truncate: 60 }}
+faq[0]:              q={{ p.metafields.custom.featured_faqs.value.first.question | default: '(empty)' | truncate: 60 }}
+step[0]:             title={{ p.metafields.custom.featured_steps.value.first.title | default: '(empty)' | truncate: 40 }}
+component[0]:        name={{ p.metafields.custom.featured_components.value.first.name | default: '(empty)' | truncate: 40 }}
+trust_card[0]:       heading={{ p.metafields.custom.featured_trust_cards.value.first.heading | default: '(empty)' | truncate: 40 }}
+quick_benefit[0]:    heading={{ p.metafields.custom.featured_quick_benefits.value.first.heading | default: '(empty)' | truncate: 40 }}
+comparison_row[0]:   left_h={{ p.metafields.custom.featured_comparison_rows.value.first.left_heading | default: '(empty)' | truncate: 40 }}
+reel[0]:             handle={{ p.metafields.custom.featured_reels.value.first.author_handle | default: '(empty)' }}
+stat_pair[0]:        value={{ p.metafields.custom.featured_outcomes_stats.value.first.value | default: '(empty)' }}
+science_card[0]:     name={{ p.metafields.custom.featured_science_cards.value.first.name | default: '(empty)' }}
+timeline_step[0]:    period={{ p.metafields.custom.featured_timeline_steps.value.first.period_label | default: '(empty)' }} / heading={{ p.metafields.custom.featured_timeline_steps.value.first.heading | default: '(empty)' | truncate: 30 }}
+consumable[0]:       heading={{ p.metafields.custom.featured_consumables.value.first.heading | default: '(empty)' }}
+science_stat[0]:     stat={{ p.metafields.custom.featured_science_stats.value.first.stat | default: '(empty)' }} / heading={{ p.metafields.custom.featured_science_stats.value.first.heading | default: '(empty)' | truncate: 30 }}
+consumption[0]:      heading={{ p.metafields.custom.featured_consumption_methods.value.first.heading | default: '(empty)' }}
+recipe_tag[0]:       {{ p.metafields.custom.featured_recipe_tags.value.first.emoji | default: '' }} {{ p.metafields.custom.featured_recipe_tags.value.first.name | default: '(empty)' }}
+
+# === ALL CUSTOM METAFIELDS WITH NON-EMPTY VALUES ===
+{%- for mf in p.metafields.custom -%}
+  {%- if mf[1] != blank %}
+  • custom.{{ mf[0] }} ({{ mf[1].type }})
+  {%- endif -%}
+{%- endfor %}
+</pre>
+  <script>if (location.search.indexOf('gbdebug=1') !== -1) { var p=document.getElementById('gb-debug-panel'); if (p) p.style.display='block'; }</script>
+
   {%- liquid
     assign trust_blocks   = section.blocks | where: 'type', 'trust_card'
     assign step_blocks    = section.blocks | where: 'type', 'step'
@@ -182,7 +267,7 @@
                   <div class="benefit-item">
                     <span class="benefit-icon{% if mf_icon != blank %} benefit-icon--img{% endif %}">
                       {%- if mf_icon != blank -%}
-                        <img src="{{ mf_icon | image_url: width: 48 }}" alt="" loading="lazy" width="24" height="24">
+                        <img src="{{ mf_icon | image_url: width: 48 | default: mf_icon.url }}" alt="" loading="lazy" width="24" height="24">
                       {%- else -%}{{ parts[0] }}{%- endif -%}
                     </span>
                     <span>{{ parts[1] }}</span>
@@ -324,7 +409,7 @@
             {%- for tc in mf_trust_cards -%}
               <div class="tr-card">
                 <div class="tr-icon">
-                  {%- if tc.icon != blank -%}<img src="{{ tc.icon | image_url: width: 88 }}" alt="{{ tc.heading | escape }}" loading="lazy" width="44" height="44" class="tr-icon-img">{%- endif -%}
+                  {%- if tc.icon != blank -%}<img src="{{ tc.icon | image_url: width: 88 | default: tc.icon.url }}" alt="{{ tc.heading | escape }}" loading="lazy" width="44" height="44" class="tr-icon-img">{%- endif -%}
                 </div>
                 <div class="tr-h">{{ tc.heading }}</div>
                 <div class="tr-d">{{ tc.description }}</div>
@@ -335,8 +420,8 @@
               {%- assign mf_icon = mf_trust_icons[forloop.index0] -%}
               <div class="tr-card" {{ block.shopify_attributes }}>
                 <div class="tr-icon">
-                  {%- if mf_icon != blank -%}<img src="{{ mf_icon | image_url: width: 88 }}" alt="{{ block.settings.heading | escape }}" loading="lazy" width="44" height="44" class="tr-icon-img">
-                  {%- elsif block.settings.icon_image != blank -%}<img src="{{ block.settings.icon_image | image_url: width: 88 }}" alt="{{ block.settings.heading | escape }}" loading="lazy" width="44" height="44" class="tr-icon-img">
+                  {%- if mf_icon != blank -%}<img src="{{ mf_icon | image_url: width: 88 | default: mf_icon.url }}" alt="{{ block.settings.heading | escape }}" loading="lazy" width="44" height="44" class="tr-icon-img">
+                  {%- elsif block.settings.icon_image != blank -%}<img src="{{ block.settings.icon_image | image_url: width: 88 | default: block.settings.icon_image.url }}" alt="{{ block.settings.heading | escape }}" loading="lazy" width="44" height="44" class="tr-icon-img">
                   {%- else -%}{{ block.settings.icon }}{%- endif -%}
                 </div>
                 <div class="tr-h">{{ block.settings.heading }}</div>
@@ -373,7 +458,7 @@
             {%- if mf_steps != blank -%}
               {%- for step in mf_steps -%}
                 <div class="hm-step">
-                  <div class="hm-num">{%- if step.icon != blank -%}<img src="{{ step.icon | image_url: width: 72 }}" alt="" loading="lazy" width="36" height="36" class="hm-num-img">{%- else -%}{{ forloop.index }}{%- endif -%}</div>
+                  <div class="hm-num">{%- if step.icon != blank -%}<img src="{{ step.icon | image_url: width: 72 | default: step.icon.url }}" alt="" loading="lazy" width="36" height="36" class="hm-num-img">{%- else -%}{{ forloop.index }}{%- endif -%}</div>
                   <div class="hm-step-body"><div class="hm-title">{{ step.title }}</div><div class="hm-desc">{{ step.description }}</div></div>
                 </div>
               {%- endfor -%}
@@ -381,7 +466,7 @@
               {%- for block in step_blocks -%}
                 {%- assign mf_icon = mf_step_icons[forloop.index0] -%}
                 <div class="hm-step" {{ block.shopify_attributes }}>
-                  <div class="hm-num">{%- if mf_icon != blank -%}<img src="{{ mf_icon | image_url: width: 72 }}" alt="" loading="lazy" width="36" height="36" class="hm-num-img">{%- else -%}{{ forloop.index }}{%- endif -%}</div>
+                  <div class="hm-num">{%- if mf_icon != blank -%}<img src="{{ mf_icon | image_url: width: 72 | default: mf_icon.url }}" alt="" loading="lazy" width="36" height="36" class="hm-num-img">{%- else -%}{{ forloop.index }}{%- endif -%}</div>
                   <div class="hm-step-body"><div class="hm-title">{{ block.settings.title }}</div><div class="hm-desc">{{ block.settings.description }}</div></div>
                 </div>
               {%- endfor -%}
@@ -448,7 +533,7 @@
             {%- if mf_quick_bens != blank -%}
               {%- for qb in mf_quick_bens -%}
                 <div class="qb-card">
-                  <div class="qb-icon">{%- if qb.icon != blank -%}<img src="{{ qb.icon | image_url: width: 112 }}" alt="{{ qb.heading | escape }}" loading="lazy" width="56" height="56" class="qb-icon-img">{%- endif -%}</div>
+                  <div class="qb-icon">{%- if qb.icon != blank -%}<img src="{{ qb.icon | image_url: width: 112 | default: qb.icon.url }}" alt="{{ qb.heading | escape }}" loading="lazy" width="56" height="56" class="qb-icon-img">{%- endif -%}</div>
                   <div class="qb-h">{{ qb.heading }}</div>
                   <div class="qb-d">{{ qb.description }}</div>
                 </div>
@@ -457,8 +542,8 @@
               {%- for block in benefit_blocks -%}
                 {%- assign mf_icon = mf_benefit_icons[forloop.index0] -%}
                 <div class="qb-card" {{ block.shopify_attributes }}>
-                  <div class="qb-icon">{%- if mf_icon != blank -%}<img src="{{ mf_icon | image_url: width: 112 }}" alt="" loading="lazy" width="56" height="56" class="qb-icon-img">
-                  {%- elsif block.settings.icon_image != blank -%}<img src="{{ block.settings.icon_image | image_url: width: 112 }}" alt="" loading="lazy" width="56" height="56" class="qb-icon-img">
+                  <div class="qb-icon">{%- if mf_icon != blank -%}<img src="{{ mf_icon | image_url: width: 112 | default: mf_icon.url }}" alt="" loading="lazy" width="56" height="56" class="qb-icon-img">
+                  {%- elsif block.settings.icon_image != blank -%}<img src="{{ block.settings.icon_image | image_url: width: 112 | default: block.settings.icon_image.url }}" alt="" loading="lazy" width="56" height="56" class="qb-icon-img">
                   {%- else -%}{{ block.settings.icon }}{%- endif -%}</div>
                   <div class="qb-h">{{ block.settings.heading }}</div>
                   <div class="qb-d">{{ block.settings.description }}</div>
@@ -533,11 +618,11 @@
             <div class="box-pills">
               {%- if mf_components != blank -%}
                 {%- for c in mf_components -%}
-                  <div class="box-pill"><span class="bp-icon">{%- if c.icon != blank -%}<img src="{{ c.icon | image_url: width: 56 }}" alt="" loading="lazy" width="28" height="28" class="bp-icon-img">{%- else -%}{{ forloop.index }}{%- endif -%}</span><span class="bp-name">{{ c.name }}</span><span class="bp-sub">{{ c.description }}</span></div>
+                  <div class="box-pill"><span class="bp-icon">{%- if c.icon != blank -%}<img src="{{ c.icon | image_url: width: 56 | default: c.icon.url }}" alt="" loading="lazy" width="28" height="28" class="bp-icon-img">{%- else -%}{{ forloop.index }}{%- endif -%}</span><span class="bp-name">{{ c.name }}</span><span class="bp-sub">{{ c.description }}</span></div>
                 {%- endfor -%}
               {%- else -%}
                 {%- for block in component_blocks -%}
-                  <div class="box-pill" {{ block.shopify_attributes }}><span class="bp-icon">{%- if block.settings.icon_image != blank -%}<img src="{{ block.settings.icon_image | image_url: width: 56 }}" alt="" loading="lazy" width="28" height="28" class="bp-icon-img">{%- else -%}{{ forloop.index }}{%- endif -%}</span><span class="bp-name">{{ block.settings.name }}</span><span class="bp-sub">{{ block.settings.description }}</span></div>
+                  <div class="box-pill" {{ block.shopify_attributes }}><span class="bp-icon">{%- if block.settings.icon_image != blank -%}<img src="{{ block.settings.icon_image | image_url: width: 56 | default: block.settings.icon_image.url }}" alt="" loading="lazy" width="28" height="28" class="bp-icon-img">{%- else -%}{{ forloop.index }}{%- endif -%}</span><span class="bp-name">{{ block.settings.name }}</span><span class="bp-sub">{{ block.settings.description }}</span></div>
                 {%- endfor -%}
               {%- endif -%}
             </div>
