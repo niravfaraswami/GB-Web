@@ -56,12 +56,11 @@
 
 <div data-kit="sprouts" class="sprout-pdp">
 
-  {%- if request.url contains 'gbdebug=1' -%}
-    <pre style="position:fixed;bottom:0;left:0;right:0;max-height:40vh;overflow:auto;background:#1f1f1d;color:#e8f4dc;font:11px/1.4 monospace;padding:14px;z-index:99999;border-top:3px solid #ff7300;white-space:pre-wrap;word-break:break-all;">[GB DEBUG · append ?gbdebug=1]
-featured_reviews         exists?       {% if p.metafields.custom.featured_reviews %}YES{% else %}NO{% endif %}
-featured_reviews.type                = {{ p.metafields.custom.featured_reviews.type | default: 'nil' }}
-featured_reviews.value.size          = {{ p.metafields.custom.featured_reviews.value.size | default: 0 }}
-mf_reviews assigned blank?           = {% if mf_reviews == blank %}YES (won't render){% else %}NO{% endif %}
+  <pre id="gb-debug-panel" style="display:none;position:fixed;bottom:0;left:0;right:0;max-height:50vh;overflow:auto;background:#1f1f1d;color:#e8f4dc;font:11px/1.4 monospace;padding:14px;z-index:99999;border-top:3px solid #ff7300;white-space:pre-wrap;word-break:break-all;">[GB DEBUG · ?gbdebug=1]
+featured_reviews exists?              {% if p.metafields.custom.featured_reviews %}YES{% else %}NO{% endif %}
+featured_reviews.type               = {{ p.metafields.custom.featured_reviews.type | default: 'nil' }}
+featured_reviews.value.size         = {{ p.metafields.custom.featured_reviews.value.size | default: 0 }}
+mf_reviews assigned blank?          = {% if mf_reviews == blank %}YES (won't render){% else %}NO{% endif %}
 
 featured_reviews.value (first entry):
   type:    {{ p.metafields.custom.featured_reviews.value.first.type | default: 'nil' }}
@@ -78,7 +77,12 @@ All product custom metafields with non-empty values:
   {%- endif -%}
 {%- endfor %}
 </pre>
-  {%- endif -%}
+  <script>
+    if (location.search.indexOf('gbdebug=1') !== -1) {
+      var p = document.getElementById('gb-debug-panel');
+      if (p) p.style.display = 'block';
+    }
+  </script>
 
   {%- comment %} ============== 1. HERO ============== {% endcomment -%}
   <section class="pdp-hero">
