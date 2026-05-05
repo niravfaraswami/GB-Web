@@ -105,17 +105,26 @@ matrixify/
 
 > ⚠️ **Matrixify does NOT support metafield definitions import.** It only handles metafield *values*. To create the definitions, run `create_definitions_via_api.py` (uses Shopify's Admin GraphQL API directly), or switch to a Matrixify-compatible alternative like Altera. The `*Definitions.csv` is kept as a human-readable reference only.
 
-### Pass 1 — Create metafield definitions via the Shopify Admin API
+### Pass 1 — Create metafield + metaobject definitions via the Shopify Admin API
 
-`create_definitions_via_api.py` creates the `kit_review` metaobject + all 17 metafield definitions in one shot. Idempotent (re-running skips existing definitions).
+`create_definitions_via_api.py` is the single source of truth for ALL kit templates (sprout-maker today; baking, cultures, fermentation-kit, prebiotic, spice-refill next). Definitions are split into four groups:
+
+| Scope | What | Count |
+|---|---|---|
+| `metaobjects` | `kit_review`, `kit_faq`, `kit_step`, `kit_component` | 4 |
+| `shared` | Product metafields used by **every** kit (hero copy, comparison images, How-to-Make video, icon overrides, featured_* metaobject lists, …) | 19 |
+| `sprout` | Sprout-maker-specific extras (`jar_capacity`, `jar_size_chart_image`) | 2 |
+| `variants` | Per-variant metafields (`best_for`, `tag`) | 2 |
+
+**Total: 27 definitions** created in one run. Idempotent — re-running skips anything that already exists.
 
 **One-time setup (5 minutes):**
 
-1. **Settings → Apps and sales channels → Develop apps** → enable custom app development if prompted, then **Create an app** → name it "Sprout Maker Setup".
-2. **Configure Admin API scopes** → tick `read_products`, `write_products`, `read_metaobjects`, `write_metaobjects` → Save.
+1. **Settings → Apps and sales channels → Develop apps** → enable custom app development if prompted, then **Create an app** → name it "GutBasket PDP Setup".
+2. **Configure Admin API scopes** → tick `read_products`, `write_products`, `read_metaobjects`, `write_metaobjects`, `read_metaobject_definitions`, `write_metaobject_definitions` → Save.
 3. **Install app** → **Reveal token once** → copy the `shpat_...` token.
 
-**Run:**
+**Run (everything):**
 
 ```bash
 cd shopify/matrixify
@@ -124,7 +133,32 @@ ADMIN_TOKEN=shpat_xxxxxxxxxxxxxxxx \
 python3 create_definitions_via_api.py
 ```
 
-The script prints one line per definition; expect `Summary: 17 created, 0 skipped, 0 failed` on a fresh store, or `0 created, 17 skipped, 0 failed` if everything already exists.
+**Run a subset (useful for staged rollouts):**
+
+```bash
+python3 create_definitions_via_api.py --scope metaobjects   # only the 4 metaobjects
+python3 create_definitions_via_api.py --scope shared        # only the 19 cross-kit metafields
+python3 create_definitions_via_api.py --scope sprout        # only sprout-maker extras
+python3 create_definitions_via_api.py --scope variants      # only variant-level
+```
+
+**Adding a new kit template:** drop a new list in the script (e.g. `BAKING_DEFS = [...]`), add it to `MAIN_GROUPS`, append a `--scope baking` branch in `main()`. Done.
+
+### Featured-content metaobjects
+
+Four metaobject types let each product have its own structured content (instead of sharing block-based content across all products on the template):
+
+| Metaobject | Fields | Referenced by |
+|---|---|---|
+| `kit_review` | `photo` (Image), `quote`, `name`, `meta` | `custom.featured_reviews` |
+| `kit_faq` | `question`, `answer` | `custom.featured_faqs` |
+| `kit_step` | `title`, `description`, `icon` (Image) | `custom.featured_steps` |
+| `kit_component` | `name`, `description`, `icon` (Image) | `custom.featured_components` |
+
+Workflow per product:
+1. **Content → Metaobjects → Kit Review** → create entries for that product.
+2. Open the product → **Featured Reviews** metafield → pick the entries.
+3. Section liquid renders the metaobject list when set; otherwise falls back to the section's block-based content.
 
 ### Pass 2 — Import products (`Sprout-Maker-Shopify-Products-FINAL.csv`)
 

@@ -1,18 +1,28 @@
-ID,Command,Owner Type,Namespace,Key,Name,Description,Type,Pin,Storefront Visibility,Validations
-,MERGE,Product,custom,activity_items,Activity Items,"Hero activity row items. Each entry: ""<emoji>|<text>"". e.g. ""⚡|Fresh sprouts in 2–3 days""",list.single_line_text_field,true,true,
-,MERGE,Product,custom,benefits_items,Benefits Items,"Hero ""Why this kit"" 2x2 benefits. Each entry: ""<emoji>|<label>"". e.g. ""🌱|Fresh sprouts in 2–3 days""",list.single_line_text_field,true,true,
-,MERGE,Product,custom,hero_trust_strip,Hero Trust Strip,Short trust items shown below the ATC button. e.g. Free Shipping / FSSAI Licensed,list.single_line_text_field,true,true,
-,MERGE,Product,custom,jar_capacity,Jar Capacity,"Capacity label for the variant cards. ""700ml"" or ""1000ml""",single_line_text_field,true,true,
-,MERGE,Product,custom,help_note,Help Note,Helper text shown beside the Jar Size Chart link in the variant block,multi_line_text_field,true,true,
-,MERGE,Product,custom,jar_size_chart_image,Jar Size Chart Image,Image displayed inside the Jar Size Chart modal,file_reference,true,true,
-,MERGE,Product,custom,companion_size_product,Companion Size Product,The other capacity (700ml ↔ 1L) — drives the cross-capacity link below the variant block,product_reference,true,true,
-,MERGE,Product,custom,cross_sell_products,Cross-sell Products,Up to 3 products shown in the Pair It With section,list.product_reference,true,true,
-,MERGE,Product,custom,hero_benefits_icons,Hero Benefits Icons,"Custom SVG / image icons for the ""Why this kit"" 2x2 grid in the hero. List in the same order as benefits_items. Overrides the emoji prefix.",list.file_reference,true,true,
-,MERGE,Product,custom,benefits_icons,Benefits Icons,"Custom SVG / image icons for the ""Quick Benefits"" 3-card section. List in the same order as benefit blocks.",list.file_reference,true,true,
-,MERGE,Product,custom,comparison_left_image,Comparison Left Image,Image for the LEFT side of the comparison section (cloth method). Overrides the section setting.,file_reference,true,true,
-,MERGE,Product,custom,comparison_right_image,Comparison Right Image,Image for the RIGHT side of the comparison section (sprout maker). Overrides the section setting.,file_reference,true,true,
-,MERGE,Product,custom,box_image,Box Image,Image for the What's in the Box section. Overrides the section setting.,file_reference,true,true,
-,MERGE,Product,custom,how_to_make_video,How to Make Video,Demo video for the How to Make section. Overrides the section setting.,file_reference,true,true,
-,MERGE,Product,custom,featured_reviews,Featured Reviews,List of kit_review metaobjects shown in the UGC Reviews section. Overrides the manual review blocks.,list.metaobject_reference,true,true,
-,MERGE,Product Variant,custom,best_for,Best For,Per-variant audience copy under the BEST FOR label inside each pack card,single_line_text_field,true,true,
-,MERGE,Product Variant,custom,tag,Variant Tag,"Optional badge above each variant card. e.g. TOP SELLER, BEST VALUE",single_line_text_field,true,true,
+Group,Owner Type,Namespace,Key,Name,Type,Description
+Metaobject,Metaobject,—,kit_review,Kit Review,metaobject_definition,"Fields: photo (Image), quote (text), name (text), meta (text). Used by featured_reviews."
+Metaobject,Metaobject,—,kit_faq,Kit FAQ,metaobject_definition,"Fields: question (text), answer (multi-line). Used by featured_faqs."
+Metaobject,Metaobject,—,kit_step,Kit Step,metaobject_definition,"Fields: title (text), description (multi-line), icon (Image). Used by featured_steps."
+Metaobject,Metaobject,—,kit_component,Kit Component,metaobject_definition,"Fields: name (text), description (multi-line), icon (Image). Used by featured_components."
+Shared,Product,custom,activity_items,Activity Items,list.single_line_text_field,"Hero activity row items. Each entry: ""<emoji>|<text>""."
+Shared,Product,custom,benefits_items,Benefits Items,list.single_line_text_field,"Hero ""Why this kit"" 2x2 benefits. Each entry: ""<emoji>|<label>""."
+Shared,Product,custom,hero_trust_strip,Hero Trust Strip,list.single_line_text_field,"Short trust items shown below the ATC button."
+Shared,Product,custom,help_note,Help Note,multi_line_text_field,"Helper text shown beside the size-chart link."
+Shared,Product,custom,capacity,Capacity,single_line_text_field,"Generic capacity label (e.g. 700ml / 2L / 1kg)."
+Shared,Product,custom,size_chart_image,Size Chart Image,file_reference,"Image displayed inside the size-chart modal."
+Shared,Product,custom,companion_size_product,Companion Size Product,product_reference,"Sister product at a different capacity (700ml ↔ 1L)."
+Shared,Product,custom,cross_sell_products,Cross-sell Products,list.product_reference,"Up to 3 products in the Pair It With section."
+Shared,Product,custom,comparison_left_image,Comparison Left Image,file_reference,"Comparison section — left card image."
+Shared,Product,custom,comparison_right_image,Comparison Right Image,file_reference,"Comparison section — right card image."
+Shared,Product,custom,box_image,Box Image,file_reference,"What's-in-the-Box section image."
+Shared,Product,custom,how_to_make_video,How to Make Video,file_reference,"Demo video for the How-to-Make section (Video file)."
+Shared,Product,custom,hero_benefits_icons,Hero Benefits Icons,list.file_reference,"Icons for hero ""Why this kit"" 2x2 — same order as benefits_items."
+Shared,Product,custom,benefits_icons,Benefits Icons,list.file_reference,"Icons for Quick Benefits cards — same order as benefit blocks."
+Shared,Product,custom,trust_strip_icons,Trust Strip Icons,list.file_reference,"Icons for Trust Row — same order as trust_card blocks."
+Shared,Product,custom,featured_reviews,Featured Reviews,list.metaobject_reference,"Per-product UGC reviews (kit_review metaobject)."
+Shared,Product,custom,featured_faqs,Featured FAQs,list.metaobject_reference,"Per-product FAQ items (kit_faq metaobject)."
+Shared,Product,custom,featured_steps,Featured Steps,list.metaobject_reference,"Per-product How-to-Make steps (kit_step metaobject)."
+Shared,Product,custom,featured_components,Featured Components,list.metaobject_reference,"Per-product What's-in-the-Box components (kit_component metaobject)."
+Sprout,Product,custom,jar_capacity,Jar Capacity,single_line_text_field,"Sprout-maker-only capacity label (700ml / 1000ml). Other kits use `capacity`."
+Sprout,Product,custom,jar_size_chart_image,Jar Size Chart Image,file_reference,"Sprout-maker-only size chart image. Other kits use `size_chart_image`."
+Variant,Product Variant,custom,best_for,Best For,single_line_text_field,"Per-variant audience copy under BEST FOR."
+Variant,Product Variant,custom,tag,Variant Tag,single_line_text_field,"Optional badge above each variant card (e.g. TOP SELLER)."
