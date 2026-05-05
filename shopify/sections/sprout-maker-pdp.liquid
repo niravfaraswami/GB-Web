@@ -1,14 +1,31 @@
 {{ 'sprout-maker.css' | asset_url | stylesheet_tag }}
 
+{%- comment -%}
+  SEO overrides (custom.seo_title_override, custom.seo_description_override)
+  are intentionally NOT rendered here — sections render inside <body>, so
+  they can't influence <head>. To wire these up, add this to theme.liquid:
+
+    <title>{%- if request.page_type == 'product' and product.metafields.custom.seo_title_override != blank -%}
+      {{ product.metafields.custom.seo_title_override }}
+    {%- else -%}{{ page_title }}{%- endif -%}</title>
+
+    <meta name="description" content="{%- if request.page_type == 'product' and product.metafields.custom.seo_description_override != blank -%}
+      {{ product.metafields.custom.seo_description_override | escape }}
+    {%- else -%}{{ page_description | escape }}{%- endif -%}">
+
+  Until then, use Shopify's built-in SEO fields on each product
+  (Edit website SEO) — they end up in page_title / page_description.
+{%- endcomment -%}
+
 {%- liquid
   assign p = product
   assign tagline = p.metafields.custom.hero_tagline | default: 'Fresh, crunchy sprouts in 2–3 days. No smell. No mess. Just water and a jar.'
   assign save_badge = p.metafields.custom.discount_badge
   assign rating = p.metafields.custom.rating | default: 4.85
   assign review_count = p.metafields.custom.review_count | default: 0
-  assign jar_capacity = p.metafields.custom.jar_capacity | default: '700ml'
+  assign jar_capacity = p.metafields.custom.jar_capacity | default: p.metafields.custom.capacity | default: '700ml'
+  assign size_chart   = p.metafields.custom.jar_size_chart_image | default: p.metafields.custom.size_chart_image
   assign companion = p.metafields.custom.companion_size_product.value
-  assign jar_chart = p.metafields.custom.jar_size_chart_image
   assign hero_trust = p.metafields.custom.hero_trust_strip.value
   assign activity = p.metafields.custom.activity_items.value
   assign benefits = p.metafields.custom.benefits_items.value
@@ -19,11 +36,22 @@
 
   assign mf_compare_left  = p.metafields.custom.comparison_left_image
   assign mf_compare_right = p.metafields.custom.comparison_right_image
+  assign mf_compare_intro = p.metafields.custom.comparison_intro
   assign mf_box_image     = p.metafields.custom.box_image
+  assign mf_box_note      = p.metafields.custom.box_note
   assign mf_how_video     = p.metafields.custom.how_to_make_video
   assign mf_hero_icons    = p.metafields.custom.hero_benefits_icons.value
   assign mf_benefit_icons = p.metafields.custom.benefits_icons.value
+  assign mf_trust_icons   = p.metafields.custom.trust_strip_icons.value
+  assign mf_step_icons    = p.metafields.custom.step_icons.value
   assign mf_reviews       = p.metafields.custom.featured_reviews.value
+  assign mf_faqs          = p.metafields.custom.featured_faqs.value
+  assign mf_steps         = p.metafields.custom.featured_steps.value
+  assign mf_components    = p.metafields.custom.featured_components.value
+  assign mf_trust_cards   = p.metafields.custom.featured_trust_cards.value
+  assign mf_quick_bens    = p.metafields.custom.featured_quick_benefits.value
+  assign mf_compare_rows  = p.metafields.custom.featured_comparison_rows.value
+  assign mf_reels         = p.metafields.custom.featured_reels.value
 -%}
 
 <div data-kit="sprouts" class="sprout-pdp">
@@ -164,10 +192,10 @@
                 {%- endfor -%}
               </div>
 
-              {%- if jar_chart != blank or p.metafields.custom.help_note != blank -%}
+              {%- if size_chart != blank or p.metafields.custom.help_note != blank -%}
                 <div class="variant-help-note">
                   <span class="vhn-text">{{ p.metafields.custom.help_note | default: 'Choose the pack that fits your household.' }}</span>
-                  {%- if jar_chart != blank -%}
+                  {%- if size_chart != blank -%}
                     <button type="button" class="vhn-link" data-open-size-modal>Jar Size Chart →</button>
                   {%- endif -%}
                 </div>
@@ -215,31 +243,48 @@
     assign cross_blocks = section.blocks | where: 'type', 'cross_sell_product'
   -%}
 
-  {%- comment %} 2. TRUST ROW {% endcomment -%}
-  {%- if trust_blocks.size > 0 -%}
+  {%- comment %} 2. TRUST ROW — metaobject list overrides blocks {% endcomment -%}
+  {%- if mf_trust_cards != blank or trust_blocks.size > 0 -%}
     <section class="trust-row-section">
       <div class="container">
         <div class="trust-row-grid">
-          {%- for block in trust_blocks -%}
-            <div class="tr-card" {{ block.shopify_attributes }}>
-              <div class="tr-icon">
-                {%- if block.settings.icon_image != blank -%}
-                  {{ block.settings.icon_image | image_url: width: 88 | image_tag: loading: 'lazy', width: 44, height: 44, alt: block.settings.heading, class: 'tr-icon-img' }}
-                {%- else -%}
-                  {{ block.settings.icon }}
-                {%- endif -%}
+          {%- if mf_trust_cards != blank -%}
+            {%- for tc in mf_trust_cards -%}
+              <div class="tr-card">
+                <div class="tr-icon">
+                  {%- if tc.icon != blank -%}
+                    <img src="{{ tc.icon | image_url: width: 88 }}" alt="{{ tc.heading | escape }}" loading="lazy" width="44" height="44" class="tr-icon-img">
+                  {%- endif -%}
+                </div>
+                <div class="tr-h">{{ tc.heading }}</div>
+                <div class="tr-d">{{ tc.description }}</div>
               </div>
-              <div class="tr-h">{{ block.settings.heading }}</div>
-              <div class="tr-d">{{ block.settings.description }}</div>
-            </div>
-          {%- endfor -%}
+            {%- endfor -%}
+          {%- else -%}
+            {%- for block in trust_blocks -%}
+              {%- assign mf_icon = mf_trust_icons[forloop.index0] -%}
+              <div class="tr-card" {{ block.shopify_attributes }}>
+                <div class="tr-icon">
+                  {%- if mf_icon != blank -%}
+                    <img src="{{ mf_icon | image_url: width: 88 }}" alt="{{ block.settings.heading | escape }}" loading="lazy" width="44" height="44" class="tr-icon-img">
+                  {%- elsif block.settings.icon_image != blank -%}
+                    <img src="{{ block.settings.icon_image | image_url: width: 88 }}" alt="{{ block.settings.heading | escape }}" loading="lazy" width="44" height="44" class="tr-icon-img">
+                  {%- else -%}
+                    {{ block.settings.icon }}
+                  {%- endif -%}
+                </div>
+                <div class="tr-h">{{ block.settings.heading }}</div>
+                <div class="tr-d">{{ block.settings.description }}</div>
+              </div>
+            {%- endfor -%}
+          {%- endif -%}
         </div>
       </div>
     </section>
   {%- endif -%}
 
-  {%- comment %} 3. HOW TO MAKE {% endcomment -%}
-  {%- if step_blocks.size > 0 -%}
+  {%- comment %} 3. HOW TO MAKE — metaobject list overrides blocks {% endcomment -%}
+  {%- if mf_steps != blank or step_blocks.size > 0 -%}
     <section class="how-make-section">
       <div class="container">
         <div class="section-header centered">
@@ -259,36 +304,58 @@
             {%- endif -%}
           </div>
           <div class="hm-steps">
-            {%- for block in step_blocks -%}
-              <div class="hm-step" {{ block.shopify_attributes }}>
-                <div class="hm-num">
-                  {%- if block.settings.icon_image != blank -%}
-                    {{ block.settings.icon_image | image_url: width: 72 | image_tag: loading: 'lazy', width: 36, height: 36, alt: block.settings.title, class: 'hm-num-img' }}
-                  {%- else -%}
-                    {{ forloop.index }}
-                  {%- endif -%}
+            {%- if mf_steps != blank -%}
+              {%- for step in mf_steps -%}
+                <div class="hm-step">
+                  <div class="hm-num">
+                    {%- if step.icon != blank -%}
+                      <img src="{{ step.icon | image_url: width: 72 }}" alt="{{ step.title | escape }}" loading="lazy" width="36" height="36" class="hm-num-img">
+                    {%- else -%}
+                      {{ forloop.index }}
+                    {%- endif -%}
+                  </div>
+                  <div class="hm-step-body">
+                    <div class="hm-title">{{ step.title }}</div>
+                    <div class="hm-desc">{{ step.description }}</div>
+                  </div>
                 </div>
-                <div class="hm-step-body">
-                  <div class="hm-title">{{ block.settings.title }}</div>
-                  <div class="hm-desc">{{ block.settings.description }}</div>
+              {%- endfor -%}
+            {%- else -%}
+              {%- for block in step_blocks -%}
+                {%- assign mf_icon = mf_step_icons[forloop.index0] -%}
+                <div class="hm-step" {{ block.shopify_attributes }}>
+                  <div class="hm-num">
+                    {%- if mf_icon != blank -%}
+                      <img src="{{ mf_icon | image_url: width: 72 }}" alt="{{ block.settings.title | escape }}" loading="lazy" width="36" height="36" class="hm-num-img">
+                    {%- elsif block.settings.icon_image != blank -%}
+                      <img src="{{ block.settings.icon_image | image_url: width: 72 }}" alt="{{ block.settings.title | escape }}" loading="lazy" width="36" height="36" class="hm-num-img">
+                    {%- else -%}
+                      {{ forloop.index }}
+                    {%- endif -%}
+                  </div>
+                  <div class="hm-step-body">
+                    <div class="hm-title">{{ block.settings.title }}</div>
+                    <div class="hm-desc">{{ block.settings.description }}</div>
+                  </div>
                 </div>
-              </div>
-            {%- endfor -%}
+              {%- endfor -%}
+            {%- endif -%}
           </div>
         </div>
       </div>
     </section>
   {%- endif -%}
 
-  {%- comment %} 4. COMPARISON {% endcomment -%}
-  {%- if compare_blocks.size > 0 -%}
+  {%- comment %} 4. COMPARISON — metaobject list overrides blocks {% endcomment -%}
+  {%- if mf_compare_rows != blank or compare_blocks.size > 0 -%}
     <section class="myth-section">
       <div class="container">
         <div class="myth-header">
           <div class="eyebrow">{{ section.settings.compare_eyebrow }}</div>
           <h2>{{ section.settings.compare_heading }}<br><em>{{ section.settings.compare_heading_em }}</em></h2>
-          {%- if section.settings.compare_intro != blank -%}
-            <p style="margin-top:18px;">{{ section.settings.compare_intro }}</p>
+          {%- assign compare_intro = mf_compare_intro | default: section.settings.compare_intro -%}
+          {%- if compare_intro != blank -%}
+            <p style="margin-top:18px;">{{ compare_intro }}</p>
           {%- endif -%}
         </div>
         {%- assign cmp_left  = mf_compare_left  | default: section.settings.compare_left_image -%}
@@ -311,26 +378,41 @@
             <span>{{ section.settings.compare_right_label }}</span>
           </div>
           <div class="compare-table">
-            {%- for block in compare_blocks -%}
-              <div class="compare-row" {{ block.shopify_attributes }}>
-                <div class="compare-cell left">
-                  <div class="h">{{ block.settings.left_h }}</div>
-                  <div class="s">{{ block.settings.left_s }}</div>
+            {%- if mf_compare_rows != blank -%}
+              {%- for row in mf_compare_rows -%}
+                <div class="compare-row">
+                  <div class="compare-cell left">
+                    <div class="h">{{ row.left_heading }}</div>
+                    <div class="s">{{ row.left_subtext }}</div>
+                  </div>
+                  <div class="compare-cell right">
+                    <div class="h">{{ row.right_heading }}</div>
+                    <div class="s">{{ row.right_subtext }}</div>
+                  </div>
                 </div>
-                <div class="compare-cell right">
-                  <div class="h">{{ block.settings.right_h }}</div>
-                  <div class="s">{{ block.settings.right_s }}</div>
+              {%- endfor -%}
+            {%- else -%}
+              {%- for block in compare_blocks -%}
+                <div class="compare-row" {{ block.shopify_attributes }}>
+                  <div class="compare-cell left">
+                    <div class="h">{{ block.settings.left_h }}</div>
+                    <div class="s">{{ block.settings.left_s }}</div>
+                  </div>
+                  <div class="compare-cell right">
+                    <div class="h">{{ block.settings.right_h }}</div>
+                    <div class="s">{{ block.settings.right_s }}</div>
+                  </div>
                 </div>
-              </div>
-            {%- endfor -%}
+              {%- endfor -%}
+            {%- endif -%}
           </div>
         </div>
       </div>
     </section>
   {%- endif -%}
 
-  {%- comment %} 5. QUICK BENEFITS {% endcomment -%}
-  {%- if benefit_blocks.size > 0 -%}
+  {%- comment %} 5. QUICK BENEFITS — metaobject list overrides blocks {% endcomment -%}
+  {%- if mf_quick_bens != blank or benefit_blocks.size > 0 -%}
     <section class="outcomes-section">
       <div class="container">
         <div class="section-header centered">
@@ -338,36 +420,65 @@
           <h2>{{ section.settings.benefits_heading }}<br><em>{{ section.settings.benefits_heading_em }}</em></h2>
         </div>
         <div class="qb-grid">
-          {%- for block in benefit_blocks -%}
-            {%- assign mf_icon = mf_benefit_icons[forloop.index0] -%}
-            <div class="qb-card" {{ block.shopify_attributes }}>
-              <div class="qb-icon">
-                {%- if mf_icon != blank -%}
-                  <img src="{{ mf_icon | image_url: width: 112 }}" alt="{{ block.settings.heading }}" loading="lazy" width="56" height="56" class="qb-icon-img">
-                {%- elsif block.settings.icon_image != blank -%}
-                  <img src="{{ block.settings.icon_image | image_url: width: 112 }}" alt="{{ block.settings.heading }}" loading="lazy" width="56" height="56" class="qb-icon-img">
-                {%- else -%}
-                  {{ block.settings.icon }}
-                {%- endif -%}
+          {%- if mf_quick_bens != blank -%}
+            {%- for qb in mf_quick_bens -%}
+              <div class="qb-card">
+                <div class="qb-icon">
+                  {%- if qb.icon != blank -%}
+                    <img src="{{ qb.icon | image_url: width: 112 }}" alt="{{ qb.heading | escape }}" loading="lazy" width="56" height="56" class="qb-icon-img">
+                  {%- endif -%}
+                </div>
+                <div class="qb-h">{{ qb.heading }}</div>
+                <div class="qb-d">{{ qb.description }}</div>
               </div>
-              <div class="qb-h">{{ block.settings.heading }}</div>
-              <div class="qb-d">{{ block.settings.description }}</div>
-            </div>
-          {%- endfor -%}
+            {%- endfor -%}
+          {%- else -%}
+            {%- for block in benefit_blocks -%}
+              {%- assign mf_icon = mf_benefit_icons[forloop.index0] -%}
+              <div class="qb-card" {{ block.shopify_attributes }}>
+                <div class="qb-icon">
+                  {%- if mf_icon != blank -%}
+                    <img src="{{ mf_icon | image_url: width: 112 }}" alt="{{ block.settings.heading | escape }}" loading="lazy" width="56" height="56" class="qb-icon-img">
+                  {%- elsif block.settings.icon_image != blank -%}
+                    <img src="{{ block.settings.icon_image | image_url: width: 112 }}" alt="{{ block.settings.heading | escape }}" loading="lazy" width="56" height="56" class="qb-icon-img">
+                  {%- else -%}
+                    {{ block.settings.icon }}
+                  {%- endif -%}
+                </div>
+                <div class="qb-h">{{ block.settings.heading }}</div>
+                <div class="qb-d">{{ block.settings.description }}</div>
+              </div>
+            {%- endfor -%}
+          {%- endif -%}
         </div>
       </div>
     </section>
   {%- endif -%}
 
-  {%- comment %} 6. REELS — Quinn UGC widget OR manual blocks {% endcomment -%}
-  {%- if section.settings.quinn_embed != blank or reel_blocks.size > 0 -%}
+  {%- comment %} 6. REELS — featured_reels (metaobject) > quinn_embed > manual blocks {% endcomment -%}
+  {%- if mf_reels != blank or section.settings.quinn_embed != blank or reel_blocks.size > 0 -%}
     <section class="reels-section">
       <div class="container">
         <div class="section-header">
           <div class="eyebrow">{{ section.settings.reels_eyebrow }}</div>
           <h2>{{ section.settings.reels_heading }}<br><em>{{ section.settings.reels_heading_em }}</em></h2>
         </div>
-        {%- if section.settings.quinn_embed != blank -%}
+        {%- if mf_reels != blank -%}
+          <div class="reels-grid">
+            {%- for reel in mf_reels -%}
+              <div class="reels-tile">
+                {%- if reel.video != blank -%}
+                  {{ reel.video | video_tag: image_size: '600x', controls: false, loop: true, muted: true, autoplay: true }}
+                {%- elsif reel.poster != blank -%}
+                  <img src="{{ reel.poster | image_url: width: 600 }}" alt="{{ reel.caption | default: reel.author_handle | default: 'Customer reel' | escape }}" loading="lazy">
+                {%- else -%}📷{%- endif -%}
+                {%- if reel.author_handle != blank -%}
+                  <span class="reels-handle">{{ reel.author_handle }}</span>
+                {%- endif -%}
+              </div>
+            {%- endfor -%}
+          </div>
+        {%- elsif section.settings.quinn_embed != blank -%}
           <div class="reels-quinn">{{ section.settings.quinn_embed }}</div>
         {%- else -%}
           <div class="reels-grid">
@@ -376,7 +487,7 @@
                 {%- if block.settings.video != blank -%}
                   {{ block.settings.video | video_tag: image_size: '600x', controls: false, loop: true, muted: true, autoplay: true }}
                 {%- elsif block.settings.poster != blank -%}
-                  {{ block.settings.poster | image_url: width: 600 | image_tag: loading: 'lazy', alt: block.settings.caption | default: 'Customer reel' }}
+                  <img src="{{ block.settings.poster | image_url: width: 600 }}" alt="{{ block.settings.caption | default: 'Customer reel' | escape }}" loading="lazy">
                 {%- else -%}📷{%- endif -%}
               </div>
             {%- endfor -%}
@@ -386,15 +497,16 @@
     </section>
   {%- endif -%}
 
-  {%- comment %} 7. WHAT'S IN THE BOX {% endcomment -%}
-  {%- if component_blocks.size > 0 -%}
+  {%- comment %} 7. WHAT'S IN THE BOX — metaobject list overrides blocks {% endcomment -%}
+  {%- if mf_components != blank or component_blocks.size > 0 -%}
     <section class="box-section">
       <div class="container">
         <div class="section-header">
           <div class="eyebrow">{{ section.settings.box_eyebrow }}</div>
           <h2>{{ section.settings.box_heading }}<br><em>{{ section.settings.box_heading_em }}</em></h2>
         </div>
-        {%- assign box_img = mf_box_image | default: section.settings.box_image -%}
+        {%- assign box_img  = mf_box_image | default: section.settings.box_image -%}
+        {%- assign box_note = mf_box_note  | default: section.settings.box_note -%}
         <div class="box-grid">
           <div class="box-image">
             {%- if box_img != blank -%}
@@ -403,22 +515,38 @@
           </div>
           <div>
             <div class="box-pills">
-              {%- for block in component_blocks -%}
-                <div class="box-pill" {{ block.shopify_attributes }}>
-                  <span class="bp-icon">
-                    {%- if block.settings.icon_image != blank -%}
-                      {{ block.settings.icon_image | image_url: width: 56 | image_tag: loading: 'lazy', width: 28, height: 28, alt: block.settings.name, class: 'bp-icon-img' }}
-                    {%- else -%}
-                      {{ forloop.index }}
-                    {%- endif -%}
-                  </span>
-                  <span class="bp-name">{{ block.settings.name }}</span>
-                  <span class="bp-sub">{{ block.settings.description }}</span>
-                </div>
-              {%- endfor -%}
+              {%- if mf_components != blank -%}
+                {%- for c in mf_components -%}
+                  <div class="box-pill">
+                    <span class="bp-icon">
+                      {%- if c.icon != blank -%}
+                        <img src="{{ c.icon | image_url: width: 56 }}" alt="{{ c.name | escape }}" loading="lazy" width="28" height="28" class="bp-icon-img">
+                      {%- else -%}
+                        {{ forloop.index }}
+                      {%- endif -%}
+                    </span>
+                    <span class="bp-name">{{ c.name }}</span>
+                    <span class="bp-sub">{{ c.description }}</span>
+                  </div>
+                {%- endfor -%}
+              {%- else -%}
+                {%- for block in component_blocks -%}
+                  <div class="box-pill" {{ block.shopify_attributes }}>
+                    <span class="bp-icon">
+                      {%- if block.settings.icon_image != blank -%}
+                        <img src="{{ block.settings.icon_image | image_url: width: 56 }}" alt="{{ block.settings.name | escape }}" loading="lazy" width="28" height="28" class="bp-icon-img">
+                      {%- else -%}
+                        {{ forloop.index }}
+                      {%- endif -%}
+                    </span>
+                    <span class="bp-name">{{ block.settings.name }}</span>
+                    <span class="bp-sub">{{ block.settings.description }}</span>
+                  </div>
+                {%- endfor -%}
+              {%- endif -%}
             </div>
-            {%- if section.settings.box_note != blank -%}
-              <p class="box-note">{{ section.settings.box_note }}</p>
+            {%- if box_note != blank -%}
+              <p class="box-note">{{ box_note }}</p>
             {%- endif -%}
           </div>
         </div>
@@ -481,8 +609,8 @@
     </section>
   {%- endif -%}
 
-  {%- comment %} 9. FAQ {% endcomment -%}
-  {%- if faq_blocks.size > 0 -%}
+  {%- comment %} 9. FAQ — metaobject list overrides blocks {% endcomment -%}
+  {%- if mf_faqs != blank or faq_blocks.size > 0 -%}
     <section class="faq-section">
       <div class="container">
         <div class="section-header centered">
@@ -490,15 +618,27 @@
           <h2>{{ section.settings.faq_heading }}<br><em>{{ section.settings.faq_heading_em }}</em></h2>
         </div>
         <div class="faq-list">
-          {%- for block in faq_blocks -%}
-            <div class="faq-item {% if forloop.first %}open{% endif %}" data-faq {{ block.shopify_attributes }}>
-              <div class="faq-q">
-                <span>{{ block.settings.question }}</span>
-                <span class="faq-toggle">+</span>
+          {%- if mf_faqs != blank -%}
+            {%- for f in mf_faqs -%}
+              <div class="faq-item {% if forloop.first %}open{% endif %}" data-faq>
+                <div class="faq-q">
+                  <span>{{ f.question }}</span>
+                  <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-a">{{ f.answer | newline_to_br }}</div>
               </div>
-              <div class="faq-a">{{ block.settings.answer }}</div>
-            </div>
-          {%- endfor -%}
+            {%- endfor -%}
+          {%- else -%}
+            {%- for block in faq_blocks -%}
+              <div class="faq-item {% if forloop.first %}open{% endif %}" data-faq {{ block.shopify_attributes }}>
+                <div class="faq-q">
+                  <span>{{ block.settings.question }}</span>
+                  <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-a">{{ block.settings.answer }}</div>
+              </div>
+            {%- endfor -%}
+          {%- endif -%}
         </div>
       </div>
     </section>
@@ -558,14 +698,14 @@
   {%- endif -%}
 
   {%- comment %} ============== JAR SIZE MODAL ============== {% endcomment -%}
-  {%- if jar_chart != blank -%}
+  {%- if size_chart != blank -%}
     <div class="size-modal" id="jar-size-modal" data-size-modal>
       <div class="size-modal-card">
         <button type="button" class="size-modal-close" data-close-size-modal aria-label="Close">×</button>
         <div class="size-modal-eyebrow">JAR SIZE COMPARISON</div>
         <h3 class="size-modal-title">{{ jar_capacity }} sprout maker.</h3>
         <div class="size-modal-image">
-          {{ jar_chart | image_url: width: 1200 | image_tag: loading: 'lazy', alt: 'Sprout maker jar size comparison' }}
+          {{ size_chart | image_url: width: 1200 | image_tag: loading: 'lazy', alt: 'Sprout maker jar size comparison' }}
         </div>
         <p class="size-modal-caption">Shown next to a standard 250ml drinking glass for scale.</p>
       </div>
