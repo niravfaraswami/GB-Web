@@ -1,0 +1,67 @@
+Handle,Title,Body (HTML),Vendor,Product Category,Type,Tags,Published,Option1 Name,Option1 Value,Option1 Linked To,Option2 Name,Option2 Value,Option2 Linked To,Option3 Name,Option3 Value,Option3 Linked To,Variant SKU,Variant Grams,Variant Inventory Tracker,Variant Inventory Qty,Variant Inventory Policy,Variant Fulfillment Service,Variant Price,Variant Compare At Price,Variant Requires Shipping,Variant Taxable,Unit Price Total Measure,Unit Price Total Measure Unit,Unit Price Base Measure,Unit Price Base Measure Unit,Variant Barcode,Image Src,Image Position,Image Alt Text,Gift Card,SEO Title,SEO Description,Bought Today (product.metafields.custom.bought_today),Content ID (product.metafields.custom.content_id),Days Subtitle (product.metafields.custom.days_subtitle),Days to Ferment (product.metafields.custom.days_to_ferment),Discount Badge (product.metafields.custom.discount_badge),Hero Tagline (product.metafields.custom.hero_tagline),Kit Label Format (product.metafields.custom.kit_label_format),PDP Template (product.metafields.custom.pdp_template),Product Name Short (product.metafields.custom.product_name_short),Rating (product.metafields.custom.rating),Review Count (product.metafields.custom.review_count),Short Name (product.metafields.custom.short_name),Theme Accent (product.metafields.custom.theme_accent),Theme Accent Dark (product.metafields.custom.theme_accent_dark),Theme Accent Soft (product.metafields.custom.theme_accent_soft),Variant Image,Variant Weight Unit,Variant Tax Code,Cost per item,Status,Activity Items (product.metafields.custom.activity_items) [list.single_line_text_field],Benefits Items (product.metafields.custom.benefits_items) [list.single_line_text_field],Hero Trust Strip (product.metafields.custom.hero_trust_strip) [list.single_line_text_field],Jar Capacity (product.metafields.custom.jar_capacity) [single_line_text_field],Help Note (product.metafields.custom.help_note) [multi_line_text_field],Best For (variant.metafields.custom.best_for) [single_line_text_field],Variant Tag (variant.metafields.custom.tag) [single_line_text_field]
+sprout-making-jar,Sprout Maker - 700 ML,"<ul>
+<ul>
+<li>
+<strong>Premium Glass Jar</strong>: Made from high-quality, food-grade glass, perfect for sprouting a variety of seeds like mung beans, chickpeas, and more.</li>
+<li>
+<strong>Durable Perforated Lid</strong>: Rust-free and BPA-free lid with precision holes for easy rinsing and ventilation, ensuring optimal sprouting conditions.</li>
+<li>
+<strong>Step-by-Step Manual Included</strong>: Detailed instructions to guide beginners and experts alike in creating nutrient-packed sprouts effortlessly.</li>
+<li>
+<strong>Eco-Friendly &amp; Reusable</strong>: Say goodbye to single-use plastics with this sustainable, reusable kit.</li>
+<li>
+<strong>Compact &amp; Versatile</strong>: Ideal for home kitchens, healthy meal prep, and sprouting enthusiasts.<br><br>
+</li>
+</ul>
+</ul>
+<p> </p>
+<ul>
+<li>
+<p><strong>What’s in the Box?</strong></p>
+<ol>
+<li>700 ml Glass Jar</li>
+<li>Perforated Sprout Lid</li>
+<li>Instruction Manual</li>
+</ol>
+</li>
+</ul>",Gutbasket,Home & Garden > Kitchen & Dining > Food Storage Accessories,Sprout,Sprout,true,Size,1 Jar,,,,,,,,SM-700-1J,1000.0,shopify,3435,deny,manual,649.00,1299.00,true,false,,,,,,https://cdn.shopify.com/s/files/1/0807/9071/6649/files/1_aa697b34-feea-4a8e-8816-c75ace932e7f.webp?v=1777971719,1,"Glass jar with sprouts, a bowl of sprouts, and a gray lid on a light green background.",false,Sprout Maker Sprouting Kit with Glass Jar and Guide,,94,,Sprouts ready in,2-3,-₹650,"Fresh, crunchy sprouts in 2–3 days. No smell. No mess. Just water and a jar.",,sprout-maker,Sprout Maker,4.85,286,Sprout Maker,#3F7754,#2C5840,#E8F4DC,,kg,,,active,"[""⚡|Fresh sprouts in 2–3 days"", ""✨|No smell. No mess. Designed for kitchen counters""]","[""🌱|Fresh sprouts in 2–3 days"", ""✨|No smell, no mess"", ""💪|10× more enzymes than seed"", ""♻️|Reusable jar lasts forever""]","[""Free Shipping"", ""Sprouting-grade seeds"", ""FSSAI Licensed""]",700ml,"Going through 1L+ batches a week? Try the 1 L jar — same kit, more headroom.",Solo / Trial,
+sprout-making-jar,,,,,,,,,2 Jars,,,,,,,,SM-700-2J,0.0,shopify,3554,deny,manual,849.00,1999.00,true,false,,,,,,https://cdn.shopify.com/s/files/1/0807/9071/6649/files/4_924bc698-533f-4dc5-984d-b7db814fe7fe.webp?v=1777971719,2,"Sprout making kit with glass jar, sprouting lid, seeds, and guide on a white background.",,,,,,,,,,,,,,,,,,,,kg,,,,,,,,,Couples / Small family,TOP SELLER
+sprout-making-jar,,,,,,,,,4 Jars,,,,,,,,SM-700-4J,1000.0,shopify,4252,deny,manual,1249.00,2999.00,true,false,,,,,,https://cdn.shopify.com/s/files/1/0807/9071/6649/files/3_736a845d-025a-4c1c-b59e-37b43a4838bd.webp?v=1777971719,3,Step-by-step guide to making wholesome and hygienic sprouts with a jar and sprout maker.,,,,,,,,,,,,,,,,,,,,kg,,,,,,,,,Big families / Workplace,BEST VALUE
+sprout-making-jar,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,https://cdn.shopify.com/s/files/1/0807/9071/6649/files/7.webp?v=1777971719,4,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+sprout-making-jar,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,https://cdn.shopify.com/s/files/1/0807/9071/6649/files/5.webp?v=1777971719,5,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+sprout-making-jar,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,https://cdn.shopify.com/s/files/1/0807/9071/6649/files/2_a6084ac5-defa-4ab3-9d0b-f9de7571a313.webp?v=1777971720,6,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+sprout-making-jar,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,https://cdn.shopify.com/s/files/1/0807/9071/6649/files/6.webp?v=1777971720,7,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+sprout-making-jar,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,https://cdn.shopify.com/s/files/1/0807/9071/6649/files/3_964dacc2-57a5-41f6-bcb8-cf1870fb5cba.png?v=1777971719,8,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+sprout-maker-1-l,Sprout Maker - 1 L,"<ul>
+<ul>
+<li>
+<strong>Premium Glass Jar</strong>: Made from high-quality, food-grade glass, perfect for sprouting a variety of seeds like mung beans, chickpeas, and more.</li>
+<li>
+<strong>Durable Perforated Lid</strong>: Rust-free and BPA-free lid with precision holes for easy rinsing and ventilation, ensuring optimal sprouting conditions.</li>
+<li>
+<strong>Step-by-Step Manual Included</strong>: Detailed instructions to guide beginners and experts alike in creating nutrient-packed sprouts effortlessly.</li>
+<li>
+<strong>Eco-Friendly &amp; Reusable</strong>: Say goodbye to single-use plastics with this sustainable, reusable kit.</li>
+<li>
+<strong>Compact &amp; Versatile</strong>: Ideal for home kitchens, healthy meal prep, and sprouting enthusiasts.<br><br>
+</li>
+</ul>
+</ul>
+<p> </p>
+<ul>
+<li>
+<p><strong>What’s in the Box?</strong></p>
+<ol>
+<li>700 ml Glass Jar</li>
+<li>Perforated Sprout Lid</li>
+<li>Instruction Manual</li>
+</ol>
+</li>
+</ul>",Gutbasket,Home & Garden > Kitchen & Dining > Food Storage Accessories,Sprout,Sprout,true,Size,1 Jar,,,,,,,,SM-1000-1J,1000.0,shopify,3435,deny,manual,649.00,1299.00,true,false,,,,,,https://cdn.shopify.com/s/files/1/0807/9071/6649/files/1_aa697b34-feea-4a8e-8816-c75ace932e7f.webp?v=1777971719,1,"Glass jar with sprouts, a bowl of sprouts, and a gray lid on a light green background.",false,Sprout Maker Sprouting Kit with Glass Jar and Guide,,94,,Sprouts ready in,2-3,-₹650,"Fresh, crunchy sprouts in 2–3 days. No smell. No mess. Just water and a jar.",,sprout-maker,Sprout Maker,4.85,286,Sprout Maker,#3F7754,#2C5840,#E8F4DC,,kg,,,active,"[""⚡|Fresh sprouts in 2–3 days"", ""✨|No smell. No mess. Designed for kitchen counters""]","[""🌱|Fresh sprouts in 2–3 days"", ""✨|No smell, no mess"", ""💪|10× more enzymes than seed"", ""♻️|Reusable jar lasts forever""]","[""Free Shipping"", ""Sprouting-grade seeds"", ""FSSAI Licensed""]",1000ml,"Solo or trial run? The 700ml jar is plenty — same kit, smaller footprint.",Solo (heavy user),
+sprout-maker-1-l,,,,,,,,,2 Jars,,,,,,,,SM-1000-2J,0.0,shopify,3554,deny,manual,849.00,1999.00,true,false,,,,,,https://cdn.shopify.com/s/files/1/0807/9071/6649/files/4_924bc698-533f-4dc5-984d-b7db814fe7fe.webp?v=1777971719,2,"Sprout making kit with glass jar, sprouting lid, seeds, and guide on a white background.",,,,,,,,,,,,,,,,,,,,kg,,,,,,,,,Families,TOP SELLER
+sprout-maker-1-l,,,,,,,,,4 Jars,,,,,,,,SM-1000-4J,1000.0,shopify,4252,deny,manual,1249.00,2999.00,true,false,,,,,,https://cdn.shopify.com/s/files/1/0807/9071/6649/files/3_736a845d-025a-4c1c-b59e-37b43a4838bd.webp?v=1777971719,3,Step-by-step guide to making wholesome and hygienic sprouts with a jar and sprout maker.,,,,,,,,,,,,,,,,,,,,kg,,,,,,,,,Big families / Workplace pantry,BEST VALUE
+sprout-maker-1-l,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,https://cdn.shopify.com/s/files/1/0807/9071/6649/files/7.webp?v=1777971719,4,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+sprout-maker-1-l,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,https://cdn.shopify.com/s/files/1/0807/9071/6649/files/5.webp?v=1777971719,5,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+sprout-maker-1-l,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,https://cdn.shopify.com/s/files/1/0807/9071/6649/files/2_a6084ac5-defa-4ab3-9d0b-f9de7571a313.webp?v=1777971720,6,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+sprout-maker-1-l,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,https://cdn.shopify.com/s/files/1/0807/9071/6649/files/6.webp?v=1777971720,7,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+sprout-maker-1-l,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,https://cdn.shopify.com/s/files/1/0807/9071/6649/files/3_964dacc2-57a5-41f6-bcb8-cf1870fb5cba.png?v=1777971719,8,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

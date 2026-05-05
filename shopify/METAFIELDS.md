@@ -1,120 +1,145 @@
 # Metafields & Matrixify Import — Sprout Maker PDP
 
-These metafields drive content for **Sprout Maker 700ml** and **Sprout Maker 1000ml**. Both products share `templates/product.sprout-maker.json` and ship with three variants each (Pack: `1 Jar`, `2 Jars`, `4 Jars`).
+Two products share `templates/product.sprout-maker.json`, each with three variants on the **Size** option (`1 Jar`, `2 Jars`, `4 Jars`).
 
-All metafields use the **`custom`** namespace. Configure them at:
-**Settings → Custom data → Products → Add definition** (or **Variants** for variant-level fields).
+| Product | Handle | Variants |
+|---|---|---|
+| Sprout Maker - 700 ML | `sprout-making-jar` | SM-700-1J, SM-700-2J, SM-700-4J |
+| Sprout Maker - 1 L | `sprout-maker-1-l` | SM-1000-1J, SM-1000-2J, SM-1000-4J |
+
+All metafields use the **`custom`** namespace.
 
 ---
 
 ## A. Product metafields
 
-| # | Display name | Namespace | Key | Type | Notes |
-|---|---|---|---|---|---|
-| 1 | Hero tagline | `custom` | `tagline` | Single line text | Below H1 in hero |
-| 2 | Save badge text | `custom` | `save_badge_text` | Single line text | e.g. `-₹400`. Top-left of gallery image. |
-| 3 | Review rating | `custom` | `review_rating` | Decimal | 0.0–5.0. e.g. `4.85` |
-| 4 | Review count | `custom` | `review_count` | Integer | e.g. `286` |
-| 5 | Activity items | `custom` | `activity_items` | List · Single line text | Each entry: `<emoji>\|<text>` |
-| 6 | Hero benefits | `custom` | `benefits_items` | List · Single line text | Each entry: `<emoji>\|<label>` |
-| 7 | Hero trust strip | `custom` | `hero_trust_strip` | List · Single line text | 2–4 short items below ATC |
-| 8 | Jar capacity | `custom` | `jar_capacity` | Single line text | `700ml` or `1000ml` |
-| 9 | Help note | `custom` | `help_note` | Multi-line text | Beside the "Jar Size Chart →" link |
-| 10 | Jar size chart image | `custom` | `jar_size_chart_image` | File reference (image) | Modal content |
-| 11 | Companion size product | `custom` | `companion_size_product` | Product reference | 700ml ↔ 1000ml link below the variant block |
-| 12 | Cross-sell products | `custom` | `cross_sell_products` | List · Product references | Up to 3 products in "Pair It With" |
+The first block re-uses keys that already exist in your Shopify store (preserved from the original Matrixify export). The second block is **new** — Matrixify will create them on first import via the `[type]` hint in the column header.
+
+### Existing (already in your store)
+
+| Display name | Namespace | Key | Type |
+|---|---|---|---|
+| Hero Tagline | `custom` | `hero_tagline` | Single line text |
+| Discount Badge | `custom` | `discount_badge` | Single line text |
+| Rating | `custom` | `rating` | Decimal |
+| Review Count | `custom` | `review_count` | Integer |
+| Bought Today | `custom` | `bought_today` | Integer |
+| Days Subtitle | `custom` | `days_subtitle` | Single line text |
+| Days to Ferment | `custom` | `days_to_ferment` | Single line text |
+| PDP Template | `custom` | `pdp_template` | Single line text |
+| Product Name Short | `custom` | `product_name_short` | Single line text |
+| Short Name | `custom` | `short_name` | Single line text |
+| Theme Accent | `custom` | `theme_accent` | Single line text |
+| Theme Accent Dark | `custom` | `theme_accent_dark` | Single line text |
+| Theme Accent Soft | `custom` | `theme_accent_soft` | Single line text |
+| Content ID | `custom` | `content_id` | (left blank) |
+| Kit Label Format | `custom` | `kit_label_format` | (left blank) |
+
+### New (added by FINAL CSV)
+
+| Display name | Namespace | Key | Type |
+|---|---|---|---|
+| Activity Items | `custom` | `activity_items` | List · Single line text — `<emoji>\|<text>` per item |
+| Benefits Items | `custom` | `benefits_items` | List · Single line text — `<emoji>\|<label>` per item |
+| Hero Trust Strip | `custom` | `hero_trust_strip` | List · Single line text — short items below ATC |
+| Jar Capacity | `custom` | `jar_capacity` | Single line text — `700ml` / `1000ml` |
+| Help Note | `custom` | `help_note` | Multi-line text — beside the Jar Size Chart link |
+
+### Manual / pass-2
+
+These can't be filled in pass 1 because they reference other products that don't yet have IDs.
+
+| Display name | Namespace | Key | Type |
+|---|---|---|---|
+| Companion Size Product | `custom` | `companion_size_product` | Product reference (700ml ↔ 1L) |
+| Cross-Sell Products | `custom` | `cross_sell_products` | List · Product references — up to 3 in "Pair It With" |
+| Jar Size Chart Image | `custom` | `jar_size_chart_image` | File reference (image) |
 
 ## B. Variant metafields
 
-| # | Display name | Namespace | Key | Type | Notes |
-|---|---|---|---|---|---|
-| 1 | Best for | `custom` | `best_for` | Single line text | Per-variant copy under "BEST FOR" label inside each pack card |
-| 2 | Tag | `custom` | `tag` | Single line text | Optional badge above the card. e.g. `TOP SELLER`, `BEST VALUE` |
+| Display name | Namespace | Key | Type |
+|---|---|---|---|
+| Best For | `custom` | `best_for` | Single line text — per-variant copy under "BEST FOR" label |
+| Variant Tag | `custom` | `tag` | Single line text — optional badge (e.g. `TOP SELLER`, `BEST VALUE`) |
 
 ---
 
-## C. Matrixify import (`shopify/matrixify/`)
+## C. Matrixify import — 3 steps
 
 ```
-matrixify/
-├── build_csv.py                       # Regenerator (edit prices/copy here, then run)
-├── sprout-maker-products.csv          # PASS 1 — products + variants + simple metafields
-└── sprout-maker-references.csv        # PASS 2 — product references (after IDs exist)
+shopify/matrixify/
+├── build_final_csv.py                       # Regenerator (read-only of the user CSV → enriched CSV)
+├── Sprout-Maker-Shopify-Products-FINAL.csv  # ★ STEP 1 — upload this in Matrixify
+└── sprout-maker-references.csv              # STEP 2 — product references (after IDs exist)
 ```
 
-### Pass 1 — Products
+### Step 1 — Import products (`Sprout-Maker-Shopify-Products-FINAL.csv`)
 
-Upload `sprout-maker-products.csv` in **Matrixify → Import**. It creates/updates:
+Drop this file into **Matrixify → Import**. It mirrors your original CSV's structure (65 columns total: 58 of yours + 7 new) with all metafield values pre-filled.
 
-- 2 products (`sprout-maker-700ml`, `sprout-maker-1000ml`)
-- 3 variants each on the `Pack` option (`1 Jar`, `2 Jars`, `4 Jars`) with SKUs `SM-{capacity}-{count}J`
-- Template suffix set to `sprout-maker`
-- All product-level metafields (tagline, save badge, review rating/count, activity items, benefits, trust strip, jar capacity, help note)
-- Variant-level metafields (`best_for`, `tag`)
+It creates / updates:
 
-Pricing in the CSV is illustrative — adjust before importing:
+- 2 products (`sprout-making-jar`, `sprout-maker-1-l`)
+- 3 variants each on the `Size` option (`1 Jar`, `2 Jars`, `4 Jars`) with your existing SKUs and prices
+- All 8 product images per product (preserved from your original CSV)
+- 15 existing product metafields (with auto-filled defaults — overrides nothing you already had)
+- 5 new product metafields (`activity_items`, `benefits_items`, `hero_trust_strip`, `jar_capacity`, `help_note`)
+- 2 variant metafields (`best_for`, `tag`)
+- Template Suffix is **NOT** set in the file. Set it manually under **Online Store → Products → [product] → Theme template → `product.sprout-maker`**, OR add a `Template Suffix` column with value `sprout-maker` if you prefer to script it.
 
-| Product | Variant | Price | Compare-at |
-|---|---|---|---|
-| Sprout Maker 700ml | 1 Jar | ₹999 | ₹1,399 |
-| Sprout Maker 700ml | 2 Jars | ₹1,499 | ₹1,999 |
-| Sprout Maker 700ml | 4 Jars | ₹2,499 | ₹3,499 |
-| Sprout Maker 1000ml | 1 Jar | ₹1,199 | ₹1,599 |
-| Sprout Maker 1000ml | 2 Jars | ₹1,899 | ₹2,499 |
-| Sprout Maker 1000ml | 4 Jars | ₹2,999 | ₹3,999 |
+Variant tags filled by the script:
 
-Variant tags (badge text shown above the pack card):
+| Variant | best_for | tag |
+|---|---|---|
+| SM-700-1J | Solo / Trial | (none) |
+| SM-700-2J | Couples / Small family | TOP SELLER |
+| SM-700-4J | Big families / Workplace | BEST VALUE |
+| SM-1000-1J | Solo (heavy user) | (none) |
+| SM-1000-2J | Families | TOP SELLER |
+| SM-1000-4J | Big families / Workplace pantry | BEST VALUE |
 
-- `1 Jar` → no tag
-- `2 Jars` → `TOP SELLER`
-- `4 Jars` → `BEST VALUE`
+### Step 2 — Set product references (`sprout-maker-references.csv`)
 
-### Pass 2 — Product references
+Once Step 1 completes, find the new product IDs (Shopify Admin URL or a Matrixify products export) and replace the `REPLACE_WITH_*_ID` placeholders in `sprout-maker-references.csv`. Then upload it to set:
 
-Open `sprout-maker-references.csv` and replace the four `REPLACE_WITH_*_ID` placeholders with the real product GIDs from your store. Find them in **Matrixify → Export → Products** (the `ID` column gives `gid://shopify/Product/{numeric_id}`), or via Shopify Admin URL (`/admin/products/{numeric_id}`).
+- `custom.companion_size_product` — 700ml ↔ 1L (drives the "Looking for the {capacity} jar?" link below the variant block)
+- `custom.cross_sell_products` — up to 3 products in "Pair It With" (refills, recipe book, etc.)
 
-Then upload it to set:
+### Step 3 — Manual finishing in admin
 
-- `custom.companion_size_product` — 700ml points to 1000ml and vice versa (powers the "Looking for the {capacity} jar?" link below the variant block)
-- `custom.cross_sell_products` — up to 3 products shown in the "Pair It With" section (seed refills, recipe book, etc.)
+1. **Jar Size Chart image** — upload to Files, then assign to each product's `custom.jar_size_chart_image` metafield (file reference).
+2. **Theme template** — assign `product.sprout-maker` to both products if you didn't add a Template Suffix column.
+3. **Theme Editor** — open each product, confirm hero variant grid shows three cards (1/2/4 Jars) with prices and badges. Set the demo video on *How to Make*, upload UGC reels and review photos, point cross-sell to your refill products.
+4. **Judge.me** — paste your widget snippet into the Judge.me area's *Custom embed* HTML field, or rely on the default `data-id` widget.
 
-### Regenerating the CSV
+### Regenerating the FINAL CSV
 
-If you want to tweak pricing, copy, SKUs or add variants, edit `build_csv.py` and run:
+If you want to tweak metafield copy or add columns, edit the `COPY` / `SHARED` / `VARIANT_META` dicts at the top of `build_final_csv.py` and re-run:
 
 ```bash
 cd shopify/matrixify
-python3 build_csv.py
+python3 build_final_csv.py
 ```
 
-It rewrites `sprout-maker-products.csv` with proper CSV escaping for the JSON-encoded list metafields.
+It re-reads `Sprout-Maker-Shopify-Products.csv` (your original) and writes a fresh `…-FINAL.csv`.
 
 ---
 
-## D. After import — finishing touches
-
-1. **Upload product images** in the Shopify admin (Matrixify can also do this via the `Image Src` column if you have hosted URLs; the CSV leaves it blank).
-2. **Upload the Jar Size Chart image** (Files area), then assign it to each product's `custom.jar_size_chart_image` metafield.
-3. **Theme Editor** — open each product, confirm the hero variant grid shows three cards (1/2/4 Jars) with the correct prices and badges. Set the demo video on the *How to Make* area, upload UGC reels and review photos, point cross-sell to your refill products.
-4. **Judge.me** — paste your widget snippet into the section's *Custom embed* HTML field, or rely on the default `data-id` widget.
-
----
-
-## E. File map (full)
+## D. File map (full)
 
 ```
 shopify/
 ├── templates/
-│   └── product.sprout-maker.json     # assigns the section + ships default blocks/copy
+│   └── product.sprout-maker.json         # Section + default blocks/copy
 ├── sections/
-│   └── sprout-maker-pdp.liquid       # full PDP: hero + 10 content areas, 9 block types
+│   └── sprout-maker-pdp.liquid           # Hero + 10 content areas, 9 block types
 ├── snippets/
-│   └── sprout_cs_card.liquid         # cross-sell card partial
+│   └── sprout_cs_card.liquid             # Cross-sell card partial
 ├── assets/
-│   └── sprout-maker.css              # scoped to [data-kit="sprouts"]
+│   └── sprout-maker.css                  # Scoped to [data-kit="sprouts"]
 ├── matrixify/
-│   ├── build_csv.py
-│   ├── sprout-maker-products.csv
+│   ├── build_final_csv.py
+│   ├── Sprout-Maker-Shopify-Products-FINAL.csv
 │   └── sprout-maker-references.csv
-└── METAFIELDS.md                     # this file
+└── METAFIELDS.md                         # this file
 ```

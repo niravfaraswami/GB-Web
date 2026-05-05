@@ -2,9 +2,9 @@
 
 {%- liquid
   assign p = product
-  assign tagline = p.metafields.custom.tagline | default: 'Fresh, crunchy sprouts in 2–3 days. No smell. No mess. Just water and a jar.'
-  assign save_badge = p.metafields.custom.save_badge_text
-  assign rating = p.metafields.custom.review_rating | default: 4.85
+  assign tagline = p.metafields.custom.hero_tagline | default: 'Fresh, crunchy sprouts in 2–3 days. No smell. No mess. Just water and a jar.'
+  assign save_badge = p.metafields.custom.discount_badge
+  assign rating = p.metafields.custom.rating | default: 4.85
   assign review_count = p.metafields.custom.review_count | default: 0
   assign jar_capacity = p.metafields.custom.jar_capacity | default: '700ml'
   assign companion = p.metafields.custom.companion_size_product.value
@@ -13,6 +13,9 @@
   assign activity = p.metafields.custom.activity_items.value
   assign benefits = p.metafields.custom.benefits_items.value
   assign cross_sell_products = p.metafields.custom.cross_sell_products.value
+  assign bought_today = p.metafields.custom.bought_today
+  assign days_subtitle = p.metafields.custom.days_subtitle
+  assign days_to_ferment = p.metafields.custom.days_to_ferment
 -%}
 
 <div data-kit="sprouts" class="sprout-pdp">
@@ -66,12 +69,20 @@
             </div>
           {%- endif -%}
 
-          {%- if activity != blank -%}
+          {%- if bought_today != blank or days_to_ferment != blank or activity != blank -%}
             <div class="activity-row">
-              {%- for item in activity -%}
-                {%- assign parts = item | split: '|' -%}
-                <div class="item"><span>{{ parts[0] }}</span><span>{{ parts[1] }}</span></div>
-              {%- endfor -%}
+              {%- if bought_today != blank and bought_today > 0 -%}
+                <div class="item"><span class="dot"></span><span><strong>{{ bought_today }}</strong> people bought this today</span></div>
+              {%- endif -%}
+              {%- if days_to_ferment != blank -%}
+                <div class="item"><span>⚡</span><span>{{ days_subtitle | default: 'Sprouts ready in' }} <strong>{{ days_to_ferment }} days</strong></span></div>
+              {%- endif -%}
+              {%- if activity != blank -%}
+                {%- for item in activity -%}
+                  {%- assign parts = item | split: '|' -%}
+                  <div class="item"><span>{{ parts[0] }}</span><span>{{ parts[1] }}</span></div>
+                {%- endfor -%}
+              {%- endif -%}
             </div>
           {%- endif -%}
 
