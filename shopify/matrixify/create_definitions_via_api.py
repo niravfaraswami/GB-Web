@@ -165,6 +165,73 @@ METAOBJECTS = [
             ("author_handle", "Author Handle", "single_line_text_field", []),
         ],
     ),
+    # ---- Fermentation-kit-specific metaobjects ----
+    (
+        "kit_stat_pair", "Kit Stat Pair",
+        "Side-by-side stat pair (e.g. 4,37,000+ Indians with gut problems).",
+        [
+            ("value",   "Value",   "single_line_text_field", []),
+            ("caption", "Caption", "single_line_text_field", []),
+        ],
+    ),
+    (
+        "kit_science_card", "Kit Science Card",
+        "Spotlight card for design components (Airlock, Glass Weight…).",
+        [
+            ("name",            "Name",            "single_line_text_field", []),
+            ("image",           "Image",           "file_reference", IMG),
+            ("what_it_does",    "What it does",    "multi_line_text_field", []),
+            ("why_it_matters",  "Why it matters",  "multi_line_text_field", []),
+            ("chip",            "Chip",            "single_line_text_field", []),
+        ],
+    ),
+    (
+        "kit_timeline_step", "Kit Timeline Step",
+        "Time-period card on the health timeline (DAYS 1-3, WEEK 1…).",
+        [
+            ("period_label", "Period label", "single_line_text_field", []),
+            ("heading",      "Heading",      "single_line_text_field", []),
+            ("description",  "Description",  "multi_line_text_field", []),
+        ],
+    ),
+    (
+        "kit_consumable", "Kit Consumable",
+        "Detail card for a consumable inside the kit (Spice Mix, Ferment Boost…).",
+        [
+            ("image",       "Image",       "file_reference", IMG),
+            ("heading",     "Heading",     "single_line_text_field", []),
+            ("sub",         "Sub-heading", "multi_line_text_field", []),
+            ("ingredients", "Ingredients", "list.single_line_text_field", []),
+            ("category",    "Category",    "single_line_text_field", []),
+        ],
+    ),
+    (
+        "kit_science_stat", "Kit Science Stat",
+        "Science / study stat card (47% Reported Better Mood…).",
+        [
+            ("icon",        "Icon",        "single_line_text_field", []),
+            ("stat",        "Stat",        "single_line_text_field", []),
+            ("heading",     "Heading",     "single_line_text_field", []),
+            ("description", "Description", "multi_line_text_field", []),
+        ],
+    ),
+    (
+        "kit_consumption_method", "Kit Consumption Method",
+        "How-to-eat-it card (Morning shot, With meals, Spritzer…).",
+        [
+            ("image",       "Image",       "file_reference", IMG),
+            ("heading",     "Heading",     "single_line_text_field", []),
+            ("description", "Description", "multi_line_text_field", []),
+        ],
+    ),
+    (
+        "kit_recipe_tag", "Kit Recipe Tag",
+        "Pill tag in the recipes section (🥕 Black Carrot, 🟣 Beetroot…).",
+        [
+            ("emoji", "Emoji", "single_line_text_field", []),
+            ("name",  "Name",  "single_line_text_field", []),
+        ],
+    ),
 ]
 
 
@@ -290,6 +357,97 @@ SPROUT_DEFS = [
 
 
 # ============================================================
+# 3b. FERMENTATION-KIT-SPECIFIC METAFIELDS
+# ============================================================
+FERMENT_DEFS = [
+    # Hero coupon
+    ("PRODUCT", "custom", "coupon_text", "Coupon Text",
+     "single_line_text_field",
+     "Hero coupon bar text (e.g. \"Flat ₹50 off on your first order\").", []),
+    ("PRODUCT", "custom", "coupon_code", "Coupon Code",
+     "single_line_text_field",
+     "Hero coupon bar code chip (e.g. \"GUTKANJI\").", []),
+
+    # Featured-content metaobject lists for new sections
+    ("PRODUCT", "custom", "featured_outcomes_stats", "Featured Outcomes Stats",
+     "list.metaobject_reference",
+     "Side-by-side stat pair under Quick Benefits. References kit_stat_pair entries.",
+     [("max_list_size", "2")]),
+    ("PRODUCT", "custom", "featured_science_cards", "Featured Science Cards",
+     "list.metaobject_reference",
+     "Spotlight cards (Airlock, Glass Weight). References kit_science_card entries.",
+     [("max_list_size", "4")]),
+    ("PRODUCT", "custom", "featured_timeline_steps", "Featured Timeline Steps",
+     "list.metaobject_reference",
+     "Health-timeline cards. References kit_timeline_step entries.", []),
+    ("PRODUCT", "custom", "featured_consumables", "Featured Consumables",
+     "list.metaobject_reference",
+     "Inside-the-Kit detail cards (Spice Mix, Ferment Boost). References kit_consumable entries.",
+     [("max_list_size", "4")]),
+    ("PRODUCT", "custom", "featured_science_stats", "Featured Science Stats",
+     "list.metaobject_reference",
+     "Zoe-style science stat cards. References kit_science_stat entries.", []),
+    ("PRODUCT", "custom", "featured_consumption_methods", "Featured Consumption Methods",
+     "list.metaobject_reference",
+     "How-to-enjoy cards. References kit_consumption_method entries.", []),
+    ("PRODUCT", "custom", "featured_recipe_tags", "Featured Recipe Tags",
+     "list.metaobject_reference",
+     "Recipe tag pills. References kit_recipe_tag entries.", []),
+
+    # Section copy / control overrides
+    ("PRODUCT", "custom", "timeline_subtitle", "Timeline Subtitle",
+     "multi_line_text_field",
+     "Subtitle paragraph below the Health Timeline heading.", []),
+    ("PRODUCT", "custom", "itk_intro", "ITK Intro",
+     "multi_line_text_field",
+     "Intro paragraph for the Inside-the-Kit section.", []),
+    ("PRODUCT", "custom", "refill_note_heading", "Refill Note Heading",
+     "single_line_text_field",
+     "Heading inside the refill callout under the ITK section.", []),
+    ("PRODUCT", "custom", "refill_note_description", "Refill Note Description",
+     "multi_line_text_field",
+     "Body text inside the refill callout.", []),
+    ("PRODUCT", "custom", "refill_cta_label", "Refill CTA Label",
+     "single_line_text_field",
+     "Label on the refill CTA button (e.g. \"Shop Refills\").", []),
+    ("PRODUCT", "custom", "refill_cta_url", "Refill CTA URL",
+     "url",
+     "URL the refill CTA button links to.", []),
+    ("PRODUCT", "custom", "science_stats_caption", "Science Stats Caption",
+     "multi_line_text_field",
+     "Caption under the Zoe science stats grid.", []),
+    ("PRODUCT", "custom", "science_stats_disclaimer", "Science Stats Disclaimer",
+     "multi_line_text_field",
+     "Italic disclaimer under the Zoe stats grid.", []),
+
+    # Eat / dosage strip
+    ("PRODUCT", "custom", "dosage_amount", "Dosage Amount",
+     "single_line_text_field",
+     "Big number on the dosage strip (e.g. \"50–150\").", []),
+    ("PRODUCT", "custom", "dosage_label", "Dosage Label",
+     "single_line_text_field",
+     "Unit label under the amount (e.g. \"ml per day\").", []),
+    ("PRODUCT", "custom", "dosage_caption", "Dosage Caption",
+     "multi_line_text_field",
+     "Italic caption below the dosage strip.", []),
+
+    # Recipes
+    ("PRODUCT", "custom", "recipe_count", "Recipe Count",
+     "number_integer",
+     "Big number in the recipes header (e.g. 7).", []),
+    ("PRODUCT", "custom", "recipe_banner_image", "Recipe Banner Image",
+     "file_reference",
+     "Wide banner image above the recipe tags.", IMG),
+    ("PRODUCT", "custom", "recipe_h_label", "Recipe H Label",
+     "single_line_text_field",
+     "Highlighted word in the recipes heading (e.g. \"KANJI\").", []),
+    ("PRODUCT", "custom", "recipe_h_text", "Recipe H Text",
+     "single_line_text_field",
+     "Trailing text in the recipes heading (e.g. \"RECIPES INSIDE\").", []),
+]
+
+
+# ============================================================
 # 4. VARIANT-LEVEL METAFIELDS
 # ============================================================
 VARIANT_DEFS = [
@@ -299,20 +457,32 @@ VARIANT_DEFS = [
     ("PRODUCTVARIANT", "custom", "tag",      "Variant Tag",
      "single_line_text_field",
      "Optional badge above each variant card (e.g. TOP SELLER, BEST VALUE).", []),
+    ("PRODUCTVARIANT", "custom", "variant_illustration", "Variant Illustration",
+     "file_reference",
+     "Optional small illustration shown inside each variant pack card.", IMG),
 ]
 
 
 # Map: metaobject metafield key → metaobject type used to inject
 # a metaobject_definition_id validation at runtime.
 METAOBJECT_LINKS = {
-    "featured_reviews":         "kit_review",
-    "featured_faqs":            "kit_faq",
-    "featured_steps":           "kit_step",
-    "featured_components":      "kit_component",
-    "featured_trust_cards":     "kit_trust_card",
-    "featured_quick_benefits":  "kit_quick_benefit",
-    "featured_comparison_rows": "kit_comparison_row",
-    "featured_reels":           "kit_reel",
+    # Shared
+    "featured_reviews":             "kit_review",
+    "featured_faqs":                "kit_faq",
+    "featured_steps":               "kit_step",
+    "featured_components":          "kit_component",
+    "featured_trust_cards":         "kit_trust_card",
+    "featured_quick_benefits":      "kit_quick_benefit",
+    "featured_comparison_rows":     "kit_comparison_row",
+    "featured_reels":               "kit_reel",
+    # Fermentation-kit-specific
+    "featured_outcomes_stats":      "kit_stat_pair",
+    "featured_science_cards":       "kit_science_card",
+    "featured_timeline_steps":      "kit_timeline_step",
+    "featured_consumables":         "kit_consumable",
+    "featured_science_stats":       "kit_science_stat",
+    "featured_consumption_methods": "kit_consumption_method",
+    "featured_recipe_tags":         "kit_recipe_tag",
 }
 
 
@@ -431,7 +601,7 @@ def main():
     )
     parser.add_argument(
         "--scope",
-        choices=["all", "metaobjects", "shared", "sprout", "variants"],
+        choices=["all", "metaobjects", "shared", "sprout", "ferment", "variants"],
         default="all",
         help="Which group(s) to create. Default: all.",
     )
@@ -450,6 +620,8 @@ def main():
         for i, n in enumerate(create_metafields(SHARED_DEFS,  "Shared product metafields")): totals[i] += n
     if args.scope in ("all", "sprout"):
         for i, n in enumerate(create_metafields(SPROUT_DEFS,  "Sprout-maker metafields")):   totals[i] += n
+    if args.scope in ("all", "ferment"):
+        for i, n in enumerate(create_metafields(FERMENT_DEFS, "Fermentation-kit metafields")):   totals[i] += n
     if args.scope in ("all", "variants"):
         for i, n in enumerate(create_metafields(VARIANT_DEFS, "Variant-level metafields")): totals[i] += n
 
