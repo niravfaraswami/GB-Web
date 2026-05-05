@@ -3,7 +3,7 @@
 {%- liquid
   assign p = product
 
-  comment ============== EXISTING / SHARED METAFIELDS ============== endcomment
+  # ============== EXISTING / SHARED METAFIELDS ==============
   assign tagline         = p.metafields.custom.hero_tagline | default: 'Make authentic, gut-loving ferments at home.'
   assign save_badge      = p.metafields.custom.discount_badge
   assign rating          = p.metafields.custom.rating | default: 4.8
@@ -19,7 +19,7 @@
   assign benefits        = p.metafields.custom.benefits_items.value
   assign cross_sell      = p.metafields.custom.cross_sell_products.value
 
-  comment Section image / video / icon overrides (shared) endcomment
+  # Section image / video / icon overrides (shared)
   assign mf_compare_left  = p.metafields.custom.comparison_left_image
   assign mf_compare_right = p.metafields.custom.comparison_right_image
   assign mf_compare_intro = p.metafields.custom.comparison_intro
@@ -31,7 +31,7 @@
   assign mf_trust_icons   = p.metafields.custom.trust_strip_icons.value
   assign mf_step_icons    = p.metafields.custom.step_icons.value
 
-  comment Reusable metaobject lists endcomment
+  # Reusable metaobject lists
   assign mf_reviews       = p.metafields.custom.featured_reviews.value
   assign mf_faqs          = p.metafields.custom.featured_faqs.value
   assign mf_steps         = p.metafields.custom.featured_steps.value
@@ -41,22 +41,22 @@
   assign mf_compare_rows  = p.metafields.custom.featured_comparison_rows.value
   assign mf_reels         = p.metafields.custom.featured_reels.value
 
-  comment ============== FERMENTATION-KIT-SPECIFIC METAFIELDS ============== endcomment
-  comment Hero coupon endcomment
+  # ============== FERMENTATION-KIT-SPECIFIC METAFIELDS ==============
+  # Hero coupon
   assign coupon_text = p.metafields.custom.coupon_text
   assign coupon_code = p.metafields.custom.coupon_code
 
-  comment Outcomes pair stats (indians-strip) endcomment
+  # Outcomes pair stats (indians-strip)
   assign mf_outcome_stats = p.metafields.custom.featured_outcomes_stats.value
 
-  comment Science section (airlock + glass weight cards) endcomment
+  # Science section (airlock + glass weight cards)
   assign mf_science_cards = p.metafields.custom.featured_science_cards.value
 
-  comment Health timeline endcomment
+  # Health timeline
   assign mf_timeline = p.metafields.custom.featured_timeline_steps.value
   assign timeline_subtitle = p.metafields.custom.timeline_subtitle
 
-  comment Inside the kit (consumables) endcomment
+  # Inside the kit (consumables)
   assign mf_consumables = p.metafields.custom.featured_consumables.value
   assign itk_intro = p.metafields.custom.itk_intro
   assign refill_h = p.metafields.custom.refill_note_heading
@@ -64,18 +64,18 @@
   assign refill_label = p.metafields.custom.refill_cta_label
   assign refill_url = p.metafields.custom.refill_cta_url
 
-  comment Zoe science stats endcomment
+  # Zoe science stats
   assign mf_science_stats = p.metafields.custom.featured_science_stats.value
   assign science_caption = p.metafields.custom.science_stats_caption
   assign science_disclaimer = p.metafields.custom.science_stats_disclaimer
 
-  comment Eat / consumption methods endcomment
+  # Eat / consumption methods
   assign mf_consumption = p.metafields.custom.featured_consumption_methods.value
   assign dosage_amount = p.metafields.custom.dosage_amount
   assign dosage_label = p.metafields.custom.dosage_label
   assign dosage_caption = p.metafields.custom.dosage_caption
 
-  comment Recipes endcomment
+  # Recipes
   assign mf_recipe_tags = p.metafields.custom.featured_recipe_tags.value
   assign recipe_count = p.metafields.custom.recipe_count
   assign recipe_banner = p.metafields.custom.recipe_banner_image
