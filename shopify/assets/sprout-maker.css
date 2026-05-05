@@ -120,8 +120,12 @@
 .pdp-hero .gallery-stack {
   display: flex; flex-direction: column; gap: 14px;
   min-width: 0;
-  position: sticky;
-  top: 24px;
+}
+@media (min-width: 769px) {
+  .pdp-hero .gallery-stack {
+    position: sticky;
+    top: 24px;
+  }
 }
 .pdp-hero .gallery-main {
   background: var(--kit-color-soft);
