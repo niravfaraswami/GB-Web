@@ -70,22 +70,16 @@ All metafields use the **`custom`** namespace (Shopify's default app-less namesp
 ```
 shopify/
 ├── templates/
-│   └── product.sprout-maker.json          ← assign this template to both products
+│   └── product.sprout-maker.json     ← assign this template to both products
 ├── sections/
-│   ├── main-product-sprout-maker.liquid   ← hero, gallery, size selector, ATC, modal
-│   ├── sprout-trust-row.liquid            ← 4 trust cards
-│   ├── sprout-how-to-make.liquid          ← 1:1 video + 4 numbered steps
-│   ├── sprout-comparison.liquid           ← Sprout maker vs cloth (5 rows)
-│   ├── sprout-benefits.liquid             ← 3 quick benefit cards
-│   ├── sprout-reels.liquid                ← 4 vertical UGC reels (9:16)
-│   ├── sprout-whats-in-box.liquid         ← image + numbered component pills
-│   ├── sprout-reviews.liquid              ← 3 horizontal-split UGC review cards
-│   ├── sprout-faq.liquid                  ← stacked accordion
-│   ├── sprout-cross-sell.liquid           ← 3 cross-sell product cards
-│   └── sprout-judgeme.liquid              ← Judge.me embed slot
+│   └── sprout-maker-pdp.liquid       ← single section: hero + 10 content sections
+├── snippets/
+│   └── sprout_cs_card.liquid         ← cross-sell card partial
 └── assets/
-    └── sprout-maker.css                   ← scoped to [data-kit="sprouts"]
+    └── sprout-maker.css              ← scoped to [data-kit="sprouts"]
 ```
+
+The entire PDP lives in one section (`sprout-maker-pdp.liquid`) with 9 block types — `trust_card`, `step`, `comparison_row`, `benefit`, `reel`, `box_component`, `review`, `faq`, `cross_sell_product`. Section settings hold the eyebrow/heading copy for each subsection; blocks hold the repeatable content.
 
 ---
 

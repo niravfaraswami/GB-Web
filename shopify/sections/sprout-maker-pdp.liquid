@@ -1,0 +1,658 @@
+{{ 'sprout-maker.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign p = product
+  assign tagline = p.metafields.custom.tagline | default: 'Fresh, crunchy sprouts in 2–3 days. No smell. No mess. Just water and a jar.'
+  assign save_badge = p.metafields.custom.save_badge_text
+  assign rating = p.metafields.custom.review_rating | default: 4.85
+  assign review_count = p.metafields.custom.review_count | default: 0
+  assign jar_capacity = p.metafields.custom.jar_capacity | default: '700ml'
+  assign best_for = p.metafields.custom.best_for | default: 'Solo / Trial'
+  assign companion = p.metafields.custom.companion_size_product.value
+  assign jar_chart = p.metafields.custom.jar_size_chart_image
+  assign hero_trust = p.metafields.custom.hero_trust_strip.value
+  assign activity = p.metafields.custom.activity_items.value
+  assign benefits = p.metafields.custom.benefits_items.value
+  assign cross_sell_products = p.metafields.custom.cross_sell_products.value
+-%}
+
+<div data-kit="sprouts" class="sprout-pdp">
+
+  {%- comment %} ============== 1. HERO ============== {% endcomment -%}
+  <section class="pdp-hero">
+    <div class="container">
+      {%- if section.settings.show_breadcrumb -%}
+        <div class="breadcrumb">
+          <a href="{{ routes.root_url }}">Home</a> /
+          {%- if collection -%}<a href="{{ collection.url }}">{{ collection.title }}</a> /{%- endif -%}
+          <span>{{ p.title }}</span>
+        </div>
+      {%- endif -%}
+
+      <div class="hero-title-block">
+        <h1 class="product-name">{{ p.title }}</h1>
+        <p class="product-tagline">{{ tagline }}</p>
+      </div>
+
+      <div class="hero-grid">
+        <div class="gallery-stack">
+          <div class="gallery-main">
+            {%- if save_badge != blank -%}<span class="save-badge">{{ save_badge }}</span>{%- endif -%}
+            {%- if p.featured_media -%}
+              {{ p.featured_media | image_url: width: 1200 | image_tag:
+                 loading: 'eager', width: p.featured_media.width, height: p.featured_media.height,
+                 alt: p.featured_media.alt | default: p.title, class: 'gallery-main-img' }}
+            {%- else -%}
+              <div class="gallery-illustration">🌱</div>
+            {%- endif -%}
+          </div>
+          {%- if p.media.size > 1 -%}
+            <div class="gallery-thumbs">
+              {%- for media in p.media limit: 6 -%}
+                <button class="gallery-thumb {% if forloop.first %}active{% endif %}" type="button"
+                        data-media-id="{{ media.id }}" aria-label="View image {{ forloop.index }}">
+                  {{ media | image_url: width: 180 | image_tag:
+                     loading: 'lazy', width: 90, height: 90, alt: media.alt | default: p.title }}
+                </button>
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+        </div>
+
+        <div class="product-info">
+          {%- if review_count > 0 -%}
+            <div class="rating-row">
+              <span class="stars" aria-label="{{ rating }} out of 5">★★★★★</span>
+              <a href="#judgeme-reviews" class="rating-link">{{ rating }} ({{ review_count }} reviews)</a>
+            </div>
+          {%- endif -%}
+
+          {%- if activity != blank -%}
+            <div class="activity-row">
+              {%- for item in activity -%}
+                {%- assign parts = item | split: '|' -%}
+                <div class="item"><span>{{ parts[0] }}</span><span>{{ parts[1] }}</span></div>
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+
+          {%- if benefits != blank -%}
+            <div class="benefits-block">
+              <div class="label">Why this kit</div>
+              <div class="benefits-grid">
+                {%- for b in benefits -%}
+                  {%- assign parts = b | split: '|' -%}
+                  <div class="benefit-item">
+                    <span class="benefit-icon">{{ parts[0] }}</span>
+                    <span>{{ parts[1] }}</span>
+                  </div>
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endif -%}
+
+          {%- form 'product', p, id: 'sprout-product-form' -%}
+            <input type="hidden" name="id" value="{{ p.selected_or_first_available_variant.id }}">
+
+            <div class="variant-block">
+              <div class="variant-label">Select Size</div>
+              <div class="variant-grid">
+                <div class="variant active" aria-current="true">
+                  <span class="variant-tag">YOU'RE VIEWING</span>
+                  <span class="variant-radio"></span>
+                  <div class="variant-pack">{{ jar_capacity | upcase }}</div>
+                  <div class="variant-rationale">
+                    <div class="vr-row"><span class="vr-label">BEST FOR</span><span class="vr-text">{{ best_for }}</span></div>
+                  </div>
+                  <div class="variant-price">
+                    <span>{{ p.price | money }}</span>
+                    {%- if p.compare_at_price > p.price -%}
+                      <span class="variant-compare">{{ p.compare_at_price | money }}</span>
+                    {%- endif -%}
+                  </div>
+                  {%- if p.compare_at_price > p.price -%}
+                    <span class="variant-save">You save {{ p.compare_at_price | minus: p.price | money }}</span>
+                  {%- endif -%}
+                </div>
+
+                {%- if companion -%}
+                  {%- assign other_capacity = companion.metafields.custom.jar_capacity | default: 'Other size' -%}
+                  {%- assign other_best_for = companion.metafields.custom.best_for | default: '' -%}
+                  <a class="variant variant--link" href="{{ companion.url }}">
+                    <span class="variant-radio"></span>
+                    <div class="variant-pack">{{ other_capacity | upcase }}</div>
+                    <div class="variant-rationale">
+                      <div class="vr-row"><span class="vr-label">BEST FOR</span><span class="vr-text">{{ other_best_for }}</span></div>
+                    </div>
+                    <div class="variant-price">
+                      <span>{{ companion.price | money }}</span>
+                      {%- if companion.compare_at_price > companion.price -%}
+                        <span class="variant-compare">{{ companion.compare_at_price | money }}</span>
+                      {%- endif -%}
+                    </div>
+                    {%- if companion.compare_at_price > companion.price -%}
+                      <span class="variant-save">You save {{ companion.compare_at_price | minus: companion.price | money }}</span>
+                    {%- endif -%}
+                  </a>
+                {%- endif -%}
+              </div>
+
+              {%- if jar_chart != blank or p.metafields.custom.help_note != blank -%}
+                <div class="variant-help-note">
+                  <span class="vhn-text">{{ p.metafields.custom.help_note | default: 'Choose the size that fits your household.' }}</span>
+                  {%- if jar_chart != blank -%}
+                    <button type="button" class="vhn-link" data-open-size-modal>Jar Size Chart →</button>
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+            </div>
+
+            <button type="submit" name="add" class="atc-btn" {% unless p.available %}disabled{% endunless %}>
+              {%- if p.available -%}ADD TO CART · {{ p.price | money }}{%- else -%}SOLD OUT{%- endif -%}
+            </button>
+          {%- endform -%}
+
+          <div class="trust-strip">
+            {%- if hero_trust != blank -%}
+              {%- for t in hero_trust -%}
+                <div class="item"><span class="check">✓</span> {{ t }}</div>
+              {%- endfor -%}
+            {%- else -%}
+              <div class="item"><span class="check">✓</span> Free Shipping</div>
+              <div class="item"><span class="check">✓</span> Sprouting-grade seeds</div>
+              <div class="item"><span class="check">✓</span> FSSAI Licensed</div>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {%- comment %} ============== BLOCK-DRIVEN SECTIONS ============== {% endcomment -%}
+  {%- liquid
+    assign trust_blocks = section.blocks | where: 'type', 'trust_card'
+    assign step_blocks = section.blocks | where: 'type', 'step'
+    assign compare_blocks = section.blocks | where: 'type', 'comparison_row'
+    assign benefit_blocks = section.blocks | where: 'type', 'benefit'
+    assign reel_blocks = section.blocks | where: 'type', 'reel'
+    assign component_blocks = section.blocks | where: 'type', 'box_component'
+    assign review_blocks = section.blocks | where: 'type', 'review'
+    assign faq_blocks = section.blocks | where: 'type', 'faq'
+    assign cross_blocks = section.blocks | where: 'type', 'cross_sell_product'
+  -%}
+
+  {%- comment %} 2. TRUST ROW {% endcomment -%}
+  {%- if trust_blocks.size > 0 -%}
+    <section class="trust-row-section">
+      <div class="container">
+        <div class="trust-row-grid">
+          {%- for block in trust_blocks -%}
+            <div class="tr-card" {{ block.shopify_attributes }}>
+              <div class="tr-icon">{{ block.settings.icon }}</div>
+              <div class="tr-h">{{ block.settings.heading }}</div>
+              <div class="tr-d">{{ block.settings.description }}</div>
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment %} 3. HOW TO MAKE {% endcomment -%}
+  {%- if step_blocks.size > 0 -%}
+    <section class="how-make-section">
+      <div class="container">
+        <div class="section-header centered">
+          <div class="eyebrow">{{ section.settings.how_eyebrow }}</div>
+          <h2>{{ section.settings.how_heading }}<br><em>{{ section.settings.how_heading_em }}</em></h2>
+        </div>
+        <div class="how-make-grid">
+          <div class="hm-video-hero">
+            {%- if section.settings.how_video != blank -%}
+              {{ section.settings.how_video | video_tag: image_size: '1100x', controls: true, loop: true, muted: true, autoplay: false }}
+            {%- elsif section.settings.how_poster != blank -%}
+              {{ section.settings.how_poster | image_url: width: 1200 | image_tag: loading: 'lazy', alt: 'How to make sprouts' }}
+            {%- endif -%}
+            {%- if section.settings.how_pill != blank -%}
+              <span class="hm-watch-pill">{{ section.settings.how_pill }}</span>
+            {%- endif -%}
+          </div>
+          <div class="hm-steps">
+            {%- for block in step_blocks -%}
+              <div class="hm-step" {{ block.shopify_attributes }}>
+                <div class="hm-num">{{ forloop.index }}</div>
+                <div class="hm-step-body">
+                  <div class="hm-title">{{ block.settings.title }}</div>
+                  <div class="hm-desc">{{ block.settings.description }}</div>
+                </div>
+              </div>
+            {%- endfor -%}
+          </div>
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment %} 4. COMPARISON {% endcomment -%}
+  {%- if compare_blocks.size > 0 -%}
+    <section class="myth-section">
+      <div class="container">
+        <div class="myth-header">
+          <div class="eyebrow">{{ section.settings.compare_eyebrow }}</div>
+          <h2>{{ section.settings.compare_heading }}<br><em>{{ section.settings.compare_heading_em }}</em></h2>
+          {%- if section.settings.compare_intro != blank -%}
+            <p style="margin-top:18px;">{{ section.settings.compare_intro }}</p>
+          {%- endif -%}
+        </div>
+        <div class="compare-block">
+          <div class="compare-images">
+            <div class="compare-image">
+              {%- if section.settings.compare_left_image != blank -%}
+                {{ section.settings.compare_left_image | image_url: width: 800 | image_tag: loading: 'lazy', alt: section.settings.compare_left_label }}
+              {%- else -%}{{ section.settings.compare_left_emoji }}{%- endif -%}
+            </div>
+            <div class="compare-image">
+              {%- if section.settings.compare_right_image != blank -%}
+                {{ section.settings.compare_right_image | image_url: width: 800 | image_tag: loading: 'lazy', alt: section.settings.compare_right_label }}
+              {%- else -%}{{ section.settings.compare_right_emoji }}{%- endif -%}
+            </div>
+          </div>
+          <div class="compare-labels">
+            <span>{{ section.settings.compare_left_label }}</span>
+            <span>{{ section.settings.compare_right_label }}</span>
+          </div>
+          <div class="compare-table">
+            {%- for block in compare_blocks -%}
+              <div class="compare-row" {{ block.shopify_attributes }}>
+                <div class="compare-cell left">
+                  <div class="h">{{ block.settings.left_h }}</div>
+                  <div class="s">{{ block.settings.left_s }}</div>
+                </div>
+                <div class="compare-cell right">
+                  <div class="h">{{ block.settings.right_h }}</div>
+                  <div class="s">{{ block.settings.right_s }}</div>
+                </div>
+              </div>
+            {%- endfor -%}
+          </div>
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment %} 5. QUICK BENEFITS {% endcomment -%}
+  {%- if benefit_blocks.size > 0 -%}
+    <section class="outcomes-section">
+      <div class="container">
+        <div class="section-header centered">
+          <div class="eyebrow">{{ section.settings.benefits_eyebrow }}</div>
+          <h2>{{ section.settings.benefits_heading }}<br><em>{{ section.settings.benefits_heading_em }}</em></h2>
+        </div>
+        <div class="qb-grid">
+          {%- for block in benefit_blocks -%}
+            <div class="qb-card" {{ block.shopify_attributes }}>
+              <div class="qb-icon">{{ block.settings.icon }}</div>
+              <div class="qb-h">{{ block.settings.heading }}</div>
+              <div class="qb-d">{{ block.settings.description }}</div>
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment %} 6. REELS {% endcomment -%}
+  {%- if reel_blocks.size > 0 -%}
+    <section class="reels-section">
+      <div class="container">
+        <div class="section-header">
+          <div class="eyebrow">{{ section.settings.reels_eyebrow }}</div>
+          <h2>{{ section.settings.reels_heading }}<br><em>{{ section.settings.reels_heading_em }}</em></h2>
+        </div>
+        <div class="reels-grid">
+          {%- for block in reel_blocks -%}
+            <div class="reels-tile" {{ block.shopify_attributes }}>
+              {%- if block.settings.video != blank -%}
+                {{ block.settings.video | video_tag: image_size: '600x', controls: false, loop: true, muted: true, autoplay: true }}
+              {%- elsif block.settings.poster != blank -%}
+                {{ block.settings.poster | image_url: width: 600 | image_tag: loading: 'lazy', alt: block.settings.caption | default: 'Customer reel' }}
+              {%- else -%}📷{%- endif -%}
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment %} 7. WHAT'S IN THE BOX {% endcomment -%}
+  {%- if component_blocks.size > 0 -%}
+    <section class="box-section">
+      <div class="container">
+        <div class="section-header">
+          <div class="eyebrow">{{ section.settings.box_eyebrow }}</div>
+          <h2>{{ section.settings.box_heading }}<br><em>{{ section.settings.box_heading_em }}</em></h2>
+        </div>
+        <div class="box-grid">
+          <div class="box-image">
+            {%- if section.settings.box_image != blank -%}
+              {{ section.settings.box_image | image_url: width: 1200 | image_tag: loading: 'lazy', alt: 'What is in the box' }}
+            {%- else -%}🫙{%- endif -%}
+          </div>
+          <div>
+            <div class="box-pills">
+              {%- for block in component_blocks -%}
+                <div class="box-pill" {{ block.shopify_attributes }}>
+                  <span class="bp-icon">{{ forloop.index }}</span>
+                  <span class="bp-name">{{ block.settings.name }}</span>
+                  <span class="bp-sub">{{ block.settings.description }}</span>
+                </div>
+              {%- endfor -%}
+            </div>
+            {%- if section.settings.box_note != blank -%}
+              <p class="box-note">{{ section.settings.box_note }}</p>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment %} 8. UGC REVIEWS {% endcomment -%}
+  {%- if review_blocks.size > 0 -%}
+    <section class="reviews-section">
+      <div class="container">
+        <div class="section-header">
+          <div class="eyebrow">{{ section.settings.reviews_eyebrow }}</div>
+          <h2>{{ section.settings.reviews_heading }}<br><em>{{ section.settings.reviews_heading_em }}</em></h2>
+        </div>
+        <div class="reviews-grid">
+          {%- for block in review_blocks -%}
+            <div class="review-card" {{ block.shopify_attributes }}>
+              <div class="rev-content">
+                <h3 class="rev-title">"{{ block.settings.quote }}"</h3>
+                <div class="rev-foot">
+                  <div class="rev-stars">★★★★★</div>
+                  <div class="rev-name">{{ block.settings.name }}</div>
+                  <div class="rev-meta">{{ block.settings.meta }}</div>
+                </div>
+              </div>
+              <div class="rev-photo">
+                {%- if block.settings.photo != blank -%}
+                  {{ block.settings.photo | image_url: width: 800 | image_tag: loading: 'lazy', alt: block.settings.name }}
+                {%- else -%}
+                  <span class="photo-placeholder">📷</span>
+                {%- endif -%}
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment %} 9. FAQ {% endcomment -%}
+  {%- if faq_blocks.size > 0 -%}
+    <section class="faq-section">
+      <div class="container">
+        <div class="section-header centered">
+          <div class="eyebrow">{{ section.settings.faq_eyebrow }}</div>
+          <h2>{{ section.settings.faq_heading }}<br><em>{{ section.settings.faq_heading_em }}</em></h2>
+        </div>
+        <div class="faq-list">
+          {%- for block in faq_blocks -%}
+            <div class="faq-item {% if forloop.first %}open{% endif %}" data-faq {{ block.shopify_attributes }}>
+              <div class="faq-q">
+                <span>{{ block.settings.question }}</span>
+                <span class="faq-toggle">+</span>
+              </div>
+              <div class="faq-a">{{ block.settings.answer }}</div>
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment %} 10. CROSS-SELL {% endcomment -%}
+  {%- assign show_cross = false -%}
+  {%- if cross_sell_products != blank or cross_blocks.size > 0 or section.settings.cross_collection != blank -%}
+    {%- assign show_cross = true -%}
+  {%- endif -%}
+  {%- if show_cross -%}
+    <section class="cross-section">
+      <div class="container">
+        <div class="section-header">
+          <div class="eyebrow">{{ section.settings.cross_eyebrow }}</div>
+          <h2>{{ section.settings.cross_heading }}<br><em>{{ section.settings.cross_heading_em }}</em></h2>
+        </div>
+        <div class="cs-grid">
+          {%- if cross_sell_products != blank -%}
+            {%- for cp in cross_sell_products limit: 3 -%}
+              {%- render 'sprout_cs_card', p: cp, eyebrow: nil, description: nil -%}
+            {%- endfor -%}
+          {%- elsif cross_blocks.size > 0 -%}
+            {%- for block in cross_blocks -%}
+              {%- if block.settings.product != blank -%}
+                {%- render 'sprout_cs_card', p: block.settings.product, eyebrow: block.settings.eyebrow, description: block.settings.description, attrs: block.shopify_attributes -%}
+              {%- endif -%}
+            {%- endfor -%}
+          {%- elsif section.settings.cross_collection.products.size > 0 -%}
+            {%- for cp in section.settings.cross_collection.products limit: 3 -%}
+              {%- render 'sprout_cs_card', p: cp -%}
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment %} 11. JUDGE.ME {% endcomment -%}
+  {%- if section.settings.show_judgeme -%}
+    <section class="judgeme-section" id="judgeme-reviews">
+      <div class="container">
+        <div class="section-header centered">
+          <div class="eyebrow">{{ section.settings.judgeme_eyebrow }}</div>
+          <h2>
+            {%- if review_count > 0 %}{{ review_count }} {% endif -%}
+            {{ section.settings.judgeme_heading }}<br><em>{{ section.settings.judgeme_heading_em }}</em>
+          </h2>
+        </div>
+        {%- if section.settings.judgeme_embed != blank -%}
+          {{ section.settings.judgeme_embed }}
+        {%- else -%}
+          <div class="jdgm-widget jdgm-review-widget" data-id="{{ p.id }}"></div>
+        {%- endif -%}
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment %} ============== JAR SIZE MODAL ============== {% endcomment -%}
+  {%- if jar_chart != blank -%}
+    <div class="size-modal" id="jar-size-modal" data-size-modal>
+      <div class="size-modal-card">
+        <button type="button" class="size-modal-close" data-close-size-modal aria-label="Close">×</button>
+        <div class="size-modal-eyebrow">JAR SIZE COMPARISON</div>
+        <h3 class="size-modal-title">{{ jar_capacity }} sprout maker.</h3>
+        <div class="size-modal-image">
+          {{ jar_chart | image_url: width: 1200 | image_tag: loading: 'lazy', alt: 'Sprout maker jar size comparison' }}
+        </div>
+        <p class="size-modal-caption">Shown next to a standard 250ml drinking glass for scale.</p>
+      </div>
+    </div>
+  {%- endif -%}
+
+</div>
+
+<script>
+  (function () {
+    document.querySelectorAll('[data-faq]').forEach(item => {
+      item.addEventListener('click', () => item.classList.toggle('open'));
+    });
+    const modal = document.querySelector('[data-size-modal]');
+    if (modal) {
+      document.querySelectorAll('[data-open-size-modal]').forEach(btn =>
+        btn.addEventListener('click', () => modal.classList.add('open')));
+      modal.addEventListener('click', e => {
+        if (e.target === modal || e.target.closest('[data-close-size-modal]')) {
+          modal.classList.remove('open');
+        }
+      });
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Sprout Maker — PDP",
+  "tag": "section",
+  "class": "section--sprout-pdp",
+  "max_blocks": 50,
+  "settings": [
+    { "type": "header", "content": "Hero" },
+    { "type": "checkbox", "id": "show_breadcrumb", "label": "Show breadcrumb", "default": true },
+
+    { "type": "header", "content": "How to Make" },
+    { "type": "text", "id": "how_eyebrow", "label": "Eyebrow", "default": "HOW TO MAKE" },
+    { "type": "text", "id": "how_heading", "label": "Heading", "default": "4 STEPS." },
+    { "type": "text", "id": "how_heading_em", "label": "Heading (highlighted)", "default": "FRESH SPROUTS." },
+    { "type": "video", "id": "how_video", "label": "Demo video" },
+    { "type": "image_picker", "id": "how_poster", "label": "Poster image (fallback)" },
+    { "type": "text", "id": "how_pill", "label": "Pill text", "default": "▶ WATCH · 60 SEC" },
+
+    { "type": "header", "content": "Comparison" },
+    { "type": "text", "id": "compare_eyebrow", "label": "Eyebrow", "default": "WHY UPGRADE" },
+    { "type": "text", "id": "compare_heading", "label": "Heading", "default": "SPROUT MAKER" },
+    { "type": "text", "id": "compare_heading_em", "label": "Heading (highlighted)", "default": "VS TRADITIONAL CLOTH." },
+    { "type": "textarea", "id": "compare_intro", "label": "Intro paragraph" },
+    { "type": "image_picker", "id": "compare_left_image", "label": "Left image (cloth method)" },
+    { "type": "image_picker", "id": "compare_right_image", "label": "Right image (sprout maker)" },
+    { "type": "text", "id": "compare_left_emoji", "label": "Left emoji fallback", "default": "🧺" },
+    { "type": "text", "id": "compare_right_emoji", "label": "Right emoji fallback", "default": "🫙" },
+    { "type": "text", "id": "compare_left_label", "label": "Left column label", "default": "CLOTH METHOD" },
+    { "type": "text", "id": "compare_right_label", "label": "Right column label", "default": "SPROUT MAKER" },
+
+    { "type": "header", "content": "Quick Benefits" },
+    { "type": "text", "id": "benefits_eyebrow", "label": "Eyebrow", "default": "QUICK BENEFITS" },
+    { "type": "text", "id": "benefits_heading", "label": "Heading", "default": "WHY SPROUTS ARE" },
+    { "type": "text", "id": "benefits_heading_em", "label": "Heading (highlighted)", "default": "NUTRITIONAL POWERHOUSES." },
+
+    { "type": "header", "content": "Reels" },
+    { "type": "text", "id": "reels_eyebrow", "label": "Eyebrow", "default": "REAL CUSTOMERS" },
+    { "type": "text", "id": "reels_heading", "label": "Heading", "default": "SPROUTS IN" },
+    { "type": "text", "id": "reels_heading_em", "label": "Heading (highlighted)", "default": "REAL KITCHENS." },
+
+    { "type": "header", "content": "What's in the Box" },
+    { "type": "text", "id": "box_eyebrow", "label": "Eyebrow", "default": "WHAT'S IN THE BOX" },
+    { "type": "text", "id": "box_heading", "label": "Heading", "default": "3 PARTS." },
+    { "type": "text", "id": "box_heading_em", "label": "Heading (highlighted)", "default": "ONE KIT." },
+    { "type": "image_picker", "id": "box_image", "label": "Box / kit image" },
+    { "type": "textarea", "id": "box_note", "label": "Note", "default": "Just add water and a kitchen counter. The kit handles the rest." },
+
+    { "type": "header", "content": "UGC Reviews" },
+    { "type": "text", "id": "reviews_eyebrow", "label": "Eyebrow", "default": "REAL RESULTS" },
+    { "type": "text", "id": "reviews_heading", "label": "Heading", "default": "WHAT OUR" },
+    { "type": "text", "id": "reviews_heading_em", "label": "Heading (highlighted)", "default": "CUSTOMERS SAY." },
+
+    { "type": "header", "content": "FAQ" },
+    { "type": "text", "id": "faq_eyebrow", "label": "Eyebrow", "default": "QUESTIONS?" },
+    { "type": "text", "id": "faq_heading", "label": "Heading", "default": "COMMON" },
+    { "type": "text", "id": "faq_heading_em", "label": "Heading (highlighted)", "default": "QUESTIONS." },
+
+    { "type": "header", "content": "Cross-sell" },
+    { "type": "text", "id": "cross_eyebrow", "label": "Eyebrow", "default": "PAIR IT WITH" },
+    { "type": "text", "id": "cross_heading", "label": "Heading", "default": "COMPLETE THE" },
+    { "type": "text", "id": "cross_heading_em", "label": "Heading (highlighted)", "default": "SPROUT KITCHEN." },
+    { "type": "collection", "id": "cross_collection", "label": "Fallback collection (used if product has no cross_sell_products metafield and no Cross-sell blocks)" },
+
+    { "type": "header", "content": "Judge.me" },
+    { "type": "checkbox", "id": "show_judgeme", "label": "Show Judge.me section", "default": true },
+    { "type": "text", "id": "judgeme_eyebrow", "label": "Eyebrow", "default": "ALL REVIEWS" },
+    { "type": "text", "id": "judgeme_heading", "label": "Heading", "default": "VERIFIED" },
+    { "type": "text", "id": "judgeme_heading_em", "label": "Heading (highlighted)", "default": "CUSTOMER REVIEWS." },
+    { "type": "html", "id": "judgeme_embed", "label": "Custom embed (optional)" }
+  ],
+  "blocks": [
+    {
+      "type": "trust_card",
+      "name": "Trust card",
+      "settings": [
+        { "type": "text", "id": "icon", "label": "Icon (emoji)", "default": "🌱" },
+        { "type": "text", "id": "heading", "label": "Heading" },
+        { "type": "textarea", "id": "description", "label": "Description" }
+      ]
+    },
+    {
+      "type": "step",
+      "name": "How-to step",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Step title" },
+        { "type": "textarea", "id": "description", "label": "Step description" }
+      ]
+    },
+    {
+      "type": "comparison_row",
+      "name": "Comparison row",
+      "settings": [
+        { "type": "text", "id": "left_h", "label": "Left heading" },
+        { "type": "textarea", "id": "left_s", "label": "Left subtext" },
+        { "type": "text", "id": "right_h", "label": "Right heading" },
+        { "type": "textarea", "id": "right_s", "label": "Right subtext" }
+      ]
+    },
+    {
+      "type": "benefit",
+      "name": "Quick benefit",
+      "settings": [
+        { "type": "text", "id": "icon", "label": "Icon (emoji)", "default": "💪" },
+        { "type": "text", "id": "heading", "label": "Heading" },
+        { "type": "textarea", "id": "description", "label": "Description" }
+      ]
+    },
+    {
+      "type": "reel",
+      "name": "UGC reel",
+      "settings": [
+        { "type": "video", "id": "video", "label": "Vertical 9:16 video" },
+        { "type": "image_picker", "id": "poster", "label": "Poster (fallback)" },
+        { "type": "text", "id": "caption", "label": "Caption" }
+      ]
+    },
+    {
+      "type": "box_component",
+      "name": "Box component",
+      "settings": [
+        { "type": "text", "id": "name", "label": "Name" },
+        { "type": "textarea", "id": "description", "label": "Description" }
+      ]
+    },
+    {
+      "type": "review",
+      "name": "Review",
+      "settings": [
+        { "type": "textarea", "id": "quote", "label": "Headline quote" },
+        { "type": "text", "id": "name", "label": "Name" },
+        { "type": "text", "id": "meta", "label": "Age, city · Persona" },
+        { "type": "image_picker", "id": "photo", "label": "Photo" }
+      ]
+    },
+    {
+      "type": "faq",
+      "name": "FAQ",
+      "settings": [
+        { "type": "text", "id": "question", "label": "Question" },
+        { "type": "richtext", "id": "answer", "label": "Answer" }
+      ]
+    },
+    {
+      "type": "cross_sell_product",
+      "name": "Cross-sell product",
+      "settings": [
+        { "type": "product", "id": "product", "label": "Product" },
+        { "type": "text", "id": "eyebrow", "label": "Eyebrow override" },
+        { "type": "textarea", "id": "description", "label": "Description override" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Sprout Maker — PDP" }]
+}
+{% endschema %}
