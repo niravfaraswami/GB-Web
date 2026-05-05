@@ -194,6 +194,7 @@
   color: var(--gb-text); margin-bottom: 10px; font-weight: 600;
 }
 .pdp-hero .variant-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.pdp-hero .variant-grid--3 { grid-template-columns: 1fr 1fr 1fr; }
 .pdp-hero .variant {
   border: 2px solid var(--gb-border);
   border-radius: 12px;
@@ -203,14 +204,42 @@
   display: block;
   text-decoration: none; color: inherit;
 }
+.pdp-hero .variant:hover { border-color: var(--kit-color); }
 .pdp-hero .variant.active {
   border-color: var(--kit-color);
   background: var(--kit-color-soft);
 }
-.pdp-hero .variant--link:hover {
-  border-color: var(--kit-color);
-  transform: translateY(-1px);
+.pdp-hero .variant.sold-out {
+  opacity: 0.55;
+  cursor: not-allowed;
 }
+.pdp-hero .variant-input {
+  position: absolute;
+  opacity: 0;
+  width: 0; height: 0;
+  pointer-events: none;
+}
+.pdp-hero .variant-sold-out {
+  display: block;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gb-text-soft);
+  margin-top: 6px;
+}
+.pdp-hero .companion-link {
+  display: block;
+  margin-top: 12px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--kit-color-dark);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  letter-spacing: 0.01em;
+}
+.pdp-hero .companion-link:hover { opacity: 0.7; }
 .pdp-hero .variant-tag {
   position: absolute; top: -10px; left: 12px;
   background: var(--gb-ink); color: var(--gb-cream);
