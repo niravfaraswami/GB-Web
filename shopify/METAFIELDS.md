@@ -109,8 +109,20 @@ Once Step 1 completes, find the new product IDs (Shopify Admin URL or a Matrixif
 
 1. **Jar Size Chart image** — upload to Files, then assign to each product's `custom.jar_size_chart_image` metafield (file reference).
 2. **Theme template** — assign `product.sprout-maker` to both products if you didn't add a Template Suffix column.
-3. **Theme Editor** — open each product, confirm hero variant grid shows three cards (1/2/4 Jars) with prices and badges. Set the demo video on *How to Make*, upload UGC reels and review photos, point cross-sell to your refill products.
-4. **Judge.me** — paste your widget snippet into the Judge.me area's *Custom embed* HTML field, or rely on the default `data-id` widget.
+3. **Theme Editor** — open each product, confirm hero variant grid shows three cards (1/2/4 Jars) in **one row × three columns** with prices and badges. Set the demo video on *How to Make*, upload UGC reels and review photos, point cross-sell to your refill products.
+4. **Quinn (UGC reels)** — paste the Quinn widget snippet into the *Reels (Quinn UGC)* section's **Quinn embed code** HTML field. When set, it replaces the manual reel blocks. Leave blank to use manually-uploaded reel videos via blocks.
+5. **Judge.me** — paste your widget snippet into the *Sprout — Judge.me* area's **Custom embed** HTML field, or rely on the default `data-id` widget that the Judge.me installer hooks.
+
+### Block-level icon images (image_picker)
+
+Each of these blocks now accepts an **Icon image** (image_picker) that overrides the emoji or number when set. Upload PNG/SVG icons in the Theme Editor:
+
+- **Trust card** — `icon_image` overrides emoji
+- **How-to step** — `icon_image` replaces the numbered badge
+- **Quick benefit** — `icon_image` overrides emoji
+- **Box component** — `icon_image` replaces the numbered badge
+
+The hero icons (activity row + benefits 2×2) come from product metafields `activity_items` / `benefits_items` and continue to use unicode emoji prefixed in each list item (`<emoji>|<text>`). To swap to image-based icons there, convert those metafields to a metaobject with `icon` (file_reference) + `label` (text) fields.
 
 ### Regenerating the FINAL CSV
 
