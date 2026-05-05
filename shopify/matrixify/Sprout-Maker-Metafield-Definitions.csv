@@ -1,0 +1,11 @@
+Command,Owner,Namespace,Key,Name,Description,Type,Pinned,Visible to Storefront
+MERGE,Product,custom,activity_items,Activity Items,"Hero activity row items. Each entry: ""<emoji>|<text>"". e.g. ""⚡|Fresh sprouts in 2–3 days""",list.single_line_text_field,TRUE,TRUE
+MERGE,Product,custom,benefits_items,Benefits Items,"Hero ""Why this kit"" 2x2 benefits. Each entry: ""<emoji>|<label>"". e.g. ""🌱|Fresh sprouts in 2–3 days""",list.single_line_text_field,TRUE,TRUE
+MERGE,Product,custom,hero_trust_strip,Hero Trust Strip,Short trust items shown below the ATC button. e.g. Free Shipping / FSSAI Licensed,list.single_line_text_field,TRUE,TRUE
+MERGE,Product,custom,jar_capacity,Jar Capacity,"Capacity label for the variant cards. ""700ml"" or ""1000ml""",single_line_text_field,TRUE,TRUE
+MERGE,Product,custom,help_note,Help Note,Helper text shown beside the Jar Size Chart link in the variant block,multi_line_text_field,TRUE,TRUE
+MERGE,Product,custom,jar_size_chart_image,Jar Size Chart Image,Image displayed inside the Jar Size Chart modal,file_reference,TRUE,TRUE
+MERGE,Product,custom,companion_size_product,Companion Size Product,The other capacity (700ml ↔ 1L) — drives the cross-capacity link below the variant block,product_reference,TRUE,TRUE
+MERGE,Product,custom,cross_sell_products,Cross-sell Products,Up to 3 products shown in the Pair It With section,list.product_reference,TRUE,TRUE
+MERGE,Product Variant,custom,best_for,Best For,Per-variant audience copy under the BEST FOR label inside each pack card,single_line_text_field,TRUE,TRUE
+MERGE,Product Variant,custom,tag,Variant Tag,"Optional badge above each variant card. e.g. TOP SELLER, BEST VALUE",single_line_text_field,TRUE,TRUE
