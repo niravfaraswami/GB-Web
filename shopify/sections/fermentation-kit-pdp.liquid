@@ -290,15 +290,28 @@ recipe_tag[0]:       {{ p.metafields.custom.featured_recipe_tags.value.first.emo
               <div class="label">Benefits</div>
               <div class="benefits-grid">
                 {%- for b in benefits -%}
+                  {%- assign target_idx = forloop.index0 -%}
                   {%- assign parts = b | split: '|' -%}
-                  {%- assign mf_icon = mf_hero_icons[forloop.index0] -%}
+                  {%- comment -%} Support either format: "<emoji>|<label>" OR plain "<label>" {%- endcomment -%}
+                  {%- assign label = parts[1] | default: parts[0] -%}
+                  {%- assign has_emoji_prefix = false -%}
+                  {%- if parts.size > 1 -%}{%- assign has_emoji_prefix = true -%}{%- endif -%}
+                  {%- comment -%} Parallel-loop pluck — Drop[i] indexing is unreliable {%- endcomment -%}
+                  {%- assign mf_icon = nil -%}
+                  {%- if mf_hero_icons -%}
+                    {%- for ic in mf_hero_icons -%}
+                      {%- if forloop.index0 == target_idx -%}{%- assign mf_icon = ic -%}{%- endif -%}
+                    {%- endfor -%}
+                  {%- endif -%}
                   <div class="benefit-item">
-                    <span class="benefit-icon{% if mf_icon != blank %} benefit-icon--img{% endif %}">
+                    <span class="benefit-icon">
                       {%- if mf_icon != blank -%}
                         {%- render 'kit_icon', icon: mf_icon, size: 24 -%}
-                      {%- else -%}{{ parts[0] }}{%- endif -%}
+                      {%- elsif has_emoji_prefix -%}
+                        {{ parts[0] }}
+                      {%- endif -%}
                     </span>
-                    <span>{{ parts[1] }}</span>
+                    <span>{{ label }}</span>
                   </div>
                 {%- endfor -%}
               </div>
@@ -445,7 +458,13 @@ recipe_tag[0]:       {{ p.metafields.custom.featured_recipe_tags.value.first.emo
             {%- endfor -%}
           {%- else -%}
             {%- for block in trust_blocks -%}
-              {%- assign mf_icon = mf_trust_icons[forloop.index0] -%}
+              {%- assign target_idx = forloop.index0 -%}
+                {%- assign mf_icon = nil -%}
+                {%- if mf_trust_icons -%}
+                  {%- for ic in mf_trust_icons -%}
+                    {%- if forloop.index0 == target_idx -%}{%- assign mf_icon = ic -%}{%- endif -%}
+                  {%- endfor -%}
+                {%- endif -%}
               <div class="tr-card" {{ block.shopify_attributes }}>
                 <div class="tr-icon">
                   {%- if mf_icon != blank -%}{%- render 'kit_icon', icon: mf_icon, size: 44, alt: '{{ block.settings.heading | escape }}', extra: 'tr-icon-img' -%}
@@ -492,7 +511,13 @@ recipe_tag[0]:       {{ p.metafields.custom.featured_recipe_tags.value.first.emo
               {%- endfor -%}
             {%- else -%}
               {%- for block in step_blocks -%}
-                {%- assign mf_icon = mf_step_icons[forloop.index0] -%}
+                {%- assign target_idx = forloop.index0 -%}
+                {%- assign mf_icon = nil -%}
+                {%- if mf_step_icons -%}
+                  {%- for ic in mf_step_icons -%}
+                    {%- if forloop.index0 == target_idx -%}{%- assign mf_icon = ic -%}{%- endif -%}
+                  {%- endfor -%}
+                {%- endif -%}
                 <div class="hm-step" {{ block.shopify_attributes }}>
                   <div class="hm-num">{%- if mf_icon != blank -%}{%- render 'kit_icon', icon: mf_icon, size: 36, extra: 'hm-num-img' -%}{%- else -%}{{ forloop.index }}{%- endif -%}</div>
                   <div class="hm-step-body"><div class="hm-title">{{ block.settings.title }}</div><div class="hm-desc">{{ block.settings.description }}</div></div>
@@ -568,7 +593,13 @@ recipe_tag[0]:       {{ p.metafields.custom.featured_recipe_tags.value.first.emo
               {%- endfor -%}
             {%- else -%}
               {%- for block in benefit_blocks -%}
-                {%- assign mf_icon = mf_benefit_icons[forloop.index0] -%}
+                {%- assign target_idx = forloop.index0 -%}
+                {%- assign mf_icon = nil -%}
+                {%- if mf_benefit_icons -%}
+                  {%- for ic in mf_benefit_icons -%}
+                    {%- if forloop.index0 == target_idx -%}{%- assign mf_icon = ic -%}{%- endif -%}
+                  {%- endfor -%}
+                {%- endif -%}
                 <div class="qb-card" {{ block.shopify_attributes }}>
                   <div class="qb-icon">{%- if mf_icon != blank -%}{%- render 'kit_icon', icon: mf_icon, size: 56, extra: 'qb-icon-img' -%}
                   {%- elsif block.settings.icon_image != blank -%}{%- render 'kit_icon', icon: block.settings.icon_image, size: 56, extra: 'qb-icon-img' -%}
