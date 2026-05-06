@@ -53,7 +53,7 @@
   assign mf_compare_intro = p.metafields.custom.comparison_intro
   assign mf_box_image     = p.metafields.custom.box_image
   assign mf_box_note      = p.metafields.custom.box_note
-  assign mf_how_video     = p.metafields.custom.how_to_make_video
+  assign mf_how_video     = p.metafields.custom.how_to_make_video.value
   assign mf_hero_icons    = p.metafields.custom.hero_benefits_icons.value
   assign mf_benefit_icons = p.metafields.custom.benefits_icons.value
   assign mf_trust_icons   = p.metafields.custom.trust_strip_icons.value
@@ -521,7 +521,14 @@ recipe_tag[0]:       {{ p.metafields.custom.featured_recipe_tags.value.first.emo
         <div class="how-make-grid">
           <div class="hm-video-hero">
             {%- if how_video != blank -%}
-              {{ how_video | video_tag: image_size: '1100x', controls: true, loop: true, muted: true, autoplay: false }}
+              {%- if how_video.sources or how_video.media_type == 'video' -%}
+                {{ how_video | video_tag: image_size: '1100x', controls: true, loop: true, muted: true, autoplay: false }}
+              {%- else -%}
+                {%- assign video_src = how_video.url | default: how_video.src -%}
+                {%- if video_src != blank -%}
+                  <video src="{{ video_src }}" controls loop muted playsinline preload="metadata" style="width:100%;height:100%;object-fit:cover;"></video>
+                {%- endif -%}
+              {%- endif -%}
             {%- elsif section.settings.how_poster != blank -%}
               <img src="{{ section.settings.how_poster | image_url: width: 1200 }}" alt="How to make" loading="lazy" width="1200" height="1200">
             {%- else -%}
@@ -664,7 +671,13 @@ recipe_tag[0]:       {{ p.metafields.custom.featured_recipe_tags.value.first.emo
           <div class="reels-grid">
             {%- for r in mf_reels -%}
               <div class="reel-tile">
-                {%- if r.video != blank -%}{{ r.video | video_tag: image_size: '600x', controls: false, loop: true, muted: true, autoplay: true }}
+                {%- if r.video != blank -%}
+                  {%- if r.video.sources or r.video.media_type == 'video' -%}
+                    {{ r.video | video_tag: image_size: '600x', controls: false, loop: true, muted: true, autoplay: true }}
+                  {%- else -%}
+                    {%- assign reel_src = r.video.url | default: r.video.src -%}
+                    {%- if reel_src != blank -%}<video src="{{ reel_src }}" autoplay loop muted playsinline preload="metadata" style="width:100%;height:100%;object-fit:cover;"></video>{%- endif -%}
+                  {%- endif -%}
                 {%- elsif r.poster != blank -%}<img src="{{ r.poster | image_url: width: 600 }}" alt="{{ r.caption | escape }}" loading="lazy" width="600" height="1067">
                 {%- endif -%}
                 {%- if r.author_handle != blank -%}<span class="reels-handle">{{ r.author_handle }}</span>{%- endif -%}
