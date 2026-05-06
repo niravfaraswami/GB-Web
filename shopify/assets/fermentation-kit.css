@@ -211,7 +211,7 @@
 .myth-section .compare-cell { padding: 14px 18px; font-size: 13.5px; line-height: 1.4; }
 .myth-section .compare-cell .h { font-family: 'Montserrat', sans-serif; font-weight: 700; margin-bottom: 2px; color: var(--gb-text); }
 .myth-section .compare-cell .s { font-size: 12px; color: var(--gb-text-muted); }
-.myth-section .compare-cell.left { background: #FFF6F2; }
+.myth-section .compare-cell.left { background: var(--kit-contrast, #FFF6F2); }
 .myth-section .compare-cell.right { background: var(--kit-color-soft); }
 .myth-section .compare-cell.right .h { color: var(--kit-color-dark); }
 
@@ -228,7 +228,7 @@
 .indians-strip { display: grid; grid-template-columns: 1fr 1fr; margin-top: 32px; border-radius: 14px; overflow: hidden; border: 1px solid var(--gb-border-soft); }
 .indians-cell { text-align: center; padding: 22px; }
 .indians-cell.left  { background: var(--kit-color-soft); color: var(--kit-color-dark); }
-.indians-cell.right { background: #DBEDDF; color: #1F4332; }
+.indians-cell.right { background: var(--kit-secondary, #DBEDDF); color: var(--kit-secondary-dark, #1F4332); }
 .indians-stat { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 28px; margin-bottom: 4px; }
 .indians-cap { font-size: 12px; opacity: 0.85; }
 

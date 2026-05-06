@@ -2,6 +2,34 @@
 
 {%- liquid
   assign p = product
+  # ============== PER-PRODUCT THEME COLORS ==============
+  # Override the CSS variables so each kit (Kanji, Achaar, Aam Panna,
+  # Kimchi, Vegetable, All-in-One) gets its own accent palette.
+  assign accent      = p.metafields.custom.theme_accent      | default: '#C24528'
+  assign accent_dark = p.metafields.custom.theme_accent_dark | default: '#8E2E1A'
+  assign accent_soft = p.metafields.custom.theme_accent_soft | default: '#FCE5DE'
+
+  # Optional secondary accents for cells with hardcoded colors.
+  # Add the metafield definitions if you want per-product customisation;
+  # otherwise the defaults below apply.
+  assign accent_contrast      = p.metafields.custom.theme_accent_contrast      | default: '#FFF6F2'
+  assign accent_secondary     = p.metafields.custom.theme_accent_secondary     | default: '#DBEDDF'
+  assign accent_secondary_dark = p.metafields.custom.theme_accent_secondary_dark | default: '#1F4332'
+-%}
+
+<style>
+  .ferment-pdp {
+    --kit-color: {{ accent }};
+    --kit-color-dark: {{ accent_dark }};
+    --kit-color-soft: {{ accent_soft }};
+    --kit-contrast: {{ accent_contrast }};
+    --kit-secondary: {{ accent_secondary }};
+    --kit-secondary-dark: {{ accent_secondary_dark }};
+  }
+</style>
+
+{%- liquid
+  assign p = product
 
   # ============== EXISTING / SHARED METAFIELDS ==============
   assign tagline         = p.metafields.custom.hero_tagline | default: 'Make authentic, gut-loving ferments at home.'
