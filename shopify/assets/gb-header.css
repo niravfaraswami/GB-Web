@@ -109,12 +109,21 @@
   justify-content: center;
 }
 
-/* Hamburger (mobile only) */
+/* Hamburger (mobile only) — first child of header-inner so flex space-between
+   pushes it to the far left, the logo into the centre, and the action icons
+   to the far right. */
 .mobile-menu-toggle {
   display: none !important;
   align-items: center;
   justify-content: center;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--gb-cream);
+  border: none;
+  cursor: pointer;
+  color: var(--gb-text);
 }
+.mobile-menu-toggle:active { background: var(--gb-cream-deeper); }
 
 /* ============== MEGA MENU ============== */
 .mega-menu {
@@ -221,16 +230,16 @@
 
 .mobile-drawer-panel {
   position: absolute;
-  top: 0; right: 0;
+  top: 0; left: 0;
   width: min(86vw, 360px);
   height: 100vh;
   height: 100dvh;
   background: var(--gb-white);
   display: flex;
   flex-direction: column;
-  transform: translateX(100%);
+  transform: translateX(-100%);
   transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: -8px 0 32px rgba(31, 31, 29, 0.12);
+  box-shadow: 8px 0 32px rgba(31, 31, 29, 0.12);
   font-family: 'DM Sans', system-ui, sans-serif;
   color: var(--gb-text);
 }

@@ -6,6 +6,10 @@
 
 <header class="gb-site-header">
   <div class="header-inner">
+    <button class="mobile-menu-toggle" aria-label="Open menu" id="mobile-menu-toggle" type="button">
+      <svg viewBox="0 0 24 24" fill="none" width="20" height="20" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+
     <a href="{{ routes.root_url }}" class="logo" aria-label="{{ shop.name }}">
       {%- if section.settings.logo != blank -%}
         {{ section.settings.logo | image_url: width: 320 | image_tag: alt: shop.name, width: 160, height: 32, class: 'gb-logo-img', loading: 'eager' }}
@@ -41,9 +45,6 @@
       <a class="header-action" href="{{ routes.search_url }}" aria-label="Search">⌕</a>
       <a class="header-action" href="{{ routes.account_url }}" aria-label="Account">◯</a>
       <a class="header-action" href="{{ routes.cart_url }}" aria-label="Cart">⊟<span class="cart-count" data-cart-count>{{ cart.item_count }}</span></a>
-      <button class="header-action mobile-menu-toggle" aria-label="Open menu" id="mobile-menu-toggle" type="button">
-        <svg viewBox="0 0 24 24" fill="none" width="20" height="20" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-      </button>
     </div>
   </div>
 
