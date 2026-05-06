@@ -119,6 +119,14 @@ All product custom metafields with non-empty values:
             {%- else -%}
               <div class="gallery-illustration">🌱</div>
             {%- endif -%}
+            {%- if p.images.size > 1 -%}
+              <button class="gallery-nav gallery-nav--prev" type="button" data-gallery-prev aria-label="Previous image">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+              </button>
+              <button class="gallery-nav gallery-nav--next" type="button" data-gallery-next aria-label="Next image">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </button>
+            {%- endif -%}
           </div>
           {%- if p.images.size > 1 -%}
             <div class="gallery-thumbs">
@@ -793,26 +801,53 @@ All product custom metafields with non-empty values:
         });
       }
 
-      // Gallery thumb → main image swap
+      // Gallery thumb → main image swap, plus prev/next/keyboard/swipe nav
       var mainImg = pdp.querySelector('.gallery-main-img');
       var thumbs = pdp.querySelectorAll('.gallery-thumb');
+      function activateThumb(t) {
+        var s = t.getAttribute('data-full-src');
+        var a = t.getAttribute('data-full-alt');
+        if (!s || !mainImg) return;
+        mainImg.removeAttribute('srcset'); mainImg.removeAttribute('sizes');
+        mainImg.setAttribute('src', s); if (a) mainImg.setAttribute('alt', a);
+        thumbs.forEach(function (x) { x.classList.remove('active'); });
+        t.classList.add('active');
+        try { t.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' }); } catch (_) {}
+      }
+      function step(delta) {
+        if (!thumbs.length) return;
+        var current = 0;
+        thumbs.forEach(function (x, i) { if (x.classList.contains('active')) current = i; });
+        var next = (current + delta + thumbs.length) % thumbs.length;
+        activateThumb(thumbs[next]);
+      }
       if (mainImg && thumbs.length) {
         thumbs.forEach(function (thumb) {
           if (thumb.dataset.bound) return;
           thumb.dataset.bound = '1';
-          thumb.addEventListener('click', function (e) {
-            e.preventDefault();
-            var fullSrc = thumb.getAttribute('data-full-src');
-            var fullAlt = thumb.getAttribute('data-full-alt');
-            if (!fullSrc) return;
-            mainImg.removeAttribute('srcset');
-            mainImg.removeAttribute('sizes');
-            mainImg.setAttribute('src', fullSrc);
-            if (fullAlt) mainImg.setAttribute('alt', fullAlt);
-            thumbs.forEach(function (t) { t.classList.remove('active'); });
-            thumb.classList.add('active');
-          });
+          thumb.addEventListener('click', function (e) { e.preventDefault(); activateThumb(thumb); });
         });
+        var prevBtn = pdp.querySelector('[data-gallery-prev]');
+        var nextBtn = pdp.querySelector('[data-gallery-next]');
+        if (prevBtn && !prevBtn.dataset.bound) { prevBtn.dataset.bound = '1'; prevBtn.addEventListener('click', function (e) { e.preventDefault(); step(-1); }); }
+        if (nextBtn && !nextBtn.dataset.bound) { nextBtn.dataset.bound = '1'; nextBtn.addEventListener('click', function (e) { e.preventDefault(); step(1); }); }
+        var galleryMain = pdp.querySelector('.gallery-main');
+        if (galleryMain && !galleryMain.dataset.bound) {
+          galleryMain.dataset.bound = '1';
+          galleryMain.setAttribute('tabindex', '0');
+          galleryMain.addEventListener('keydown', function (e) {
+            if (e.key === 'ArrowLeft')  { e.preventDefault(); step(-1); }
+            if (e.key === 'ArrowRight') { e.preventDefault(); step(1); }
+          });
+          var touchStartX = null;
+          galleryMain.addEventListener('touchstart', function (e) { touchStartX = e.touches[0].clientX; }, { passive: true });
+          galleryMain.addEventListener('touchend', function (e) {
+            if (touchStartX === null) return;
+            var dx = e.changedTouches[0].clientX - touchStartX;
+            if (Math.abs(dx) > 40) step(dx < 0 ? 1 : -1);
+            touchStartX = null;
+          }, { passive: true });
+        }
       }
     }
 
