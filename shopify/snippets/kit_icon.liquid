@@ -1,0 +1,21 @@
+{%- comment -%}
+  Renders a kit icon. SVGs are output as a masked <span> so they
+  adopt the parent's `color` (currentColor) — meaning the icon
+  takes the kit color automatically. Raster files (PNG/JPG/WebP/GIF)
+  fall through to an <img> tag at the requested size.
+
+  Params:
+    - icon  (required): file_reference value
+    - size  (default 24): pixel size for both rendering and CDN width
+    - alt   (optional): alt text for raster <img>
+    - extra (optional): extra class added to the rendered element
+{%- endcomment -%}
+{%- if icon != blank -%}
+  {%- assign sz = size | default: 24 -%}
+  {%- assign icon_url = icon | image_url: width: sz | default: icon.url | default: icon.src | default: icon.preview_image.src -%}
+  {%- if icon_url contains '.svg' -%}
+    <span class="kit-icon-mask{% if extra %} {{ extra }}{% endif %}" style="--kit-icon-url: url('{{ icon_url }}'); --kit-icon-size: {{ sz }}px;" aria-hidden="true"></span>
+  {%- else -%}
+    <img class="kit-icon-img{% if extra %} {{ extra }}{% endif %}" src="{{ icon_url }}" alt="{{ alt | default: '' | escape }}" loading="lazy" width="{{ sz }}" height="{{ sz }}">
+  {%- endif -%}
+{%- endif -%}
