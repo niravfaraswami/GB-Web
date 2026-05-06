@@ -1,17 +1,32 @@
 {%- comment -%}
-  Renders a kit icon. SVGs and rasters both render as <img> so the
-  source file's colors come through verbatim — important for
-  multi-color SVG icons (light + dark fills) where masking would
-  collapse everything to a single currentColor silhouette.
+  Renders a kit icon. SVGs are output as a CSS-masked <span> so they
+  adopt the parent's `color` (currentColor) — meaning the icon
+  takes the kit color automatically. Best results with outline-style
+  / single-color silhouette SVGs (any painted pixel becomes the kit
+  color; multi-fill SVGs collapse to one color).
+
+  Raster files (PNG/JPG/WebP/GIF) render as <img> with their native
+  colors.
 
   Params:
     - icon  (required): file_reference value
     - size  (default 24): pixel size for both rendering and CDN width
-    - alt   (optional): alt text for the <img>
+    - alt   (optional): alt text for raster <img>
     - extra (optional): extra class added to the rendered element
 {%- endcomment -%}
 {%- if icon != blank -%}
   {%- assign sz = size | default: 24 -%}
   {%- assign icon_url = icon | image_url: width: sz | default: icon.url | default: icon.src | default: icon.preview_image.src -%}
-  <img class="kit-icon-img{% if extra %} {{ extra }}{% endif %}" src="{{ icon_url }}" alt="{{ alt | default: '' | escape }}" loading="lazy" width="{{ sz }}" height="{{ sz }}">
+  {%- if icon_url contains '.svg' -%}
+    {%- comment -%}
+      Mask properties inlined so the icon renders even if the CSS file
+      hasn't propagated. Single-quoted style attribute lets the url() use
+      double quotes, avoiding HTML-entity escaping of ampersands.
+    {%- endcomment -%}
+    <span class="kit-icon-mask{% if extra %} {{ extra }}{% endif %}"
+          style='display:inline-block;width:100%;height:100%;background-color:currentColor;-webkit-mask-image:url("{{ icon_url }}");mask-image:url("{{ icon_url }}");-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:center;mask-position:center;'
+          aria-hidden="true"></span>
+  {%- else -%}
+    <img class="kit-icon-img{% if extra %} {{ extra }}{% endif %}" src="{{ icon_url }}" alt="{{ alt | default: '' | escape }}" loading="lazy" width="{{ sz }}" height="{{ sz }}">
+  {%- endif -%}
 {%- endif -%}
