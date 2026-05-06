@@ -330,6 +330,15 @@
 
 <script>
   (function () {
+    function syncHeaderHeights() {
+      var header = document.querySelector('.gb-site-header');
+      if (!header) return;
+      var h = header.offsetHeight;
+      // Match the CSS variable names Shopify Horizon uses elsewhere in the theme.
+      document.body.style.setProperty('--header-height', h + 'px');
+      document.body.style.setProperty('--header-group-height', h + 'px');
+      document.body.style.setProperty('--top-row-height', h + 'px');
+    }
     function init(scope) {
       var root = scope || document;
       // ---------- Mega menu (desktop) ----------
@@ -383,9 +392,13 @@
         el.dataset.bound = '1';
         el.addEventListener('click', closeMobileMenu);
       });
+
+      syncHeaderHeights();
     }
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function () { init(); }); else init();
     document.addEventListener('shopify:section:load', function (e) { init(e.target); });
+    window.addEventListener('resize', syncHeaderHeights);
+    window.addEventListener('load', syncHeaderHeights);
   })();
 </script>
 
