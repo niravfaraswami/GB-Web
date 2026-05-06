@@ -181,6 +181,21 @@ recipe_tag[0]:       {{ p.metafields.custom.featured_recipe_tags.value.first.emo
   resolved (with fallback)  = {{ ic | image_url: width: 48 | default: ic.url | default: ic.src | default: ic.preview_image.src | default: '(nil)' }}
 {%- endfor %}
 </pre>
+
+{%- assign test_icon = p.metafields.custom.hero_benefits_icons.value.first -%}
+{%- if test_icon -%}
+  {%- assign test_url = test_icon | image_url: width: 64 | default: test_icon.url | default: test_icon.src -%}
+  <div id="gb-mask-test" style="display:none;position:fixed;bottom:0;right:0;background:#1f1f1d;color:#fff;padding:14px 18px;z-index:99999;border-top-left-radius:10px;font:11px/1.5 monospace;border:2px solid #ff7300;">
+    <div style="margin-bottom:8px;color:#ff7300;font-weight:700">▼ MASK TEST</div>
+    <div style="display:flex;gap:14px;align-items:center;color:#000;background:#fff;padding:10px 14px;border-radius:6px;">
+      <div style="text-align:center"><span class="kit-icon-mask" style="--kit-icon-url: url('{{ test_url }}'); width:40px; height:40px; display:inline-block; color:#C24528;"></span><div style="margin-top:4px;font-size:9px">.kit-icon-mask</div></div>
+      <div style="text-align:center"><span style="display:inline-block;width:40px;height:40px;background:#C24528;-webkit-mask:url('{{ test_url }}') center/contain no-repeat;mask:url('{{ test_url }}') center/contain no-repeat;"></span><div style="margin-top:4px;font-size:9px">inline mask</div></div>
+      <div style="text-align:center"><img src="{{ test_url }}" width="40" height="40" alt="raw"><div style="margin-top:4px;font-size:9px">raw img</div></div>
+    </div>
+    <div style="margin-top:6px;opacity:0.7">If column 1 or 2 shows a coral square = mask works.<br>If only column 3 shows the SVG = mask CSS or browser-side issue.</div>
+  </div>
+  <script>if (location.search.indexOf('gbdebug=1') !== -1) { var t=document.getElementById('gb-mask-test'); if (t) t.style.display='block'; }</script>
+{%- endif -%}
   <script>if (location.search.indexOf('gbdebug=1') !== -1) { var p=document.getElementById('gb-debug-panel'); if (p) p.style.display='block'; }</script>
 
   {%- liquid
