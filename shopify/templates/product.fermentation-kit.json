@@ -93,17 +93,10 @@
         "ben-2": { "type": "benefit", "settings": { "icon": "🦠", "heading": "NATURAL PROBIOTICS", "description": "Wild Lactobacillus from real fermentation. No supplements, no capsules." } },
         "ben-3": { "type": "benefit", "settings": { "icon": "✨", "heading": "NO EXPERIENCE NEEDED", "description": "Pre-measured spice mix. Foolproof airlock. Beginners get it right first try." } },
 
-        "reel-1": { "type": "reel", "settings": {} },
-        "reel-2": { "type": "reel", "settings": {} },
-        "reel-3": { "type": "reel", "settings": {} },
-        "reel-4": { "type": "reel", "settings": {} },
-
         "box-1": { "type": "box_component", "settings": { "name": "Glass Fermentation Jar", "description": "Borosilicate · with airlock lid" } },
         "box-2": { "type": "box_component", "settings": { "name": "Spice Mix", "description": "Pre-measured for the kit" } },
         "box-3": { "type": "box_component", "settings": { "name": "Ferment Boost", "description": "Prebiotic blend sachet" } },
-        "box-4": { "type": "box_component", "settings": { "name": "Storage Lid", "description": "For refrigeration" } },
-        "box-5": { "type": "box_component", "settings": { "name": "Recipe Book", "description": "Seasonal recipes" } },
-        "box-6": { "type": "box_component", "settings": { "name": "Step-by-step Guide", "description": "Printed instructions" } },
+        "box-4": { "type": "box_component", "settings": { "name": "Recipe Book", "description": "Seasonal recipes" } },
 
         "sci-1": { "type": "science_card", "settings": { "name": "AIRLOCK", "what_it_does": "Gas out. Oxygen blocked.", "why_it_matters": "Oxygen = mould. Airlock blocks it.", "chip": "No daily burping needed." } },
         "sci-2": { "type": "science_card", "settings": { "name": "GLASS WEIGHT", "what_it_does": "Pushes veggies under brine.", "why_it_matters": "Above brine = mould. Weight fixes it.", "chip": "Safe ferment. Every time." } },
@@ -140,8 +133,7 @@
         "step-1","step-2","step-3","step-4",
         "cmp-1","cmp-2","cmp-3","cmp-4","cmp-5",
         "ben-1","ben-2","ben-3",
-        "reel-1","reel-2","reel-3","reel-4",
-        "box-1","box-2","box-3","box-4","box-5","box-6",
+        "box-1","box-2","box-3","box-4",
         "sci-1","sci-2",
         "rev-1","rev-2","rev-3",
         "tl-1","tl-2","tl-3","tl-4",
