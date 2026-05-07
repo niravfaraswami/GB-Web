@@ -1100,6 +1100,27 @@ recipe_tag[0]:       {{ p.metafields.custom.featured_recipe_tags.value.first.emo
       // ---------- Inline SVG icons so CSS can recolor stroke + fill ----------
       // Cached + de-duped to avoid refetching the same icon multiple times.
       window.__gbSvgCache = window.__gbSvgCache || {};
+      function recolorSvg(svgRoot) {
+        if (!svgRoot) return;
+        var rgb = function (s) { var m = String(s).match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/); return m ? [+m[1], +m[2], +m[3]] : null; };
+        var lightnessOf = function (c) { return (Math.max(c[0], c[1], c[2]) + Math.min(c[0], c[1], c[2])) / 2 / 255; };
+        var transparentBlack = function (c) { return c[0] === 0 && c[1] === 0 && c[2] === 0; }; // SVG default — treat as no fill
+        // Force the browser to compute styles from any inline <style> or attributes
+        svgRoot.querySelectorAll('*').forEach(function (el) {
+          var cs = getComputedStyle(el);
+          var fillC = rgb(cs.fill);
+          var strokeC = rgb(cs.stroke);
+          if (cs.fill && cs.fill !== 'none' && fillC && !(transparentBlack(fillC) && cs.fillOpacity === '1' && el.tagName === 'svg')) {
+            // Only mark when fill is a real, non-default color
+            if (cs.fill !== 'rgba(0, 0, 0, 0)') {
+              el.setAttribute('data-fill-tone', lightnessOf(fillC) > 0.7 ? 'light' : 'dark');
+            }
+          }
+          if (cs.stroke && cs.stroke !== 'none' && strokeC && cs.stroke !== 'rgba(0, 0, 0, 0)') {
+            el.setAttribute('data-has-stroke', '1');
+          }
+        });
+      }
       pdp.querySelectorAll('.kit-icon-svg[data-svg-src]').forEach(function (el) {
         var src = el.getAttribute('data-svg-src');
         if (!src) return;
@@ -1107,6 +1128,8 @@ recipe_tag[0]:       {{ p.metafields.custom.featured_recipe_tags.value.first.emo
           var clean = String(txt).replace(/<\?xml[^?]*\?>\s*/, '').replace(/<!DOCTYPE[^>]*>\s*/i, '');
           el.innerHTML = clean;
           el.removeAttribute('data-svg-src');
+          // Wait one frame so getComputedStyle sees the new <style> block
+          requestAnimationFrame(function () { recolorSvg(el.querySelector('svg')); });
         };
         var cached = window.__gbSvgCache[src];
         if (typeof cached === 'string') { setMarkup(cached); return; }

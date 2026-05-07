@@ -128,14 +128,22 @@
   line-height: 0;
 }
 .kit-icon-svg svg { width: 100%; height: 100%; display: block; overflow: visible; }
-.kit-icon-svg svg [stroke]:not([stroke="none"]) { stroke: var(--kit-color); }
-.kit-icon-svg svg [fill]:not([fill="none"]) { fill: var(--kit-color-soft); }
-/* If the parent context is white (.hm-num / .bp-icon — solid kit-color tile),
-   invert the recoloring so the icon stays visible against the dark tile. */
-.hm-num .kit-icon-svg svg [stroke]:not([stroke="none"]),
-.bp-icon .kit-icon-svg svg [stroke]:not([stroke="none"]) { stroke: var(--gb-white); }
-.hm-num .kit-icon-svg svg [fill]:not([fill="none"]),
-.bp-icon .kit-icon-svg svg [fill]:not([fill="none"]) { fill: rgba(255,255,255,0.18); }
+/* Recoloring driven by data-attributes that the JS recolor pass sets after
+   inlining the SVG. The pass classifies every element's computed fill as
+   "light" or "dark" (HSL lightness > 0.7) and marks elements with a stroke.
+   !important is needed because some SVG exports embed an internal <style>
+   block with class-scoped color rules. */
+.kit-icon-svg svg [data-fill-tone="dark"]  { fill: var(--kit-color) !important; }
+.kit-icon-svg svg [data-fill-tone="light"] { fill: var(--kit-color-soft) !important; }
+.kit-icon-svg svg [data-has-stroke="1"]    { stroke: var(--kit-color) !important; }
+/* If the icon sits inside a solid kit-color tile (.hm-num / .bp-icon),
+   invert the recoloring so the icon stays visible against the tile. */
+.hm-num .kit-icon-svg svg [data-fill-tone="dark"],
+.bp-icon .kit-icon-svg svg [data-fill-tone="dark"]  { fill: var(--gb-white) !important; }
+.hm-num .kit-icon-svg svg [data-fill-tone="light"],
+.bp-icon .kit-icon-svg svg [data-fill-tone="light"] { fill: rgba(255,255,255,0.25) !important; }
+.hm-num .kit-icon-svg svg [data-has-stroke="1"],
+.bp-icon .kit-icon-svg svg [data-has-stroke="1"]    { stroke: var(--gb-white) !important; }
 
 /* Legacy single-color mask (kept for any fallbacks) */
 .kit-icon-mask {
