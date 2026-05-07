@@ -1,12 +1,15 @@
 {%- comment -%}
-  Renders a kit icon. SVGs are output as a CSS-masked <span> so they
-  adopt the parent's `color` (currentColor) — meaning the icon
-  takes the kit color automatically. Best results with outline-style
-  / single-color silhouette SVGs (any painted pixel becomes the kit
-  color; multi-fill SVGs collapse to one color).
+  Renders a kit icon. SVGs are injected inline at runtime so CSS can
+  recolor `fill` and `stroke` separately:
+    stroke → kit accent color (var --kit-color)
+    fill   → light tile color  (var --kit-color-soft)
+  Raster files (PNG/JPG/WebP/GIF) render as <img> with native colors.
 
-  Raster files (PNG/JPG/WebP/GIF) render as <img> with their native
-  colors.
+  SVG AUTHORING CONVENTION
+  ────────────────────────
+  Outline strokes:  <path stroke="..." fill="none" />
+  Filled shapes:    <path fill="..." />        (no stroke OR stroke="none")
+  CSS overrides any explicit colors at runtime.
 
   Params:
     - icon  (required): file_reference value
@@ -18,13 +21,8 @@
   {%- assign sz = size | default: 24 -%}
   {%- assign icon_url = icon | image_url: width: sz | default: icon.url | default: icon.src | default: icon.preview_image.src -%}
   {%- if icon_url contains '.svg' -%}
-    {%- comment -%}
-      Mask properties inlined so the icon renders even if the CSS file
-      hasn't propagated. Single-quoted style attribute lets the url() use
-      double quotes, avoiding HTML-entity escaping of ampersands.
-    {%- endcomment -%}
-    <span class="kit-icon-mask{% if extra %} {{ extra }}{% endif %}"
-          style='display:inline-block;width:100%;height:100%;background-color:currentColor;-webkit-mask-image:url("{{ icon_url }}");mask-image:url("{{ icon_url }}");-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:center;mask-position:center;'
+    <span class="kit-icon-svg{% if extra %} {{ extra }}{% endif %}"
+          data-svg-src="{{ icon_url }}"
           aria-hidden="true"></span>
   {%- else -%}
     <img class="kit-icon-img{% if extra %} {{ extra }}{% endif %}" src="{{ icon_url }}" alt="{{ alt | default: '' | escape }}" loading="lazy" width="{{ sz }}" height="{{ sz }}">

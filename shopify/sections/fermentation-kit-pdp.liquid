@@ -1097,6 +1097,25 @@ recipe_tag[0]:       {{ p.metafields.custom.featured_recipe_tags.value.first.emo
           try { var u = new URL(window.location.href); u.searchParams.set('variant', e.target.value); history.replaceState({}, '', u); } catch (err) {}
         });
       }
+      // ---------- Inline SVG icons so CSS can recolor stroke + fill ----------
+      // Cached + de-duped to avoid refetching the same icon multiple times.
+      window.__gbSvgCache = window.__gbSvgCache || {};
+      pdp.querySelectorAll('.kit-icon-svg[data-svg-src]').forEach(function (el) {
+        var src = el.getAttribute('data-svg-src');
+        if (!src) return;
+        var setMarkup = function (txt) {
+          var clean = String(txt).replace(/<\?xml[^?]*\?>\s*/, '').replace(/<!DOCTYPE[^>]*>\s*/i, '');
+          el.innerHTML = clean;
+          el.removeAttribute('data-svg-src');
+        };
+        var cached = window.__gbSvgCache[src];
+        if (typeof cached === 'string') { setMarkup(cached); return; }
+        if (cached && cached.then) { cached.then(setMarkup); return; }
+        var p = fetch(src).then(function (r) { return r.text(); }).then(function (txt) { window.__gbSvgCache[src] = txt; return txt; });
+        window.__gbSvgCache[src] = p;
+        p.then(setMarkup).catch(function () { /* silently leave the placeholder empty */ });
+      });
+
       var mainImg = pdp.querySelector('.gallery-main-img');
       var thumbs = pdp.querySelectorAll('.gallery-thumb');
       function activateThumb(t) {
