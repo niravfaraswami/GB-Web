@@ -359,6 +359,18 @@
             {%- if section.settings.f30_image != blank -%}
               <img src="{{ section.settings.f30_image | image_url: width: 1200 }}" alt="{{ section.settings.f30_h | escape }}" loading="lazy" width="1000" height="1250">
             {%- endif -%}
+            <svg class="f30-overlay-svg" viewBox="0 0 100 125" preserveAspectRatio="none" aria-hidden="true">
+              <defs>
+                <filter id="f30-glow-{{ section.id }}" x="-50%" y="-50%" width="200%" height="200%">
+                  <feGaussianBlur stdDeviation="1.4" result="blur"/>
+                  <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+              </defs>
+              <path class="f30-curve" d="M 5 22 Q 2 45 11 66 Q 45 86 81 101" filter="url(#f30-glow-{{ section.id }})"/>
+              <circle class="f30-dot" cx="5" cy="22" r="1.6" filter="url(#f30-glow-{{ section.id }})"/>
+              <circle class="f30-dot" cx="11" cy="66" r="1.6" filter="url(#f30-glow-{{ section.id }})"/>
+              <circle class="f30-dot" cx="81" cy="101" r="1.6" filter="url(#f30-glow-{{ section.id }})"/>
+            </svg>
             {%- if section.settings.f30_anno_1 != blank -%}<div class="first30-anno a1">{{ section.settings.f30_anno_1 }}</div>{%- endif -%}
             {%- if section.settings.f30_anno_2 != blank -%}<div class="first30-anno a2">{{ section.settings.f30_anno_2 }}</div>{%- endif -%}
             {%- if section.settings.f30_anno_3 != blank -%}<div class="first30-anno a3">{{ section.settings.f30_anno_3 }}</div>{%- endif -%}
@@ -378,6 +390,7 @@
           {%- if section.settings.stacks_intro != blank -%}<p>{{ section.settings.stacks_intro }}</p>{%- endif -%}
         </div>
 
+        <div class="stacks-table-wrap">
         <div class="stacks-table">
           <div class="st-head">
             <div class="st-h-cell st-h-label">&nbsp;</div>
@@ -407,6 +420,7 @@
             </div>
           {%- endfor -%}
         </div>
+        </div>
       </div>
     </section>
   {%- endif -%}
@@ -429,12 +443,21 @@
 
             {%- if variant == 'image_only' -%}
               <div class="stag-card stag-image-only{{ span_cls }}" {{ block.shopify_attributes }}>
-                {%- if block.settings.image != blank -%}<img src="{{ block.settings.image | image_url: width: 800 }}" alt="{{ block.settings.heading | escape }}" loading="lazy" width="800" height="800">{%- endif -%}
+                {%- if block.settings.image != blank -%}
+                  {%- if block.settings.image_mobile != blank -%}
+                    <picture>
+                      <source media="(max-width: 768px)" srcset="{{ block.settings.image_mobile | image_url: width: 800 }}">
+                      <img src="{{ block.settings.image | image_url: width: 800 }}" alt="{{ block.settings.heading | escape }}" loading="lazy" width="800" height="800">
+                    </picture>
+                  {%- else -%}
+                    <img src="{{ block.settings.image | image_url: width: 800 }}" alt="{{ block.settings.heading | escape }}" loading="lazy" width="800" height="800">
+                  {%- endif -%}
+                {%- endif -%}
               </div>
 
             {%- elsif variant == 'dark' -%}
               <div class="stag-card stag-dark{{ span_cls }}" {{ block.shopify_attributes }}>
-                <div class="stag-num">{{ block.settings.numeral | default: forloop.index }}</div>
+                {%- if block.settings.numeral != blank -%}<div class="stag-num">{{ block.settings.numeral }}</div>{%- endif -%}
                 <div class="stag-body">
                   {%- if block.settings.eyebrow != blank -%}<span class="stag-num-small">{{ block.settings.eyebrow }}</span>{%- endif -%}
                   <div class="stag-h">{{ block.settings.heading }}</div>
@@ -446,7 +469,7 @@
               <div class="stag-card stag-dark stag-dark-photo{{ span_cls }}" {{ block.shopify_attributes }}>
                 {%- if block.settings.image != blank -%}<img class="stag-dark-img" src="{{ block.settings.image | image_url: width: 800 }}" alt="{{ block.settings.heading | escape }}" loading="lazy" width="800" height="450">{%- endif -%}
                 <div class="stag-dark-content">
-                  <div class="stag-num">{{ block.settings.numeral | default: forloop.index }}</div>
+                  {%- if block.settings.numeral != blank -%}<div class="stag-num">{{ block.settings.numeral }}</div>{%- endif -%}
                   <div class="stag-body">
                     {%- if block.settings.eyebrow != blank -%}<span class="stag-num-small">{{ block.settings.eyebrow }}</span>{%- endif -%}
                     <div class="stag-h">{{ block.settings.heading }}</div>
@@ -496,35 +519,18 @@
 
         {%- if section.settings.refill_show -%}
           <div class="refill-card">
-            <div class="refill-side">
-              <div class="refill-img">
-                {%- if section.settings.refill_a_image != blank -%}<img src="{{ section.settings.refill_a_image | image_url: width: 600 }}" alt="{{ section.settings.refill_a_h | escape }}" loading="lazy" width="600" height="400">{%- endif -%}
-              </div>
-              <div class="refill-body">
-                {%- if section.settings.refill_a_h != blank -%}<div class="refill-h">{{ section.settings.refill_a_h }}</div>{%- endif -%}
-                {%- if section.settings.refill_a_bullets != blank -%}
-                  <ul class="refill-list">
-                    {%- assign al = section.settings.refill_a_bullets | newline_to_br | split: '<br />' -%}
-                    {%- for line in al -%}{%- assign t = line | strip -%}{%- if t != blank -%}<li>{{ t }}</li>{%- endif -%}{%- endfor -%}
-                  </ul>
-                {%- endif -%}
-                {%- if section.settings.refill_a_cta_label != blank -%}<a class="refill-cta" href="{{ section.settings.refill_a_cta_url | default: '#' }}">{{ section.settings.refill_a_cta_label }}</a>{%- endif -%}
-              </div>
+            <div class="refill-img">
+              {%- if section.settings.refill_image != blank -%}<img src="{{ section.settings.refill_image | image_url: width: 800 }}" alt="{{ section.settings.refill_h | escape }}" loading="lazy" width="800" height="600">{%- endif -%}
             </div>
-            <div class="refill-side">
-              <div class="refill-img">
-                {%- if section.settings.refill_b_image != blank -%}<img src="{{ section.settings.refill_b_image | image_url: width: 600 }}" alt="{{ section.settings.refill_b_h | escape }}" loading="lazy" width="600" height="400">{%- endif -%}
-              </div>
-              <div class="refill-body">
-                {%- if section.settings.refill_b_h != blank -%}<div class="refill-h">{{ section.settings.refill_b_h }}</div>{%- endif -%}
-                {%- if section.settings.refill_b_bullets != blank -%}
-                  <ul class="refill-list">
-                    {%- assign bl = section.settings.refill_b_bullets | newline_to_br | split: '<br />' -%}
-                    {%- for line in bl -%}{%- assign t = line | strip -%}{%- if t != blank -%}<li>{{ t }}</li>{%- endif -%}{%- endfor -%}
-                  </ul>
-                {%- endif -%}
-                {%- if section.settings.refill_b_cta_label != blank -%}<a class="refill-cta" href="{{ section.settings.refill_b_cta_url | default: '#' }}">{{ section.settings.refill_b_cta_label }}</a>{%- endif -%}
-              </div>
+            <div class="refill-body">
+              {%- if section.settings.refill_h != blank -%}<div class="refill-h">{{ section.settings.refill_h }}</div>{%- endif -%}
+              {%- if section.settings.refill_bullets != blank -%}
+                <ul class="refill-list">
+                  {%- assign rl = section.settings.refill_bullets | newline_to_br | split: '<br />' -%}
+                  {%- for line in rl -%}{%- assign t = line | strip -%}{%- if t != blank -%}<li>{{ t }}</li>{%- endif -%}{%- endfor -%}
+                </ul>
+              {%- endif -%}
+              {%- if section.settings.refill_cta_label != blank -%}<a class="refill-cta" href="{{ section.settings.refill_cta_url | default: '#' }}">{{ section.settings.refill_cta_label }}</a>{%- endif -%}
             </div>
           </div>
         {%- endif -%}
@@ -579,12 +585,15 @@
               {%- assign unit_key = 'sci_stat' | append: stat_idx | append: '_unit' -%}
               {%- assign h_key = 'sci_stat' | append: stat_idx | append: '_h' -%}
               {%- assign d_key = 'sci_stat' | append: stat_idx | append: '_d' -%}
+              {%- assign img_key = 'sci_stat' | append: stat_idx | append: '_img' -%}
               {%- assign s_num = section.settings[num_key] -%}
               {%- assign s_unit = section.settings[unit_key] -%}
               {%- assign s_h = section.settings[h_key] -%}
               {%- assign s_d = section.settings[d_key] -%}
+              {%- assign s_img = section.settings[img_key] -%}
               {%- if s_num != blank or s_h != blank -%}
                 <div class="science-stag-card sci-stat">
+                  {%- if s_img != blank -%}<img class="sci-stat-bg" src="{{ s_img | image_url: width: 800 }}" alt="{{ s_h | escape }}" loading="lazy" width="600" height="450">{%- endif -%}
                   <div class="sci-stat-eyebrow">{{ section.settings.sci_stat_eyebrow | default: 'REPORTED' }}</div>
                   <div>
                     <div class="sci-stat-num">{{ s_num }}{%- if s_unit != blank %}<span>{{ s_unit }}</span>{%- endif -%}</div>
@@ -614,7 +623,8 @@
   {%- endif -%}
 
   {%- comment %} ============== 9. ENJOY (HOW TO DRINK) ============== {% endcomment -%}
-  {%- if section.settings.enjoy_h != blank -%}
+  {%- assign enjoy_blocks = section.blocks | where: 'type', 'enjoy_card' -%}
+  {%- if enjoy_blocks.size > 0 or section.settings.enjoy_h != blank -%}
     <section class="eat-section" data-leo="1">
       <div class="container">
         <div class="section-header centered">
@@ -623,25 +633,17 @@
         </div>
 
         <div class="enjoy-grid">
-          {%- for n in (1..4) -%}
-            {%- assign img_key = 'enjoy' | append: n | append: '_img' -%}
-            {%- assign h_key = 'enjoy' | append: n | append: '_h' -%}
-            {%- assign d_key = 'enjoy' | append: n | append: '_d' -%}
-            {%- assign e_img = section.settings[img_key] -%}
-            {%- assign e_h = section.settings[h_key] -%}
-            {%- assign e_d = section.settings[d_key] -%}
-            {%- if e_h != blank -%}
-              <div class="enjoy-card">
-                <div class="enjoy-card-img">
-                  {%- if e_img != blank -%}<img src="{{ e_img | image_url: width: 600 }}" alt="{{ e_h | escape }}" loading="lazy" width="450" height="600">{%- endif -%}
-                </div>
-                <div class="enjoy-card-num">{{ n }}</div>
-                <div class="enjoy-card-text">
-                  <div class="enjoy-card-h">{{ e_h }}</div>
-                  <div class="enjoy-card-d">{{ e_d }}</div>
-                </div>
+          {%- for block in enjoy_blocks -%}
+            <div class="enjoy-card" {{ block.shopify_attributes }}>
+              <div class="enjoy-card-img">
+                {%- if block.settings.image != blank -%}<img src="{{ block.settings.image | image_url: width: 600 }}" alt="{{ block.settings.heading | escape }}" loading="lazy" width="450" height="600">{%- endif -%}
               </div>
-            {%- endif -%}
+              <div class="enjoy-card-num">{{ forloop.index }}</div>
+              <div class="enjoy-card-text">
+                <div class="enjoy-card-h">{{ block.settings.heading }}</div>
+                <div class="enjoy-card-d">{{ block.settings.description }}</div>
+              </div>
+            </div>
           {%- endfor -%}
         </div>
 
@@ -657,8 +659,9 @@
   {%- endif -%}
 
   {%- comment %} ============== 10. RECIPES ============== {% endcomment -%}
-  {%- if section.settings.recipe_banner != blank or section.settings.recipe_count != blank -%}
-    <section class="recipes-section">
+  {%- assign recipe_blocks = section.blocks | where: 'type', 'recipe_item' -%}
+  {%- if section.settings.recipe_banner != blank or section.settings.recipe_count != blank or recipe_blocks.size > 0 -%}
+    <section class="recipes-section" data-leo="1">
       <div class="container">
         <div class="section-header">
           <div class="eyebrow">{{ section.settings.recipes_eyebrow }}</div>
@@ -669,6 +672,25 @@
         </div>
         {%- if section.settings.recipe_banner != blank -%}
           <div class="recipes-banner"><img src="{{ section.settings.recipe_banner | image_url: width: 1600 }}" alt="Recipes" loading="lazy" width="1600" height="700"></div>
+        {%- endif -%}
+        {%- if recipe_blocks.size > 0 -%}
+          <div class="recipes-grid">
+            {%- for block in recipe_blocks -%}
+              {%- if block.settings.url != blank -%}
+                <a class="recipe-item" href="{{ block.settings.url }}" {{ block.shopify_attributes }}>
+              {%- else -%}
+                <div class="recipe-item" {{ block.shopify_attributes }}>
+              {%- endif -%}
+                <div class="recipe-item-img">
+                  {%- if block.settings.image != blank -%}<img src="{{ block.settings.image | image_url: width: 500 }}" alt="{{ block.settings.name | escape }}" loading="lazy" width="400" height="300">{%- endif -%}
+                </div>
+                <div class="recipe-item-body">
+                  <div class="recipe-item-name">{{ block.settings.name }}</div>
+                  {%- if block.settings.description != blank -%}<div class="recipe-item-d">{{ block.settings.description }}</div>{%- endif -%}
+                </div>
+              {%- if block.settings.url != blank -%}</a>{%- else -%}</div>{%- endif -%}
+            {%- endfor -%}
+          </div>
         {%- endif -%}
       </div>
     </section>
@@ -920,16 +942,11 @@
     { "type": "text", "id": "stag_heading_em", "label": "Heading (highlighted)", "default": "TO FERMENT 2L." },
     { "type": "textarea", "id": "stag_note", "label": "Note strip below grid", "default": "Just add fresh black carrots, beetroot, and water. The kit handles the rest." },
     { "type": "checkbox", "id": "refill_show", "label": "Show refill card", "default": true },
-    { "type": "image_picker", "id": "refill_a_image", "label": "Refill A — image" },
-    { "type": "text", "id": "refill_a_h", "label": "Refill A — heading", "default": "First Time?<br>Get The Full Kit." },
-    { "type": "textarea", "id": "refill_a_bullets", "label": "Refill A — bullets (one per line)", "default": "Includes the 2L glass jar + airlock\nSpice Mix + Ferment Boost (1 batch)\nRecipe book + step-by-step guide\nBest for first-time fermenters" },
-    { "type": "text", "id": "refill_a_cta_label", "label": "Refill A — CTA label", "default": "Shop The Kit →" },
-    { "type": "url", "id": "refill_a_cta_url", "label": "Refill A — CTA URL" },
-    { "type": "image_picker", "id": "refill_b_image", "label": "Refill B — image" },
-    { "type": "text", "id": "refill_b_h", "label": "Refill B — heading", "default": "Already Have The Jar?<br>Just Refill The Mix." },
-    { "type": "textarea", "id": "refill_b_bullets", "label": "Refill B — bullets (one per line)", "default": "Spice Mix + Ferment Boost only\nSame flavour, same probiotic punch\nReuse your jar — much lower cost\nBest for existing customers" },
-    { "type": "text", "id": "refill_b_cta_label", "label": "Refill B — CTA label", "default": "Shop Refills →" },
-    { "type": "url", "id": "refill_b_cta_url", "label": "Refill B — CTA URL" },
+    { "type": "image_picker", "id": "refill_image", "label": "Refill — image" },
+    { "type": "text", "id": "refill_h", "label": "Refill — heading", "default": "Already Have The Jar?<br>Just Refill The Mix." },
+    { "type": "textarea", "id": "refill_bullets", "label": "Refill — bullets (one per line)", "default": "Spice Mix + Ferment Boost only\nSame flavour, same probiotic punch\nReuse your jar — much lower cost\nBest for existing customers" },
+    { "type": "text", "id": "refill_cta_label", "label": "Refill — CTA label", "default": "Shop Refills →" },
+    { "type": "url", "id": "refill_cta_url", "label": "Refill — CTA URL" },
 
     { "type": "header", "content": "UGC Reviews" },
     { "type": "text", "id": "reviews_eyebrow", "label": "Eyebrow", "default": "REAL RESULTS" },
@@ -941,26 +958,30 @@
     { "type": "text", "id": "sci_h", "label": "Heading", "default": "WHAT FERMENTED DRINKS DO" },
     { "type": "text", "id": "sci_h_em", "label": "Heading (highlighted)", "default": "FOR YOU." },
     { "type": "text", "id": "sci_stat_eyebrow", "label": "Stat-card eyebrow", "default": "REPORTED" },
+    { "type": "image_picker", "id": "sci_stat1_img", "label": "Stat 1 — background image" },
     { "type": "text", "id": "sci_stat1_num", "label": "Stat 1 — number", "default": "47" },
     { "type": "text", "id": "sci_stat1_unit", "label": "Stat 1 — unit", "default": "%" },
     { "type": "text", "id": "sci_stat1_h", "label": "Stat 1 — heading", "default": "Better Mood" },
     { "type": "textarea", "id": "sci_stat1_d", "label": "Stat 1 — description", "default": "After adding fermented drinks for just 14 days." },
+    { "type": "image_picker", "id": "sci_stat2_img", "label": "Stat 2 — background image" },
     { "type": "text", "id": "sci_stat2_num", "label": "Stat 2 — number", "default": "56" },
     { "type": "text", "id": "sci_stat2_unit", "label": "Stat 2 — unit", "default": "%" },
     { "type": "text", "id": "sci_stat2_h", "label": "Stat 2 — heading", "default": "More Energy" },
     { "type": "textarea", "id": "sci_stat2_d", "label": "Stat 2 — description", "default": "Without supplements or lifestyle changes." },
+    { "type": "image_picker", "id": "sci_stat3_img", "label": "Stat 3 — background image" },
     { "type": "text", "id": "sci_stat3_num", "label": "Stat 3 — number", "default": "42" },
     { "type": "text", "id": "sci_stat3_unit", "label": "Stat 3 — unit", "default": "%" },
     { "type": "text", "id": "sci_stat3_h", "label": "Stat 3 — heading", "default": "Less Bloating" },
     { "type": "textarea", "id": "sci_stat3_d", "label": "Stat 3 — description", "default": "From everyday fermented drinks like kanji." },
+    { "type": "image_picker", "id": "sci_stat4_img", "label": "Stat 4 — background image" },
     { "type": "text", "id": "sci_stat4_num", "label": "Stat 4 — number", "default": "52" },
     { "type": "text", "id": "sci_stat4_unit", "label": "Stat 4 — unit", "default": "%" },
     { "type": "text", "id": "sci_stat4_h", "label": "Stat 4 — heading", "default": "Less Hunger" },
     { "type": "textarea", "id": "sci_stat4_d", "label": "Stat 4 — description", "default": "Linked to improved gut health." },
-    { "type": "image_picker", "id": "sci_img1", "label": "Science image 1" },
-    { "type": "image_picker", "id": "sci_img2", "label": "Science image 2" },
-    { "type": "image_picker", "id": "sci_img3", "label": "Science image 3" },
-    { "type": "image_picker", "id": "sci_img4", "label": "Science image 4" },
+    { "type": "image_picker", "id": "sci_img1", "label": "Filler image 1 (between stats)" },
+    { "type": "image_picker", "id": "sci_img2", "label": "Filler image 2 (between stats)" },
+    { "type": "image_picker", "id": "sci_img3", "label": "Filler image 3 (between stats)" },
+    { "type": "image_picker", "id": "sci_img4", "label": "Filler image 4 (between stats)" },
     { "type": "richtext", "id": "sci_caption", "label": "Caption", "default": "<p>Based on a <strong>5,400+ person</strong> study on fermented drink intake.</p>" },
     { "type": "textarea", "id": "sci_disclaimer", "label": "Disclaimer", "default": "*Results from observational studies on fermented drink intake. Individual results vary." },
 
@@ -969,18 +990,6 @@
     { "type": "text", "id": "enjoy_h", "label": "Heading", "default": "HOW TO" },
     { "type": "text", "id": "enjoy_h_em", "label": "Heading (highlighted)", "default": "DRINK IT" },
     { "type": "text", "id": "enjoy_h_tail", "label": "Heading (tail)", "default": " DAILY." },
-    { "type": "image_picker", "id": "enjoy1_img", "label": "Card 1 — image" },
-    { "type": "text", "id": "enjoy1_h", "label": "Card 1 — heading", "default": "Morning Shot" },
-    { "type": "text", "id": "enjoy1_d", "label": "Card 1 — description", "default": "50ml on an empty stomach." },
-    { "type": "image_picker", "id": "enjoy2_img", "label": "Card 2 — image" },
-    { "type": "text", "id": "enjoy2_h", "label": "Card 2 — heading", "default": "With Meals" },
-    { "type": "text", "id": "enjoy2_d", "label": "Card 2 — description", "default": "A glass alongside your thali." },
-    { "type": "image_picker", "id": "enjoy3_img", "label": "Card 3 — image" },
-    { "type": "text", "id": "enjoy3_h", "label": "Card 3 — heading", "default": "Kanji Spritzer" },
-    { "type": "text", "id": "enjoy3_d", "label": "Card 3 — description", "default": "+ sparkling water + mint." },
-    { "type": "image_picker", "id": "enjoy4_img", "label": "Card 4 — image" },
-    { "type": "text", "id": "enjoy4_h", "label": "Card 4 — heading", "default": "Chilled Pour" },
-    { "type": "text", "id": "enjoy4_d", "label": "Card 4 — description", "default": "Straight from the fridge." },
     { "type": "text", "id": "spoons_num", "label": "Dosage — value", "default": "50–150" },
     { "type": "text", "id": "spoons_label", "label": "Dosage — unit label", "default": "ml per day" },
     { "type": "text", "id": "spoons_cap", "label": "Dosage — caption", "default": "Drink chilled or room temp. Don't heat." },
@@ -1053,8 +1062,9 @@
       ], "default": "light" },
       { "type": "checkbox", "id": "span_row_2", "label": "Span 2 rows", "default": false },
       { "type": "checkbox", "id": "span_col_2", "label": "Span 2 columns (mobile)", "default": false },
-      { "type": "image_picker", "id": "image", "label": "Image" },
-      { "type": "text", "id": "numeral", "label": "Numeral (dark variants)" },
+      { "type": "image_picker", "id": "image", "label": "Image (desktop)" },
+      { "type": "image_picker", "id": "image_mobile", "label": "Image (mobile, optional — falls back to desktop image)" },
+      { "type": "text", "id": "numeral", "label": "Numeral (dark variants — leave blank to hide)" },
       { "type": "text", "id": "eyebrow", "label": "Eyebrow / pill" },
       { "type": "text", "id": "heading", "label": "Heading" },
       { "type": "textarea", "id": "description", "label": "Description" },
@@ -1065,6 +1075,17 @@
       { "type": "textarea", "id": "quote", "label": "Quote" },
       { "type": "text", "id": "name", "label": "Name" },
       { "type": "text", "id": "meta", "label": "Meta (e.g. age)" }
+    ]},
+    { "type": "enjoy_card", "name": "Enjoy card (How To Drink)", "limit": 4, "settings": [
+      { "type": "image_picker", "id": "image", "label": "Image" },
+      { "type": "text", "id": "heading", "label": "Heading" },
+      { "type": "text", "id": "description", "label": "Description" }
+    ]},
+    { "type": "recipe_item", "name": "Recipe item", "limit": 8, "settings": [
+      { "type": "image_picker", "id": "image", "label": "Recipe image" },
+      { "type": "text", "id": "name", "label": "Recipe name" },
+      { "type": "text", "id": "description", "label": "Short description" },
+      { "type": "url", "id": "url", "label": "Link (optional)" }
     ]},
     { "type": "faq", "name": "FAQ", "limit": 12, "settings": [
       { "type": "text", "id": "question", "label": "Question" },

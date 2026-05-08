@@ -128,14 +128,26 @@
   background: var(--gb-cream-deeper); min-height: 480px;
 }
 .first30-section .first30-right img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.first30-section .f30-overlay-svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  pointer-events: none; z-index: 1;
+}
+.first30-section .f30-overlay-svg .f30-curve {
+  fill: none; stroke: #E5B662; stroke-width: 0.7;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+.first30-section .f30-overlay-svg .f30-dot { fill: #E5B662; }
+
 .first30-section .first30-anno {
-  position: absolute; color: var(--gb-white);
+  position: absolute; color: var(--gb-white); z-index: 2;
   font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 13.5px;
-  line-height: 1.25; letter-spacing: 0.005em; text-shadow: 0 1px 6px rgba(0,0,0,0.35);
+  line-height: 1.25; letter-spacing: 0.005em; text-shadow: 0 1px 6px rgba(0,0,0,0.45);
 }
 .first30-section .first30-anno::before {
   content: ''; position: absolute; width: 11px; height: 11px;
-  border-radius: 50%; border: 1.5px solid var(--gb-white); background: rgba(255,255,255,0.18);
+  border-radius: 50%; border: 1.5px solid #E5B662;
+  background: #E5B662; box-shadow: 0 0 8px rgba(229, 182, 98, 0.7);
 }
 .first30-section .first30-anno.a1 { top: 16%; left: 10%; }
 .first30-section .first30-anno.a1::before { left: -22px; top: 4px; }
@@ -205,13 +217,22 @@
 .st-mark.st-mark-yes::before { content: '✓'; }
 .st-mark.st-mark-no::before { content: '✕'; }
 
+.stacks-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.stacks-table-wrap::-webkit-scrollbar { height: 4px; }
+.stacks-table-wrap::-webkit-scrollbar-thumb { background: var(--gb-border); border-radius: 4px; }
+
 @media (max-width: 768px) {
   .stacks-section { padding: 56px 0; }
   .stacks-section h2 { font-size: 30px; }
-  .stacks-table { grid-template-columns: 1fr 1fr 1fr 1fr; border-radius: 14px; }
-  .stacks-table .st-h-cell { padding: 12px 10px; font-size: 11px; line-height: 1.2; }
-  .stacks-table .st-cell { padding: 12px 10px; font-size: 11.5px; line-height: 1.35; gap: 6px; }
-  .stacks-table .st-cell.st-cell-label { font-size: 11.5px; }
+  .stacks-table-wrap { margin: 0 -24px; padding: 0 24px 8px; }
+  .stacks-table {
+    grid-template-columns: 110px 1.05fr 1fr 1fr;
+    border-radius: 14px;
+    min-width: 560px;
+  }
+  .stacks-table .st-h-cell { padding: 12px 10px; font-size: 11.5px; line-height: 1.2; }
+  .stacks-table .st-cell { padding: 12px 10px; font-size: 12px; line-height: 1.35; gap: 6px; }
+  .stacks-table .st-cell.st-cell-label { font-size: 12px; }
   .st-mark { width: 14px; height: 14px; font-size: 9px; }
 }
 
@@ -321,20 +342,17 @@
   border-radius: 8px; line-height: 1.5; text-align: center;
 }
 
-/* Refill card (2 sides) */
+/* Refill card (single, full-width) */
 .refill-card {
-  margin-top: 28px; display: grid; grid-template-columns: 1fr 1fr;
+  margin-top: 28px;
+  display: grid; grid-template-columns: 1fr 1.4fr;
+  align-items: stretch; min-height: 220px;
   background: var(--gb-cream); border: 1px solid var(--gb-border-soft);
   border-radius: 18px; overflow: hidden;
 }
-.refill-side {
-  display: grid; grid-template-columns: 1fr 1fr;
-  align-items: stretch; min-height: 220px;
-}
-.refill-side + .refill-side { border-left: 1px solid var(--gb-border-soft); }
 .refill-img { background: var(--gb-cream-deeper); overflow: hidden; }
 .refill-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.refill-body { padding: 22px; display: flex; flex-direction: column; justify-content: center; }
+.refill-body { padding: 28px 32px; display: flex; flex-direction: column; justify-content: center; }
 .refill-h {
   font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 16px;
   letter-spacing: 0.005em; color: var(--gb-text);
@@ -368,12 +386,12 @@
   .stag-card.stag-detail .stag-detail-h { font-size: 11px; }
   .stag-card.stag-detail .stag-detail-eyebrow { font-size: 8.5px; }
   .stag-card.stag-detail .stag-detail-list { padding: 8px 12px 10px; font-size: 10px; gap: 4px; }
-  .refill-card { grid-template-columns: 1fr; }
-  .refill-side + .refill-side { border-left: none; border-top: 1px solid var(--gb-border-soft); }
-  .refill-body { padding: 16px 16px 18px; }
-  .refill-h { font-size: 14px; }
-  .refill-list { font-size: 11.5px; margin-bottom: 10px; }
-  .refill-cta { font-size: 11.5px; }
+  .refill-card { grid-template-columns: 1fr; min-height: 0; }
+  .refill-img { aspect-ratio: 16/9; }
+  .refill-body { padding: 18px 18px 20px; }
+  .refill-h { font-size: 15px; }
+  .refill-list { font-size: 12px; margin-bottom: 10px; }
+  .refill-cta { font-size: 12px; }
 }
 
 /* ============== UGC REVIEWS ============== */
@@ -435,10 +453,20 @@
 .science-stag-card.sci-stat {
   background: var(--gb-all-in-one); color: var(--gb-cream);
   padding: 22px 24px; flex-direction: column; justify-content: space-between;
+  position: relative;
 }
+.science-stag-card.sci-stat .sci-stat-bg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; display: block; z-index: 0;
+}
+.science-stag-card.sci-stat::after {
+  content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: linear-gradient(to right, rgba(43,34,24,0.78) 0%, rgba(43,34,24,0.55) 45%, rgba(43,34,24,0.30) 100%);
+}
+.science-stag-card.sci-stat > * { position: relative; z-index: 2; }
 .science-stag-card.sci-stat .sci-stat-eyebrow {
   font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.18em;
-  text-transform: uppercase; color: var(--gb-cream); opacity: 0.7; font-weight: 700;
+  text-transform: uppercase; color: var(--gb-cream); opacity: 0.85; font-weight: 700;
 }
 .science-stag-card.sci-stat .sci-stat-num {
   font-family: 'Cormorant Garamond', 'Georgia', serif; font-weight: 500;
@@ -467,6 +495,30 @@
   .science-stag-card.sci-stat .sci-stat-h { font-size: 11.5px; }
   .science-stag-card.sci-stat .sci-stat-d { font-size: 10.5px; line-height: 1.35; }
   .science-stag-card.sci-stat .sci-stat-eyebrow { font-size: 8.5px; }
+}
+
+/* ============== RECIPES — per-recipe block grid ============== */
+.recipes-section[data-leo="1"] .recipes-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 24px;
+}
+.recipes-section[data-leo="1"] .recipe-item {
+  border-radius: 14px; overflow: hidden;
+  background: var(--gb-cream); border: 1px solid var(--gb-border-soft);
+  display: flex; flex-direction: column;
+}
+.recipes-section[data-leo="1"] .recipe-item-img { aspect-ratio: 4/3; background: var(--gb-cream-deeper); overflow: hidden; }
+.recipes-section[data-leo="1"] .recipe-item-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.recipes-section[data-leo="1"] .recipe-item-body { padding: 12px 14px 14px; }
+.recipes-section[data-leo="1"] .recipe-item-name {
+  font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 13.5px;
+  color: var(--gb-text); letter-spacing: -0.005em; margin-bottom: 2px;
+}
+.recipes-section[data-leo="1"] .recipe-item-d { font-size: 12px; color: var(--gb-text-muted); line-height: 1.45; }
+
+@media (max-width: 768px) {
+  .recipes-section[data-leo="1"] .recipes-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .recipes-section[data-leo="1"] .recipe-item-name { font-size: 12.5px; }
+  .recipes-section[data-leo="1"] .recipe-item-d { font-size: 11px; }
 }
 
 /* ============== ENJOY (HOW TO DRINK) — Leo ============== */
