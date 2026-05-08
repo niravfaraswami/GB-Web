@@ -7,8 +7,15 @@
 
 /* ============== HERO — 4 SVG benefit icons ============== */
 [data-template="leo"] .benefits-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-[data-template="leo"] .benefit-item { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; color: var(--gb-text); line-height: 1.4; }
-[data-template="leo"] .benefit-icon-svg { flex-shrink: 0; width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; }
+[data-template="leo"] .benefit-item { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--gb-text); line-height: 1.4; }
+[data-template="leo"] .benefit-icon-svg {
+  flex-shrink: 0; width: 36px; height: 36px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--kit-color-soft);
+  border-radius: 8px;
+  padding: 6px;
+  box-sizing: border-box;
+}
 [data-template="leo"] .benefit-icon-svg svg { width: 100%; height: 100%; display: block; }
 /* SVG recolor — stroke uses kit color, fill uses kit-soft */
 [data-template="leo"] .benefit-icon-svg svg [data-has-stroke="1"] { stroke: var(--kit-color); }
@@ -57,14 +64,19 @@
 [data-template="leo"] .hero-accordion-panel .tab-step-d { font-size: 13px; color: var(--gb-text-muted); line-height: 1.45; }
 
 /* ============== TRUST ROW — Leo override (gb-icon) ============== */
-[data-template="leo"] .gb-icon { width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+[data-template="leo"] .gb-icon { width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
 [data-template="leo"] .gb-icon svg { width: 100%; height: 100%; display: block; }
 [data-template="leo"] .gb-icon svg [data-has-stroke="1"] { stroke: var(--kit-color); }
 [data-template="leo"] .gb-icon svg [data-fill-tone="dark"] { fill: var(--kit-color); }
 [data-template="leo"] .gb-icon svg [data-fill-tone="light"] { fill: var(--kit-color-soft); }
 [data-template="leo"] .trust-row-section .tr-card .tr-icon {
-  background: transparent; width: auto; height: auto;
-  margin: 0 0 10px 0; padding: 0;
+  background: var(--kit-color-soft);
+  width: 44px; height: 44px;
+  border-radius: 8px;
+  margin: 0 0 12px 0;
+  padding: 8px;
+  display: inline-flex; align-items: center; justify-content: center;
+  box-sizing: border-box;
 }
 
 /* ============== FIRST 30 DAYS ============== */
@@ -512,6 +524,29 @@
   .science-stag-card.sci-stat .sci-stat-h { font-size: 11.5px; }
   .science-stag-card.sci-stat .sci-stat-d { font-size: 10.5px; line-height: 1.35; }
   .science-stag-card.sci-stat .sci-stat-eyebrow { font-size: 8.5px; }
+}
+
+/* ============== RECIPES — pill tags ============== */
+[data-template="leo"] .recipes-section .recipe-tags {
+  display: flex; flex-wrap: wrap; gap: 8px 10px; margin-top: 18px;
+}
+[data-template="leo"] .recipes-section .recipe-tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--gb-cream); border: 1px solid var(--gb-border-soft);
+  padding: 7px 14px 7px 12px; border-radius: 999px;
+  font-family: 'DM Sans', system-ui, sans-serif; font-weight: 500;
+  font-size: 13px; color: var(--gb-text); line-height: 1;
+  transition: border-color 0.15s, background 0.15s, transform 0.15s;
+}
+[data-template="leo"] .recipes-section a.recipe-tag:hover {
+  border-color: var(--kit-color); background: var(--kit-color-soft); transform: translateY(-1px);
+}
+[data-template="leo"] .recipes-section .recipe-tag .dot {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--kit-color); display: inline-block; flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  [data-template="leo"] .recipes-section .recipe-tag { font-size: 12px; padding: 6px 12px 6px 10px; }
 }
 
 /* ============== ENJOY (HOW TO DRINK) — Leo ============== */

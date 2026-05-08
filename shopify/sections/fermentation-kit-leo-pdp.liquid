@@ -227,8 +227,8 @@
           {%- if accordion_blocks.size > 0 -%}
             <div class="hero-accordion">
               {%- for block in accordion_blocks -%}
-                <div class="hero-accordion-item{% if forloop.first %} is-open{% endif %}" data-accordion {{ block.shopify_attributes }}>
-                  <button class="hero-accordion-trigger" type="button" aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}">
+                <div class="hero-accordion-item{% if block.settings.default_open %} is-open{% endif %}" data-accordion {{ block.shopify_attributes }}>
+                  <button class="hero-accordion-trigger" type="button" aria-expanded="{% if block.settings.default_open %}true{% else %}false{% endif %}">
                     <span class="hero-accordion-label">{{ block.settings.label }}</span>
                     <span class="hero-accordion-toggle" aria-hidden="true"></span>
                   </button>
@@ -674,7 +674,8 @@
   {%- endif -%}
 
   {%- comment %} ============== 10. RECIPES ============== {% endcomment -%}
-  {%- if section.settings.recipe_banner != blank or section.settings.recipe_count != blank -%}
+  {%- assign recipe_pill_blocks = section.blocks | where: 'type', 'recipe_pill' -%}
+  {%- if section.settings.recipe_banner != blank or section.settings.recipe_count != blank or recipe_pill_blocks.size > 0 -%}
     <section class="recipes-section">
       <div class="container">
         <div class="section-header">
@@ -686,6 +687,17 @@
         </div>
         {%- if section.settings.recipe_banner != blank -%}
           <div class="recipes-banner"><img src="{{ section.settings.recipe_banner | image_url: width: 1600 }}" alt="Recipes" loading="lazy" width="1600" height="700"></div>
+        {%- endif -%}
+        {%- if recipe_pill_blocks.size > 0 -%}
+          <div class="recipe-tags">
+            {%- for block in recipe_pill_blocks -%}
+              {%- if block.settings.url != blank -%}
+                <a class="recipe-tag" href="{{ block.settings.url }}" {{ block.shopify_attributes }}><span class="dot"></span>{%- if block.settings.emoji != blank %}{{ block.settings.emoji }} {% endif -%}{{ block.settings.name }}</a>
+              {%- else -%}
+                <span class="recipe-tag" {{ block.shopify_attributes }}><span class="dot"></span>{%- if block.settings.emoji != blank %}{{ block.settings.emoji }} {% endif -%}{{ block.settings.name }}</span>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
         {%- endif -%}
       </div>
     </section>
@@ -1021,7 +1033,8 @@
     ]},
     { "type": "hero_accordion_tab", "name": "Hero accordion tab", "limit": 3, "settings": [
       { "type": "text", "id": "label", "label": "Tab label" },
-      { "type": "richtext", "id": "body", "label": "Tab body" }
+      { "type": "richtext", "id": "body", "label": "Tab body" },
+      { "type": "checkbox", "id": "default_open", "label": "Open by default", "default": false }
     ]},
     { "type": "step", "name": "How-to step", "settings": [
       { "type": "text", "id": "title", "label": "Step title" },
@@ -1075,6 +1088,11 @@
       { "type": "image_picker", "id": "image", "label": "Image" },
       { "type": "text", "id": "heading", "label": "Heading" },
       { "type": "text", "id": "description", "label": "Description" }
+    ]},
+    { "type": "recipe_pill", "name": "Recipe pill", "limit": 12, "settings": [
+      { "type": "text", "id": "emoji", "label": "Emoji (optional)" },
+      { "type": "text", "id": "name", "label": "Recipe name" },
+      { "type": "url", "id": "url", "label": "Link (optional)" }
     ]},
     { "type": "faq", "name": "FAQ", "limit": 12, "settings": [
       { "type": "text", "id": "question", "label": "Question" },
