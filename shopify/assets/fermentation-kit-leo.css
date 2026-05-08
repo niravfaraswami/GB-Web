@@ -5,6 +5,103 @@
    so it never leaks into the base fermentation-kit template.
    ============================================================== */
 
+/* ============== TOKENS / SHARED ============== */
+/* 2× section-header eyebrows for Leo */
+[data-template="leo"] .eyebrow,
+[data-template="leo"] .first30-eyebrow { font-size: 22px; letter-spacing: 0.10em; }
+
+/* ============== STICKY ATC BAR ============== */
+.sticky-atc {
+  position: fixed; left: 50%; bottom: 18px;
+  transform: translateX(-50%) translateY(140%);
+  z-index: 90;
+  width: calc(100% - 32px); max-width: 880px;
+  background: var(--gb-white);
+  border: 1px solid var(--gb-border-soft);
+  border-radius: 999px;
+  box-shadow: 0 8px 28px rgba(31, 31, 29, 0.12);
+  padding: 8px;
+  opacity: 0; pointer-events: none;
+  transition: transform 0.28s cubic-bezier(0.2, 0.7, 0.2, 1), opacity 0.2s ease;
+}
+.sticky-atc.is-visible { transform: translateX(-50%) translateY(0); opacity: 1; pointer-events: auto; }
+
+.sticky-atc-inner {
+  display: flex; align-items: center; gap: 16px;
+}
+.sticky-atc-prod {
+  display: flex; align-items: center; gap: 12px;
+  flex: 1; min-width: 0;
+}
+.sticky-atc-img {
+  width: 48px; height: 48px; border-radius: 10px;
+  object-fit: cover; flex-shrink: 0;
+  background: var(--gb-cream);
+}
+.sticky-atc-name {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-weight: 500; font-size: 14.5px; color: var(--gb-text);
+  letter-spacing: -0.005em;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  min-width: 0;
+}
+.sticky-atc-price {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-weight: 600; font-size: 15px; color: var(--gb-text);
+  white-space: nowrap; flex-shrink: 0;
+}
+.sticky-atc-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  background: var(--gb-ink); color: var(--gb-white);
+  border: 0; cursor: pointer;
+  padding: 12px 22px;
+  border-radius: 999px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700; font-size: 13px; letter-spacing: 0.02em;
+  flex-shrink: 0;
+  transition: background 0.15s, transform 0.1s;
+}
+.sticky-atc-btn:hover { background: #000; }
+.sticky-atc-btn:active { transform: scale(0.98); }
+.sticky-atc-cart-icon { display: block; }
+
+.sticky-atc-social {
+  display: flex; align-items: center; gap: 14px;
+  margin-left: 4px; padding-left: 16px;
+  border-left: 1px solid var(--gb-border-soft);
+  flex-shrink: 0;
+}
+.sticky-atc-social a {
+  color: var(--gb-text-muted); display: inline-flex; align-items: center; justify-content: center;
+  transition: color 0.15s, transform 0.1s;
+}
+.sticky-atc-social a:hover { color: var(--gb-text); transform: translateY(-1px); }
+.sticky-atc-social svg { display: block; }
+
+/* Reserve space at the bottom so the bar doesn't cover content */
+.ferment-pdp-leo { padding-bottom: 88px; }
+
+@media (max-width: 768px) {
+  .sticky-atc {
+    bottom: 12px;
+    width: calc(100% - 20px);
+    border-radius: 16px;
+    padding: 8px;
+  }
+  .sticky-atc-inner { gap: 10px; }
+  .sticky-atc-img { width: 44px; height: 44px; border-radius: 8px; }
+  .sticky-atc-name { font-size: 13.5px; }
+  .sticky-atc-price { font-size: 14px; }
+  .sticky-atc-btn {
+    width: 44px; height: 44px;
+    padding: 0; border-radius: 12px;
+    flex-shrink: 0;
+  }
+  .sticky-atc-btn-label { display: none; }
+  .sticky-atc-social { display: none; }
+  .ferment-pdp-leo { padding-bottom: 80px; }
+}
+
 /* ============== HERO — 4 SVG benefit icons ============== */
 [data-template="leo"] .benefits-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 [data-template="leo"] .benefit-item { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--gb-text); line-height: 1.4; }
