@@ -69,8 +69,18 @@
 
 /* ============== FIRST 30 DAYS ============== */
 .first30-section { background: var(--gb-cream); padding: 80px 0; }
-.first30-section .first30-grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 48px; align-items: stretch; }
-.first30-section .first30-left { display: flex; flex-direction: column; }
+.first30-section .first30-grid {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  grid-template-areas:
+    "header right"
+    "rest   right";
+  gap: 14px 48px;
+  align-items: stretch;
+}
+.first30-section .first30-header { grid-area: header; }
+.first30-section .first30-rest   { grid-area: rest; display: flex; flex-direction: column; }
+.first30-section .first30-right  { grid-area: right; }
 .first30-section .first30-eyebrow {
   font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 700;
   letter-spacing: 0.16em; text-transform: uppercase; color: var(--kit-color); margin-bottom: 16px;
@@ -158,9 +168,16 @@
 
 @media (max-width: 768px) {
   .first30-section { padding: 56px 0; }
-  .first30-section .first30-grid { grid-template-columns: 1fr; gap: 24px; }
+  .first30-section .first30-grid {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "header"
+      "right"
+      "rest";
+    gap: 18px;
+  }
   .first30-section .first30-h { font-size: 30px; }
-  .first30-section .first30-right { min-height: 320px; order: -1; }
+  .first30-section .first30-right { min-height: 320px; }
   .first30-section .first30-stat-circle { width: 72px; height: 72px; }
   .first30-section .first30-stat-num { font-size: 17px; }
   .first30-section .first30-stats-row { gap: 8px; }
@@ -495,30 +512,6 @@
   .science-stag-card.sci-stat .sci-stat-h { font-size: 11.5px; }
   .science-stag-card.sci-stat .sci-stat-d { font-size: 10.5px; line-height: 1.35; }
   .science-stag-card.sci-stat .sci-stat-eyebrow { font-size: 8.5px; }
-}
-
-/* ============== RECIPES — per-recipe block grid ============== */
-.recipes-section[data-leo="1"] .recipes-grid {
-  display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 24px;
-}
-.recipes-section[data-leo="1"] .recipe-item {
-  border-radius: 14px; overflow: hidden;
-  background: var(--gb-cream); border: 1px solid var(--gb-border-soft);
-  display: flex; flex-direction: column;
-}
-.recipes-section[data-leo="1"] .recipe-item-img { aspect-ratio: 4/3; background: var(--gb-cream-deeper); overflow: hidden; }
-.recipes-section[data-leo="1"] .recipe-item-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.recipes-section[data-leo="1"] .recipe-item-body { padding: 12px 14px 14px; }
-.recipes-section[data-leo="1"] .recipe-item-name {
-  font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 13.5px;
-  color: var(--gb-text); letter-spacing: -0.005em; margin-bottom: 2px;
-}
-.recipes-section[data-leo="1"] .recipe-item-d { font-size: 12px; color: var(--gb-text-muted); line-height: 1.45; }
-
-@media (max-width: 768px) {
-  .recipes-section[data-leo="1"] .recipes-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
-  .recipes-section[data-leo="1"] .recipe-item-name { font-size: 12.5px; }
-  .recipes-section[data-leo="1"] .recipe-item-d { font-size: 11px; }
 }
 
 /* ============== ENJOY (HOW TO DRINK) — Leo ============== */

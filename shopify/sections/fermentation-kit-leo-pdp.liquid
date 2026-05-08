@@ -315,9 +315,12 @@
     <section class="first30-section">
       <div class="container">
         <div class="first30-grid">
-          <div class="first30-left">
+          <div class="first30-header">
             {%- if section.settings.f30_eyebrow != blank -%}<div class="first30-eyebrow">{{ section.settings.f30_eyebrow }}</div>{%- endif -%}
             <h2 class="first30-h">{{ section.settings.f30_h }} {%- if section.settings.f30_h_em != blank %}<em>{{ section.settings.f30_h_em }}</em>{%- endif -%}{{ section.settings.f30_h_tail }}</h2>
+          </div>
+
+          <div class="first30-rest">
             {%- if section.settings.f30_intro != blank -%}<p class="first30-intro">{{ section.settings.f30_intro }}</p>{%- endif -%}
 
             {%- if f30_row_blocks.size > 0 -%}
@@ -659,9 +662,8 @@
   {%- endif -%}
 
   {%- comment %} ============== 10. RECIPES ============== {% endcomment -%}
-  {%- assign recipe_blocks = section.blocks | where: 'type', 'recipe_item' -%}
-  {%- if section.settings.recipe_banner != blank or section.settings.recipe_count != blank or recipe_blocks.size > 0 -%}
-    <section class="recipes-section" data-leo="1">
+  {%- if section.settings.recipe_banner != blank or section.settings.recipe_count != blank -%}
+    <section class="recipes-section">
       <div class="container">
         <div class="section-header">
           <div class="eyebrow">{{ section.settings.recipes_eyebrow }}</div>
@@ -672,25 +674,6 @@
         </div>
         {%- if section.settings.recipe_banner != blank -%}
           <div class="recipes-banner"><img src="{{ section.settings.recipe_banner | image_url: width: 1600 }}" alt="Recipes" loading="lazy" width="1600" height="700"></div>
-        {%- endif -%}
-        {%- if recipe_blocks.size > 0 -%}
-          <div class="recipes-grid">
-            {%- for block in recipe_blocks -%}
-              {%- if block.settings.url != blank -%}
-                <a class="recipe-item" href="{{ block.settings.url }}" {{ block.shopify_attributes }}>
-              {%- else -%}
-                <div class="recipe-item" {{ block.shopify_attributes }}>
-              {%- endif -%}
-                <div class="recipe-item-img">
-                  {%- if block.settings.image != blank -%}<img src="{{ block.settings.image | image_url: width: 500 }}" alt="{{ block.settings.name | escape }}" loading="lazy" width="400" height="300">{%- endif -%}
-                </div>
-                <div class="recipe-item-body">
-                  <div class="recipe-item-name">{{ block.settings.name }}</div>
-                  {%- if block.settings.description != blank -%}<div class="recipe-item-d">{{ block.settings.description }}</div>{%- endif -%}
-                </div>
-              {%- if block.settings.url != blank -%}</a>{%- else -%}</div>{%- endif -%}
-            {%- endfor -%}
-          </div>
         {%- endif -%}
       </div>
     </section>
@@ -1080,12 +1063,6 @@
       { "type": "image_picker", "id": "image", "label": "Image" },
       { "type": "text", "id": "heading", "label": "Heading" },
       { "type": "text", "id": "description", "label": "Description" }
-    ]},
-    { "type": "recipe_item", "name": "Recipe item", "limit": 8, "settings": [
-      { "type": "image_picker", "id": "image", "label": "Recipe image" },
-      { "type": "text", "id": "name", "label": "Recipe name" },
-      { "type": "text", "id": "description", "label": "Short description" },
-      { "type": "url", "id": "url", "label": "Link (optional)" }
     ]},
     { "type": "faq", "name": "FAQ", "limit": 12, "settings": [
       { "type": "text", "id": "question", "label": "Question" },
