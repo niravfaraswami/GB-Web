@@ -568,6 +568,18 @@
     </section>
   {%- endif -%}
 
+  {%- comment %} ============== 7.5 APP BLOCKS (Quinn UGC reels, etc.) ============== {% endcomment -%}
+  {%- assign app_blocks = section.blocks | where: 'type', '@app' -%}
+  {%- if app_blocks.size > 0 -%}
+    <section class="app-block-slot">
+      <div class="container">
+        {%- for block in app_blocks -%}
+          {% render block %}
+        {%- endfor -%}
+      </div>
+    </section>
+  {%- endif -%}
+
   {%- comment %} ============== 8. SCIENCE 4×2 CHECKERBOARD ============== {% endcomment -%}
   {%- if section.settings.sci_h != blank -%}
     <section class="science-stag-section">
@@ -1070,7 +1082,8 @@
     ]},
     { "type": "cross_sell_product", "name": "Cross-sell product", "limit": 4, "settings": [
       { "type": "product", "id": "product", "label": "Product" }
-    ]}
+    ]},
+    { "type": "@app" }
   ],
   "presets": [{ "name": "Fermentation Kit Leo PDP" }]
 }
