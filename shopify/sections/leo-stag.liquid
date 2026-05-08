@@ -1,0 +1,157 @@
+{%- render 'leo_kit_chrome' -%}
+
+{%- assign stag_card_blocks = section.blocks | where: 'type', 'stag_card' -%}
+
+{%- if stag_card_blocks.size > 0 -%}
+  <section class="stag-section ferment-pdp-leo" {%- render 'leo_kit_attrs' -%}>
+    <div class="container">
+      <div class="section-header">
+        <div class="eyebrow">{{ section.settings.stag_eyebrow }}</div>
+        <h2>{{ section.settings.stag_heading }} <em>{{ section.settings.stag_heading_em }}</em></h2>
+      </div>
+
+      <div class="stag-grid">
+        {%- for block in stag_card_blocks -%}
+          {%- assign variant = block.settings.variant -%}
+          {%- assign span_cls = '' -%}
+          {%- if block.settings.span_row_2 -%}{%- assign span_cls = ' span-row-2' -%}{%- endif -%}
+          {%- if block.settings.span_col_2 -%}{%- assign span_cls = span_cls | append: ' span-col-2' -%}{%- endif -%}
+
+          {%- if variant == 'image_only' -%}
+            <div class="stag-card stag-image-only{{ span_cls }}" {{ block.shopify_attributes }}>
+              {%- if block.settings.image != blank -%}
+                {%- if block.settings.image_mobile != blank -%}
+                  <picture>
+                    <source media="(max-width: 768px)" srcset="{{ block.settings.image_mobile | image_url: width: 800 }}">
+                    <img src="{{ block.settings.image | image_url: width: 800 }}" alt="{{ block.settings.heading | escape }}" loading="lazy" width="800" height="800">
+                  </picture>
+                {%- else -%}
+                  <img src="{{ block.settings.image | image_url: width: 800 }}" alt="{{ block.settings.heading | escape }}" loading="lazy" width="800" height="800">
+                {%- endif -%}
+              {%- endif -%}
+            </div>
+
+          {%- elsif variant == 'dark' -%}
+            <div class="stag-card stag-dark{{ span_cls }}" {{ block.shopify_attributes }}>
+              {%- if block.settings.numeral != blank -%}<div class="stag-num">{{ block.settings.numeral }}</div>{%- endif -%}
+              <div class="stag-body">
+                {%- if block.settings.eyebrow != blank -%}<span class="stag-num-small">{{ block.settings.eyebrow }}</span>{%- endif -%}
+                <div class="stag-h">{{ block.settings.heading }}</div>
+                <div class="stag-d">{{ block.settings.description }}</div>
+              </div>
+            </div>
+
+          {%- elsif variant == 'dark_photo' -%}
+            <div class="stag-card stag-dark stag-dark-photo{{ span_cls }}" {{ block.shopify_attributes }}>
+              {%- if block.settings.image != blank -%}<img class="stag-dark-img" src="{{ block.settings.image | image_url: width: 800 }}" alt="{{ block.settings.heading | escape }}" loading="lazy" width="800" height="450">{%- endif -%}
+              <div class="stag-dark-content">
+                {%- if block.settings.numeral != blank -%}<div class="stag-num">{{ block.settings.numeral }}</div>{%- endif -%}
+                <div class="stag-body">
+                  {%- if block.settings.eyebrow != blank -%}<span class="stag-num-small">{{ block.settings.eyebrow }}</span>{%- endif -%}
+                  <div class="stag-h">{{ block.settings.heading }}</div>
+                  <div class="stag-d">{{ block.settings.description }}</div>
+                </div>
+              </div>
+            </div>
+
+          {%- elsif variant == 'light' -%}
+            <div class="stag-card stag-light{{ span_cls }}" {{ block.shopify_attributes }}>
+              <div class="stag-light-img">
+                {%- if block.settings.image != blank -%}<img src="{{ block.settings.image | image_url: width: 600 }}" alt="{{ block.settings.heading | escape }}" loading="lazy" width="600" height="400">{%- endif -%}
+              </div>
+              <div class="stag-light-body">
+                {%- if block.settings.eyebrow != blank -%}<span class="stag-pill">{{ block.settings.eyebrow }}</span>{%- endif -%}
+                <div class="stag-h">{{ block.settings.heading }}</div>
+                <div class="stag-d">{{ block.settings.description }}</div>
+              </div>
+            </div>
+
+          {%- elsif variant == 'detail' -%}
+            <div class="stag-card stag-detail{{ span_cls }}" {{ block.shopify_attributes }}>
+              <div class="stag-detail-head">
+                <div class="stag-detail-thumb">
+                  {%- if block.settings.image != blank -%}<img src="{{ block.settings.image | image_url: width: 200 }}" alt="{{ block.settings.heading | escape }}" loading="lazy" width="96" height="96">{%- endif -%}
+                </div>
+                <div class="stag-detail-titles">
+                  {%- if block.settings.eyebrow != blank -%}<div class="stag-detail-eyebrow">{{ block.settings.eyebrow }}</div>{%- endif -%}
+                  <div class="stag-detail-h">{{ block.settings.heading }}</div>
+                </div>
+              </div>
+              <ul class="stag-detail-list">
+                {%- assign lines = block.settings.bullets | newline_to_br | split: '<br />' -%}
+                {%- for line in lines -%}
+                  {%- assign trimmed = line | strip -%}
+                  {%- if trimmed != blank -%}<li>{{ trimmed }}</li>{%- endif -%}
+                {%- endfor -%}
+              </ul>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+
+      {%- if section.settings.stag_note != blank -%}
+        <p class="stag-note-strip">{{ section.settings.stag_note }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.refill_show -%}
+        <div class="refill-card">
+          <div class="refill-img">
+            {%- if section.settings.refill_image != blank -%}<img src="{{ section.settings.refill_image | image_url: width: 800 }}" alt="{{ section.settings.refill_h | escape }}" loading="lazy" width="800" height="600">{%- endif -%}
+          </div>
+          <div class="refill-body">
+            {%- if section.settings.refill_h != blank -%}<div class="refill-h">{{ section.settings.refill_h }}</div>{%- endif -%}
+            {%- if section.settings.refill_bullets != blank -%}
+              <ul class="refill-list">
+                {%- assign rl = section.settings.refill_bullets | newline_to_br | split: '<br />' -%}
+                {%- for line in rl -%}{%- assign t = line | strip -%}{%- if t != blank -%}<li>{{ t }}</li>{%- endif -%}{%- endfor -%}
+              </ul>
+            {%- endif -%}
+            {%- if section.settings.refill_cta_label != blank -%}<a class="refill-cta" href="{{ section.settings.refill_cta_url | default: '#' }}">{{ section.settings.refill_cta_label }}</a>{%- endif -%}
+          </div>
+        </div>
+      {%- endif -%}
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Leo · Includes",
+  "tag": "section",
+  "class": "leo-stag-section",
+  "settings": [
+    { "type": "text", "id": "stag_eyebrow", "label": "Eyebrow", "default": "WHAT'S INSIDE THE BOX" },
+    { "type": "text", "id": "stag_heading", "label": "Heading", "default": "EVERYTHING YOU NEED" },
+    { "type": "text", "id": "stag_heading_em", "label": "Heading (highlighted)", "default": "TO FERMENT 2L." },
+    { "type": "textarea", "id": "stag_note", "label": "Note strip below grid", "default": "Just add fresh black carrots, beetroot, and water. The kit handles the rest." },
+    { "type": "header", "content": "Refill card" },
+    { "type": "checkbox", "id": "refill_show", "label": "Show refill card", "default": true },
+    { "type": "image_picker", "id": "refill_image", "label": "Refill — image" },
+    { "type": "text", "id": "refill_h", "label": "Refill — heading", "default": "Already Have The Jar?<br>Just Refill The Mix." },
+    { "type": "textarea", "id": "refill_bullets", "label": "Refill — bullets (one per line)", "default": "Spice Mix + Ferment Boost only\nSame flavour, same probiotic punch\nReuse your jar — much lower cost\nBest for existing customers" },
+    { "type": "text", "id": "refill_cta_label", "label": "Refill — CTA label", "default": "Shop Refills →" },
+    { "type": "url", "id": "refill_cta_url", "label": "Refill — CTA URL" }
+  ],
+  "blocks": [
+    { "type": "stag_card", "name": "Staggered grid card", "limit": 12, "settings": [
+      { "type": "select", "id": "variant", "label": "Variant", "options": [
+        {"value":"image_only","label":"Image only (large hero)"},
+        {"value":"dark","label":"Dark · numeral + text"},
+        {"value":"dark_photo","label":"Dark · photo background"},
+        {"value":"light","label":"Light · image + text"},
+        {"value":"detail","label":"Detail · thumb + bullets"}
+      ], "default": "light" },
+      { "type": "checkbox", "id": "span_row_2", "label": "Span 2 rows", "default": false },
+      { "type": "checkbox", "id": "span_col_2", "label": "Span 2 columns (mobile)", "default": false },
+      { "type": "image_picker", "id": "image", "label": "Image (desktop)" },
+      { "type": "image_picker", "id": "image_mobile", "label": "Image (mobile, optional)" },
+      { "type": "text", "id": "numeral", "label": "Numeral (dark variants — leave blank to hide)" },
+      { "type": "text", "id": "eyebrow", "label": "Eyebrow / pill" },
+      { "type": "text", "id": "heading", "label": "Heading" },
+      { "type": "textarea", "id": "description", "label": "Description" },
+      { "type": "textarea", "id": "bullets", "label": "Bullets (one per line — detail variant)" }
+    ]}
+  ],
+  "presets": [{ "name": "Leo · Includes" }]
+}
+{% endschema %}

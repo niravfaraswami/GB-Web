@@ -1,0 +1,113 @@
+{%- render 'leo_kit_chrome' -%}
+
+{%- liquid
+  assign f30_row_blocks  = section.blocks | where: 'type', 'f30_row'
+  assign f30_stat_blocks = section.blocks | where: 'type', 'f30_stat'
+-%}
+
+{%- if f30_row_blocks.size > 0 or section.settings.f30_h != blank -%}
+  <section class="first30-section ferment-pdp-leo" {%- render 'leo_kit_attrs' -%}>
+    <div class="container">
+      <div class="first30-grid">
+        <div class="first30-header">
+          {%- if section.settings.f30_eyebrow != blank -%}<div class="first30-eyebrow">{{ section.settings.f30_eyebrow }}</div>{%- endif -%}
+          <h2 class="first30-h">{{ section.settings.f30_h }} {%- if section.settings.f30_h_em != blank %}<em>{{ section.settings.f30_h_em }}</em>{%- endif -%}{{ section.settings.f30_h_tail }}</h2>
+        </div>
+
+        <div class="first30-rest">
+          {%- if section.settings.f30_intro != blank -%}<p class="first30-intro">{{ section.settings.f30_intro }}</p>{%- endif -%}
+
+          {%- if f30_row_blocks.size > 0 -%}
+            <div class="first30-rows">
+              {%- for block in f30_row_blocks -%}
+                <div class="first30-row" {{ block.shopify_attributes }}>
+                  <div class="f30-icon">
+                    {%- if block.settings.icon_svg != blank -%}{%- render 'kit_icon', icon: block.settings.icon_svg, size: 24 -%}
+                    {%- elsif block.settings.icon_emoji != blank -%}{{ block.settings.icon_emoji }}{%- endif -%}
+                  </div>
+                  <div class="f30-body">
+                    <div class="f30-h">{{ block.settings.heading }}</div>
+                    <div class="f30-d">{{ block.settings.description }}</div>
+                  </div>
+                </div>
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+
+          {%- if f30_stat_blocks.size > 0 or section.settings.f30_stats_line != blank -%}
+            <div class="first30-stats-strip">
+              {%- if section.settings.f30_stats_line != blank -%}<div class="first30-stats-line">{{ section.settings.f30_stats_line }}</div>{%- endif -%}
+              {%- if f30_stat_blocks.size > 0 -%}
+                <div class="first30-stats-row">
+                  {%- for block in f30_stat_blocks -%}
+                    <div class="first30-stat-cell" {{ block.shopify_attributes }}>
+                      <div class="first30-stat-circle"><div class="first30-stat-num">{{ block.settings.num }}{%- if block.settings.num_unit != blank %}<span>{{ block.settings.num_unit }}</span>{%- endif -%}</div></div>
+                      <div class="first30-stat-label">{{ block.settings.label }}</div>
+                    </div>
+                  {%- endfor -%}
+                </div>
+              {%- endif -%}
+              {%- if section.settings.f30_disclaimer != blank -%}<div class="first30-disclaimer">{{ section.settings.f30_disclaimer }}</div>{%- endif -%}
+            </div>
+          {%- endif -%}
+        </div>
+
+        <div class="first30-right">
+          {%- if section.settings.f30_image != blank -%}
+            <img src="{{ section.settings.f30_image | image_url: width: 1200 }}" alt="{{ section.settings.f30_h | escape }}" loading="lazy" width="1000" height="1250">
+          {%- endif -%}
+          <svg class="f30-overlay-svg" viewBox="0 0 100 125" preserveAspectRatio="none" aria-hidden="true">
+            <defs>
+              <filter id="f30-glow-{{ section.id }}" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="1.4" result="blur"/>
+                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            </defs>
+            <path class="f30-curve" d="M 5 22 Q 2 45 11 66 Q 45 86 81 101" filter="url(#f30-glow-{{ section.id }})"/>
+            <circle class="f30-dot" cx="5" cy="22" r="1.6" filter="url(#f30-glow-{{ section.id }})"/>
+            <circle class="f30-dot" cx="11" cy="66" r="1.6" filter="url(#f30-glow-{{ section.id }})"/>
+            <circle class="f30-dot" cx="81" cy="101" r="1.6" filter="url(#f30-glow-{{ section.id }})"/>
+          </svg>
+          {%- if section.settings.f30_anno_1 != blank -%}<div class="first30-anno a1">{{ section.settings.f30_anno_1 }}</div>{%- endif -%}
+          {%- if section.settings.f30_anno_2 != blank -%}<div class="first30-anno a2">{{ section.settings.f30_anno_2 }}</div>{%- endif -%}
+          {%- if section.settings.f30_anno_3 != blank -%}<div class="first30-anno a3">{{ section.settings.f30_anno_3 }}</div>{%- endif -%}
+        </div>
+      </div>
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Leo · First 30 Days",
+  "tag": "section",
+  "class": "leo-first30-section",
+  "settings": [
+    { "type": "text", "id": "f30_eyebrow", "label": "Eyebrow", "default": "YOUR GUT'S FIRST 30 DAYS" },
+    { "type": "text", "id": "f30_h", "label": "Heading", "default": "The gentle" },
+    { "type": "text", "id": "f30_h_em", "label": "Heading (highlighted)", "default": "science" },
+    { "type": "text", "id": "f30_h_tail", "label": "Heading (tail)", "default": " of balance." },
+    { "type": "textarea", "id": "f30_intro", "label": "Intro", "default": "When your gut finds its rhythm, your body follows. Daily kanji rebuilds balance from the inside — and the shifts arrive on a predictable timeline." },
+    { "type": "image_picker", "id": "f30_image", "label": "Right-column image" },
+    { "type": "text", "id": "f30_anno_1", "label": "Annotation 1 (top-left)", "default": "Digestion<br>Improves" },
+    { "type": "text", "id": "f30_anno_2", "label": "Annotation 2 (mid-left)", "default": "Less<br>Bloating" },
+    { "type": "text", "id": "f30_anno_3", "label": "Annotation 3 (bottom-right)", "default": "Steadier<br>Energy" },
+    { "type": "text", "id": "f30_stats_line", "label": "Stats strip headline", "default": "Daily kanji. Live cultures. Real, measurable shifts." },
+    { "type": "textarea", "id": "f30_disclaimer", "label": "Stats disclaimer", "default": "When accompanied by a balanced diet and regular routine. Individual results vary." }
+  ],
+  "blocks": [
+    { "type": "f30_row", "name": "Timeline row", "limit": 5, "settings": [
+      { "type": "image_picker", "id": "icon_svg", "label": "Icon (SVG)" },
+      { "type": "text", "id": "icon_emoji", "label": "Icon emoji (fallback)" },
+      { "type": "text", "id": "heading", "label": "Heading" },
+      { "type": "textarea", "id": "description", "label": "Description" }
+    ]},
+    { "type": "f30_stat", "name": "Stat circle", "limit": 3, "settings": [
+      { "type": "text", "id": "num", "label": "Number" },
+      { "type": "text", "id": "num_unit", "label": "Number unit (e.g. %, +, L, ⁹)" },
+      { "type": "text", "id": "label", "label": "Label" }
+    ]}
+  ],
+  "presets": [{ "name": "Leo · First 30 Days" }]
+}
+{% endschema %}

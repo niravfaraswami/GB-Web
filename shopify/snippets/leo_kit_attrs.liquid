@@ -1,0 +1,14 @@
+{%- comment %}
+  Emits the data-* attributes + inline CSS variables string for a Leo refactor
+  section's outer wrapper. Reads the per-product theme_accent metafields.
+
+  Usage:
+    <section class="..." {%- render 'leo_kit_attrs' -%}>
+{% endcomment -%}
+{%- liquid
+  assign p = product
+  assign accent = p.metafields.custom.theme_accent | default: '#C24528'
+  assign accent_dark = p.metafields.custom.theme_accent_dark | default: '#8E2E1A'
+  assign accent_soft = p.metafields.custom.theme_accent_soft | default: '#FCE5DE'
+-%}
+ data-kit="fermentation" data-template="leo" style="--kit-color: {{ accent }}; --kit-color-dark: {{ accent_dark }}; --kit-color-soft: {{ accent_soft }};"

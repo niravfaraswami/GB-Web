@@ -1,0 +1,42 @@
+{%- render 'leo_kit_chrome' -%}
+
+{%- assign faq_blocks = section.blocks | where: 'type', 'faq' -%}
+
+{%- if faq_blocks.size > 0 -%}
+  <section class="faq-section ferment-pdp-leo" {%- render 'leo_kit_attrs' -%}>
+    <div class="container">
+      <div class="section-header centered">
+        <div class="eyebrow">{{ section.settings.faq_eyebrow }}</div>
+        <h2>{{ section.settings.faq_heading }} <em>{{ section.settings.faq_heading_em }}</em></h2>
+      </div>
+      <div class="faq-list">
+        {%- for block in faq_blocks -%}
+          <div class="faq-item {% if forloop.first %}open{% endif %}" data-faq {{ block.shopify_attributes }}>
+            <div class="faq-q"><span>{{ block.settings.question }}</span><span class="faq-toggle">+</span></div>
+            <div class="faq-a">{{ block.settings.answer }}</div>
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Leo · FAQ",
+  "tag": "section",
+  "class": "leo-faq-section",
+  "settings": [
+    { "type": "text", "id": "faq_eyebrow", "label": "Eyebrow", "default": "QUESTIONS?" },
+    { "type": "text", "id": "faq_heading", "label": "Heading", "default": "COMMON" },
+    { "type": "text", "id": "faq_heading_em", "label": "Heading (highlighted)", "default": "QUESTIONS" }
+  ],
+  "blocks": [
+    { "type": "faq", "name": "FAQ", "limit": 20, "settings": [
+      { "type": "text", "id": "question", "label": "Question" },
+      { "type": "richtext", "id": "answer", "label": "Answer" }
+    ]}
+  ],
+  "presets": [{ "name": "Leo · FAQ" }]
+}
+{% endschema %}

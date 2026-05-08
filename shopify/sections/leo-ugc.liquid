@@ -1,0 +1,51 @@
+{%- render 'leo_kit_chrome' -%}
+
+{%- assign ugc_blocks = section.blocks | where: 'type', 'ugc_review' -%}
+
+{%- if ugc_blocks.size > 0 -%}
+  <section class="reviews-section ferment-pdp-leo" data-leo="1" {%- render 'leo_kit_attrs' -%}>
+    <div class="container">
+      <div class="section-header centered">
+        <div class="eyebrow">{{ section.settings.eyebrow }}</div>
+        <h2>{{ section.settings.heading }} <em>{{ section.settings.heading_em }}</em></h2>
+      </div>
+      <div class="ugc-grid">
+        {%- for block in ugc_blocks -%}
+          <div class="ugc-card" {{ block.shopify_attributes }}>
+            <div class="ugc-card-photo">
+              {%- if block.settings.photo != blank -%}<img src="{{ block.settings.photo | image_url: width: 800 }}" alt="{{ block.settings.name | escape }}" loading="lazy" width="600" height="800">{%- endif -%}
+            </div>
+            <div class="ugc-card-text">
+              <div class="ugc-card-quote">{{ block.settings.quote }}</div>
+              <div class="ugc-card-name">{{ block.settings.name }}</div>
+              {%- if block.settings.meta != blank -%}<div class="ugc-card-age">{{ block.settings.meta }}</div>{%- endif -%}
+            </div>
+            <div class="ugc-card-spacer"></div>
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Leo · UGC Reviews",
+  "tag": "section",
+  "class": "leo-ugc-section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "REAL RESULTS" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "WHAT OUR" },
+    { "type": "text", "id": "heading_em", "label": "Heading (highlighted)", "default": "CUSTOMERS SAY" }
+  ],
+  "blocks": [
+    { "type": "ugc_review", "name": "UGC review card", "limit": 6, "settings": [
+      { "type": "image_picker", "id": "photo", "label": "Photo" },
+      { "type": "textarea", "id": "quote", "label": "Quote" },
+      { "type": "text", "id": "name", "label": "Name" },
+      { "type": "text", "id": "meta", "label": "Meta (e.g. age)" }
+    ]}
+  ],
+  "presets": [{ "name": "Leo · UGC Reviews" }]
+}
+{% endschema %}

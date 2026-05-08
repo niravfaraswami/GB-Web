@@ -1,0 +1,32 @@
+{%- render 'leo_kit_chrome' -%}
+
+{%- liquid
+  assign p = product
+  assign review_count = p.metafields.custom.review_count | default: 0
+-%}
+
+<section class="judgeme-section ferment-pdp-leo" id="judgeme-reviews" {%- render 'leo_kit_attrs' -%}>
+  <div class="container">
+    <div class="section-header centered">
+      <div class="eyebrow">{{ section.settings.judgeme_eyebrow }}</div>
+      <h2>{% if review_count > 0 %}{{ review_count }} {% endif %}{{ section.settings.judgeme_heading }} <em>{{ section.settings.judgeme_heading_em }}</em></h2>
+    </div>
+    {%- if section.settings.judgeme_embed != blank -%}{{ section.settings.judgeme_embed }}
+    {%- else -%}<div class="jdgm-widget jdgm-review-widget" data-id="{{ p.id }}"></div>{%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Leo · Judge.me",
+  "tag": "section",
+  "class": "leo-judgeme-section",
+  "settings": [
+    { "type": "text", "id": "judgeme_eyebrow", "label": "Eyebrow", "default": "ALL REVIEWS" },
+    { "type": "text", "id": "judgeme_heading", "label": "Heading", "default": "VERIFIED" },
+    { "type": "text", "id": "judgeme_heading_em", "label": "Heading (highlighted)", "default": "REVIEWS" },
+    { "type": "html", "id": "judgeme_embed", "label": "Custom embed (optional)" }
+  ],
+  "presets": [{ "name": "Leo · Judge.me" }]
+}
+{% endschema %}

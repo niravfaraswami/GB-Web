@@ -1,0 +1,54 @@
+{%- render 'leo_kit_chrome' -%}
+
+{%- assign recipe_pill_blocks = section.blocks | where: 'type', 'recipe_pill' -%}
+
+{%- if section.settings.recipe_banner != blank or section.settings.recipe_count != blank or recipe_pill_blocks.size > 0 -%}
+  <section class="recipes-section ferment-pdp-leo" {%- render 'leo_kit_attrs' -%}>
+    <div class="container">
+      <div class="section-header">
+        <div class="eyebrow">{{ section.settings.recipes_eyebrow }}</div>
+        <div class="recipes-h-row">
+          {%- if section.settings.recipe_count != blank -%}<div class="recipes-num">{{ section.settings.recipe_count }}</div>{%- endif -%}
+          <div class="recipes-h-text"><em>{{ section.settings.recipe_h_label }}</em> <span>{{ section.settings.recipe_h_text }}</span></div>
+        </div>
+      </div>
+      {%- if section.settings.recipe_banner != blank -%}
+        <div class="recipes-banner"><img src="{{ section.settings.recipe_banner | image_url: width: 1600 }}" alt="Recipes" loading="lazy" width="1600" height="700"></div>
+      {%- endif -%}
+      {%- if recipe_pill_blocks.size > 0 -%}
+        <div class="recipe-tags">
+          {%- for block in recipe_pill_blocks -%}
+            {%- if block.settings.url != blank -%}
+              <a class="recipe-tag" href="{{ block.settings.url }}" {{ block.shopify_attributes }}><span class="dot"></span>{%- if block.settings.emoji != blank %}{{ block.settings.emoji }} {% endif -%}{{ block.settings.name }}</a>
+            {%- else -%}
+              <span class="recipe-tag" {{ block.shopify_attributes }}><span class="dot"></span>{%- if block.settings.emoji != blank %}{{ block.settings.emoji }} {% endif -%}{{ block.settings.name }}</span>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Leo · Recipes",
+  "tag": "section",
+  "class": "leo-recipes-section",
+  "settings": [
+    { "type": "text", "id": "recipes_eyebrow", "label": "Eyebrow", "default": "ONE KIT. ENDLESS VARIETY." },
+    { "type": "text", "id": "recipe_count", "label": "Recipe count", "default": "7" },
+    { "type": "text", "id": "recipe_h_label", "label": "Heading label", "default": "KANJI" },
+    { "type": "text", "id": "recipe_h_text", "label": "Heading text", "default": "RECIPES INSIDE" },
+    { "type": "image_picker", "id": "recipe_banner", "label": "Recipes banner image" }
+  ],
+  "blocks": [
+    { "type": "recipe_pill", "name": "Recipe pill", "limit": 12, "settings": [
+      { "type": "text", "id": "emoji", "label": "Emoji (optional)" },
+      { "type": "text", "id": "name", "label": "Recipe name" },
+      { "type": "url", "id": "url", "label": "Link (optional)" }
+    ]}
+  ],
+  "presets": [{ "name": "Leo · Recipes" }]
+}
+{% endschema %}

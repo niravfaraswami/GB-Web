@@ -1,0 +1,241 @@
+{%- render 'leo_kit_chrome' -%}
+
+{%- liquid
+  assign p = product
+  assign tagline       = p.metafields.custom.hero_tagline | default: 'Make authentic, gut-loving ferments at home.'
+  assign rating        = p.metafields.custom.rating | default: 4.8
+  assign review_count  = p.metafields.custom.review_count | default: 0
+  assign bought_today  = p.metafields.custom.bought_today
+  assign capacity_label = p.metafields.custom.jar_capacity | default: p.metafields.custom.capacity
+  assign size_chart    = p.metafields.custom.jar_size_chart_image | default: p.metafields.custom.size_chart_image
+  assign companion     = p.metafields.custom.companion_size_product.value
+  assign hero_trust    = p.metafields.custom.hero_trust_strip.value
+  assign coupon_text   = p.metafields.custom.coupon_text
+  assign coupon_code   = p.metafields.custom.coupon_code
+
+  assign hero_benefit_blocks = section.blocks | where: 'type', 'hero_benefit'
+  assign accordion_blocks    = section.blocks | where: 'type', 'hero_accordion_tab'
+-%}
+
+<section class="pdp-hero ferment-pdp-leo" {%- render 'leo_kit_attrs' -%}>
+  <div class="container">
+    {%- if section.settings.show_breadcrumb -%}
+      <div class="breadcrumb">
+        <a href="{{ routes.root_url }}">Home</a> /
+        {%- if collection -%}<a href="{{ collection.url }}">{{ collection.title }}</a> /{%- endif -%}
+        <span>{{ p.title }}</span>
+      </div>
+    {%- endif -%}
+
+    <div class="hero-title-block">
+      <h1 class="product-name">{{ p.title }}</h1>
+      <p class="product-tagline">{{ tagline }}</p>
+    </div>
+
+    <div class="hero-grid">
+      <div class="gallery-stack">
+        <div class="gallery-main">
+          {%- if p.featured_image -%}
+            <img class="gallery-main-img"
+                 src="{{ p.featured_image | image_url: width: 1200 }}"
+                 srcset="{{ p.featured_image | image_url: width: 600 }} 600w, {{ p.featured_image | image_url: width: 1200 }} 1200w, {{ p.featured_image | image_url: width: 1800 }} 1800w"
+                 sizes="(min-width: 768px) 50vw, 100vw"
+                 alt="{{ p.featured_image.alt | default: p.title | escape }}"
+                 loading="eager"
+                 width="{{ p.featured_image.width }}"
+                 height="{{ p.featured_image.height }}">
+          {%- else -%}
+            <div class="gallery-illustration">🫙</div>
+          {%- endif -%}
+          {%- if p.images.size > 1 -%}
+            <button class="gallery-nav gallery-nav--prev" type="button" data-gallery-prev aria-label="Previous image">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            </button>
+            <button class="gallery-nav gallery-nav--next" type="button" data-gallery-next aria-label="Next image">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
+          {%- endif -%}
+        </div>
+        {%- if p.images.size > 1 -%}
+          <div class="gallery-thumbs">
+            {%- for image in p.images limit: 8 -%}
+              <button class="gallery-thumb {% if forloop.first %}active{% endif %}" type="button"
+                      data-full-src="{{ image | image_url: width: 1200 }}"
+                      data-full-alt="{{ image.alt | default: p.title | escape }}"
+                      aria-label="View image {{ forloop.index }}">
+                <img src="{{ image | image_url: width: 180 }}" alt="{{ image.alt | default: p.title | escape }}" loading="lazy" width="90" height="90">
+              </button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      <div class="product-info">
+        {%- if review_count > 0 -%}
+          <div class="rating-row">
+            <span class="stars" aria-label="{{ rating }} out of 5">★★★★★</span>
+            <a href="#judgeme-reviews" class="rating-link">{{ rating }} ({{ review_count }} reviews)</a>
+          </div>
+        {%- endif -%}
+
+        {%- if bought_today != blank and bought_today > 0 -%}
+          <div class="activity-row">
+            <div class="item"><span class="dot"></span><span><strong>{{ bought_today }}</strong> people bought this today</span></div>
+          </div>
+        {%- endif -%}
+
+        {%- if hero_benefit_blocks.size > 0 -%}
+          <div class="benefits-block">
+            <div class="label">Benefits</div>
+            <div class="benefits-grid">
+              {%- for block in hero_benefit_blocks -%}
+                <div class="benefit-item" {{ block.shopify_attributes }}>
+                  <span class="benefit-icon-svg">
+                    {%- if block.settings.icon_svg != blank -%}{%- render 'kit_icon', icon: block.settings.icon_svg, size: 28 -%}
+                    {%- elsif block.settings.icon_emoji != blank -%}{{ block.settings.icon_emoji }}{%- endif -%}
+                  </span>
+                  <span>{{ block.settings.label }}</span>
+                </div>
+              {%- endfor -%}
+            </div>
+          </div>
+        {%- endif -%}
+
+        {%- form 'product', p, id: 'ferment-product-form' -%}
+          <div class="variant-block">
+            {%- assign opt_name = p.options.first | default: 'Pack' -%}
+            {%- if p.variants.size > 1 -%}
+              <div class="variant-label">Select {{ opt_name }}</div>
+              <div class="variant-grid variant-grid--{{ p.variants.size }}">
+                {%- for variant in p.variants -%}
+                  {%- assign v_tag = variant.metafields.custom.tag -%}
+                  {%- assign v_best = variant.metafields.custom.best_for -%}
+                  {%- assign v_img = variant.metafields.custom.variant_illustration | default: variant.image -%}
+                  {%- assign is_selected = false -%}
+                  {%- if variant == p.selected_or_first_available_variant -%}{%- assign is_selected = true -%}{%- endif -%}
+                  <label class="variant{% if is_selected %} active{% endif %}{% unless variant.available %} sold-out{% endunless %}"
+                         data-variant-id="{{ variant.id }}"
+                         data-variant-price="{{ variant.price | money }}">
+                    <input type="radio" name="id" value="{{ variant.id }}" class="variant-input"
+                           {% if is_selected %}checked{% endif %}
+                           {% unless variant.available %}disabled{% endunless %}>
+                    {%- if v_tag != blank -%}<span class="variant-tag">{{ v_tag }}</span>{%- endif -%}
+                    <span class="variant-radio"></span>
+                    <div class="variant-pack">{{ variant.title | upcase }}</div>
+                    {%- if v_img != blank -%}
+                      <div class="variant-illustration">
+                        <img src="{{ v_img | image_url: width: 320 }}" alt="{{ variant.title }}" loading="lazy" width="160" height="120">
+                      </div>
+                    {%- endif -%}
+                    {%- if v_best != blank -%}
+                      <div class="variant-rationale">
+                        <div class="vr-row"><span class="vr-label">BEST FOR</span><span class="vr-text">{{ v_best }}</span></div>
+                      </div>
+                    {%- endif -%}
+                    <div class="variant-price">
+                      <span>{{ variant.price | money }}</span>
+                      {%- if variant.compare_at_price > variant.price -%}
+                        <span class="variant-compare">{{ variant.compare_at_price | money }}</span>
+                      {%- endif -%}
+                    </div>
+                    {%- if variant.compare_at_price > variant.price -%}
+                      <span class="variant-save">You save {{ variant.compare_at_price | minus: variant.price | money }}</span>
+                    {%- endif -%}
+                  </label>
+                {%- endfor -%}
+              </div>
+            {%- else -%}
+              <input type="hidden" name="id" value="{{ p.selected_or_first_available_variant.id }}">
+            {%- endif -%}
+
+            {%- if size_chart != blank or p.metafields.custom.help_note != blank -%}
+              <div class="variant-help-note">
+                <span class="vhn-text">{{ p.metafields.custom.help_note | default: 'Choose the pack that fits your household.' }}</span>
+                {%- if size_chart != blank -%}
+                  <button type="button" class="vhn-link" data-open-size-modal>Jar Size Chart →</button>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+
+            {%- if companion -%}
+              {%- assign other_capacity = companion.metafields.custom.jar_capacity | default: companion.metafields.custom.capacity | default: 'other size' -%}
+              <a href="{{ companion.url }}" class="companion-link">
+                Looking for the {{ other_capacity }} version? View {{ companion.title }} →
+              </a>
+            {%- endif -%}
+          </div>
+
+          <button type="submit" name="add" class="atc-btn" data-atc {% unless p.available %}disabled{% endunless %}>
+            {%- if p.available -%}ADD TO CART · <span data-atc-price>{{ p.price | money }}</span>{%- else -%}SOLD OUT{%- endif -%}
+          </button>
+        {%- endform -%}
+
+        <div class="trust-strip">
+          {%- if hero_trust != blank -%}
+            {%- for t in hero_trust -%}<div class="item"><span class="check">✓</span> {{ t }}</div>{%- endfor -%}
+          {%- else -%}
+            <div class="item"><span class="check">✓</span> Secure Payment</div>
+            <div class="item"><span class="check">✓</span> Free Shipping</div>
+            <div class="item"><span class="check">✓</span> FSSAI Licensed</div>
+          {%- endif -%}
+        </div>
+
+        {%- if coupon_text != blank or coupon_code != blank -%}
+          <div class="coupon-bar">
+            <span>{{ coupon_text }}</span>
+            {%- if coupon_code != blank -%}<span class="code">{{ coupon_code }}</span>{%- endif -%}
+          </div>
+        {%- endif -%}
+
+        {%- if accordion_blocks.size > 0 -%}
+          <div class="hero-accordion">
+            {%- for block in accordion_blocks -%}
+              <div class="hero-accordion-item{% if block.settings.default_open %} is-open{% endif %}" data-accordion {{ block.shopify_attributes }}>
+                <button class="hero-accordion-trigger" type="button" aria-expanded="{% if block.settings.default_open %}true{% else %}false{% endif %}">
+                  <span class="hero-accordion-label">{{ block.settings.label }}</span>
+                  <span class="hero-accordion-toggle" aria-hidden="true"></span>
+                </button>
+                <div class="hero-accordion-panel">{{ block.settings.body }}</div>
+              </div>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{%- if size_chart != blank -%}
+  <div class="size-modal" id="jar-size-modal" data-size-modal>
+    <div class="size-modal-card">
+      <button type="button" class="size-modal-close" data-close-size-modal aria-label="Close">×</button>
+      <div class="size-modal-eyebrow">JAR SIZE COMPARISON</div>
+      <h3 class="size-modal-title">{{ capacity_label | default: p.title }}</h3>
+      <div class="size-modal-image"><img src="{{ size_chart | image_url: width: 1200 }}" alt="Size chart" loading="lazy" width="1200" height="900"></div>
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Leo · Hero",
+  "tag": "section",
+  "class": "leo-hero-section",
+  "settings": [
+    { "type": "checkbox", "id": "show_breadcrumb", "label": "Show breadcrumb", "default": true }
+  ],
+  "blocks": [
+    { "type": "hero_benefit", "name": "Hero benefit", "limit": 4, "settings": [
+      { "type": "image_picker", "id": "icon_svg", "label": "Icon (SVG)" },
+      { "type": "text", "id": "icon_emoji", "label": "Icon emoji (fallback)" },
+      { "type": "text", "id": "label", "label": "Label" }
+    ]},
+    { "type": "hero_accordion_tab", "name": "Hero accordion tab", "limit": 4, "settings": [
+      { "type": "text", "id": "label", "label": "Tab label" },
+      { "type": "richtext", "id": "body", "label": "Tab body" },
+      { "type": "checkbox", "id": "default_open", "label": "Open by default", "default": false }
+    ]}
+  ],
+  "presets": [{ "name": "Leo · Hero" }]
+}
+{% endschema %}
