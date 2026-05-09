@@ -1227,3 +1227,33 @@
   .gb-journey-card.gb-journey-featured { transform: none; }
   .gb-journey-product { font-size: 14px; }
 }
+
+/* ============== Single-variant price strip ==============
+   Renders in the variant-picker slot when a product has exactly one
+   variant — keeps the hero from looking empty above the ATC button. */
+[data-template="leo"] .single-variant-price {
+  display: flex; align-items: baseline; flex-wrap: wrap;
+  gap: 12px; margin-bottom: 18px;
+  padding: 14px 18px;
+  background: var(--kit-color-soft);
+  border: 1px solid var(--kit-color-soft);
+  border-radius: 12px;
+}
+[data-template="leo"] .single-variant-price-now {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800; font-size: 26px;
+  color: var(--kit-color-dark); letter-spacing: -0.01em;
+}
+[data-template="leo"] .single-variant-price-was {
+  font-size: 16px; color: var(--gb-text-muted); text-decoration: line-through;
+}
+[data-template="leo"] .single-variant-price-save {
+  font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 700;
+  letter-spacing: 0.04em; text-transform: uppercase;
+  color: var(--gb-white); background: var(--gb-ink);
+  padding: 4px 10px; border-radius: 999px;
+}
+@media (max-width: 768px) {
+  [data-template="leo"] .single-variant-price-now { font-size: 22px; }
+  [data-template="leo"] .single-variant-price-was { font-size: 14px; }
+}

@@ -1,6 +1,24 @@
 {
   "sections": {
-    "hero": { "type": "leo-hero", "settings": { "show_breadcrumb": true } },
+    "hero": {
+      "type": "leo-hero",
+      "settings": {
+        "show_breadcrumb": true,
+        "trust_1_text": "Lab-tested purity",
+        "trust_2_text": "No fillers",
+        "trust_3_text": "Free shipping over ₹499"
+      },
+      "blocks": {
+        "hb-1": { "type": "hero_benefit", "settings": { "icon_emoji": "🌿", "label": "100% pure acacia fiber" } },
+        "hb-2": { "type": "hero_benefit", "settings": { "icon_emoji": "🥄", "label": "5g soluble fiber per scoop" } },
+        "hb-3": { "type": "hero_benefit", "settings": { "icon_emoji": "💧", "label": "Tasteless, dissolves clear" } },
+        "hb-4": { "type": "hero_benefit", "settings": { "icon_emoji": "🧪", "label": "Lab-tested for purity" } },
+        "ha-1": { "type": "hero_accordion_tab", "settings": { "label": "What's Inside", "default_open": true, "body": "<p>250g of pure acacia gum fiber, sourced direct from Senegal — the original prebiotic fiber gut bacteria have eaten for centuries. Each scoop (5g) feeds your gut microbiome. Tasteless, mixes into water, coffee, or smoothies without changing flavor or texture.</p><p>One bag = 50 daily servings. Most customers feel a difference in week 2.</p>" } },
+        "ha-2": { "type": "hero_accordion_tab", "settings": { "label": "How To Consume", "body": "<ol><li><strong>Scoop</strong> — 1 level scoop (5g) — included in the bag</li><li><strong>Stir</strong> — Into 200ml water, coffee, or smoothie. Stir 10 seconds.</li><li><strong>Drink</strong> — Once a day. Most do morning; pick a time you'll stick with.</li></ol><p><em>First-week tip:</em> start with half a scoop and build up over 7 days to give your gut time to adjust.</p>" } },
+        "ha-3": { "type": "hero_accordion_tab", "settings": { "label": "Who It's For", "body": "<ul><li>Anyone with everyday digestion issues — bloating, irregularity, sluggish gut</li><li>People who don't get enough fiber from food (most of us)</li><li>Gut-health curious folks who want a lab-grade prebiotic without weird fillers</li><li>Low-FODMAP friendly diets</li></ul><p><em>Skip if</em>: you're in an acute IBS flare, allergic to acacia, or expecting instant overnight relief.</p>" } }
+      },
+      "block_order": ["hb-1","hb-2","hb-3","hb-4","ha-1","ha-2","ha-3"]
+    },
     "why-add": {
       "type": "gb-card-grid",
       "settings": {
@@ -8,14 +26,27 @@
         "heading": "WHAT MAKES IT",
         "heading_em": "WORK.",
         "columns": "4"
-      }
+      },
+      "blocks": {
+        "wc-1": { "type": "card", "settings": { "icon_emoji": "🦠", "label": "FEEDS BACTERIA", "heading": "Selectively feeds the good guys", "description": "Acacia fiber is fermented preferentially by Bifidobacteria and Lactobacillus — the gut bacteria you want more of." } },
+        "wc-2": { "type": "card", "settings": { "icon_emoji": "💧", "label": "TASTELESS", "heading": "Won't change your drink", "description": "No grit, no sweet aftertaste, no chalky texture. Dissolves clear within 10 seconds of stirring." } },
+        "wc-3": { "type": "card", "settings": { "icon_emoji": "🚫", "label": "NO FILLERS", "heading": "Just acacia. Nothing else.", "description": "No maltodextrin, no inulin extender, no flavoring, no sweeteners. Read the label — there's only one ingredient." } },
+        "wc-4": { "type": "card", "settings": { "icon_emoji": "🧪", "label": "LAB-TESTED", "heading": "Source-certified purity", "description": "Every batch passes a 14-point purity panel before shipping. Heavy metals, microbial counts, fiber assay — all on file." } }
+      },
+      "block_order": ["wc-1","wc-2","wc-3","wc-4"]
     },
     "who": {
       "type": "gb-who-yes-no",
       "settings": {
         "eyebrow": "WHO IS THIS FOR",
         "heading": "IS THIS",
-        "heading_em": "RIGHT FOR YOU?"
+        "heading_em": "RIGHT FOR YOU?",
+        "yes_label": "PERFECT FOR",
+        "yes_heading": "Great fit if you…",
+        "yes_bullets": "Have everyday digestion issues — bloating, irregularity, post-meal heaviness\nDon't eat 25–30g of fiber/day from food (most people don't)\nWant a tasteless prebiotic, no flavor masking required\nFollow a low-FODMAP diet (acacia is FODMAP-friendly)\nTake daily probiotics and want them to do more work",
+        "no_label": "MAYBE NOT FOR",
+        "no_heading": "Skip this if you…",
+        "no_bullets": "Are in an acute IBS / IBD flare — wait until it settles\nAre allergic to acacia (rare but real)\nExpect overnight relief — gut shifts take 1–4 weeks\nPrefer a multi-fiber blend with sweeteners and flavors\nWant something for cooking, not for daily supplementation"
       }
     },
     "diff": {
@@ -24,11 +55,21 @@
         "eyebrow": "VS THE OTHERS",
         "heading": "WHY PURE PREBIOTIC FIBER",
         "heading_em": "WINS.",
+        "intro": "Most fiber supplements bulk up with fillers and sweeteners. Read the label — purity matters more than ingredient count.",
         "col_count": "3",
         "col_kit_label": "Pure Prebiotic Fiber",
         "col_2_label": "Cheap Fiber Mix",
         "col_3_label": "Generic Powder"
-      }
+      },
+      "blocks": {
+        "cr-1": { "type": "cmp_row", "settings": { "label": "Source", "kit_mark": "yes", "kit_text": "Single-origin acacia, Senegal", "col2_text": "Multiple bulk suppliers", "col3_text": "Unspecified blend" } },
+        "cr-2": { "type": "cmp_row", "settings": { "label": "Filler %", "kit_mark": "yes", "kit_text": "0% (just acacia)", "col2_mark": "no", "col2_text": "30–60% maltodextrin", "col3_mark": "no", "col3_text": "Often 50%+ fillers" } },
+        "cr-3": { "type": "cmp_row", "settings": { "label": "Soluble fiber per scoop", "kit_mark": "yes", "kit_text": "5g (real, lab-verified)", "col2_text": "1.5–3g effective", "col3_text": "Rarely disclosed" } },
+        "cr-4": { "type": "cmp_row", "settings": { "label": "Mixing time", "kit_mark": "yes", "kit_text": "10 sec, dissolves clear", "col2_text": "30+ sec, often clumpy", "col3_text": "Settles to bottom" } },
+        "cr-5": { "type": "cmp_row", "settings": { "label": "Lab-tested for purity", "kit_mark": "yes", "kit_text": "Every batch", "col2_mark": "no", "col2_text": "No verification", "col3_mark": "no", "col3_text": "No verification" } },
+        "cr-6": { "type": "cmp_row", "settings": { "label": "Cost per serving", "kit_mark": "yes", "kit_text": "~₹14 / 5g effective fiber", "col2_text": "~₹10 / 2g effective fiber", "col3_text": "~₹6 / unknown effective" } }
+      },
+      "block_order": ["cr-1","cr-2","cr-3","cr-4","cr-5","cr-6"]
     },
     "consume": {
       "type": "gb-step-cards",
@@ -37,8 +78,14 @@
         "heading": "AS EASY AS",
         "heading_em": "1, 2, 3.",
         "tips_heading": "Quick tips",
-        "tips_bullets": "Start with 1/2 scoop · build up over 7 days\nWater works best — milk dilutes prebiotic fiber\nMorning or evening, but pick one and stick to it"
-      }
+        "tips_bullets": "Start with 1/2 scoop · build up over 7 days\nWater works best — milk dilutes the prebiotic effect\nPick one time of day and stick with it (morning is most common)\nMissed a day? Just resume the next day — no need to double up\nIncrease water intake by 250ml when you start, especially the first 2 weeks"
+      },
+      "blocks": {
+        "sc-1": { "type": "step_card", "settings": { "icon_emoji": "🥄", "heading": "Scoop", "description": "1 level scoop (5g). The scoop is included in the bag." } },
+        "sc-2": { "type": "step_card", "settings": { "icon_emoji": "🥤", "heading": "Stir", "description": "Into 200ml water, coffee, or smoothie. Stir 10 seconds — it dissolves clear." } },
+        "sc-3": { "type": "step_card", "settings": { "icon_emoji": "✨", "heading": "Drink", "description": "Once a day. Most prefer morning. No flavor, no texture change to your drink." } }
+      },
+      "block_order": ["sc-1","sc-2","sc-3"]
     },
     "timeline": {
       "type": "gb-week-timeline",
@@ -46,8 +93,16 @@
         "eyebrow": "WHAT TO EXPECT",
         "heading": "YOUR FIRST",
         "heading_em": "30 DAYS.",
-        "disclaimer": "Most people notice shifts in week 1; deeper benefits build over the first month. Individual results vary."
-      }
+        "intro": "Daily acacia fiber rebuilds your gut microbiota slowly and predictably. Most shifts arrive on a timeline.",
+        "disclaimer": "When accompanied by a balanced diet and regular routine. Individual results vary. Reference: published research on acacia gum prebiotic effect on gut microbiota."
+      },
+      "blocks": {
+        "wk-1": { "type": "week", "settings": { "day_label": "WEEK 1", "heading": "Adjustment", "description": "Some people feel mild bloating as gut bacteria adjust. Lean into the half-scoop ramp-up. Drink extra water." } },
+        "wk-2": { "type": "week", "settings": { "day_label": "WEEK 2", "heading": "Less bloating", "description": "Bifidobacteria population starts shifting. Most customers report flatter stomach feeling, easier post-meal digestion." } },
+        "wk-3": { "type": "week", "settings": { "day_label": "WEEK 3", "heading": "Steadier energy", "description": "Better gut balance = better short-chain fatty acid production. Energy holds through afternoon, less post-lunch slump." } },
+        "wk-4": { "type": "week", "settings": { "day_label": "WEEK 4+", "heading": "New baseline", "description": "Your gut is on a new microbiome baseline. Consistency matters more than dose now — keep a daily scoop and you stay there." } }
+      },
+      "block_order": ["wk-1","wk-2","wk-3","wk-4"]
     },
     "product-details": {
       "type": "gb-image-text",
@@ -55,7 +110,9 @@
         "eyebrow": "INSIDE THE BAG",
         "heading": "PURE",
         "heading_em": "ACACIA FIBER.",
-        "image_position": "right"
+        "image_position": "right",
+        "body": "<p>One ingredient. Sourced direct from Senegal, where acacia trees have been tapped for gum for centuries. Each batch is heavy-metal tested, microbial-tested, and assayed for fiber content before it ships.</p>",
+        "bullets": "Single-origin: Senegal, West Africa\nHarvest: hand-tapped from acacia senegal trees\nProcessing: spray-dried into fine powder, no chemicals\nLab tests: heavy metals, microbial, fiber assay\nCertifications: Halal, Vegan, Non-GMO\nServing: 5g (one included scoop) per day"
       }
     },
     "ugc": {
@@ -64,7 +121,13 @@
         "eyebrow": "REAL RESULTS",
         "heading": "WHAT OUR",
         "heading_em": "CUSTOMERS SAY"
-      }
+      },
+      "blocks": {
+        "ugc-1": { "type": "ugc_review", "settings": { "quote": "Tried 3 fiber powders before this. The others all had a weird gritty after-taste. This one is actually invisible in coffee. Two weeks in, my bloating is way down.", "name": "Meera Joshi", "meta": "34 · Mumbai" } },
+        "ugc-2": { "type": "ugc_review", "settings": { "quote": "Started at half scoop because I'm sensitive. By day 10 I was at full scoop with zero gas issues. Energy through afternoons is noticeably better.", "name": "Arjun Singh", "meta": "41 · Delhi" } },
+        "ugc-3": { "type": "ugc_review", "settings": { "quote": "Low-FODMAP diet means I'm picky about what I add. Acacia is on the safe list and this brand actually delivers what it claims. Nothing weird in the ingredient list.", "name": "Kavya Reddy", "meta": "28 · Hyderabad" } }
+      },
+      "block_order": ["ugc-1","ugc-2","ugc-3"]
     },
     "journey": {
       "type": "gb-journey",
@@ -72,8 +135,14 @@
         "eyebrow": "FIBER JOURNEY",
         "heading": "FROM",
         "heading_em": "BEGINNER TO ADVANCED.",
-        "intro": "Start gentle, build up. Each stage is designed to feed and challenge your gut a little more than the last."
-      }
+        "intro": "Start gentle, build up. Each stage feeds and challenges your gut a little more than the last."
+      },
+      "blocks": {
+        "st-1": { "type": "stage", "settings": { "stage_label": "BEGINNER", "product_name": "Acacia Fiber Boost 250g", "tag": "Easy on gut · daily fiber", "bullets": "Pure single-source acacia\n5g soluble fiber per scoop\n50 daily servings\nLow-FODMAP, tasteless", "price": "₹699", "cta_label": "You're here", "cta_url": "#" } },
+        "st-2": { "type": "stage", "settings": { "stage_label": "REGULAR", "product_name": "Fiber Boost Plus 500g", "tag": "Multi-fiber blend", "bullets": "Acacia + inulin + resistant dextrin\nWider strain feeding\n100 daily servings\nFor people 8+ weeks into daily fiber", "price": "₹1,199", "cta_label": "Shop →", "cta_url": "#", "featured": true } },
+        "st-3": { "type": "stage", "settings": { "stage_label": "ADVANCED", "product_name": "Inulin Concentrate 500g", "tag": "Higher prebiotic dose", "bullets": "100% inulin from chicory root\n10g per scoop\nFor experienced fiber consumers\nNot for first-timers — ramps up gas", "price": "₹999", "cta_label": "Shop →", "cta_url": "#" } }
+      },
+      "block_order": ["st-1","st-2","st-3"]
     },
     "faq": {
       "type": "leo-faq",
@@ -81,7 +150,16 @@
         "faq_eyebrow": "QUESTIONS?",
         "faq_heading": "COMMON",
         "faq_heading_em": "QUESTIONS"
-      }
+      },
+      "blocks": {
+        "faq-1": { "type": "faq", "settings": { "question": "Will it cause bloating?", "answer": "<p>The first week, sometimes — your gut bacteria are adjusting. Start at half a scoop and build up over 7 days; this minimises bloating. By week 2, most people feel less bloated than before.</p>" } },
+        "faq-2": { "type": "faq", "settings": { "question": "Can I take more than one scoop a day?", "answer": "<p>Stick to one scoop until you've been at it for 8+ weeks. After that, some people benefit from two — talk to your doctor if you're considering doubling up.</p>" } },
+        "faq-3": { "type": "faq", "settings": { "question": "Can kids take it?", "answer": "<p>Children 6+ can take half a scoop daily. Under 6, check with your pediatrician first. Acacia fiber has been safely used in food for centuries.</p>" } },
+        "faq-4": { "type": "faq", "settings": { "question": "Does it interact with medications?", "answer": "<p>Soluble fiber can slow absorption of some medications. Take Fiber Boost at least 1 hour apart from prescription medications. If on multiple meds, ask your doctor.</p>" } },
+        "faq-5": { "type": "faq", "settings": { "question": "Is it safe with probiotics?", "answer": "<p>Yes — and recommended. Prebiotic fiber feeds the probiotic strains you take. Most people take fiber in the morning and probiotics with dinner, but timing isn't critical.</p>" } },
+        "faq-6": { "type": "faq", "settings": { "question": "How long does one bag last?", "answer": "<p>50 daily servings — about 7 weeks at one scoop a day. Subscribe-and-save customers get auto-shipped every 6 weeks to never run out.</p>" } }
+      },
+      "block_order": ["faq-1","faq-2","faq-3","faq-4","faq-5","faq-6"]
     },
     "judgeme": {
       "type": "leo-judgeme",
@@ -91,7 +169,10 @@
         "judgeme_heading_em": "REVIEWS"
       }
     },
-    "sticky-atc": { "type": "leo-sticky-atc", "settings": { "sticky_show": true } }
+    "sticky-atc": {
+      "type": "leo-sticky-atc",
+      "settings": { "sticky_show": true }
+    }
   },
   "order": ["hero","why-add","who","diff","consume","timeline","product-details","ugc","journey","faq","judgeme","sticky-atc"]
 }

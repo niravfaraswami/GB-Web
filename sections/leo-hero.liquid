@@ -145,7 +145,15 @@
                 {%- endfor -%}
               </div>
             {%- else -%}
-              <input type="hidden" name="id" value="{{ p.selected_or_first_available_variant.id }}">
+              {%- assign v = p.selected_or_first_available_variant -%}
+              <input type="hidden" name="id" value="{{ v.id }}">
+              <div class="single-variant-price">
+                <span class="single-variant-price-now">{{ v.price | money }}</span>
+                {%- if v.compare_at_price > v.price -%}
+                  <span class="single-variant-price-was">{{ v.compare_at_price | money }}</span>
+                  <span class="single-variant-price-save">You save {{ v.compare_at_price | minus: v.price | money }}</span>
+                {%- endif -%}
+              </div>
             {%- endif -%}
 
             {%- if size_chart != blank or p.metafields.custom.help_note != blank -%}
