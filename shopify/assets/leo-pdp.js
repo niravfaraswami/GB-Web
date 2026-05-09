@@ -138,8 +138,8 @@
       var lastY = window.pageYOffset;
       var upAccum = 0;
       var DOWN_THRESHOLD = 6;   // dead-zone for jitter
-      var UP_THRESHOLD = 30;    // px of cumulative scroll-up to qualify
-      var SHOW_DELAY = 750;     // ms after scroll stops before showing
+      var UP_THRESHOLD = parseInt(stickyBar.dataset.upThreshold, 10) || 30;  // px of cumulative scroll-up
+      var SHOW_DELAY = parseInt(stickyBar.dataset.showDelay, 10) || 750;     // ms after scroll stops
       var showTimer = null;
 
       function isMainAtcVisible() {

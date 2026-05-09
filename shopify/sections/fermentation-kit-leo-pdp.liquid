@@ -774,7 +774,13 @@
   {%- comment %} STICKY ATC BAR {% endcomment -%}
   {%- if section.settings.sticky_show -%}
     {%- assign sticky_truncate = section.settings.sticky_name_truncate | default: 21 -%}
-    <div class="sticky-atc" data-sticky-atc aria-hidden="true">
+    {%- assign sticky_up_threshold = section.settings.sticky_up_threshold | default: 30 -%}
+    {%- assign sticky_show_delay = section.settings.sticky_show_delay | default: 750 -%}
+    <div class="sticky-atc"
+         data-sticky-atc
+         data-up-threshold="{{ sticky_up_threshold }}"
+         data-show-delay="{{ sticky_show_delay }}"
+         aria-hidden="true">
       <div class="sticky-atc-inner">
         <div class="sticky-atc-prod">
           {%- if p.featured_image -%}
@@ -848,8 +854,8 @@
         var lastY = window.pageYOffset;
         var upAccum = 0;
         var DOWN_THRESHOLD = 6;
-        var UP_THRESHOLD = 30;
-        var SHOW_DELAY = 750;
+        var UP_THRESHOLD = parseInt(stickyBar.dataset.upThreshold, 10) || 30;
+        var SHOW_DELAY = parseInt(stickyBar.dataset.showDelay, 10) || 750;
         var showTimer = null;
         function isMainAtcVisible() {
           var rect = mainAtc.getBoundingClientRect();
@@ -1096,7 +1102,9 @@
     { "type": "header", "content": "Sticky ATC Bar" },
     { "type": "checkbox", "id": "sticky_show", "label": "Show sticky add-to-cart bar", "default": true },
     { "type": "text", "id": "sticky_cta_label", "label": "Button label", "default": "Add to cart" },
-    { "type": "range", "id": "sticky_name_truncate", "label": "Truncate product name to (chars)", "min": 12, "max": 40, "step": 1, "default": 21, "info": "Includes 3-char ellipsis. CSS also truncates if the bar is narrower." }
+    { "type": "range", "id": "sticky_name_truncate", "label": "Truncate product name to (chars)", "min": 12, "max": 40, "step": 1, "default": 21, "info": "Includes 3-char ellipsis. CSS also truncates if the bar is narrower." },
+    { "type": "range", "id": "sticky_up_threshold", "label": "Scroll-up threshold (px)", "min": 10, "max": 80, "step": 5, "default": 30, "info": "Cumulative scroll-up distance required before the bar is allowed to show." },
+    { "type": "range", "id": "sticky_show_delay", "label": "Pause before showing (ms)", "min": 100, "max": 2000, "step": 50, "default": 750, "info": "How long after scrolling stops before the bar slides in." }
   ],
   "blocks": [
     { "type": "hero_benefit", "name": "Hero benefit", "limit": 4, "settings": [

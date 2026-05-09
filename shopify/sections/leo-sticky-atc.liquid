@@ -3,11 +3,18 @@
 {%- liquid
   assign p = product
   assign name_truncate = section.settings.name_truncate | default: 21
+  assign up_threshold = section.settings.up_threshold | default: 30
+  assign show_delay = section.settings.show_delay | default: 750
 -%}
 
 {%- if section.settings.sticky_show -%}
   <div class="sticky-atc-spacer" aria-hidden="true"></div>
-  <div class="sticky-atc" data-sticky-atc aria-hidden="true" {%- render 'leo_kit_attrs' -%}>
+  <div class="sticky-atc"
+       data-sticky-atc
+       data-up-threshold="{{ up_threshold }}"
+       data-show-delay="{{ show_delay }}"
+       aria-hidden="true"
+       {%- render 'leo_kit_attrs' -%}>
     <div class="sticky-atc-inner">
       <div class="sticky-atc-prod">
         {%- if p.featured_image -%}
@@ -31,7 +38,10 @@
   "settings": [
     { "type": "checkbox", "id": "sticky_show", "label": "Show sticky add-to-cart bar", "default": true },
     { "type": "text", "id": "cta_label", "label": "Button label", "default": "Add to cart" },
-    { "type": "range", "id": "name_truncate", "label": "Truncate product name to (chars)", "min": 12, "max": 40, "step": 1, "default": 21, "info": "Includes 3-char ellipsis. CSS also truncates if the bar is narrower than the chosen length." }
+    { "type": "range", "id": "name_truncate", "label": "Truncate product name to (chars)", "min": 12, "max": 40, "step": 1, "default": 21, "info": "Includes 3-char ellipsis. CSS also truncates if the bar is narrower." },
+    { "type": "header", "content": "Visibility behaviour" },
+    { "type": "range", "id": "up_threshold", "label": "Scroll-up threshold (px)", "min": 10, "max": 80, "step": 5, "default": 30, "info": "Cumulative scroll-up distance required before the bar is allowed to show." },
+    { "type": "range", "id": "show_delay", "label": "Pause before showing (ms)", "min": 100, "max": 2000, "step": 50, "default": 750, "info": "How long after scrolling stops before the bar slides in." }
   ],
   "presets": [{ "name": "Leo · Sticky ATC" }]
 }
