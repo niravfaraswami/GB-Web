@@ -56,15 +56,17 @@
           {%- if section.settings.f30_image != blank -%}
             <img src="{{ section.settings.f30_image | image_url: width: 1200 }}" alt="{{ section.settings.f30_h | escape }}" loading="lazy" width="1000" height="1250">
           {%- endif -%}
-          <svg class="f30-overlay-svg" viewBox="0 0 100 125" preserveAspectRatio="none" aria-hidden="true">
-            <path class="f30-curve" d="M -3 130 Q 8 122 17 117 T 52 70 T 84 22 T 110 -8"/>
-            <circle class="f30-dot" cx="17" cy="117" r="2.4"/>
-            <circle class="f30-dot" cx="52" cy="70" r="2.4"/>
-            <circle class="f30-dot" cx="84" cy="22" r="2.4"/>
-          </svg>
-          {%- if section.settings.f30_anno_1 != blank -%}<div class="first30-anno a1">{{ section.settings.f30_anno_1 }}</div>{%- endif -%}
-          {%- if section.settings.f30_anno_2 != blank -%}<div class="first30-anno a2">{{ section.settings.f30_anno_2 }}</div>{%- endif -%}
-          {%- if section.settings.f30_anno_3 != blank -%}<div class="first30-anno a3">{{ section.settings.f30_anno_3 }}</div>{%- endif -%}
+          {%- if section.settings.f30_overlay_show -%}
+            <svg class="f30-overlay-svg" viewBox="0 0 100 125" preserveAspectRatio="none" aria-hidden="true">
+              <path class="f30-curve" d="M -3 130 Q 8 122 17 117 T 52 70 T 84 22 T 110 -8"/>
+              <circle class="f30-dot" cx="17" cy="117" r="2.4"/>
+              <circle class="f30-dot" cx="52" cy="70" r="2.4"/>
+              <circle class="f30-dot" cx="84" cy="22" r="2.4"/>
+            </svg>
+            {%- if section.settings.f30_anno_1 != blank -%}<div class="first30-anno a1">{{ section.settings.f30_anno_1 }}</div>{%- endif -%}
+            {%- if section.settings.f30_anno_2 != blank -%}<div class="first30-anno a2">{{ section.settings.f30_anno_2 }}</div>{%- endif -%}
+            {%- if section.settings.f30_anno_3 != blank -%}<div class="first30-anno a3">{{ section.settings.f30_anno_3 }}</div>{%- endif -%}
+          {%- endif -%}
         </div>
       </div>
     </div>
@@ -83,6 +85,7 @@
     { "type": "text", "id": "f30_h_tail", "label": "Heading (tail)", "default": " of balance." },
     { "type": "textarea", "id": "f30_intro", "label": "Intro", "default": "When your gut finds its rhythm, your body follows. Daily kanji rebuilds balance from the inside — and the shifts arrive on a predictable timeline." },
     { "type": "image_picker", "id": "f30_image", "label": "Right-column image" },
+    { "type": "checkbox", "id": "f30_overlay_show", "label": "Show curve overlay + annotations", "default": true, "info": "Toggles the white SVG curve, the 3 dots, and all 3 annotation labels together." },
     { "type": "text", "id": "f30_anno_1", "label": "Annotation 1 (bottom-left)", "default": "Week 1:<br>Digestion<br>Improved" },
     { "type": "text", "id": "f30_anno_2", "label": "Annotation 2 (mid)", "default": "Week 2:<br>Bloating<br>Reduced" },
     { "type": "text", "id": "f30_anno_3", "label": "Annotation 3 (top-right)", "default": "Week 3:<br>Steady<br>Energy" },
