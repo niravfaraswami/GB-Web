@@ -1,0 +1,110 @@
+{
+  "sections": {
+    "hero": { "type": "leo-hero", "settings": { "show_breadcrumb": true } },
+    "why": {
+      "type": "gb-card-grid",
+      "settings": {
+        "eyebrow": "WHY THIS CULTURE",
+        "heading": "LIVE,",
+        "heading_em": "LAB-GRADE,",
+        "heading_tail": " RELIABLE.",
+        "columns": "4"
+      }
+    },
+    "comparison": {
+      "type": "gb-comparison",
+      "settings": {
+        "eyebrow": "VS HOMEMADE STARTERS",
+        "heading": "WHY OUR CULTURE",
+        "heading_em": "STAYS ALIVE.",
+        "col_count": "2",
+        "col_kit_label": "GutBasket Culture",
+        "col_2_label": "Homemade Starter"
+      }
+    },
+    "how": {
+      "type": "gb-step-cards",
+      "settings": {
+        "eyebrow": "HOW TO START",
+        "heading": "FROM POUCH TO",
+        "heading_em": "FERMENT."
+      }
+    },
+    "expect": {
+      "type": "gb-card-grid",
+      "settings": {
+        "eyebrow": "WHAT TO EXPECT",
+        "heading": "FIRST",
+        "heading_em": "BATCH, BREATHE.",
+        "columns": "3"
+      }
+    },
+    "benefits": {
+      "type": "gb-card-grid",
+      "settings": {
+        "eyebrow": "BENEFITS",
+        "heading": "WHAT THIS CULTURE",
+        "heading_em": "GIVES YOU.",
+        "columns": "3"
+      }
+    },
+    "who": {
+      "type": "gb-who-yes-no",
+      "settings": {
+        "eyebrow": "WHO IS THIS FOR",
+        "heading": "IS THIS",
+        "heading_em": "RIGHT FOR YOU?"
+      }
+    },
+    "care": {
+      "type": "gb-card-grid",
+      "settings": {
+        "eyebrow": "CARE & MAINTENANCE",
+        "heading": "KEEP IT",
+        "heading_em": "ALIVE.",
+        "columns": "4"
+      }
+    },
+    "troubleshooting": {
+      "type": "leo-faq",
+      "settings": {
+        "faq_eyebrow": "TROUBLESHOOTING",
+        "faq_heading": "WHEN THINGS",
+        "faq_heading_em": "GO SIDEWAYS."
+      }
+    },
+    "ugc": {
+      "type": "leo-ugc",
+      "settings": {
+        "eyebrow": "REAL FERMENTERS",
+        "heading": "FROM OUR",
+        "heading_em": "CUSTOMERS."
+      }
+    },
+    "cross": {
+      "type": "leo-cross",
+      "settings": {
+        "cross_eyebrow": "TOOLS & COMPANIONS",
+        "cross_heading": "ROUND OUT YOUR FERMENT KIT"
+      }
+    },
+    "faq": {
+      "type": "leo-faq",
+      "settings": {
+        "faq_eyebrow": "QUESTIONS?",
+        "faq_heading": "COMMON",
+        "faq_heading_em": "QUESTIONS"
+      }
+    },
+    "judgeme": {
+      "type": "leo-judgeme",
+      "settings": {
+        "judgeme_eyebrow": "ALL REVIEWS",
+        "judgeme_heading": "VERIFIED",
+        "judgeme_heading_em": "REVIEWS"
+      }
+    },
+    "sticky-atc": { "type": "leo-sticky-atc", "settings": { "sticky_show": true } }
+  },
+  "order": ["hero","why","comparison","how","expect","benefits","who","care","troubleshooting","ugc","cross","faq","judgeme","sticky-atc"]
+}

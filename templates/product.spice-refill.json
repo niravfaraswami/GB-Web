@@ -1,0 +1,57 @@
+{
+  "sections": {
+    "hero": { "type": "leo-hero", "settings": { "show_breadcrumb": true } },
+    "why": {
+      "type": "gb-image-text",
+      "settings": {
+        "eyebrow": "WHY THE REFILL",
+        "heading": "SAME FORMULA.",
+        "heading_em": "LESS WASTE.",
+        "image_position": "left"
+      }
+    },
+    "box": {
+      "type": "gb-image-pills",
+      "settings": {
+        "eyebrow": "WHAT'S IN THE PACK",
+        "heading": "EVERYTHING YOU NEED",
+        "heading_em": "(MINUS THE JAR).",
+        "image_position": "left",
+        "body_heading": "Inside this refill"
+      }
+    },
+    "how-to-make": {
+      "type": "leo-how-to-make",
+      "settings": {
+        "how_eyebrow": "HOW TO USE",
+        "how_heading": "DROP IN,",
+        "how_heading_em": "FERMENT, ENJOY."
+      }
+    },
+    "reviews": {
+      "type": "leo-ugc",
+      "settings": {
+        "eyebrow": "REPEAT BUYERS",
+        "heading": "WHY OUR CUSTOMERS",
+        "heading_em": "KEEP REORDERING."
+      }
+    },
+    "cross": {
+      "type": "leo-cross",
+      "settings": {
+        "cross_eyebrow": "PAIR IT WITH",
+        "cross_heading": "OTHER REFILLS & UPGRADES"
+      }
+    },
+    "judgeme": {
+      "type": "leo-judgeme",
+      "settings": {
+        "judgeme_eyebrow": "ALL REVIEWS",
+        "judgeme_heading": "VERIFIED",
+        "judgeme_heading_em": "REVIEWS"
+      }
+    },
+    "sticky-atc": { "type": "leo-sticky-atc", "settings": { "sticky_show": true } }
+  },
+  "order": ["hero","why","box","how-to-make","reviews","cross","judgeme","sticky-atc"]
+}

@@ -1,0 +1,78 @@
+{
+  "sections": {
+    "hero": { "type": "leo-hero", "settings": { "show_breadcrumb": true } },
+    "features": {
+      "type": "gb-card-grid",
+      "settings": {
+        "eyebrow": "WHY THIS YEAST",
+        "heading": "BUILT FOR",
+        "heading_em": "PROFESSIONAL BAKES.",
+        "columns": "4"
+      }
+    },
+    "comparison": {
+      "type": "gb-comparison",
+      "settings": {
+        "eyebrow": "VS GROCERY YEAST",
+        "heading": "WHY DIRECT-SOURCED",
+        "heading_em": "WINS.",
+        "col_count": "2",
+        "col_kit_label": "GutBasket",
+        "col_2_label": "Repacked Yeast"
+      }
+    },
+    "how-to-make": {
+      "type": "leo-how-to-make",
+      "settings": {
+        "how_eyebrow": "HOW TO USE",
+        "how_heading": "4 STEPS TO",
+        "how_heading_em": "FRESH BREAD."
+      }
+    },
+    "includes": {
+      "type": "gb-includes",
+      "settings": {
+        "eyebrow": "WHAT YOU GET",
+        "heading": "EVERYTHING IN",
+        "heading_em": "THE PACK.",
+        "left_pill": "INCLUDED",
+        "left_heading": "What's in the bag",
+        "right_pill": "YOU'LL NEED",
+        "right_heading": "What you'll need at home"
+      }
+    },
+    "ugc": {
+      "type": "leo-ugc",
+      "settings": {
+        "eyebrow": "REAL BAKERS",
+        "heading": "BAKERS WHO",
+        "heading_em": "TRUST THIS YEAST."
+      }
+    },
+    "faq": {
+      "type": "leo-faq",
+      "settings": {
+        "faq_eyebrow": "QUESTIONS?",
+        "faq_heading": "COMMON",
+        "faq_heading_em": "QUESTIONS"
+      }
+    },
+    "cross": {
+      "type": "leo-cross",
+      "settings": {
+        "cross_eyebrow": "PAIR IT WITH",
+        "cross_heading": "ALSO IN YOUR PANTRY"
+      }
+    },
+    "judgeme": {
+      "type": "leo-judgeme",
+      "settings": {
+        "judgeme_eyebrow": "ALL REVIEWS",
+        "judgeme_heading": "VERIFIED",
+        "judgeme_heading_em": "REVIEWS"
+      }
+    },
+    "sticky-atc": { "type": "leo-sticky-atc", "settings": { "sticky_show": true } }
+  },
+  "order": ["hero","features","comparison","how-to-make","includes","ugc","faq","cross","judgeme","sticky-atc"]
+}

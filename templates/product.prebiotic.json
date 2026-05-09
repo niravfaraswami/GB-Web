@@ -1,0 +1,97 @@
+{
+  "sections": {
+    "hero": { "type": "leo-hero", "settings": { "show_breadcrumb": true } },
+    "why-add": {
+      "type": "gb-card-grid",
+      "settings": {
+        "eyebrow": "WHY THIS FIBER",
+        "heading": "WHAT MAKES IT",
+        "heading_em": "WORK.",
+        "columns": "4"
+      }
+    },
+    "who": {
+      "type": "gb-who-yes-no",
+      "settings": {
+        "eyebrow": "WHO IS THIS FOR",
+        "heading": "IS THIS",
+        "heading_em": "RIGHT FOR YOU?"
+      }
+    },
+    "diff": {
+      "type": "gb-comparison",
+      "settings": {
+        "eyebrow": "VS THE OTHERS",
+        "heading": "WHY PURE PREBIOTIC FIBER",
+        "heading_em": "WINS.",
+        "col_count": "3",
+        "col_kit_label": "Pure Prebiotic Fiber",
+        "col_2_label": "Cheap Fiber Mix",
+        "col_3_label": "Generic Powder"
+      }
+    },
+    "consume": {
+      "type": "gb-step-cards",
+      "settings": {
+        "eyebrow": "HOW TO CONSUME",
+        "heading": "AS EASY AS",
+        "heading_em": "1, 2, 3.",
+        "tips_heading": "Quick tips",
+        "tips_bullets": "Start with 1/2 scoop · build up over 7 days\nWater works best — milk dilutes prebiotic fiber\nMorning or evening, but pick one and stick to it"
+      }
+    },
+    "timeline": {
+      "type": "gb-week-timeline",
+      "settings": {
+        "eyebrow": "WHAT TO EXPECT",
+        "heading": "YOUR FIRST",
+        "heading_em": "30 DAYS.",
+        "disclaimer": "Most people notice shifts in week 1; deeper benefits build over the first month. Individual results vary."
+      }
+    },
+    "product-details": {
+      "type": "gb-image-text",
+      "settings": {
+        "eyebrow": "INSIDE THE BAG",
+        "heading": "PURE",
+        "heading_em": "ACACIA FIBER.",
+        "image_position": "right"
+      }
+    },
+    "ugc": {
+      "type": "leo-ugc",
+      "settings": {
+        "eyebrow": "REAL RESULTS",
+        "heading": "WHAT OUR",
+        "heading_em": "CUSTOMERS SAY"
+      }
+    },
+    "journey": {
+      "type": "gb-journey",
+      "settings": {
+        "eyebrow": "FIBER JOURNEY",
+        "heading": "FROM",
+        "heading_em": "BEGINNER TO ADVANCED.",
+        "intro": "Start gentle, build up. Each stage is designed to feed and challenge your gut a little more than the last."
+      }
+    },
+    "faq": {
+      "type": "leo-faq",
+      "settings": {
+        "faq_eyebrow": "QUESTIONS?",
+        "faq_heading": "COMMON",
+        "faq_heading_em": "QUESTIONS"
+      }
+    },
+    "judgeme": {
+      "type": "leo-judgeme",
+      "settings": {
+        "judgeme_eyebrow": "ALL REVIEWS",
+        "judgeme_heading": "VERIFIED",
+        "judgeme_heading_em": "REVIEWS"
+      }
+    },
+    "sticky-atc": { "type": "leo-sticky-atc", "settings": { "sticky_show": true } }
+  },
+  "order": ["hero","why-add","who","diff","consume","timeline","product-details","ugc","journey","faq","judgeme","sticky-atc"]
+}
