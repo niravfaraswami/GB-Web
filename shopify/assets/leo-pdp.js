@@ -129,20 +129,65 @@
       }
     });
 
-    // Sticky ATC bar
+    // Sticky ATC bar — show after main ATC scrolls out of view AND user scrolls up
     var stickyBar = document.querySelector('[data-sticky-atc]');
     var mainAtc = document.querySelector('.atc-btn');
     if (stickyBar && mainAtc && !stickyBar.dataset.bound) {
       stickyBar.dataset.bound = '1';
-      var checkSticky = function () {
+
+      var lastY = window.pageYOffset;
+      var upAccum = 0;
+      var DOWN_THRESHOLD = 6;   // dead-zone for jitter
+      var UP_THRESHOLD = 30;    // px of cumulative scroll-up to qualify
+      var SHOW_DELAY = 750;     // ms after scroll stops before showing
+      var showTimer = null;
+
+      function isMainAtcVisible() {
         var rect = mainAtc.getBoundingClientRect();
-        var atcVisible = rect.top < (window.innerHeight - 40) && rect.bottom > 0;
-        stickyBar.classList.toggle('is-visible', !atcVisible);
-        stickyBar.setAttribute('aria-hidden', atcVisible ? 'true' : 'false');
-      };
-      window.addEventListener('scroll', checkSticky, { passive: true });
-      window.addEventListener('resize', checkSticky);
-      checkSticky();
+        return rect.top < (window.innerHeight - 40) && rect.bottom > 0;
+      }
+      function showBar() {
+        stickyBar.classList.add('is-visible');
+        stickyBar.setAttribute('aria-hidden', 'false');
+      }
+      function hideBar() {
+        stickyBar.classList.remove('is-visible');
+        stickyBar.setAttribute('aria-hidden', 'true');
+      }
+
+      function onScroll() {
+        var y = window.pageYOffset;
+        var delta = y - lastY;
+        lastY = y;
+
+        if (isMainAtcVisible()) {
+          hideBar();
+          upAccum = 0;
+          clearTimeout(showTimer);
+          return;
+        }
+        if (delta > DOWN_THRESHOLD) {
+          // scrolling down — hide & reset
+          hideBar();
+          upAccum = 0;
+          clearTimeout(showTimer);
+        } else if (delta < -DOWN_THRESHOLD) {
+          // scrolling up — accumulate, schedule show after pause
+          upAccum += -delta;
+          if (upAccum >= UP_THRESHOLD) {
+            clearTimeout(showTimer);
+            showTimer = setTimeout(function () {
+              if (!isMainAtcVisible()) showBar();
+            }, SHOW_DELAY);
+          }
+        }
+      }
+
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', function () {
+        if (isMainAtcVisible()) hideBar();
+      });
+
       var trigger = stickyBar.querySelector('[data-sticky-atc-trigger]');
       if (trigger) {
         trigger.addEventListener('click', function () {
