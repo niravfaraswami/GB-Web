@@ -1,0 +1,48 @@
+{%- render 'leo_kit_chrome' -%}
+
+<section class="trust-row-section ferment-pdp-leo" {%- render 'leo_kit_attrs' -%}>
+  <div class="container">
+    <div class="trust-row-grid">
+      {%- for n in (1..4) -%}
+        {%- assign h_key = 'trust' | append: n | append: '_h' -%}
+        {%- assign d_key = 'trust' | append: n | append: '_d' -%}
+        {%- assign i_key = 'trust' | append: n | append: '_icon' -%}
+        {%- assign th = section.settings[h_key] -%}
+        {%- assign td = section.settings[d_key] -%}
+        {%- assign ti = section.settings[i_key] -%}
+        {%- if th != blank -%}
+          <div class="tr-card">
+            <div class="tr-icon">
+              {%- if ti != blank -%}{%- render 'kit_icon', icon: ti, size: 28, extra: 'gb-icon' -%}{%- endif -%}
+            </div>
+            <div class="tr-h">{{ th }}</div>
+            <div class="tr-d">{{ td }}</div>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Leo · Trust Strip",
+  "tag": "section",
+  "class": "leo-trust-section",
+  "settings": [
+    { "type": "image_picker", "id": "trust1_icon", "label": "Card 1 — icon SVG" },
+    { "type": "text", "id": "trust1_h", "label": "Card 1 — heading", "default": "50K+ Customers Served" },
+    { "type": "textarea", "id": "trust1_d", "label": "Card 1 — description", "default": "Trusted by Indian homes since 2020." },
+    { "type": "image_picker", "id": "trust2_icon", "label": "Card 2 — icon SVG" },
+    { "type": "text", "id": "trust2_h", "label": "Card 2 — heading", "default": "Fermentation Expert Help" },
+    { "type": "textarea", "id": "trust2_d", "label": "Card 2 — description", "default": "WhatsApp us a photo if your batch looks confusing." },
+    { "type": "image_picker", "id": "trust3_icon", "label": "Card 3 — icon SVG" },
+    { "type": "text", "id": "trust3_h", "label": "Card 3 — heading", "default": "Damage Support Included" },
+    { "type": "textarea", "id": "trust3_d", "label": "Card 3 — description", "default": "We help quickly if anything arrives damaged." },
+    { "type": "image_picker", "id": "trust4_icon", "label": "Card 4 — icon SVG" },
+    { "type": "text", "id": "trust4_h", "label": "Card 4 — heading", "default": "Hand-Packed" },
+    { "type": "textarea", "id": "trust4_d", "label": "Card 4 — description", "default": "Small-batch spice mix, made by people who drink kanji daily." }
+  ],
+  "presets": [{ "name": "Leo · Trust Strip" }]
+}
+{% endschema %}

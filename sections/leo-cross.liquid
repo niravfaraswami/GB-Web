@@ -1,0 +1,50 @@
+{%- render 'leo_kit_chrome' -%}
+
+{%- liquid
+  assign p = product
+  assign cross_sell = p.metafields.custom.cross_sell_products.value
+  assign cross_blocks = section.blocks | where: 'type', 'cross_sell_product'
+  assign show = false
+  if cross_sell != blank or cross_blocks.size > 0 or section.settings.cross_collection != blank
+    assign show = true
+  endif
+-%}
+
+{%- if show -%}
+  <section class="cross-section ferment-pdp-leo" {%- render 'leo_kit_attrs' -%}>
+    <div class="container">
+      <div class="section-header centered">
+        <div class="eyebrow">{{ section.settings.cross_eyebrow }}</div>
+        <h2>{{ section.settings.cross_heading }}</h2>
+      </div>
+      <div class="cross-grid">
+        {%- if cross_sell != blank -%}
+          {%- for cp in cross_sell limit: 3 -%}{%- render 'ferment_cross_card', p: cp -%}{%- endfor -%}
+        {%- elsif cross_blocks.size > 0 -%}
+          {%- for block in cross_blocks -%}{%- if block.settings.product != blank -%}{%- render 'ferment_cross_card', p: block.settings.product, attrs: block.shopify_attributes -%}{%- endif -%}{%- endfor -%}
+        {%- elsif section.settings.cross_collection.products.size > 0 -%}
+          {%- for cp in section.settings.cross_collection.products limit: 3 -%}{%- render 'ferment_cross_card', p: cp -%}{%- endfor -%}
+        {%- endif -%}
+      </div>
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Leo · Cross-sell",
+  "tag": "section",
+  "class": "leo-cross-section",
+  "settings": [
+    { "type": "text", "id": "cross_eyebrow", "label": "Eyebrow", "default": "PAIR IT WITH" },
+    { "type": "text", "id": "cross_heading", "label": "Heading", "default": "CUSTOMERS ALSO BOUGHT" },
+    { "type": "collection", "id": "cross_collection", "label": "Fallback collection" }
+  ],
+  "blocks": [
+    { "type": "cross_sell_product", "name": "Cross-sell product", "limit": 6, "settings": [
+      { "type": "product", "id": "product", "label": "Product" }
+    ]}
+  ],
+  "presets": [{ "name": "Leo · Cross-sell" }]
+}
+{% endschema %}

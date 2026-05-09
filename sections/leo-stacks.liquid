@@ -1,0 +1,76 @@
+{%- render 'leo_kit_chrome' -%}
+
+{%- assign stacks_row_blocks = section.blocks | where: 'type', 'stacks_row' -%}
+
+{%- if stacks_row_blocks.size > 0 -%}
+  <section class="stacks-section ferment-pdp-leo" {%- render 'leo_kit_attrs' -%}>
+    <div class="container">
+      <div class="section-header centered">
+        <div class="eyebrow">{{ section.settings.stacks_eyebrow }}</div>
+        <h2>{{ section.settings.stacks_heading }} <em>{{ section.settings.stacks_heading_em }}</em></h2>
+        {%- if section.settings.stacks_intro != blank -%}<p>{{ section.settings.stacks_intro }}</p>{%- endif -%}
+      </div>
+
+      <div class="stacks-table-wrap">
+        <div class="stacks-table">
+          <div class="st-head">
+            <div class="st-h-cell st-h-label">&nbsp;</div>
+            <div class="st-h-cell st-h-kit">{{ section.settings.stacks_col_kit | default: 'GutBasket Kit' }}</div>
+            <div class="st-h-cell">{{ section.settings.stacks_col_3 | default: 'Traditional Homemade' }}</div>
+            <div class="st-h-cell">{{ section.settings.stacks_col_4 | default: 'Probiotic Capsule' }}</div>
+          </div>
+
+          {%- for block in stacks_row_blocks -%}
+            <div class="st-row" {{ block.shopify_attributes }}>
+              <div class="st-cell st-cell-label">{{ block.settings.label }}</div>
+              <div class="st-cell st-cell-kit">
+                {%- if block.settings.kit_mark == 'yes' -%}<span class="st-mark st-mark-yes"></span>
+                {%- elsif block.settings.kit_mark == 'no' -%}<span class="st-mark st-mark-no"></span>{%- endif -%}
+                {{ block.settings.kit_text }}
+              </div>
+              <div class="st-cell st-cell-other">
+                {%- if block.settings.col3_mark == 'yes' -%}<span class="st-mark st-mark-yes"></span>
+                {%- elsif block.settings.col3_mark == 'no' -%}<span class="st-mark st-mark-no"></span>{%- endif -%}
+                {{ block.settings.col3_text }}
+              </div>
+              <div class="st-cell st-cell-other">
+                {%- if block.settings.col4_mark == 'yes' -%}<span class="st-mark st-mark-yes"></span>
+                {%- elsif block.settings.col4_mark == 'no' -%}<span class="st-mark st-mark-no"></span>{%- endif -%}
+                {{ block.settings.col4_text }}
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Leo · Stacks",
+  "tag": "section",
+  "class": "leo-stacks-section",
+  "settings": [
+    { "type": "text", "id": "stacks_eyebrow", "label": "Eyebrow", "default": "SIDE BY SIDE" },
+    { "type": "text", "id": "stacks_heading", "label": "Heading", "default": "HOW THIS KIT" },
+    { "type": "text", "id": "stacks_heading_em", "label": "Heading (highlighted)", "default": "STACKS UP." },
+    { "type": "textarea", "id": "stacks_intro", "label": "Intro", "default": "Against what you'd otherwise buy or do. No spin — every row is verifiable." },
+    { "type": "text", "id": "stacks_col_kit", "label": "Column 2 — kit label", "default": "GutBasket Kit" },
+    { "type": "text", "id": "stacks_col_3", "label": "Column 3 — label", "default": "Traditional Homemade" },
+    { "type": "text", "id": "stacks_col_4", "label": "Column 4 — label", "default": "Probiotic Capsule" }
+  ],
+  "blocks": [
+    { "type": "stacks_row", "name": "Comparison row", "limit": 12, "settings": [
+      { "type": "text", "id": "label", "label": "Row label" },
+      { "type": "select", "id": "kit_mark", "label": "Kit cell mark", "options": [{"value":"none","label":"None"},{"value":"yes","label":"✓ Yes"},{"value":"no","label":"✕ No"}], "default": "yes" },
+      { "type": "text", "id": "kit_text", "label": "Kit cell text" },
+      { "type": "select", "id": "col3_mark", "label": "Col 3 cell mark", "options": [{"value":"none","label":"None"},{"value":"yes","label":"✓ Yes"},{"value":"no","label":"✕ No"}], "default": "none" },
+      { "type": "text", "id": "col3_text", "label": "Col 3 cell text" },
+      { "type": "select", "id": "col4_mark", "label": "Col 4 cell mark", "options": [{"value":"none","label":"None"},{"value":"yes","label":"✓ Yes"},{"value":"no","label":"✕ No"}], "default": "none" },
+      { "type": "text", "id": "col4_text", "label": "Col 4 cell text" }
+    ]}
+  ],
+  "presets": [{ "name": "Leo · Stacks" }]
+}
+{% endschema %}

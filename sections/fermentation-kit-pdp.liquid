@@ -1,0 +1,1384 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+{{ 'fermentation-kit.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign p = product
+  # ============== PER-PRODUCT THEME COLORS ==============
+  # Override the CSS variables so each kit (Kanji, Achaar, Aam Panna,
+  # Kimchi, Vegetable, All-in-One) gets its own accent palette.
+  assign accent      = p.metafields.custom.theme_accent      | default: '#C24528'
+  assign accent_dark = p.metafields.custom.theme_accent_dark | default: '#8E2E1A'
+  assign accent_soft = p.metafields.custom.theme_accent_soft | default: '#FCE5DE'
+
+  # Optional secondary accents for cells with hardcoded colors.
+  # Add the metafield definitions if you want per-product customisation;
+  # otherwise the defaults below apply.
+  assign accent_contrast      = p.metafields.custom.theme_accent_contrast      | default: '#FFF6F2'
+  assign accent_secondary     = p.metafields.custom.theme_accent_secondary     | default: '#DBEDDF'
+  assign accent_secondary_dark = p.metafields.custom.theme_accent_secondary_dark | default: '#1F4332'
+-%}
+
+<style>
+  .ferment-pdp {
+    --kit-color: {{ accent }};
+    --kit-color-dark: {{ accent_dark }};
+    --kit-color-soft: {{ accent_soft }};
+    --kit-contrast: {{ accent_contrast }};
+    --kit-secondary: {{ accent_secondary }};
+    --kit-secondary-dark: {{ accent_secondary_dark }};
+  }
+</style>
+
+{%- liquid
+  assign p = product
+
+  # ============== EXISTING / SHARED METAFIELDS ==============
+  assign tagline         = p.metafields.custom.hero_tagline | default: 'Make authentic, gut-loving ferments at home.'
+  assign save_badge      = p.metafields.custom.discount_badge
+  assign rating          = p.metafields.custom.rating | default: 4.8
+  assign review_count    = p.metafields.custom.review_count | default: 0
+  assign bought_today    = p.metafields.custom.bought_today
+  assign days_subtitle   = p.metafields.custom.days_subtitle
+  assign days_to_ferment = p.metafields.custom.days_to_ferment
+  assign capacity_label  = p.metafields.custom.jar_capacity | default: p.metafields.custom.capacity
+  assign size_chart      = p.metafields.custom.jar_size_chart_image | default: p.metafields.custom.size_chart_image
+  assign companion       = p.metafields.custom.companion_size_product.value
+  assign hero_trust      = p.metafields.custom.hero_trust_strip.value
+  assign activity        = p.metafields.custom.activity_items.value
+  assign benefits        = p.metafields.custom.benefits_items.value
+  assign cross_sell      = p.metafields.custom.cross_sell_products.value
+
+  # Section image / video / icon overrides (shared)
+  assign mf_compare_left  = p.metafields.custom.comparison_left_image
+  assign mf_compare_right = p.metafields.custom.comparison_right_image
+  assign mf_compare_intro = p.metafields.custom.comparison_intro
+  assign mf_box_image     = p.metafields.custom.box_image
+  assign mf_box_note      = p.metafields.custom.box_note
+  assign mf_how_video     = p.metafields.custom.how_to_make_video.value
+  assign mf_hero_icons    = p.metafields.custom.hero_benefits_icons.value
+  assign mf_benefit_icons = p.metafields.custom.benefits_icons.value
+  assign mf_trust_icons   = p.metafields.custom.trust_strip_icons.value
+  assign mf_step_icons    = p.metafields.custom.step_icons.value
+
+  # Reusable metaobject lists
+  assign mf_reviews       = p.metafields.custom.featured_reviews.value
+  assign mf_faqs          = p.metafields.custom.featured_faqs.value
+  assign mf_steps         = p.metafields.custom.featured_steps.value
+  assign mf_components    = p.metafields.custom.featured_components.value
+  assign mf_trust_cards   = p.metafields.custom.featured_trust_cards.value
+  assign mf_quick_bens    = p.metafields.custom.featured_quick_benefits.value
+  assign mf_compare_rows  = p.metafields.custom.featured_comparison_rows.value
+  assign mf_reels         = p.metafields.custom.featured_reels.value
+
+  # ============== FERMENTATION-KIT-SPECIFIC METAFIELDS ==============
+  # Hero coupon
+  assign coupon_text = p.metafields.custom.coupon_text
+  assign coupon_code = p.metafields.custom.coupon_code
+
+  # Outcomes pair stats (indians-strip)
+  assign mf_outcome_stats = p.metafields.custom.featured_outcomes_stats.value
+
+  # Science section (airlock + glass weight cards)
+  assign mf_science_cards = p.metafields.custom.featured_science_cards.value
+
+  # Health timeline
+  assign mf_timeline = p.metafields.custom.featured_timeline_steps.value
+  assign timeline_subtitle = p.metafields.custom.timeline_subtitle
+
+  # Inside the kit (consumables)
+  assign mf_consumables = p.metafields.custom.featured_consumables.value
+  assign itk_intro = p.metafields.custom.itk_intro
+  assign refill_h = p.metafields.custom.refill_note_heading
+  assign refill_d = p.metafields.custom.refill_note_description
+  assign refill_label = p.metafields.custom.refill_cta_label
+  assign refill_url = p.metafields.custom.refill_cta_url
+
+  # Zoe science stats
+  assign mf_science_stats = p.metafields.custom.featured_science_stats.value
+  assign science_caption = p.metafields.custom.science_stats_caption
+  assign science_disclaimer = p.metafields.custom.science_stats_disclaimer
+
+  # Eat / consumption methods
+  assign mf_consumption = p.metafields.custom.featured_consumption_methods.value
+  assign dosage_amount = p.metafields.custom.dosage_amount
+  assign dosage_label = p.metafields.custom.dosage_label
+  assign dosage_caption = p.metafields.custom.dosage_caption
+
+  # Recipes
+  assign mf_recipe_tags = p.metafields.custom.featured_recipe_tags.value
+  assign recipe_count = p.metafields.custom.recipe_count
+  assign recipe_banner = p.metafields.custom.recipe_banner_image
+  assign recipe_h_label = p.metafields.custom.recipe_h_label | default: p.metafields.custom.short_name
+  assign recipe_h_text = p.metafields.custom.recipe_h_text | default: 'RECIPES INSIDE'
+-%}
+
+<div data-kit="fermentation" class="ferment-pdp">
+
+  <pre id="gb-debug-panel" style="display:none;position:fixed;bottom:0;left:0;right:0;max-height:50vh;overflow:auto;background:#1f1f1d;color:#e8f4dc;font:11px/1.4 monospace;padding:14px;z-index:99999;border-top:3px solid #ff7300;white-space:pre-wrap;word-break:break-all;">[GB DEBUG · ?gbdebug=1 — fermentation-kit]
+Product: {{ p.title }} ({{ p.handle }})
+
+# === SHARED ===
+hero_tagline                   = {{ p.metafields.custom.hero_tagline | default: '(empty)' }}
+discount_badge                 = {{ p.metafields.custom.discount_badge | default: '(empty)' }}
+rating                         = {{ p.metafields.custom.rating | default: '(empty)' }}
+review_count                   = {{ p.metafields.custom.review_count | default: '(empty)' }}
+bought_today                   = {{ p.metafields.custom.bought_today | default: '(empty)' }}
+days_subtitle                  = {{ p.metafields.custom.days_subtitle | default: '(empty)' }}
+days_to_ferment                = {{ p.metafields.custom.days_to_ferment | default: '(empty)' }}
+capacity                       = {{ p.metafields.custom.capacity | default: '(empty)' }}
+companion_size_product         = {% if p.metafields.custom.companion_size_product %}{{ p.metafields.custom.companion_size_product.value.title }}{% else %}(empty){% endif %}
+cross_sell_products    .size   = {{ p.metafields.custom.cross_sell_products.value.size | default: 0 }}
+activity_items         .size   = {{ p.metafields.custom.activity_items.value.size | default: 0 }}
+benefits_items         .size   = {{ p.metafields.custom.benefits_items.value.size | default: 0 }}
+hero_trust_strip       .size   = {{ p.metafields.custom.hero_trust_strip.value.size | default: 0 }}
+hero_benefits_icons    .size   = {{ p.metafields.custom.hero_benefits_icons.value.size | default: 0 }}
+benefits_icons         .size   = {{ p.metafields.custom.benefits_icons.value.size | default: 0 }}
+trust_strip_icons      .size   = {{ p.metafields.custom.trust_strip_icons.value.size | default: 0 }}
+step_icons             .size   = {{ p.metafields.custom.step_icons.value.size | default: 0 }}
+
+# === SHARED METAOBJECT LISTS ===
+featured_reviews          .size = {{ p.metafields.custom.featured_reviews.value.size | default: 0 }}
+featured_faqs             .size = {{ p.metafields.custom.featured_faqs.value.size | default: 0 }}
+featured_steps            .size = {{ p.metafields.custom.featured_steps.value.size | default: 0 }}
+featured_components       .size = {{ p.metafields.custom.featured_components.value.size | default: 0 }}
+featured_trust_cards      .size = {{ p.metafields.custom.featured_trust_cards.value.size | default: 0 }}
+featured_quick_benefits   .size = {{ p.metafields.custom.featured_quick_benefits.value.size | default: 0 }}
+featured_comparison_rows  .size = {{ p.metafields.custom.featured_comparison_rows.value.size | default: 0 }}
+featured_reels            .size = {{ p.metafields.custom.featured_reels.value.size | default: 0 }}
+
+# === FERMENTATION-KIT-SPECIFIC ===
+coupon_text                    = {{ p.metafields.custom.coupon_text | default: '(empty)' }}
+coupon_code                    = {{ p.metafields.custom.coupon_code | default: '(empty)' }}
+timeline_subtitle              = {{ p.metafields.custom.timeline_subtitle | default: '(empty)' | truncate: 80 }}
+itk_intro                      = {{ p.metafields.custom.itk_intro | default: '(empty)' | truncate: 80 }}
+refill_note_heading            = {{ p.metafields.custom.refill_note_heading | default: '(empty)' }}
+refill_cta_label               = {{ p.metafields.custom.refill_cta_label | default: '(empty)' }}
+refill_cta_url                 = {{ p.metafields.custom.refill_cta_url | default: '(empty)' }}
+science_stats_caption          = {{ p.metafields.custom.science_stats_caption | default: '(empty)' | truncate: 80 }}
+science_stats_disclaimer       = {{ p.metafields.custom.science_stats_disclaimer | default: '(empty)' | truncate: 80 }}
+dosage_amount                  = {{ p.metafields.custom.dosage_amount | default: '(empty)' }}
+dosage_label                   = {{ p.metafields.custom.dosage_label | default: '(empty)' }}
+dosage_caption                 = {{ p.metafields.custom.dosage_caption | default: '(empty)' | truncate: 80 }}
+recipe_count                   = {{ p.metafields.custom.recipe_count | default: '(empty)' }}
+recipe_h_label                 = {{ p.metafields.custom.recipe_h_label | default: '(empty)' }}
+recipe_h_text                  = {{ p.metafields.custom.recipe_h_text | default: '(empty)' }}
+recipe_banner_image            = {% if p.metafields.custom.recipe_banner_image %}{{ p.metafields.custom.recipe_banner_image.url | default: p.metafields.custom.recipe_banner_image | image_url: width: 80 }}{% else %}(empty){% endif %}
+
+# === FERMENTATION METAOBJECT LISTS ===
+featured_outcomes_stats       .size = {{ p.metafields.custom.featured_outcomes_stats.value.size | default: 0 }}
+featured_science_cards        .size = {{ p.metafields.custom.featured_science_cards.value.size | default: 0 }}
+featured_timeline_steps       .size = {{ p.metafields.custom.featured_timeline_steps.value.size | default: 0 }}
+featured_consumables          .size = {{ p.metafields.custom.featured_consumables.value.size | default: 0 }}
+featured_science_stats        .size = {{ p.metafields.custom.featured_science_stats.value.size | default: 0 }}
+featured_consumption_methods  .size = {{ p.metafields.custom.featured_consumption_methods.value.size | default: 0 }}
+featured_recipe_tags          .size = {{ p.metafields.custom.featured_recipe_tags.value.size | default: 0 }}
+
+# === FIRST ENTRY OF EACH METAOBJECT LIST (sanity check) ===
+review[0]:           quote={{ p.metafields.custom.featured_reviews.value.first.quote | default: '(empty)' | truncate: 60 }}
+faq[0]:              q={{ p.metafields.custom.featured_faqs.value.first.question | default: '(empty)' | truncate: 60 }}
+step[0]:             title={{ p.metafields.custom.featured_steps.value.first.title | default: '(empty)' | truncate: 40 }}
+component[0]:        name={{ p.metafields.custom.featured_components.value.first.name | default: '(empty)' | truncate: 40 }}
+trust_card[0]:       heading={{ p.metafields.custom.featured_trust_cards.value.first.heading | default: '(empty)' | truncate: 40 }}
+quick_benefit[0]:    heading={{ p.metafields.custom.featured_quick_benefits.value.first.heading | default: '(empty)' | truncate: 40 }}
+comparison_row[0]:   left_h={{ p.metafields.custom.featured_comparison_rows.value.first.left_heading | default: '(empty)' | truncate: 40 }}
+reel[0]:             handle={{ p.metafields.custom.featured_reels.value.first.author_handle | default: '(empty)' }}
+stat_pair[0]:        value={{ p.metafields.custom.featured_outcomes_stats.value.first.value | default: '(empty)' }}
+science_card[0]:     name={{ p.metafields.custom.featured_science_cards.value.first.name | default: '(empty)' }}
+timeline_step[0]:    period={{ p.metafields.custom.featured_timeline_steps.value.first.period_label | default: '(empty)' }} / heading={{ p.metafields.custom.featured_timeline_steps.value.first.heading | default: '(empty)' | truncate: 30 }}
+consumable[0]:       heading={{ p.metafields.custom.featured_consumables.value.first.heading | default: '(empty)' }}
+science_stat[0]:     stat={{ p.metafields.custom.featured_science_stats.value.first.stat | default: '(empty)' }} / heading={{ p.metafields.custom.featured_science_stats.value.first.heading | default: '(empty)' | truncate: 30 }}
+consumption[0]:      heading={{ p.metafields.custom.featured_consumption_methods.value.first.heading | default: '(empty)' }}
+recipe_tag[0]:       {{ p.metafields.custom.featured_recipe_tags.value.first.emoji | default: '' }} {{ p.metafields.custom.featured_recipe_tags.value.first.name | default: '(empty)' }}
+
+# === ALL CUSTOM METAFIELDS WITH NON-EMPTY VALUES ===
+{%- for mf in p.metafields.custom -%}
+  {%- if mf[1] != blank %}
+  • custom.{{ mf[0] }} ({{ mf[1].type }})
+  {%- endif -%}
+{%- endfor %}
+
+# === ICON URL DIAGNOSTICS (hero_benefits_icons) ===
+{%- assign hbi = p.metafields.custom.hero_benefits_icons.value -%}
+{%- for ic in hbi limit: 4 -%}
+[{{ forloop.index0 }}]
+  raw                       = {{ ic }}
+  ic.url                    = {{ ic.url | default: '(nil)' }}
+  ic.src                    = {{ ic.src | default: '(nil)' }}
+  ic.preview_image.src      = {{ ic.preview_image.src | default: '(nil)' }}
+  ic | image_url:48         = {{ ic | image_url: width: 48 | default: '(nil)' }}
+  ic | file_url             = {{ ic | file_url | default: '(nil)' }}
+  resolved (with fallback)  = {{ ic | image_url: width: 48 | default: ic.url | default: ic.src | default: ic.preview_image.src | default: '(nil)' }}
+{%- endfor %}
+</pre>
+
+{%- assign test_icon = p.metafields.custom.hero_benefits_icons.value.first -%}
+{%- if test_icon -%}
+  {%- assign test_url = test_icon | image_url: width: 64 | default: test_icon.url | default: test_icon.src -%}
+  <div id="gb-mask-test" style="display:none;position:fixed;bottom:0;right:0;background:#1f1f1d;color:#fff;padding:14px 18px;z-index:99999;border-top-left-radius:10px;font:11px/1.5 monospace;border:2px solid #ff7300;">
+    <div style="margin-bottom:8px;color:#ff7300;font-weight:700">▼ MASK TEST</div>
+    <div style="display:flex;gap:14px;align-items:center;color:#000;background:#fff;padding:10px 14px;border-radius:6px;">
+      <div style="text-align:center"><span class="kit-icon-mask" style="--kit-icon-url: url('{{ test_url }}'); width:40px; height:40px; display:inline-block; color:#C24528;"></span><div style="margin-top:4px;font-size:9px">.kit-icon-mask</div></div>
+      <div style="text-align:center"><span style="display:inline-block;width:40px;height:40px;background:#C24528;-webkit-mask:url('{{ test_url }}') center/contain no-repeat;mask:url('{{ test_url }}') center/contain no-repeat;"></span><div style="margin-top:4px;font-size:9px">inline mask</div></div>
+      <div style="text-align:center"><img src="{{ test_url }}" width="40" height="40" alt="raw"><div style="margin-top:4px;font-size:9px">raw img</div></div>
+    </div>
+    <div style="margin-top:6px;opacity:0.7">If column 1 or 2 shows a coral square = mask works.<br>If only column 3 shows the SVG = mask CSS or browser-side issue.</div>
+  </div>
+  <script>if (location.search.indexOf('gbdebug=1') !== -1) { var t=document.getElementById('gb-mask-test'); if (t) t.style.display='block'; }</script>
+{%- endif -%}
+  <script>if (location.search.indexOf('gbdebug=1') !== -1) { var p=document.getElementById('gb-debug-panel'); if (p) p.style.display='block'; }</script>
+
+  {%- liquid
+    assign trust_blocks   = section.blocks | where: 'type', 'trust_card'
+    assign step_blocks    = section.blocks | where: 'type', 'step'
+    assign compare_blocks = section.blocks | where: 'type', 'comparison_row'
+    assign benefit_blocks = section.blocks | where: 'type', 'benefit'
+    assign reel_blocks    = section.blocks | where: 'type', 'reel'
+    assign component_blocks = section.blocks | where: 'type', 'box_component'
+    assign review_blocks  = section.blocks | where: 'type', 'review'
+    assign faq_blocks     = section.blocks | where: 'type', 'faq'
+    assign cross_blocks   = section.blocks | where: 'type', 'cross_sell_product'
+    assign timeline_blocks = section.blocks | where: 'type', 'timeline_step'
+    assign science_card_blocks = section.blocks | where: 'type', 'science_card'
+    assign consumable_blocks   = section.blocks | where: 'type', 'consumable'
+    assign science_stat_blocks = section.blocks | where: 'type', 'science_stat'
+    assign consumption_blocks  = section.blocks | where: 'type', 'consumption_method'
+    assign recipe_tag_blocks   = section.blocks | where: 'type', 'recipe_tag'
+  -%}
+
+  {%- comment %} ============== 1. HERO ============== {% endcomment -%}
+  <section class="pdp-hero">
+    <div class="container">
+      {%- if section.settings.show_breadcrumb -%}
+        <div class="breadcrumb">
+          <a href="{{ routes.root_url }}">Home</a> /
+          {%- if collection -%}<a href="{{ collection.url }}">{{ collection.title }}</a> /{%- endif -%}
+          <span>{{ p.title }}</span>
+        </div>
+      {%- endif -%}
+
+      <div class="hero-title-block">
+        <h1 class="product-name">{{ p.title }}</h1>
+        <p class="product-tagline">{{ tagline }}</p>
+      </div>
+
+      <div class="hero-grid">
+        <div class="gallery-stack">
+          <div class="gallery-main">
+            {%- if save_badge != blank -%}<span class="save-badge">{{ save_badge }}</span>{%- endif -%}
+            {%- if p.featured_image -%}
+              <img class="gallery-main-img"
+                   src="{{ p.featured_image | image_url: width: 1200 }}"
+                   srcset="{{ p.featured_image | image_url: width: 600 }} 600w, {{ p.featured_image | image_url: width: 1200 }} 1200w, {{ p.featured_image | image_url: width: 1800 }} 1800w"
+                   sizes="(min-width: 768px) 50vw, 100vw"
+                   alt="{{ p.featured_image.alt | default: p.title | escape }}"
+                   loading="eager"
+                   width="{{ p.featured_image.width }}"
+                   height="{{ p.featured_image.height }}">
+            {%- else -%}
+              <div class="gallery-illustration">🫙</div>
+            {%- endif -%}
+            {%- if p.images.size > 1 -%}
+              <button class="gallery-nav gallery-nav--prev" type="button" data-gallery-prev aria-label="Previous image">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+              </button>
+              <button class="gallery-nav gallery-nav--next" type="button" data-gallery-next aria-label="Next image">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </button>
+            {%- endif -%}
+          </div>
+          {%- if p.images.size > 1 -%}
+            <div class="gallery-thumbs">
+              {%- for image in p.images limit: 8 -%}
+                <button class="gallery-thumb {% if forloop.first %}active{% endif %}" type="button"
+                        data-full-src="{{ image | image_url: width: 1200 }}"
+                        data-full-alt="{{ image.alt | default: p.title | escape }}"
+                        aria-label="View image {{ forloop.index }}">
+                  <img src="{{ image | image_url: width: 180 }}" alt="{{ image.alt | default: p.title | escape }}" loading="lazy" width="90" height="90">
+                </button>
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+        </div>
+
+        <div class="product-info">
+          {%- if review_count > 0 -%}
+            <div class="rating-row">
+              <span class="stars" aria-label="{{ rating }} out of 5">★★★★★</span>
+              <a href="#judgeme-reviews" class="rating-link">{{ rating }} ({{ review_count }} reviews)</a>
+            </div>
+          {%- endif -%}
+
+          {%- if bought_today != blank or activity != blank -%}
+            <div class="activity-row">
+              {%- if bought_today != blank and bought_today > 0 -%}
+                <div class="item"><span class="dot"></span><span><strong>{{ bought_today }}</strong> people bought this today</span></div>
+              {%- endif -%}
+              {%- if activity != blank -%}
+                {%- for item in activity -%}
+                  {%- assign parts = item | split: '|' -%}
+                  <div class="item"><span>{{ parts[0] }}</span><span>{{ parts[1] }}</span></div>
+                {%- endfor -%}
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+
+          {%- if benefits != blank -%}
+            <div class="benefits-block">
+              <div class="label">Benefits</div>
+              <div class="benefits-grid">
+                {%- for b in benefits -%}
+                  {%- assign target_idx = forloop.index0 -%}
+                  {%- assign parts = b | split: '|' -%}
+                  {%- comment -%} Support either format: "<emoji>|<label>" OR plain "<label>" {%- endcomment -%}
+                  {%- assign label = parts[1] | default: parts[0] -%}
+                  {%- assign has_emoji_prefix = false -%}
+                  {%- if parts.size > 1 -%}{%- assign has_emoji_prefix = true -%}{%- endif -%}
+                  {%- comment -%} Parallel-loop pluck — Drop[i] indexing is unreliable {%- endcomment -%}
+                  {%- assign mf_icon = nil -%}
+                  {%- if mf_hero_icons -%}
+                    {%- for ic in mf_hero_icons -%}
+                      {%- if forloop.index0 == target_idx -%}{%- assign mf_icon = ic -%}{%- endif -%}
+                    {%- endfor -%}
+                  {%- endif -%}
+                  <div class="benefit-item">
+                    <span class="benefit-icon">
+                      {%- if mf_icon != blank -%}
+                        {%- render 'kit_icon', icon: mf_icon, size: 24 -%}
+                      {%- elsif has_emoji_prefix -%}
+                        {{ parts[0] }}
+                      {%- endif -%}
+                    </span>
+                    <span>{{ label }}</span>
+                  </div>
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endif -%}
+
+          {%- form 'product', p, id: 'ferment-product-form' -%}
+            <div class="variant-block">
+              {%- assign opt_name = p.options.first | default: 'Pack' -%}
+              {%- if p.variants.size > 1 -%}
+                <div class="variant-label">Select {{ opt_name }}</div>
+                <div class="variant-grid variant-grid--{{ p.variants.size }}">
+                  {%- for variant in p.variants -%}
+                    {%- assign v_tag = variant.metafields.custom.tag -%}
+                    {%- assign v_best = variant.metafields.custom.best_for -%}
+                    {%- assign v_img = variant.metafields.custom.variant_illustration | default: variant.image -%}
+                    {%- assign is_selected = false -%}
+                    {%- if variant == p.selected_or_first_available_variant -%}{%- assign is_selected = true -%}{%- endif -%}
+                    <label class="variant{% if is_selected %} active{% endif %}{% unless variant.available %} sold-out{% endunless %}"
+                           data-variant-id="{{ variant.id }}"
+                           data-variant-price="{{ variant.price | money }}">
+                      <input type="radio" name="id" value="{{ variant.id }}" class="variant-input"
+                             {% if is_selected %}checked{% endif %}
+                             {% unless variant.available %}disabled{% endunless %}>
+                      {%- if v_tag != blank -%}<span class="variant-tag">{{ v_tag }}</span>{%- endif -%}
+                      <span class="variant-radio"></span>
+                      <div class="variant-pack">{{ variant.title | upcase }}</div>
+                      {%- if v_img != blank -%}
+                        <div class="variant-illustration">
+                          <img src="{{ v_img | image_url: width: 320 }}" alt="{{ variant.title }}" loading="lazy" width="160" height="120">
+                        </div>
+                      {%- endif -%}
+                      {%- if v_best != blank -%}
+                        <div class="variant-rationale">
+                          <div class="vr-row"><span class="vr-label">BEST FOR</span><span class="vr-text">{{ v_best }}</span></div>
+                        </div>
+                      {%- endif -%}
+                      <div class="variant-price">
+                        <span>{{ variant.price | money }}</span>
+                        {%- if variant.compare_at_price > variant.price -%}
+                          <span class="variant-compare">{{ variant.compare_at_price | money }}</span>
+                        {%- endif -%}
+                      </div>
+                      {%- if variant.compare_at_price > variant.price -%}
+                        <span class="variant-save">You save {{ variant.compare_at_price | minus: variant.price | money }}</span>
+                      {%- endif -%}
+                    </label>
+                  {%- endfor -%}
+                </div>
+              {%- else -%}
+                <input type="hidden" name="id" value="{{ p.selected_or_first_available_variant.id }}">
+              {%- endif -%}
+
+              {%- if size_chart != blank or p.metafields.custom.help_note != blank -%}
+                <div class="variant-help-note">
+                  <span class="vhn-text">{{ p.metafields.custom.help_note | default: 'Choose the pack that fits your household.' }}</span>
+                  {%- if size_chart != blank -%}
+                    <button type="button" class="vhn-link" data-open-size-modal>Jar Size Chart →</button>
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+
+              {%- if companion -%}
+                {%- assign other_capacity = companion.metafields.custom.jar_capacity | default: companion.metafields.custom.capacity | default: 'other size' -%}
+                <a href="{{ companion.url }}" class="companion-link">
+                  Looking for the {{ other_capacity }} version? View {{ companion.title }} →
+                </a>
+              {%- endif -%}
+            </div>
+
+            <button type="submit" name="add" class="atc-btn" data-atc {% unless p.available %}disabled{% endunless %}>
+              {%- if p.available -%}ADD TO CART · <span data-atc-price>{{ p.price | money }}</span>{%- else -%}SOLD OUT{%- endif -%}
+            </button>
+          {%- endform -%}
+
+          <div class="trust-strip">
+            {%- if hero_trust != blank -%}
+              {%- for t in hero_trust -%}
+                <div class="item"><span class="check">✓</span> {{ t }}</div>
+              {%- endfor -%}
+            {%- else -%}
+              <div class="item"><span class="check">✓</span> Secure Payment</div>
+              <div class="item"><span class="check">✓</span> Free Shipping</div>
+              <div class="item"><span class="check">✓</span> FSSAI Licensed</div>
+            {%- endif -%}
+          </div>
+
+          {%- if coupon_text != blank or coupon_code != blank -%}
+            <div class="coupon-bar">
+              <span>{{ coupon_text }}</span>
+              {%- if coupon_code != blank -%}<span class="code">{{ coupon_code }}</span>{%- endif -%}
+            </div>
+          {%- endif -%}
+
+          {%- if p.description != blank or mf_components != blank or component_blocks.size > 0 -%}
+            <div class="hero-accordions">
+              {%- if p.description != blank -%}
+                <div class="hero-acc-item" data-acc>
+                  <div class="hero-acc-q"><span>Description</span><span class="hero-acc-toggle">+</span></div>
+                  <div class="hero-acc-a"><div class="hero-acc-inner">{{ p.description }}</div></div>
+                </div>
+              {%- endif -%}
+              {%- if mf_components != blank or component_blocks.size > 0 -%}
+                <div class="hero-acc-item" data-acc>
+                  <div class="hero-acc-q"><span>What's Inside</span><span class="hero-acc-toggle">+</span></div>
+                  <div class="hero-acc-a">
+                    <div class="hero-acc-inner">
+                      <ul>
+                        {%- if mf_components != blank -%}
+                          {%- for c in mf_components -%}
+                            <li><strong>{{ c.name }}</strong>{% if c.description != blank %} — {{ c.description }}{% endif %}</li>
+                          {%- endfor -%}
+                        {%- else -%}
+                          {%- for block in component_blocks -%}
+                            <li><strong>{{ block.settings.name }}</strong>{% if block.settings.description != blank %} — {{ block.settings.description }}{% endif %}</li>
+                          {%- endfor -%}
+                        {%- endif -%}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {%- comment %} ============== 2. TRUST ROW ============== {% endcomment -%}
+  {%- if mf_trust_cards != blank or trust_blocks.size > 0 -%}
+    <section class="trust-row-section">
+      <div class="container">
+        <div class="trust-row-grid">
+          {%- if mf_trust_cards != blank -%}
+            {%- for tc in mf_trust_cards -%}
+              <div class="tr-card">
+                <div class="tr-icon">
+                  {%- if tc.icon != blank -%}{%- render 'kit_icon', icon: tc.icon, size: 44, alt: '{{ tc.heading | escape }}', extra: 'tr-icon-img' -%}{%- endif -%}
+                </div>
+                <div class="tr-h">{{ tc.heading }}</div>
+                <div class="tr-d">{{ tc.description }}</div>
+              </div>
+            {%- endfor -%}
+          {%- else -%}
+            {%- for block in trust_blocks -%}
+              {%- assign target_idx = forloop.index0 -%}
+                {%- assign mf_icon = nil -%}
+                {%- if mf_trust_icons -%}
+                  {%- for ic in mf_trust_icons -%}
+                    {%- if forloop.index0 == target_idx -%}{%- assign mf_icon = ic -%}{%- endif -%}
+                  {%- endfor -%}
+                {%- endif -%}
+              <div class="tr-card" {{ block.shopify_attributes }}>
+                <div class="tr-icon">
+                  {%- if mf_icon != blank -%}{%- render 'kit_icon', icon: mf_icon, size: 44, alt: '{{ block.settings.heading | escape }}', extra: 'tr-icon-img' -%}
+                  {%- elsif block.settings.icon_image != blank -%}{%- render 'kit_icon', icon: block.settings.icon_image, size: 44, alt: '{{ block.settings.heading | escape }}', extra: 'tr-icon-img' -%}
+                  {%- else -%}{{ block.settings.icon }}{%- endif -%}
+                </div>
+                <div class="tr-h">{{ block.settings.heading }}</div>
+                <div class="tr-d">{{ block.settings.description }}</div>
+              </div>
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment %} ============== 3. HOW TO MAKE ============== {% endcomment -%}
+  {%- if mf_steps != blank or step_blocks.size > 0 -%}
+    <section class="how-make-section section-accent">
+      <div class="container">
+        <div class="section-header centered">
+          <div class="eyebrow">{{ section.settings.how_eyebrow }}</div>
+          <h2>{{ section.settings.how_heading }} <em>{{ section.settings.how_heading_em }}</em></h2>
+        </div>
+        {%- assign how_video = mf_how_video | default: section.settings.how_video -%}
+        <div class="how-make-grid">
+          <div class="hm-video-hero {% if how_video != blank %}hm-video-hero--has-video{% endif %}">
+            {%- if how_video != blank -%}
+              {%- if how_video.sources or how_video.media_type == 'video' -%}
+                {{ how_video | video_tag: image_size: '1100x', controls: false, loop: true, muted: true, autoplay: true, playsinline: true }}
+              {%- else -%}
+                {%- assign video_src = how_video.url | default: how_video.src -%}
+                {%- if video_src != blank -%}
+                  <video src="{{ video_src }}" autoplay loop muted playsinline preload="auto" style="width:100%;height:100%;object-fit:cover;"></video>
+                {%- endif -%}
+              {%- endif -%}
+            {%- elsif section.settings.how_poster != blank -%}
+              <img src="{{ section.settings.how_poster | image_url: width: 1200 }}" alt="How to make" loading="lazy" width="1200" height="1200">
+              {%- if section.settings.how_pill != blank -%}<span class="hm-watch-pill">{{ section.settings.how_pill }}</span>{%- endif -%}
+            {%- else -%}
+              <div class="hm-video-placeholder"><span class="hm-play">▶</span></div>
+              {%- if section.settings.how_pill != blank -%}<span class="hm-watch-pill">{{ section.settings.how_pill }}</span>{%- endif -%}
+            {%- endif -%}
+          </div>
+          <div class="hm-steps">
+            {%- if mf_steps != blank -%}
+              {%- for step in mf_steps -%}
+                <div class="hm-step">
+                  <div class="hm-num">{%- if step.icon != blank -%}{%- render 'kit_icon', icon: step.icon, size: 36, extra: 'hm-num-img' -%}{%- else -%}{{ forloop.index }}{%- endif -%}</div>
+                  <div class="hm-step-body"><div class="hm-title">{{ step.title }}</div><div class="hm-desc">{{ step.description }}</div></div>
+                </div>
+              {%- endfor -%}
+            {%- else -%}
+              {%- for block in step_blocks -%}
+                {%- assign target_idx = forloop.index0 -%}
+                {%- assign mf_icon = nil -%}
+                {%- if mf_step_icons -%}
+                  {%- for ic in mf_step_icons -%}
+                    {%- if forloop.index0 == target_idx -%}{%- assign mf_icon = ic -%}{%- endif -%}
+                  {%- endfor -%}
+                {%- endif -%}
+                <div class="hm-step" {{ block.shopify_attributes }}>
+                  <div class="hm-num">{%- if mf_icon != blank -%}{%- render 'kit_icon', icon: mf_icon, size: 36, extra: 'hm-num-img' -%}{%- else -%}{{ forloop.index }}{%- endif -%}</div>
+                  <div class="hm-step-body"><div class="hm-title">{{ block.settings.title }}</div><div class="hm-desc">{{ block.settings.description }}</div></div>
+                </div>
+              {%- endfor -%}
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment %} ============== 4. COMPARISON / MYTH ============== {% endcomment -%}
+  {%- if mf_compare_rows != blank or compare_blocks.size > 0 -%}
+    <section class="myth-section">
+      <div class="container">
+        <div class="myth-header">
+          <div class="eyebrow">{{ section.settings.compare_eyebrow }}</div>
+          <h2>{{ section.settings.compare_heading }}<br><em>{{ section.settings.compare_heading_em }}</em></h2>
+          {%- assign cintro = mf_compare_intro | default: section.settings.compare_intro -%}
+          {%- if cintro != blank -%}<p style="margin-top:18px;">{{ cintro }}</p>{%- endif -%}
+        </div>
+        {%- assign cmp_left = mf_compare_left | default: section.settings.compare_left_image -%}
+        {%- assign cmp_right = mf_compare_right | default: section.settings.compare_right_image -%}
+        <div class="compare-block">
+          <div class="compare-images">
+            <div class="compare-image">{%- if cmp_left != blank -%}<img src="{{ cmp_left | image_url: width: 800 }}" alt="{{ section.settings.compare_left_label }}" loading="lazy" width="800" height="600">{%- else -%}{{ section.settings.compare_left_emoji }}{%- endif -%}</div>
+            <div class="compare-image">{%- if cmp_right != blank -%}<img src="{{ cmp_right | image_url: width: 800 }}" alt="{{ section.settings.compare_right_label }}" loading="lazy" width="800" height="600">{%- else -%}{{ section.settings.compare_right_emoji }}{%- endif -%}</div>
+          </div>
+          <div class="compare-labels">
+            <span>{{ section.settings.compare_left_label }}</span>
+            <span>{{ section.settings.compare_right_label }}</span>
+          </div>
+          <div class="compare-table">
+            {%- if mf_compare_rows != blank -%}
+              {%- for row in mf_compare_rows -%}
+                <div class="compare-row">
+                  <div class="compare-cell left"><div class="h">{{ row.left_heading }}</div><div class="s">{{ row.left_subtext }}</div></div>
+                  <div class="compare-cell right"><div class="h">{{ row.right_heading }}</div><div class="s">{{ row.right_subtext }}</div></div>
+                </div>
+              {%- endfor -%}
+            {%- else -%}
+              {%- for block in compare_blocks -%}
+                <div class="compare-row" {{ block.shopify_attributes }}>
+                  <div class="compare-cell left"><div class="h">{{ block.settings.left_h }}</div><div class="s">{{ block.settings.left_s }}</div></div>
+                  <div class="compare-cell right"><div class="h">{{ block.settings.right_h }}</div><div class="s">{{ block.settings.right_s }}</div></div>
+                </div>
+              {%- endfor -%}
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment %} ============== 5. QUICK BENEFITS + INDIANS-STRIP ============== {% endcomment -%}
+  {%- if mf_quick_bens != blank or benefit_blocks.size > 0 or mf_outcome_stats != blank -%}
+    <section class="outcomes-section">
+      <div class="container">
+        <div class="section-header centered">
+          <div class="eyebrow">{{ section.settings.benefits_eyebrow }}</div>
+          <h2>{{ section.settings.benefits_heading }}<br><em>{{ section.settings.benefits_heading_em }}</em></h2>
+        </div>
+        {%- if mf_quick_bens != blank or benefit_blocks.size > 0 -%}
+          <div class="qb-grid">
+            {%- if mf_quick_bens != blank -%}
+              {%- for qb in mf_quick_bens -%}
+                <div class="qb-card">
+                  <div class="qb-icon">{%- if qb.icon != blank -%}{%- render 'kit_icon', icon: qb.icon, size: 56, alt: '{{ qb.heading | escape }}', extra: 'qb-icon-img' -%}{%- endif -%}</div>
+                  <div class="qb-h">{{ qb.heading }}</div>
+                  <div class="qb-d">{{ qb.description }}</div>
+                </div>
+              {%- endfor -%}
+            {%- else -%}
+              {%- for block in benefit_blocks -%}
+                {%- assign target_idx = forloop.index0 -%}
+                {%- assign mf_icon = nil -%}
+                {%- if mf_benefit_icons -%}
+                  {%- for ic in mf_benefit_icons -%}
+                    {%- if forloop.index0 == target_idx -%}{%- assign mf_icon = ic -%}{%- endif -%}
+                  {%- endfor -%}
+                {%- endif -%}
+                <div class="qb-card" {{ block.shopify_attributes }}>
+                  <div class="qb-icon">{%- if mf_icon != blank -%}{%- render 'kit_icon', icon: mf_icon, size: 56, extra: 'qb-icon-img' -%}
+                  {%- elsif block.settings.icon_image != blank -%}{%- render 'kit_icon', icon: block.settings.icon_image, size: 56, extra: 'qb-icon-img' -%}
+                  {%- else -%}{{ block.settings.icon }}{%- endif -%}</div>
+                  <div class="qb-h">{{ block.settings.heading }}</div>
+                  <div class="qb-d">{{ block.settings.description }}</div>
+                </div>
+              {%- endfor -%}
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+        {%- if mf_outcome_stats != blank -%}
+          <div class="indians-strip">
+            {%- for s in mf_outcome_stats limit: 2 -%}
+              <div class="indians-cell {% if forloop.first %}left{% else %}right{% endif %}">
+                <div class="indians-stat">{{ s.value }}</div>
+                <div class="indians-cap">{{ s.caption }}</div>
+              </div>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment %} ============== 6. UGC REELS ============== {% endcomment -%}
+  {%- if mf_reels != blank or section.settings.quinn_embed != blank or reel_blocks.size > 0 -%}
+    <section class="reels-section">
+      <div class="container">
+        <div class="reels-header">
+          <h2>{{ section.settings.reels_heading | default: 'Real People, Real Ferments,' }}<br><em>{{ section.settings.reels_heading_em | default: 'Real Magic' }}</em></h2>
+        </div>
+        {%- if mf_reels != blank -%}
+          <div class="reels-grid">
+            {%- for r in mf_reels -%}
+              <div class="reel-tile">
+                {%- if r.video != blank -%}
+                  {%- if r.video.sources or r.video.media_type == 'video' -%}
+                    {{ r.video | video_tag: image_size: '600x', controls: false, loop: true, muted: true, autoplay: true }}
+                  {%- else -%}
+                    {%- assign reel_src = r.video.url | default: r.video.src -%}
+                    {%- if reel_src != blank -%}<video src="{{ reel_src }}" autoplay loop muted playsinline preload="metadata" style="width:100%;height:100%;object-fit:cover;"></video>{%- endif -%}
+                  {%- endif -%}
+                {%- elsif r.poster != blank -%}<img src="{{ r.poster | image_url: width: 600 }}" alt="{{ r.caption | escape }}" loading="lazy" width="600" height="1067">
+                {%- endif -%}
+                {%- if r.author_handle != blank -%}<span class="reels-handle">{{ r.author_handle }}</span>{%- endif -%}
+                {%- if r.caption != blank -%}<span class="reels-cap">{{ r.caption }}</span>{%- endif -%}
+              </div>
+            {%- endfor -%}
+          </div>
+        {%- elsif section.settings.quinn_embed != blank -%}
+          <div class="reels-quinn">{{ section.settings.quinn_embed }}</div>
+        {%- else -%}
+          <div class="reels-grid">
+            {%- for block in reel_blocks -%}
+              <div class="reel-tile" {{ block.shopify_attributes }}>
+                {%- if block.settings.video != blank -%}{{ block.settings.video | video_tag: image_size: '600x', controls: false, loop: true, muted: true, autoplay: true }}
+                {%- elsif block.settings.poster != blank -%}<img src="{{ block.settings.poster | image_url: width: 600 }}" alt="{{ block.settings.caption | escape }}" loading="lazy" width="600" height="1067">
+                {%- endif -%}
+              </div>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment %} ============== 7. WHAT'S IN THE BOX ============== {% endcomment -%}
+  {%- if mf_components != blank or component_blocks.size > 0 -%}
+    <section class="box-section">
+      <div class="container">
+        <div class="section-header">
+          <div class="eyebrow">{{ section.settings.box_eyebrow }}</div>
+          <h2>{{ section.settings.box_heading }}<br><em>{{ section.settings.box_heading_em }}</em></h2>
+        </div>
+        {%- assign box_img = mf_box_image | default: section.settings.box_image -%}
+        {%- assign bnote = mf_box_note | default: section.settings.box_note -%}
+        <div class="box-grid">
+          <div class="box-image">{%- if box_img != blank -%}<img src="{{ box_img | image_url: width: 1200 }}" alt="What is in the box" loading="lazy" width="1200" height="750">{%- else -%}🫙{%- endif -%}</div>
+          <div>
+            <div class="box-pills">
+              {%- if mf_components != blank -%}
+                {%- for c in mf_components -%}
+                  <div class="box-pill"><span class="bp-icon">{%- if c.icon != blank -%}{%- render 'kit_icon', icon: c.icon, size: 28, extra: 'bp-icon-img' -%}{%- else -%}{{ forloop.index }}{%- endif -%}</span><span class="bp-name">{{ c.name }}</span><span class="bp-sub">{{ c.description }}</span></div>
+                {%- endfor -%}
+              {%- else -%}
+                {%- for block in component_blocks -%}
+                  <div class="box-pill" {{ block.shopify_attributes }}><span class="bp-icon">{%- if block.settings.icon_image != blank -%}{%- render 'kit_icon', icon: block.settings.icon_image, size: 28, extra: 'bp-icon-img' -%}{%- else -%}{{ forloop.index }}{%- endif -%}</span><span class="bp-name">{{ block.settings.name }}</span><span class="bp-sub">{{ block.settings.description }}</span></div>
+                {%- endfor -%}
+              {%- endif -%}
+            </div>
+            {%- if bnote != blank -%}<p class="box-note">{{ bnote }}</p>{%- endif -%}
+          </div>
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment %} ============== 8. SCIENCE / AIRLOCK SPOTLIGHT ============== {% endcomment -%}
+  {%- if mf_science_cards != blank or science_card_blocks.size > 0 -%}
+    <section class="science-section airlock-spotlight-section">
+      <div class="container">
+        <div class="section-header">
+          <div class="eyebrow">{{ section.settings.science_eyebrow }}</div>
+          <h2>{{ section.settings.science_heading }}<br><em>{{ section.settings.science_heading_em }}</em>{{ section.settings.science_heading_tail }}</h2>
+        </div>
+        <div class="ag-grid">
+          {%- if mf_science_cards != blank -%}
+            {%- for s in mf_science_cards -%}
+              <div class="ag-card">
+                <div class="ag-image">{%- if s.image != blank -%}<img src="{{ s.image | image_url: width: 800 }}" alt="{{ s.name | escape }}" loading="lazy" width="800" height="500">{%- endif -%}</div>
+                <div class="ag-body">
+                  <div class="ag-name">{{ s.name }}</div>
+                  <div class="ag-label">WHAT IT DOES</div>
+                  <div class="ag-text">{{ s.what_it_does }}</div>
+                  <div class="ag-label">WHY IT MATTERS</div>
+                  <div class="ag-text">{{ s.why_it_matters }}</div>
+                  {%- if s.chip != blank -%}<div class="ag-chip">{{ s.chip }}</div>{%- endif -%}
+                </div>
+              </div>
+            {%- endfor -%}
+          {%- else -%}
+            {%- for block in science_card_blocks -%}
+              <div class="ag-card" {{ block.shopify_attributes }}>
+                <div class="ag-image">{%- if block.settings.image != blank -%}<img src="{{ block.settings.image | image_url: width: 800 }}" alt="{{ block.settings.name | escape }}" loading="lazy" width="800" height="500">{%- endif -%}</div>
+                <div class="ag-body">
+                  <div class="ag-name">{{ block.settings.name }}</div>
+                  <div class="ag-label">WHAT IT DOES</div>
+                  <div class="ag-text">{{ block.settings.what_it_does }}</div>
+                  <div class="ag-label">WHY IT MATTERS</div>
+                  <div class="ag-text">{{ block.settings.why_it_matters }}</div>
+                  {%- if block.settings.chip != blank -%}<div class="ag-chip">{{ block.settings.chip }}</div>{%- endif -%}
+                </div>
+              </div>
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment %} ============== 9. UGC REVIEWS ============== {% endcomment -%}
+  {%- if mf_reviews != blank or review_blocks.size > 0 -%}
+    <section class="reviews-section">
+      <div class="container">
+        <div class="section-header">
+          <div class="eyebrow">{{ section.settings.reviews_eyebrow }}</div>
+          <h2>{{ section.settings.reviews_heading }} <em>{{ section.settings.reviews_heading_em }}</em></h2>
+        </div>
+        <div class="reviews-grid">
+          {%- if mf_reviews != blank -%}
+            {%- for r in mf_reviews -%}
+              <div class="review-card">
+                <div class="rev-content"><h3 class="rev-title">"{{ r.quote }}"</h3><div class="rev-foot"><div class="rev-stars">★★★★★</div><div class="rev-name">{{ r.name }}</div><div class="rev-meta">{{ r.meta }}</div></div></div>
+                <div class="rev-photo">{%- if r.photo != blank -%}<img src="{{ r.photo | image_url: width: 800 }}" alt="{{ r.name | escape }}" loading="lazy" width="800" height="800">{%- else -%}<span class="photo-placeholder">📷</span>{%- endif -%}</div>
+              </div>
+            {%- endfor -%}
+          {%- else -%}
+            {%- for block in review_blocks -%}
+              <div class="review-card" {{ block.shopify_attributes }}>
+                <div class="rev-content"><h3 class="rev-title">"{{ block.settings.quote }}"</h3><div class="rev-foot"><div class="rev-stars">★★★★★</div><div class="rev-name">{{ block.settings.name }}</div><div class="rev-meta">{{ block.settings.meta }}</div></div></div>
+                <div class="rev-photo">{%- if block.settings.photo != blank -%}<img src="{{ block.settings.photo | image_url: width: 800 }}" alt="{{ block.settings.name | escape }}" loading="lazy" width="800" height="800">{%- else -%}<span class="photo-placeholder">📷</span>{%- endif -%}</div>
+              </div>
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment %} ============== 10. HEALTH TIMELINE ============== {% endcomment -%}
+  {%- if mf_timeline != blank or timeline_blocks.size > 0 -%}
+    <section class="health-timeline-section">
+      <div class="container">
+        <div class="section-header">
+          <div class="eyebrow">{{ section.settings.timeline_eyebrow }}</div>
+          <h2>{{ section.settings.timeline_heading }}<br><em>{{ section.settings.timeline_heading_em }}</em></h2>
+          {%- if timeline_subtitle != blank -%}<p class="ht-sub">{{ timeline_subtitle }}</p>
+          {%- elsif section.settings.timeline_subtitle != blank -%}<p class="ht-sub">{{ section.settings.timeline_subtitle }}</p>{%- endif -%}
+        </div>
+        <div class="ht-timeline">
+          {%- if mf_timeline != blank -%}
+            {%- for t in mf_timeline -%}
+              <div class="ht-card"><span class="ht-day">{{ t.period_label }}</span><div class="ht-h">{{ t.heading }}</div><div class="ht-d">{{ t.description }}</div></div>
+            {%- endfor -%}
+          {%- else -%}
+            {%- for block in timeline_blocks -%}
+              <div class="ht-card" {{ block.shopify_attributes }}><span class="ht-day">{{ block.settings.period_label }}</span><div class="ht-h">{{ block.settings.heading }}</div><div class="ht-d">{{ block.settings.description }}</div></div>
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment %} ============== 11. INSIDE THE KIT (consumables) ============== {% endcomment -%}
+  {%- if mf_consumables != blank or consumable_blocks.size > 0 -%}
+    <section class="itk-section">
+      <div class="container">
+        <div class="section-header centered">
+          <div class="eyebrow">{{ section.settings.itk_eyebrow }}</div>
+          <h2>{{ section.settings.itk_heading }}<br><em>{{ section.settings.itk_heading_em }}</em></h2>
+          {%- if itk_intro != blank -%}<p>{{ itk_intro }}</p>{%- elsif section.settings.itk_intro != blank -%}<p>{{ section.settings.itk_intro }}</p>{%- endif -%}
+        </div>
+        <div class="itk-grid">
+          {%- if mf_consumables != blank -%}
+            {%- for c in mf_consumables -%}
+              <div class="itk-card">
+                <div class="itk-img">{%- if c.image != blank -%}<img src="{{ c.image | image_url: width: 800 }}" alt="{{ c.heading | escape }}" loading="lazy" width="800" height="600">{%- endif -%}</div>
+                <div class="itk-body">
+                  <div class="itk-h">{{ c.heading }}</div>
+                  <div class="itk-sub">{{ c.sub }}</div>
+                  {%- if c.ingredients.size > 0 -%}
+                    <ul class="itk-list itk-list-{{ c.category | default: 'spice' }}">
+                      {%- for ing in c.ingredients -%}<li>{{ ing }}</li>{%- endfor -%}
+                    </ul>
+                  {%- endif -%}
+                </div>
+              </div>
+            {%- endfor -%}
+          {%- else -%}
+            {%- for block in consumable_blocks -%}
+              <div class="itk-card" {{ block.shopify_attributes }}>
+                <div class="itk-img">{%- if block.settings.image != blank -%}<img src="{{ block.settings.image | image_url: width: 800 }}" alt="{{ block.settings.heading | escape }}" loading="lazy" width="800" height="600">{%- endif -%}</div>
+                <div class="itk-body">
+                  <div class="itk-h">{{ block.settings.heading }}</div>
+                  <div class="itk-sub">{{ block.settings.sub }}</div>
+                  {%- assign ingredients = block.settings.ingredients | newline_to_br | split: '<br />' -%}
+                  {%- if block.settings.ingredients != blank -%}
+                    <ul class="itk-list itk-list-{{ block.settings.category | default: 'spice' }}">
+                      {%- for ing in ingredients -%}{%- if ing != blank -%}<li>{{ ing | strip }}</li>{%- endif -%}{%- endfor -%}
+                    </ul>
+                  {%- endif -%}
+                </div>
+              </div>
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+        {%- if refill_h != blank or refill_d != blank -%}
+          <div class="itk-refill-note">
+            <div class="irn-icon">♻️</div>
+            <div class="irn-body">
+              {%- if refill_h != blank -%}<div class="irn-h">{{ refill_h }}</div>{%- endif -%}
+              {%- if refill_d != blank -%}<div class="irn-d">{{ refill_d }}</div>{%- endif -%}
+            </div>
+            {%- if refill_label != blank and refill_url != blank -%}<a class="irn-cta" href="{{ refill_url }}">{{ refill_label }} →</a>{%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment %} ============== 12. ZOE / SCIENCE STATS ============== {% endcomment -%}
+  {%- if mf_science_stats != blank or science_stat_blocks.size > 0 -%}
+    <section class="zoe-section">
+      <div class="container">
+        <div class="section-header centered">
+          <div class="eyebrow">{{ section.settings.zoe_eyebrow }}</div>
+          <h2>{{ section.settings.zoe_heading }}<br><em>{{ section.settings.zoe_heading_em }}</em></h2>
+        </div>
+        <div class="zoe-grid">
+          {%- if mf_science_stats != blank -%}
+            {%- for s in mf_science_stats -%}
+              <div class="zoe-card">
+                <div class="zoe-icon">{%- if s.icon != blank -%}{{ s.icon }}{%- endif -%}</div>
+                <div><div class="zoe-stat">{{ s.stat }}</div><div class="zoe-h">{{ s.heading }}</div><div class="zoe-d">{{ s.description }}</div></div>
+              </div>
+            {%- endfor -%}
+          {%- else -%}
+            {%- for block in science_stat_blocks -%}
+              <div class="zoe-card" {{ block.shopify_attributes }}>
+                <div class="zoe-icon">{{ block.settings.icon }}</div>
+                <div><div class="zoe-stat">{{ block.settings.stat }}</div><div class="zoe-h">{{ block.settings.heading }}</div><div class="zoe-d">{{ block.settings.description }}</div></div>
+              </div>
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+        {%- if science_caption != blank -%}<div class="zoe-caption">{{ science_caption }}</div>{%- endif -%}
+        {%- if science_disclaimer != blank -%}<div class="zoe-disclaimer">{{ science_disclaimer }}</div>{%- endif -%}
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment %} ============== 13. EAT / CONSUMPTION ============== {% endcomment -%}
+  {%- if mf_consumption != blank or consumption_blocks.size > 0 -%}
+    <section class="eat-section">
+      <div class="container">
+        <div class="section-header">
+          <div class="eyebrow">{{ section.settings.eat_eyebrow }}</div>
+          <h2>{{ section.settings.eat_heading }} <em>{{ section.settings.eat_heading_em }}</em>{{ section.settings.eat_heading_tail }}</h2>
+        </div>
+        <div class="eat-grid">
+          {%- if mf_consumption != blank -%}
+            {%- for c in mf_consumption -%}
+              <div class="eat-card"><div class="eat-img">{%- if c.image != blank -%}<img src="{{ c.image | image_url: width: 480 }}" alt="{{ c.heading | escape }}" loading="lazy" width="480" height="300">{%- endif -%}</div><div class="eat-body"><div class="eat-h">{{ c.heading }}</div><div class="eat-d">{{ c.description }}</div></div></div>
+            {%- endfor -%}
+          {%- else -%}
+            {%- for block in consumption_blocks -%}
+              <div class="eat-card" {{ block.shopify_attributes }}><div class="eat-img">{%- if block.settings.image != blank -%}<img src="{{ block.settings.image | image_url: width: 480 }}" alt="{{ block.settings.heading | escape }}" loading="lazy" width="480" height="300">{%- endif -%}</div><div class="eat-body"><div class="eat-h">{{ block.settings.heading }}</div><div class="eat-d">{{ block.settings.description }}</div></div></div>
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+        {%- if dosage_amount != blank -%}
+          <div class="spoons-strip">
+            <div class="spoons-num">{{ dosage_amount }}</div>
+            {%- if dosage_label != blank -%}<div class="spoons-label">{{ dosage_label }}</div>{%- endif -%}
+            {%- if dosage_caption != blank -%}<div class="spoons-cap">{{ dosage_caption }}</div>{%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment %} ============== 14. RECIPES ============== {% endcomment -%}
+  {%- if mf_recipe_tags != blank or recipe_tag_blocks.size > 0 or recipe_count != blank -%}
+    <section class="recipes-section">
+      <div class="container">
+        <div class="section-header">
+          <div class="eyebrow">{{ section.settings.recipes_eyebrow }}</div>
+          <div class="recipes-h-row">
+            {%- if recipe_count != blank -%}<div class="recipes-num">{{ recipe_count }}</div>{%- endif -%}
+            <div class="recipes-h-text"><em>{{ recipe_h_label }}</em> <span>{{ recipe_h_text }}</span></div>
+          </div>
+        </div>
+        {%- if recipe_banner != blank -%}
+          <div class="recipes-banner"><img src="{{ recipe_banner | image_url: width: 1600 }}" alt="Recipes" loading="lazy" width="1600" height="700"></div>
+        {%- endif -%}
+        <div class="recipe-tags">
+          {%- if mf_recipe_tags != blank -%}
+            {%- for t in mf_recipe_tags -%}
+              <span class="recipe-tag"><span class="dot"></span>{{ t.emoji }} {{ t.name }}</span>
+            {%- endfor -%}
+          {%- else -%}
+            {%- for block in recipe_tag_blocks -%}
+              <span class="recipe-tag" {{ block.shopify_attributes }}><span class="dot"></span>{{ block.settings.emoji }} {{ block.settings.name }}</span>
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment %} ============== 15. FAQ ============== {% endcomment -%}
+  {%- if mf_faqs != blank or faq_blocks.size > 0 -%}
+    <section class="faq-section">
+      <div class="container">
+        <div class="section-header centered">
+          <div class="eyebrow">{{ section.settings.faq_eyebrow }}</div>
+          <h2>{{ section.settings.faq_heading }} <em>{{ section.settings.faq_heading_em }}</em></h2>
+        </div>
+        <div class="faq-list">
+          {%- if mf_faqs != blank -%}
+            {%- for f in mf_faqs -%}
+              <div class="faq-item {% if forloop.first %}open{% endif %}" data-faq>
+                <div class="faq-q"><span>{{ f.question }}</span><span class="faq-toggle">+</span></div>
+                <div class="faq-a">{{ f.answer | newline_to_br }}</div>
+              </div>
+            {%- endfor -%}
+          {%- else -%}
+            {%- for block in faq_blocks -%}
+              <div class="faq-item {% if forloop.first %}open{% endif %}" data-faq {{ block.shopify_attributes }}>
+                <div class="faq-q"><span>{{ block.settings.question }}</span><span class="faq-toggle">+</span></div>
+                <div class="faq-a">{{ block.settings.answer }}</div>
+              </div>
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment %} ============== 16. CROSS-SELL ============== {% endcomment -%}
+  {%- assign show_cross = false -%}
+  {%- if cross_sell != blank or cross_blocks.size > 0 or section.settings.cross_collection != blank -%}{%- assign show_cross = true -%}{%- endif -%}
+  {%- if show_cross -%}
+    <section class="cross-section">
+      <div class="container">
+        <div class="section-header centered">
+          <div class="eyebrow">{{ section.settings.cross_eyebrow }}</div>
+          <h2>{{ section.settings.cross_heading }}</h2>
+        </div>
+        <div class="cross-grid">
+          {%- if cross_sell != blank -%}
+            {%- for cp in cross_sell limit: 3 -%}
+              {%- render 'ferment_cross_card', p: cp -%}
+            {%- endfor -%}
+          {%- elsif cross_blocks.size > 0 -%}
+            {%- for block in cross_blocks -%}{%- if block.settings.product != blank -%}{%- render 'ferment_cross_card', p: block.settings.product, attrs: block.shopify_attributes -%}{%- endif -%}{%- endfor -%}
+          {%- elsif section.settings.cross_collection.products.size > 0 -%}
+            {%- for cp in section.settings.cross_collection.products limit: 3 -%}{%- render 'ferment_cross_card', p: cp -%}{%- endfor -%}
+          {%- endif -%}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment %} ============== 17. JUDGE.ME ============== {% endcomment -%}
+  {%- if section.settings.show_judgeme -%}
+    <section class="judgeme-section" id="judgeme-reviews">
+      <div class="container">
+        <div class="section-header centered">
+          <div class="eyebrow">{{ section.settings.judgeme_eyebrow }}</div>
+          <h2>{% if review_count > 0 %}{{ review_count }} {% endif %}{{ section.settings.judgeme_heading }} <em>{{ section.settings.judgeme_heading_em }}</em></h2>
+        </div>
+        {%- if section.settings.judgeme_embed != blank -%}{{ section.settings.judgeme_embed }}
+        {%- else -%}<div class="jdgm-widget jdgm-review-widget" data-id="{{ p.id }}"></div>{%- endif -%}
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment %} JAR SIZE MODAL {% endcomment -%}
+  {%- if size_chart != blank -%}
+    <div class="size-modal" id="jar-size-modal" data-size-modal>
+      <div class="size-modal-card">
+        <button type="button" class="size-modal-close" data-close-size-modal aria-label="Close">×</button>
+        <div class="size-modal-eyebrow">JAR SIZE COMPARISON</div>
+        <h3 class="size-modal-title">{{ capacity_label | default: p.title }}</h3>
+        <div class="size-modal-image"><img src="{{ size_chart | image_url: width: 1200 }}" alt="Size chart" loading="lazy" width="1200" height="900"></div>
+      </div>
+    </div>
+  {%- endif -%}
+
+</div>
+
+<script>
+  (function () {
+    function init(scope) {
+      var root = scope || document;
+      var pdp = root.querySelector ? (root.matches && root.matches('.ferment-pdp') ? root : root.querySelector('.ferment-pdp')) : null;
+      if (!pdp) return;
+      pdp.querySelectorAll('[data-faq]').forEach(function (i) { if (!i.dataset.bound) { i.dataset.bound = '1'; i.addEventListener('click', function () { i.classList.toggle('open'); }); } });
+      pdp.querySelectorAll('[data-acc]').forEach(function (i) { if (!i.dataset.bound) { i.dataset.bound = '1'; i.addEventListener('click', function () { i.classList.toggle('open'); }); } });
+      var modal = pdp.querySelector('[data-size-modal]');
+      if (modal && !modal.dataset.bound) {
+        modal.dataset.bound = '1';
+        pdp.querySelectorAll('[data-open-size-modal]').forEach(function (b) { b.addEventListener('click', function () { modal.classList.add('open'); }); });
+        modal.addEventListener('click', function (e) { if (e.target === modal || (e.target.closest && e.target.closest('[data-close-size-modal]'))) modal.classList.remove('open'); });
+      }
+      var grid = pdp.querySelector('.variant-grid');
+      var atcPrice = pdp.querySelector('[data-atc-price]');
+      if (grid && !grid.dataset.bound) {
+        grid.dataset.bound = '1';
+        grid.addEventListener('change', function (e) {
+          if (!e.target.classList.contains('variant-input')) return;
+          grid.querySelectorAll('.variant').forEach(function (v) { v.classList.remove('active'); });
+          var card = e.target.closest('.variant');
+          if (card) { card.classList.add('active'); if (atcPrice && card.dataset.variantPrice) atcPrice.textContent = card.dataset.variantPrice; }
+          try { var u = new URL(window.location.href); u.searchParams.set('variant', e.target.value); history.replaceState({}, '', u); } catch (err) {}
+        });
+      }
+      // ---------- Inline SVG icons so CSS can recolor stroke + fill ----------
+      // Cached + de-duped to avoid refetching the same icon multiple times.
+      window.__gbSvgCache = window.__gbSvgCache || {};
+      function recolorSvg(svgRoot) {
+        if (!svgRoot) return;
+        var rgb = function (s) { var m = String(s).match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/); return m ? [+m[1], +m[2], +m[3]] : null; };
+        var lightnessOf = function (c) { return (Math.max(c[0], c[1], c[2]) + Math.min(c[0], c[1], c[2])) / 2 / 255; };
+        var transparentBlack = function (c) { return c[0] === 0 && c[1] === 0 && c[2] === 0; }; // SVG default — treat as no fill
+        // Force the browser to compute styles from any inline <style> or attributes
+        svgRoot.querySelectorAll('*').forEach(function (el) {
+          var cs = getComputedStyle(el);
+          var fillC = rgb(cs.fill);
+          var strokeC = rgb(cs.stroke);
+          if (cs.fill && cs.fill !== 'none' && fillC && !(transparentBlack(fillC) && cs.fillOpacity === '1' && el.tagName === 'svg')) {
+            // Only mark when fill is a real, non-default color
+            if (cs.fill !== 'rgba(0, 0, 0, 0)') {
+              el.setAttribute('data-fill-tone', lightnessOf(fillC) > 0.7 ? 'light' : 'dark');
+            }
+          }
+          if (cs.stroke && cs.stroke !== 'none' && strokeC && cs.stroke !== 'rgba(0, 0, 0, 0)') {
+            el.setAttribute('data-has-stroke', '1');
+          }
+        });
+      }
+      pdp.querySelectorAll('.kit-icon-svg[data-svg-src]').forEach(function (el) {
+        var src = el.getAttribute('data-svg-src');
+        if (!src) return;
+        var setMarkup = function (txt) {
+          var clean = String(txt).replace(/<\?xml[^?]*\?>\s*/, '').replace(/<!DOCTYPE[^>]*>\s*/i, '');
+          el.innerHTML = clean;
+          el.removeAttribute('data-svg-src');
+          // Wait one frame so getComputedStyle sees the new <style> block
+          requestAnimationFrame(function () { recolorSvg(el.querySelector('svg')); });
+        };
+        var cached = window.__gbSvgCache[src];
+        if (typeof cached === 'string') { setMarkup(cached); return; }
+        if (cached && cached.then) { cached.then(setMarkup); return; }
+        var p = fetch(src).then(function (r) { return r.text(); }).then(function (txt) { window.__gbSvgCache[src] = txt; return txt; });
+        window.__gbSvgCache[src] = p;
+        p.then(setMarkup).catch(function () { /* silently leave the placeholder empty */ });
+      });
+
+      var mainImg = pdp.querySelector('.gallery-main-img');
+      var thumbs = pdp.querySelectorAll('.gallery-thumb');
+      function activateThumb(t) {
+        var s = t.getAttribute('data-full-src');
+        var a = t.getAttribute('data-full-alt');
+        if (!s || !mainImg) return;
+        mainImg.removeAttribute('srcset'); mainImg.removeAttribute('sizes');
+        mainImg.setAttribute('src', s); if (a) mainImg.setAttribute('alt', a);
+        thumbs.forEach(function (x) { x.classList.remove('active'); });
+        t.classList.add('active');
+        try { t.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' }); } catch (_) {}
+      }
+      function step(delta) {
+        if (!thumbs.length) return;
+        var current = 0;
+        thumbs.forEach(function (x, i) { if (x.classList.contains('active')) current = i; });
+        var next = (current + delta + thumbs.length) % thumbs.length;
+        activateThumb(thumbs[next]);
+      }
+      if (mainImg && thumbs.length) {
+        thumbs.forEach(function (t) {
+          if (t.dataset.bound) return;
+          t.dataset.bound = '1';
+          t.addEventListener('click', function (e) { e.preventDefault(); activateThumb(t); });
+        });
+        var prevBtn = pdp.querySelector('[data-gallery-prev]');
+        var nextBtn = pdp.querySelector('[data-gallery-next]');
+        if (prevBtn && !prevBtn.dataset.bound) { prevBtn.dataset.bound = '1'; prevBtn.addEventListener('click', function (e) { e.preventDefault(); step(-1); }); }
+        if (nextBtn && !nextBtn.dataset.bound) { nextBtn.dataset.bound = '1'; nextBtn.addEventListener('click', function (e) { e.preventDefault(); step(1); }); }
+        // Keyboard arrows when the gallery main image is focused / visible
+        var galleryMain = pdp.querySelector('.gallery-main');
+        if (galleryMain && !galleryMain.dataset.bound) {
+          galleryMain.dataset.bound = '1';
+          galleryMain.setAttribute('tabindex', '0');
+          galleryMain.addEventListener('keydown', function (e) {
+            if (e.key === 'ArrowLeft')  { e.preventDefault(); step(-1); }
+            if (e.key === 'ArrowRight') { e.preventDefault(); step(1); }
+          });
+        }
+        // Touch swipe on the main image
+        if (galleryMain) {
+          var touchStartX = null;
+          galleryMain.addEventListener('touchstart', function (e) { touchStartX = e.touches[0].clientX; }, { passive: true });
+          galleryMain.addEventListener('touchend', function (e) {
+            if (touchStartX === null) return;
+            var dx = e.changedTouches[0].clientX - touchStartX;
+            if (Math.abs(dx) > 40) step(dx < 0 ? 1 : -1);
+            touchStartX = null;
+          }, { passive: true });
+        }
+      }
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function () { init(); }); else init();
+    document.addEventListener('shopify:section:load', function (e) { init(e.target); });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Fermentation Kit — PDP",
+  "tag": "section",
+  "class": "section--ferment-pdp",
+  "max_blocks": 50,
+  "settings": [
+    { "type": "header", "content": "Hero" },
+    { "type": "checkbox", "id": "show_breadcrumb", "label": "Show breadcrumb", "default": true },
+
+    { "type": "header", "content": "How to Make" },
+    { "type": "text", "id": "how_eyebrow", "label": "Eyebrow", "default": "HOW TO MAKE" },
+    { "type": "text", "id": "how_heading", "label": "Heading", "default": "4 STEPS." },
+    { "type": "text", "id": "how_heading_em", "label": "Heading (highlighted)", "default": "FRESH FERMENT." },
+    { "type": "video", "id": "how_video", "label": "Demo video" },
+    { "type": "image_picker", "id": "how_poster", "label": "Poster image (fallback)" },
+    { "type": "text", "id": "how_pill", "label": "Pill text", "default": "▶ WATCH · 60 SEC" },
+
+    { "type": "header", "content": "Comparison" },
+    { "type": "text", "id": "compare_eyebrow", "label": "Eyebrow", "default": "TRADITIONAL VS AIRLOCK" },
+    { "type": "text", "id": "compare_heading", "label": "Heading", "default": "CLOTH METHOD" },
+    { "type": "text", "id": "compare_heading_em", "label": "Heading (highlighted)", "default": "VS AIRLOCK." },
+    { "type": "textarea", "id": "compare_intro", "label": "Intro paragraph" },
+    { "type": "image_picker", "id": "compare_left_image", "label": "Left image" },
+    { "type": "image_picker", "id": "compare_right_image", "label": "Right image" },
+    { "type": "text", "id": "compare_left_emoji", "label": "Left emoji fallback", "default": "🧺" },
+    { "type": "text", "id": "compare_right_emoji", "label": "Right emoji fallback", "default": "🫙" },
+    { "type": "text", "id": "compare_left_label", "label": "Left column label", "default": "TRADITIONAL METHOD" },
+    { "type": "text", "id": "compare_right_label", "label": "Right column label", "default": "GUTBASKET KIT" },
+
+    { "type": "header", "content": "Quick Benefits" },
+    { "type": "text", "id": "benefits_eyebrow", "label": "Eyebrow", "default": "QUICK BENEFITS" },
+    { "type": "text", "id": "benefits_heading", "label": "Heading", "default": "WHY DAILY FERMENTS" },
+    { "type": "text", "id": "benefits_heading_em", "label": "Heading (highlighted)", "default": "CHANGE YOUR GUT." },
+
+    { "type": "header", "content": "Reels (Quinn UGC)" },
+    { "type": "text", "id": "reels_heading", "label": "Heading", "default": "Real People, Real Ferments," },
+    { "type": "text", "id": "reels_heading_em", "label": "Heading (highlighted)", "default": "Real Magic" },
+    { "type": "html", "id": "quinn_embed", "label": "Quinn embed code" },
+
+    { "type": "header", "content": "What's in the Box" },
+    { "type": "text", "id": "box_eyebrow", "label": "Eyebrow", "default": "WHAT'S IN THE BOX" },
+    { "type": "text", "id": "box_heading", "label": "Heading", "default": "EVERYTHING YOU NEED" },
+    { "type": "text", "id": "box_heading_em", "label": "Heading (highlighted)", "default": "TO FERMENT." },
+    { "type": "image_picker", "id": "box_image", "label": "Box / kit image" },
+    { "type": "textarea", "id": "box_note", "label": "Note" },
+
+    { "type": "header", "content": "Science / Airlock Spotlight" },
+    { "type": "text", "id": "science_eyebrow", "label": "Eyebrow", "default": "SCIENCE-BACKED DESIGN" },
+    { "type": "text", "id": "science_heading", "label": "Heading", "default": "BUILT FOR" },
+    { "type": "text", "id": "science_heading_em", "label": "Heading (highlighted)", "default": "PERFECT" },
+    { "type": "text", "id": "science_heading_tail", "label": "Heading (tail)", "default": " FERMENTS." },
+
+    { "type": "header", "content": "UGC Reviews" },
+    { "type": "text", "id": "reviews_eyebrow", "label": "Eyebrow", "default": "REAL RESULTS" },
+    { "type": "text", "id": "reviews_heading", "label": "Heading", "default": "WHAT OUR" },
+    { "type": "text", "id": "reviews_heading_em", "label": "Heading (highlighted)", "default": "CUSTOMERS SAY" },
+
+    { "type": "header", "content": "Health Timeline" },
+    { "type": "text", "id": "timeline_eyebrow", "label": "Eyebrow", "default": "WHAT TO EXPECT" },
+    { "type": "text", "id": "timeline_heading", "label": "Heading", "default": "YOUR GUT'S" },
+    { "type": "text", "id": "timeline_heading_em", "label": "Heading (highlighted)", "default": "FIRST 30 DAYS." },
+    { "type": "textarea", "id": "timeline_subtitle", "label": "Subtitle" },
+
+    { "type": "header", "content": "Inside the Kit (consumables)" },
+    { "type": "text", "id": "itk_eyebrow", "label": "Eyebrow", "default": "INSIDE THE KIT" },
+    { "type": "text", "id": "itk_heading", "label": "Heading", "default": "SPICE MIX +" },
+    { "type": "text", "id": "itk_heading_em", "label": "Heading (highlighted)", "default": "FERMENT BOOST." },
+    { "type": "textarea", "id": "itk_intro", "label": "Intro paragraph" },
+
+    { "type": "header", "content": "Zoe / Science Stats" },
+    { "type": "text", "id": "zoe_eyebrow", "label": "Eyebrow", "default": "THE SCIENCE" },
+    { "type": "text", "id": "zoe_heading", "label": "Heading", "default": "WHAT FERMENTED FOODS DO" },
+    { "type": "text", "id": "zoe_heading_em", "label": "Heading (highlighted)", "default": "FOR YOU" },
+
+    { "type": "header", "content": "How to Eat / Drink" },
+    { "type": "text", "id": "eat_eyebrow", "label": "Eyebrow", "default": "HOW TO" },
+    { "type": "text", "id": "eat_heading", "label": "Heading", "default": "HOW TO" },
+    { "type": "text", "id": "eat_heading_em", "label": "Heading (highlighted)", "default": "ENJOY IT" },
+    { "type": "text", "id": "eat_heading_tail", "label": "Heading (tail)", "default": " DAILY" },
+
+    { "type": "header", "content": "Recipes" },
+    { "type": "text", "id": "recipes_eyebrow", "label": "Eyebrow", "default": "ONE KIT. ENDLESS VARIETY." },
+
+    { "type": "header", "content": "FAQ" },
+    { "type": "text", "id": "faq_eyebrow", "label": "Eyebrow", "default": "QUESTIONS?" },
+    { "type": "text", "id": "faq_heading", "label": "Heading", "default": "COMMON" },
+    { "type": "text", "id": "faq_heading_em", "label": "Heading (highlighted)", "default": "QUESTIONS" },
+
+    { "type": "header", "content": "Cross-sell" },
+    { "type": "text", "id": "cross_eyebrow", "label": "Eyebrow", "default": "PAIR IT WITH" },
+    { "type": "text", "id": "cross_heading", "label": "Heading", "default": "CUSTOMERS ALSO BOUGHT" },
+    { "type": "collection", "id": "cross_collection", "label": "Fallback collection", "info": "Used if cross_sell_products is blank and no Cross-sell blocks." },
+
+    { "type": "header", "content": "Judge.me" },
+    { "type": "checkbox", "id": "show_judgeme", "label": "Show Judge.me section", "default": true },
+    { "type": "text", "id": "judgeme_eyebrow", "label": "Eyebrow", "default": "ALL REVIEWS" },
+    { "type": "text", "id": "judgeme_heading", "label": "Heading", "default": "VERIFIED" },
+    { "type": "text", "id": "judgeme_heading_em", "label": "Heading (highlighted)", "default": "REVIEWS" },
+    { "type": "html", "id": "judgeme_embed", "label": "Custom embed (optional)" }
+  ],
+  "blocks": [
+    { "type": "trust_card", "name": "Trust card", "settings": [
+      { "type": "image_picker", "id": "icon_image", "label": "Icon image" },
+      { "type": "text", "id": "icon", "label": "Icon (emoji fallback)" },
+      { "type": "text", "id": "heading", "label": "Heading" },
+      { "type": "textarea", "id": "description", "label": "Description" }
+    ]},
+    { "type": "step", "name": "How-to step", "settings": [
+      { "type": "image_picker", "id": "icon_image", "label": "Icon image" },
+      { "type": "text", "id": "title", "label": "Step title" },
+      { "type": "textarea", "id": "description", "label": "Step description" }
+    ]},
+    { "type": "comparison_row", "name": "Comparison row", "settings": [
+      { "type": "text", "id": "left_h", "label": "Left heading" },
+      { "type": "textarea", "id": "left_s", "label": "Left subtext" },
+      { "type": "text", "id": "right_h", "label": "Right heading" },
+      { "type": "textarea", "id": "right_s", "label": "Right subtext" }
+    ]},
+    { "type": "benefit", "name": "Quick benefit", "settings": [
+      { "type": "image_picker", "id": "icon_image", "label": "Icon image" },
+      { "type": "text", "id": "icon", "label": "Icon (emoji fallback)" },
+      { "type": "text", "id": "heading", "label": "Heading" },
+      { "type": "textarea", "id": "description", "label": "Description" }
+    ]},
+    { "type": "reel", "name": "UGC reel", "settings": [
+      { "type": "video", "id": "video", "label": "Vertical 9:16 video" },
+      { "type": "image_picker", "id": "poster", "label": "Poster (fallback)" },
+      { "type": "text", "id": "caption", "label": "Caption" }
+    ]},
+    { "type": "box_component", "name": "Box component", "settings": [
+      { "type": "image_picker", "id": "icon_image", "label": "Component icon" },
+      { "type": "text", "id": "name", "label": "Name" },
+      { "type": "textarea", "id": "description", "label": "Description" }
+    ]},
+    { "type": "review", "name": "Review", "settings": [
+      { "type": "textarea", "id": "quote", "label": "Quote" },
+      { "type": "text", "id": "name", "label": "Name" },
+      { "type": "text", "id": "meta", "label": "Meta" },
+      { "type": "image_picker", "id": "photo", "label": "Photo" }
+    ]},
+    { "type": "faq", "name": "FAQ", "settings": [
+      { "type": "text", "id": "question", "label": "Question" },
+      { "type": "richtext", "id": "answer", "label": "Answer" }
+    ]},
+    { "type": "cross_sell_product", "name": "Cross-sell product", "settings": [
+      { "type": "product", "id": "product", "label": "Product" }
+    ]},
+    { "type": "timeline_step", "name": "Timeline step", "settings": [
+      { "type": "text", "id": "period_label", "label": "Period label", "default": "WEEK 1" },
+      { "type": "text", "id": "heading", "label": "Heading" },
+      { "type": "textarea", "id": "description", "label": "Description" }
+    ]},
+    { "type": "science_card", "name": "Science card", "settings": [
+      { "type": "image_picker", "id": "image", "label": "Image" },
+      { "type": "text", "id": "name", "label": "Name" },
+      { "type": "textarea", "id": "what_it_does", "label": "What it does" },
+      { "type": "textarea", "id": "why_it_matters", "label": "Why it matters" },
+      { "type": "text", "id": "chip", "label": "Chip / pill text" }
+    ]},
+    { "type": "consumable", "name": "Consumable detail", "settings": [
+      { "type": "image_picker", "id": "image", "label": "Image" },
+      { "type": "text", "id": "heading", "label": "Heading" },
+      { "type": "textarea", "id": "sub", "label": "Sub-heading" },
+      { "type": "textarea", "id": "ingredients", "label": "Ingredients (one per line)" },
+      { "type": "select", "id": "category", "label": "Category", "options": [{"value":"spice","label":"Spice"},{"value":"boost","label":"Boost"}], "default": "spice" }
+    ]},
+    { "type": "science_stat", "name": "Science stat", "settings": [
+      { "type": "text", "id": "icon", "label": "Icon (emoji)", "default": "🌟" },
+      { "type": "text", "id": "stat", "label": "Stat", "default": "47%" },
+      { "type": "text", "id": "heading", "label": "Heading" },
+      { "type": "textarea", "id": "description", "label": "Description" }
+    ]},
+    { "type": "consumption_method", "name": "Consumption method", "settings": [
+      { "type": "image_picker", "id": "image", "label": "Image" },
+      { "type": "text", "id": "heading", "label": "Heading" },
+      { "type": "textarea", "id": "description", "label": "Description" }
+    ]},
+    { "type": "recipe_tag", "name": "Recipe tag", "settings": [
+      { "type": "text", "id": "emoji", "label": "Emoji" },
+      { "type": "text", "id": "name", "label": "Name" }
+    ]}
+  ],
+  "presets": [{ "name": "Fermentation Kit — PDP" }]
+}
+{% endschema %}

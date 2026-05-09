@@ -1,0 +1,222 @@
+{%- render 'leo_kit_chrome' -%}
+
+{%- liquid
+  assign p = product
+  assign mf_how_video = p.metafields.custom.how_to_make_video.value
+  assign step_blocks = section.blocks | where: 'type', 'step'
+  assign how_video = mf_how_video | default: section.settings.how_video
+-%}
+
+{%- if step_blocks.size > 0 or how_video != blank or section.settings.how_poster != blank -%}
+  <section class="how-make-section section-accent ferment-pdp-leo" {%- render 'leo_kit_attrs' -%}>
+    <div class="container">
+      <div class="section-header centered">
+        <div class="eyebrow">{{ section.settings.how_eyebrow }}</div>
+        <h2>{{ section.settings.how_heading }} <em>{{ section.settings.how_heading_em }}</em></h2>
+      </div>
+      <div class="how-make-grid">
+        <div class="hm-video-hero {% if how_video != blank %}hm-video-hero--has-video{% endif %}">
+          {%- if how_video != blank -%}
+            {%- if how_video.sources or how_video.media_type == 'video' -%}
+              {{ how_video | video_tag: image_size: '1100x', controls: false, loop: true, muted: true, autoplay: true, playsinline: true }}
+            {%- else -%}
+              {%- assign video_src = how_video.url | default: how_video.src -%}
+              {%- if video_src != blank -%}
+                <video src="{{ video_src }}" autoplay loop muted playsinline preload="auto" style="width:100%;height:100%;object-fit:cover;"></video>
+              {%- endif -%}
+            {%- endif -%}
+          {%- elsif section.settings.how_poster != blank -%}
+            <img src="{{ section.settings.how_poster | image_url: width: 1200 }}" alt="How to make" loading="lazy" width="1200" height="1200">
+          {%- else -%}
+            <div class="hm-video-placeholder"><span class="hm-play">▶</span></div>
+          {%- endif -%}
+        </div>
+        <div class="hm-steps">
+          {%- for block in step_blocks -%}
+            <div class="hm-step" {{ block.shopify_attributes }}>
+              <div class="hm-num">{{ forloop.index }}</div>
+              <div class="hm-step-body">
+                <div class="hm-title">{{ block.settings.title }}</div>
+                <div class="hm-desc">{{ block.settings.description }}</div>
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Leo · How To Make",
+  "tag": "section",
+  "class": "leo-how-make-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "how_eyebrow",
+      "label": "Eyebrow",
+      "default": "HOW TO MAKE"
+    },
+    {
+      "type": "text",
+      "id": "how_heading",
+      "label": "Heading",
+      "default": "4 STEPS."
+    },
+    {
+      "type": "text",
+      "id": "how_heading_em",
+      "label": "Heading (highlighted)",
+      "default": "FRESH FERMENT."
+    },
+    {
+      "type": "video",
+      "id": "how_video",
+      "label": "Demo video (or set custom.how_to_make_video on product)"
+    },
+    {
+      "type": "image_picker",
+      "id": "how_poster",
+      "label": "Poster image (fallback)"
+    },
+    {
+      "type": "header",
+      "content": "Spacing & Typography"
+    },
+    {
+      "type": "range",
+      "id": "pad_top_d",
+      "label": "Padding top — desktop (px)",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "pad_bot_d",
+      "label": "Padding bottom — desktop (px)",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "pad_top_m",
+      "label": "Padding top — mobile (px)",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "pad_bot_m",
+      "label": "Padding bottom — mobile (px)",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "mar_top_d",
+      "label": "Margin top — desktop (px)",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "mar_bot_d",
+      "label": "Margin bottom — desktop (px)",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "mar_top_m",
+      "label": "Margin top — mobile (px)",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "mar_bot_m",
+      "label": "Margin bottom — mobile (px)",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_size_d",
+      "label": "Eyebrow font size — desktop (px)",
+      "min": 9,
+      "max": 32,
+      "step": 1,
+      "default": 22
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_size_m",
+      "label": "Eyebrow font size — mobile (px)",
+      "min": 9,
+      "max": 24,
+      "step": 1,
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "heading_size_d",
+      "label": "Heading font size — desktop (px)",
+      "min": 18,
+      "max": 80,
+      "step": 2,
+      "default": 44
+    },
+    {
+      "type": "range",
+      "id": "heading_size_m",
+      "label": "Heading font size — mobile (px)",
+      "min": 16,
+      "max": 60,
+      "step": 2,
+      "default": 30
+    }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "How-to step",
+      "limit": 8,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Step title"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Step description"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Leo · How To Make"
+    }
+  ]
+}
+{% endschema %}
