@@ -166,12 +166,37 @@
           </div>
 
           <button type="submit" name="add" class="atc-btn" data-atc {% unless p.available %}disabled{% endunless %}>
-            {%- if p.available -%}ADD TO CART · <span data-atc-price>{{ p.price | money }}</span>{%- else -%}SOLD OUT{%- endif -%}
+            {%- if p.available -%}ADD TO CART{%- else -%}SOLD OUT{%- endif -%}
           </button>
         {%- endform -%}
 
-        <div class="trust-strip">
-          {%- if hero_trust != blank -%}
+        <div class="trust-strip trust-strip--leo">
+          {%- assign t1_icon = section.settings.trust_1_icon -%}
+          {%- assign t1_text = section.settings.trust_1_text -%}
+          {%- assign t2_icon = section.settings.trust_2_icon -%}
+          {%- assign t2_text = section.settings.trust_2_text -%}
+          {%- assign t3_icon = section.settings.trust_3_icon -%}
+          {%- assign t3_text = section.settings.trust_3_text -%}
+          {%- if t1_text != blank or t2_text != blank or t3_text != blank -%}
+            {%- if t1_text != blank -%}
+              <div class="item">
+                {%- if t1_icon != blank -%}{%- render 'kit_icon', icon: t1_icon, size: 14, extra: 'trust-strip-icon' -%}{%- else -%}<span class="check">✓</span>{%- endif -%}
+                <span>{{ t1_text }}</span>
+              </div>
+            {%- endif -%}
+            {%- if t2_text != blank -%}
+              <div class="item">
+                {%- if t2_icon != blank -%}{%- render 'kit_icon', icon: t2_icon, size: 14, extra: 'trust-strip-icon' -%}{%- else -%}<span class="check">✓</span>{%- endif -%}
+                <span>{{ t2_text }}</span>
+              </div>
+            {%- endif -%}
+            {%- if t3_text != blank -%}
+              <div class="item">
+                {%- if t3_icon != blank -%}{%- render 'kit_icon', icon: t3_icon, size: 14, extra: 'trust-strip-icon' -%}{%- else -%}<span class="check">✓</span>{%- endif -%}
+                <span>{{ t3_text }}</span>
+              </div>
+            {%- endif -%}
+          {%- elsif hero_trust != blank -%}
             {%- for t in hero_trust -%}<div class="item"><span class="check">✓</span> {{ t }}</div>{%- endfor -%}
           {%- else -%}
             <div class="item"><span class="check">✓</span> Secure Payment</div>
@@ -222,7 +247,14 @@
   "tag": "section",
   "class": "leo-hero-section",
   "settings": [
-    { "type": "checkbox", "id": "show_breadcrumb", "label": "Show breadcrumb", "default": true }
+    { "type": "checkbox", "id": "show_breadcrumb", "label": "Show breadcrumb", "default": true },
+    { "type": "header", "content": "Trust strip (below ATC, single row)" },
+    { "type": "image_picker", "id": "trust_1_icon", "label": "Item 1 — icon (SVG)" },
+    { "type": "text", "id": "trust_1_text", "label": "Item 1 — text", "default": "Secure Payment" },
+    { "type": "image_picker", "id": "trust_2_icon", "label": "Item 2 — icon (SVG)" },
+    { "type": "text", "id": "trust_2_text", "label": "Item 2 — text", "default": "Free Shipping" },
+    { "type": "image_picker", "id": "trust_3_icon", "label": "Item 3 — icon (SVG)" },
+    { "type": "text", "id": "trust_3_text", "label": "Item 3 — text", "default": "FSSAI Licensed" }
   ],
   "blocks": [
     { "type": "hero_benefit", "name": "Hero benefit", "limit": 4, "settings": [

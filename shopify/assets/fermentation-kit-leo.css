@@ -93,6 +93,52 @@
   .sticky-atc-spacer { height: 80px; }
 }
 
+/* ============== HERO — Trust strip (single row, kit-color icons) ============== */
+[data-template="leo"] .pdp-hero .trust-strip.trust-strip--leo {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 14px;
+  font-size: 12px;
+  color: var(--gb-text-muted);
+}
+[data-template="leo"] .pdp-hero .trust-strip.trust-strip--leo .item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: 0 1 auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+[data-template="leo"] .pdp-hero .trust-strip.trust-strip--leo .check {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 14px; height: 14px;
+  background: #5DBC52; color: #FFF;
+  font-size: 9px; font-weight: 800;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+[data-template="leo"] .trust-strip-icon {
+  width: 16px; height: 16px;
+  display: inline-flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+[data-template="leo"] .trust-strip-icon svg [data-has-stroke="1"] { stroke: var(--kit-color); }
+[data-template="leo"] .trust-strip-icon svg [data-fill-tone="dark"] { fill: var(--kit-color); }
+[data-template="leo"] .trust-strip-icon svg [data-fill-tone="light"] { fill: var(--kit-color-soft); }
+
+@media (max-width: 768px) {
+  [data-template="leo"] .pdp-hero .trust-strip.trust-strip--leo {
+    gap: 8px;
+    font-size: 10.5px;
+  }
+  [data-template="leo"] .pdp-hero .trust-strip.trust-strip--leo .check { width: 12px; height: 12px; font-size: 8px; }
+  [data-template="leo"] .trust-strip-icon { width: 14px; height: 14px; }
+}
+
 /* ============== HERO — 4 SVG benefit icons ============== */
 [data-template="leo"] .benefits-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 [data-template="leo"] .benefit-item { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--gb-text); line-height: 1.4; }

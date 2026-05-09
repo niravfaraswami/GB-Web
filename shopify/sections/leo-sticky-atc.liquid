@@ -22,7 +22,7 @@
         {%- endif -%}
         <div class="sticky-atc-name">{{ p.title | truncate: name_truncate }}</div>
       </div>
-      <div class="sticky-atc-price"><span data-sticky-price>{{ p.price | money }}</span></div>
+      <div class="sticky-atc-price"><span data-sticky-price>{{ p.selected_or_first_available_variant.price | money }}</span></div>
       <button type="button" class="sticky-atc-btn" data-sticky-atc-trigger aria-label="Add to cart">
         {{ section.settings.cta_label | default: 'Add to cart' }}
       </button>
