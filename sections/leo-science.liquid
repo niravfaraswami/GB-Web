@@ -61,37 +61,295 @@
   "tag": "section",
   "class": "leo-science-section",
   "settings": [
-    { "type": "text", "id": "sci_eyebrow", "label": "Eyebrow", "default": "THE SCIENCE" },
-    { "type": "text", "id": "sci_h", "label": "Heading", "default": "WHAT FERMENTED DRINKS DO" },
-    { "type": "text", "id": "sci_h_em", "label": "Heading (highlighted)", "default": "FOR YOU." },
-    { "type": "text", "id": "sci_stat_eyebrow", "label": "Stat-card eyebrow", "default": "REPORTED" },
-    { "type": "image_picker", "id": "sci_stat1_img", "label": "Stat 1 — background image" },
-    { "type": "text", "id": "sci_stat1_num", "label": "Stat 1 — number", "default": "47" },
-    { "type": "text", "id": "sci_stat1_unit", "label": "Stat 1 — unit", "default": "%" },
-    { "type": "text", "id": "sci_stat1_h", "label": "Stat 1 — heading", "default": "Better Mood" },
-    { "type": "textarea", "id": "sci_stat1_d", "label": "Stat 1 — description", "default": "After adding fermented drinks for just 14 days." },
-    { "type": "image_picker", "id": "sci_stat2_img", "label": "Stat 2 — background image" },
-    { "type": "text", "id": "sci_stat2_num", "label": "Stat 2 — number", "default": "56" },
-    { "type": "text", "id": "sci_stat2_unit", "label": "Stat 2 — unit", "default": "%" },
-    { "type": "text", "id": "sci_stat2_h", "label": "Stat 2 — heading", "default": "More Energy" },
-    { "type": "textarea", "id": "sci_stat2_d", "label": "Stat 2 — description", "default": "Without supplements or lifestyle changes." },
-    { "type": "image_picker", "id": "sci_stat3_img", "label": "Stat 3 — background image" },
-    { "type": "text", "id": "sci_stat3_num", "label": "Stat 3 — number", "default": "42" },
-    { "type": "text", "id": "sci_stat3_unit", "label": "Stat 3 — unit", "default": "%" },
-    { "type": "text", "id": "sci_stat3_h", "label": "Stat 3 — heading", "default": "Less Bloating" },
-    { "type": "textarea", "id": "sci_stat3_d", "label": "Stat 3 — description", "default": "From everyday fermented drinks like kanji." },
-    { "type": "image_picker", "id": "sci_stat4_img", "label": "Stat 4 — background image" },
-    { "type": "text", "id": "sci_stat4_num", "label": "Stat 4 — number", "default": "52" },
-    { "type": "text", "id": "sci_stat4_unit", "label": "Stat 4 — unit", "default": "%" },
-    { "type": "text", "id": "sci_stat4_h", "label": "Stat 4 — heading", "default": "Less Hunger" },
-    { "type": "textarea", "id": "sci_stat4_d", "label": "Stat 4 — description", "default": "Linked to improved gut health." },
-    { "type": "image_picker", "id": "sci_img1", "label": "Filler image 1" },
-    { "type": "image_picker", "id": "sci_img2", "label": "Filler image 2" },
-    { "type": "image_picker", "id": "sci_img3", "label": "Filler image 3" },
-    { "type": "image_picker", "id": "sci_img4", "label": "Filler image 4" },
-    { "type": "richtext", "id": "sci_caption", "label": "Caption", "default": "<p>Based on a <strong>5,400+ person</strong> study on fermented drink intake.</p>" },
-    { "type": "textarea", "id": "sci_disclaimer", "label": "Disclaimer", "default": "*Results from observational studies on fermented drink intake. Individual results vary." }
+    {
+      "type": "text",
+      "id": "sci_eyebrow",
+      "label": "Eyebrow",
+      "default": "THE SCIENCE"
+    },
+    {
+      "type": "text",
+      "id": "sci_h",
+      "label": "Heading",
+      "default": "WHAT FERMENTED DRINKS DO"
+    },
+    {
+      "type": "text",
+      "id": "sci_h_em",
+      "label": "Heading (highlighted)",
+      "default": "FOR YOU."
+    },
+    {
+      "type": "text",
+      "id": "sci_stat_eyebrow",
+      "label": "Stat-card eyebrow",
+      "default": "REPORTED"
+    },
+    {
+      "type": "image_picker",
+      "id": "sci_stat1_img",
+      "label": "Stat 1 — background image"
+    },
+    {
+      "type": "text",
+      "id": "sci_stat1_num",
+      "label": "Stat 1 — number",
+      "default": "47"
+    },
+    {
+      "type": "text",
+      "id": "sci_stat1_unit",
+      "label": "Stat 1 — unit",
+      "default": "%"
+    },
+    {
+      "type": "text",
+      "id": "sci_stat1_h",
+      "label": "Stat 1 — heading",
+      "default": "Better Mood"
+    },
+    {
+      "type": "textarea",
+      "id": "sci_stat1_d",
+      "label": "Stat 1 — description",
+      "default": "After adding fermented drinks for just 14 days."
+    },
+    {
+      "type": "image_picker",
+      "id": "sci_stat2_img",
+      "label": "Stat 2 — background image"
+    },
+    {
+      "type": "text",
+      "id": "sci_stat2_num",
+      "label": "Stat 2 — number",
+      "default": "56"
+    },
+    {
+      "type": "text",
+      "id": "sci_stat2_unit",
+      "label": "Stat 2 — unit",
+      "default": "%"
+    },
+    {
+      "type": "text",
+      "id": "sci_stat2_h",
+      "label": "Stat 2 — heading",
+      "default": "More Energy"
+    },
+    {
+      "type": "textarea",
+      "id": "sci_stat2_d",
+      "label": "Stat 2 — description",
+      "default": "Without supplements or lifestyle changes."
+    },
+    {
+      "type": "image_picker",
+      "id": "sci_stat3_img",
+      "label": "Stat 3 — background image"
+    },
+    {
+      "type": "text",
+      "id": "sci_stat3_num",
+      "label": "Stat 3 — number",
+      "default": "42"
+    },
+    {
+      "type": "text",
+      "id": "sci_stat3_unit",
+      "label": "Stat 3 — unit",
+      "default": "%"
+    },
+    {
+      "type": "text",
+      "id": "sci_stat3_h",
+      "label": "Stat 3 — heading",
+      "default": "Less Bloating"
+    },
+    {
+      "type": "textarea",
+      "id": "sci_stat3_d",
+      "label": "Stat 3 — description",
+      "default": "From everyday fermented drinks like kanji."
+    },
+    {
+      "type": "image_picker",
+      "id": "sci_stat4_img",
+      "label": "Stat 4 — background image"
+    },
+    {
+      "type": "text",
+      "id": "sci_stat4_num",
+      "label": "Stat 4 — number",
+      "default": "52"
+    },
+    {
+      "type": "text",
+      "id": "sci_stat4_unit",
+      "label": "Stat 4 — unit",
+      "default": "%"
+    },
+    {
+      "type": "text",
+      "id": "sci_stat4_h",
+      "label": "Stat 4 — heading",
+      "default": "Less Hunger"
+    },
+    {
+      "type": "textarea",
+      "id": "sci_stat4_d",
+      "label": "Stat 4 — description",
+      "default": "Linked to improved gut health."
+    },
+    {
+      "type": "image_picker",
+      "id": "sci_img1",
+      "label": "Filler image 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "sci_img2",
+      "label": "Filler image 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "sci_img3",
+      "label": "Filler image 3"
+    },
+    {
+      "type": "image_picker",
+      "id": "sci_img4",
+      "label": "Filler image 4"
+    },
+    {
+      "type": "richtext",
+      "id": "sci_caption",
+      "label": "Caption",
+      "default": "<p>Based on a <strong>5,400+ person</strong> study on fermented drink intake.</p>"
+    },
+    {
+      "type": "textarea",
+      "id": "sci_disclaimer",
+      "label": "Disclaimer",
+      "default": "*Results from observational studies on fermented drink intake. Individual results vary."
+    },
+    {
+      "type": "header",
+      "content": "Spacing & Typography"
+    },
+    {
+      "type": "range",
+      "id": "pad_top_d",
+      "label": "Padding top — desktop (px)",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "pad_bot_d",
+      "label": "Padding bottom — desktop (px)",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "pad_top_m",
+      "label": "Padding top — mobile (px)",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "pad_bot_m",
+      "label": "Padding bottom — mobile (px)",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "mar_top_d",
+      "label": "Margin top — desktop (px)",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "mar_bot_d",
+      "label": "Margin bottom — desktop (px)",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "mar_top_m",
+      "label": "Margin top — mobile (px)",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "mar_bot_m",
+      "label": "Margin bottom — mobile (px)",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_size_d",
+      "label": "Eyebrow font size — desktop (px)",
+      "min": 9,
+      "max": 32,
+      "step": 1,
+      "default": 22
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_size_m",
+      "label": "Eyebrow font size — mobile (px)",
+      "min": 9,
+      "max": 24,
+      "step": 1,
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "heading_size_d",
+      "label": "Heading font size — desktop (px)",
+      "min": 18,
+      "max": 80,
+      "step": 2,
+      "default": 44
+    },
+    {
+      "type": "range",
+      "id": "heading_size_m",
+      "label": "Heading font size — mobile (px)",
+      "min": 16,
+      "max": 60,
+      "step": 2,
+      "default": 30
+    }
   ],
-  "presets": [{ "name": "Leo · Science" }]
+  "presets": [
+    {
+      "name": "Leo · Science"
+    }
+  ]
 }
 {% endschema %}

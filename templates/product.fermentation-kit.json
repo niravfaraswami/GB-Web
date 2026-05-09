@@ -1,1 +1,148 @@
-{"sections":{"main":{"type":"fermentation-kit-pdp","blocks":{"trust-1":{"type":"trust_card","settings":{"icon":"📖","heading":"Beginner Friendly","description":"Step-by-step guide included — first ferment, first try."}},"trust-2":{"type":"trust_card","settings":{"icon":"💨","heading":"No Daily Burping","description":"Airlock releases gas automatically. No daily babysitting."}},"trust-3":{"type":"trust_card","settings":{"icon":"💬","heading":"WhatsApp Help","description":"Stuck on your batch? Message us — we reply same-day."}},"trust-4":{"type":"trust_card","settings":{"icon":"♻️","heading":"Refills Available","description":"Reuse your jar — just buy spice mix + Ferment Boost next time."}},"step-1":{"type":"step","settings":{"title":"CHOP + ADD","description":"Vegetables. Fill 20% of jar."}},"step-2":{"type":"step","settings":{"title":"SPICE + BOOST + WATER","description":"Pour both sachets. Top up with water."}},"step-3":{"type":"step","settings":{"title":"SEAL WITH AIRLOCK","description":"Wait 3–5 days. Watch the bubbles."}},"step-4":{"type":"step","settings":{"title":"STRAIN + ENJOY","description":"Refrigerate. Daily serving."}},"cmp-1":{"type":"comparison_row","settings":{"left_h":"Air contamination: High","left_s":"Cloth lets dust + insects in","right_h":"Air contamination: Zero","right_s":"Sealed airlock blocks everything"}},"cmp-2":{"type":"comparison_row","settings":{"left_h":"Spice ratio: Guesswork","left_s":"Different every batch","right_h":"Spice ratio: Pre-measured","right_s":"Sachet is exact for the kit size"}},"cmp-3":{"type":"comparison_row","settings":{"left_h":"Ferment time: 7–10 days","left_s":"Slow, inconsistent","right_h":"Ferment time: 3–5 days","right_s":"Ferment Boost speeds it up"}},"cmp-4":{"type":"comparison_row","settings":{"left_h":"Mould risk: High","left_s":"Open surface = wild bacteria","right_h":"Mould risk: None","right_s":"CO₂ out, oxygen out"}},"cmp-5":{"type":"comparison_row","settings":{"left_h":"Storage: Transfer needed","left_s":"Move to another jar","right_h":"Storage: Same jar","right_s":"Swap to storage lid"}},"ben-1":{"type":"benefit","settings":{"icon":"🌱","heading":"GUT HEALTH","description":"Live cultures support digestion, regularity, and a balanced microbiome."}},"ben-2":{"type":"benefit","settings":{"icon":"🦠","heading":"NATURAL PROBIOTICS","description":"Wild Lactobacillus from real fermentation. No supplements, no capsules."}},"ben-3":{"type":"benefit","settings":{"icon":"✨","heading":"NO EXPERIENCE NEEDED","description":"Pre-measured spice mix. Foolproof airlock. Beginners get it right first try."}},"box-1":{"type":"box_component","settings":{"name":"Glass Fermentation Jar","description":"Borosilicate · with airlock lid"}},"box-2":{"type":"box_component","settings":{"name":"Spice Mix","description":"Pre-measured for the kit"}},"box-3":{"type":"box_component","settings":{"name":"Ferment Boost","description":"Prebiotic blend sachet"}},"box-4":{"type":"box_component","settings":{"name":"Recipe Book","description":"Seasonal recipes"}},"sci-1":{"type":"science_card","settings":{"name":"AIRLOCK","what_it_does":"Gas out. Oxygen blocked.","why_it_matters":"Oxygen = mould. Airlock blocks it.","chip":"No daily burping needed."}},"sci-2":{"type":"science_card","settings":{"name":"GLASS WEIGHT","what_it_does":"Pushes veggies under brine.","why_it_matters":"Above brine = mould. Weight fixes it.","chip":"Safe ferment. Every time."}},"rev-1":{"type":"review","settings":{"quote":"Digestion, acidity, all issues addressed.","name":"Archana R.","meta":"34, Bengaluru · Wellness seeker","photo":"shopify:\/\/shop_images\/review_1.png"}},"rev-2":{"type":"review","settings":{"quote":"Oh my God, it's the same taste.","name":"Eke M.","meta":"38, Mumbai · Grew up on homemade ferments","photo":"shopify:\/\/shop_images\/Review_2.png"}},"rev-3":{"type":"review","settings":{"quote":"With the kit, it is so easy. Both prep and hygiene.","name":"Niren S.","meta":"31, Ahmedabad · First-time fermenter","photo":"shopify:\/\/shop_images\/Review_3.jpg"}},"tl-1":{"type":"timeline_step","settings":{"period_label":"DAYS 1-3","heading":"FIRST EXPOSURE","description":"Live Lactobacillus reach your gut. You may feel mild bubbling — microbes settling in."}},"tl-2":{"type":"timeline_step","settings":{"period_label":"WEEK 1","heading":"REGULARITY","description":"Most people report easier, more predictable mornings. Probiotics start crowding out less helpful bacteria."}},"tl-3":{"type":"timeline_step","settings":{"period_label":"WEEK 2-3","heading":"LESS BLOATING","description":"Daily ferment reduces fermentation gas in the gut. Meals digest cleaner."}},"tl-4":{"type":"timeline_step","settings":{"period_label":"WEEK 4+","heading":"STEADIER ENERGY","description":"Better gut balance = better nutrient absorption. Iron, B12, and magnesium reach you more efficiently."}},"zs-1":{"type":"science_stat","settings":{"icon":"🌟","stat":"47%","heading":"Reported Better Mood","description":"After adding fermented foods for just 14 days."}},"zs-2":{"type":"science_stat","settings":{"icon":"⚡","stat":"56%","heading":"Reported More Energy","description":"Without supplements or lifestyle changes."}},"zs-3":{"type":"science_stat","settings":{"icon":"🌬️","stat":"42%","heading":"Reported Less Bloating","description":"From everyday fermented foods."}},"zs-4":{"type":"science_stat","settings":{"icon":"🍽️","stat":"52%","heading":"Reported Less Hunger","description":"Linked to improved gut health."}},"faq-1":{"type":"faq","settings":{"question":"How long does it take to ferment?","answer":"<p>3–5 days at typical Indian room temperature (25–32°C). Cooler weather may extend it to 6–7 days. The bubbles in the airlock tell you when it's active.<\/p>"}},"faq-2":{"type":"faq","settings":{"question":"Is this really probiotic?","answer":"<p>Yes. Wild lacto-fermentation produces 8+ strains of beneficial Lactobacillus bacteria.<\/p>"}},"faq-3":{"type":"faq","settings":{"question":"How long does it last?","answer":"<p>Once ready, swap to the storage lid and refrigerate. Refrigerated ferments stay good for 2 weeks.<\/p>"}},"faq-4":{"type":"faq","settings":{"question":"Can I reuse the jar?","answer":"<p>The jar lasts years — borosilicate glass, dishwasher-safe. The airlock is reusable indefinitely.<\/p>"}},"cons-1":{"type":"consumable","settings":{"heading":"Spice Mix","sub":"Complete mix for authentic homemade ferment.","ingredients":"Ground mustard powder (the wild starter)\nSea salt (controls fermentation)\nChilli powder (warmth + colour)\nGinger powder (digestive support)","category":"spice"}},"cons-2":{"type":"consumable","settings":{"heading":"Ferment Boost","sub":"Prebiotic blend that boosts good bacteria. Cuts ferment time to 3–5 days.","ingredients":"Inulin (chicory root prebiotic fiber)\nFOS (fructo-oligosaccharides)\nResistant dextrin (slow-fermenting fuel)\nFeeds good bacteria, not bad ones","category":"boost"}},"eat-1":{"type":"consumption_method","settings":{"heading":"BEFORE MEALS","description":"Aids digestion"}},"eat-2":{"type":"consumption_method","settings":{"heading":"AFTER WORKOUT","description":"Natural electrolytes"}},"eat-3":{"type":"consumption_method","settings":{"heading":"WITH BREAKFAST","description":"Morning gut reset"}},"eat-4":{"type":"consumption_method","settings":{"heading":"AS A SHOT","description":"50ml cold pour"}}},"block_order":["trust-1","trust-2","trust-3","trust-4","step-1","step-2","step-3","step-4","cmp-1","cmp-2","cmp-3","cmp-4","cmp-5","ben-1","ben-2","ben-3","box-1","box-2","box-3","box-4","sci-1","sci-2","rev-1","rev-2","rev-3","tl-1","tl-2","tl-3","tl-4","zs-1","zs-2","zs-3","zs-4","faq-1","faq-2","faq-3","faq-4","cons-1","cons-2","eat-1","eat-2","eat-3","eat-4"],"settings":{"show_breadcrumb":true,"how_eyebrow":"HOW TO MAKE","how_heading":"4 STEPS.","how_heading_em":"FRESH FERMENT.","how_pill":"▶ WATCH · 60 SEC","compare_eyebrow":"TRADITIONAL VS AIRLOCK","compare_heading":"CLOTH METHOD","compare_heading_em":"VS AIRLOCK.","compare_intro":"A muslin cloth lets dust, mould spores and insects in. An airlock changes everything.","compare_left_emoji":"🧺","compare_right_emoji":"🫙","compare_left_label":"TRADITIONAL METHOD","compare_right_label":"GUTBASKET KIT","benefits_eyebrow":"QUICK BENEFITS","benefits_heading":"WHY DAILY FERMENTS","benefits_heading_em":"CHANGE YOUR GUT.","reels_heading":"Real People, Real Ferments,","reels_heading_em":"Real Magic","quinn_embed":"","box_eyebrow":"WHAT'S IN THE BOX","box_heading":"EVERYTHING YOU NEED","box_heading_em":"TO FERMENT.","box_note":"","science_eyebrow":"SCIENCE-BACKED DESIGN","science_heading":"BUILT FOR","science_heading_em":"PERFECT-","science_heading_tail":"FERMENTS.","reviews_eyebrow":"REAL RESULTS","reviews_heading":"WHAT OUR","reviews_heading_em":"CUSTOMERS SAY","timeline_eyebrow":"WHAT TO EXPECT","timeline_heading":"YOUR GUT'S","timeline_heading_em":"FIRST 30 DAYS.","timeline_subtitle":"Most people notice digestive shifts within the first week. Deeper benefits build over the first month.","itk_eyebrow":"INSIDE THE KIT","itk_heading":"SPICE MIX +","itk_heading_em":"FERMENT BOOST.","itk_intro":"The two consumables that make this kit feel like a 5-day shortcut to ancient gut wisdom.","zoe_eyebrow":"THE SCIENCE","zoe_heading":"WHAT FERMENTED FOODS DO","zoe_heading_em":"FOR YOU","eat_eyebrow":"HOW TO","eat_heading":"HOW TO","eat_heading_em":"ENJOY IT","eat_heading_tail":"DAILY","recipes_eyebrow":"ONE KIT. ENDLESS VARIETY.","faq_eyebrow":"QUESTIONS?","faq_heading":"COMMON","faq_heading_em":"QUESTIONS","cross_eyebrow":"PAIR IT WITH","cross_heading":"CUSTOMERS ALSO BOUGHT","cross_collection":"","show_judgeme":true,"judgeme_eyebrow":"ALL REVIEWS","judgeme_heading":"VERIFIED","judgeme_heading_em":"REVIEWS","judgeme_embed":""}}},"order":["main"]}
+{
+  "sections": {
+    "main": {
+      "type": "fermentation-kit-pdp",
+      "settings": {
+        "show_breadcrumb": true,
+
+        "how_eyebrow": "HOW TO MAKE",
+        "how_heading": "4 STEPS.",
+        "how_heading_em": "FRESH FERMENT.",
+        "how_pill": "▶ WATCH · 60 SEC",
+
+        "compare_eyebrow": "TRADITIONAL VS AIRLOCK",
+        "compare_heading": "CLOTH METHOD",
+        "compare_heading_em": "VS AIRLOCK.",
+        "compare_intro": "A muslin cloth lets dust, mould spores and insects in. An airlock changes everything.",
+        "compare_left_emoji": "🧺",
+        "compare_right_emoji": "🫙",
+        "compare_left_label": "TRADITIONAL METHOD",
+        "compare_right_label": "GUTBASKET KIT",
+
+        "benefits_eyebrow": "QUICK BENEFITS",
+        "benefits_heading": "WHY DAILY FERMENTS",
+        "benefits_heading_em": "CHANGE YOUR GUT.",
+
+        "reels_heading": "Real People, Real Ferments,",
+        "reels_heading_em": "Real Magic",
+
+        "box_eyebrow": "WHAT'S IN THE BOX",
+        "box_heading": "EVERYTHING YOU NEED",
+        "box_heading_em": "TO FERMENT.",
+
+        "science_eyebrow": "SCIENCE-BACKED DESIGN",
+        "science_heading": "BUILT FOR",
+        "science_heading_em": "PERFECT",
+        "science_heading_tail": " FERMENTS.",
+
+        "reviews_eyebrow": "REAL RESULTS",
+        "reviews_heading": "WHAT OUR",
+        "reviews_heading_em": "CUSTOMERS SAY",
+
+        "timeline_eyebrow": "WHAT TO EXPECT",
+        "timeline_heading": "YOUR GUT'S",
+        "timeline_heading_em": "FIRST 30 DAYS.",
+        "timeline_subtitle": "Most people notice digestive shifts within the first week. Deeper benefits build over the first month.",
+
+        "itk_eyebrow": "INSIDE THE KIT",
+        "itk_heading": "SPICE MIX +",
+        "itk_heading_em": "FERMENT BOOST.",
+        "itk_intro": "The two consumables that make this kit feel like a 5-day shortcut to ancient gut wisdom.",
+
+        "zoe_eyebrow": "THE SCIENCE",
+        "zoe_heading": "WHAT FERMENTED FOODS DO",
+        "zoe_heading_em": "FOR YOU",
+
+        "eat_eyebrow": "HOW TO",
+        "eat_heading": "HOW TO",
+        "eat_heading_em": "ENJOY IT",
+        "eat_heading_tail": " DAILY",
+
+        "recipes_eyebrow": "ONE KIT. ENDLESS VARIETY.",
+
+        "faq_eyebrow": "QUESTIONS?",
+        "faq_heading": "COMMON",
+        "faq_heading_em": "QUESTIONS",
+
+        "cross_eyebrow": "PAIR IT WITH",
+        "cross_heading": "CUSTOMERS ALSO BOUGHT",
+
+        "show_judgeme": true,
+        "judgeme_eyebrow": "ALL REVIEWS",
+        "judgeme_heading": "VERIFIED",
+        "judgeme_heading_em": "REVIEWS"
+      },
+      "blocks": {
+        "trust-1": { "type": "trust_card", "settings": { "icon": "📖", "heading": "Beginner Friendly", "description": "Step-by-step guide included — first ferment, first try." } },
+        "trust-2": { "type": "trust_card", "settings": { "icon": "💨", "heading": "No Daily Burping", "description": "Airlock releases gas automatically. No daily babysitting." } },
+        "trust-3": { "type": "trust_card", "settings": { "icon": "💬", "heading": "WhatsApp Help", "description": "Stuck on your batch? Message us — we reply same-day." } },
+        "trust-4": { "type": "trust_card", "settings": { "icon": "♻️", "heading": "Refills Available", "description": "Reuse your jar — just buy spice mix + Ferment Boost next time." } },
+
+        "step-1": { "type": "step", "settings": { "title": "CHOP + ADD", "description": "Vegetables. Fill 20% of jar." } },
+        "step-2": { "type": "step", "settings": { "title": "SPICE + BOOST + WATER", "description": "Pour both sachets. Top up with water." } },
+        "step-3": { "type": "step", "settings": { "title": "SEAL WITH AIRLOCK", "description": "Wait 3–5 days. Watch the bubbles." } },
+        "step-4": { "type": "step", "settings": { "title": "STRAIN + ENJOY", "description": "Refrigerate. Daily serving." } },
+
+        "cmp-1": { "type": "comparison_row", "settings": { "left_h": "Air contamination: High", "left_s": "Cloth lets dust + insects in", "right_h": "Air contamination: Zero", "right_s": "Sealed airlock blocks everything" } },
+        "cmp-2": { "type": "comparison_row", "settings": { "left_h": "Spice ratio: Guesswork", "left_s": "Different every batch", "right_h": "Spice ratio: Pre-measured", "right_s": "Sachet is exact for the kit size" } },
+        "cmp-3": { "type": "comparison_row", "settings": { "left_h": "Ferment time: 7–10 days", "left_s": "Slow, inconsistent", "right_h": "Ferment time: 3–5 days", "right_s": "Ferment Boost speeds it up" } },
+        "cmp-4": { "type": "comparison_row", "settings": { "left_h": "Mould risk: High", "left_s": "Open surface = wild bacteria", "right_h": "Mould risk: None", "right_s": "CO₂ out, oxygen out" } },
+        "cmp-5": { "type": "comparison_row", "settings": { "left_h": "Storage: Transfer needed", "left_s": "Move to another jar", "right_h": "Storage: Same jar", "right_s": "Swap to storage lid" } },
+
+        "ben-1": { "type": "benefit", "settings": { "icon": "🌱", "heading": "GUT HEALTH", "description": "Live cultures support digestion, regularity, and a balanced microbiome." } },
+        "ben-2": { "type": "benefit", "settings": { "icon": "🦠", "heading": "NATURAL PROBIOTICS", "description": "Wild Lactobacillus from real fermentation. No supplements, no capsules." } },
+        "ben-3": { "type": "benefit", "settings": { "icon": "✨", "heading": "NO EXPERIENCE NEEDED", "description": "Pre-measured spice mix. Foolproof airlock. Beginners get it right first try." } },
+
+        "box-1": { "type": "box_component", "settings": { "name": "Glass Fermentation Jar", "description": "Borosilicate · with airlock lid" } },
+        "box-2": { "type": "box_component", "settings": { "name": "Spice Mix", "description": "Pre-measured for the kit" } },
+        "box-3": { "type": "box_component", "settings": { "name": "Ferment Boost", "description": "Prebiotic blend sachet" } },
+        "box-4": { "type": "box_component", "settings": { "name": "Recipe Book", "description": "Seasonal recipes" } },
+
+        "sci-1": { "type": "science_card", "settings": { "name": "AIRLOCK", "what_it_does": "Gas out. Oxygen blocked.", "why_it_matters": "Oxygen = mould. Airlock blocks it.", "chip": "No daily burping needed." } },
+        "sci-2": { "type": "science_card", "settings": { "name": "GLASS WEIGHT", "what_it_does": "Pushes veggies under brine.", "why_it_matters": "Above brine = mould. Weight fixes it.", "chip": "Safe ferment. Every time." } },
+
+        "rev-1": { "type": "review", "settings": { "quote": "Digestion, acidity, all issues addressed.", "name": "Archana R.", "meta": "34, Bengaluru · Wellness seeker" } },
+        "rev-2": { "type": "review", "settings": { "quote": "Oh my God, it's the same taste.", "name": "Eke M.", "meta": "38, Mumbai · Grew up on homemade ferments" } },
+        "rev-3": { "type": "review", "settings": { "quote": "With the kit, it is so easy. Both prep and hygiene.", "name": "Niren S.", "meta": "31, Ahmedabad · First-time fermenter" } },
+
+        "tl-1": { "type": "timeline_step", "settings": { "period_label": "DAYS 1-3", "heading": "FIRST EXPOSURE", "description": "Live Lactobacillus reach your gut. You may feel mild bubbling — microbes settling in." } },
+        "tl-2": { "type": "timeline_step", "settings": { "period_label": "WEEK 1", "heading": "REGULARITY", "description": "Most people report easier, more predictable mornings. Probiotics start crowding out less helpful bacteria." } },
+        "tl-3": { "type": "timeline_step", "settings": { "period_label": "WEEK 2-3", "heading": "LESS BLOATING", "description": "Daily ferment reduces fermentation gas in the gut. Meals digest cleaner." } },
+        "tl-4": { "type": "timeline_step", "settings": { "period_label": "WEEK 4+", "heading": "STEADIER ENERGY", "description": "Better gut balance = better nutrient absorption. Iron, B12, and magnesium reach you more efficiently." } },
+
+        "zs-1": { "type": "science_stat", "settings": { "icon": "🌟", "stat": "47%", "heading": "Reported Better Mood", "description": "After adding fermented foods for just 14 days." } },
+        "zs-2": { "type": "science_stat", "settings": { "icon": "⚡", "stat": "56%", "heading": "Reported More Energy", "description": "Without supplements or lifestyle changes." } },
+        "zs-3": { "type": "science_stat", "settings": { "icon": "🌬️", "stat": "42%", "heading": "Reported Less Bloating", "description": "From everyday fermented foods." } },
+        "zs-4": { "type": "science_stat", "settings": { "icon": "🍽️", "stat": "52%", "heading": "Reported Less Hunger", "description": "Linked to improved gut health." } },
+
+        "faq-1": { "type": "faq", "settings": { "question": "How long does it take to ferment?", "answer": "<p>3–5 days at typical Indian room temperature (25–32°C). Cooler weather may extend it to 6–7 days. The bubbles in the airlock tell you when it's active.</p>" } },
+        "faq-2": { "type": "faq", "settings": { "question": "Is this really probiotic?", "answer": "<p>Yes. Wild lacto-fermentation produces 8+ strains of beneficial Lactobacillus bacteria.</p>" } },
+        "faq-3": { "type": "faq", "settings": { "question": "How long does it last?", "answer": "<p>Once ready, swap to the storage lid and refrigerate. Refrigerated ferments stay good for 2 weeks.</p>" } },
+        "faq-4": { "type": "faq", "settings": { "question": "Can I reuse the jar?", "answer": "<p>The jar lasts years — borosilicate glass, dishwasher-safe. The airlock is reusable indefinitely.</p>" } },
+
+        "cons-1": { "type": "consumable", "settings": { "heading": "Spice Mix", "sub": "Complete mix for authentic homemade ferment.", "ingredients": "Ground mustard powder (the wild starter)\nSea salt (controls fermentation)\nChilli powder (warmth + colour)\nGinger powder (digestive support)", "category": "spice" } },
+        "cons-2": { "type": "consumable", "settings": { "heading": "Ferment Boost", "sub": "Prebiotic blend that boosts good bacteria. Cuts ferment time to 3–5 days.", "ingredients": "Inulin (chicory root prebiotic fiber)\nFOS (fructo-oligosaccharides)\nResistant dextrin (slow-fermenting fuel)\nFeeds good bacteria, not bad ones", "category": "boost" } },
+
+        "eat-1": { "type": "consumption_method", "settings": { "heading": "BEFORE MEALS", "description": "Aids digestion" } },
+        "eat-2": { "type": "consumption_method", "settings": { "heading": "AFTER WORKOUT", "description": "Natural electrolytes" } },
+        "eat-3": { "type": "consumption_method", "settings": { "heading": "WITH BREAKFAST", "description": "Morning gut reset" } },
+        "eat-4": { "type": "consumption_method", "settings": { "heading": "AS A SHOT", "description": "50ml cold pour" } }
+      },
+      "block_order": [
+        "trust-1","trust-2","trust-3","trust-4",
+        "step-1","step-2","step-3","step-4",
+        "cmp-1","cmp-2","cmp-3","cmp-4","cmp-5",
+        "ben-1","ben-2","ben-3",
+        "box-1","box-2","box-3","box-4",
+        "sci-1","sci-2",
+        "rev-1","rev-2","rev-3",
+        "tl-1","tl-2","tl-3","tl-4",
+        "zs-1","zs-2","zs-3","zs-4",
+        "faq-1","faq-2","faq-3","faq-4",
+        "cons-1","cons-2",
+        "eat-1","eat-2","eat-3","eat-4"
+      ]
+    }
+  },
+  "order": ["main"]
+}

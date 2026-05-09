@@ -247,27 +247,213 @@
   "tag": "section",
   "class": "leo-hero-section",
   "settings": [
-    { "type": "checkbox", "id": "show_breadcrumb", "label": "Show breadcrumb", "default": true },
-    { "type": "header", "content": "Trust strip (below ATC, single row)" },
-    { "type": "image_picker", "id": "trust_1_icon", "label": "Item 1 — icon (SVG)" },
-    { "type": "text", "id": "trust_1_text", "label": "Item 1 — text", "default": "Secure Payment" },
-    { "type": "image_picker", "id": "trust_2_icon", "label": "Item 2 — icon (SVG)" },
-    { "type": "text", "id": "trust_2_text", "label": "Item 2 — text", "default": "Free Shipping" },
-    { "type": "image_picker", "id": "trust_3_icon", "label": "Item 3 — icon (SVG)" },
-    { "type": "text", "id": "trust_3_text", "label": "Item 3 — text", "default": "FSSAI Licensed" }
+    {
+      "type": "checkbox",
+      "id": "show_breadcrumb",
+      "label": "Show breadcrumb",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Trust strip (below ATC, single row)"
+    },
+    {
+      "type": "image_picker",
+      "id": "trust_1_icon",
+      "label": "Item 1 — icon (SVG)"
+    },
+    {
+      "type": "text",
+      "id": "trust_1_text",
+      "label": "Item 1 — text",
+      "default": "Secure Payment"
+    },
+    {
+      "type": "image_picker",
+      "id": "trust_2_icon",
+      "label": "Item 2 — icon (SVG)"
+    },
+    {
+      "type": "text",
+      "id": "trust_2_text",
+      "label": "Item 2 — text",
+      "default": "Free Shipping"
+    },
+    {
+      "type": "image_picker",
+      "id": "trust_3_icon",
+      "label": "Item 3 — icon (SVG)"
+    },
+    {
+      "type": "text",
+      "id": "trust_3_text",
+      "label": "Item 3 — text",
+      "default": "FSSAI Licensed"
+    },
+    {
+      "type": "header",
+      "content": "Spacing & Typography"
+    },
+    {
+      "type": "range",
+      "id": "pad_top_d",
+      "label": "Padding top — desktop (px)",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "pad_bot_d",
+      "label": "Padding bottom — desktop (px)",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "pad_top_m",
+      "label": "Padding top — mobile (px)",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "pad_bot_m",
+      "label": "Padding bottom — mobile (px)",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "mar_top_d",
+      "label": "Margin top — desktop (px)",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "mar_bot_d",
+      "label": "Margin bottom — desktop (px)",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "mar_top_m",
+      "label": "Margin top — mobile (px)",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "mar_bot_m",
+      "label": "Margin bottom — mobile (px)",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_size_d",
+      "label": "Eyebrow font size — desktop (px)",
+      "min": 9,
+      "max": 32,
+      "step": 1,
+      "default": 22
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_size_m",
+      "label": "Eyebrow font size — mobile (px)",
+      "min": 9,
+      "max": 24,
+      "step": 1,
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "heading_size_d",
+      "label": "Heading font size — desktop (px)",
+      "min": 18,
+      "max": 80,
+      "step": 2,
+      "default": 44
+    },
+    {
+      "type": "range",
+      "id": "heading_size_m",
+      "label": "Heading font size — mobile (px)",
+      "min": 16,
+      "max": 60,
+      "step": 2,
+      "default": 30
+    }
   ],
   "blocks": [
-    { "type": "hero_benefit", "name": "Hero benefit", "limit": 4, "settings": [
-      { "type": "image_picker", "id": "icon_svg", "label": "Icon (SVG)" },
-      { "type": "text", "id": "icon_emoji", "label": "Icon emoji (fallback)" },
-      { "type": "text", "id": "label", "label": "Label" }
-    ]},
-    { "type": "hero_accordion_tab", "name": "Hero accordion tab", "limit": 4, "settings": [
-      { "type": "text", "id": "label", "label": "Tab label" },
-      { "type": "richtext", "id": "body", "label": "Tab body" },
-      { "type": "checkbox", "id": "default_open", "label": "Open by default", "default": false }
-    ]}
+    {
+      "type": "hero_benefit",
+      "name": "Hero benefit",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon_svg",
+          "label": "Icon (SVG)"
+        },
+        {
+          "type": "text",
+          "id": "icon_emoji",
+          "label": "Icon emoji (fallback)"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label"
+        }
+      ]
+    },
+    {
+      "type": "hero_accordion_tab",
+      "name": "Hero accordion tab",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Tab label"
+        },
+        {
+          "type": "richtext",
+          "id": "body",
+          "label": "Tab body"
+        },
+        {
+          "type": "checkbox",
+          "id": "default_open",
+          "label": "Open by default",
+          "default": false
+        }
+      ]
+    }
   ],
-  "presets": [{ "name": "Leo · Hero" }]
+  "presets": [
+    {
+      "name": "Leo · Hero"
+    }
+  ]
 }
 {% endschema %}
