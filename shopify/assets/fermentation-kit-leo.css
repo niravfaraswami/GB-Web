@@ -6,9 +6,69 @@
    ============================================================== */
 
 /* ============== TOKENS / SHARED ============== */
-/* 2× section-header eyebrows for Leo */
+/* Section-header eyebrows + headings now driven by per-section CSS vars
+   set on the section wrapper via leo_kit_attrs. Fallbacks match the
+   previous baseline so unset sections look identical to before. */
 [data-template="leo"] .eyebrow,
-[data-template="leo"] .first30-eyebrow { font-size: 22px; letter-spacing: 0.10em; }
+[data-template="leo"] .first30-eyebrow {
+  font-size: var(--eyebrow-size-d, 22px);
+  letter-spacing: 0.10em;
+}
+[data-template="leo"] .section-header h2,
+[data-template="leo"] .first30-h {
+  font-size: var(--heading-size-d, 44px);
+}
+@media (max-width: 768px) {
+  [data-template="leo"] .eyebrow,
+  [data-template="leo"] .first30-eyebrow { font-size: var(--eyebrow-size-m, 14px); }
+  [data-template="leo"] .section-header h2,
+  [data-template="leo"] .first30-h { font-size: var(--heading-size-m, 30px); }
+}
+
+/* Per-section padding + margin driven by CSS vars set on the
+   section wrapper. Targets the outermost <section> that carries
+   data-template="leo". Each rule's fallback matches the existing
+   pre-customisation baseline. */
+[data-template="leo"].pdp-hero,
+[data-template="leo"].trust-row-section,
+[data-template="leo"].how-make-section,
+[data-template="leo"].first30-section,
+[data-template="leo"].stacks-section,
+[data-template="leo"].stag-section,
+[data-template="leo"].reels-section,
+[data-template="leo"].reviews-section,
+[data-template="leo"].science-stag-section,
+[data-template="leo"].eat-section,
+[data-template="leo"].recipes-section,
+[data-template="leo"].faq-section,
+[data-template="leo"].cross-section,
+[data-template="leo"].judgeme-section {
+  padding-top: var(--pad-top-d, 80px);
+  padding-bottom: var(--pad-bot-d, 80px);
+  margin-top: var(--mar-top-d, 0);
+  margin-bottom: var(--mar-bot-d, 0);
+}
+@media (max-width: 768px) {
+  [data-template="leo"].pdp-hero,
+  [data-template="leo"].trust-row-section,
+  [data-template="leo"].how-make-section,
+  [data-template="leo"].first30-section,
+  [data-template="leo"].stacks-section,
+  [data-template="leo"].stag-section,
+  [data-template="leo"].reels-section,
+  [data-template="leo"].reviews-section,
+  [data-template="leo"].science-stag-section,
+  [data-template="leo"].eat-section,
+  [data-template="leo"].recipes-section,
+  [data-template="leo"].faq-section,
+  [data-template="leo"].cross-section,
+  [data-template="leo"].judgeme-section {
+    padding-top: var(--pad-top-m, 56px);
+    padding-bottom: var(--pad-bot-m, 56px);
+    margin-top: var(--mar-top-m, 0);
+    margin-bottom: var(--mar-bot-m, 0);
+  }
+}
 
 /* ============== STICKY ATC BAR ============== */
 .sticky-atc {

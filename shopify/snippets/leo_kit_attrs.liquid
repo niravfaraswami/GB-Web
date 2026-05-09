@@ -1,14 +1,33 @@
 {%- comment %}
-  Emits the data-* attributes + inline CSS variables string for a Leo refactor
-  section's outer wrapper. Reads the per-product theme_accent metafields.
+  Emits the data-* attributes + inline CSS variables for a Leo refactor
+  section's outer wrapper. Reads:
+    - per-product theme_accent metafields (kit colors)
+    - per-section spacing & typography settings (12 ranges)
+
+  Falls back to baseline defaults when a setting is undefined,
+  so it's safe to render even on sections that don't expose
+  the spacing block (e.g. sticky-atc).
 
   Usage:
     <section class="..." {%- render 'leo_kit_attrs' -%}>
 {% endcomment -%}
 {%- liquid
   assign p = product
-  assign accent = p.metafields.custom.theme_accent | default: '#C24528'
+  assign accent      = p.metafields.custom.theme_accent      | default: '#C24528'
   assign accent_dark = p.metafields.custom.theme_accent_dark | default: '#8E2E1A'
   assign accent_soft = p.metafields.custom.theme_accent_soft | default: '#FCE5DE'
+
+  assign pad_top_d = section.settings.pad_top_d | default: 80
+  assign pad_bot_d = section.settings.pad_bot_d | default: 80
+  assign pad_top_m = section.settings.pad_top_m | default: 56
+  assign pad_bot_m = section.settings.pad_bot_m | default: 56
+  assign mar_top_d = section.settings.mar_top_d | default: 0
+  assign mar_bot_d = section.settings.mar_bot_d | default: 0
+  assign mar_top_m = section.settings.mar_top_m | default: 0
+  assign mar_bot_m = section.settings.mar_bot_m | default: 0
+  assign eyebrow_d = section.settings.eyebrow_size_d | default: 22
+  assign eyebrow_m = section.settings.eyebrow_size_m | default: 14
+  assign heading_d = section.settings.heading_size_d | default: 44
+  assign heading_m = section.settings.heading_size_m | default: 30
 -%}
- data-kit="fermentation" data-template="leo" style="--kit-color: {{ accent }}; --kit-color-dark: {{ accent_dark }}; --kit-color-soft: {{ accent_soft }};"
+ data-kit="fermentation" data-template="leo" style="--kit-color: {{ accent }}; --kit-color-dark: {{ accent_dark }}; --kit-color-soft: {{ accent_soft }}; --pad-top-d: {{ pad_top_d }}px; --pad-bot-d: {{ pad_bot_d }}px; --pad-top-m: {{ pad_top_m }}px; --pad-bot-m: {{ pad_bot_m }}px; --mar-top-d: {{ mar_top_d }}px; --mar-bot-d: {{ mar_bot_d }}px; --mar-top-m: {{ mar_top_m }}px; --mar-bot-m: {{ mar_bot_m }}px; --eyebrow-size-d: {{ eyebrow_d }}px; --eyebrow-size-m: {{ eyebrow_m }}px; --heading-size-d: {{ heading_d }}px; --heading-size-m: {{ heading_m }}px;"
