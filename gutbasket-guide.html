@@ -1,0 +1,3507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your First 30 Days of Fermenting — GutBasket Guides</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   1. BASE / TOKENS / RESET / SHARED COMPONENTS
+   ============================================================ */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  /* Surfaces */
+  --white: #FFFFFF;
+  --cream: #FFF9EE;
+  --cream-deeper: #F5EDD8;
+  --border: #E8E3D5;
+  --border-soft: #F0EBDD;
+
+  /* Identity & action */
+  --ink: #1F1F1D;
+  --all-in-one: #2B2218;
+  --action: #FF7300;
+  --action-dark: #E66800;
+
+  /* Text scale */
+  --text: #1F1F1D;
+  --text-muted: #5C4D3F;
+  --text-soft: #888780;
+
+  /* Kit color (overridden per-kit by JS) */
+  --kit-color: #FF7300;
+  --kit-color-dark: #E66800;
+  --kit-color-soft: #FFE4D1;
+
+  /* Other Track A reference colors (used in blend sub-cards) */
+  --bake-improver-accent: #C9A02E;
+  --ferment-boost: #4F7C57;
+}
+
+body {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  color: var(--text);
+  background: var(--cream);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { text-decoration: none; color: inherit; }
+img { max-width: 100%; display: block; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+
+.container { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+
+h1, h2, h3, h4 {
+  font-family: 'Montserrat', sans-serif;
+  letter-spacing: -0.015em;
+  line-height: 1.1;
+}
+
+/* ============== HEADER ============== */
+.promo-bar {
+  background: var(--all-in-one);
+  color: var(--cream);
+  font-size: 13px;
+  text-align: center;
+  padding: 10px 16px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.promo-bar .item { white-space: nowrap; }
+
+header.site-header {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 24px;
+  gap: 24px;
+}
+.logo { display: inline-flex; align-items: center; }
+.logo img { height: 40px; width: auto; }
+
+.main-nav {
+  display: flex;
+  gap: 24px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.nav-link {
+  color: var(--text);
+  padding: 8px 4px;
+  position: relative;
+}
+.nav-link.has-tag::before {
+  content: attr(data-tag);
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--kit-color);
+  color: white;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 3px;
+  white-space: nowrap;
+  letter-spacing: 0.06em;
+}
+.nav-link:hover { color: var(--kit-color); }
+
+.header-actions { display: flex; gap: 14px; align-items: center; }
+.header-action {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--cream);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  color: var(--text);
+  font-size: 18px;
+}
+.cart-count {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  background: var(--kit-color);
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ============== KIT COLOR PICKER (DEV ONLY) ============== */
+.kit-picker-toggle {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 1000;
+  background: var(--ink);
+  color: var(--cream);
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-family: 'DM Mono', monospace;
+  border: 1px solid rgba(255, 249, 238, 0.2);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+}
+.kit-picker {
+  position: fixed;
+  top: 56px;
+  right: 12px;
+  z-index: 999;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 10px 40px rgba(43, 31, 26, 0.12);
+  max-width: 320px;
+  display: none;
+}
+.kit-picker.open { display: block; }
+.kit-picker-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 10px;
+}
+.kit-picker-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.kit-pick-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 6px;
+  border-radius: 8px;
+  background: var(--cream);
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.kit-pick-btn:hover { background: var(--cream-deeper); }
+.kit-pick-btn.active {
+  border-color: var(--kit-color);
+  background: var(--kit-color-soft);
+}
+.kit-pick-swatch {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+}
+.kit-pick-name {
+  font-size: 10px;
+  font-weight: 700;
+  text-align: center;
+  line-height: 1.2;
+  color: var(--text);
+}
+
+/* ============== HERO ============== */
+.pdp-hero {
+  background: var(--white);
+  padding: 48px 0 80px;
+}
+.breadcrumb {
+  padding: 16px 0;
+  font-size: 13px;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border-soft);
+}
+.breadcrumb a { color: var(--text-muted); }
+.breadcrumb a:hover { color: var(--kit-color); }
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 56px;
+  margin-top: 32px;
+}
+
+.gallery-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.gallery-main {
+  background: var(--kit-color-soft);
+  border-radius: 16px;
+  aspect-ratio: 1;
+  position: relative;
+  overflow: hidden;
+}
+.gallery-main .save-badge {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background: var(--ink);
+  color: var(--cream);
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.gallery-illustration {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 120px;
+  opacity: 0.4;
+  color: var(--kit-color);
+}
+.gallery-thumbs {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+}
+.gallery-thumb {
+  flex: 0 0 90px;
+  height: 90px;
+  background: var(--cream);
+  border: 2px solid var(--border-soft);
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 10px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 8px;
+}
+.gallery-thumb.active { border-color: var(--kit-color); }
+
+.product-info { padding-top: 8px; }
+.rating-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+}
+.stars { color: #DDA738; font-size: 15px; letter-spacing: 1px; }
+.rating-link {
+  color: var(--text-muted);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.product-name {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 32px;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin-bottom: 14px;
+  text-transform: uppercase;
+}
+.product-tagline {
+  font-size: 16px;
+  color: var(--text-muted);
+  line-height: 1.55;
+  margin-bottom: 24px;
+}
+
+.activity-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 24px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.activity-row .item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.activity-row .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #5DBC52;
+}
+
+.benefits-block {
+  margin-bottom: 28px;
+}
+.benefits-block .label {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--kit-color);
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+.benefits-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.benefit-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.4;
+}
+.benefit-icon {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  background: var(--kit-color-soft);
+  color: var(--kit-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+/* Variant selector */
+.variant-block { margin-bottom: 24px; }
+.variant-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text);
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+.variant-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+/* 3-col variant grid for kits with 3 size options (drinks: 1L, 2L, 4L) */
+.variant-grid.variant-grid-3 {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+.variant {
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 16px 16px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.15s;
+  background: var(--white);
+}
+.variant.active {
+  border-color: var(--kit-color);
+  background: var(--kit-color-soft);
+}
+.variant-tag {
+  position: absolute;
+  top: -10px;
+  left: 12px;
+  background: var(--ink);
+  color: var(--cream);
+  font-size: 9px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.06em;
+}
+.variant-radio {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  background: var(--white);
+}
+.variant.active .variant-radio { border-color: var(--kit-color); background: var(--kit-color); }
+.variant-pack {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 20px;
+  margin-bottom: 4px;
+  color: var(--text);
+}
+.variant-sub {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+.variant-illustration {
+  height: 60px;
+  background: var(--cream);
+  border-radius: 8px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  color: var(--kit-color);
+  opacity: 0.5;
+}
+.variant-price {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 18px;
+  color: var(--kit-color);
+}
+.variant-compare {
+  font-size: 13px;
+  color: var(--text-soft);
+  text-decoration: line-through;
+  margin-left: 6px;
+  font-weight: 400;
+}
+.variant-save {
+  display: block;
+  font-size: 11px;
+  color: var(--ink);
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+.atc-btn {
+  width: 100%;
+  background: var(--all-in-one);
+  color: var(--cream);
+  padding: 18px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-top: 8px;
+  transition: background 0.15s;
+}
+.atc-btn:hover { background: var(--ink); }
+
+.trust-strip {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-top: 14px;
+  font-size: 12px;
+  color: var(--text-muted);
+  flex-wrap: wrap;
+}
+.trust-strip .item { display: flex; align-items: center; gap: 6px; }
+.trust-strip .check {
+  display: inline-flex;
+  width: 14px;
+  height: 14px;
+  align-items: center;
+  justify-content: center;
+  background: #5DBC52;
+  color: white;
+  font-size: 9px;
+  border-radius: 3px;
+  font-weight: 800;
+}
+
+.coupon-bar {
+  margin-top: 18px;
+  padding: 12px 16px;
+  border: 1px dashed var(--kit-color);
+  border-radius: 10px;
+  background: var(--kit-color-soft);
+  color: var(--text);
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.coupon-bar .code {
+  background: var(--kit-color);
+  color: var(--white);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-family: 'DM Mono', monospace;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+}
+
+/* ============== SECTIONS ============== */
+section { padding: 80px 0; }
+section + section { border-top: 1px solid var(--border-soft); }
+
+.section-header { margin-bottom: 56px; max-width: 720px; }
+.section-header.centered { text-align: center; margin-left: auto; margin-right: auto; }
+.eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--kit-color);
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 44px;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  text-transform: uppercase;
+}
+h2 em { font-style: normal; color: var(--kit-color); }
+.section-header p {
+  font-size: 16px;
+  color: var(--text-muted);
+  margin-top: 16px;
+  line-height: 1.6;
+}
+
+/* ============== MYTH SECTION ============== */
+.myth-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 56px;
+  align-items: start;
+}
+.myth-pills {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.myth-pill {
+  padding: 14px 16px;
+  border-radius: 10px;
+  font-size: 13px;
+  line-height: 1.45;
+}
+.myth-pill .label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  display: block;
+}
+.myth-pill.myth {
+  background: #FCD7D2;
+  color: #6E2A22;
+}
+.myth-pill.myth .label { color: #C24528; }
+.myth-pill.fact {
+  background: #DBEDDF;
+  color: #1F4332;
+}
+.myth-pill.fact .label { color: #3F7754; }
+
+.compare-block { margin-top: 56px; }
+.compare-images {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin-bottom: 24px;
+}
+.compare-image {
+  aspect-ratio: 1;
+  border-radius: 14px;
+  background: var(--cream-deeper);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 80px;
+  opacity: 0.5;
+  color: var(--text-muted);
+}
+.compare-labels {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  text-align: center;
+  margin-bottom: 8px;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-weight: 700;
+}
+.compare-table {
+  background: var(--white);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 2px 14px rgba(43, 31, 26, 0.04);
+  border: 1px solid var(--border-soft);
+}
+.compare-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.compare-row + .compare-row { border-top: 1px solid var(--border-soft); }
+/* Desktop scoped override for tpl-01's kit-switching compare table —
+   beats the yogurt template's later .compare-row { 1.2fr 1fr 1fr } rule. */
+#compare-table.compare-table .compare-row,
+.myth-section #compare-table .compare-row {
+  grid-template-columns: 1fr 1fr !important;
+}
+.compare-cell {
+  padding: 16px 20px;
+  font-size: 13px;
+}
+.compare-cell.left { background: #FBEDEA; color: #6E2A22; }
+.compare-cell.right { background: #DBEDDF; color: #1F4332; }
+.compare-cell .h {
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.compare-cell .s {
+  font-size: 12px;
+  opacity: 0.8;
+}
+.compare-summary {
+  margin-top: 24px;
+  padding: 22px;
+  background: #DBEDDF;
+  border-radius: 12px;
+  text-align: center;
+  color: #1F4332;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.compare-summary strong { color: var(--kit-color-dark); font-weight: 700; }
+.compare-summary .caption {
+  display: block;
+  margin-top: 6px;
+  font-size: 13px;
+  opacity: 0.85;
+}
+
+/* ============== GLOBAL: Suppress alt-text rendering when images break ============== */
+/* When an <img> sits inside a container with large emoji-fallback font-size,
+   broken images render the alt text at that huge size. Prevent that universally. */
+.gallery-main img, .gallery-illustration img, .gallery-thumb img,
+.compare-image img, .step-img img, .airlock-card-img img,
+.stats-image img, .recipes-banner img, .blend-img img,
+.alive-image img, .reel-tile img, .spotlight-image img,
+.component-img img, .box-image img, .expert-thumb img,
+.cross-img img, .variant-illustration img,
+.review-photo img {
+  font-size: 0 !important;
+  color: transparent !important;
+  text-indent: -9999px;
+}
+
+/* Many image-container divs have opacity: 0.4/0.5 set for the emoji-fallback aesthetic.
+   CSS opacity propagates to children — overriding with opacity:1 on the inner <img>
+   doesn't help (opacity is multiplicative within a stacking context). The parent's
+   opacity must be reset when an actual image is present inside. */
+.gallery-main:has(img),
+.gallery-illustration:has(img),
+.compare-image:has(img),
+.airlock-card-img:has(img),
+.stats-image:has(img),
+.recipes-banner:has(img),
+.blend-img:has(img),
+.alive-image:has(img),
+.reel-tile:has(img),
+.spotlight-image:has(img),
+.component-img:has(img),
+.box-image:has(img),
+.expert-thumb:has(img),
+.cross-img:has(img),
+.variant-illustration:has(img) {
+  opacity: 1 !important;
+}
+
+/* ============== STEPS SECTION ============== */
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+.step-card {
+  background: var(--white);
+  border-radius: 14px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(43, 31, 26, 0.04);
+}
+.step-img {
+  height: 130px;
+  background: var(--kit-color-soft);
+  border-radius: 10px;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 56px;
+  color: var(--kit-color);
+  overflow: hidden;
+  position: relative;
+}
+.step-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  font-size: 0;  /* Hide alt text if image breaks */
+  color: transparent;
+}
+.step-num {
+  display: inline-flex;
+  width: 24px;
+  height: 24px;
+  background: var(--kit-color);
+  color: white;
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+  font-family: 'DM Mono', monospace;
+  font-weight: 700;
+  font-size: 11px;
+  margin-bottom: 8px;
+}
+.step-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 14px;
+  margin-bottom: 4px;
+  color: var(--text);
+  letter-spacing: 0;
+}
+.step-desc { font-size: 12px; color: var(--text-muted); }
+
+.days-strip {
+  margin-top: 28px;
+  padding: 24px 32px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  background: var(--white);
+  border-radius: 14px;
+  box-shadow: 0 2px 10px rgba(43, 31, 26, 0.04);
+}
+.days-h1 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 14px;
+  color: var(--kit-color);
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+.days-h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 28px;
+  color: var(--text);
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+.days-sub {
+  font-size: 12px;
+  color: var(--text-muted);
+  text-align: right;
+  white-space: pre-line;
+  line-height: 1.4;
+}
+
+/* ============== SCIENCE SECTION ============== */
+.science-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 56px;
+  align-items: center;
+}
+.science-image {
+  aspect-ratio: 4 / 3;
+  background: var(--cream-deeper);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 120px;
+  color: var(--text-soft);
+  opacity: 0.4;
+}
+.science-feats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-top: 24px;
+}
+.science-feat {
+  background: var(--white);
+  border-radius: 10px;
+  padding: 14px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  border: 1px solid var(--border-soft);
+}
+.science-feat-icon {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--kit-color-soft);
+  color: var(--kit-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 800;
+}
+.science-feat-h {
+  font-size: 12px;
+  font-weight: 800;
+  font-family: 'Montserrat', sans-serif;
+  color: var(--text);
+  margin-bottom: 2px;
+  text-transform: uppercase;
+}
+.science-feat-d { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
+
+.airlock-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 56px;
+}
+.airlock-card {
+  background: var(--white);
+  border: 1px solid var(--border-soft);
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 2px 10px rgba(43, 31, 26, 0.04);
+}
+.airlock-card-img {
+  height: 160px;
+  background: var(--cream);
+  border-radius: 10px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 64px;
+  color: var(--text-muted);
+  opacity: 0.4;
+  overflow: hidden;
+  position: relative;
+}
+.airlock-card-img img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  font-size: 0; color: transparent;
+}
+.airlock-name {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 20px;
+  color: var(--text);
+  margin-bottom: 14px;
+  text-transform: uppercase;
+}
+.airlock-row {
+  margin-bottom: 12px;
+}
+.airlock-row .h {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--kit-color);
+  margin-bottom: 4px;
+}
+.airlock-row .d { font-size: 13px; color: var(--text); line-height: 1.5; }
+.airlock-pill {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 6px 14px;
+  background: #DBEDDF;
+  color: #1F4332;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* ============== AIRLOCK SPOTLIGHT (single-card hero layout) ============== */
+.spotlight-wrap {
+  background: var(--cream-deeper);
+  border-radius: 18px;
+  padding: 48px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+  margin-top: 32px;
+}
+.spotlight-image {
+  aspect-ratio: 1/1;
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--cream);
+  position: relative;
+}
+.spotlight-image img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  font-size: 0; color: transparent;
+}
+.spotlight-name {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--kit-color);
+  margin-bottom: 12px;
+}
+.spotlight-h {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 28px;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  color: var(--text);
+  margin-bottom: 14px;
+}
+.spotlight-sub {
+  font-size: 15px;
+  color: var(--text-muted);
+  line-height: 1.55;
+  margin-bottom: 20px;
+}
+.spotlight-bullets {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.spotlight-bullets li {
+  font-size: 14px;
+  color: var(--text);
+  padding: 8px 0 8px 28px;
+  position: relative;
+  line-height: 1.4;
+}
+.spotlight-bullets li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  color: var(--kit-color);
+  font-weight: 700;
+}
+@media (max-width: 768px) {
+  .spotlight-wrap {
+    grid-template-columns: 1fr !important;
+    padding: 24px !important;
+    gap: 24px !important;
+  }
+  .spotlight-image { aspect-ratio: 4/3; }
+  .spotlight-h { font-size: 22px !important; }
+  .spotlight-sub { font-size: 14px !important; }
+  .spotlight-bullets li { font-size: 13px !important; }
+}
+
+/* ============== COMPONENTS (Spice Mix + Ferment Boost paired) ============== */
+.components-section { background: var(--cream); padding: 80px 0; }
+.components-sub {
+  font-size: 16px;
+  color: var(--text-muted);
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.55;
+}
+.components-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  margin-top: 16px;
+}
+.component-card {
+  background: var(--white);
+  border: 1px solid var(--border-soft);
+  border-radius: 16px;
+  overflow: hidden;
+}
+.component-img {
+  aspect-ratio: 16/10;
+  overflow: hidden;
+  background: var(--cream);
+  position: relative;
+}
+.component-img img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  font-size: 0; color: transparent;
+}
+.component-body { padding: 24px; }
+.component-h {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 20px;
+  letter-spacing: -0.01em;
+  margin-bottom: 6px;
+  color: var(--text);
+  text-transform: uppercase;
+}
+.component-tagline {
+  font-size: 13.5px;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+  line-height: 1.5;
+}
+.component-bullets {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.component-bullets li {
+  font-size: 13.5px;
+  color: var(--text);
+  padding: 6px 0 6px 22px;
+  position: relative;
+  line-height: 1.45;
+}
+.component-bullets li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  top: 6px;
+  color: var(--kit-color);
+  font-weight: 700;
+}
+.component-card.boost .component-bullets li::before {
+  color: #0097B2;
+}
+@media (max-width: 768px) {
+  .components-section { padding: 56px 0 !important; }
+  .components-grid { grid-template-columns: 1fr !important; gap: 16px !important; }
+  .component-h { font-size: 17px !important; }
+  .component-body { padding: 18px !important; }
+}
+
+/* ============== STATS / GUT BENEFITS ============== */
+.stats-image {
+  aspect-ratio: 16 / 7;
+  background: var(--cream-deeper);
+  border-radius: 16px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 80px;
+  color: var(--text-soft);
+  opacity: 0.4;
+}
+.gut-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+.gut-card {
+  background: var(--white);
+  border: 1px solid var(--border-soft);
+  border-radius: 12px;
+  padding: 18px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  box-shadow: 0 2px 8px rgba(43, 31, 26, 0.03);
+}
+.gut-icon {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--kit-color-soft);
+  color: var(--kit-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 800;
+}
+.gut-h {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 13px;
+  margin-bottom: 4px;
+  color: var(--text);
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+.gut-d { font-size: 12px; color: var(--text-muted); line-height: 1.4; }
+
+.indians-strip {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-top: 56px;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--border-soft);
+}
+.indians-cell {
+  text-align: center;
+  padding: 22px;
+}
+.indians-cell.left { background: var(--kit-color-soft); color: var(--kit-color-dark); }
+.indians-cell.right { background: #DBEDDF; color: #1F4332; }
+.indians-stat {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 28px;
+  margin-bottom: 4px;
+}
+.indians-cap { font-size: 12px; opacity: 0.85; }
+
+/* ============== EAT IT DAILY ============== */
+.eat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+.eat-card {
+  background: var(--white);
+  border: 1px solid var(--border-soft);
+  border-radius: 14px;
+  padding: 0;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(43, 31, 26, 0.03);
+}
+.eat-img {
+  height: 130px;
+  background: var(--kit-color-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+  color: var(--kit-color);
+}
+.eat-body { padding: 16px; }
+.eat-h {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 13px;
+  color: var(--text);
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+.eat-d { font-size: 12px; color: var(--text-muted); }
+
+.spoons-strip {
+  margin-top: 24px;
+  padding: 32px;
+  background: var(--kit-color);
+  border-radius: 14px;
+  color: var(--white);
+  text-align: center;
+}
+.spoons-num {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 56px;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.spoons-label {
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: 6px;
+  opacity: 0.95;
+}
+.spoons-cap {
+  font-size: 12px;
+  opacity: 0.8;
+  margin-top: 8px;
+  font-style: italic;
+}
+
+/* ============== RECIPES SECTION ============== */
+.recipes-banner {
+  aspect-ratio: 16 / 7;
+  background: var(--cream-deeper);
+  border-radius: 16px;
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 80px;
+  color: var(--text-soft);
+  opacity: 0.4;
+}
+.recipe-tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.recipe-tag {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 12px;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.recipe-tag .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--kit-color);
+}
+.recipes-h-row {
+  display: block;
+  margin-bottom: 24px;
+}
+.recipes-num {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 64px;
+  color: var(--kit-color);
+  line-height: 1;
+  display: block;
+  margin-bottom: 8px;
+}
+.recipes-h-text {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 36px;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  line-height: 1.05;
+  display: block;
+}
+.recipes-h-text em { font-style: normal; color: var(--kit-color); }
+/* Recipes section header: always left-aligned (matching live PDP) — beats global .section-header { text-align:center } */
+.recipes-section .section-header,
+.recipes-section .section-header.centered {
+  text-align: left !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+@media (max-width: 768px) {
+  .recipes-num { font-size: 56px !important; }
+  .recipes-h-text { font-size: 28px !important; }
+}
+@media (max-width: 480px) {
+  .recipes-num { font-size: 48px !important; }
+  .recipes-h-text { font-size: 24px !important; }
+}
+
+/* ============== BLENDS / WHATS INSIDE ============== */
+.blends-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+.blend-card {
+  background: var(--white);
+  border: 2px solid var(--border-soft);
+  border-radius: 14px;
+  padding: 0;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(43, 31, 26, 0.04);
+}
+.blend-card.first { border-color: var(--kit-color); }
+.blend-img {
+  height: 130px;
+  background: var(--cream);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 56px;
+  position: relative;
+}
+.blend-img .pill {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  background: var(--ink);
+  color: var(--cream);
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.06em;
+}
+.blend-body { padding: 18px; text-align: center; }
+.blend-name {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 16px;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.blend-sub {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+.blend-desc { font-size: 12px; color: var(--text-muted); line-height: 1.4; }
+
+.refill-bar {
+  margin-top: 24px;
+  padding: 16px 20px;
+  background: var(--white);
+  border: 1px solid var(--border-soft);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.refill-bar .copy {
+  font-size: 13px;
+  color: var(--text);
+}
+.refill-bar .copy strong { font-weight: 700; }
+.refill-link {
+  color: var(--kit-color);
+  font-weight: 600;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+/* ============== STATS WITH STUDY ============== */
+.zoe-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+.zoe-card {
+  background: var(--white);
+  border-radius: 14px;
+  padding: 22px 24px;
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  border: 1px solid var(--border-soft);
+}
+.zoe-icon {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--kit-color-soft);
+  color: var(--kit-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+.zoe-stat {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 24px;
+  color: var(--kit-color);
+  letter-spacing: -0.01em;
+  margin-bottom: 4px;
+}
+.zoe-h {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.zoe-d { font-size: 12px; color: var(--text-muted); line-height: 1.45; }
+.zoe-caption {
+  text-align: center;
+  margin-top: 28px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.zoe-disclaimer {
+  text-align: center;
+  margin-top: 12px;
+  font-size: 11px;
+  color: var(--text-soft);
+  font-style: italic;
+  line-height: 1.5;
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ============== REVIEWS ============== */
+.reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+.review-card {
+  background: var(--white);
+  border-radius: 14px;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  border: 1px solid var(--border-soft);
+  box-shadow: 0 2px 10px rgba(43, 31, 26, 0.04);
+}
+.review-photo {
+  height: 200px;
+  background: var(--cream-deeper);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 64px;
+  color: var(--text-soft);
+  opacity: 0.4;
+}
+.review-body { padding: 22px; }
+.review-stars {
+  color: #DDA738;
+  font-size: 16px;
+  letter-spacing: 1.5px;
+  margin-bottom: 8px;
+}
+.review-h {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 17px;
+  color: var(--text);
+  line-height: 1.3;
+  margin-bottom: 10px;
+}
+.review-author {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 22px;
+  background: var(--cream);
+  font-size: 13px;
+}
+.review-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--kit-color);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+}
+.review-name {
+  font-weight: 700;
+  color: var(--text);
+}
+.review-sub {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* ============== FAQ ============== */
+.faq-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  max-width: 760px;
+  margin: 0 auto;
+}
+.faq-item {
+  background: var(--white);
+  border: 1px solid var(--border-soft);
+  border-radius: 12px;
+  padding: 18px 22px;
+  cursor: pointer;
+}
+.faq-item.open { background: var(--white); }
+.faq-q {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--text);
+}
+.faq-toggle {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--cream);
+  color: var(--kit-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+  margin-left: 14px;
+  transition: transform 0.15s;
+}
+.faq-item.open .faq-toggle { transform: rotate(45deg); }
+.faq-a {
+  margin-top: 14px;
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  display: none;
+}
+.faq-item.open .faq-a { display: block; }
+
+/* ============== FOOTER ============== */
+footer.site-footer {
+  background: var(--all-in-one);
+  color: var(--cream);
+  padding: 60px 0 40px;
+}
+.footer-strip {
+  background: rgba(255, 249, 238, 0.04);
+  margin: -60px 0 60px;
+  padding: 16px 0;
+  font-size: 12px;
+  color: rgba(255, 249, 238, 0.7);
+  text-align: center;
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1.2fr;
+  gap: 40px;
+  margin-bottom: 40px;
+}
+.footer-col h4 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--kit-color);
+  margin-bottom: 16px;
+}
+.footer-col ul { list-style: none; }
+.footer-col li {
+  font-size: 13px;
+  margin-bottom: 8px;
+  color: rgba(255, 249, 238, 0.75);
+}
+.footer-col li a:hover { color: var(--cream); }
+.footer-bottom {
+  border-top: 1px solid rgba(255, 249, 238, 0.1);
+  padding-top: 28px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: rgba(255, 249, 238, 0.6);
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+/* ============== STICKY MOBILE ATC ============== */
+.sticky-atc {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--white);
+  border-top: 1px solid var(--border);
+  padding: 12px 16px;
+  z-index: 99;
+  box-shadow: 0 -4px 16px rgba(43, 31, 26, 0.08);
+}
+
+/* ============== GLOBAL MOBILE CAROUSEL RULE ============== */
+@media (max-width: 768px) {
+  .hero-grid,
+  .myth-grid,
+  .science-grid {
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+  }
+  h2 { font-size: 28px !important; }
+  .product-name { font-size: 28px !important; }
+  section { padding: 56px 0 !important; }
+  .pdp-hero { padding: 24px 0 56px !important; }
+  .main-nav { display: none; }
+  .promo-bar { font-size: 12px; gap: 16px; padding: 8px 12px; }
+
+  /* Stack as 2x2 grid on mobile (matches live PDP) */
+  .steps-grid,
+  .gut-grid,
+  .eat-grid,
+  .zoe-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 12px !important;
+    overflow: visible !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  .steps-grid > *,
+  .gut-grid > *,
+  .eat-grid > *,
+  .zoe-grid > * {
+    flex: none !important;
+    max-width: none !important;
+    width: auto !important;
+    scroll-snap-align: none !important;
+  }
+  /* Step cards: tighten on mobile to fit 2x2 */
+  .step-card { padding: 14px !important; }
+  .step-img { height: 100px !important; font-size: 36px !important; }
+  .step-title { font-size: 13px !important; }
+  .step-desc { font-size: 11.5px !important; line-height: 1.35; }
+  /* ZOE cards: tighten on mobile to fit 2x2 in viewport */
+  .zoe-card { padding: 16px 14px !important; }
+  .zoe-num { font-size: 28px !important; }
+  .zoe-h { font-size: 13px !important; line-height: 1.2; }
+  .zoe-d { font-size: 11.5px !important; line-height: 1.35; }
+  .zoe-icon { width: 32px !important; height: 32px !important; font-size: 16px !important; }
+
+  /* Airlock + Ferment Boost: stack 1-up vertically */
+  .airlock-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  /* Blends: stack 1-up vertically */
+  .blends-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  /* Compare table: keep 2-col grid (left | right), each row stacks below previous */
+  .compare-images,
+  .compare-labels,
+  .compare-row {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  /* Ensure rows have aligned cells by making cells fill their grid track */
+  .compare-row {
+    align-items: stretch;
+  }
+  .compare-cell {
+    padding: 14px !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    min-height: 100%;
+  }
+  .compare-cell .h { font-size: 13px !important; line-height: 1.3; }
+  .compare-cell .s { font-size: 11px !important; line-height: 1.4; }
+  /* Compare images on mobile: equal aspect ratios so labels stay aligned */
+  .compare-image {
+    aspect-ratio: 1/1 !important;
+    height: auto !important;
+  }
+  .compare-labels > * {
+    padding: 12px 8px !important;
+    font-size: 12px !important;
+    text-align: center;
+  }
+
+  /* Recipe pills: WRAP to multiple rows */
+  .recipe-tags {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+    justify-content: flex-start !important;
+    overflow: visible !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  .recipe-tag {
+    flex: 0 0 auto !important;
+    font-size: 13px !important;
+  }
+
+  /* Reviews: KEEP horizontal scroll carousel (matches live PDP 3-dot pattern) */
+  .reviews-grid {
+    display: flex !important;
+    grid-template-columns: none !important;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-left: 20px;
+    scroll-padding-right: 20px;
+    gap: 12px;
+    padding: 4px 20px 20px;
+    margin-left: -20px;
+    margin-right: -20px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .reviews-grid::-webkit-scrollbar { display: none; }
+  .reviews-grid > * {
+    flex: 0 0 78%;
+    max-width: 320px;
+    scroll-snap-align: start;
+  }
+
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 28px; }
+  .sticky-atc { display: flex; align-items: center; gap: 12px; }
+  body { padding-bottom: 88px; }
+  .sticky-atc .price-block { flex: 1; }
+  .sticky-atc .price-num {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 18px;
+    color: var(--text);
+  }
+  .sticky-atc .price-pack { font-size: 11px; color: var(--text-muted); }
+  .sticky-atc .atc-mobile {
+    background: var(--all-in-one);
+    color: var(--cream);
+    padding: 12px 24px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+}
+
+
+
+/* ============================================================
+   2. SHARED SHELL — promo bar, header, footer, mobile drawer
+   ============================================================ */
+/* ============================================================
+   UNIFIED SHELL CSS
+   Mega-menu, primary nav, templates dropdown, hash router
+   ============================================================ */
+
+/* Promo bar marquee */
+.promo-bar {
+  background: var(--all-in-one);
+  color: var(--cream);
+  font-size: 13px;
+  padding: 10px 0;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.promo-bar .promo-track {
+  display: inline-flex;
+  gap: 32px;
+  padding-right: 32px;
+  animation: promoScroll 32s linear infinite;
+}
+.promo-bar .item { white-space: nowrap; }
+@keyframes promoScroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* Header — overrides any template-specific header rules */
+header.site-header {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.header-inner {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  padding: 14px 24px;
+  gap: 32px;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+.logo { display: inline-flex; align-items: center; }
+.logo img { height: 36px; width: auto; }
+
+.primary-nav {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+}
+.nav-item { position: relative; }
+.nav-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text);
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-radius: 6px;
+  font-family: inherit;
+}
+.nav-trigger svg {
+  width: 11px;
+  height: 11px;
+  transition: transform 0.2s;
+}
+.nav-trigger:hover { color: var(--brand-orange, #FF7300); }
+.nav-trigger.open svg { transform: rotate(180deg); }
+.nav-trigger.active { color: var(--brand-orange, #FF7300); }
+
+.header-actions { display: flex; gap: 10px; align-items: center; }
+.header-action {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--cream);
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+}
+.header-action:hover { background: var(--cream-deeper, #F5EDD8); }
+.cart-count {
+  position: absolute;
+  top: -2px; right: -2px;
+  background: var(--brand-orange, #FF7300);
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* Mega menu */
+.mega-menu {
+  position: absolute;
+  top: calc(100% + 1px);
+  left: 0; right: 0;
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 16px 40px rgba(43, 31, 26, 0.08);
+  display: none;
+  z-index: 99;
+}
+.mega-menu.open {
+  display: block;
+  animation: slideDown 0.2s ease-out;
+}
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.mm-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 36px 24px 40px;
+}
+.mm-grid-shop {
+  display: grid;
+  grid-template-columns: 1.1fr 1.1fr 1fr 1fr 1fr;
+  gap: 32px;
+}
+.mm-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+.mm-grid-templates {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+.mm-template-row {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-soft, #F0EBDD);
+}
+.mm-template-row-h {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-soft, #888780);
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+.mm-template-row-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+.mm-card-sm {
+  padding: 14px 16px;
+  gap: 6px;
+}
+.mm-card-sm .icon { font-size: 22px; }
+.mm-card-sm .name { font-size: 13px; }
+.mm-card-sm .sublabel { font-size: 10px; }
+.mm-col h4 {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-soft, #888780);
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.mm-col h4 .dot {
+  display: inline-block;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+.mm-col ul { list-style: none; padding: 0; margin: 0; }
+.mm-col li { margin-bottom: 8px; }
+.mm-col li a {
+  font-size: 13px;
+  color: var(--text);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.mm-col li a:hover { color: var(--brand-orange, #FF7300); }
+.mm-col li .badge {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background: var(--cream-deeper, #F5EDD8);
+  color: var(--text-muted, #5C4D3F);
+}
+.mm-col li .badge.new { background: #FF7300; color: white; }
+.mm-col li .badge.hot { background: #8B1F40; color: white; }
+.mm-col li .badge.soon {
+  background: var(--all-in-one, #2B2218);
+  color: var(--cream);
+}
+.mm-cta {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-soft, #F0EBDD);
+}
+.mm-cta a {
+  color: var(--brand-orange, #FF7300);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.mm-card {
+  background: var(--cream);
+  border: 1px solid var(--border-soft, #F0EBDD);
+  border-radius: 12px;
+  padding: 18px;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-decoration: none;
+}
+.mm-card:hover {
+  background: var(--white);
+  border-color: var(--brand-orange, #FF7300);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(43, 31, 26, 0.08);
+}
+.mm-card .num {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--brand-orange, #FF7300);
+  letter-spacing: 0.08em;
+}
+.mm-card .icon {
+  font-size: 28px;
+  line-height: 1;
+}
+.mm-card .name {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 14px;
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+.mm-card .sublabel {
+  font-size: 11px;
+  color: var(--text-muted, #5C4D3F);
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.04em;
+}
+
+/* HOME / TEMPLATE INDEX PAGE */
+.home-hero {
+  padding: 80px 0 64px;
+  background: var(--white);
+  border-bottom: 1px solid var(--border-soft, #F0EBDD);
+}
+.home-hero .container {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+.home-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--brand-orange, #FF7300);
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+.home-h1 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 56px;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin-bottom: 18px;
+  line-height: 1.05;
+}
+.home-h1 em { font-style: normal; color: var(--brand-orange, #FF7300); }
+.home-sub {
+  font-size: 17px;
+  color: var(--text-muted, #5C4D3F);
+  max-width: 680px;
+  line-height: 1.55;
+}
+.home-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-top: 40px;
+  max-width: 880px;
+}
+.home-stat {
+  background: var(--cream);
+  border: 1px solid var(--border-soft, #F0EBDD);
+  border-radius: 12px;
+  padding: 18px 22px;
+}
+.home-stat .num {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 28px;
+  color: var(--brand-orange, #FF7300);
+  letter-spacing: -0.01em;
+  line-height: 1;
+}
+.home-stat .label {
+  font-size: 12px;
+  color: var(--text-muted, #5C4D3F);
+  margin-top: 6px;
+  line-height: 1.4;
+}
+
+.home-templates {
+  padding: 64px 0 96px;
+  background: var(--cream);
+}
+.home-templates .container {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+.home-section-h {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 32px;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+.home-section-sub {
+  font-size: 14px;
+  color: var(--text-muted, #5C4D3F);
+  margin-bottom: 32px;
+}
+.template-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+.template-grid.template-grid-3 {
+  grid-template-columns: repeat(3, 1fr);
+  max-width: 880px;
+}
+.template-grid.template-grid-1 {
+  grid-template-columns: 1fr;
+  max-width: 600px;
+}
+.template-tile {
+  background: var(--white);
+  border: 1px solid var(--border-soft, #F0EBDD);
+  border-radius: 14px;
+  padding: 24px;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: all 0.15s;
+  cursor: pointer;
+  position: relative;
+}
+.template-tile:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(43, 31, 26, 0.08);
+  border-color: var(--brand-orange, #FF7300);
+}
+.template-tile .num {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--brand-orange, #FF7300);
+  letter-spacing: 0.1em;
+}
+.template-tile .icon {
+  font-size: 40px;
+  line-height: 1;
+  margin: 4px 0;
+}
+.template-tile .name {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 17px;
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+.template-tile .sublabel {
+  font-size: 12px;
+  color: var(--text-muted, #5C4D3F);
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.04em;
+}
+.template-tile .arrow {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--cream);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+  font-size: 14px;
+  color: var(--text-muted, #5C4D3F);
+}
+.template-tile:hover .arrow {
+  background: var(--brand-orange, #FF7300);
+  color: white;
+}
+
+/* Status bar — shows which template is active */
+.status-bar {
+  background: var(--cream-deeper, #F5EDD8);
+  padding: 8px 24px;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--text-muted, #5C4D3F);
+  text-align: center;
+  border-bottom: 1px solid var(--border-soft, #F0EBDD);
+  display: none;
+}
+.status-bar.shown { display: block; }
+.status-bar a {
+  color: var(--brand-orange, #FF7300);
+  text-decoration: none;
+  font-weight: 700;
+}
+.status-bar a:hover { text-decoration: underline; }
+
+/* Hide the per-template kit-picker-toggle in the unified shell since we
+   give each template its own persistent picker via JS re-injection.
+   Templates will still get their kit-picker — see the JS mount logic. */
+
+/* MOBILE shell adaptations */
+@media (max-width: 768px) {
+  .primary-nav { display: none; }
+  .header-inner { grid-template-columns: auto auto; }
+  .home-h1 { font-size: 36px; }
+  .home-stats { grid-template-columns: 1fr 1fr; }
+  .template-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .template-grid.template-grid-3 { grid-template-columns: 1fr 1fr; }
+  .template-tile { padding: 18px; }
+  .template-tile .name { font-size: 15px; }
+  .mm-grid-shop, .mm-grid-3, .mm-grid-templates {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .mm-template-row-cards { grid-template-columns: 1fr; }
+  .promo-bar { font-size: 12px; }
+  /* Hide desktop mega-menus on mobile — replaced by mobile drawer */
+  .mega-menu { display: none !important; }
+  .mobile-menu-toggle { display: inline-flex !important; }
+}
+
+/* Hamburger button — hidden on desktop, shown on mobile */
+.mobile-menu-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+/* MOBILE DRAWER */
+.mobile-drawer {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  pointer-events: none;
+  visibility: hidden;
+  transition: visibility 0s linear 0.25s;
+}
+.mobile-drawer.open {
+  pointer-events: auto;
+  visibility: visible;
+  transition: visibility 0s linear 0s;
+}
+.mobile-drawer-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(31, 31, 29, 0.5);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+.mobile-drawer.open .mobile-drawer-overlay { opacity: 1; }
+.mobile-drawer-panel {
+  position: absolute;
+  top: 0; right: 0;
+  width: min(86vw, 360px);
+  height: 100vh;
+  height: 100dvh;
+  background: var(--white);
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: -8px 0 32px rgba(31, 31, 29, 0.12);
+}
+.mobile-drawer.open .mobile-drawer-panel { transform: translateX(0); }
+
+.mobile-drawer-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border-soft, #F0EBDD);
+  flex-shrink: 0;
+}
+.mobile-drawer-close {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--cream);
+  display: flex;
+  align-items: center; justify-content: center;
+  border: none;
+  color: var(--text);
+  cursor: pointer;
+}
+.mobile-drawer-close:active { background: var(--cream-deeper, #F5EDD8); }
+
+.mobile-drawer-nav {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 8px 0;
+}
+
+.md-section { border-bottom: 1px solid var(--border-soft, #F0EBDD); }
+.md-section[open] { background: var(--cream); }
+.md-section summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 16px 22px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  -webkit-tap-highlight-color: transparent;
+}
+.md-section summary::-webkit-details-marker { display: none; }
+.md-section .md-chev {
+  font-size: 14px;
+  color: var(--text-muted, #5C4D3F);
+  transition: transform 0.2s;
+  display: inline-block;
+}
+.md-section[open] .md-chev { transform: rotate(180deg); }
+
+.md-list {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 12px 0;
+}
+.md-list li { margin: 0; }
+.md-list a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 22px 11px 36px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+  text-decoration: none;
+  -webkit-tap-highlight-color: var(--cream-deeper, #F5EDD8);
+}
+.md-list a:active { background: var(--cream-deeper, #F5EDD8); }
+.md-link-strong { font-weight: 700 !important; color: var(--brand-orange, #FF7300) !important; }
+.md-list .md-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.md-list .md-cat-h {
+  padding: 14px 22px 6px 22px;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-soft, #888780);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.md-sublist { padding-bottom: 8px; }
+
+.mobile-drawer-foot {
+  padding: 14px 22px;
+  border-top: 1px solid var(--border-soft, #F0EBDD);
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--text-muted, #5C4D3F);
+  flex-shrink: 0;
+}
+
+
+
+/* ============================================================
+   3. TEMPLATE-SPECIFIC CSS
+   ============================================================ */
+/* ============== DIGITAL GUIDE TEMPLATE ============== */
+body { background: var(--cream); }
+/* GUIDE COVER HERO */
+.guide-cover {
+  background: linear-gradient(135deg, var(--kit-color-soft) 0%, var(--white) 100%);
+  padding: 72px 0 56px;
+  border-bottom: 1px solid var(--border-soft);
+}
+.guide-cover .container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+.guide-cover h1 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 52px;
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+  color: var(--text);
+  margin-bottom: 18px;
+  text-transform: none;
+  max-width: 760px;
+}
+.guide-subtitle {
+  font-size: 18px;
+  color: var(--text-muted);
+  line-height: 1.55;
+  margin-bottom: 32px;
+  max-width: 720px;
+}
+.guide-meta-bar {
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-soft);
+}
+.guide-meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.gm-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-weight: 700;
+}
+.gm-value {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--text);
+}
+/* PROGRESS BAR (sticky below header) */
+.progress-bar-wrap {
+  position: sticky;
+  top: 76px;
+  z-index: 50;
+  background: var(--white);
+  border-bottom: 1px solid var(--border-soft);
+  padding: 14px 0;
+}
+.progress-bar-wrap .container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.progress-track {
+  flex: 1;
+  height: 6px;
+  background: var(--cream-deeper);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--kit-color);
+  width: 16%;
+  transition: width 0.3s ease;
+}
+.progress-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  font-weight: 700;
+  white-space: nowrap;
+}
+/* MAIN LAYOUT — sidebar + content */
+.guide-body {
+  padding: 56px 0 96px;
+}
+.guide-body .container {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 56px;
+  align-items: start;
+}
+/* SIDEBAR NAV */
+.guide-sidebar {
+  position: sticky;
+  top: 140px;
+  background: var(--white);
+  border: 1px solid var(--border-soft);
+  border-radius: 16px;
+  padding: 24px;
+}
+.sidebar-h {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  font-weight: 700;
+  margin-bottom: 18px;
+}
+.section-list { list-style: none; padding: 0; margin: 0; }
+.section-list-item {
+  margin-bottom: 4px;
+}
+.section-list-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.35;
+  transition: background 0.15s;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+}
+.section-list-link:hover { background: var(--cream); }
+.section-list-link.active {
+  background: var(--kit-color-soft);
+  color: var(--kit-color-dark);
+  font-weight: 700;
+}
+.section-list-num {
+  flex-shrink: 0;
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background: var(--cream-deeper);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center; justify-content: center;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  position: relative;
+}
+.section-list-link.active .section-list-num {
+  background: var(--kit-color);
+  color: var(--cream);
+}
+.section-list-link.completed .section-list-num {
+  background: #5DBC52;
+  color: var(--white);
+}
+.section-list-link.completed .section-list-num::before {
+  content: '✓';
+  position: absolute;
+}
+.section-list-link.completed .section-list-num span { display: none; }
+/* CONTENT AREA — only one section visible at a time */
+.guide-content {
+  max-width: 760px;
+}
+.section-pane { display: none; }
+.section-pane.active { display: block; }
+.pane-header {
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border-soft);
+}
+.pane-progress {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--kit-color);
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.pane-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 36px;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin-bottom: 10px;
+  line-height: 1.1;
+  text-transform: none;
+}
+.pane-duration {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.pane-duration::before { content: '⏱'; }
+.pane-intro {
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--text);
+  margin-bottom: 28px;
+  font-style: italic;
+}
+/* Video block */
+.pane-video {
+  margin-bottom: 32px;
+  background: var(--white);
+  border: 1px solid var(--border-soft);
+  border-radius: 14px;
+  overflow: hidden;
+}
+.pane-video-thumb {
+  aspect-ratio: 16 / 9;
+  background: linear-gradient(135deg, var(--kit-color-dark), var(--kit-color));
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  color: var(--cream);
+}
+.pane-video-play {
+  width: 76px; height: 76px;
+  background: rgba(0,0,0,0.5);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px;
+  border: 2px solid var(--cream);
+  color: var(--cream);
+  transition: all 0.15s;
+}
+.pane-video-thumb:hover .pane-video-play {
+  background: rgba(0,0,0,0.8);
+  transform: scale(1.05);
+}
+.pane-video-title {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+/* Lesson body */
+.pane-lesson {
+  font-family: 'DM Sans', system-ui, sans-serif;
+}
+.pane-lesson p {
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--text);
+  margin-bottom: 16px;
+}
+.pane-lesson p strong { color: var(--ink); font-weight: 700; }
+/* Key takeaways callout */
+.takeaways-block {
+  margin: 32px 0;
+  padding: 24px 28px;
+  background: var(--white);
+  border: 1px solid var(--border-soft);
+  border-left: 4px solid var(--kit-color);
+  border-radius: 12px;
+}
+.takeaways-h {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--kit-color-dark);
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+.takeaways-list { list-style: none; padding: 0; margin: 0; }
+.takeaways-list li {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text);
+  padding: 8px 0;
+  padding-left: 24px;
+  position: relative;
+}
+.takeaways-list li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--kit-color);
+  font-weight: 800;
+}
+/* Action item card */
+.action-card {
+  margin: 32px 0;
+  padding: 28px 32px;
+  background: var(--all-in-one);
+  color: var(--cream);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+.action-icon {
+  flex-shrink: 0;
+  width: 56px; height: 56px;
+  background: var(--kit-color);
+  color: var(--cream);
+  border-radius: 50%;
+  display: flex;
+  align-items: center; justify-content: center;
+  font-size: 24px;
+  font-weight: 800;
+}
+.action-body { flex: 1; }
+.action-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--kit-color);
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.action-text {
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--cream);
+}
+/* Section navigation footer */
+.pane-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-soft);
+  gap: 16px;
+}
+.pane-nav-btn {
+  background: var(--white);
+  border: 1px solid var(--border);
+  padding: 14px 22px;
+  border-radius: 999px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.pane-nav-btn:hover { border-color: var(--kit-color); color: var(--kit-color-dark); }
+.pane-nav-btn.next {
+  background: var(--kit-color);
+  color: var(--cream);
+  border-color: var(--kit-color);
+}
+.pane-nav-btn.next:hover { background: var(--kit-color-dark); color: var(--cream); }
+.pane-nav-btn[disabled] { opacity: 0.4; cursor: not-allowed; }
+/* COMPLETION SCREEN */
+.complete-screen {
+  text-align: center;
+  padding: 48px 0;
+}
+.complete-icon {
+  width: 80px; height: 80px;
+  background: var(--kit-color);
+  color: var(--cream);
+  border-radius: 50%;
+  display: flex;
+  align-items: center; justify-content: center;
+  font-size: 36px;
+  margin: 0 auto 24px;
+}
+.complete-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 36px;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin-bottom: 14px;
+}
+.complete-desc {
+  font-size: 16px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  max-width: 480px;
+  margin: 0 auto 32px;
+}
+/* END CTA */
+.guide-cta {
+  background: var(--all-in-one);
+  color: var(--cream);
+  border-radius: 18px;
+  padding: 48px;
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 40px;
+  align-items: center;
+  margin: 32px 0;
+}
+.guide-cta-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--kit-color);
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+.guide-cta-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 28px;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--cream);
+  margin-bottom: 12px;
+  text-align: left;
+}
+.guide-cta-desc {
+  font-size: 14px;
+  line-height: 1.55;
+  color: rgba(255,249,238,0.78);
+}
+.guide-cta-product { text-align: right; }
+.guide-cta-name {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: rgba(255,249,238,0.78);
+  margin-bottom: 4px;
+}
+.guide-cta-price {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 32px;
+  color: var(--kit-color);
+  margin-bottom: 16px;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.guide-cta-button {
+  display: inline-block;
+  background: var(--kit-color);
+  color: var(--cream);
+  padding: 14px 26px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+@media (max-width: 768px) {
+  .guide-cover h1 { font-size: 32px; }
+  .guide-subtitle { font-size: 16px; }
+  .guide-body .container {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .guide-sidebar {
+    position: static;
+    margin-bottom: 12px;
+  }
+  .pane-title { font-size: 26px; }
+  .pane-intro { font-size: 15px; }
+  .action-card {
+    flex-direction: column;
+    text-align: center;
+    padding: 24px;
+  }
+  .pane-nav { flex-direction: column; }
+  .pane-nav-btn { justify-content: center; }
+  .guide-cta {
+    grid-template-columns: 1fr;
+    padding: 32px 24px;
+    gap: 24px;
+    text-align: left;
+  }
+  .guide-cta-product { text-align: left; }
+  .guide-meta-bar { gap: 18px; }
+}
+
+</style>
+
+<style>
+/* ============================================================
+   4. POST-PROCESSED OVERRIDES — overflow guards, alternating bg
+   ============================================================ */
+/* ===== POST-PROCESSED CSS =====
+   1. Alternating section backgrounds (white/cream).
+   2. .section-accent override for kit-color-soft tinted sections.
+   3. Mobile overflow guards.
+   Works in standalone (body > section) and unified (main > section) contexts. */
+html, body { overflow-x: hidden !important; max-width: 100vw !important; }
+body > section, main > section { background: var(--white); }
+body > section.pdp-hero, main > section.pdp-hero { background: var(--white); }
+body > section:nth-of-type(2n+2), main > section:nth-of-type(2n+2) { background: var(--cream); }
+section.section-accent { background: var(--kit-color-soft) !important; }
+
+/* MOBILE OVERFLOW GUARDS — single-column grids at narrow widths must use
+   minmax(0, 1fr) so they don't stretch to fit min-content of children. */
+@media (max-width: 768px) {
+  .hero-grid,
+  .myth-grid,
+  .science-grid,
+  .recipe-hero .container,
+  .article-body-wrap .container,
+  .guide-body .container {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  .hero-grid > *,
+  .gallery-stack,
+  .product-info,
+  .recipe-hero > * > *,
+  .article-body,
+  .guide-content {
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+  .product-name,
+  .recipe-hero h1,
+  .article-hero h1,
+  .guide-cover h1 {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+}
+
+
+/* ============================================================
+   5. KIT COLOUR INITIALISATION
+   Override per category / product / variant if you re-use this
+   template. These three CSS variables drive every accent on the
+   page (pills, progress bars, buttons, links, hover states).
+   ============================================================ */
+:root {
+  --kit-color:      #FF7300;
+  --kit-color-dark: #E66800;
+  --kit-color-soft: #FFE4D1;
+}
+</style>
+</head>
+<body>
+
+<!-- PROMO BAR -->
+<div class="promo-bar">
+  <div class="promo-track">
+    <span class="item">🍃 Free Shipping over ₹300</span><span class="item">⚡ Ships Next Working Day</span><span class="item">🇮🇳 Made in India</span><span class="item">🛡️ Secure Checkout</span><span class="item">💵 Cash On Delivery</span><span class="item">🔄 Easy Returns</span><span class="item">📦 25,000+ kits shipped</span><span class="item">💬 Expert help on WhatsApp</span><span class="item">🍃 Free Shipping over ₹300</span><span class="item">⚡ Ships Next Working Day</span><span class="item">🇮🇳 Made in India</span><span class="item">🛡️ Secure Checkout</span><span class="item">💵 Cash On Delivery</span><span class="item">🔄 Easy Returns</span><span class="item">📦 25,000+ kits shipped</span><span class="item">💬 Expert help on WhatsApp</span>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-inner">
+    <a href="#" class="logo" aria-label="GutBasket">
+      <span style="font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 22px; letter-spacing: -0.02em; color: var(--ink);">GutBasket</span>
+    </a>
+    <nav class="primary-nav">
+      <div class="nav-item"><button class="nav-trigger">Shop</button></div>
+      <div class="nav-item"><button class="nav-trigger">Learn</button></div>
+      <div class="nav-item"><button class="nav-trigger">Recipes</button></div>
+      <div class="nav-item"><button class="nav-trigger">About</button></div>
+    </nav>
+    <div class="header-actions">
+      <button class="header-action" aria-label="Search">🔍</button>
+      <button class="header-action" aria-label="Account">👤</button>
+      <button class="header-action" aria-label="Cart">🛒<span class="cart-count">0</span></button>
+    </div>
+  </div>
+</header>
+
+
+<!-- ============================================================
+     TEMPLATE BODY — this is the part that becomes a Shopify
+     template / section. Everything else (promo bar, header,
+     footer) is theme-shell and lives in the theme's existing
+     header/footer sections.
+     ============================================================ -->
+<main>
+
+
+
+
+<!-- COVER -->
+<section class="guide-cover">
+  <div class="container">
+    <div class="cat-pill">
+      <span class="dot"></span>
+      <span data-bind="category">FERMENTATION 101</span>
+    </div>
+    <h1 data-bind="guide-title">Your First 30 Days of Fermenting</h1>
+    <p class="guide-subtitle" data-bind="guide-subtitle">A complete walkthrough from "I've never fermented anything" to "I have three live ferments in my kitchen". Six sections, ~3 hours of total time across the month.</p>
+    <div class="guide-meta-bar">
+      <div class="guide-meta-item">
+        <div class="gm-label">Duration</div>
+        <div class="gm-value" data-bind="duration">~3 hours · spread over 30 days</div>
+      </div>
+      <div class="guide-meta-item">
+        <div class="gm-label">Level</div>
+        <div class="gm-value" data-bind="level">Absolute Beginner</div>
+      </div>
+      <div class="guide-meta-item">
+        <div class="gm-label">Sections</div>
+        <div class="gm-value" data-bind="sections-count">6 sections</div>
+      </div>
+      <div class="guide-meta-item">
+        <div class="gm-label">Format</div>
+        <div class="gm-value">Self-paced · Save progress</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROGRESS BAR -->
+<div class="progress-bar-wrap">
+  <div class="container">
+    <div class="progress-track">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+    <div class="progress-label" id="progress-label">SECTION 1 OF 6</div>
+  </div>
+</div>
+
+<!-- BODY -->
+<div class="guide-body">
+  <div class="container">
+    <aside class="guide-sidebar">
+      <div class="sidebar-h">SECTIONS</div>
+      <ul class="section-list" id="section-list">
+        <li class="section-list-item">
+  <a class="section-list-link active" data-section-idx="0">
+    <span class="section-list-num"><span>1</span></span>
+    <span>Welcome to fermentation</span>
+  </a>
+</li><li class="section-list-item">
+  <a class="section-list-link" data-section-idx="1">
+    <span class="section-list-num"><span>2</span></span>
+    <span>Setting up your kitchen lab</span>
+  </a>
+</li><li class="section-list-item">
+  <a class="section-list-link" data-section-idx="2">
+    <span class="section-list-num"><span>3</span></span>
+    <span>Your first batch: sauerkraut</span>
+  </a>
+</li><li class="section-list-item">
+  <a class="section-list-link" data-section-idx="3">
+    <span class="section-list-num"><span>4</span></span>
+    <span>Reading your ferment</span>
+  </a>
+</li><li class="section-list-item">
+  <a class="section-list-link" data-section-idx="4">
+    <span class="section-list-num"><span>5</span></span>
+    <span>Branching out: kanji and achaar</span>
+  </a>
+</li><li class="section-list-item">
+  <a class="section-list-link" data-section-idx="5">
+    <span class="section-list-num"><span>6</span></span>
+    <span>Going forward</span>
+  </a>
+</li>
+      </ul>
+    </aside>
+
+    <main class="guide-content" id="guide-content">
+      <div class="section-pane active" data-section-idx="0">
+  <div class="pane-header">
+    <div class="pane-progress">SECTION 1 OF 6</div>
+    <h2 class="pane-title">Welcome to fermentation</h2>
+    <span class="pane-duration">20 min</span>
+  </div>
+
+  <div class="pane-video">
+    <div class="pane-video-thumb" onclick="loadGuideVideo('dQw4w9WgXcQ', this)">
+      <span class="pane-video-play">▶</span>
+      <div class="pane-video-title">Why fermentation, and why now</div>
+    </div>
+  </div>
+
+  <p class="pane-intro">Before we touch a jar, you need to know what you're doing and why. This first section is mindset and basics — no shopping yet.</p>
+
+  <div class="pane-lesson">
+    <p><strong>What you'll learn:</strong> What lacto-fermentation actually is. Why salt is the only "preservative" you need. What "live cultures" really means in your gut.</p>
+<p>Fermentation has been around for as long as humans have been preserving food. It predates refrigeration, predates canning, predates everything. And yet most modern Indian kitchens have forgotten it.</p>
+<p>In the next 30 days you're going to bring it back. By day 30 you'll have three live ferments going. You'll know how to read them, how to fix them, and how to keep them going.</p>
+
+  </div>
+
+  <div class="takeaways-block">
+    <div class="takeaways-h">KEY TAKEAWAYS</div>
+    <ul class="takeaways-list">
+      <li>Lacto-fermentation = salt + vegetables + time. No special equipment needed beyond a jar.</li><li>Salt at 2% by weight is the "referee" — keeps bad bacteria out, lets good ones thrive.</li><li>Live cultures = beneficial bacteria. They survive your stomach acid and reach your gut.</li>
+    </ul>
+  </div>
+
+  <div class="action-card">
+    <div class="action-icon">→</div>
+    <div class="action-body">
+      <div class="action-eyebrow">YOUR NEXT ACTION</div>
+      <div class="action-text">Read this entire section. Don't buy anything yet. Tomorrow you'll set up your fermentation lab.</div>
+    </div>
+  </div>
+
+  <div class="pane-nav">
+    <button class="pane-nav-btn prev" onclick="navSection(-1)" disabled>← Previous</button>
+    <button class="pane-nav-btn next" onclick="navSection(1)">Next section →</button>
+  </div>
+</div><div class="section-pane" data-section-idx="1">
+  <div class="pane-header">
+    <div class="pane-progress">SECTION 2 OF 6</div>
+    <h2 class="pane-title">Setting up your kitchen lab</h2>
+    <span class="pane-duration">30 min</span>
+  </div>
+
+  <div class="pane-video">
+    <div class="pane-video-thumb" onclick="loadGuideVideo('dQw4w9WgXcQ', this)">
+      <span class="pane-video-play">▶</span>
+      <div class="pane-video-title">Your fermentation toolkit</div>
+    </div>
+  </div>
+
+  <p class="pane-intro">You don't need a "lab". You need 4 things: jar, weight, airlock, salt. This section walks through what to get, what to skip, and how much to spend.</p>
+
+  <div class="pane-lesson">
+    <p><strong>The essential 4:</strong> Wide-mouth glass jar (1L or 2L). Glass weight that fits inside. Airlock with a silicone grommet. Sea salt or rock salt — never iodised.</p>
+<p><strong>Things you don't need:</strong> Fancy fermentation crocks (₹4,000+). Specialty starter cultures (the cabbage already has them). Distilled water (filtered tap is fine).</p>
+<p>Total cost if you buy everything separately: about ₹1,200. If you buy our kit: ₹1,499 with the spice mixes already measured. Up to you — both work.</p>
+
+  </div>
+
+  <div class="takeaways-block">
+    <div class="takeaways-h">KEY TAKEAWAYS</div>
+    <ul class="takeaways-list">
+      <li>Wide-mouth jars only. Narrow-mouth jars trap vegetables above the brine.</li><li>Use sea salt or rock salt. Iodised salt kills the bacteria you're trying to grow.</li><li>Filtered water — chlorinated tap water can stall fermentation.</li>
+    </ul>
+  </div>
+
+  <div class="action-card">
+    <div class="action-icon">→</div>
+    <div class="action-body">
+      <div class="action-eyebrow">YOUR NEXT ACTION</div>
+      <div class="action-text">Acquire the 4 tools. Set them up in a cool spot in your kitchen (away from direct sun, below 25°C). Tomorrow you'll do your first ferment.</div>
+    </div>
+  </div>
+
+  <div class="pane-nav">
+    <button class="pane-nav-btn prev" onclick="navSection(-1)" >← Previous</button>
+    <button class="pane-nav-btn next" onclick="navSection(1)">Next section →</button>
+  </div>
+</div><div class="section-pane" data-section-idx="2">
+  <div class="pane-header">
+    <div class="pane-progress">SECTION 3 OF 6</div>
+    <h2 class="pane-title">Your first batch: sauerkraut</h2>
+    <span class="pane-duration">45 min hands-on, 7 days waiting</span>
+  </div>
+
+  <div class="pane-video">
+    <div class="pane-video-thumb" onclick="loadGuideVideo('dQw4w9WgXcQ', this)">
+      <span class="pane-video-play">▶</span>
+      <div class="pane-video-title">Sauerkraut — the fermenter's first kiss</div>
+    </div>
+  </div>
+
+  <p class="pane-intro">The most forgiving ferment in the world. One ingredient (cabbage), one preservative (salt), one container (jar). You will not fail at this. And on day 7, you'll eat real probiotic food you made yourself.</p>
+
+  <div class="pane-lesson">
+    <p><strong>Day 0:</strong> Shred 1kg cabbage finely. Add 20g salt. Massage by hand for 5 minutes — the salt pulls water out of the cabbage, this is your brine. Pack tightly into the jar, push down so the brine covers all the cabbage. Glass weight on top. Airlock on. Done.</p>
+<p><strong>Day 1:</strong> Check that vegetables are still under brine. Smell — should be cabbage-y.</p>
+<p><strong>Day 3:</strong> Bubbles in the brine. Slightly cloudy. Smell shifting — sharper, more sour.</p>
+<p><strong>Day 7:</strong> Open. Taste a small piece. If you like the tang, refrigerate. If you want more tang, leave another 2-3 days.</p>
+
+  </div>
+
+  <div class="takeaways-block">
+    <div class="takeaways-h">KEY TAKEAWAYS</div>
+    <ul class="takeaways-list">
+      <li>Salt = 2% of the cabbage weight. 1kg cabbage = 20g salt.</li><li>The brine MUST cover all cabbage. Anything above the brine line gets mould.</li><li>Bubbles by day 3 = working. No bubbles by day 4 = check temperature.</li>
+    </ul>
+  </div>
+
+  <div class="action-card">
+    <div class="action-icon">→</div>
+    <div class="action-body">
+      <div class="action-eyebrow">YOUR NEXT ACTION</div>
+      <div class="action-text">Make 1kg of sauerkraut. Set a daily reminder to check the jar. Don't open it until day 7.</div>
+    </div>
+  </div>
+
+  <div class="pane-nav">
+    <button class="pane-nav-btn prev" onclick="navSection(-1)" >← Previous</button>
+    <button class="pane-nav-btn next" onclick="navSection(1)">Next section →</button>
+  </div>
+</div><div class="section-pane" data-section-idx="3">
+  <div class="pane-header">
+    <div class="pane-progress">SECTION 4 OF 6</div>
+    <h2 class="pane-title">Reading your ferment</h2>
+    <span class="pane-duration">15 min</span>
+  </div>
+
+  <div class="pane-video">
+    <div class="pane-video-thumb" onclick="loadGuideVideo('dQw4w9WgXcQ', this)">
+      <span class="pane-video-play">▶</span>
+      <div class="pane-video-title">Signs of a healthy ferment</div>
+    </div>
+  </div>
+
+  <p class="pane-intro">By now you're a few days in. Things are happening in the jar. This section teaches you what to look for, what's normal, what's alarming, and what's actually fine.</p>
+
+  <div class="pane-lesson">
+    <p><strong>Cloudy brine:</strong> Normal. The bacteria are multiplying. Brine clears slightly after fermentation completes.</p>
+<p><strong>Bubbles:</strong> Good. Especially days 3-5. Means the bacteria are producing CO2. Should slow down by day 6-7.</p>
+<p><strong>White film on the surface:</strong> Probably kahm yeast. Harmless. Skim and continue.</p>
+<p><strong>Fuzzy patches in any color:</strong> Probably mould. Most likely cause: vegetables above the brine line. Throw out and start again.</p>
+<p><strong>Sour, sharp smell:</strong> Excellent. That's lactic acid.</p>
+<p><strong>Putrid smell, rotten egg, ammonia:</strong> Throw out. Something went wrong.</p>
+
+  </div>
+
+  <div class="takeaways-block">
+    <div class="takeaways-h">KEY TAKEAWAYS</div>
+    <ul class="takeaways-list">
+      <li>Cloudy ≠ bad. Cloudy = bacteria active.</li><li>White film = kahm yeast = scrape and continue.</li><li>Fuzzy = mould = throw out (most of the time).</li><li>Putrid smell = throw out always.</li>
+    </ul>
+  </div>
+
+  <div class="action-card">
+    <div class="action-icon">→</div>
+    <div class="action-body">
+      <div class="action-eyebrow">YOUR NEXT ACTION</div>
+      <div class="action-text">Open your sauerkraut jar briefly on day 5. Look. Smell. Match what you see to this section. Record observations in a kitchen notebook.</div>
+    </div>
+  </div>
+
+  <div class="pane-nav">
+    <button class="pane-nav-btn prev" onclick="navSection(-1)" >← Previous</button>
+    <button class="pane-nav-btn next" onclick="navSection(1)">Next section →</button>
+  </div>
+</div><div class="section-pane" data-section-idx="4">
+  <div class="pane-header">
+    <div class="pane-progress">SECTION 5 OF 6</div>
+    <h2 class="pane-title">Branching out: kanji and achaar</h2>
+    <span class="pane-duration">60 min hands-on, 5-7 days waiting</span>
+  </div>
+
+  <div class="pane-video">
+    <div class="pane-video-thumb" onclick="loadGuideVideo('dQw4w9WgXcQ', this)">
+      <span class="pane-video-play">▶</span>
+      <div class="pane-video-title">Indian ferments — kanji and achaar</div>
+    </div>
+  </div>
+
+  <p class="pane-intro">You've done sauerkraut. Now we make ferments that taste like home. Kanji — the Punjabi probiotic drink. Achaar — but the lacto-fermented kind, not the oil-preserved kind.</p>
+
+  <div class="pane-lesson">
+    <p><strong>Kanji (5 days):</strong> 500g black or red carrots, sliced. 1L filtered water. 1 tbsp cracked mustard. 1 tsp kala namak. 1 tsp regular salt. Pack everything in the jar. Airlock. Wait 5 days. Strain. Drink.</p>
+<p><strong>Raw mango achaar (5-7 days):</strong> 900g raw mangoes cubed. 20g salt. 8g black mustard. 7g red chilli. 6g fennel. 3g turmeric. Mix, pack, weight, airlock. Wait 5-7 days.</p>
+<p>Both follow the same fundamental pattern: vegetables + salt + spices + water + time. Once you get the pattern, you can ferment almost anything.</p>
+
+  </div>
+
+  <div class="takeaways-block">
+    <div class="takeaways-h">KEY TAKEAWAYS</div>
+    <ul class="takeaways-list">
+      <li>Different vegetables ferment at different rates. Cabbage = 7 days. Mango = 5 days. Carrots = 5 days.</li><li>The pattern is universal: 2% salt, submerged vegetables, airlock, time.</li><li>You can substitute almost anything. Cucumbers. Cauliflower. Beetroot. Daikon.</li>
+    </ul>
+  </div>
+
+  <div class="action-card">
+    <div class="action-icon">→</div>
+    <div class="action-body">
+      <div class="action-eyebrow">YOUR NEXT ACTION</div>
+      <div class="action-text">Make kanji and achaar. Run all three ferments simultaneously (sauerkraut, kanji, achaar). Label the jars with the start date. By the end of this section you'll have 3 active ferments.</div>
+    </div>
+  </div>
+
+  <div class="pane-nav">
+    <button class="pane-nav-btn prev" onclick="navSection(-1)" >← Previous</button>
+    <button class="pane-nav-btn next" onclick="navSection(1)">Next section →</button>
+  </div>
+</div><div class="section-pane" data-section-idx="5">
+  <div class="pane-header">
+    <div class="pane-progress">SECTION 6 OF 6</div>
+    <h2 class="pane-title">Going forward</h2>
+    <span class="pane-duration">20 min</span>
+  </div>
+
+  <div class="pane-video">
+    <div class="pane-video-thumb" onclick="loadGuideVideo('dQw4w9WgXcQ', this)">
+      <span class="pane-video-play">▶</span>
+      <div class="pane-video-title">Building a fermentation practice</div>
+    </div>
+  </div>
+
+  <p class="pane-intro">Day 30. You have three live ferments. You've eaten food you made with bacteria. Now what?</p>
+
+  <div class="pane-lesson">
+    <p><strong>Eat them daily:</strong> 1-2 tablespoons of fermented food per meal. Sauerkraut on a sandwich. Achaar with dal-rice. Kanji as a digestive shot before lunch.</p>
+<p><strong>Keep one batch always going:</strong> When one finishes, start another. The kitchen always has at least one active ferment.</p>
+<p><strong>Experiment:</strong> Try fermenting whatever's in season. Daikon in winter. Mangoes in summer. Carrots year-round.</p>
+<p><strong>Read more:</strong> Sandor Ellix Katz, "The Art of Fermentation". Best book on the subject.</p>
+<p><strong>Track what works:</strong> Notebook. Note what worked, what failed, why. Your batches improve every month.</p>
+
+  </div>
+
+  <div class="takeaways-block">
+    <div class="takeaways-h">KEY TAKEAWAYS</div>
+    <ul class="takeaways-list">
+      <li>Daily consumption matters more than perfect technique.</li><li>A "fermentation practice" beats a "fermentation project".</li><li>You've done the hardest part — starting.</li>
+    </ul>
+  </div>
+
+  <div class="action-card">
+    <div class="action-icon">→</div>
+    <div class="action-body">
+      <div class="action-eyebrow">YOUR NEXT ACTION</div>
+      <div class="action-text">Set a recurring weekly reminder to start a new batch. Buy a notebook. Make Sunday "ferment day". You're no longer a beginner.</div>
+    </div>
+  </div>
+
+  <div class="pane-nav">
+    <button class="pane-nav-btn prev" onclick="navSection(-1)" >← Previous</button>
+    <button class="pane-nav-btn next" onclick="navSection(1)">Complete guide ✓</button>
+  </div>
+</div>
+
+      <!-- COMPLETION SCREEN -->
+      <div class="section-pane" data-section-idx="complete">
+        <div class="complete-screen">
+          <div class="complete-icon">🎉</div>
+          <div class="complete-title">You've completed the guide.</div>
+          <div class="complete-desc">You now have everything you need to put this into practice. The next step isn't reading more — it's doing.</div>
+        </div>
+
+        <div class="guide-cta">
+          <div>
+            <div class="guide-cta-eyebrow" data-bind="cta-eyebrow">NOW THAT YOU'RE READY</div>
+            <div class="guide-cta-title" data-bind="cta-title">Get the kit that makes this guide foolproof.</div>
+            <div class="guide-cta-desc" data-bind="cta-desc">Pre-measured spices, the right jar, an airlock, a glass weight, and a printed copy of this guide. Skip the trial and error.</div>
+          </div>
+          <div class="guide-cta-product">
+            <div class="guide-cta-name" data-bind="cta-product">All-in-One Fermentation Kit</div>
+            <div class="guide-cta-price" data-bind="cta-price">From ₹2,999</div>
+            <a href="#template-01" class="guide-cta-button" data-bind="cta-link">Shop Now →</a>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <a href="#" class="logo">
+          <span style="font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 24px; color: var(--cream);">GutBasket</span>
+        </a>
+        <p style="margin-top: 16px; font-size: 13px; color: rgba(255,249,238,0.65); line-height: 1.55;">India's first probiotic fermentation brand. Live cultures in every spoon.</p>
+      </div>
+      <div class="footer-col">
+        <h4>SHOP</h4>
+        <ul class="footer-links">
+          <li><a href="#">Fermentation Kits</a></li>
+          <li><a href="#">Spice Refills</a></li>
+          <li><a href="#">Prebiotics</a></li>
+          <li><a href="#">Sprouts</a></li>
+          <li><a href="#">Baking</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>LEARN</h4>
+        <ul class="footer-links">
+          <li><a href="#">Fermentation 101</a></li>
+          <li><a href="#">Recipes</a></li>
+          <li><a href="#">Guides</a></li>
+          <li><a href="#">Gut Health Science</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>HELP</h4>
+        <ul class="footer-links">
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">Shipping</a></li>
+          <li><a href="#">Returns</a></li>
+          <li><a href="#">FAQ</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>STAY IN TOUCH</h4>
+        <p style="font-size: 13px; color: rgba(255,249,238,0.65); line-height: 1.55; margin-bottom: 12px;">Get recipes, guides and 10% off your first order.</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 GutBasket Foods Pvt. Ltd.</span>
+      <span>Made in India 🇮🇳</span>
+    </div>
+  </div>
+</footer>
+
+
+<script>
+
+// === Digital guide section navigation ===
+let currentSection = 0;
+const totalSections = document.querySelectorAll('.section-pane[data-section-idx]').length - 1; // exclude completion screen
+
+function showSection(idx) {
+  document.querySelectorAll('.section-pane').forEach(p => p.classList.remove('active'));
+  let targetPane;
+  if (idx >= totalSections) {
+    targetPane = document.querySelector('.section-pane[data-section-idx="complete"]');
+  } else {
+    targetPane = document.querySelector('.section-pane[data-section-idx="' + idx + '"]');
+  }
+  if (targetPane) targetPane.classList.add('active');
+
+  // Update sidebar
+  document.querySelectorAll('.section-list-link').forEach((l, i) => {
+    l.classList.remove('active', 'completed');
+    if (i < idx) l.classList.add('completed');
+    if (i === idx) l.classList.add('active');
+  });
+
+  // Update progress bar
+  const pct = idx >= totalSections ? 100 : Math.round(((idx + 1) / totalSections) * 100);
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-label').textContent =
+    idx >= totalSections ? 'COMPLETED' : 'SECTION ' + (idx + 1) + ' OF ' + totalSections;
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function navSection(delta) {
+  const next = currentSection + delta;
+  if (next < 0 || next > totalSections) return;
+  currentSection = next;
+  showSection(currentSection);
+}
+window.navSection = navSection;
+
+// Sidebar click
+document.querySelectorAll('.section-list-link').forEach(link => {
+  link.addEventListener('click', () => {
+    currentSection = parseInt(link.dataset.sectionIdx);
+    showSection(currentSection);
+  });
+});
+
+// Video lazy-load
+function loadGuideVideo(videoId, thumb) {
+  thumb.outerHTML = '<iframe width="100%" style="aspect-ratio: 16/9; border: 0;" ' +
+    'src="https://www.youtube.com/embed/' + videoId + '?autoplay=1" ' +
+    'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" ' +
+    'allowfullscreen></iframe>';
+}
+window.loadGuideVideo = loadGuideVideo;
+
+showSection(0);
+
+</script>
+</body>
+</html>
