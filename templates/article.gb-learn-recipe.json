@@ -11,58 +11,233 @@
   "sections": {
     "hero": {
       "type": "gb-learn-recipe-hero",
+      "blocks": {
+        "dt-1": {
+          "type": "dietary_tag",
+          "settings": {
+            "label": "Vegan"
+          }
+        },
+        "dt-2": {
+          "type": "dietary_tag",
+          "settings": {
+            "label": "Gluten-Free"
+          }
+        },
+        "dt-3": {
+          "type": "dietary_tag",
+          "settings": {
+            "label": "No Oil"
+          }
+        },
+        "mi-1": {
+          "type": "meta_item",
+          "settings": {
+            "icon": "⏱",
+            "label": "PREP",
+            "value": "20 min"
+          }
+        },
+        "mi-2": {
+          "type": "meta_item",
+          "settings": {
+            "icon": "🫙",
+            "label": "FERMENT",
+            "value": "5–7 days"
+          }
+        },
+        "mi-3": {
+          "type": "meta_item",
+          "settings": {
+            "icon": "⌛",
+            "label": "TOTAL",
+            "value": "5+ days"
+          }
+        },
+        "mi-4": {
+          "type": "meta_item",
+          "settings": {
+            "icon": "🍽",
+            "label": "YIELD",
+            "value": "1L jar"
+          }
+        },
+        "mi-5": {
+          "type": "meta_item",
+          "settings": {
+            "icon": "📊",
+            "label": "DIFFICULTY",
+            "value": "Beginner"
+          }
+        },
+        "mi-6": {
+          "type": "meta_item",
+          "settings": {
+            "icon": "🌍",
+            "label": "CUISINE",
+            "value": "Indian"
+          }
+        },
+        "jl-1": {
+          "type": "jump_link",
+          "settings": {
+            "label": "Ingredients",
+            "anchor": "ingredients"
+          }
+        },
+        "jl-2": {
+          "type": "jump_link",
+          "settings": {
+            "label": "Method",
+            "anchor": "method"
+          }
+        },
+        "jl-3": {
+          "type": "jump_link",
+          "settings": {
+            "label": "Video",
+            "anchor": "video"
+          }
+        },
+        "jl-4": {
+          "type": "jump_link",
+          "settings": {
+            "label": "Notes",
+            "anchor": "notes"
+          }
+        }
+      },
+      "block_order": [
+        "dt-1",
+        "dt-2",
+        "dt-3",
+        "mi-1",
+        "mi-2",
+        "mi-3",
+        "mi-4",
+        "mi-5",
+        "mi-6",
+        "jl-1",
+        "jl-2",
+        "jl-3",
+        "jl-4"
+      ],
       "settings": {
         "fallback_title": "Recipe title",
         "fallback_subtitle": "Subtitle / one-line description.",
         "fallback_category": "FERMENTATION 101",
-        "fallback_emoji": "🥭"
-      },
-      "blocks": {
-        "dt-1": { "type": "dietary_tag", "settings": { "label": "Vegan" } },
-        "dt-2": { "type": "dietary_tag", "settings": { "label": "Gluten-Free" } },
-        "dt-3": { "type": "dietary_tag", "settings": { "label": "No Oil" } },
-        "mi-1": { "type": "meta_item", "settings": { "icon": "⏱", "label": "PREP", "value": "20 min" } },
-        "mi-2": { "type": "meta_item", "settings": { "icon": "🫙", "label": "FERMENT", "value": "5–7 days" } },
-        "mi-3": { "type": "meta_item", "settings": { "icon": "⌛", "label": "TOTAL", "value": "5+ days" } },
-        "mi-4": { "type": "meta_item", "settings": { "icon": "🍽", "label": "YIELD", "value": "1L jar" } },
-        "mi-5": { "type": "meta_item", "settings": { "icon": "📊", "label": "DIFFICULTY", "value": "Beginner" } },
-        "mi-6": { "type": "meta_item", "settings": { "icon": "🌍", "label": "CUISINE", "value": "Indian" } },
-        "jl-1": { "type": "jump_link", "settings": { "label": "Ingredients", "anchor": "ingredients" } },
-        "jl-2": { "type": "jump_link", "settings": { "label": "Method", "anchor": "method" } },
-        "jl-3": { "type": "jump_link", "settings": { "label": "Video", "anchor": "video" } },
-        "jl-4": { "type": "jump_link", "settings": { "label": "Notes", "anchor": "notes" } }
-      },
-      "block_order": ["dt-1","dt-2","dt-3","mi-1","mi-2","mi-3","mi-4","mi-5","mi-6","jl-1","jl-2","jl-3","jl-4"]
+        "fallback_emoji": "🥭",
+        "pad_top_d": 56,
+        "pad_bot_d": 48,
+        "pad_top_m": 40,
+        "pad_bot_m": 32,
+        "heading_size_d": 44,
+        "heading_size_m": 32
+      }
     },
     "ingredients": {
       "type": "gb-learn-recipe-ingredients",
+      "blocks": {
+        "ing-1": {
+          "type": "ingredient",
+          "settings": {
+            "amount": "1 kg",
+            "name": "Vegetables (main)",
+            "desc": "Cleaned and chopped."
+          }
+        },
+        "ing-2": {
+          "type": "ingredient",
+          "settings": {
+            "amount": "20 g",
+            "name": "Salt (2%)",
+            "desc": "Sea salt or kosher; no iodised."
+          }
+        },
+        "ing-3": {
+          "type": "ingredient",
+          "settings": {
+            "amount": "1 L",
+            "name": "Filtered water",
+            "desc": "No chlorine."
+          }
+        },
+        "ing-4": {
+          "type": "ingredient",
+          "settings": {
+            "amount": "1 sachet",
+            "name": "Spice mix",
+            "desc": "From the kit."
+          }
+        }
+      },
+      "block_order": [
+        "ing-1",
+        "ing-2",
+        "ing-3",
+        "ing-4"
+      ],
       "settings": {
         "anchor": "ingredients",
         "heading": "Ingredients",
-        "sub": "Everything you need."
-      },
-      "blocks": {
-        "ing-1": { "type": "ingredient", "settings": { "amount": "1 kg", "name": "Vegetables (main)", "desc": "Cleaned and chopped." } },
-        "ing-2": { "type": "ingredient", "settings": { "amount": "20 g", "name": "Salt (2%)", "desc": "Sea salt or kosher; no iodised." } },
-        "ing-3": { "type": "ingredient", "settings": { "amount": "1 L", "name": "Filtered water", "desc": "No chlorine." } },
-        "ing-4": { "type": "ingredient", "settings": { "amount": "1 sachet", "name": "Spice mix", "desc": "From the kit." } }
-      },
-      "block_order": ["ing-1","ing-2","ing-3","ing-4"]
+        "sub": "Everything you need.",
+        "pad_top_d": 64,
+        "pad_bot_d": 64,
+        "pad_top_m": 48,
+        "pad_bot_m": 48
+      }
     },
     "method": {
       "type": "gb-learn-recipe-method",
+      "blocks": {
+        "ms-1": {
+          "type": "method_step",
+          "settings": {
+            "emoji": "🔪",
+            "title": "Prep the vegetables",
+            "desc": "<p>Wash, dry, chop into pieces. Don't dice too fine — chunky holds shape better through fermentation.</p>"
+          }
+        },
+        "ms-2": {
+          "type": "method_step",
+          "settings": {
+            "emoji": "🧂",
+            "title": "Salt + brine",
+            "desc": "<p>Massage salt into vegetables for 5 min until they release water. Top up with filtered water if needed.</p>"
+          }
+        },
+        "ms-3": {
+          "type": "method_step",
+          "settings": {
+            "emoji": "🫙",
+            "title": "Pack into jar",
+            "desc": "<p>Press everything below the brine line. Add glass weight. Seal with airlock.</p>"
+          }
+        },
+        "ms-4": {
+          "type": "method_step",
+          "settings": {
+            "emoji": "⏳",
+            "title": "Wait",
+            "desc": "<p>Day 3–5: bubbles. Day 5–7: tang develops. Taste from day 5; refrigerate when you like the flavour.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "ms-1",
+        "ms-2",
+        "ms-3",
+        "ms-4"
+      ],
       "settings": {
         "anchor": "method",
         "heading": "Method",
-        "sub": "Step-by-step."
-      },
-      "blocks": {
-        "ms-1": { "type": "method_step", "settings": { "emoji": "🔪", "title": "Prep the vegetables", "desc": "<p>Wash, dry, chop into pieces. Don't dice too fine — chunky holds shape better through fermentation.</p>"} },
-        "ms-2": { "type": "method_step", "settings": { "emoji": "🧂", "title": "Salt + brine", "desc": "<p>Massage salt into vegetables for 5 min until they release water. Top up with filtered water if needed.</p>" } },
-        "ms-3": { "type": "method_step", "settings": { "emoji": "🫙", "title": "Pack into jar", "desc": "<p>Press everything below the brine line. Add glass weight. Seal with airlock.</p>" } },
-        "ms-4": { "type": "method_step", "settings": { "emoji": "⏳", "title": "Wait", "desc": "<p>Day 3–5: bubbles. Day 5–7: tang develops. Taste from day 5; refrigerate when you like the flavour.</p>" } }
-      },
-      "block_order": ["ms-1","ms-2","ms-3","ms-4"]
+        "sub": "Step-by-step.",
+        "pad_top_d": 64,
+        "pad_bot_d": 64,
+        "pad_top_m": 48,
+        "pad_bot_m": 48
+      }
     },
     "video": {
       "type": "gb-learn-recipe-video",
@@ -70,22 +245,50 @@
         "anchor": "video",
         "heading": "Watch the walkthrough",
         "sub": "Full method on YouTube.",
-        "video_title": "How to make this recipe — full walkthrough"
+        "youtube_id": "A4dkseIgmgU",
+        "video_title": "How to make this recipe — full walkthrough",
+        "pad_top_d": 64,
+        "pad_bot_d": 64,
+        "pad_top_m": 48,
+        "pad_bot_m": 48
       }
     },
     "notes": {
       "type": "gb-learn-recipe-notes",
+      "blocks": {
+        "n-1": {
+          "type": "note",
+          "settings": {
+            "text": "<p><strong>Spice level:</strong> if it's too hot for you, halve the chilli in the spice mix. Won't affect fermentation.</p>"
+          }
+        },
+        "n-2": {
+          "type": "note",
+          "settings": {
+            "text": "<p><strong>Cooler kitchens:</strong> below 22°C, fermentation can take 7–10 days instead of 5. Be patient.</p>"
+          }
+        },
+        "n-3": {
+          "type": "note",
+          "settings": {
+            "text": "<p><strong>Storage:</strong> once you like the tang, refrigerate. Stays good 4–6 weeks; flavour deepens.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "n-1",
+        "n-2",
+        "n-3"
+      ],
       "settings": {
         "anchor": "notes",
         "heading": "Notes & variations",
-        "sub": "Tweaks, swaps, what we've learned."
-      },
-      "blocks": {
-        "n-1": { "type": "note", "settings": { "text": "<p><strong>Spice level:</strong> if it's too hot for you, halve the chilli in the spice mix. Won't affect fermentation.</p>" } },
-        "n-2": { "type": "note", "settings": { "text": "<p><strong>Cooler kitchens:</strong> below 22°C, fermentation can take 7–10 days instead of 5. Be patient.</p>" } },
-        "n-3": { "type": "note", "settings": { "text": "<p><strong>Storage:</strong> once you like the tang, refrigerate. Stays good 4–6 weeks; flavour deepens.</p>" } }
-      },
-      "block_order": ["n-1","n-2","n-3"]
+        "sub": "Tweaks, swaps, what we've learned.",
+        "pad_top_d": 64,
+        "pad_bot_d": 64,
+        "pad_top_m": 48,
+        "pad_bot_m": 48
+      }
     },
     "kit-cta": {
       "type": "gb-learn-recipe-kit-cta",
@@ -93,16 +296,36 @@
         "eyebrow": "MAKE THIS RECIPE",
         "title": "Get the kit that does the work for you.",
         "desc": "Pre-measured spice mix, the right jar, an airlock, glass weight, and a recipe book that includes this one. No guessing.",
+        "product": "",
+        "name_override": "",
+        "price_override": "",
         "emoji": "🫙",
-        "cta_label": "Shop Now →"
+        "cta_label": "Shop Now →",
+        "cta_url": "",
+        "pad_top_d": 64,
+        "pad_bot_d": 80,
+        "pad_top_m": 48,
+        "pad_bot_m": 56
       }
     },
     "related": {
       "type": "gb-learn-recipe-related",
       "settings": {
-        "heading": "More recipes from this kit"
+        "heading": "More recipes from this kit",
+        "pad_top_d": 64,
+        "pad_bot_d": 64,
+        "pad_top_m": 48,
+        "pad_bot_m": 48
       }
     }
   },
-  "order": ["hero","ingredients","method","video","notes","kit-cta","related"]
+  "order": [
+    "hero",
+    "ingredients",
+    "method",
+    "video",
+    "notes",
+    "kit-cta",
+    "related"
+  ]
 }
