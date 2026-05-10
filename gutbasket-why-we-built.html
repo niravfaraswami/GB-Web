@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Why we built GutBasket — GutBasket</title>
+<meta name="description" content="Why we built GutBasket · GutBasket. India's probiotic fermentation kit company.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --white: #FFFFFF;
+  --cream: #FFF9EE;
+  --cream-deeper: #F5EDD8;
+  --border: #E8E3D5;
+  --border-soft: #F0EBDD;
+  --ink: #1F1F1D;
+  --all-in-one: #2B2218;
+  --action: #FF7300;
+  --action-dark: #E66800;
+  --text: #1F1F1D;
+  --text-muted: #5C4D3F;
+  --text-soft: #888780;
+
+  --kit: #8B1F40;
+  --kit-dark: #6E1733;
+  --kit-soft: #F4D7DD;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  color: var(--text);
+  background: var(--cream);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+a { text-decoration: none; color: inherit; }
+img { max-width: 100%; display: block; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+
+.container { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+.container-narrow { max-width: 820px; margin: 0 auto; padding: 0 24px; }
+
+h1, h2, h3, h4 {
+  font-family: 'Montserrat', sans-serif;
+  letter-spacing: -0.018em;
+  line-height: 1.1;
+  color: var(--text);
+}
+
+.eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--kit);
+}
+
+/* ============== PROMO BAR ============== */
+.promo-bar {
+  background: var(--all-in-one);
+  color: var(--cream);
+  font-size: 12.5px;
+  font-weight: 500;
+  overflow: hidden;
+  position: relative;
+  height: 38px;
+  display: flex;
+  align-items: center;
+}
+.promo-track {
+  display: flex; gap: 40px;
+  white-space: nowrap;
+  animation: promoScroll 50s linear infinite;
+  padding-left: 24px;
+}
+.promo-track .item { display: flex; gap: 6px; align-items: center; }
+@keyframes promoScroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ============== HEADER ============== */
+header.site-header {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; z-index: 100;
+}
+.header-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 24px;
+  max-width: 1280px; margin: 0 auto;
+  gap: 32px;
+}
+.brand-logo {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 22px;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  flex-shrink: 0;
+}
+.brand-logo .reg {
+  font-size: 11px;
+  vertical-align: super;
+  font-weight: 500;
+  color: var(--text-soft);
+  margin-left: 1px;
+}
+.brand-logo b { font-weight: 800; }
+.brand-logo span.basket { font-weight: 500; }
+
+.primary-nav { display: flex; gap: 32px; flex: 1; }
+.primary-nav a {
+  font-size: 14px; font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--text);
+  padding: 8px 0;
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.15s, color 0.15s;
+}
+.primary-nav a:hover, .primary-nav a.active {
+  color: var(--kit); border-bottom-color: var(--kit);
+}
+
+.utility-nav { display: flex; gap: 14px; align-items: center; }
+.utility-nav button, .utility-nav a {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text);
+  position: relative;
+  transition: background 0.15s;
+}
+.utility-nav button:hover, .utility-nav a:hover { background: var(--cream-deeper); }
+.cart-badge {
+  position: absolute; top: 4px; right: 4px;
+  width: 16px; height: 16px;
+  background: var(--action);
+  color: white;
+  border-radius: 50%;
+  font-size: 10px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+}
+.hamburger { display: none; }
+@media (max-width: 920px) {
+  .primary-nav { display: none; }
+  .hamburger { display: flex; }
+  .header-inner { padding: 14px 18px; gap: 8px; }
+}
+
+/* ============== MOBILE DRAWER ============== */
+.mobile-drawer {
+  position: fixed; inset: 0;
+  z-index: 1000;
+  visibility: hidden; opacity: 0;
+  transition: opacity 0.28s ease, visibility 0s linear 0.28s;
+}
+.mobile-drawer.open { opacity: 1; visibility: visible; transition-delay: 0s; }
+.mobile-drawer-overlay { position: absolute; inset: 0; background: rgba(31,31,29,0.5); }
+.mobile-drawer-panel {
+  position: absolute; top: 0; right: 0; bottom: 0;
+  width: min(86vw, 360px);
+  background: var(--white);
+  transform: translateX(100%);
+  transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex; flex-direction: column;
+}
+.mobile-drawer.open .mobile-drawer-panel { transform: translateX(0); }
+.mobile-drawer-head {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 18px 20px; border-bottom: 1px solid var(--border);
+}
+.mobile-drawer-head .brand-logo { font-size: 18px; }
+.mobile-drawer-close {
+  width: 36px; height: 36px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text);
+}
+.mobile-drawer-close:hover { background: var(--cream-deeper); }
+.mobile-drawer-nav { padding: 12px 0; flex: 1; overflow-y: auto; }
+.mobile-drawer-nav details { border-bottom: 1px solid var(--border-soft); }
+.mobile-drawer-nav summary {
+  list-style: none;
+  padding: 16px 20px;
+  font-family: 'DM Mono', monospace;
+  font-size: 12px; font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text);
+  cursor: pointer;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.mobile-drawer-nav summary::-webkit-details-marker { display: none; }
+.mobile-drawer-nav summary::after { content: '+'; font-size: 18px; color: var(--text-soft); }
+.mobile-drawer-nav details[open] summary::after { content: '−'; }
+.mobile-drawer-nav ul { list-style: none; padding: 0 20px 16px; }
+.mobile-drawer-nav ul li { padding: 8px 0; }
+.mobile-drawer-nav ul a { font-size: 14.5px; color: var(--text); display: flex; align-items: center; gap: 10px; }
+.mobile-drawer-nav ul a:hover { color: var(--kit); }
+.mobile-drawer-foot {
+  padding: 18px 20px;
+  border-top: 1px solid var(--border);
+  background: var(--cream);
+  font-size: 13px; color: var(--text-muted);
+}
+
+/* ============== BREADCRUMB ============== */
+.breadcrumb {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  padding: 24px 0 0;
+}
+.breadcrumb a { color: var(--text-soft); }
+.breadcrumb a:hover { color: var(--kit); }
+.breadcrumb .sep { margin: 0 10px; opacity: 0.6; }
+.breadcrumb .current { color: var(--text); font-weight: 600; }
+
+/* ============== PAGE HERO ============== */
+.page-hero {
+  padding: 56px 0 44px;
+  border-bottom: 1px solid var(--border);
+}
+.page-hero .eyebrow { margin-bottom: 18px; }
+.page-hero h1 {
+  font-size: clamp(36px, 5.4vw, 64px);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  margin-bottom: 22px;
+  max-width: 920px;
+}
+.page-hero h1 .accent { color: var(--kit); }
+.page-hero .lede {
+  font-size: clamp(16px, 1.6vw, 19px);
+  color: var(--text-muted);
+  max-width: 680px;
+  line-height: 1.6;
+}
+.page-hero .meta {
+  margin-top: 28px;
+  display: flex; gap: 28px; flex-wrap: wrap;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.page-hero .meta span strong { color: var(--text); font-weight: 600; }
+
+/* ============== SECTIONS ============== */
+section { padding: 64px 0; }
+section.alt { background: var(--white); }
+section.deep { background: var(--ink); color: var(--cream); }
+section.deep h2, section.deep h3 { color: var(--cream); }
+section.deep .eyebrow { color: var(--kit-soft); }
+
+.section-head { margin-bottom: 40px; max-width: 720px; }
+.section-head .eyebrow { margin-bottom: 14px; }
+.section-head h2 {
+  font-size: clamp(28px, 3.2vw, 40px);
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+.section-head p {
+  font-size: 17px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+/* ============== PROSE ============== */
+.prose { max-width: 720px; }
+.prose p { margin-bottom: 18px; font-size: 16.5px; line-height: 1.7; color: var(--text); }
+.prose p.lede-prose { font-size: 19px; color: var(--text-muted); margin-bottom: 28px; }
+.prose h3 { font-size: 22px; font-weight: 700; margin: 36px 0 14px; }
+.prose ul { margin: 14px 0 22px 22px; }
+.prose ul li { margin-bottom: 8px; font-size: 16px; line-height: 1.65; }
+.prose blockquote {
+  border-left: 3px solid var(--kit);
+  padding: 4px 0 4px 22px;
+  margin: 28px 0;
+  font-size: 19px;
+  font-style: italic;
+  color: var(--text-muted);
+}
+
+/* ============== CARDS ============== */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 22px;
+}
+.card-grid.two { grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); }
+.card-grid.four { grid-template-columns: repeat(4, 1fr); }
+@media (max-width: 880px) { .card-grid.four { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 520px) { .card-grid.four { grid-template-columns: 1fr; } }
+
+.card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 28px 26px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.card.deep { background: var(--ink); color: var(--cream); border-color: var(--all-in-one); }
+.card.deep h3 { color: var(--cream); }
+.card.deep p { color: rgba(255,249,238,0.78); }
+.card.accent { background: var(--kit-soft); border-color: var(--kit-soft); }
+.card .icon {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  background: var(--kit-soft);
+  color: var(--kit-dark);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+  margin-bottom: 4px;
+}
+.card.deep .icon { background: rgba(255,249,238,0.1); color: var(--kit-soft); }
+.card .num {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  color: var(--kit);
+  font-weight: 600;
+}
+.card h3 {
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+}
+.card p {
+  font-size: 14.5px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+/* ============== STATS ============== */
+.stat-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 24px;
+  padding: 36px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.stat .num {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 42px;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  color: var(--kit);
+  line-height: 1;
+}
+.stat .label {
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.45;
+}
+
+/* ============== STEP LIST ============== */
+.step-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+  counter-reset: step-counter;
+}
+.step {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 26px 24px;
+  position: relative;
+  counter-increment: step-counter;
+}
+.step::before {
+  content: counter(step-counter, decimal-leading-zero);
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--kit);
+  font-weight: 600;
+  display: block;
+  margin-bottom: 12px;
+}
+.step h3 {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin-bottom: 8px;
+}
+.step p {
+  font-size: 14.5px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+/* ============== BUTTONS ============== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 24px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  font-family: 'Montserrat', sans-serif;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.btn-primary { background: var(--action); color: var(--white); }
+.btn-primary:hover { background: var(--action-dark); }
+.btn-ink { background: var(--ink); color: var(--cream); }
+.btn-ink:hover { background: var(--all-in-one); }
+.btn-ghost { background: transparent; color: var(--text); border: 1px solid var(--border); }
+.btn-ghost:hover { border-color: var(--kit); color: var(--kit); }
+.btn-cream { background: var(--cream); color: var(--ink); }
+.btn-cream:hover { background: var(--cream-deeper); }
+.btn-wa { background: #25D366; color: white; }
+.btn-wa:hover { background: #1FB456; }
+
+/* ============== FAQ ============== */
+.faq { max-width: 820px; }
+.faq details {
+  border-bottom: 1px solid var(--border);
+  padding: 22px 0;
+}
+.faq details:first-child { border-top: 1px solid var(--border); }
+.faq summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 17px;
+  color: var(--text);
+  gap: 18px;
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: '+'; font-size: 22px; color: var(--text-soft); flex-shrink: 0; }
+.faq details[open] summary::after { content: '−'; color: var(--kit); }
+.faq details > div {
+  margin-top: 14px;
+  font-size: 15.5px;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+/* ============== TABLE ============== */
+.table-wrap { overflow-x: auto; }
+table.policy {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+table.policy th {
+  background: var(--cream-deeper);
+  text-align: left;
+  padding: 14px 18px;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
+}
+table.policy td {
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--border-soft);
+  font-size: 14.5px;
+  color: var(--text);
+  vertical-align: top;
+}
+table.policy tr:last-child td { border-bottom: none; }
+table.policy td.muted { color: var(--text-muted); }
+table.policy td strong { font-weight: 700; color: var(--text); }
+
+/* ============== CTA BLOCK ============== */
+.cta-block {
+  background: var(--ink);
+  color: var(--cream);
+  border-radius: 18px;
+  padding: 48px 44px;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 32px;
+  align-items: center;
+}
+.cta-block.kit { background: var(--kit); }
+.cta-block .eyebrow { color: var(--kit-soft); margin-bottom: 12px; }
+.cta-block.kit .eyebrow { color: rgba(255,249,238,0.7); }
+.cta-block h3 {
+  color: var(--cream);
+  font-size: clamp(22px, 2.4vw, 30px);
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.cta-block p { color: rgba(255,249,238,0.78); font-size: 15.5px; max-width: 480px; }
+.cta-block .actions { display: flex; flex-direction: column; gap: 10px; align-items: stretch; }
+.cta-block .actions .btn { width: 100%; }
+@media (max-width: 720px) {
+  .cta-block { grid-template-columns: 1fr; padding: 32px 26px; }
+}
+
+/* ============== FORM ============== */
+.form-stack { display: flex; flex-direction: column; gap: 14px; }
+.form-row { display: flex; gap: 10px; flex-wrap: wrap; }
+.form-row input, .form-stack input, .form-stack textarea, .form-stack select {
+  flex: 1;
+  min-width: 200px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  padding: 14px 18px;
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 15px;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.15s;
+}
+.form-stack textarea { border-radius: 14px; resize: vertical; min-height: 110px; }
+.form-row input:focus, .form-stack input:focus, .form-stack textarea:focus, .form-stack select:focus {
+  border-color: var(--kit);
+}
+.form-note { font-size: 12.5px; color: var(--text-soft); }
+label.field-label {
+  display: block;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+/* ============== INSTAGRAM GRID ============== */
+.ig-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+.ig-tile {
+  aspect-ratio: 1;
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 38px;
+  background: var(--cream-deeper);
+  color: var(--ink);
+  overflow: hidden;
+}
+.ig-tile.t1 { background: linear-gradient(135deg, #F4D7DD, #E8B4C0); }
+.ig-tile.t2 { background: linear-gradient(135deg, #FFE4D1, #F7BB85); }
+.ig-tile.t3 { background: linear-gradient(135deg, #FAD3CB, #E89A8A); color: var(--cream); }
+.ig-tile.t4 { background: linear-gradient(135deg, #F8E9C2, #DDA738); }
+.ig-tile.t5 { background: linear-gradient(135deg, #D8E4DC, #4F7C57); color: var(--cream); }
+.ig-tile.t6 { background: linear-gradient(135deg, #FFF9EE, #F5EDD8); }
+.ig-tile.t7 { background: linear-gradient(135deg, #2B2218, #1F1F1D); color: var(--cream); }
+.ig-tile.t8 { background: linear-gradient(135deg, #F4D7DD, #8B1F40); color: var(--cream); }
+.ig-tile.t9 { background: linear-gradient(135deg, #FFE4D1, #FF7300); color: var(--cream); }
+.ig-tile .corner { position: absolute; top: 8px; right: 8px; font-size: 14px; opacity: 0.6; }
+.ig-tile .caption {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 12px;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: linear-gradient(transparent, rgba(0,0,0,0.5));
+  color: white;
+  font-weight: 600;
+}
+
+/* ============== SIBLING NAV ============== */
+.sibling-nav { background: var(--cream-deeper); padding: 56px 0; }
+.sibling-nav .eyebrow { color: var(--kit); margin-bottom: 18px; display: block; }
+.sibling-nav h3 { font-size: 26px; font-weight: 700; margin-bottom: 28px; }
+.sibling-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+}
+.sibling-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  padding: 20px 22px;
+  border-radius: 12px;
+  display: flex; flex-direction: column; gap: 6px;
+  transition: transform 0.15s, border-color 0.15s;
+}
+.sibling-card:hover { transform: translateY(-2px); border-color: var(--kit); }
+.sibling-card .label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  color: var(--text-soft);
+  text-transform: uppercase;
+}
+.sibling-card .title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+.sibling-card .arrow { color: var(--kit); font-size: 14px; margin-top: auto; padding-top: 6px; font-weight: 600; }
+
+/* ============== FOOTER ============== */
+footer.site-footer { background: var(--ink); color: var(--cream); padding: 64px 0 28px; }
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr;
+  gap: 40px;
+  margin-bottom: 48px;
+}
+@media (max-width: 880px) { .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px 24px; } }
+.footer-col .brand-logo { color: var(--cream); }
+.footer-col .brand-logo .reg { color: rgba(255,249,238,0.5); }
+.footer-col p {
+  margin-top: 14px;
+  font-size: 13.5px;
+  color: rgba(255,249,238,0.65);
+  line-height: 1.6;
+  max-width: 260px;
+}
+.footer-col h4 {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255,249,238,0.55);
+  margin-bottom: 16px;
+}
+.footer-col ul { list-style: none; }
+.footer-col ul li { margin-bottom: 10px; }
+.footer-col ul a {
+  font-size: 14px;
+  color: rgba(255,249,238,0.85);
+  transition: color 0.15s;
+}
+.footer-col ul a:hover { color: var(--action); }
+.footer-bottom {
+  border-top: 1px solid rgba(255,249,238,0.12);
+  padding-top: 24px;
+  display: flex; justify-content: space-between; flex-wrap: wrap;
+  gap: 14px;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: rgba(255,249,238,0.5);
+  text-transform: uppercase;
+}
+
+/* ============== MISC LAYOUT ============== */
+.split-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: start;
+}
+@media (max-width: 800px) { .split-2 { grid-template-columns: 1fr; gap: 32px; } }
+
+.kv-list { list-style: none; }
+.kv-list li {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 18px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border-soft);
+  font-size: 15px;
+}
+.kv-list li:last-child { border-bottom: none; }
+.kv-list .k {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  font-weight: 600;
+}
+.kv-list .v { color: var(--text); }
+@media (max-width: 600px) {
+  .kv-list li { grid-template-columns: 1fr; gap: 4px; }
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  background: var(--kit-soft);
+  color: var(--kit-dark);
+  border-radius: 999px;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.tag.dark { background: var(--ink); color: var(--cream); }
+.tag.action { background: var(--action); color: var(--cream); }
+.tag.success { background: #D9EFDC; color: #2D6E3D; }
+.tag.danger { background: #F8DFDF; color: #8B2929; }
+
+.divider { height: 1px; background: var(--border); margin: 32px 0; border: 0; }
+
+.search-bar {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 6px 6px 6px 22px;
+  display: flex; align-items: center; gap: 12px;
+  max-width: 560px;
+  box-shadow: 0 4px 24px rgba(31,31,29,0.06);
+}
+.search-bar input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 16px;
+  font-family: inherit;
+  color: var(--text);
+}
+.search-bar input::placeholder { color: var(--text-soft); }
+.search-bar button {
+  padding: 12px 24px;
+  background: var(--ink);
+  color: var(--cream);
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 14px;
+  font-family: 'Montserrat', sans-serif;
+}
+.search-bar button:hover { background: var(--all-in-one); }
+
+.alert {
+  padding: 18px 22px;
+  border-radius: 12px;
+  background: var(--kit-soft);
+  border-left: 3px solid var(--kit);
+  font-size: 14.5px;
+  color: var(--text);
+  line-height: 1.6;
+}
+.alert strong { color: var(--kit-dark); }
+
+:root {
+  --kit: #8B1F40;
+  --kit-dark: #6E1733;
+  --kit-soft: #F4D7DD;
+}
+</style>
+</head>
+<body>
+<div class="promo-bar" aria-label="Site announcements"><div class="promo-track">
+<span class="item">🍃 Free Shipping over ₹300</span><span class="item">⚡ Ships Next Working Day</span><span class="item">🇮🇳 Made in India</span><span class="item">🛡️ Secure Checkout</span><span class="item">💵 Cash On Delivery</span><span class="item">🔄 Easy Returns</span><span class="item">📦 25,000+ kits shipped</span><span class="item">💬 Expert help on WhatsApp</span><span class="item">🍃 Free Shipping over ₹300</span><span class="item">⚡ Ships Next Working Day</span><span class="item">🇮🇳 Made in India</span><span class="item">🛡️ Secure Checkout</span><span class="item">💵 Cash On Delivery</span><span class="item">🔄 Easy Returns</span><span class="item">📦 25,000+ kits shipped</span><span class="item">💬 Expert help on WhatsApp</span>
+</div></div>
+<header class="site-header"><div class="header-inner">
+<a href="/" class="brand-logo" aria-label="GutBasket"><b>GUT</b><span class="basket">Basket</span><span class="reg">®</span></a>
+<nav class="primary-nav" aria-label="Primary">
+  <a href="/shop">Shop</a>
+  <a href="/learn">Learn</a>
+  <a href="/recipes">Recipes</a>
+  <a href="/about" class="active">About</a>
+  <a href="/build-a-box">Build a Box</a>
+</nav>
+<div class="utility-nav">
+  <a href="/search" aria-label="Search"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></a>
+  <a href="/account" aria-label="Account"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></a>
+  <a href="/cart" aria-label="Cart"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg><span class="cart-badge">2</span></a>
+  <button class="hamburger" aria-label="Open menu" onclick="openMobileMenu()"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+</div>
+</div></header>
+<div class="mobile-drawer" id="mobile-drawer" aria-hidden="true">
+<div class="mobile-drawer-overlay" onclick="closeMobileMenu()"></div>
+<aside class="mobile-drawer-panel" role="dialog" aria-label="Main navigation">
+<div class="mobile-drawer-head">
+<a href="/" class="brand-logo" onclick="closeMobileMenu()" aria-label="GutBasket"><b>GUT</b><span class="basket">Basket</span><span class="reg">®</span></a>
+<button class="mobile-drawer-close" onclick="closeMobileMenu()" aria-label="Close menu"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+</div>
+<nav class="mobile-drawer-nav">
+<details><summary>Shop</summary><ul>
+<li><a href="/shop/ferment-kits">Ferment Kits</a></li>
+<li><a href="/shop/spice-refills">Spice Mix Refills</a></li>
+<li><a href="/shop/sprouts">Sprout Kits</a></li>
+<li><a href="/shop/prebiotic">Prebiotic &amp; Wellness</a></li>
+<li><a href="/shop/dairy">Dairy Cultures</a></li>
+<li><a href="/shop/baking">Baking</a></li>
+<li><a href="/shop/jars">Jars &amp; Tools</a></li>
+<li><a href="/shop/recipe-books">Recipe Books</a></li>
+</ul></details>
+<details><summary>Learn</summary><ul>
+<li><a href="/learn/fermentation-101">Fermentation 101</a></li>
+<li><a href="/learn/gut-science">Gut Health Science</a></li>
+<li><a href="/learn/troubleshooting">Troubleshooting</a></li>
+</ul></details>
+<details><summary>Recipes</summary><ul>
+<li><a href="/recipes">All recipes</a></li>
+<li><a href="/recipes/achaar">Achaar variants</a></li>
+<li><a href="/recipes/kanji">Kanji &amp; drinks</a></li>
+<li><a href="/recipes/kimchi">Kimchi corner</a></li>
+</ul></details>
+<details open><summary>About</summary><ul>
+<li><a href="gutbasket-why-we-built.html">Why we built GutBasket</a></li>
+<li><a href="gutbasket-science.html">The science behind our kits</a></li>
+<li><a href="gutbasket-sourcing.html">Sourcing &amp; quality standards</a></li>
+<li><a href="gutbasket-certifications.html">FSSAI &amp; certifications</a></li>
+<li><a href="gutbasket-help-center.html">Help center</a></li>
+<li><a href="gutbasket-whatsapp-support.html">WhatsApp expert support</a></li>
+<li><a href="gutbasket-returns-refunds.html">Returns &amp; refunds</a></li>
+<li><a href="gutbasket-shipping-policy.html">Shipping policy</a></li>
+<li><a href="gutbasket-ferment-forum.html">Ferment Forum</a></li>
+<li><a href="gutbasket-customer-recipes.html">Customer recipes</a></li>
+<li><a href="gutbasket-instagram.html">Instagram</a></li>
+<li><a href="gutbasket-newsletter.html">Newsletter</a></li>
+</ul></details>
+</nav>
+<div class="mobile-drawer-foot">
+<strong style="display:block;color:var(--text);margin-bottom:6px;">Need help?</strong>
+Message us on WhatsApp:<br>
+<a href="https://wa.me/917861940110" style="color:var(--kit);font-weight:600;">+91 78619 40110</a>
+</div>
+</aside>
+</div>
+
+<div class="container"><nav class="breadcrumb" aria-label="Breadcrumb">
+<a href="/">Home</a><span class="sep">/</span>
+<a href="/about">About</a><span class="sep">/</span>
+<a href="#">Our Story</a><span class="sep">/</span>
+<span class="current">Why we built GutBasket</span>
+</nav></div><section class="page-hero"><div class="container">
+<span class="eyebrow">Our Story · 01</span>
+<h1>We built GutBasket because Indian gut health is broken — and "<span class="accent">probiotic</span>" is doing all the lying.</h1>
+<p class="lede">Most things sold to you as probiotic in India aren't. The good bacteria died at the factory, in transit, or on a shelf. We started GutBasket because the only fermentation that's actually alive is the one happening in your kitchen.</p>
+<div class="meta"><span><strong>2024</strong> · FOUNDED</span><span><strong>Gandhinagar, Gujarat</strong> · BASED IN</span><span><strong>25,000+</strong> · KITS SHIPPED</span></div>
+</div></section>
+<section>
+  <div class="container">
+    <div class="prose">
+      <p class="lede-prose">Walk down any supermarket aisle in India and read three labels. "Probiotic curd." "Gut-friendly pickle." "Live cultures inside." It's almost all dead. Pasteurised. Vinegared. Sugar-loaded. Sealed for shelf life — not for life.</p>
+
+      <p>That gap between what the label promises and what the bottle delivers is what we built GutBasket to close.</p>
+
+      <h3>The problem we saw in 2023</h3>
+      <p>Three quiet facts kept showing up in everything we read about Indian gut health:</p>
+      <ul>
+        <li>Roughly <strong>22% of Indian adults report chronic IBS-type symptoms</strong> — bloating, irregularity, low-grade discomfort — and most never bring it up with a doctor.</li>
+        <li>The probiotic supplement market in India is a <strong>billion-dollar category</strong> built largely on capsules with viability counts that drop steeply between manufacture and consumption.</li>
+        <li>The traditional answer — kanji, achaar, dahi, idli batter, dhokla, dosa — is <strong>still in our culture but mostly out of our kitchens</strong>. We outsourced fermentation to factories. Factories outsourced it to vinegar.</li>
+      </ul>
+      <p>The fix isn't another capsule. It's getting fermentation back to the place it actually works — your counter, your fridge, your spoon.</p>
+
+      <blockquote>"My grandmother kept a kanji jar on the windowsill from October to March. Nobody in our family ever called it probiotic. Nobody needed to."</blockquote>
+
+      <h3>What we stand against</h3>
+      <p>We're a small company with strong opinions. The category does too much pretending; we'd rather pick a lane and be clearly right or clearly wrong about it.</p>
+    </div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Four Beliefs</span>
+      <h2>What we stand for.</h2>
+      <p>If you disagree with these, GutBasket probably isn't for you — and that's fine. We'd rather be loved by the right people than tolerated by everyone.</p>
+    </div>
+    <div class="card-grid four">
+      <div class="card"><div class="num">01</div><h3>Live cultures only</h3><p>If the bacteria are dead by the time you eat it, calling it probiotic is dishonest. Every kit is designed so the LAB are alive in your fridge, not just on the box.</p></div>
+      <div class="card"><div class="num">02</div><h3>Salt brine, not vinegar</h3><p>Vinegar kills the bacteria you want to grow. We use salt-water at 2&ndash;3%, which is the actual chemistry of every traditional ferment that has ever worked.</p></div>
+      <div class="card"><div class="num">03</div><h3>Indian-first sourcing</h3><p>Black mustard from Kheda. Carrots from Punjab. Sea salt from Tuticorin. We import only when no Indian supplier exists at the quality we need.</p></div>
+      <div class="card"><div class="num">04</div><h3>Made at home, by you</h3><p>Factory-fermented anything has the same problem: time on a shelf. The only way to keep cultures peak-strength is to ferment in the kitchen they'll be eaten in.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Timeline</span>
+      <h2>How we got here.</h2>
+    </div>
+    <div class="step-list">
+      <div class="step"><h3>One jar of kanji</h3><p>Spring 2024. A failed Punjabi black-carrot kanji on a Gandhinagar windowsill. Then a working one. Then five at once.</p></div>
+      <div class="step"><h3>The first 50 customers</h3><p>September 2024. Friends-of-friends in Ahmedabad and Pune. Hand-delivered. Half wrote back with photos.</p></div>
+      <div class="step"><h3>FSSAI license, real packaging</h3><p>December 2024. License 10021021000439. Lab-tested, retort-grade pouches, an actual recipe book.</p></div>
+      <div class="step"><h3>25,000 kits</h3><p>April 2026. Eleven people in Gandhinagar. Twenty-two SKUs. One opinion: ferment at home.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="deep">
+  <div class="container">
+    <div class="split-2">
+      <div>
+        <span class="eyebrow">The Team</span>
+        <h2 style="margin-top:14px;font-size:36px;font-weight:700;letter-spacing:-0.02em;">Eleven people. One small workshop in Gandhinagar.</h2>
+      </div>
+      <div>
+        <p style="font-size:16px;line-height:1.7;color:rgba(255,249,238,0.78);margin-bottom:18px;">A food scientist who tests every batch on a microbial-viability bench. A microbiologist who used to work in dairy QC. Three home fermenters who taught themselves on YouTube and now teach customers on WhatsApp. Two people who pack boxes. A founder who still picks up the phone when something breaks. A part-time accountant. A part-time recipe writer. And the dog.</p>
+        <p style="font-size:16px;line-height:1.7;color:rgba(255,249,238,0.78);">We don't have an investor deck. We have a fridge full of test ferments and a Google Sheet with every customer who's ever messaged us.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="cta-block kit">
+      <div>
+        <span class="eyebrow">Where to next</span>
+        <h3>Read the science, or just start fermenting.</h3>
+        <p>The kits ship from Gandhinagar within one working day. The science holds up under a microscope. Start anywhere.</p>
+      </div>
+      <div class="actions">
+        <a class="btn btn-primary" href="/shop">Browse our kits →</a>
+        <a class="btn btn-cream" href="gutbasket-science.html">The science behind our kits</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="sibling-nav"><div class="container">
+<span class="eyebrow">More from Our Story</span>
+<h3>Keep reading</h3>
+<div class="sibling-grid"><a class="sibling-card" href="gutbasket-science.html"><span class="label">02 · Our Story</span><span class="title">The science behind our kits</span><span class="arrow">Read →</span></a>
+<a class="sibling-card" href="gutbasket-sourcing.html"><span class="label">03 · Our Story</span><span class="title">Sourcing & quality standards</span><span class="arrow">Read →</span></a>
+<a class="sibling-card" href="gutbasket-certifications.html"><span class="label">04 · Our Story</span><span class="title">FSSAI & certifications</span><span class="arrow">Read →</span></a></div>
+</div></section>
+<footer class="site-footer"><div class="container">
+<div class="footer-grid">
+<div class="footer-col">
+<a href="/" class="brand-logo" aria-label="GutBasket"><b>GUT</b><span class="basket">Basket</span><span class="reg">®</span></a>
+<p>India's first probiotic fermentation kit company. Live cultures, salt brine, no shortcuts.</p>
+</div>
+<div class="footer-col"><h4>Our Story</h4><ul>
+<li><a href="gutbasket-why-we-built.html">Why we built GutBasket</a></li>
+<li><a href="gutbasket-science.html">The science behind our kits</a></li>
+<li><a href="gutbasket-sourcing.html">Sourcing &amp; quality standards</a></li>
+<li><a href="gutbasket-certifications.html">FSSAI &amp; certifications</a></li>
+</ul></div>
+<div class="footer-col"><h4>Support</h4><ul>
+<li><a href="gutbasket-help-center.html">Help center</a></li>
+<li><a href="gutbasket-whatsapp-support.html">WhatsApp expert support</a></li>
+<li><a href="gutbasket-returns-refunds.html">Returns &amp; refunds</a></li>
+<li><a href="gutbasket-shipping-policy.html">Shipping policy</a></li>
+</ul></div>
+<div class="footer-col"><h4>Community</h4><ul>
+<li><a href="gutbasket-ferment-forum.html">Ferment Forum</a></li>
+<li><a href="gutbasket-customer-recipes.html">Customer recipes</a></li>
+<li><a href="gutbasket-instagram.html">Instagram</a></li>
+<li><a href="gutbasket-newsletter.html">Newsletter</a></li>
+</ul></div>
+</div>
+<div class="footer-bottom">
+<span>© 2026 GutBasket Foods Pvt. Ltd. · Gandhinagar, Gujarat, India</span>
+<span>FSSAI License 10021021000439</span>
+</div>
+</div></footer>
+<script>
+function openMobileMenu(){document.getElementById('mobile-drawer').classList.add('open');document.body.style.overflow='hidden';}
+function closeMobileMenu(){document.getElementById('mobile-drawer').classList.remove('open');document.body.style.overflow='';}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMobileMenu();});
+</script>
+</body>
+</html>
