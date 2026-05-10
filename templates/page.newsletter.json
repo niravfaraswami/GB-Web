@@ -1,5 +1,13 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
-  "name": "Newsletter",
   "sections": {
     "main": {
       "type": "gb-content-page",
@@ -15,20 +23,18 @@
         "subscribe": {
           "type": "cta",
           "settings": {
+            "theme": "dark",
             "eyebrow": "SUBSCRIBE",
             "title": "A real fermenter's email, every Friday.",
             "desc": "Recipes you'll actually cook, science you'll actually find interesting. Written by a human, not a marketing automation.",
             "button_label": "Subscribe",
-            "button_link": "/pages/newsletter#signup",
-            "theme": "dark"
+            "button_link": "/pages/newsletter#signup"
           }
         },
         "what_you_get": {
           "type": "features",
           "settings": {
-            "eyebrow": "WHAT YOU GET",
             "heading": "One email. Four sections. Always.",
-            "columns": "2",
             "item_1_icon": "🍳",
             "item_1_title": "Recipe of the week",
             "item_1_desc": "One member-tested recipe with photos, ingredient list with grams, and method. Always something you can make in a single weekend.",
@@ -37,18 +43,13 @@
             "item_2_desc": "300 words on a strain, a study, or a question we've been thinking about. No clickbait. Sources cited.",
             "item_3_icon": "💬",
             "item_3_title": "Forum highlights",
-            "item_3_desc": "Three threads from the Ferment Forum worth reading. Often: someone's failure post that turned out to be a great teaching moment.",
-            "item_4_icon": "🎁",
-            "item_4_title": "Subscriber-only deal",
-            "item_4_desc": "One small offer per week — usually 10–15% off a refill or new product. Subscriber-exclusive coupon code, valid Fri–Sun."
+            "item_3_desc": "Three threads from the Ferment Forum worth reading. Often: someone's failure post that turned out to be a great teaching moment."
           }
         },
         "past_issues": {
           "type": "features",
           "settings": {
-            "eyebrow": "PAST ISSUES",
             "heading": "Three to read first.",
-            "columns": "3",
             "item_1_icon": "📨",
             "item_1_title": "May 3, 2026 · Iss. 47",
             "item_1_desc": "Beetroot kvass recipe + the postbiotic K2 question (why it's not in your dahi) + 3 forum threads on first-batch nerves.",
@@ -78,17 +79,28 @@
         "subscribe_2": {
           "type": "cta",
           "settings": {
+            "theme": "dark",
             "eyebrow": "SIGN UP",
             "title": "Subscribe — it's actually good.",
             "desc": "Email only. Free. Unsubscribe anytime, no questions, no \"are you sure?\" pop-up.",
             "button_label": "Subscribe to the newsletter",
-            "button_link": "/pages/newsletter#signup",
-            "theme": "dark"
+            "button_link": "/pages/newsletter#signup"
           }
         }
       },
-      "block_order": ["hero", "subscribe", "what_you_get", "past_issues", "stats", "testimonial", "subscribe_2"]
+      "block_order": [
+        "hero",
+        "subscribe",
+        "what_you_get",
+        "past_issues",
+        "stats",
+        "testimonial",
+        "subscribe_2"
+      ],
+      "settings": {}
     }
   },
-  "order": ["main"]
+  "order": [
+    "main"
+  ]
 }

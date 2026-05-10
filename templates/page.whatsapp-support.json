@@ -1,5 +1,13 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
-  "name": "WhatsApp expert support",
   "sections": {
     "main": {
       "type": "gb-content-page",
@@ -26,9 +34,7 @@
         "hours": {
           "type": "features",
           "settings": {
-            "eyebrow": "HOURS",
             "heading": "When you'll get a reply.",
-            "columns": "3",
             "item_1_icon": "🌅",
             "item_1_title": "Mon–Fri · 9am–7pm",
             "item_1_desc": "Full team online. Median reply 12 minutes. Specialist available for fermentation troubleshooting.",
@@ -43,9 +49,7 @@
         "team": {
           "type": "features",
           "settings": {
-            "eyebrow": "MEET THE TEAM",
             "heading": "Three humans you might talk to.",
-            "columns": "3",
             "item_1_icon": "👤",
             "item_1_title": "Pooja",
             "item_1_desc": "Lead fermenter. 6 years home-fermenting. Best for: troubleshooting kanji, achaar, kimchi. Will ask for a photo.",
@@ -60,9 +64,7 @@
         "categories": {
           "type": "features",
           "settings": {
-            "eyebrow": "WHAT WE HELP WITH",
             "heading": "Six categories that cover 95% of messages.",
-            "columns": "3",
             "item_1_icon": "🫙",
             "item_1_title": "Fermentation troubleshooting",
             "item_1_desc": "Stuck batch, surface film, off-smell, no bubbling, taste issues. Send a photo for fastest diagnosis.",
@@ -71,32 +73,33 @@
             "item_2_desc": "Where's my order, change my address, mark COD as paid, expedite shipping.",
             "item_3_icon": "💳",
             "item_3_title": "Refunds & replacements",
-            "item_3_desc": "Damaged on arrival, wrong item, batch defect. We send a replacement before you ship the original back.",
-            "item_4_icon": "🍽️",
-            "item_4_title": "Recipe & ingredient questions",
-            "item_4_desc": "Substitutions, scaling up/down, dietary adaptations, what to do with leftover brine.",
-            "item_5_icon": "🎁",
-            "item_5_title": "Gift orders & corporate",
-            "item_5_desc": "Bulk orders, branded packaging, gift cards, scheduled delivery, custom kits for events.",
-            "item_6_icon": "🦠",
-            "item_6_title": "Health & safety",
-            "item_6_desc": "Pregnancy, kids, medication interactions, allergens, dietary restrictions. We'll point to specific guidance."
+            "item_3_desc": "Damaged on arrival, wrong item, batch defect. We send a replacement before you ship the original back."
           }
         },
         "cta_chat": {
           "type": "cta",
           "settings": {
+            "theme": "dark",
             "eyebrow": "OPEN A CHAT",
             "title": "Message us now.",
             "desc": "Tap below — opens WhatsApp on your phone or web. No app install needed.",
             "button_label": "Open WhatsApp chat",
-            "button_link": "https://wa.me/917861940110?text=Hi%2C%20I%20have%20a%20question%20about%20my%20kit",
-            "theme": "dark"
+            "button_link": "https://wa.me/917861940110?text=Hi%2C%20I%20have%20a%20question%20about%20my%20kit"
           }
         }
       },
-      "block_order": ["hero", "number", "hours", "team", "categories", "cta_chat"]
+      "block_order": [
+        "hero",
+        "number",
+        "hours",
+        "team",
+        "categories",
+        "cta_chat"
+      ],
+      "settings": {}
     }
   },
-  "order": ["main"]
+  "order": [
+    "main"
+  ]
 }

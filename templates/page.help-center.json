@@ -1,5 +1,13 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
-  "name": "Help center",
   "sections": {
     "main": {
       "type": "gb-content-page",
@@ -15,9 +23,7 @@
         "topics": {
           "type": "features",
           "settings": {
-            "eyebrow": "BROWSE BY TOPIC",
             "heading": "Six places most questions live.",
-            "columns": "3",
             "item_1_icon": "📦",
             "item_1_title": "Orders & shipping",
             "item_1_desc": "Tracking, delivery times, change-of-address, lost packages.",
@@ -26,16 +32,7 @@
             "item_2_desc": "Cancellations, refund timelines, COD, failed payments.",
             "item_3_icon": "🫙",
             "item_3_title": "Using your kit",
-            "item_3_desc": "First batch, troubleshooting fermentation, recipe questions.",
-            "item_4_icon": "🦠",
-            "item_4_title": "Probiotic safety",
-            "item_4_desc": "When NOT to ferment, allergens, kids, pregnancy, medication interactions.",
-            "item_5_icon": "🌍",
-            "item_5_title": "International shipping",
-            "item_5_desc": "Customs, restricted countries, transit times beyond India.",
-            "item_6_icon": "🎁",
-            "item_6_title": "Gift orders & subscriptions",
-            "item_6_desc": "Gift wrapping, scheduled delivery, recurring kits, corporate orders."
+            "item_3_desc": "First batch, troubleshooting fermentation, recipe questions."
           }
         },
         "faqs": {
@@ -60,9 +57,7 @@
         "contact": {
           "type": "features",
           "settings": {
-            "eyebrow": "STILL STUCK?",
             "heading": "Three ways to reach a real person.",
-            "columns": "3",
             "item_1_icon": "💬",
             "item_1_title": "WhatsApp",
             "item_1_desc": "Fastest. Mon–Sat 9am–7pm IST. Median reply time 18 minutes. Send a photo if it's a fermentation question.",
@@ -77,17 +72,26 @@
         "cta_chat": {
           "type": "cta",
           "settings": {
+            "theme": "dark",
             "eyebrow": "OPEN A CHAT",
             "title": "Talk to a fermenter on WhatsApp.",
             "desc": "Real human, fast reply, photo-friendly. The fastest path to an answer.",
             "button_label": "Message us on WhatsApp",
-            "button_link": "https://wa.me/917861940110",
-            "theme": "dark"
+            "button_link": "https://wa.me/917861940110"
           }
         }
       },
-      "block_order": ["hero", "topics", "faqs", "contact", "cta_chat"]
+      "block_order": [
+        "hero",
+        "topics",
+        "faqs",
+        "contact",
+        "cta_chat"
+      ],
+      "settings": {}
     }
   },
-  "order": ["main"]
+  "order": [
+    "main"
+  ]
 }

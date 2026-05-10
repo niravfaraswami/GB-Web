@@ -1,5 +1,13 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
-  "name": "Instagram",
   "sections": {
     "main": {
       "type": "gb-content-page",
@@ -26,9 +34,7 @@
         "reels": {
           "type": "features",
           "settings": {
-            "eyebrow": "REELS",
             "heading": "Three series we keep going.",
-            "columns": "3",
             "item_1_icon": "🍳",
             "item_1_title": "60-second ferments",
             "item_1_desc": "One recipe, sped-up to 60 seconds. From hand-chopping to jar-sealing. New episode every Monday.",
@@ -59,17 +65,27 @@
         "cta_follow": {
           "type": "cta",
           "settings": {
+            "theme": "dark",
             "eyebrow": "TWO CLICKS",
             "title": "Follow the grid.",
             "desc": "Daily fermentation content, customer features, behind-the-scenes from our workshop.",
             "button_label": "Follow @gutbasketindia",
-            "button_link": "https://instagram.com/gutbasketindia",
-            "theme": "dark"
+            "button_link": "https://instagram.com/gutbasketindia"
           }
         }
       },
-      "block_order": ["hero", "follow", "reels", "tag", "live", "cta_follow"]
+      "block_order": [
+        "hero",
+        "follow",
+        "reels",
+        "tag",
+        "live",
+        "cta_follow"
+      ],
+      "settings": {}
     }
   },
-  "order": ["main"]
+  "order": [
+    "main"
+  ]
 }

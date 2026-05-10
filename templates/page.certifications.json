@@ -1,5 +1,13 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
-  "name": "FSSAI & certifications",
   "sections": {
     "main": {
       "type": "gb-content-page",
@@ -23,9 +31,7 @@
         "certs": {
           "type": "features",
           "settings": {
-            "eyebrow": "ALL CERTIFICATIONS",
             "heading": "What we hold, and why each matters.",
-            "columns": "3",
             "item_1_icon": "📜",
             "item_1_title": "FSSAI Manufacturing",
             "item_1_desc": "The headline licence. Required for any food brand that processes, packs, or distributes in India. Includes annual inspection and renewable every 5 years.",
@@ -34,16 +40,7 @@
             "item_2_desc": "A separate notification under FSSAI 2.4 (2017) for products labelled \"probiotic.\" Requires a minimum CFU count, strain identification, and stability data per batch.",
             "item_3_icon": "🏭",
             "item_3_title": "GMP — Good Manufacturing Practices",
-            "item_3_desc": "Voluntary. Independent third-party audit of facility cleanliness, staff training, equipment calibration, and traceability logs. Renewed annually.",
-            "item_4_icon": "🛡️",
-            "item_4_title": "HACCP — Hazard Analysis",
-            "item_4_desc": "Maps every step of production where contamination could occur and defines a control point. Required by Indian food retailers like Nature's Basket.",
-            "item_5_icon": "📋",
-            "item_5_title": "ISO 22000:2018",
-            "item_5_desc": "International food-safety management standard. Combines HACCP with quality-management practices. Audited every 3 years by an accredited body.",
-            "item_6_icon": "🌍",
-            "item_6_title": "APEDA Export Licence",
-            "item_6_desc": "Required to export processed food from India. We ship to UAE and Singapore today — license activated April 2026."
+            "item_3_desc": "Voluntary. Independent third-party audit of facility cleanliness, staff training, equipment calibration, and traceability logs. Renewed annually."
           }
         },
         "tests": {
@@ -74,8 +71,18 @@
           }
         }
       },
-      "block_order": ["hero", "fssai", "certs", "tests", "recall", "contact"]
+      "block_order": [
+        "hero",
+        "fssai",
+        "certs",
+        "tests",
+        "recall",
+        "contact"
+      ],
+      "settings": {}
     }
   },
-  "order": ["main"]
+  "order": [
+    "main"
+  ]
 }

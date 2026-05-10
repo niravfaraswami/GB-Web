@@ -1,5 +1,13 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
-  "name": "Ferment Forum",
   "sections": {
     "main": {
       "type": "gb-content-page",
@@ -15,9 +23,7 @@
         "categories": {
           "type": "features",
           "settings": {
-            "eyebrow": "SIX CATEGORIES",
             "heading": "Where conversations happen.",
-            "columns": "3",
             "item_1_icon": "🫙",
             "item_1_title": "Help me — this looks weird",
             "item_1_desc": "Post a photo of your jar. Get diagnosis from mentors and other members. The most active category.",
@@ -26,24 +32,13 @@
             "item_2_desc": "Member-developed recipes. Variations, regional adaptations, dietary mods. Top recipes graduate to /pages/recipes.",
             "item_3_icon": "🦠",
             "item_3_title": "Science & research",
-            "item_3_desc": "Strain talk, papers worth reading, gut-microbiome news. Heavily moderated to avoid pseudoscience.",
-            "item_4_icon": "🌱",
-            "item_4_title": "Beginner's corner",
-            "item_4_desc": "First-batch questions, kit unboxings, what-do-I-do-now. No question too basic.",
-            "item_5_icon": "🛠️",
-            "item_5_title": "Build & gear",
-            "item_5_desc": "DIY airlocks, jar mods, weight alternatives, fermentation chambers. For people who tinker.",
-            "item_6_icon": "🌍",
-            "item_6_title": "Regional ferments",
-            "item_6_desc": "State-by-state traditional ferments. Black carrot kanji (Punjab), bori (Bengal), kombucha rituals, etc."
+            "item_3_desc": "Strain talk, papers worth reading, gut-microbiome news. Heavily moderated to avoid pseudoscience."
           }
         },
         "threads": {
           "type": "features",
           "settings": {
-            "eyebrow": "ACTIVE THREADS",
             "heading": "Three conversations going right now.",
-            "columns": "3",
             "item_1_icon": "🔥",
             "item_1_title": "Why is my kanji not turning red?",
             "item_1_desc": "47 replies · last 2 hours ago · started by Priya M. — diagnosing a black-carrot kanji that's clear instead of red. Mentor: Pooja.",
@@ -74,17 +69,27 @@
         "cta_join": {
           "type": "cta",
           "settings": {
+            "theme": "dark",
             "eyebrow": "JOIN THE FORUM",
             "title": "Free to join. No spam, ever.",
             "desc": "Sign in with email. We don't sell, share, or analyse your data. The forum is for fermenters, not advertisers.",
             "button_label": "Create an account →",
-            "button_link": "/account/register",
-            "theme": "dark"
+            "button_link": "/account/register"
           }
         }
       },
-      "block_order": ["hero", "categories", "threads", "rules", "mentors", "cta_join"]
+      "block_order": [
+        "hero",
+        "categories",
+        "threads",
+        "rules",
+        "mentors",
+        "cta_join"
+      ],
+      "settings": {}
     }
   },
-  "order": ["main"]
+  "order": [
+    "main"
+  ]
 }

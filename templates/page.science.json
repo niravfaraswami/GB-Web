@@ -1,5 +1,13 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
-  "name": "The science behind our kits",
   "sections": {
     "main": {
       "type": "gb-content-page",
@@ -15,9 +23,7 @@
         "lacto": {
           "type": "features",
           "settings": {
-            "eyebrow": "LACTO-FERMENTATION IN 60 SECONDS",
             "heading": "What's actually happening in the jar.",
-            "columns": "4",
             "item_1_icon": "01",
             "item_1_title": "Salt creates a gate",
             "item_1_desc": "2–3% salt by weight makes the brine inhospitable to most bacteria, moulds, and yeasts. It does not bother lactic acid bacteria (LAB). They can swim. The competition can't.",
@@ -26,18 +32,13 @@
             "item_2_desc": "Vegetables, fruits, and grains carry wild LAB on their skin. The dominant species — Lactobacillus plantarum, Leuconostoc mesenteroides, Pediococcus — start consuming naturally-present sugars.",
             "item_3_icon": "03",
             "item_3_title": "pH drops below 4.0",
-            "item_3_desc": "LAB excrete lactic acid as a by-product. The brine acidifies. By Day 4, pH is around 3.5–3.8 — too acidic for spoilage organisms, just right for LAB.",
-            "item_4_icon": "04",
-            "item_4_title": "Preserved, alive, bioactive",
-            "item_4_desc": "The food is now shelf-stable in the fridge, full of live cultures, plus the metabolites LAB produced along the way (vitamin K2, B12 traces, postbiotics, bioactive peptides)."
+            "item_3_desc": "LAB excrete lactic acid as a by-product. The brine acidifies. By Day 4, pH is around 3.5–3.8 — too acidic for spoilage organisms, just right for LAB."
           }
         },
         "biotics": {
           "type": "features",
           "settings": {
-            "eyebrow": "THE THREE BIOTICS",
             "heading": "Probiotic, prebiotic, postbiotic — explained.",
-            "columns": "3",
             "item_1_icon": "🦠",
             "item_1_title": "Probiotic",
             "item_1_desc": "The live bacteria themselves — Lactobacillus, Leuconostoc, Pediococcus, Bifidobacterium. They colonise temporarily, crowd out pathogens, train your immune system, and produce compounds that help your gut barrier.",
@@ -60,9 +61,7 @@
         "strains": {
           "type": "features",
           "settings": {
-            "eyebrow": "STRAIN SPOTLIGHT",
             "heading": "The four organisms doing most of the work.",
-            "columns": "2",
             "item_1_icon": "L. plantarum",
             "item_1_title": "The closer.",
             "item_1_desc": "The most studied LAB on Earth. Tolerates pH 3.5, dominates the late-fermentation phase. Linked in trials to reduced bloating, IBS-symptom relief, and improved gut-barrier integrity. Present in achaar, kanji, kimchi, sauerkraut.",
@@ -71,26 +70,33 @@
             "item_2_desc": "Produces complex aroma compounds and small amounts of CO₂. Responsible for the slight fizz in kanji and the depth in mature kimchi. Also produces GABA, a neurotransmitter linked to mood-axis effects.",
             "item_3_icon": "Leuconostoc",
             "item_3_title": "The opener.",
-            "item_3_desc": "Starts every veg ferment in the first 48 hours. Heterofermentative — produces both lactic acid and CO₂. Hands off to L. plantarum once the pH gets too low for it.",
-            "item_4_icon": "Pediococcus",
-            "item_4_title": "The polisher.",
-            "item_4_desc": "Late-stage. Tolerates higher salt. Adds umami and depth. Common in long-aged ferments and dry-cured meats."
+            "item_3_desc": "Starts every veg ferment in the first 48 hours. Heterofermentative — produces both lactic acid and CO₂. Hands off to L. plantarum once the pH gets too low for it."
           }
         },
         "cta_sourcing": {
           "type": "cta",
           "settings": {
+            "theme": "dark",
             "eyebrow": "NEXT",
             "title": "Where the ingredients come from.",
             "desc": "If the science checks out, the next question is sourcing — every batch is traceable to a single farm or partner.",
             "button_label": "Sourcing & quality →",
-            "button_link": "/pages/sourcing-quality-standards",
-            "theme": "dark"
+            "button_link": "/pages/sourcing-quality-standards"
           }
         }
       },
-      "block_order": ["hero", "lacto", "biotics", "vinegar", "strains", "cta_sourcing"]
+      "block_order": [
+        "hero",
+        "lacto",
+        "biotics",
+        "vinegar",
+        "strains",
+        "cta_sourcing"
+      ],
+      "settings": {}
     }
   },
-  "order": ["main"]
+  "order": [
+    "main"
+  ]
 }

@@ -1,5 +1,13 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
-  "name": "Shipping policy",
   "sections": {
     "main": {
       "type": "gb-content-page",
@@ -15,9 +23,7 @@
         "times": {
           "type": "features",
           "settings": {
-            "eyebrow": "DELIVERY TIMES",
             "heading": "How long it takes to reach you.",
-            "columns": "3",
             "item_1_icon": "🏙️",
             "item_1_title": "Metro cities",
             "item_1_desc": "Mumbai, Delhi, Bengaluru, Chennai, Hyderabad, Pune, Kolkata, Ahmedabad. 2–3 working days from dispatch.",
@@ -26,16 +32,7 @@
             "item_2_desc": "Jaipur, Lucknow, Indore, Surat, Kochi, Chandigarh, etc. 3–5 working days.",
             "item_3_icon": "📍",
             "item_3_title": "Rest of India",
-            "item_3_desc": "Smaller towns, NE states, J&K, A&N Islands. 5–7 working days. Some pin codes 7–10 days.",
-            "item_4_icon": "💰",
-            "item_4_title": "Free shipping",
-            "item_4_desc": "Orders over ₹300. Below that, ₹49 flat. COD adds ₹20 per order.",
-            "item_5_icon": "⚡",
-            "item_5_title": "Express",
-            "item_5_desc": "Available at checkout for metro cities. ₹149 flat. Next-working-day delivery on orders placed before 12pm IST.",
-            "item_6_icon": "🌍",
-            "item_6_title": "International",
-            "item_6_desc": "UAE, Singapore, Australia, UK, US. ₹1,200–2,400 depending on weight. 7–14 days. Customs not included."
+            "item_3_desc": "Smaller towns, NE states, J&K, A&N Islands. 5–7 working days. Some pin codes 7–10 days."
           }
         },
         "dry_shipping": {
@@ -49,9 +46,7 @@
         "tracking": {
           "type": "features",
           "settings": {
-            "eyebrow": "TRACKING",
             "heading": "You'll know where it is.",
-            "columns": "3",
             "item_1_icon": "📧",
             "item_1_title": "Email + WhatsApp",
             "item_1_desc": "Tracking link sent the moment we hand the order to the courier (usually within 18 hours of order placement).",
@@ -92,8 +87,18 @@
           }
         }
       },
-      "block_order": ["hero", "times", "dry_shipping", "tracking", "edge_cases", "cta_track"]
+      "block_order": [
+        "hero",
+        "times",
+        "dry_shipping",
+        "tracking",
+        "edge_cases",
+        "cta_track"
+      ],
+      "settings": {}
     }
   },
-  "order": ["main"]
+  "order": [
+    "main"
+  ]
 }
