@@ -1,13 +1,14 @@
 {
+  "name": "Recipes",
   "sections": {
     "main": {
       "type": "gb-blog-recipes",
       "settings": {
         "eyebrow": "RECIPES",
         "heading": "All recipes",
-        "subhead": "<p>Step-by-step fermentation recipes — from raw mango achaar to kanji to kimchi. Every recipe is paired with the kit that makes it foolproof.</p>",
+        "subhead": "<p>Step-by-step probiotic fermentation recipes — from raw mango achaar to kanji to kimchi. Every recipe is paired with the kit that makes it foolproof.</p>",
         "show_filter": true,
-        "per_page": 12
+        "per_page": 9
       }
     }
   },
