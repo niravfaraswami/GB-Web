@@ -1,0 +1,325 @@
+{%- comment -%}
+  Recipe blog index — listing page for the "Recipes" Shopify blog.
+  Renders a grid of recipe cards (image, dietary tags, title, time meta)
+  reading from each article's metafields where available.
+
+  Activate: in Shopify admin → Online Store → Blog Posts → Manage blogs
+  → Add blog "Recipes" (or open existing). On the blog edit page, set
+  Theme template = blog.recipes. Articles inside use article.recipe.
+{%- endcomment -%}
+
+{%- liquid
+  assign articles_per_page = section.settings.per_page | default: 12
+  paginate blog.articles by articles_per_page
+-%}
+
+<div class="gb-rcpx" id="gb-rcpx-{{ section.id }}">
+  <section class="gb-rcpx-hero">
+    <div class="gb-rcpx-hero-inner">
+      {%- if section.settings.eyebrow != blank -%}
+        <span class="gb-rcpx-eyebrow">{{ section.settings.eyebrow }}</span>
+      {%- endif -%}
+      <h1 class="gb-rcpx-h1">{{ section.settings.heading | default: blog.title }}</h1>
+      {%- if section.settings.subhead != blank -%}
+        <p class="gb-rcpx-sub">{{ section.settings.subhead }}</p>
+      {%- endif -%}
+    </div>
+  </section>
+
+  {%- assign all_tags = blog.all_tags -%}
+  {%- if section.settings.show_filter and all_tags.size > 0 -%}
+    <nav class="gb-rcpx-filter" aria-label="Filter recipes by tag">
+      <a href="{{ blog.url }}" class="gb-rcpx-filter-link {% if current_tags == blank %}is-active{% endif %}">All</a>
+      {%- for tag in all_tags -%}
+        <a href="{{ blog.url }}/tagged/{{ tag | handleize }}" class="gb-rcpx-filter-link {% if current_tags contains tag %}is-active{% endif %}">{{ tag }}</a>
+      {%- endfor -%}
+    </nav>
+  {%- endif -%}
+
+  <section class="gb-rcpx-list-wrap">
+    <div class="gb-rcpx-list-inner">
+      {%- if blog.articles.size > 0 -%}
+        <div class="gb-rcpx-grid">
+          {%- for article in blog.articles -%}
+            {%- liquid
+              assign cm = article.metafields.custom
+              assign emoji = cm.hero_emoji | default: '🥄'
+              assign tags = cm.dietary_tags.value
+              assign prep = cm.prep_time
+              assign ferment = cm.ferment_time
+              assign total = cm.total_time
+              assign cat = cm.category_label
+              assign accent = cm.color | default: '#FF7300'
+              assign accent_soft = cm.color_soft | default: '#FFE4D1'
+            -%}
+            <a href="{{ article.url }}" class="gb-rcpx-card" style="--gb-rcpx-accent: {{ accent }}; --gb-rcpx-accent-soft: {{ accent_soft }};">
+              <div class="gb-rcpx-card-media">
+                {%- if article.image -%}
+                  <img src="{{ article.image | image_url: width: 800 }}" alt="{{ article.image.alt | escape }}" loading="lazy">
+                {%- else -%}
+                  <span class="gb-rcpx-card-emoji">{{ emoji }}</span>
+                {%- endif -%}
+                {%- if cat != blank -%}
+                  <span class="gb-rcpx-card-cat">{{ cat }}</span>
+                {%- endif -%}
+              </div>
+              <div class="gb-rcpx-card-body">
+                {%- if tags and tags.size > 0 -%}
+                  <div class="gb-rcpx-card-tags">
+                    {%- for t in tags limit: 3 -%}
+                      <span class="gb-rcpx-card-tag">{{ t }}</span>
+                    {%- endfor -%}
+                  </div>
+                {%- endif -%}
+                <h2 class="gb-rcpx-card-title">{{ article.title }}</h2>
+                {%- if article.excerpt != blank -%}
+                  <p class="gb-rcpx-card-excerpt">{{ article.excerpt | strip_html | truncate: 110 }}</p>
+                {%- elsif cm.subtitle != blank -%}
+                  <p class="gb-rcpx-card-excerpt">{{ cm.subtitle | strip_html | truncate: 110 }}</p>
+                {%- endif -%}
+                <div class="gb-rcpx-card-meta">
+                  {%- if prep != blank -%}<span><strong>Prep</strong> {{ prep }}</span>{%- endif -%}
+                  {%- if ferment != blank -%}<span><strong>Ferment</strong> {{ ferment }}</span>{%- elsif total != blank -%}<span><strong>Total</strong> {{ total }}</span>{%- endif -%}
+                </div>
+              </div>
+            </a>
+          {%- endfor -%}
+        </div>
+
+        {%- if paginate.pages > 1 -%}
+          <nav class="gb-rcpx-pager" aria-label="Pagination">
+            {%- if paginate.previous -%}
+              <a href="{{ paginate.previous.url }}" class="gb-rcpx-pager-link">← Newer</a>
+            {%- endif -%}
+            <span class="gb-rcpx-pager-info">Page {{ paginate.current_page }} of {{ paginate.pages }}</span>
+            {%- if paginate.next -%}
+              <a href="{{ paginate.next.url }}" class="gb-rcpx-pager-link">Older →</a>
+            {%- endif -%}
+          </nav>
+        {%- endif -%}
+      {%- else -%}
+        <div class="gb-rcpx-empty">
+          <p>No recipes yet. Check back soon, or visit our <a href="/blogs">other journals</a>.</p>
+        </div>
+      {%- endif -%}
+    </div>
+  </section>
+</div>
+
+{%- endpaginate -%}
+
+{% stylesheet %}
+.gb-rcpx {
+  --gb-rcpx-white: #FFFFFF;
+  --gb-rcpx-cream: #FFF9EE;
+  --gb-rcpx-text: #1F1F1D;
+  --gb-rcpx-muted: #5C4D3F;
+  --gb-rcpx-soft: #888780;
+  --gb-rcpx-border: #E8E3D5;
+  --gb-rcpx-border-soft: #F0EBDD;
+  --gb-rcpx-ink: #1F1F1D;
+  --gb-rcpx-action: #FF7300;
+  background: var(--gb-rcpx-cream);
+  font-family: 'DM Sans', sans-serif;
+}
+.gb-rcpx-eyebrow {
+  display: inline-block;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gb-rcpx-muted);
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.gb-rcpx-hero { background: var(--gb-rcpx-white); padding: 56px 0 40px; border-bottom: 1px solid var(--gb-rcpx-border-soft); }
+.gb-rcpx-hero-inner { max-width: 880px; margin: 0 auto; padding: 0 24px; }
+.gb-rcpx-h1 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: clamp(32px, 4.6vw, 48px);
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+  margin: 0 0 14px;
+  color: var(--gb-rcpx-text);
+}
+.gb-rcpx-sub {
+  font-size: 17px;
+  line-height: 1.55;
+  color: var(--gb-rcpx-muted);
+  margin: 0;
+  max-width: 720px;
+}
+.gb-rcpx-filter {
+  background: var(--gb-rcpx-white);
+  border-bottom: 1px solid var(--gb-rcpx-border-soft);
+  padding: 14px 0;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.gb-rcpx-filter::-webkit-scrollbar { display: none; }
+.gb-rcpx-filter-link {
+  padding: 8px 16px;
+  background: var(--gb-rcpx-cream);
+  color: var(--gb-rcpx-text);
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: all 0.15s;
+}
+.gb-rcpx-filter-link:hover { background: var(--gb-rcpx-border); }
+.gb-rcpx-filter-link.is-active { background: var(--gb-rcpx-ink); color: var(--gb-rcpx-cream); }
+.gb-rcpx-list-wrap { padding: 56px 0 96px; background: var(--gb-rcpx-cream); }
+.gb-rcpx-list-inner { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+.gb-rcpx-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.gb-rcpx-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--gb-rcpx-white);
+  border-radius: 14px;
+  border: 1px solid var(--gb-rcpx-border-soft);
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.gb-rcpx-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 28px rgba(43,31,26,0.10);
+}
+.gb-rcpx-card-media {
+  aspect-ratio: 4 / 3;
+  background: var(--gb-rcpx-accent-soft, var(--gb-rcpx-cream));
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+.gb-rcpx-card-media img { width: 100%; height: 100%; object-fit: cover; }
+.gb-rcpx-card-emoji { font-size: 80px; color: var(--gb-rcpx-accent); }
+.gb-rcpx-card-cat {
+  position: absolute;
+  bottom: 12px; left: 12px;
+  background: var(--gb-rcpx-ink);
+  color: var(--gb-rcpx-cream);
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: 700;
+}
+.gb-rcpx-card-body { padding: 20px 22px 22px; flex: 1; display: flex; flex-direction: column; }
+.gb-rcpx-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+.gb-rcpx-card-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: var(--gb-rcpx-accent-soft);
+  color: var(--gb-rcpx-accent);
+}
+.gb-rcpx-card-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 18px;
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+  margin: 0 0 8px;
+  color: var(--gb-rcpx-text);
+}
+.gb-rcpx-card-excerpt {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--gb-rcpx-muted);
+  margin: 0 0 14px;
+  flex: 1;
+}
+.gb-rcpx-card-meta {
+  display: flex;
+  gap: 16px;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--gb-rcpx-soft);
+}
+.gb-rcpx-card-meta strong { color: var(--gb-rcpx-text); font-weight: 700; margin-right: 4px; }
+.gb-rcpx-pager {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  margin-top: 56px;
+}
+.gb-rcpx-pager-link {
+  padding: 10px 20px;
+  background: var(--gb-rcpx-white);
+  border: 1px solid var(--gb-rcpx-border);
+  border-radius: 999px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--gb-rcpx-text);
+  text-decoration: none;
+  transition: all 0.15s;
+}
+.gb-rcpx-pager-link:hover { background: var(--gb-rcpx-ink); color: var(--gb-rcpx-cream); border-color: var(--gb-rcpx-ink); }
+.gb-rcpx-pager-info {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--gb-rcpx-soft);
+}
+.gb-rcpx-empty {
+  text-align: center;
+  padding: 64px 24px;
+  background: var(--gb-rcpx-white);
+  border-radius: 14px;
+  border: 1px solid var(--gb-rcpx-border-soft);
+  color: var(--gb-rcpx-muted);
+}
+@media (max-width: 968px) {
+  .gb-rcpx-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+}
+@media (max-width: 600px) {
+  .gb-rcpx-grid { grid-template-columns: 1fr; }
+  .gb-rcpx-h1 { font-size: 28px; }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "GB · Blog Recipes",
+  "tag": "section",
+  "class": "gb-rcpx-wrap",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "RECIPES" },
+    { "type": "text", "id": "heading", "label": "Heading (defaults to blog title)" },
+    { "type": "richtext", "id": "subhead", "label": "Subhead", "default": "<p>Step-by-step fermentation recipes — from raw mango achaar to kanji to kimchi.</p>" },
+    { "type": "checkbox", "id": "show_filter", "label": "Show tag filter bar", "default": true },
+    { "type": "range", "id": "per_page", "label": "Recipes per page", "min": 6, "max": 24, "step": 3, "default": 12 }
+  ],
+  "presets": [{ "name": "GB · Blog Recipes" }]
+}
+{% endschema %}

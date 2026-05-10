@@ -1,0 +1,1043 @@
+{%- comment -%}
+  Build Your Own Kit — interactive product bundle builder
+  Source: gutbasket-build-your-kit.html + Build your own kit IMPLEMENTATION_NOTES.md
+  Reads from up to 4 Shopify collections (one per byok_section block).
+  No section is mandatory — customer toggles cards across sections, sees
+  a live bundle summary on desktop / mobile sheet, hits one ATC.
+
+  Activate: create a Shopify page with handle `build-your-kit`, set
+  Theme template = page.byok.
+{%- endcomment -%}
+
+{%- liquid
+  assign hero_blocks = section.blocks | where: 'type', 'hero'
+  assign byok_sections = section.blocks | where: 'type', 'byok_section'
+-%}
+
+<div class="gb-byok" id="gb-byok-{{ section.id }}">
+
+  {%- for hero in hero_blocks -%}
+    <section class="gb-byok-hero" {{ hero.shopify_attributes }}>
+      <div class="gb-byok-hero-inner">
+        {%- if hero.settings.eyebrow != blank -%}
+          <span class="gb-byok-eyebrow">{{ hero.settings.eyebrow }}</span>
+        {%- endif -%}
+        <h1 class="gb-byok-h1">{{ hero.settings.heading_1 }} <em>{{ hero.settings.heading_2 }}</em></h1>
+        {%- if hero.settings.subhead != blank -%}
+          <p class="gb-byok-sub">{{ hero.settings.subhead }}</p>
+        {%- endif -%}
+      </div>
+    </section>
+  {%- endfor -%}
+
+  <main class="gb-byok-main">
+    <div class="gb-byok-layout">
+      <div class="gb-byok-sections">
+        {%- for sblock in byok_sections -%}
+          {%- liquid
+            assign s_idx = forloop.index
+            assign s_key = sblock.settings.section_key | default: 'sec'
+            assign coll = sblock.settings.collection
+            assign visible = sblock.settings.visible_count | default: 6
+            assign products_list = coll.products
+            assign total_count = products_list.size
+          -%}
+          <section class="gb-byok-section" data-section="{{ s_key }}" id="gb-byok-section-{{ s_key }}-{{ section.id }}" {{ sblock.shopify_attributes }}>
+            <div class="gb-byok-section-h">
+              <div class="gb-byok-section-num">{{ s_idx }}</div>
+              <h2 class="gb-byok-section-title">{{ sblock.settings.title }}</h2>
+              <span class="gb-byok-pill" data-pill="{{ s_key }}"><span class="gb-byok-pill-icon"></span><span class="gb-byok-pill-text">Optional</span></span>
+              {%- if sblock.settings.hint != blank -%}
+                <p class="gb-byok-section-hint">{{ sblock.settings.hint }}</p>
+              {%- endif -%}
+            </div>
+
+            {%- if total_count == 0 -%}
+              <div class="gb-byok-empty">Pick a Shopify collection for this section in Theme Editor.</div>
+            {%- else -%}
+              <div class="gb-byok-grid" data-grid="{{ s_key }}">
+                {%- for product in products_list -%}
+                  {%- liquid
+                    assign v = product.selected_or_first_available_variant
+                    assign extra_class = ''
+                    if forloop.index > visible
+                      assign extra_class = ' is-extra'
+                    endif
+                    assign price_now = v.price | money_without_trailing_zeros
+                    assign price_was = ''
+                    if v.compare_at_price and v.compare_at_price > v.price
+                      assign price_was = v.compare_at_price | money_without_trailing_zeros
+                    endif
+                    assign badge = product.metafields.byok.badge | default: product.metafields.custom.badge
+                  -%}
+                  <article class="gb-byok-card{{ extra_class }}"
+                           data-id="{{ product.handle }}"
+                           data-section="{{ s_key }}"
+                           data-variant-id="{{ v.id }}"
+                           data-name="{{ product.title | escape }}"
+                           data-price="{{ v.price | divided_by: 100.0 }}"
+                           data-compare="{% if v.compare_at_price %}{{ v.compare_at_price | divided_by: 100.0 }}{% else %}0{% endif %}"
+                           tabindex="0" role="button" aria-pressed="false"
+                           {%- unless v.available %} aria-disabled="true" data-soldout="1"{%- endunless %}>
+                    <div class="gb-byok-card-media">
+                      {%- if badge != blank -%}
+                        <span class="gb-byok-card-badge">{{ badge }}</span>
+                      {%- endif -%}
+                      <span class="gb-byok-card-radio" aria-hidden="true"></span>
+                      {%- if product.featured_image -%}
+                        <img src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.title | escape }}" loading="lazy">
+                      {%- else -%}
+                        <span class="gb-byok-card-fallback">📦</span>
+                      {%- endif -%}
+                      {%- unless v.available -%}<span class="gb-byok-card-soldout">Sold out</span>{%- endunless -%}
+                    </div>
+                    <div class="gb-byok-card-body">
+                      <div class="gb-byok-card-name">{{ product.title }}</div>
+                      {%- assign short = product.metafields.byok.short_description | default: product.metafields.custom.short_description -%}
+                      {%- if short == blank -%}{%- assign short = product.description | strip_html | truncate: 80 -%}{%- endif -%}
+                      <p class="gb-byok-card-desc">{{ short }}</p>
+                      {%- if product.variants.size > 1 -%}
+                        <select class="gb-byok-variant" aria-label="Choose variant for {{ product.title | escape }}">
+                          {%- for variant in product.variants -%}
+                            <option value="{{ variant.id }}" data-price="{{ variant.price | divided_by: 100.0 }}" data-compare="{% if variant.compare_at_price %}{{ variant.compare_at_price | divided_by: 100.0 }}{% else %}0{% endif %}">
+                              {{ variant.title }} — {{ variant.price | money }}
+                            </option>
+                          {%- endfor -%}
+                        </select>
+                      {%- endif -%}
+                      <div class="gb-byok-card-prices">
+                        {%- if price_was != '' -%}<span class="gb-byok-card-was">{{ price_was }}</span>{%- endif -%}
+                        <span class="gb-byok-card-now">{{ price_now }}</span>
+                      </div>
+                    </div>
+                  </article>
+                {%- endfor -%}
+              </div>
+
+              {%- if total_count > visible -%}
+                <button type="button" class="gb-byok-viewmore" data-viewmore="{{ s_key }}">View more</button>
+              {%- endif -%}
+            {%- endif -%}
+          </section>
+        {%- endfor -%}
+      </div>
+
+      {%- comment -%} Sticky desktop bundle summary {%- endcomment -%}
+      <aside class="gb-byok-bundle" aria-label="Your bundle">
+        <div class="gb-byok-bundle-title">{{ section.settings.bundle_title | default: 'YOUR BUNDLE' }}</div>
+        <ul class="gb-byok-bundle-list">
+          {%- for sblock in byok_sections -%}
+            {%- assign s_key = sblock.settings.section_key | default: 'sec' -%}
+            <li class="gb-byok-bundle-item" data-bundle="{{ s_key }}">
+              <div class="gb-byok-bundle-label">
+                <span class="gb-byok-bundle-step">{{ forloop.index }}. {{ sblock.settings.title | default: sblock.settings.short_label }}</span>
+                <span class="gb-byok-bundle-selection">No selection yet</span>
+              </div>
+              <span class="gb-byok-bundle-check" aria-hidden="true"></span>
+            </li>
+          {%- endfor -%}
+        </ul>
+        <div class="gb-byok-bundle-divider"></div>
+        <div class="gb-byok-bundle-total">
+          <span class="gb-byok-bundle-tlbl">{{ section.settings.total_label | default: 'Total' }}</span>
+          <span class="gb-byok-bundle-tval" id="gb-byok-total-{{ section.id }}">{{ 0 | money }}</span>
+        </div>
+        <div class="gb-byok-bundle-savings" id="gb-byok-savings-{{ section.id }}"></div>
+        <button type="button" class="gb-byok-cta" id="gb-byok-cta-{{ section.id }}" disabled>{{ section.settings.cta_label | default: 'Add bundle to cart' }}</button>
+        <div class="gb-byok-trust">
+          {%- if section.settings.trust_line != blank -%}<div>{{ section.settings.trust_line }}</div>{%- endif -%}
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  {%- comment -%} Mobile bottom sheet {%- endcomment -%}
+  <div class="gb-byok-m-backdrop" id="gb-byok-m-backdrop-{{ section.id }}"></div>
+  <div class="gb-byok-m" id="gb-byok-m-{{ section.id }}" aria-hidden="true">
+    <div class="gb-byok-m-handle" id="gb-byok-m-handle-{{ section.id }}" aria-label="Drag to expand bundle"></div>
+    <div class="gb-byok-m-sheet" aria-hidden="true">
+      <div class="gb-byok-m-sheet-h">
+        <h3>Your bundle</h3>
+        <span class="gb-byok-m-meta" id="gb-byok-m-sheet-meta-{{ section.id }}">No items yet</span>
+      </div>
+      <ul class="gb-byok-m-list" id="gb-byok-m-list-{{ section.id }}"></ul>
+    </div>
+    <div class="gb-byok-m-row">
+      <div class="gb-byok-m-info" id="gb-byok-m-toggle-{{ section.id }}" role="button" tabindex="0" aria-expanded="false" aria-controls="gb-byok-m-{{ section.id }}">
+        <div class="gb-byok-m-info-text">
+          <div class="gb-byok-m-lbl">Total</div>
+          <div class="gb-byok-m-val" id="gb-byok-m-total-{{ section.id }}">{{ 0 | money }}</div>
+          <div class="gb-byok-m-meta" id="gb-byok-m-meta-{{ section.id }}">Tap to review bundle</div>
+        </div>
+        <div class="gb-byok-m-chev" aria-hidden="true">▲</div>
+      </div>
+      <button type="button" class="gb-byok-cta" id="gb-byok-m-cta-{{ section.id }}" disabled>{{ section.settings.cta_label | default: 'Add bundle to cart' }}</button>
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+.gb-byok {
+  --byok-ink: #1F1F1D;
+  --byok-cream: #FFF9EE;
+  --byok-white: #FFFFFF;
+  --byok-allinone: #2B2218;
+  --byok-text: #1F1F1D;
+  --byok-text-muted: #5C4D3F;
+  --byok-text-soft: #888780;
+  --byok-border: #E8E1D4;
+  --byok-action: #FF7300;
+  --byok-action-dark: #E66800;
+  --byok-kit: #8B1F40;
+  --byok-kit-dark: #6E1832;
+  --byok-kit-soft: #F5E6EC;
+  background: var(--byok-cream);
+  color: var(--byok-text);
+  font-family: 'DM Sans', sans-serif;
+}
+.gb-byok-eyebrow {
+  display: inline-block;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--byok-text-muted);
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.gb-byok-hero {
+  background: var(--byok-white);
+  padding: 56px 0 40px;
+  border-bottom: 1px solid var(--byok-border);
+}
+.gb-byok-hero-inner { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+.gb-byok-h1 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: clamp(32px, 4.6vw, 52px);
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+  margin: 0 0 18px;
+  color: var(--byok-text);
+}
+.gb-byok-h1 em { font-style: italic; font-weight: 800; color: var(--byok-kit); }
+.gb-byok-sub {
+  font-size: 17px;
+  line-height: 1.55;
+  color: var(--byok-text-muted);
+  margin: 0;
+  max-width: 720px;
+}
+.gb-byok-main { padding: 56px 0 96px; }
+.gb-byok-layout {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 40px;
+  align-items: start;
+}
+.gb-byok-sections { min-width: 0; }
+.gb-byok-section { margin-bottom: 56px; background: var(--byok-white); border: 1px solid var(--byok-border); border-radius: 12px; padding: 32px; }
+.gb-byok-section-h {
+  display: grid;
+  grid-template-columns: 36px 1fr auto;
+  gap: 12px 16px;
+  align-items: center;
+  margin-bottom: 24px;
+}
+.gb-byok-section-num {
+  width: 36px; height: 36px;
+  background: var(--byok-kit);
+  color: var(--byok-cream);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 16px;
+}
+.gb-byok-section-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 22px;
+  letter-spacing: -0.02em;
+  margin: 0;
+  color: var(--byok-text);
+}
+.gb-byok-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--byok-cream);
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--byok-text-muted);
+  white-space: nowrap;
+}
+.gb-byok-pill-icon { width: 6px; height: 6px; border-radius: 50%; background: var(--byok-text-soft); }
+.gb-byok-pill.has-selection { background: var(--byok-kit-soft); color: var(--byok-kit-dark); }
+.gb-byok-pill.has-selection .gb-byok-pill-icon { background: var(--byok-kit); }
+.gb-byok-section-hint {
+  grid-column: 1 / -1;
+  font-size: 14px;
+  color: var(--byok-text-muted);
+  margin: 0;
+  line-height: 1.5;
+}
+.gb-byok-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.gb-byok-card {
+  background: var(--byok-white);
+  border: 2px solid var(--byok-border);
+  border-radius: 12px;
+  cursor: pointer;
+  position: relative;
+  transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+  overflow: hidden;
+  outline: none;
+}
+.gb-byok-card:focus-visible { box-shadow: 0 0 0 3px var(--byok-kit-soft); }
+.gb-byok-card:hover { transform: translateY(-2px); border-color: var(--byok-text-muted); }
+.gb-byok-card.is-selected { border-color: var(--byok-kit); }
+.gb-byok-card.is-extra { display: none; }
+.gb-byok-card.is-shown { display: block; }
+.gb-byok-card[data-soldout] { opacity: 0.55; cursor: not-allowed; }
+.gb-byok-card-media {
+  aspect-ratio: 1 / 1;
+  background: var(--byok-cream);
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+.gb-byok-card-media img { width: 100%; height: 100%; object-fit: cover; }
+.gb-byok-card-fallback { font-size: 56px; }
+.gb-byok-card-badge {
+  position: absolute;
+  top: 10px; left: 10px;
+  background: var(--byok-ink);
+  color: var(--byok-cream);
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 4px;
+  z-index: 2;
+}
+.gb-byok-card-radio {
+  position: absolute;
+  top: 10px; right: 10px;
+  width: 22px; height: 22px;
+  border: 2px solid var(--byok-border);
+  border-radius: 50%;
+  background: var(--byok-white);
+  z-index: 2;
+  transition: background 0.15s, border-color 0.15s;
+}
+.gb-byok-card.is-selected .gb-byok-card-radio { border-color: var(--byok-kit); background: var(--byok-kit); }
+.gb-byok-card.is-selected .gb-byok-card-radio::after {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px; height: 8px;
+  background: var(--byok-white);
+  border-radius: 50%;
+}
+.gb-byok-card-soldout {
+  position: absolute;
+  bottom: 10px; left: 10px;
+  background: var(--byok-text-muted);
+  color: var(--byok-cream);
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 4px;
+  z-index: 2;
+}
+.gb-byok-card-body { padding: 14px 16px 16px; }
+.gb-byok-card-name {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 4px;
+  color: var(--byok-text);
+  line-height: 1.3;
+}
+.gb-byok-card-desc {
+  font-size: 12px;
+  color: var(--byok-text-muted);
+  line-height: 1.45;
+  margin: 0 0 10px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.gb-byok-variant {
+  width: 100%;
+  margin-bottom: 8px;
+  padding: 6px 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  border: 1px solid var(--byok-border);
+  border-radius: 6px;
+  background: var(--byok-white);
+  color: var(--byok-text);
+}
+.gb-byok-card-prices { display: flex; align-items: baseline; gap: 8px; }
+.gb-byok-card-now {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 15px;
+  color: var(--byok-text);
+}
+.gb-byok-card-was {
+  font-size: 12px;
+  color: var(--byok-text-soft);
+  text-decoration: line-through;
+}
+.gb-byok-viewmore {
+  display: block;
+  margin: 18px 0 0;
+  background: transparent;
+  border: none;
+  color: var(--byok-kit);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  cursor: pointer;
+  padding: 6px 0;
+  letter-spacing: 0.02em;
+}
+.gb-byok-viewmore:hover { color: var(--byok-kit-dark); }
+.gb-byok-empty {
+  padding: 32px;
+  background: var(--byok-cream);
+  border-radius: 8px;
+  text-align: center;
+  color: var(--byok-text-muted);
+  font-style: italic;
+  font-size: 14px;
+}
+
+/* Sidebar bundle summary */
+.gb-byok-bundle {
+  position: sticky;
+  top: 100px;
+  background: var(--byok-white);
+  border: 1px solid var(--byok-border);
+  border-radius: 12px;
+  padding: 24px;
+  align-self: start;
+}
+.gb-byok-bundle-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--byok-text-muted);
+  margin-bottom: 16px;
+}
+.gb-byok-bundle-list { list-style: none; padding: 0; margin: 0 0 16px; }
+.gb-byok-bundle-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--byok-border);
+}
+.gb-byok-bundle-item:last-child { border-bottom: none; }
+.gb-byok-bundle-label { flex: 1; min-width: 0; }
+.gb-byok-bundle-step {
+  display: block;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--byok-text-muted);
+  margin-bottom: 2px;
+}
+.gb-byok-bundle-selection {
+  display: block;
+  font-size: 12px;
+  color: var(--byok-text-soft);
+  line-height: 1.4;
+}
+.gb-byok-bundle-item.has-selection .gb-byok-bundle-step { color: var(--byok-kit); }
+.gb-byok-bundle-item.has-selection .gb-byok-bundle-selection { color: var(--byok-text-muted); font-weight: 600; }
+.gb-byok-bundle-check {
+  width: 22px; height: 22px;
+  border: 2px solid var(--byok-border);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.gb-byok-bundle-item.has-selection .gb-byok-bundle-check { background: var(--byok-kit); border-color: var(--byok-kit); position: relative; }
+.gb-byok-bundle-item.has-selection .gb-byok-bundle-check::after {
+  content: '✓';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--byok-white);
+  font-weight: 800;
+  font-size: 12px;
+}
+.gb-byok-bundle-divider { border-top: 1px solid var(--byok-border); margin: 12px 0; }
+.gb-byok-bundle-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 6px;
+}
+.gb-byok-bundle-tlbl {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--byok-text-muted);
+}
+.gb-byok-bundle-tval {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 24px;
+  letter-spacing: -0.02em;
+  color: var(--byok-text);
+}
+.gb-byok-bundle-savings {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--byok-kit);
+  margin-bottom: 16px;
+  min-height: 14px;
+}
+.gb-byok-cta {
+  width: 100%;
+  padding: 14px 24px;
+  background: var(--byok-action);
+  color: var(--byok-white);
+  border: none;
+  border-radius: 999px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.15s;
+}
+.gb-byok-cta:hover:not(:disabled) { background: var(--byok-action-dark); transform: translateY(-1px); }
+.gb-byok-cta:disabled { opacity: 0.5; cursor: not-allowed; }
+.gb-byok-trust {
+  margin-top: 12px;
+  font-size: 11px;
+  color: var(--byok-text-soft);
+  text-align: center;
+  line-height: 1.5;
+}
+
+/* Mobile bundle */
+.gb-byok-m { display: none; }
+.gb-byok-m-backdrop { display: none; }
+
+@media (max-width: 980px) {
+  .gb-byok-layout { grid-template-columns: 1fr; }
+  .gb-byok-bundle { display: none; }
+  .gb-byok-section { padding: 20px; }
+  .gb-byok-grid {
+    grid-template-columns: none;
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 12px;
+    padding-bottom: 8px;
+    margin: 0 -20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .gb-byok-grid::-webkit-scrollbar { display: none; }
+  .gb-byok-card { flex: 0 0 78vw; max-width: 280px; scroll-snap-align: start; }
+  .gb-byok-main { padding-bottom: 140px; }
+
+  /* Mobile sheet */
+  .gb-byok-m {
+    display: block;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: var(--byok-white);
+    border-top: 1px solid var(--byok-border);
+    border-radius: 16px 16px 0 0;
+    padding-bottom: calc(12px + env(safe-area-inset-bottom));
+    z-index: 90;
+    box-shadow: 0 -8px 24px rgba(31,31,29,0.08);
+  }
+  .gb-byok-m-handle {
+    width: 40px; height: 4px;
+    background: var(--byok-border);
+    border-radius: 999px;
+    margin: 8px auto 4px;
+    cursor: pointer;
+  }
+  .gb-byok-m-sheet {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.28s ease;
+  }
+  .gb-byok-m.is-expanded .gb-byok-m-sheet {
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+  .gb-byok-m-sheet-h {
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--byok-border);
+    display: flex; justify-content: space-between; align-items: baseline;
+  }
+  .gb-byok-m-sheet-h h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 15px;
+    margin: 0;
+  }
+  .gb-byok-m-sheet-h .gb-byok-m-meta {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--byok-text-soft);
+    letter-spacing: 0.06em;
+  }
+  .gb-byok-m-list { list-style: none; padding: 0; margin: 0; }
+  .gb-byok-m-list li {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 10px;
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--byok-border);
+    align-items: center;
+  }
+  .gb-byok-m-list .gb-byok-m-section-tag {
+    grid-column: 1 / -1;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--byok-kit);
+    font-weight: 700;
+    padding-bottom: 2px;
+  }
+  .gb-byok-m-list .gb-byok-m-item-name {
+    font-size: 13px;
+    color: var(--byok-text);
+    line-height: 1.35;
+  }
+  .gb-byok-m-list .gb-byok-m-item-price {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--byok-text);
+  }
+  .gb-byok-m-list .gb-byok-m-item-remove {
+    width: 24px; height: 24px;
+    background: transparent;
+    border: 1px solid var(--byok-border);
+    border-radius: 50%;
+    color: var(--byok-text-muted);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+  }
+  .gb-byok-m-list .gb-byok-m-item-remove:hover { color: var(--byok-kit); border-color: var(--byok-kit); }
+  .gb-byok-m-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 10px;
+    padding: 12px 16px 0;
+    align-items: center;
+  }
+  .gb-byok-m-info {
+    display: flex; align-items: center;
+    cursor: pointer;
+    user-select: none;
+  }
+  .gb-byok-m-info-text { flex: 1; }
+  .gb-byok-m-lbl {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--byok-text-soft);
+    font-weight: 700;
+  }
+  .gb-byok-m-val {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 18px;
+    color: var(--byok-text);
+    letter-spacing: -0.02em;
+  }
+  .gb-byok-m-meta {
+    font-size: 11px;
+    color: var(--byok-text-soft);
+  }
+  .gb-byok-m-chev {
+    color: var(--byok-text-muted);
+    transition: transform 0.2s ease;
+    margin-left: 8px;
+  }
+  .gb-byok-m.is-expanded .gb-byok-m-chev { transform: rotate(180deg); }
+  .gb-byok-m-row .gb-byok-cta { padding: 12px 18px; font-size: 12px; }
+  .gb-byok-m-backdrop {
+    display: block;
+    position: fixed; inset: 0;
+    background: rgba(31,31,29,0.4);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    z-index: 89;
+  }
+  .gb-byok-m-backdrop.is-visible { opacity: 1; pointer-events: auto; }
+}
+
+@media (max-width: 768px) {
+  .gb-byok-h1 { font-size: 26px; }
+}
+{% endstylesheet %}
+
+<script>
+(function() {
+  var root = document.getElementById('gb-byok-{{ section.id }}');
+  if (!root) return;
+  var sectionId = '{{ section.id }}';
+  var moneyFmt = function(v) { return '₹' + Math.round(v).toLocaleString('en-IN'); };
+
+  // Index cards by handle, group by section_key
+  var cards = root.querySelectorAll('.gb-byok-card');
+  var selections = {};      // { section_key: Set(handle) }
+  var productData = {};     // { handle: {name, price, compare, sectionKey} }
+
+  cards.forEach(function(c) {
+    var sk = c.dataset.section;
+    selections[sk] = selections[sk] || new Set();
+    productData[c.dataset.id] = {
+      name: c.dataset.name,
+      price: parseFloat(c.dataset.price) || 0,
+      compare: parseFloat(c.dataset.compare) || 0,
+      sectionKey: sk,
+      handle: c.dataset.id
+    };
+  });
+
+  function toggleCard(card) {
+    if (card.dataset.soldout) return;
+    var handle = card.dataset.id;
+    var sk = card.dataset.section;
+    var sel = selections[sk];
+    if (sel.has(handle)) {
+      sel.delete(handle);
+      card.classList.remove('is-selected');
+      card.setAttribute('aria-pressed', 'false');
+    } else {
+      sel.add(handle);
+      card.classList.add('is-selected');
+      card.setAttribute('aria-pressed', 'true');
+    }
+    updateBundle();
+  }
+
+  cards.forEach(function(c) {
+    c.addEventListener('click', function(e) {
+      if (e.target.closest('.gb-byok-variant')) return;
+      toggleCard(c);
+    });
+    c.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        if (e.target.closest('.gb-byok-variant')) return;
+        e.preventDefault();
+        toggleCard(c);
+      }
+    });
+    var v = c.querySelector('.gb-byok-variant');
+    if (v) {
+      v.addEventListener('change', function(e) {
+        e.stopPropagation();
+        var opt = v.selectedOptions[0];
+        c.dataset.variantId = opt.value;
+        c.dataset.price = opt.dataset.price;
+        c.dataset.compare = opt.dataset.compare || '0';
+        productData[c.dataset.id].price = parseFloat(opt.dataset.price) || 0;
+        productData[c.dataset.id].compare = parseFloat(opt.dataset.compare) || 0;
+        if (selections[c.dataset.section].has(c.dataset.id)) updateBundle();
+      });
+    }
+  });
+
+  // View more buttons
+  root.querySelectorAll('[data-viewmore]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var sk = btn.dataset.viewmore;
+      root.querySelectorAll('.gb-byok-grid[data-grid="' + sk + '"] .gb-byok-card.is-extra').forEach(function(c) {
+        c.classList.add('is-shown');
+      });
+      btn.style.display = 'none';
+    });
+  });
+
+  function sectionLabel(sk) {
+    var item = root.querySelector('.gb-byok-bundle-item[data-bundle="' + sk + '"] .gb-byok-bundle-step');
+    return item ? item.textContent : sk;
+  }
+
+  function updateBundle() {
+    var total = 0, totalCompare = 0, totalCount = 0;
+    var sheetItems = [];
+
+    Object.keys(selections).forEach(function(sk) {
+      var sel = selections[sk];
+      var bundleItem = root.querySelector('.gb-byok-bundle-item[data-bundle="' + sk + '"]');
+      var pill = root.querySelector('.gb-byok-pill[data-pill="' + sk + '"]');
+      if (sel.size === 0) {
+        if (bundleItem) {
+          bundleItem.classList.remove('has-selection');
+          bundleItem.querySelector('.gb-byok-bundle-selection').textContent = 'No selection yet';
+        }
+        if (pill) {
+          pill.classList.remove('has-selection');
+          pill.querySelector('.gb-byok-pill-text').textContent = 'Optional';
+        }
+      } else {
+        var subtotal = 0;
+        sel.forEach(function(h) {
+          var pd = productData[h];
+          if (!pd) return;
+          subtotal += pd.price;
+          total += pd.price;
+          totalCompare += (pd.compare > pd.price) ? pd.compare : pd.price;
+          totalCount++;
+          sheetItems.push(pd);
+        });
+        if (bundleItem) {
+          bundleItem.classList.add('has-selection');
+          var labelTxt = sel.size === 1
+            ? Array.from(sel).map(function(h) { return productData[h].name; })[0]
+            : sel.size + ' items · ' + moneyFmt(subtotal);
+          bundleItem.querySelector('.gb-byok-bundle-selection').textContent = labelTxt;
+        }
+        if (pill) {
+          pill.classList.add('has-selection');
+          pill.querySelector('.gb-byok-pill-text').textContent = sel.size + ' selected';
+        }
+      }
+    });
+
+    var totalEl = document.getElementById('gb-byok-total-' + sectionId);
+    var savingsEl = document.getElementById('gb-byok-savings-' + sectionId);
+    var mTotalEl = document.getElementById('gb-byok-m-total-' + sectionId);
+    var mMetaEl = document.getElementById('gb-byok-m-meta-' + sectionId);
+    var mSheetMetaEl = document.getElementById('gb-byok-m-sheet-meta-' + sectionId);
+    var ctaD = document.getElementById('gb-byok-cta-' + sectionId);
+    var ctaM = document.getElementById('gb-byok-m-cta-' + sectionId);
+
+    if (totalEl) totalEl.textContent = moneyFmt(total);
+    if (mTotalEl) mTotalEl.textContent = moneyFmt(total);
+    var savings = Math.max(0, totalCompare - total);
+    if (savingsEl) savingsEl.textContent = savings > 0 ? "You save " + moneyFmt(savings) : '';
+    if (mMetaEl) mMetaEl.textContent = totalCount === 0 ? 'No items selected yet' : (totalCount + ' item' + (totalCount === 1 ? '' : 's') + ' · tap to review');
+    if (mSheetMetaEl) mSheetMetaEl.textContent = totalCount === 0 ? 'No items yet' : (totalCount + ' item' + (totalCount === 1 ? '' : 's'));
+    if (ctaD) ctaD.disabled = totalCount === 0;
+    if (ctaM) ctaM.disabled = totalCount === 0;
+
+    // Build mobile sheet list
+    var listEl = document.getElementById('gb-byok-m-list-' + sectionId);
+    if (listEl) {
+      listEl.innerHTML = '';
+      var bySection = {};
+      sheetItems.forEach(function(it) {
+        bySection[it.sectionKey] = bySection[it.sectionKey] || [];
+        bySection[it.sectionKey].push(it);
+      });
+      Object.keys(bySection).forEach(function(sk) {
+        bySection[sk].forEach(function(it, idx) {
+          var li = document.createElement('li');
+          if (idx === 0) {
+            var tag = document.createElement('div');
+            tag.className = 'gb-byok-m-section-tag';
+            tag.textContent = sectionLabel(sk);
+            li.appendChild(tag);
+          }
+          var name = document.createElement('div');
+          name.className = 'gb-byok-m-item-name';
+          name.textContent = it.name;
+          li.appendChild(name);
+          var price = document.createElement('div');
+          price.className = 'gb-byok-m-item-price';
+          price.textContent = moneyFmt(it.price);
+          li.appendChild(price);
+          var btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'gb-byok-m-item-remove';
+          btn.dataset.removeId = it.handle;
+          btn.setAttribute('aria-label', 'Remove ' + it.name);
+          btn.textContent = '×';
+          li.appendChild(btn);
+          listEl.appendChild(li);
+        });
+      });
+    }
+
+    if (totalCount === 0) closeMobileSheet();
+  }
+
+  function openMobileSheet() {
+    var totalCount = 0;
+    Object.keys(selections).forEach(function(sk) { totalCount += selections[sk].size; });
+    if (totalCount === 0) return;
+    var m = document.getElementById('gb-byok-m-' + sectionId);
+    var bd = document.getElementById('gb-byok-m-backdrop-' + sectionId);
+    var toggle = document.getElementById('gb-byok-m-toggle-' + sectionId);
+    if (m) { m.classList.add('is-expanded'); m.setAttribute('aria-hidden', 'false'); }
+    if (bd) bd.classList.add('is-visible');
+    if (toggle) toggle.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeMobileSheet() {
+    var m = document.getElementById('gb-byok-m-' + sectionId);
+    var bd = document.getElementById('gb-byok-m-backdrop-' + sectionId);
+    var toggle = document.getElementById('gb-byok-m-toggle-' + sectionId);
+    if (m) { m.classList.remove('is-expanded'); m.setAttribute('aria-hidden', 'true'); }
+    if (bd) bd.classList.remove('is-visible');
+    if (toggle) toggle.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  var mToggle = document.getElementById('gb-byok-m-toggle-' + sectionId);
+  if (mToggle) {
+    mToggle.addEventListener('click', function() {
+      var m = document.getElementById('gb-byok-m-' + sectionId);
+      if (m && m.classList.contains('is-expanded')) closeMobileSheet();
+      else openMobileSheet();
+    });
+  }
+  var mHandle = document.getElementById('gb-byok-m-handle-' + sectionId);
+  if (mHandle) mHandle.addEventListener('click', closeMobileSheet);
+  var mBackdrop = document.getElementById('gb-byok-m-backdrop-' + sectionId);
+  if (mBackdrop) mBackdrop.addEventListener('click', closeMobileSheet);
+
+  // Mobile sheet remove buttons (event-delegated)
+  var listEl = document.getElementById('gb-byok-m-list-' + sectionId);
+  if (listEl) {
+    listEl.addEventListener('click', function(e) {
+      var b = e.target.closest('[data-remove-id]');
+      if (!b) return;
+      var card = root.querySelector('.gb-byok-card[data-id="' + b.dataset.removeId + '"]');
+      if (card) toggleCard(card);
+    });
+  }
+
+  function handleCheckout() {
+    var items = [];
+    Object.keys(selections).forEach(function(sk) {
+      selections[sk].forEach(function(h) {
+        var card = root.querySelector('.gb-byok-card[data-id="' + h + '"]');
+        if (!card) return;
+        var vSelect = card.querySelector('.gb-byok-variant');
+        var vid = vSelect ? vSelect.value : card.dataset.variantId;
+        items.push({ id: parseInt(vid, 10), quantity: 1 });
+      });
+    });
+    if (items.length === 0) return;
+    var ctaD = document.getElementById('gb-byok-cta-' + sectionId);
+    var ctaM = document.getElementById('gb-byok-m-cta-' + sectionId);
+    var origLabel = ctaD ? ctaD.textContent : 'Add bundle to cart';
+    if (ctaD) { ctaD.disabled = true; ctaD.textContent = 'Adding…'; }
+    if (ctaM) { ctaM.disabled = true; ctaM.textContent = 'Adding…'; }
+    fetch('/cart/add.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ items: items })
+    })
+    .then(function(r) {
+      if (!r.ok) throw new Error('cart add failed');
+      document.dispatchEvent(new CustomEvent('cart:refresh'));
+      window.location.href = '/cart';
+    })
+    .catch(function() {
+      if (ctaD) { ctaD.disabled = false; ctaD.textContent = origLabel; }
+      if (ctaM) { ctaM.disabled = false; ctaM.textContent = origLabel; }
+      alert('Could not add bundle. Please try again.');
+    });
+  }
+
+  var ctaDesktop = document.getElementById('gb-byok-cta-' + sectionId);
+  if (ctaDesktop) ctaDesktop.addEventListener('click', handleCheckout);
+  var ctaMobile = document.getElementById('gb-byok-m-cta-' + sectionId);
+  if (ctaMobile) ctaMobile.addEventListener('click', handleCheckout);
+
+  updateBundle();
+})();
+</script>
+
+{% schema %}
+{
+  "name": "GB · BYOK Builder",
+  "tag": "section",
+  "class": "gb-byok-wrap",
+  "settings": [
+    { "type": "text", "id": "bundle_title", "label": "Bundle summary heading", "default": "YOUR BUNDLE" },
+    { "type": "text", "id": "total_label", "label": "Total label", "default": "Total" },
+    { "type": "text", "id": "cta_label", "label": "CTA label", "default": "Add bundle to cart" },
+    { "type": "richtext", "id": "trust_line", "label": "Trust line (under CTA)", "default": "<p>Free shipping over ₹300 · Ships next working day</p>" }
+  ],
+  "blocks": [
+    {
+      "type": "hero",
+      "name": "Hero",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "CRAFT YOUR FERMENTATION SETUP" },
+        { "type": "text", "id": "heading_1", "label": "Heading line 1", "default": "Build Your Own" },
+        { "type": "text", "id": "heading_2", "label": "Heading line 2 (italic accent)", "default": "Fermentation Kit" },
+        { "type": "textarea", "id": "subhead", "label": "Subhead", "default": "Mix and match — pick what you need from any section. Add a jar, a spice mix, a tool, a recipe book, or all four. Your kit, your way." }
+      ]
+    },
+    {
+      "type": "byok_section",
+      "name": "Builder section",
+      "limit": 4,
+      "settings": [
+        { "type": "text", "id": "title", "label": "Section title", "default": "Choose your jar" },
+        { "type": "text", "id": "section_key", "label": "Section key (lowercase, no spaces)", "default": "jars" },
+        { "type": "text", "id": "short_label", "label": "Short label (sidebar)", "default": "Jar" },
+        { "type": "textarea", "id": "hint", "label": "Section hint", "default": "Pick one or more — different sizes for different ferments." },
+        { "type": "collection", "id": "collection", "label": "Source collection" },
+        { "type": "range", "id": "visible_count", "label": "Visible cards before View More", "min": 3, "max": 12, "step": 1, "default": 6 }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "GB · BYOK Builder",
+      "blocks": [
+        { "type": "hero", "settings": {
+          "eyebrow": "CRAFT YOUR FERMENTATION SETUP",
+          "heading_1": "Build Your Own",
+          "heading_2": "Fermentation Kit",
+          "subhead": "Mix and match — pick what you need from any section. Add a jar, a spice mix, a tool, a recipe book, or all four. Your kit, your way."
+        }},
+        { "type": "byok_section", "settings": { "title": "Choose your jar",         "section_key": "jars",  "short_label": "Jar",          "hint": "Pick one or more — different sizes for different ferments." } },
+        { "type": "byok_section", "settings": { "title": "Spice mix — what will you make?", "section_key": "spice", "short_label": "Spice Mix",    "hint": "Each pack ferments multiple batches. Mix and match across blends." } },
+        { "type": "byok_section", "settings": { "title": "Tools & accessories",     "section_key": "tools", "short_label": "Tools & Accessories", "hint": "Add the bits that make fermentation foolproof." } },
+        { "type": "byok_section", "settings": { "title": "Recipe books & guides",   "section_key": "books", "short_label": "Recipe Books", "hint": "Print copies of our most popular guides." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

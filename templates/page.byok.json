@@ -1,0 +1,66 @@
+{
+  "sections": {
+    "main": {
+      "type": "gb-byok-builder",
+      "blocks": {
+        "hero": {
+          "type": "hero",
+          "settings": {
+            "eyebrow": "CRAFT YOUR FERMENTATION SETUP",
+            "heading_1": "Build Your Own",
+            "heading_2": "Fermentation Kit",
+            "subhead": "Mix and match — pick what you need from any section. Add a jar, a spice mix, a tool, a recipe book, or all four. Your kit, your way."
+          }
+        },
+        "s_jars": {
+          "type": "byok_section",
+          "settings": {
+            "title": "Choose your jar",
+            "section_key": "jars",
+            "short_label": "Jar",
+            "hint": "Pick one or more — different sizes for different ferments.",
+            "visible_count": 6
+          }
+        },
+        "s_spice": {
+          "type": "byok_section",
+          "settings": {
+            "title": "Spice mix — what will you make?",
+            "section_key": "spice",
+            "short_label": "Spice Mix",
+            "hint": "Each pack ferments multiple batches. Mix and match across blends.",
+            "visible_count": 6
+          }
+        },
+        "s_tools": {
+          "type": "byok_section",
+          "settings": {
+            "title": "Tools & accessories",
+            "section_key": "tools",
+            "short_label": "Tools & Accessories",
+            "hint": "Add the bits that make fermentation foolproof.",
+            "visible_count": 6
+          }
+        },
+        "s_books": {
+          "type": "byok_section",
+          "settings": {
+            "title": "Recipe books & guides",
+            "section_key": "books",
+            "short_label": "Recipe Books",
+            "hint": "Print copies of our most popular guides.",
+            "visible_count": 6
+          }
+        }
+      },
+      "block_order": ["hero", "s_jars", "s_spice", "s_tools", "s_books"],
+      "settings": {
+        "bundle_title": "YOUR BUNDLE",
+        "total_label": "Total",
+        "cta_label": "Add bundle to cart",
+        "trust_line": "<p>Free shipping over ₹300 · Ships next working day</p>"
+      }
+    }
+  },
+  "order": ["main"]
+}
