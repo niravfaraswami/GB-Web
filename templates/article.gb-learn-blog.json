@@ -1,0 +1,45 @@
+{
+  "sections": {
+    "hero": {
+      "type": "gb-learn-blog-hero",
+      "settings": {
+        "fallback_title": "Article title",
+        "fallback_subtitle": "Lead paragraph or excerpt — appears below the title in italic.",
+        "fallback_category": "FERMENTATION 101",
+        "fallback_read_time": "8 min read",
+        "fallback_emoji": "🫙"
+      }
+    },
+    "body": {
+      "type": "gb-learn-blog-body",
+      "settings": {
+        "show_toc": true,
+        "toc_label": "In This Article",
+        "show_article_content": false
+      },
+      "blocks": {
+        "as-1": { "type": "article_section", "settings": { "heading": "Section heading", "anchor_id": "section-1", "body": "<p>Edit this in the theme customizer or replace with the article body.</p>" } }
+      },
+      "block_order": ["as-1"]
+    },
+    "end-cta": {
+      "type": "gb-learn-blog-end-cta",
+      "settings": {
+        "eyebrow": "READY TO START?",
+        "title": "Try lacto-fermentation hands-on.",
+        "desc": "Our beginner kits come with pre-measured spice mixes, the right jar, an airlock, and a glass weight. No guessing. No failed batches.",
+        "name_override": "All-in-One Fermentation Kit",
+        "price_override": "From ₹2,999",
+        "cta_label": "Shop Now →"
+      }
+    },
+    "related": {
+      "type": "gb-learn-blog-related",
+      "settings": {
+        "eyebrow": "KEEP READING",
+        "heading": "Related articles"
+      }
+    }
+  },
+  "order": ["hero","body","end-cta","related"]
+}

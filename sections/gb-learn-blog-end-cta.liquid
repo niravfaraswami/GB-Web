@@ -1,0 +1,53 @@
+{%- render 'leo_kit_chrome' -%}
+
+{%- liquid
+  assign cta_product = section.settings.product
+-%}
+
+<section class="end-cta-section" {%- render 'leo_kit_attrs' -%}>
+  <div class="container">
+    <div class="end-cta-card">
+      <div>
+        {%- if section.settings.eyebrow != blank -%}<div class="end-cta-eyebrow">{{ section.settings.eyebrow }}</div>{%- endif -%}
+        {%- if section.settings.title != blank -%}<div class="end-cta-title">{{ section.settings.title }}</div>{%- endif -%}
+        {%- if section.settings.desc != blank -%}<div class="end-cta-desc">{{ section.settings.desc }}</div>{%- endif -%}
+      </div>
+      <div class="end-cta-product-block">
+        {%- if cta_product -%}
+          <div class="end-cta-product-name">{{ section.settings.name_override | default: cta_product.title }}</div>
+          <div class="end-cta-price">{{ section.settings.price_override | default: cta_product.price | money }}</div>
+          <a href="{{ cta_product.url }}" class="end-cta-button">{{ section.settings.cta_label | default: 'Shop Now →' }}</a>
+        {%- else -%}
+          {%- if section.settings.name_override != blank -%}<div class="end-cta-product-name">{{ section.settings.name_override }}</div>{%- endif -%}
+          {%- if section.settings.price_override != blank -%}<div class="end-cta-price">{{ section.settings.price_override }}</div>{%- endif -%}
+          {%- if section.settings.cta_label != blank -%}<a href="{{ section.settings.cta_url | default: '#' }}" class="end-cta-button">{{ section.settings.cta_label }}</a>{%- endif -%}
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "GB · Learn Blog End CTA",
+  "tag": "section",
+  "class": "gb-learn-blog-end-cta-wrap",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "READY TO START?" },
+    { "type": "text", "id": "title", "label": "Title", "default": "Try lacto-fermentation hands-on." },
+    { "type": "textarea", "id": "desc", "label": "Description", "default": "Our beginner kits come with pre-measured spice mixes, the right jar, an airlock, and a glass weight. No guessing. No failed batches." },
+    { "type": "header", "content": "Product (right-side block)" },
+    { "type": "product", "id": "product", "label": "Featured product" },
+    { "type": "text", "id": "name_override", "label": "Product name override (optional)" },
+    { "type": "text", "id": "price_override", "label": "Price text override (optional)", "info": "Use to display a 'From ₹X' price instead of the variant price." },
+    { "type": "text", "id": "cta_label", "label": "Button label", "default": "Shop Now →" },
+    { "type": "url", "id": "cta_url", "label": "Button URL (only if no product set)" },
+    { "type": "header", "content": "Spacing & Typography" },
+    { "type": "range", "id": "pad_top_d", "label": "Padding top — desktop (px)", "min": 0, "max": 200, "step": 4, "default": 0 },
+    { "type": "range", "id": "pad_bot_d", "label": "Padding bottom — desktop (px)", "min": 0, "max": 200, "step": 4, "default": 96 },
+    { "type": "range", "id": "pad_top_m", "label": "Padding top — mobile (px)", "min": 0, "max": 120, "step": 4, "default": 0 },
+    { "type": "range", "id": "pad_bot_m", "label": "Padding bottom — mobile (px)", "min": 0, "max": 120, "step": 4, "default": 64 }
+  ],
+  "presets": [{ "name": "GB · Learn Blog End CTA" }]
+}
+{% endschema %}

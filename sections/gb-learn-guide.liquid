@@ -1,0 +1,216 @@
+{%- render 'leo_kit_chrome' -%}
+
+{%- liquid
+  assign cat_label = page.metafields.custom.category_label | default: section.settings.fallback_category
+  assign subtitle = page.metafields.custom.subtitle | default: section.settings.fallback_subtitle
+  assign duration = page.metafields.custom.duration | default: section.settings.fallback_duration
+  assign level = page.metafields.custom.level | default: section.settings.fallback_level
+  assign format_label = page.metafields.custom.format | default: section.settings.fallback_format
+  assign pane_blocks = section.blocks | where: 'type', 'pane'
+  assign pane_count = pane_blocks.size
+  assign cta_product = section.settings.cta_product
+-%}
+
+<section class="guide-cover" {%- render 'leo_kit_attrs' -%}>
+  <div class="container">
+    {%- if cat_label != blank -%}
+      <div class="cat-pill">
+        <span class="dot"></span><span>{{ cat_label }}</span>
+      </div>
+    {%- endif -%}
+    <h1>{{ page.title | default: section.settings.fallback_title }}</h1>
+    {%- if subtitle != blank -%}<p class="guide-subtitle">{{ subtitle }}</p>{%- endif -%}
+    <div class="guide-meta-bar">
+      {%- if duration != blank -%}
+        <div class="guide-meta-item">
+          <span class="gm-label">DURATION</span>
+          <span class="gm-value">{{ duration }}</span>
+        </div>
+      {%- endif -%}
+      {%- if level != blank -%}
+        <div class="guide-meta-item">
+          <span class="gm-label">LEVEL</span>
+          <span class="gm-value">{{ level }}</span>
+        </div>
+      {%- endif -%}
+      {%- if pane_count > 0 -%}
+        <div class="guide-meta-item">
+          <span class="gm-label">SECTIONS</span>
+          <span class="gm-value">{{ pane_count }}</span>
+        </div>
+      {%- endif -%}
+      {%- if format_label != blank -%}
+        <div class="guide-meta-item">
+          <span class="gm-label">FORMAT</span>
+          <span class="gm-value">{{ format_label }}</span>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{%- if pane_count > 0 -%}
+  <div class="progress-bar-wrap" data-gb-guide-progress>
+    <div class="container">
+      <div class="progress-track">
+        <div class="progress-fill" data-gb-guide-progress-fill style="width: {{ 100 | divided_by: pane_count }}%"></div>
+      </div>
+      <div class="progress-label" data-gb-guide-progress-label>SECTION 1 OF {{ pane_count }}</div>
+    </div>
+  </div>
+
+  <div class="guide-body" data-gb-guide-body data-pane-count="{{ pane_count }}">
+    <div class="container">
+      <aside class="guide-sidebar">
+        <div class="sidebar-h">{{ section.settings.sidebar_label | default: 'Sections' }}</div>
+        <ul class="section-list" data-gb-guide-sidebar>
+          {%- for block in pane_blocks -%}
+            <li class="section-list-item">
+              <a class="section-list-link{% if forloop.first %} active{% endif %}" data-gb-guide-link data-section-idx="{{ forloop.index0 }}">
+                <span class="section-list-num"><span>{{ forloop.index }}</span></span>
+                <span class="section-list-label">{{ block.settings.title }}</span>
+              </a>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </aside>
+
+      <div class="guide-content">
+        {%- for block in pane_blocks -%}
+          <article class="section-pane{% if forloop.first %} active{% endif %}" data-gb-guide-pane data-section-idx="{{ forloop.index0 }}" {{ block.shopify_attributes }}>
+            <header class="pane-header">
+              <div class="pane-progress">SECTION {{ forloop.index }} OF {{ pane_count }}</div>
+              <h2 class="pane-title">{{ block.settings.title }}</h2>
+              {%- if block.settings.duration != blank -%}<div class="pane-duration">{{ block.settings.duration }}</div>{%- endif -%}
+            </header>
+
+            {%- if block.settings.video_youtube_id != blank -%}
+              <div class="pane-video">
+                <div class="pane-video-thumb" data-youtube-id="{{ block.settings.video_youtube_id }}" data-gb-video-thumb>
+                  <div class="pane-video-play">▶</div>
+                  {%- if block.settings.video_title != blank -%}<div class="pane-video-title">{{ block.settings.video_title }}</div>{%- endif -%}
+                </div>
+              </div>
+            {%- endif -%}
+
+            {%- if block.settings.intro != blank -%}<p class="pane-intro">{{ block.settings.intro }}</p>{%- endif -%}
+
+            {%- if block.settings.lesson != blank -%}
+              <div class="pane-lesson">{{ block.settings.lesson }}</div>
+            {%- endif -%}
+
+            {%- if block.settings.takeaways != blank -%}
+              <div class="takeaways-block">
+                <div class="takeaways-h">{{ block.settings.takeaways_label | default: 'Key Takeaways' }}</div>
+                <ul class="takeaways-list">
+                  {%- assign lines = block.settings.takeaways | newline_to_br | split: '<br />' -%}
+                  {%- for line in lines -%}
+                    {%- assign t = line | strip -%}
+                    {%- if t != blank -%}<li>{{ t }}</li>{%- endif -%}
+                  {%- endfor -%}
+                </ul>
+              </div>
+            {%- endif -%}
+
+            {%- if block.settings.action_text != blank -%}
+              <div class="action-card">
+                <div class="action-icon">→</div>
+                <div class="action-body">
+                  <div class="action-eyebrow">{{ block.settings.action_label | default: 'Your next action' }}</div>
+                  <div class="action-text">{{ block.settings.action_text }}</div>
+                </div>
+              </div>
+            {%- endif -%}
+
+            <nav class="pane-nav">
+              {%- if forloop.first -%}
+                <button class="pane-nav-btn" disabled>← Previous</button>
+              {%- else -%}
+                <button class="pane-nav-btn" data-gb-guide-prev>← Previous</button>
+              {%- endif -%}
+              <button class="pane-nav-btn next" data-gb-guide-next>{% if forloop.last %}Finish ✓{% else %}Next →{% endif %}</button>
+            </nav>
+          </article>
+        {%- endfor -%}
+
+        <article class="section-pane complete-pane" data-gb-guide-pane data-section-idx="complete">
+          <div class="complete-screen">
+            <div class="complete-icon">✓</div>
+            <div class="complete-title">{{ section.settings.complete_title | default: 'You finished the guide!' }}</div>
+            <div class="complete-desc">{{ section.settings.complete_desc | default: 'You now have what you need to put this into practice. The kit below makes it stupid-simple to start.' }}</div>
+          </div>
+          <div class="guide-cta">
+            <div>
+              {%- if section.settings.cta_eyebrow != blank -%}<div class="guide-cta-eyebrow">{{ section.settings.cta_eyebrow }}</div>{%- endif -%}
+              {%- if section.settings.cta_title != blank -%}<div class="guide-cta-title">{{ section.settings.cta_title }}</div>{%- endif -%}
+              {%- if section.settings.cta_desc != blank -%}<div class="guide-cta-desc">{{ section.settings.cta_desc }}</div>{%- endif -%}
+            </div>
+            <div class="guide-cta-product">
+              {%- if cta_product -%}
+                <div class="guide-cta-name">{{ section.settings.cta_name_override | default: cta_product.title }}</div>
+                <div class="guide-cta-price">{{ section.settings.cta_price_override | default: cta_product.price | money }}</div>
+                <a href="{{ cta_product.url }}" class="guide-cta-button">{{ section.settings.cta_label | default: 'Shop Now →' }}</a>
+              {%- else -%}
+                {%- if section.settings.cta_name_override != blank -%}<div class="guide-cta-name">{{ section.settings.cta_name_override }}</div>{%- endif -%}
+                {%- if section.settings.cta_price_override != blank -%}<div class="guide-cta-price">{{ section.settings.cta_price_override }}</div>{%- endif -%}
+                {%- if section.settings.cta_label != blank -%}<a href="{{ section.settings.cta_url | default: '#' }}" class="guide-cta-button">{{ section.settings.cta_label }}</a>{%- endif -%}
+              {%- endif -%}
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "GB · Learn Guide",
+  "tag": "section",
+  "class": "gb-learn-guide-wrap",
+  "settings": [
+    { "type": "header", "content": "Cover" },
+    { "type": "text", "id": "fallback_title", "label": "Fallback title", "default": "Guide title" },
+    { "type": "textarea", "id": "fallback_subtitle", "label": "Fallback subtitle" },
+    { "type": "text", "id": "fallback_category", "label": "Fallback category label", "default": "FERMENTATION 101" },
+    { "type": "text", "id": "fallback_duration", "label": "Duration", "default": "~3 hours · spread over 30 days" },
+    { "type": "text", "id": "fallback_level", "label": "Level", "default": "Absolute Beginner" },
+    { "type": "text", "id": "fallback_format", "label": "Format", "default": "Self-paced" },
+    { "type": "header", "content": "Sidebar" },
+    { "type": "text", "id": "sidebar_label", "label": "Sidebar label", "default": "Sections" },
+    { "type": "header", "content": "Completion screen + CTA" },
+    { "type": "text", "id": "complete_title", "label": "Completion title", "default": "You finished the guide!" },
+    { "type": "textarea", "id": "complete_desc", "label": "Completion description", "default": "You now have what you need to put this into practice. The kit below makes it stupid-simple to start." },
+    { "type": "text", "id": "cta_eyebrow", "label": "CTA eyebrow", "default": "PUT IT INTO PRACTICE" },
+    { "type": "text", "id": "cta_title", "label": "CTA title", "default": "Get the kit and start your first batch this weekend." },
+    { "type": "textarea", "id": "cta_desc", "label": "CTA description" },
+    { "type": "product", "id": "cta_product", "label": "CTA product" },
+    { "type": "text", "id": "cta_name_override", "label": "Product name override (optional)" },
+    { "type": "text", "id": "cta_price_override", "label": "Price override (optional)" },
+    { "type": "text", "id": "cta_label", "label": "Button label", "default": "Shop Now →" },
+    { "type": "url", "id": "cta_url", "label": "Button URL (only if no product set)" },
+    { "type": "header", "content": "Spacing & Typography" },
+    { "type": "range", "id": "pad_top_d", "label": "Cover padding top — desktop (px)", "min": 0, "max": 200, "step": 4, "default": 72 },
+    { "type": "range", "id": "pad_bot_d", "label": "Cover padding bottom — desktop (px)", "min": 0, "max": 200, "step": 4, "default": 56 },
+    { "type": "range", "id": "pad_top_m", "label": "Cover padding top — mobile (px)", "min": 0, "max": 120, "step": 4, "default": 48 },
+    { "type": "range", "id": "pad_bot_m", "label": "Cover padding bottom — mobile (px)", "min": 0, "max": 120, "step": 4, "default": 40 },
+    { "type": "range", "id": "heading_size_d", "label": "Cover H1 size — desktop (px)", "min": 24, "max": 80, "step": 2, "default": 52 },
+    { "type": "range", "id": "heading_size_m", "label": "Cover H1 size — mobile (px)", "min": 20, "max": 60, "step": 2, "default": 32 }
+  ],
+  "blocks": [
+    { "type": "pane", "name": "Section pane (lesson)", "limit": 12, "settings": [
+      { "type": "text", "id": "title", "label": "Section title", "default": "Section title" },
+      { "type": "text", "id": "duration", "label": "Duration (e.g. '12 min')", "default": "12 min" },
+      { "type": "text", "id": "video_youtube_id", "label": "YouTube video ID (optional)" },
+      { "type": "text", "id": "video_title", "label": "Video title overlay (optional)" },
+      { "type": "richtext", "id": "intro", "label": "Intro paragraph (italic)" },
+      { "type": "richtext", "id": "lesson", "label": "Lesson body (rich text)" },
+      { "type": "text", "id": "takeaways_label", "label": "Takeaways heading", "default": "Key Takeaways" },
+      { "type": "textarea", "id": "takeaways", "label": "Key takeaways (one per line)" },
+      { "type": "text", "id": "action_label", "label": "Action card heading", "default": "Your next action" },
+      { "type": "richtext", "id": "action_text", "label": "Action card text" }
+    ]}
+  ],
+  "presets": [{ "name": "GB · Learn Guide" }]
+}
+{% endschema %}

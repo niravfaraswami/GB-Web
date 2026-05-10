@@ -1,0 +1,50 @@
+{%- render 'leo_kit_chrome' -%}
+
+{%- liquid
+  assign cat_label = collection.metafields.custom.track_label | default: section.settings.fallback_category
+  assign subtitle = collection.description | strip_html | strip | default: collection.metafields.custom.subtitle | default: section.settings.fallback_subtitle
+  assign hero_emoji = collection.metafields.custom.hero_emoji | default: section.settings.fallback_emoji
+-%}
+
+<section class="coll-hero" {%- render 'leo_kit_attrs' -%}>
+  <div class="container">
+    <div>
+      {%- if cat_label != blank -%}
+        <div class="cat-pill">
+          <span class="dot"></span><span>{{ cat_label }}</span>
+        </div>
+      {%- endif -%}
+      <h1>{{ collection.title | default: section.settings.fallback_title }}</h1>
+      {%- if subtitle != blank -%}<p class="coll-hero-sub">{{ subtitle }}</p>{%- endif -%}
+    </div>
+    <div class="coll-hero-image">
+      {%- if collection.image -%}
+        <img src="{{ collection.image | image_url: width: 1200 }}" alt="{{ collection.title | escape }}" loading="eager" width="900" height="675">
+      {%- elsif hero_emoji != blank -%}
+        {{ hero_emoji }}
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "GB · Collection Hero",
+  "tag": "section",
+  "class": "gb-coll-hero-wrap",
+  "settings": [
+    { "type": "text", "id": "fallback_title", "label": "Fallback title", "default": "Collection title" },
+    { "type": "textarea", "id": "fallback_subtitle", "label": "Fallback subtitle" },
+    { "type": "text", "id": "fallback_category", "label": "Fallback category label", "default": "TRACK A · PANTRY" },
+    { "type": "text", "id": "fallback_emoji", "label": "Fallback hero emoji", "default": "🫙" },
+    { "type": "header", "content": "Spacing & Typography" },
+    { "type": "range", "id": "pad_top_d", "label": "Padding top — desktop (px)", "min": 0, "max": 200, "step": 4, "default": 72 },
+    { "type": "range", "id": "pad_bot_d", "label": "Padding bottom — desktop (px)", "min": 0, "max": 200, "step": 4, "default": 56 },
+    { "type": "range", "id": "pad_top_m", "label": "Padding top — mobile (px)", "min": 0, "max": 120, "step": 4, "default": 48 },
+    { "type": "range", "id": "pad_bot_m", "label": "Padding bottom — mobile (px)", "min": 0, "max": 120, "step": 4, "default": 40 },
+    { "type": "range", "id": "heading_size_d", "label": "H1 size — desktop (px)", "min": 24, "max": 80, "step": 2, "default": 56 },
+    { "type": "range", "id": "heading_size_m", "label": "H1 size — mobile (px)", "min": 20, "max": 60, "step": 2, "default": 36 }
+  ],
+  "presets": [{ "name": "GB · Collection Hero" }]
+}
+{% endschema %}

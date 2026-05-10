@@ -206,3 +206,322 @@
   else init();
   document.addEventListener('shopify:section:load', function (e) { bindScope(e.target); });
 })();
+
+/* GB Learn Blog — TOC smooth-scroll + scroll-spy */
+(function () {
+  if (window.__gbLearnBlogInit) return;
+  window.__gbLearnBlogInit = true;
+
+  function init() {
+    var tocLinks = document.querySelectorAll('.article-toc a');
+    if (!tocLinks.length) return;
+    var sections = document.querySelectorAll('.article-section');
+    if (!sections.length) return;
+
+    // Smooth scroll
+    tocLinks.forEach(function (link) {
+      link.addEventListener('click', function (e) {
+        var href = link.getAttribute('href');
+        if (!href || href.charAt(0) !== '#') return;
+        var target = document.querySelector(href);
+        if (!target) return;
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+
+    // Scroll-spy
+    var scrollTimer = null;
+    function spy() {
+      var current = '';
+      sections.forEach(function (s) {
+        if (window.scrollY >= s.offsetTop - 120) current = s.id;
+      });
+      tocLinks.forEach(function (l) {
+        l.classList.toggle('active', l.getAttribute('href') === '#' + current);
+      });
+    }
+    window.addEventListener('scroll', function () {
+      if (scrollTimer) return;
+      scrollTimer = setTimeout(function () { spy(); scrollTimer = null; }, 50);
+    }, { passive: true });
+    spy();
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+  document.addEventListener('shopify:section:load', init);
+})();
+
+/* GB Learn Recipe — YouTube lazy-load on click (also reused by Guide template) */
+(function () {
+  if (window.__gbVideoThumbInit) return;
+  window.__gbVideoThumbInit = true;
+
+  function init(scope) {
+    var root = scope || document;
+    var thumbs = root.querySelectorAll('[data-gb-video-thumb]');
+    thumbs.forEach(function (t) {
+      if (t.dataset.bound) return;
+      t.dataset.bound = '1';
+      t.addEventListener('click', function () {
+        var id = t.getAttribute('data-youtube-id');
+        if (!id) return;
+        var iframe = document.createElement('iframe');
+        iframe.setAttribute('width', '100%');
+        iframe.setAttribute('style', 'aspect-ratio: 16/9; border: 0; display: block;');
+        iframe.setAttribute('src', 'https://www.youtube.com/embed/' + id + '?autoplay=1');
+        iframe.setAttribute('allow', 'autoplay; encrypted-media; picture-in-picture');
+        iframe.setAttribute('allowfullscreen', '');
+        t.parentNode.replaceChild(iframe, t);
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function () { init(); });
+  else init();
+  document.addEventListener('shopify:section:load', function (e) { init(e.target); });
+})();
+
+/* GB Learn Guide — multi-pane navigation state machine */
+(function () {
+  if (window.__gbLearnGuideInit) return;
+  window.__gbLearnGuideInit = true;
+
+  function init() {
+    var body = document.querySelector('[data-gb-guide-body]');
+    if (!body) return;
+    var panes = body.querySelectorAll('[data-gb-guide-pane]');
+    var links = body.querySelectorAll('[data-gb-guide-link]');
+    var prevBtns = body.querySelectorAll('[data-gb-guide-prev]');
+    var nextBtns = body.querySelectorAll('[data-gb-guide-next]');
+    var fill = document.querySelector('[data-gb-guide-progress-fill]');
+    var label = document.querySelector('[data-gb-guide-progress-label]');
+    var totalSections = parseInt(body.getAttribute('data-pane-count'), 10) || links.length;
+    if (!totalSections) return;
+
+    var current = 0;
+
+    function show(idx) {
+      // idx can be 0..totalSections-1, or 'complete' (== totalSections)
+      var isComplete = idx >= totalSections;
+      // Hide all panes
+      panes.forEach(function (p) { p.classList.remove('active'); });
+      // Show the target pane
+      var target;
+      if (isComplete) {
+        target = body.querySelector('[data-gb-guide-pane][data-section-idx="complete"]');
+      } else {
+        target = body.querySelector('[data-gb-guide-pane][data-section-idx="' + idx + '"]');
+      }
+      if (target) target.classList.add('active');
+
+      // Sidebar links
+      links.forEach(function (link, i) {
+        link.classList.remove('active', 'completed');
+        if (isComplete || i < idx) link.classList.add('completed');
+        else if (i === idx) link.classList.add('active');
+      });
+
+      // Progress bar
+      var pct = isComplete ? 100 : ((idx + 1) / totalSections) * 100;
+      if (fill) fill.style.width = pct + '%';
+      if (label) {
+        if (isComplete) label.textContent = 'COMPLETE';
+        else label.textContent = 'SECTION ' + (idx + 1) + ' OF ' + totalSections;
+      }
+
+      // Smooth scroll to top of pane
+      try {
+        var top = body.getBoundingClientRect().top + window.scrollY - 140;
+        window.scrollTo({ top: top, behavior: 'smooth' });
+      } catch (_) { window.scrollTo(0, 0); }
+
+      current = isComplete ? totalSections : idx;
+
+      // Optional persistence
+      try { localStorage.setItem('gb-guide:' + (window.location.pathname || '') + ':section', String(current)); } catch (_) {}
+    }
+
+    // Wire sidebar links
+    links.forEach(function (link) {
+      link.addEventListener('click', function (e) {
+        e.preventDefault();
+        var idx = parseInt(link.getAttribute('data-section-idx'), 10);
+        if (!isNaN(idx)) show(idx);
+      });
+    });
+
+    // Wire prev/next buttons
+    prevBtns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        if (current > 0) show(current - 1);
+      });
+    });
+    nextBtns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        show(current + 1);
+      });
+    });
+
+    // Restore from localStorage
+    try {
+      var saved = parseInt(localStorage.getItem('gb-guide:' + (window.location.pathname || '') + ':section'), 10);
+      if (!isNaN(saved) && saved >= 0 && saved <= totalSections) {
+        show(saved);
+        return;
+      }
+    } catch (_) {}
+    show(0);
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+  document.addEventListener('shopify:section:load', init);
+})();
+
+/* ============================================================
+   GB Collection Shop — filter, sort, count
+   ============================================================ */
+(function () {
+  if (window.__gbCollShopInit) return;
+  window.__gbCollShopInit = true;
+
+  function readFilters(scope) {
+    var f = { subcategory: [], bucket: [], tag: [], instock: false };
+    scope.querySelectorAll('input[type="checkbox"][data-filter]').forEach(function (cb) {
+      if (!cb.checked) return;
+      var key = cb.getAttribute('data-filter');
+      if (key === 'instock') { f.instock = true; return; }
+      if (f[key]) f[key].push(cb.value);
+    });
+    return f;
+  }
+
+  function cardMatches(card, f) {
+    if (f.subcategory.length && f.subcategory.indexOf(card.getAttribute('data-subcat')) === -1) return false;
+    if (f.bucket.length && f.bucket.indexOf(card.getAttribute('data-bucket')) === -1) return false;
+    if (f.tag.length) {
+      var tags = (card.getAttribute('data-tags') || '').split('|');
+      for (var i = 0; i < f.tag.length; i++) {
+        if (tags.indexOf(f.tag[i]) === -1) return false;
+      }
+    }
+    if (f.instock && card.getAttribute('data-instock') !== '1') return false;
+    return true;
+  }
+
+  function applyFilters(scope) {
+    var grid = scope.querySelector('[data-gb-coll-grid]');
+    if (!grid) return;
+    var cards = Array.prototype.slice.call(grid.querySelectorAll('.prod-card'));
+    var f = readFilters(scope);
+    var visible = 0;
+    cards.forEach(function (card) {
+      var ok = cardMatches(card, f);
+      card.classList.toggle('hidden', !ok);
+      if (ok) visible++;
+    });
+    var total = cards.length;
+    var countEl = scope.querySelector('[data-gb-coll-count]');
+    if (countEl) countEl.innerHTML = 'Showing <strong>' + visible + '</strong> of ' + total + ' products';
+    var empty = scope.querySelector('[data-gb-coll-empty]');
+    if (empty) empty.classList.toggle('show', visible === 0 && total > 0);
+    var active = f.subcategory.length + f.bucket.length + f.tag.length + (f.instock ? 1 : 0);
+    scope.querySelectorAll('[data-gb-coll-active-count]').forEach(function (el) {
+      el.textContent = active + ' active';
+    });
+    scope.querySelectorAll('[data-gb-coll-active-badge]').forEach(function (el) {
+      el.textContent = active;
+      el.classList.toggle('on', active > 0);
+    });
+  }
+
+  function applySort(scope) {
+    var grid = scope.querySelector('[data-gb-coll-grid]');
+    var sel = scope.querySelector('[data-gb-coll-sort]');
+    if (!grid || !sel) return;
+    var mode = sel.value;
+    var cards = Array.prototype.slice.call(grid.querySelectorAll('.prod-card'));
+    cards.sort(function (a, b) {
+      switch (mode) {
+        case 'newest':
+          return parseFloat(a.getAttribute('data-days') || '0') - parseFloat(b.getAttribute('data-days') || '0');
+        case 'rating':
+          return parseFloat(b.getAttribute('data-rating') || '0') - parseFloat(a.getAttribute('data-rating') || '0');
+        case 'price-asc':
+          return parseFloat(a.getAttribute('data-price') || '0') - parseFloat(b.getAttribute('data-price') || '0');
+        case 'price-desc':
+          return parseFloat(b.getAttribute('data-price') || '0') - parseFloat(a.getAttribute('data-price') || '0');
+        case 'popular':
+        default:
+          return parseFloat(b.getAttribute('data-reviews') || '0') - parseFloat(a.getAttribute('data-reviews') || '0');
+      }
+    });
+    cards.forEach(function (c) { grid.appendChild(c); });
+  }
+
+  function computeFilterCounts(scope) {
+    var grid = scope.querySelector('[data-gb-coll-grid]');
+    if (!grid) return;
+    var cards = Array.prototype.slice.call(grid.querySelectorAll('.prod-card'));
+    scope.querySelectorAll('[data-count-subcategory]').forEach(function (el) {
+      var v = el.getAttribute('data-count-subcategory');
+      el.textContent = cards.filter(function (c) { return c.getAttribute('data-subcat') === v; }).length;
+    });
+    scope.querySelectorAll('[data-count-bucket]').forEach(function (el) {
+      var v = el.getAttribute('data-count-bucket');
+      el.textContent = cards.filter(function (c) { return c.getAttribute('data-bucket') === v; }).length;
+    });
+    scope.querySelectorAll('[data-count-tag]').forEach(function (el) {
+      var v = el.getAttribute('data-count-tag');
+      el.textContent = cards.filter(function (c) {
+        return ((c.getAttribute('data-tags') || '').split('|')).indexOf(v) !== -1;
+      }).length;
+    });
+  }
+
+  function clearFilters(scope) {
+    scope.querySelectorAll('input[type="checkbox"][data-filter]').forEach(function (cb) { cb.checked = false; });
+    applyFilters(scope);
+  }
+
+  function initOne(section) {
+    if (section.__gbCollWired) return;
+    section.__gbCollWired = true;
+
+    section.querySelectorAll('input[type="checkbox"][data-filter]').forEach(function (cb) {
+      cb.addEventListener('change', function () { applyFilters(section); });
+    });
+    section.querySelectorAll('[data-gb-coll-clear]').forEach(function (btn) {
+      btn.addEventListener('click', function () { clearFilters(section); });
+    });
+    var sortSel = section.querySelector('[data-gb-coll-sort]');
+    if (sortSel) sortSel.addEventListener('change', function () { applySort(section); });
+
+    var sidebar = section.querySelector('[data-gb-coll-sidebar]');
+    section.querySelectorAll('[data-gb-coll-open]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        if (sidebar) sidebar.classList.add('open');
+        document.body.classList.add('gb-coll-drawer-open');
+      });
+    });
+    section.querySelectorAll('[data-gb-coll-close]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        if (sidebar) sidebar.classList.remove('open');
+        document.body.classList.remove('gb-coll-drawer-open');
+      });
+    });
+
+    computeFilterCounts(section);
+    applyFilters(section);
+  }
+
+  function init() {
+    document.querySelectorAll('.coll-shop').forEach(initOne);
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+  document.addEventListener('shopify:section:load', init);
+})();

@@ -1,22 +1,33 @@
 {%- comment %}
-  Emits the data-* attributes + inline CSS variables for a Leo refactor
-  section's outer wrapper. Reads:
-    - per-product theme_accent metafields (kit colors)
-    - per-section spacing & typography settings (12 ranges)
-
-  Falls back to baseline defaults when a setting is undefined,
-  so it's safe to render even on sections that don't expose
-  the spacing block (e.g. sticky-atc).
+  Emits the data-* attributes + inline CSS variables for a Leo / GB section's
+  outer wrapper. Context-aware: resolves kit color from article / page /
+  collection / product metafields depending on what's available.
 
   Usage:
     <section class="..." {%- render 'leo_kit_attrs' -%}>
 {% endcomment -%}
 {%- liquid
-  assign p = product
-  assign accent      = p.metafields.custom.theme_accent      | default: '#C24528'
-  assign accent_dark = p.metafields.custom.theme_accent_dark | default: '#8E2E1A'
-  assign accent_soft = p.metafields.custom.theme_accent_soft | default: '#FCE5DE'
+  # Resolve color source by template context
+  if article and article.metafields.custom.color != blank
+    assign accent      = article.metafields.custom.color
+    assign accent_dark = article.metafields.custom.color_dark | default: '#E66800'
+    assign accent_soft = article.metafields.custom.color_soft | default: '#FFE4D1'
+  elsif page and page.metafields.custom.color != blank
+    assign accent      = page.metafields.custom.color
+    assign accent_dark = page.metafields.custom.color_dark | default: '#E66800'
+    assign accent_soft = page.metafields.custom.color_soft | default: '#FFE4D1'
+  elsif collection and collection.metafields.custom.color != blank
+    assign accent      = collection.metafields.custom.color
+    assign accent_dark = collection.metafields.custom.color_dark | default: '#E66800'
+    assign accent_soft = collection.metafields.custom.color_soft | default: '#FFE4D1'
+  else
+    assign p = product
+    assign accent      = p.metafields.custom.theme_accent      | default: '#C24528'
+    assign accent_dark = p.metafields.custom.theme_accent_dark | default: '#8E2E1A'
+    assign accent_soft = p.metafields.custom.theme_accent_soft | default: '#FCE5DE'
+  endif
 
+  # Spacing & typography (per-section settings, with defaults)
   assign pad_top_d = section.settings.pad_top_d | default: 80
   assign pad_bot_d = section.settings.pad_bot_d | default: 80
   assign pad_top_m = section.settings.pad_top_m | default: 56

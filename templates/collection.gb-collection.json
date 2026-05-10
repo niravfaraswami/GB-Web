@@ -1,0 +1,92 @@
+{
+  "sections": {
+    "hero": {
+      "type": "gb-coll-hero",
+      "settings": {
+        "fallback_title": "Collection title",
+        "fallback_category": "TRACK A · PANTRY",
+        "fallback_emoji": "🫙",
+        "pad_top_d": 72,
+        "pad_bot_d": 56,
+        "pad_top_m": 48,
+        "pad_bot_m": 40,
+        "heading_size_d": 56,
+        "heading_size_m": 36
+      }
+    },
+    "intro": {
+      "type": "gb-coll-intro",
+      "blocks": {
+        "f1": {
+          "type": "feature",
+          "settings": {
+            "icon": "⏱️",
+            "heading": "5–7 day ferments",
+            "body": "Designed for Indian kitchens where space is small and the climate runs warm."
+          }
+        },
+        "f2": {
+          "type": "feature",
+          "settings": {
+            "icon": "🦠",
+            "heading": "Real live cultures",
+            "body": "Lab-tested SCOBY, kefir grains, and starter blends — never freeze-dried shortcuts."
+          }
+        },
+        "f3": {
+          "type": "feature",
+          "settings": {
+            "icon": "🌶️",
+            "heading": "Indian-first formulations",
+            "body": "Built around the masalas, dals and breads people actually eat at home."
+          }
+        }
+      },
+      "block_order": ["f1", "f2", "f3"],
+      "settings": {
+        "pad_top_d": 64,
+        "pad_bot_d": 64,
+        "pad_top_m": 48,
+        "pad_bot_m": 48
+      }
+    },
+    "testimonial": {
+      "type": "gb-coll-testimonial",
+      "settings": {
+        "show_stars": true,
+        "quote": "<p>Started with the achaar kit, ended up making my own kombucha. The instructions are honest about timing and the cultures are alive — you can tell on day one.</p>",
+        "author_name": "Priya R.",
+        "author_role": "Home fermenter · Bengaluru",
+        "rating_num": "4.85",
+        "rating_label": "AVG · ALL PRODUCTS",
+        "pad_top_d": 32,
+        "pad_bot_d": 64,
+        "pad_top_m": 24,
+        "pad_bot_m": 48
+      }
+    },
+    "shop": {
+      "type": "gb-coll-shop",
+      "settings": {
+        "default_show_tags": "Vegan|Gluten-free|No oil|Top seller|Sugar-free|Diabetic-safe",
+        "fallback_emoji": "🫙",
+        "pad_top_d": 32,
+        "pad_bot_d": 96,
+        "pad_top_m": 24,
+        "pad_bot_m": 64
+      }
+    },
+    "cross-cta": {
+      "type": "gb-coll-cross-cta",
+      "settings": {
+        "eyebrow": "EXPLORE MORE",
+        "title": "Once you've nailed fermentation, level up to prebiotic powders.",
+        "pad_top_d": 64,
+        "pad_bot_d": 64,
+        "pad_top_m": 48,
+        "pad_bot_m": 48
+      }
+    }
+  },
+  "order": ["hero", "intro", "testimonial", "shop", "cross-cta"]
+}
