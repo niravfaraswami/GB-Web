@@ -1,9 +1,19 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "hero": {
       "type": "gb-coll-hero",
       "settings": {
         "fallback_title": "Collection title",
+        "fallback_subtitle": "",
         "fallback_category": "TRACK A · PANTRY",
         "fallback_emoji": "🫙",
         "pad_top_d": 72,
@@ -42,7 +52,11 @@
           }
         }
       },
-      "block_order": ["f1", "f2", "f3"],
+      "block_order": [
+        "f1",
+        "f2",
+        "f3"
+      ],
       "settings": {
         "pad_top_d": 64,
         "pad_bot_d": 64,
@@ -57,6 +71,7 @@
         "quote": "<p>Started with the achaar kit, ended up making my own kombucha. The instructions are honest about timing and the cultures are alive — you can tell on day one.</p>",
         "author_name": "Priya R.",
         "author_role": "Home fermenter · Bengaluru",
+        "author_initial": "",
         "rating_num": "4.85",
         "rating_label": "AVG · ALL PRODUCTS",
         "pad_top_d": 32,
@@ -81,6 +96,10 @@
       "settings": {
         "eyebrow": "EXPLORE MORE",
         "title": "Once you've nailed fermentation, level up to prebiotic powders.",
+        "desc": "",
+        "target_collection": "",
+        "cta_url": "",
+        "cta_label": "",
         "pad_top_d": 64,
         "pad_bot_d": 64,
         "pad_top_m": 48,
@@ -88,5 +107,11 @@
       }
     }
   },
-  "order": ["hero", "intro", "testimonial", "shop", "cross-cta"]
+  "order": [
+    "hero",
+    "intro",
+    "testimonial",
+    "shop",
+    "cross-cta"
+  ]
 }
