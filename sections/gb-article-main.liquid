@@ -7,19 +7,24 @@
 {%- endcomment -%}
 
 {%- liquid
-  assign category_label = article.metafields.custom.category_label | default: 'FERMENTATION 101'
-  assign category_color = article.metafields.custom.color | default: '#FF7300'
-  assign category_color_dark = article.metafields.custom.color_dark | default: '#E66800'
-  assign category_color_soft = article.metafields.custom.color_soft | default: '#FFE4D1'
-  assign hero_emoji = article.metafields.custom.hero_emoji | default: '🫙'
-  assign subtitle = article.metafields.custom.subtitle | default: article.excerpt | strip_html | strip
-  assign author_role = article.metafields.custom.author_role | default: 'Brand Editorial'
-  assign read_time = article.metafields.custom.read_time
+  assign cm = article.metafields.custom
+
+  assign category_label = cm.category_label | default: 'FERMENTATION 101'
+  assign category_color = cm.color | default: '#FF7300'
+  assign category_color_dark = cm.color_dark | default: '#E66800'
+  assign category_color_soft = cm.color_soft | default: '#FFE4D1'
+  assign hero_emoji = cm.hero_emoji | default: '🫙'
+  assign subtitle = cm.subtitle | default: article.excerpt | strip_html | strip
+  assign author_role = cm.author_role | default: 'Brand Editorial'
+  assign read_time = cm.read_time
   if read_time == blank
     assign words = article.content | strip_html | split: ' ' | size
     assign minutes = words | divided_by: 225 | at_least: 1
     assign read_time = minutes | append: ' min read'
   endif
+
+  assign mf_sources = cm.sources.value
+  assign mf_related = cm.related_articles.value
 -%}
 
 {%- capture vars -%}
@@ -67,10 +72,16 @@
 
       {%- liquid
         assign sources_blocks = section.blocks | where: 'type', 'source'
-        assign callout_blocks = section.blocks | where: 'type', 'inline_callout'
       -%}
 
-      {%- if sources_blocks.size > 0 -%}
+      {%- if mf_sources and mf_sources.size > 0 -%}
+        <div class="gb-art-sources">
+          <div class="gb-art-sources-h">{{ section.settings.sources_label | default: 'Sources & Further Reading' }}</div>
+          <ol>
+            {%- for s in mf_sources -%}<li>{{ s }}</li>{%- endfor -%}
+          </ol>
+        </div>
+      {%- elsif sources_blocks.size > 0 -%}
         <div class="gb-art-sources">
           <div class="gb-art-sources-h">{{ section.settings.sources_label | default: 'Sources & Further Reading' }}</div>
           <ol>
@@ -124,41 +135,89 @@
 </section>
 {%- endif -%}
 
-{%- if blog -%}
-  {%- assign related_blocks = section.blocks | where: 'type', 'related' -%}
-  {%- if related_blocks.size > 0 -%}
-    <section class="gb-art-related">
-      <div class="gb-art-related-container">
-        <div class="gb-art-related-eyebrow">{{ section.settings.related_eyebrow | default: 'KEEP READING' }}</div>
-        <h2 class="gb-art-related-h">{{ section.settings.related_heading | default: 'Related articles' }}</h2>
-        <div class="gb-art-related-grid">
-          {%- for block in related_blocks -%}
-            {%- liquid
-              assign linked = block.settings.article
-              if linked
-                assign url = linked.url
-                assign title = linked.title
-                assign meta = linked.metafields.custom.read_time
-              else
-                assign url = block.settings.url | default: '#'
-                assign title = block.settings.title
-                assign meta = block.settings.read_time
-              endif
-              assign dot_color = block.settings.color | default: '#15BA97'
-            -%}
-            <a href="{{ url }}" class="gb-art-related-card" {{ block.shopify_attributes }}>
-              <div class="gb-art-related-cat" style="background: {{ dot_color }};">●</div>
-              <div class="gb-art-related-title">{{ title }}</div>
-              {%- if meta != blank -%}<div class="gb-art-related-meta">{{ meta }}</div>{%- endif -%}
-            </a>
-          {%- endfor -%}
-        </div>
+{%- assign related_blocks = section.blocks | where: 'type', 'related' -%}
+{%- if mf_related and mf_related.size > 0 -%}
+  <section class="gb-art-related">
+    <div class="gb-art-related-container">
+      <div class="gb-art-related-eyebrow">{{ section.settings.related_eyebrow | default: 'KEEP READING' }}</div>
+      <h2 class="gb-art-related-h">{{ section.settings.related_heading | default: 'Related articles' }}</h2>
+      <div class="gb-art-related-grid">
+        {%- for r in mf_related -%}
+          {%- liquid
+            assign rcm = r.metafields.custom
+            assign dot_color = rcm.color | default: '#15BA97'
+          -%}
+          <a href="{{ r.url }}" class="gb-art-related-card">
+            <div class="gb-art-related-cat" style="background: {{ dot_color }};">●</div>
+            <div class="gb-art-related-title">{{ r.title }}</div>
+            {%- if rcm.read_time != blank -%}<div class="gb-art-related-meta">{{ rcm.read_time }}</div>{%- endif -%}
+          </a>
+        {%- endfor -%}
       </div>
-    </section>
-  {%- endif -%}
+    </div>
+  </section>
+{%- elsif related_blocks.size > 0 -%}
+  <section class="gb-art-related">
+    <div class="gb-art-related-container">
+      <div class="gb-art-related-eyebrow">{{ section.settings.related_eyebrow | default: 'KEEP READING' }}</div>
+      <h2 class="gb-art-related-h">{{ section.settings.related_heading | default: 'Related articles' }}</h2>
+      <div class="gb-art-related-grid">
+        {%- for block in related_blocks -%}
+          {%- liquid
+            assign linked = block.settings.article
+            if linked
+              assign url = linked.url
+              assign title = linked.title
+              assign meta = linked.metafields.custom.read_time
+            else
+              assign url = block.settings.url | default: '#'
+              assign title = block.settings.title
+              assign meta = block.settings.read_time
+            endif
+            assign dot_color = block.settings.color | default: '#15BA97'
+          -%}
+          <a href="{{ url }}" class="gb-art-related-card" {{ block.shopify_attributes }}>
+            <div class="gb-art-related-cat" style="background: {{ dot_color }};">●</div>
+            <div class="gb-art-related-title">{{ title }}</div>
+            {%- if meta != blank -%}<div class="gb-art-related-meta">{{ meta }}</div>{%- endif -%}
+          </a>
+        {%- endfor -%}
+      </div>
+    </div>
+  </section>
 {%- endif -%}
 
 </div>
+
+{%- comment -%} JSON-LD: schema.org/Article for SEO rich results {%- endcomment -%}
+{%- capture article_ld -%}
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": {{ article.title | json }},
+  "description": {{ subtitle | json }},
+  {%- if article.image -%}
+  "image": [{{ article.image | image_url: width: 1200 | prepend: 'https:' | json }}],
+  {%- endif -%}
+  {%- if article.author != blank -%}
+  "author": { "@type": "Person", "name": {{ article.author | json }} },
+  {%- endif -%}
+  "publisher": {
+    "@type": "Organization",
+    "name": {{ shop.name | json }},
+    "url": {{ shop.url | json }}
+  },
+  {%- if article.published_at -%}
+  "datePublished": {{ article.published_at | date: '%Y-%m-%d' | json }},
+  {%- endif -%}
+  {%- if article.updated_at -%}
+  "dateModified": {{ article.updated_at | date: '%Y-%m-%d' | json }},
+  {%- endif -%}
+  "articleSection": {{ category_label | json }},
+  "mainEntityOfPage": {{ request.origin | append: request.path | json }}
+}
+{%- endcapture -%}
+<script type="application/ld+json">{{ article_ld | strip }}</script>
 
 {% stylesheet %}
 .gb-art {
