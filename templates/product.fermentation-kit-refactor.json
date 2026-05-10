@@ -885,8 +885,8 @@
         "sticky_show": true,
         "cta_label": "Add to cart",
         "name_truncate": 21,
-        "up_threshold": 30,
-        "show_delay": 750
+        "up_threshold": 20,
+        "show_delay": 350
       }
     }
   },
