@@ -216,35 +216,40 @@
     </div>
   </div>
 
-  {%- comment -%} ============== ABOUT MEGA MENU ============== {%- endcomment -%}
+  {%- comment -%}
+    ============== ABOUT MEGA MENU ==============
+    Hardcoded links to /pages/{handle} so we don't depend on Shopify
+    Navigation. To rename/reorder: edit the <li> rows below directly.
+    All 12 page handles match the ones in ABOUT_PAGES_SETUP.md.
+  {%- endcomment -%}
   <div class="mega-menu" data-menu="about">
     <div class="mm-inner">
       <div class="mm-grid-3">
         <div class="mm-col">
           <h4>OUR STORY</h4>
           <ul>
-            <li><a href="#">Why we built GutBasket</a></li>
-            <li><a href="#">The science behind our kits</a></li>
-            <li><a href="#">Sourcing &amp; quality standards</a></li>
-            <li><a href="#">FSSAI &amp; certifications</a></li>
+            <li><a href="/pages/why-we-built-gutbasket">Why we built GutBasket</a></li>
+            <li><a href="/pages/the-science-behind-our-kits">The science behind our kits</a></li>
+            <li><a href="/pages/sourcing-quality-standards">Sourcing &amp; quality standards</a></li>
+            <li><a href="/pages/fssai-certifications">FSSAI &amp; certifications</a></li>
           </ul>
         </div>
         <div class="mm-col">
           <h4>SUPPORT</h4>
           <ul>
-            <li><a href="/pages/help">Help center</a></li>
-            <li><a href="#">WhatsApp expert support</a></li>
-            <li><a href="/policies/refund-policy">Returns &amp; refunds</a></li>
-            <li><a href="/policies/shipping-policy">Shipping policy</a></li>
+            <li><a href="/pages/help-center">Help center</a></li>
+            <li><a href="/pages/whatsapp-expert-support">WhatsApp expert support</a></li>
+            <li><a href="/pages/returns-refunds">Returns &amp; refunds</a></li>
+            <li><a href="/pages/shipping-policy">Shipping policy</a></li>
           </ul>
         </div>
         <div class="mm-col">
           <h4>COMMUNITY</h4>
           <ul>
-            <li><a href="#">Ferment Forum</a></li>
-            <li><a href="#">Customer recipes</a></li>
-            <li><a href="#">Instagram</a></li>
-            <li><a href="#">Newsletter</a></li>
+            <li><a href="/pages/ferment-forum">Ferment Forum</a></li>
+            <li><a href="/pages/customer-recipes">Customer recipes</a></li>
+            <li><a href="/pages/instagram">Instagram</a></li>
+            <li><a href="/pages/newsletter">Newsletter</a></li>
           </ul>
         </div>
       </div>
@@ -313,12 +318,22 @@
 
       <details class="md-section">
         <summary class="md-section-h">ABOUT <span class="md-chev">⌃</span></summary>
-        <ul class="md-list">
-          <li><a href="#" data-md-close>Our story</a></li>
-          <li><a href="#" data-md-close>The science behind our kits</a></li>
-          <li><a href="#" data-md-close>FSSAI &amp; certifications</a></li>
-          <li><a href="/pages/help" data-md-close>Help center</a></li>
-          <li><a href="#" data-md-close>WhatsApp support</a></li>
+        <ul class="md-list md-sublist">
+          <li class="md-cat-h">Our Story</li>
+          <li><a href="/pages/why-we-built-gutbasket" data-md-close>Why we built GutBasket</a></li>
+          <li><a href="/pages/the-science-behind-our-kits" data-md-close>The science behind our kits</a></li>
+          <li><a href="/pages/sourcing-quality-standards" data-md-close>Sourcing &amp; quality standards</a></li>
+          <li><a href="/pages/fssai-certifications" data-md-close>FSSAI &amp; certifications</a></li>
+          <li class="md-cat-h">Support</li>
+          <li><a href="/pages/help-center" data-md-close>Help center</a></li>
+          <li><a href="/pages/whatsapp-expert-support" data-md-close>WhatsApp expert support</a></li>
+          <li><a href="/pages/returns-refunds" data-md-close>Returns &amp; refunds</a></li>
+          <li><a href="/pages/shipping-policy" data-md-close>Shipping policy</a></li>
+          <li class="md-cat-h">Community</li>
+          <li><a href="/pages/ferment-forum" data-md-close>Ferment Forum</a></li>
+          <li><a href="/pages/customer-recipes" data-md-close>Customer recipes</a></li>
+          <li><a href="/pages/instagram" data-md-close>Instagram</a></li>
+          <li><a href="/pages/newsletter" data-md-close>Newsletter</a></li>
         </ul>
       </details>
     </nav>
