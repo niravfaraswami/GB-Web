@@ -202,6 +202,37 @@
 
 </div>
 
+{%- comment -%} JSON-LD: schema.org/HowTo (a multi-step guide is naturally a HowTo) {%- endcomment -%}
+{%- capture guide_ld -%}
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": {{ page.title | default: section.settings.placeholder_title | json }},
+  "description": {{ guide_subtitle | json }},
+  "totalTime": {{ duration | json }},
+  "step": [
+    {%- for block in section_blocks -%}
+      {
+        "@type": "HowToStep",
+        "position": {{ forloop.index }},
+        "name": {{ block.settings.title | json }},
+        "text": {{ block.settings.intro | strip_html | strip | json }}
+        {%- if block.settings.video_id != blank -%},
+        "video": {
+          "@type": "VideoObject",
+          "name": {{ block.settings.video_title | default: block.settings.title | json }},
+          "thumbnailUrl": {{ 'https://i.ytimg.com/vi/' | append: block.settings.video_id | append: '/hqdefault.jpg' | json }},
+          "embedUrl": {{ 'https://www.youtube.com/embed/' | append: block.settings.video_id | json }},
+          "uploadDate": {{ 'now' | date: '%Y-%m-%d' | json }}
+        }
+        {%- endif -%}
+      }{%- unless forloop.last -%},{%- endunless -%}
+    {%- endfor -%}
+  ]
+}
+{%- endcapture -%}
+<script type="application/ld+json">{{ guide_ld | strip }}</script>
+
 {% stylesheet %}
 .gb-gd {
   --gb-gd-white: #FFFFFF;

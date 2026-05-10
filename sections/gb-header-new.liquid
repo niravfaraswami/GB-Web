@@ -1,0 +1,346 @@
+{%- comment -%}
+  Site header — Shopify-native menu, configurable via admin.
+
+  Activation (one of):
+  1. Replace the contents of `sections/header.liquid` with the contents
+     of this file. The whole site will use this header.
+  2. Or in `layout/theme.liquid`, replace the existing
+     `{% section 'header' %}` (or section group) with `{% section 'gb-header-new' %}`.
+
+  Menu is set in admin: Online Store → Navigation → pick or create a menu,
+  then in Customize → Header section → "Primary menu" → select that menu.
+{%- endcomment -%}
+
+{%- liquid
+  assign primary = section.settings.primary_menu
+  assign sticky = section.settings.sticky
+  assign show_search = section.settings.show_search
+  assign show_account = section.settings.show_account
+  assign show_cart = section.settings.show_cart
+  assign logo_image = section.settings.logo
+  assign logo_text = section.settings.logo_text | default: shop.name
+  assign bg = section.settings.bg_color | default: '#FFFFFF'
+  assign text = section.settings.text_color | default: '#1F1F1D'
+  assign accent = section.settings.accent_color | default: '#FF7300'
+-%}
+
+<header class="gb-hd{% if sticky %} gb-hd--sticky{% endif %}"
+        style="--gb-hd-bg: {{ bg }}; --gb-hd-text: {{ text }}; --gb-hd-accent: {{ accent }};"
+        id="gb-hd-{{ section.id }}">
+  <div class="gb-hd-inner">
+    <button class="gb-hd-burger" type="button" aria-label="Open menu" aria-controls="gb-hd-drawer-{{ section.id }}" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+
+    <a href="{{ routes.root_url }}" class="gb-hd-logo">
+      {%- if logo_image -%}
+        <img src="{{ logo_image | image_url: width: 320 }}" alt="{{ shop.name | escape }}" height="32">
+      {%- else -%}
+        <span class="gb-hd-logo-text">{{ logo_text }}</span>
+      {%- endif -%}
+    </a>
+
+    <nav class="gb-hd-nav" aria-label="Primary">
+      {%- if primary != blank -%}
+        <ul class="gb-hd-nav-list">
+          {%- for link in primary.links -%}
+            <li class="gb-hd-nav-item{% if link.links.size > 0 %} has-sub{% endif %}">
+              <a href="{{ link.url }}" class="gb-hd-nav-link">{{ link.title }}</a>
+              {%- if link.links.size > 0 -%}
+                <div class="gb-hd-sub">
+                  <ul>
+                    {%- for sublink in link.links -%}
+                      <li><a href="{{ sublink.url }}">{{ sublink.title }}</a></li>
+                    {%- endfor -%}
+                  </ul>
+                </div>
+              {%- endif -%}
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- else -%}
+        <span class="gb-hd-nav-empty">Pick a menu in Theme Editor → Header → Primary menu.</span>
+      {%- endif -%}
+    </nav>
+
+    <div class="gb-hd-actions">
+      {%- if show_search -%}
+        <a href="{{ routes.search_url }}" class="gb-hd-icon" aria-label="Search">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </a>
+      {%- endif -%}
+      {%- if show_account -%}
+        <a href="{{ routes.account_url }}" class="gb-hd-icon" aria-label="Account">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </a>
+      {%- endif -%}
+      {%- if show_cart -%}
+        <a href="{{ routes.cart_url }}" class="gb-hd-icon gb-hd-icon--cart" aria-label="Cart">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          {%- if cart.item_count > 0 -%}
+            <span class="gb-hd-cart-count">{{ cart.item_count }}</span>
+          {%- endif -%}
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+
+  {%- comment -%} Mobile drawer {%- endcomment -%}
+  <div class="gb-hd-drawer" id="gb-hd-drawer-{{ section.id }}" aria-hidden="true">
+    <div class="gb-hd-drawer-inner">
+      {%- if primary != blank -%}
+        <ul class="gb-hd-drawer-list">
+          {%- for link in primary.links -%}
+            <li class="gb-hd-drawer-item">
+              <a href="{{ link.url }}" class="gb-hd-drawer-link">{{ link.title }}</a>
+              {%- if link.links.size > 0 -%}
+                <ul class="gb-hd-drawer-sub">
+                  {%- for sublink in link.links -%}
+                    <li><a href="{{ sublink.url }}">{{ sublink.title }}</a></li>
+                  {%- endfor -%}
+                </ul>
+              {%- endif -%}
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+      <div class="gb-hd-drawer-actions">
+        {%- if show_account -%}<a href="{{ routes.account_url }}">Account</a>{%- endif -%}
+        {%- if show_search -%}<a href="{{ routes.search_url }}">Search</a>{%- endif -%}
+        {%- if show_cart -%}<a href="{{ routes.cart_url }}">Cart ({{ cart.item_count }})</a>{%- endif -%}
+      </div>
+    </div>
+  </div>
+</header>
+
+{% stylesheet %}
+.gb-hd {
+  background: var(--gb-hd-bg, #fff);
+  color: var(--gb-hd-text, #1F1F1D);
+  border-bottom: 1px solid #E8E3D5;
+  font-family: 'DM Sans', sans-serif;
+  position: relative;
+  z-index: 90;
+}
+.gb-hd--sticky { position: sticky; top: 0; }
+.gb-hd-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 12px 24px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 24px;
+}
+.gb-hd-logo { display: inline-flex; align-items: center; text-decoration: none; color: inherit; }
+.gb-hd-logo img { display: block; max-height: 32px; width: auto; }
+.gb-hd-logo-text {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 22px;
+  letter-spacing: -0.01em;
+  color: var(--gb-hd-text);
+}
+.gb-hd-nav { justify-self: center; }
+.gb-hd-nav-list { list-style: none; margin: 0; padding: 0; display: flex; gap: 28px; }
+.gb-hd-nav-item { position: relative; }
+.gb-hd-nav-link {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--gb-hd-text);
+  text-decoration: none;
+  padding: 8px 0;
+  display: inline-block;
+  transition: color 0.15s;
+}
+.gb-hd-nav-link:hover { color: var(--gb-hd-accent); }
+.gb-hd-nav-empty { color: #888780; font-size: 13px; font-style: italic; }
+.gb-hd-sub {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+  border: 1px solid #E8E3D5;
+  border-radius: 10px;
+  box-shadow: 0 12px 32px rgba(43,31,26,0.08);
+  min-width: 200px;
+  padding: 10px;
+  display: none;
+  z-index: 100;
+}
+.gb-hd-nav-item.has-sub:hover .gb-hd-sub,
+.gb-hd-nav-item.has-sub:focus-within .gb-hd-sub { display: block; }
+.gb-hd-sub ul { list-style: none; margin: 0; padding: 0; }
+.gb-hd-sub li a {
+  display: block;
+  padding: 8px 12px;
+  border-radius: 6px;
+  color: var(--gb-hd-text);
+  text-decoration: none;
+  font-size: 14px;
+  white-space: nowrap;
+}
+.gb-hd-sub li a:hover { background: #FFF9EE; color: var(--gb-hd-accent); }
+.gb-hd-actions { display: flex; align-items: center; gap: 8px; }
+.gb-hd-icon {
+  width: 38px; height: 38px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  color: var(--gb-hd-text);
+  text-decoration: none;
+  transition: background 0.15s;
+  position: relative;
+}
+.gb-hd-icon:hover { background: #FFF9EE; }
+.gb-hd-cart-count {
+  position: absolute;
+  top: 4px; right: 4px;
+  background: var(--gb-hd-accent);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 999px;
+  display: flex; align-items: center; justify-content: center;
+  line-height: 1;
+}
+.gb-hd-burger {
+  display: none;
+  width: 38px; height: 38px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+}
+.gb-hd-burger span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--gb-hd-text);
+  border-radius: 2px;
+  transition: transform 0.2s, opacity 0.2s;
+}
+.gb-hd-burger[aria-expanded="true"] span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+.gb-hd-burger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+.gb-hd-burger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+.gb-hd-drawer {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 80%;
+  max-width: 320px;
+  height: 100vh;
+  background: #fff;
+  border-right: 1px solid #E8E3D5;
+  padding: 80px 0 24px;
+  overflow-y: auto;
+  z-index: 95;
+  transform: translateX(-100%);
+  transition: transform 0.25s ease;
+  box-shadow: 12px 0 40px rgba(43,31,26,0.08);
+}
+.gb-hd-drawer.is-open { transform: translateX(0); }
+.gb-hd-drawer-inner { padding: 0 24px; }
+.gb-hd-drawer-list { list-style: none; padding: 0; margin: 0; }
+.gb-hd-drawer-item { border-bottom: 1px solid #F0EBDD; }
+.gb-hd-drawer-link {
+  display: block;
+  padding: 16px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--gb-hd-text);
+  text-decoration: none;
+}
+.gb-hd-drawer-sub { list-style: none; padding: 0 0 16px 16px; margin: 0; }
+.gb-hd-drawer-sub li a {
+  display: block;
+  padding: 8px 0;
+  font-size: 14px;
+  color: #5C4D3F;
+  text-decoration: none;
+}
+.gb-hd-drawer-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #F0EBDD;
+}
+.gb-hd-drawer-actions a {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--gb-hd-accent);
+  text-decoration: none;
+  padding: 6px 0;
+}
+@media (max-width: 900px) {
+  .gb-hd-burger { display: flex; }
+  .gb-hd-nav { display: none; }
+  .gb-hd-drawer { display: block; }
+  .gb-hd-inner { grid-template-columns: auto 1fr auto; }
+  .gb-hd-logo { justify-self: center; }
+}
+{% endstylesheet %}
+
+<script>
+(function() {
+  var section = document.getElementById('gb-hd-{{ section.id }}');
+  if (!section) return;
+  var burger = section.querySelector('.gb-hd-burger');
+  var drawer = section.querySelector('.gb-hd-drawer');
+  if (!burger || !drawer) return;
+  burger.addEventListener('click', function() {
+    var open = drawer.classList.toggle('is-open');
+    burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+    drawer.setAttribute('aria-hidden', open ? 'false' : 'true');
+    document.body.style.overflow = open ? 'hidden' : '';
+  });
+  document.addEventListener('click', function(e) {
+    if (!section.contains(e.target) && drawer.classList.contains('is-open')) {
+      drawer.classList.remove('is-open');
+      burger.setAttribute('aria-expanded', 'false');
+      drawer.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "GB · Header",
+  "tag": "header",
+  "class": "gb-hd-wrap",
+  "settings": [
+    { "type": "header", "content": "Logo" },
+    { "type": "image_picker", "id": "logo", "label": "Logo image (overrides text)" },
+    { "type": "text", "id": "logo_text", "label": "Logo text fallback" },
+
+    { "type": "header", "content": "Navigation menu" },
+    { "type": "link_list", "id": "primary_menu", "label": "Primary menu",
+      "info": "Pick a menu from Online Store → Navigation. Two levels supported (parent + dropdown)." },
+
+    { "type": "header", "content": "Right-side icons" },
+    { "type": "checkbox", "id": "show_search",  "label": "Show search icon",  "default": true },
+    { "type": "checkbox", "id": "show_account", "label": "Show account icon", "default": true },
+    { "type": "checkbox", "id": "show_cart",    "label": "Show cart icon",    "default": true },
+
+    { "type": "header", "content": "Layout" },
+    { "type": "checkbox", "id": "sticky", "label": "Sticky header", "default": true },
+
+    { "type": "header", "content": "Colors" },
+    { "type": "color", "id": "bg_color",     "label": "Background", "default": "#FFFFFF" },
+    { "type": "color", "id": "text_color",   "label": "Text",       "default": "#1F1F1D" },
+    { "type": "color", "id": "accent_color", "label": "Accent (hover, cart count)", "default": "#FF7300" }
+  ],
+  "presets": [{ "name": "GB · Header", "settings": { "logo_text": "GutBasket", "show_cart": true } }]
+}
+{% endschema %}
