@@ -1,0 +1,96 @@
+{
+  "name": "The science behind our kits",
+  "sections": {
+    "main": {
+      "type": "gb-content-page",
+      "blocks": {
+        "hero": {
+          "type": "hero",
+          "settings": {
+            "eyebrow": "OUR STORY · 02",
+            "title": "The bacteria do the work. We just give them the right room.",
+            "subtitle": "<p>Lacto-fermentation in 60 seconds, the three biotics explained, and the four organisms doing most of the work.</p>"
+          }
+        },
+        "lacto": {
+          "type": "features",
+          "settings": {
+            "eyebrow": "LACTO-FERMENTATION IN 60 SECONDS",
+            "heading": "What's actually happening in the jar.",
+            "columns": "4",
+            "item_1_icon": "01",
+            "item_1_title": "Salt creates a gate",
+            "item_1_desc": "2–3% salt by weight makes the brine inhospitable to most bacteria, moulds, and yeasts. It does not bother lactic acid bacteria (LAB). They can swim. The competition can't.",
+            "item_2_icon": "02",
+            "item_2_title": "LAB eat the sugars",
+            "item_2_desc": "Vegetables, fruits, and grains carry wild LAB on their skin. The dominant species — Lactobacillus plantarum, Leuconostoc mesenteroides, Pediococcus — start consuming naturally-present sugars.",
+            "item_3_icon": "03",
+            "item_3_title": "pH drops below 4.0",
+            "item_3_desc": "LAB excrete lactic acid as a by-product. The brine acidifies. By Day 4, pH is around 3.5–3.8 — too acidic for spoilage organisms, just right for LAB.",
+            "item_4_icon": "04",
+            "item_4_title": "Preserved, alive, bioactive",
+            "item_4_desc": "The food is now shelf-stable in the fridge, full of live cultures, plus the metabolites LAB produced along the way (vitamin K2, B12 traces, postbiotics, bioactive peptides)."
+          }
+        },
+        "biotics": {
+          "type": "features",
+          "settings": {
+            "eyebrow": "THE THREE BIOTICS",
+            "heading": "Probiotic, prebiotic, postbiotic — explained.",
+            "columns": "3",
+            "item_1_icon": "🦠",
+            "item_1_title": "Probiotic",
+            "item_1_desc": "The live bacteria themselves — Lactobacillus, Leuconostoc, Pediococcus, Bifidobacterium. They colonise temporarily, crowd out pathogens, train your immune system, and produce compounds that help your gut barrier.",
+            "item_2_icon": "🌾",
+            "item_2_title": "Prebiotic",
+            "item_2_desc": "The fiber that feeds them — inulin, fructooligosaccharides, beta-glucan. Doesn't make it through your stomach digested. The bacteria in your colon eat it. Without prebiotic, probiotic doesn't stay.",
+            "item_3_icon": "✨",
+            "item_3_title": "Postbiotic",
+            "item_3_desc": "Everything LAB produce — short-chain fatty acids, lactic acid, K2, B12, antimicrobial peptides, GABA. The compounds that do most of the actual physiological good. Stable even after the bacteria die."
+          }
+        },
+        "vinegar": {
+          "type": "text",
+          "settings": {
+            "eyebrow": "WHY SALT BRINE",
+            "heading": "Vinegar pickles aren't fermented.",
+            "body": "<p>Vinegar pickles are <strong>preserved in acetic acid</strong>. They taste tangy but contain zero live cultures — the vinegar killed them all on contact.</p><p>Lacto-fermented pickles produce their <em>own</em> acid (lactic acid) as bacteria metabolise sugars over days. The result: live LAB, postbiotics, and a tang that comes from biology, not a bottle.</p><p>If the recipe says \"add vinegar,\" it's not a probiotic ferment. Period.</p>"
+          }
+        },
+        "strains": {
+          "type": "features",
+          "settings": {
+            "eyebrow": "STRAIN SPOTLIGHT",
+            "heading": "The four organisms doing most of the work.",
+            "columns": "2",
+            "item_1_icon": "L. plantarum",
+            "item_1_title": "The closer.",
+            "item_1_desc": "The most studied LAB on Earth. Tolerates pH 3.5, dominates the late-fermentation phase. Linked in trials to reduced bloating, IBS-symptom relief, and improved gut-barrier integrity. Present in achaar, kanji, kimchi, sauerkraut.",
+            "item_2_icon": "L. brevis",
+            "item_2_title": "The flavour-builder.",
+            "item_2_desc": "Produces complex aroma compounds and small amounts of CO₂. Responsible for the slight fizz in kanji and the depth in mature kimchi. Also produces GABA, a neurotransmitter linked to mood-axis effects.",
+            "item_3_icon": "Leuconostoc",
+            "item_3_title": "The opener.",
+            "item_3_desc": "Starts every veg ferment in the first 48 hours. Heterofermentative — produces both lactic acid and CO₂. Hands off to L. plantarum once the pH gets too low for it.",
+            "item_4_icon": "Pediococcus",
+            "item_4_title": "The polisher.",
+            "item_4_desc": "Late-stage. Tolerates higher salt. Adds umami and depth. Common in long-aged ferments and dry-cured meats."
+          }
+        },
+        "cta_sourcing": {
+          "type": "cta",
+          "settings": {
+            "eyebrow": "NEXT",
+            "title": "Where the ingredients come from.",
+            "desc": "If the science checks out, the next question is sourcing — every batch is traceable to a single farm or partner.",
+            "button_label": "Sourcing & quality →",
+            "button_link": "/pages/sourcing-quality-standards",
+            "theme": "dark"
+          }
+        }
+      },
+      "block_order": ["hero", "lacto", "biotics", "vinegar", "strains", "cta_sourcing"]
+    }
+  },
+  "order": ["main"]
+}

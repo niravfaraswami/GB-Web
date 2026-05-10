@@ -1,0 +1,99 @@
+{
+  "name": "Shipping policy",
+  "sections": {
+    "main": {
+      "type": "gb-content-page",
+      "blocks": {
+        "hero": {
+          "type": "hero",
+          "settings": {
+            "eyebrow": "SUPPORT · 04",
+            "title": "Free over ₹300. Next-working-day dispatch from Gandhinagar.",
+            "subtitle": "<p>Delivery times across India, why we ship dry (no cold chain), tracking, and edge cases.</p>"
+          }
+        },
+        "times": {
+          "type": "features",
+          "settings": {
+            "eyebrow": "DELIVERY TIMES",
+            "heading": "How long it takes to reach you.",
+            "columns": "3",
+            "item_1_icon": "🏙️",
+            "item_1_title": "Metro cities",
+            "item_1_desc": "Mumbai, Delhi, Bengaluru, Chennai, Hyderabad, Pune, Kolkata, Ahmedabad. 2–3 working days from dispatch.",
+            "item_2_icon": "🏘️",
+            "item_2_title": "Tier 2 cities",
+            "item_2_desc": "Jaipur, Lucknow, Indore, Surat, Kochi, Chandigarh, etc. 3–5 working days.",
+            "item_3_icon": "📍",
+            "item_3_title": "Rest of India",
+            "item_3_desc": "Smaller towns, NE states, J&K, A&N Islands. 5–7 working days. Some pin codes 7–10 days.",
+            "item_4_icon": "💰",
+            "item_4_title": "Free shipping",
+            "item_4_desc": "Orders over ₹300. Below that, ₹49 flat. COD adds ₹20 per order.",
+            "item_5_icon": "⚡",
+            "item_5_title": "Express",
+            "item_5_desc": "Available at checkout for metro cities. ₹149 flat. Next-working-day delivery on orders placed before 12pm IST.",
+            "item_6_icon": "🌍",
+            "item_6_title": "International",
+            "item_6_desc": "UAE, Singapore, Australia, UK, US. ₹1,200–2,400 depending on weight. 7–14 days. Customs not included."
+          }
+        },
+        "dry_shipping": {
+          "type": "text",
+          "settings": {
+            "eyebrow": "LIVE CULTURES, DRY SHIPPING",
+            "heading": "No cold chain. By design.",
+            "body": "<p>Our kits ship as <strong>dry components</strong> — spice mixes, jars, salts, ferment-boost prebiotics. The live bacteria are in the air around your kitchen and on the surface of the vegetables you'll add.</p><p>This means no refrigerated trucks, no \"keep cold\" stickers, no risk of failed cultures because a logistics partner left a box on a sunny dock for 6 hours.</p><p>The lone exceptions: dairy starters (yogurt, kefir cultures) ship in foil sachets at room temperature — they're freeze-dried and stable.</p>"
+          }
+        },
+        "tracking": {
+          "type": "features",
+          "settings": {
+            "eyebrow": "TRACKING",
+            "heading": "You'll know where it is.",
+            "columns": "3",
+            "item_1_icon": "📧",
+            "item_1_title": "Email + WhatsApp",
+            "item_1_desc": "Tracking link sent the moment we hand the order to the courier (usually within 18 hours of order placement).",
+            "item_2_icon": "📱",
+            "item_2_title": "Self-serve tracking",
+            "item_2_desc": "Order page on our site (logged in) shows live status. Or visit the courier's site directly with the AWB number.",
+            "item_3_icon": "🚚",
+            "item_3_title": "Courier partners",
+            "item_3_desc": "Delhivery (default), Bluedart (express), India Post (some pin codes). All provide real-time updates."
+          }
+        },
+        "edge_cases": {
+          "type": "faq",
+          "settings": {
+            "heading": "Edge cases",
+            "intro": "<p>What happens when shipping doesn't go smoothly.</p>",
+            "q_1": "My order says delivered but I didn't receive it.",
+            "a_1": "<p>WhatsApp us within 48 hours of the \"delivered\" status. We file a courier investigation (usually returns the package or confirms loss within 5 working days). If lost, free reshipment.</p>",
+            "q_2": "My package is delayed past the estimated date.",
+            "a_2": "<p>Up to 3 working days past estimate is normal in India. Past that, message us — we'll escalate with the courier and either expedite or offer partial shipping refund.</p>",
+            "q_3": "I gave the wrong address. Can I change it?",
+            "a_3": "<p>Yes if it hasn't shipped — message us, we'll update before dispatch. After shipping, address changes are at the courier's discretion (sometimes possible for ₹50–100, sometimes not).</p>",
+            "q_4": "Can I refuse delivery and get a refund?",
+            "a_4": "<p>For COD orders: yes, courier returns to us, full refund (no reverse-ship cost since you didn't pay yet). For prepaid: also yes, but treat as a regular return (refund minus return-ship cost).</p>",
+            "q_5": "International order — do I pay customs?",
+            "a_5": "<p>Yes, on arrival in your country. We don't pre-pay customs because rates vary by destination and product category. UAE: typically ₹0 for fermentation kits. UK/US: ₹400–1,200 depending on order value. Singapore: usually ₹0.</p>"
+          }
+        },
+        "cta_track": {
+          "type": "contact",
+          "settings": {
+            "icon": "🔎",
+            "title": "Need to track an order?",
+            "desc": "Have your order number ready. We'll pull up the live status.",
+            "button_label": "Message us",
+            "button_link": "https://wa.me/917861940110?text=Hi%2C%20I%20want%20to%20track%20order%20%23",
+            "open_new_tab": true
+          }
+        }
+      },
+      "block_order": ["hero", "times", "dry_shipping", "tracking", "edge_cases", "cta_track"]
+    }
+  },
+  "order": ["main"]
+}

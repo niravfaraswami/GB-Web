@@ -1,0 +1,93 @@
+{
+  "name": "Help center",
+  "sections": {
+    "main": {
+      "type": "gb-content-page",
+      "blocks": {
+        "hero": {
+          "type": "hero",
+          "settings": {
+            "eyebrow": "SUPPORT · 01",
+            "title": "Find an answer. Or call a human.",
+            "subtitle": "<p>Six topic categories, six top FAQs, three ways to reach a real person.</p>"
+          }
+        },
+        "topics": {
+          "type": "features",
+          "settings": {
+            "eyebrow": "BROWSE BY TOPIC",
+            "heading": "Six places most questions live.",
+            "columns": "3",
+            "item_1_icon": "📦",
+            "item_1_title": "Orders & shipping",
+            "item_1_desc": "Tracking, delivery times, change-of-address, lost packages.",
+            "item_2_icon": "💳",
+            "item_2_title": "Payments & refunds",
+            "item_2_desc": "Cancellations, refund timelines, COD, failed payments.",
+            "item_3_icon": "🫙",
+            "item_3_title": "Using your kit",
+            "item_3_desc": "First batch, troubleshooting fermentation, recipe questions.",
+            "item_4_icon": "🦠",
+            "item_4_title": "Probiotic safety",
+            "item_4_desc": "When NOT to ferment, allergens, kids, pregnancy, medication interactions.",
+            "item_5_icon": "🌍",
+            "item_5_title": "International shipping",
+            "item_5_desc": "Customs, restricted countries, transit times beyond India.",
+            "item_6_icon": "🎁",
+            "item_6_title": "Gift orders & subscriptions",
+            "item_6_desc": "Gift wrapping, scheduled delivery, recurring kits, corporate orders."
+          }
+        },
+        "faqs": {
+          "type": "faq",
+          "settings": {
+            "heading": "Six things people ask every week.",
+            "intro": "<p>Click any question to expand the answer. If yours isn't here, jump to <a href=\"#contact\">contact</a> at the bottom.</p>",
+            "q_1": "My ferment isn't bubbling on Day 2. Did I do something wrong?",
+            "a_1": "<p>Probably not — visible bubbling depends on temperature and ingredient sugar content. At 22–25°C, expect bubbles by Day 2–3 in vegetable ferments and Day 1 in kanji. Below 18°C, fermentation slows by 50%.</p><p>If it's still flat by Day 4, send us a photo on WhatsApp. We can usually diagnose from a picture.</p>",
+            "q_2": "There's white film on the surface of my ferment. Is it mould?",
+            "a_2": "<p>Almost always it's <strong>kahm yeast</strong> — a harmless surface film that forms when oxygen reaches the brine. Skim it off with a clean spoon and continue. Your ferment is fine.</p><p>True mould is fuzzy and coloured (blue/green/black/pink). If you see that, throw the batch out and message us — we'll send a free replacement.</p>",
+            "q_3": "Can children have probiotic ferments?",
+            "a_3": "<p>Yes — kanji, dahi, kefir, and kimchi (mild) are safe and healthy for children over 1 year. Start with small portions (1–2 tbsp) and work up.</p><p>Avoid: anything with raw honey for under-1-year-olds (botulism risk, unrelated to fermentation).</p>",
+            "q_4": "How long does my fermented batch last in the fridge?",
+            "a_4": "<p>Once refrigerated and the pH is below 4.0:</p><p>• <strong>Vegetable ferments</strong> (achaar, sauerkraut, kimchi): 2–6 months<br>• <strong>Kanji</strong>: 4–6 weeks<br>• <strong>Yogurt/kefir</strong>: 7–10 days<br>• <strong>Sourdough discard</strong>: 3 weeks</p><p>The flavour will keep developing — not a sign of spoilage.</p>",
+            "q_5": "Can I use iodised salt?",
+            "a_5": "<p><strong>No.</strong> Iodine kills lactic acid bacteria. Use sea salt, rock salt, or any non-iodised salt. The kits ship with the right salt; if you're refilling, check the label.</p>",
+            "q_6": "Where do I find the recipe for kit X?",
+            "a_6": "<p>Every kit ships with a printed recipe card. Digital copies live at <a href=\"/pages/recipes\">/pages/recipes</a>. If yours is missing or unclear, message us on WhatsApp with the kit name and we'll send a PDF in 30 seconds.</p>"
+          }
+        },
+        "contact": {
+          "type": "features",
+          "settings": {
+            "eyebrow": "STILL STUCK?",
+            "heading": "Three ways to reach a real person.",
+            "columns": "3",
+            "item_1_icon": "💬",
+            "item_1_title": "WhatsApp",
+            "item_1_desc": "Fastest. Mon–Sat 9am–7pm IST. Median reply time 18 minutes. Send a photo if it's a fermentation question.",
+            "item_2_icon": "✉️",
+            "item_2_title": "Email",
+            "item_2_desc": "support@gutbasket.com. Reply within 24 hours, longer-form questions, attachments OK.",
+            "item_3_icon": "📞",
+            "item_3_title": "Phone",
+            "item_3_desc": "+91 78619 40110. Mon–Fri 10am–6pm IST. Best for order tracking emergencies."
+          }
+        },
+        "cta_chat": {
+          "type": "cta",
+          "settings": {
+            "eyebrow": "OPEN A CHAT",
+            "title": "Talk to a fermenter on WhatsApp.",
+            "desc": "Real human, fast reply, photo-friendly. The fastest path to an answer.",
+            "button_label": "Message us on WhatsApp",
+            "button_link": "https://wa.me/917861940110",
+            "theme": "dark"
+          }
+        }
+      },
+      "block_order": ["hero", "topics", "faqs", "contact", "cta_chat"]
+    }
+  },
+  "order": ["main"]
+}
