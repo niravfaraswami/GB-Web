@@ -248,7 +248,7 @@
           "settings": {
             "label": "Fermentation Kits",
             "tab_id": "fermentation",
-            "collection": "",
+            "collection": "fermentation-kits",
             "products_limit": 0,
             "cat_band": "Probiotic Drink",
             "view_all_label": "View all fermentation kits",
