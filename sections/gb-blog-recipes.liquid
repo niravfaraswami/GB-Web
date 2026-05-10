@@ -24,8 +24,9 @@
 
 {%- liquid
   assign articles_per_page = section.settings.per_page | default: 12
-  paginate blog.articles by articles_per_page
 -%}
+
+{%- paginate blog.articles by articles_per_page -%}
 
 <div class="gb-rcpx" id="gb-rcpx-{{ section.id }}">
   <section class="gb-rcpx-hero">
