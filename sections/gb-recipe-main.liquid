@@ -1,52 +1,21 @@
 {%- comment -%}
   Recipe page main section
   Source: gutbasket-recipe.html
-  Reads structured content from article metafields (preferred) and falls
-  back to section blocks. JSON-LD schema.org/Recipe emitted at end.
-
-  Metafield definitions to create in Shopify admin (namespace: custom):
-    - subtitle              (single_line_text_field)
-    - hero_emoji            (single_line_text_field)
-    - prep_time             (single_line_text_field)
-    - ferment_time          (single_line_text_field)
-    - total_time            (single_line_text_field)
-    - yield                 (single_line_text_field)
-    - difficulty            (single_line_text_field)
-    - cuisine               (single_line_text_field)
-    - dietary_tags          (list.single_line_text_field)
-    - ingredients           (json)  — see PHASE_4_REVIEW.md for schema
-    - method_steps          (json)  — see PHASE_4_REVIEW.md for schema
-    - notes                 (list.single_line_text_field)
-    - video_youtube_id      (single_line_text_field)
-    - video_title           (single_line_text_field)
-    - kit_product           (product_reference)
-    - color, color_dark, color_soft (color)
-    - category_label        (single_line_text_field)
+  Renders the entire recipe: hero, meta strip, jump nav, ingredients,
+  method, video, notes, kit CTA, related recipes.
+  Designed for templates/article.recipe.json (suffix template) so that
+  individual articles in a "Recipes" blog can opt in via Theme settings.
 {%- endcomment -%}
 
 {%- liquid
-  assign cm = article.metafields.custom
-
-  assign category_label = cm.category_label | default: section.settings.category_label
-  assign category_color = cm.color | default: section.settings.category_color
-  assign category_color_dark = cm.color_dark | default: section.settings.category_color_dark
-  assign category_color_soft = cm.color_soft | default: section.settings.category_color_soft
-  assign hero_emoji = cm.hero_emoji | default: section.settings.hero_emoji
-  assign subtitle = cm.subtitle | default: article.excerpt | strip_html | default: section.settings.subtitle
-  assign video_id = cm.video_youtube_id | default: section.settings.video_id
-  assign video_title = cm.video_title | default: section.settings.video_title
-
-  assign prep    = cm.prep_time    | default: section.settings.prep_time
-  assign ferment = cm.ferment_time | default: section.settings.ferment_time
-  assign total   = cm.total_time   | default: section.settings.total_time
-  assign yld     = cm.yield        | default: section.settings.yield_text
-  assign diff    = cm.difficulty   | default: section.settings.difficulty
-  assign cuisine = cm.cuisine      | default: section.settings.cuisine
-
-  assign mf_tags = cm.dietary_tags.value
-  assign mf_ings = cm.ingredients.value
-  assign mf_method = cm.method_steps.value
-  assign mf_notes = cm.notes.value
+  assign category_label = article.metafields.custom.category_label | default: section.settings.category_label
+  assign category_color = article.metafields.custom.color | default: section.settings.category_color
+  assign category_color_dark = article.metafields.custom.color_dark | default: section.settings.category_color_dark
+  assign category_color_soft = article.metafields.custom.color_soft | default: section.settings.category_color_soft
+  assign hero_emoji = article.metafields.custom.hero_emoji | default: section.settings.hero_emoji
+  assign subtitle = article.metafields.custom.subtitle | default: article.excerpt | strip_html | default: section.settings.subtitle
+  assign video_id = article.metafields.custom.video_youtube_id | default: section.settings.video_id
+  assign video_title = article.metafields.custom.video_title | default: section.settings.video_title
 -%}
 
 {%- capture vars -%}
@@ -65,22 +34,13 @@
       {%- if subtitle != blank -%}
         <p class="gb-rcp-subtitle">{{ subtitle }}</p>
       {%- endif -%}
-
-      {%- if mf_tags and mf_tags.size > 0 -%}
+      {%- assign tag_blocks = section.blocks | where: 'type', 'dietary_tag' -%}
+      {%- if tag_blocks.size > 0 -%}
         <div class="gb-rcp-tags">
-          {%- for t in mf_tags -%}
-            <span class="gb-rcp-tag">{{ t }}</span>
+          {%- for block in tag_blocks -%}
+            <span class="gb-rcp-tag" {{ block.shopify_attributes }}>{{ block.settings.label }}</span>
           {%- endfor -%}
         </div>
-      {%- else -%}
-        {%- assign tag_blocks = section.blocks | where: 'type', 'dietary_tag' -%}
-        {%- if tag_blocks.size > 0 -%}
-          <div class="gb-rcp-tags">
-            {%- for block in tag_blocks -%}
-              <span class="gb-rcp-tag" {{ block.shopify_attributes }}>{{ block.settings.label }}</span>
-            {%- endfor -%}
-          </div>
-        {%- endif -%}
       {%- endif -%}
     </div>
     <div class="gb-rcp-hero-img">
@@ -95,6 +55,12 @@
 
 <div class="gb-rcp-meta">
   <div class="gb-rcp-meta-grid">
+    {%- assign prep    = article.metafields.custom.prep_time    | default: section.settings.prep_time -%}
+    {%- assign ferment = article.metafields.custom.ferment_time | default: section.settings.ferment_time -%}
+    {%- assign total   = article.metafields.custom.total_time   | default: section.settings.total_time -%}
+    {%- assign yld     = article.metafields.custom.yield        | default: section.settings.yield_text -%}
+    {%- assign diff    = article.metafields.custom.difficulty   | default: section.settings.difficulty -%}
+    {%- assign cuisine = article.metafields.custom.cuisine      | default: section.settings.cuisine -%}
     <div class="gb-rcp-meta-item"><span class="gb-rcp-meta-icon">⏱️</span><span class="gb-rcp-meta-label">Prep</span><span class="gb-rcp-meta-value">{{ prep }}</span></div>
     <div class="gb-rcp-meta-item"><span class="gb-rcp-meta-icon">🫙</span><span class="gb-rcp-meta-label">Ferment</span><span class="gb-rcp-meta-value">{{ ferment }}</span></div>
     <div class="gb-rcp-meta-item"><span class="gb-rcp-meta-icon">📅</span><span class="gb-rcp-meta-label">Total</span><span class="gb-rcp-meta-value">{{ total }}</span></div>
@@ -119,29 +85,17 @@
     {%- if section.settings.ingredients_sub != blank -%}
       <p class="gb-rcp-section-sub">{{ section.settings.ingredients_sub }}</p>
     {%- endif -%}
+    {%- assign ing_blocks = section.blocks | where: 'type', 'ingredient' -%}
     <div class="gb-rcp-ing-grid">
-      {%- if mf_ings and mf_ings.size > 0 -%}
-        {%- for ing in mf_ings -%}
-          <div class="gb-rcp-ing-row">
-            <div class="gb-rcp-ing-amt">{{ ing.amount }}</div>
-            <div>
-              <div class="gb-rcp-ing-name">{{ ing.name }}</div>
-              {%- if ing.desc != blank -%}<div class="gb-rcp-ing-desc">{{ ing.desc }}</div>{%- endif -%}
-            </div>
+      {%- for block in ing_blocks -%}
+        <div class="gb-rcp-ing-row" {{ block.shopify_attributes }}>
+          <div class="gb-rcp-ing-amt">{{ block.settings.amount }}</div>
+          <div>
+            <div class="gb-rcp-ing-name">{{ block.settings.name }}</div>
+            {%- if block.settings.desc != blank -%}<div class="gb-rcp-ing-desc">{{ block.settings.desc }}</div>{%- endif -%}
           </div>
-        {%- endfor -%}
-      {%- else -%}
-        {%- assign ing_blocks = section.blocks | where: 'type', 'ingredient' -%}
-        {%- for block in ing_blocks -%}
-          <div class="gb-rcp-ing-row" {{ block.shopify_attributes }}>
-            <div class="gb-rcp-ing-amt">{{ block.settings.amount }}</div>
-            <div>
-              <div class="gb-rcp-ing-name">{{ block.settings.name }}</div>
-              {%- if block.settings.desc != blank -%}<div class="gb-rcp-ing-desc">{{ block.settings.desc }}</div>{%- endif -%}
-            </div>
-          </div>
-        {%- endfor -%}
-      {%- endif -%}
+        </div>
+      {%- endfor -%}
     </div>
   </div>
 </section>
@@ -152,64 +106,23 @@
     {%- if section.settings.method_sub != blank -%}
       <p class="gb-rcp-section-sub">{{ section.settings.method_sub }}</p>
     {%- endif -%}
-    {%- if mf_method and mf_method.size > 0 -%}
-      {%- for step in mf_method -%}
-        {%- liquid
-          assign has_visual = false
-          if step.image != blank or step.emoji != blank
-            assign has_visual = true
-          endif
-        -%}
-        <div class="gb-rcp-step{% unless has_visual %} gb-rcp-step--text{% endunless %}">
-          {%- if has_visual -%}
-            <div class="gb-rcp-step-img">
-              <span class="gb-rcp-step-num">{{ forloop.index }}</span>
-              {%- if step.image != blank -%}
-                <img src="{{ step.image }}" alt="" loading="lazy" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;">
-              {%- elsif step.emoji != blank -%}
-                <span class="gb-rcp-step-emoji">{{ step.emoji }}</span>
-              {%- endif -%}
-            </div>
+    {%- assign step_blocks = section.blocks | where: 'type', 'method_step' -%}
+    {%- for block in step_blocks -%}
+      <div class="gb-rcp-step" {{ block.shopify_attributes }}>
+        <div class="gb-rcp-step-img">
+          <span class="gb-rcp-step-num">{{ forloop.index }}</span>
+          {%- if block.settings.image -%}
+            <img src="{{ block.settings.image | image_url: width: 600 }}" alt="" loading="lazy" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;">
+          {%- else -%}
+            <span class="gb-rcp-step-emoji">{{ block.settings.emoji | default: '🥄' }}</span>
           {%- endif -%}
-          <div class="gb-rcp-step-body">
-            {%- unless has_visual -%}
-              <span class="gb-rcp-step-num gb-rcp-step-num--inline">{{ forloop.index }}</span>
-            {%- endunless -%}
-            <div class="gb-rcp-step-title">{{ step.title }}</div>
-            <div class="gb-rcp-step-desc">{{ step.description | default: step.desc }}</div>
-          </div>
         </div>
-      {%- endfor -%}
-    {%- else -%}
-      {%- assign step_blocks = section.blocks | where: 'type', 'method_step' -%}
-      {%- for block in step_blocks -%}
-        {%- liquid
-          assign has_visual = false
-          if block.settings.image != blank or block.settings.emoji != blank
-            assign has_visual = true
-          endif
-        -%}
-        <div class="gb-rcp-step{% unless has_visual %} gb-rcp-step--text{% endunless %}" {{ block.shopify_attributes }}>
-          {%- if has_visual -%}
-            <div class="gb-rcp-step-img">
-              <span class="gb-rcp-step-num">{{ forloop.index }}</span>
-              {%- if block.settings.image -%}
-                <img src="{{ block.settings.image | image_url: width: 600 }}" alt="" loading="lazy" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;">
-              {%- elsif block.settings.emoji != blank -%}
-                <span class="gb-rcp-step-emoji">{{ block.settings.emoji }}</span>
-              {%- endif -%}
-            </div>
-          {%- endif -%}
-          <div class="gb-rcp-step-body">
-            {%- unless has_visual -%}
-              <span class="gb-rcp-step-num gb-rcp-step-num--inline">{{ forloop.index }}</span>
-            {%- endunless -%}
-            <div class="gb-rcp-step-title">{{ block.settings.title }}</div>
-            <div class="gb-rcp-step-desc">{{ block.settings.description }}</div>
-          </div>
+        <div class="gb-rcp-step-body">
+          <div class="gb-rcp-step-title">{{ block.settings.title }}</div>
+          <div class="gb-rcp-step-desc">{{ block.settings.description }}</div>
         </div>
-      {%- endfor -%}
-    {%- endif -%}
+      </div>
+    {%- endfor -%}
   </div>
 </section>
 
@@ -238,54 +151,45 @@
     {%- if section.settings.notes_sub != blank -%}
       <p class="gb-rcp-section-sub">{{ section.settings.notes_sub }}</p>
     {%- endif -%}
+    {%- assign note_blocks = section.blocks | where: 'type', 'note' -%}
     <ul class="gb-rcp-notes">
-      {%- if mf_notes and mf_notes.size > 0 -%}
-        {%- for n in mf_notes -%}
-          <li>{{ n }}</li>
-        {%- endfor -%}
-      {%- else -%}
-        {%- assign note_blocks = section.blocks | where: 'type', 'note' -%}
-        {%- for block in note_blocks -%}
-          <li {{ block.shopify_attributes }}>{{ block.settings.text }}</li>
-        {%- endfor -%}
-      {%- endif -%}
+      {%- for block in note_blocks -%}
+        <li {{ block.shopify_attributes }}>{{ block.settings.text }}</li>
+      {%- endfor -%}
     </ul>
   </div>
 </section>
 
-{%- liquid
-  assign linked_kit = cm.kit_product | default: section.settings.kit_product
-  assign kit_title = section.settings.kit_title
--%}
-{%- if kit_title != blank -%}
+{%- if section.settings.kit_title != blank -%}
 <section class="gb-rcp-kit">
   <div class="gb-rcp-kit-inner">
     <div class="gb-rcp-kit-card">
       <div>
         {%- if section.settings.kit_eyebrow != blank -%}<div class="gb-rcp-kit-eyebrow">{{ section.settings.kit_eyebrow }}</div>{%- endif -%}
-        <div class="gb-rcp-kit-title">{{ kit_title }}</div>
+        <div class="gb-rcp-kit-title">{{ section.settings.kit_title }}</div>
         {%- if section.settings.kit_desc != blank -%}<div class="gb-rcp-kit-desc">{{ section.settings.kit_desc }}</div>{%- endif -%}
       </div>
       <div class="gb-rcp-kit-product">
         {%- liquid
+          assign kp = section.settings.kit_product
           assign kn = section.settings.kit_name
           assign kpr = section.settings.kit_price
           assign kl = section.settings.kit_link
-          if linked_kit
+          if kp
             if kn == blank
-              assign kn = linked_kit.title
+              assign kn = kp.title
             endif
             if kpr == blank
-              assign kpr = linked_kit.price | money
+              assign kpr = kp.price | money
             endif
             if kl == blank
-              assign kl = linked_kit.url
+              assign kl = kp.url
             endif
           endif
         -%}
         <div class="gb-rcp-kit-img">
-          {%- if linked_kit.featured_image -%}
-            <img src="{{ linked_kit.featured_image | image_url: width: 200 }}" alt="">
+          {%- if kp.featured_image -%}
+            <img src="{{ kp.featured_image | image_url: width: 200 }}" alt="">
           {%- else -%}
             {{ section.settings.kit_emoji | default: '🫙' }}
           {%- endif -%}
@@ -334,67 +238,6 @@
 
 </div>
 
-{%- comment -%} JSON-LD: schema.org/Recipe for SEO rich results {%- endcomment -%}
-{%- capture json_ld -%}
-{
-  "@context": "https://schema.org",
-  "@type": "Recipe",
-  "name": {{ article.title | default: section.settings.placeholder_title | json }},
-  "description": {{ subtitle | json }},
-  {%- if article.image -%}
-  "image": [{{ article.image | image_url: width: 1200 | prepend: 'https:' | json }}],
-  {%- endif -%}
-  {%- if article.author != blank -%}
-  "author": { "@type": "Person", "name": {{ article.author | json }} },
-  {%- endif -%}
-  {%- if article.published_at -%}
-  "datePublished": {{ article.published_at | date: '%Y-%m-%d' | json }},
-  {%- endif -%}
-  {%- assign ld_tags = mf_tags -%}
-  {%- if ld_tags == blank or ld_tags.size == 0 -%}
-    {%- assign ld_tags = section.blocks | where: 'type', 'dietary_tag' | map: 'settings' | map: 'label' -%}
-  {%- endif -%}
-  {%- if ld_tags and ld_tags.size > 0 -%}
-  "suitableForDiet": {{ ld_tags | json }},
-  {%- endif -%}
-  "recipeCategory": {{ category_label | json }},
-  "recipeCuisine": {{ cuisine | json }},
-  "recipeYield": {{ yld | json }},
-  "prepTime": {{ prep | json }},
-  "cookTime": {{ ferment | json }},
-  "totalTime": {{ total | json }},
-  "recipeIngredient": [
-    {%- if mf_ings and mf_ings.size > 0 -%}
-      {%- for ing in mf_ings -%}{{ ing.amount | append: ' ' | append: ing.name | strip | json }}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}
-    {%- else -%}
-      {%- assign ing_blocks_ld = section.blocks | where: 'type', 'ingredient' -%}
-      {%- for block in ing_blocks_ld -%}{{ block.settings.amount | append: ' ' | append: block.settings.name | strip | json }}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}
-    {%- endif -%}
-  ],
-  "recipeInstructions": [
-    {%- if mf_method and mf_method.size > 0 -%}
-      {%- for step in mf_method -%}
-        { "@type": "HowToStep", "name": {{ step.title | json }}, "text": {{ step.description | default: step.desc | json }}{% if step.image != blank %}, "image": {{ step.image | json }}{% endif %} }{%- unless forloop.last -%},{%- endunless -%}
-      {%- endfor -%}
-    {%- else -%}
-      {%- assign step_blocks_ld = section.blocks | where: 'type', 'method_step' -%}
-      {%- for block in step_blocks_ld -%}
-        { "@type": "HowToStep", "name": {{ block.settings.title | json }}, "text": {{ block.settings.description | json }}{% if block.settings.image %}, "image": {{ block.settings.image | image_url: width: 1200 | prepend: 'https:' | json }}{% endif %} }{%- unless forloop.last -%},{%- endunless -%}
-      {%- endfor -%}
-    {%- endif -%}
-  ]{%- if video_id != blank -%},
-  "video": {
-    "@type": "VideoObject",
-    "name": {{ video_title | default: 'Recipe walkthrough' | json }},
-    "description": {{ video_title | default: subtitle | json }},
-    "thumbnailUrl": {{ 'https://i.ytimg.com/vi/' | append: video_id | append: '/hqdefault.jpg' | json }},
-    "embedUrl": {{ 'https://www.youtube.com/embed/' | append: video_id | json }},
-    "uploadDate": {{ article.published_at | date: '%Y-%m-%d' | json }}
-  }{%- endif -%}
-}
-{%- endcapture -%}
-<script type="application/ld+json">{{ json_ld | strip }}</script>
-
 {% stylesheet %}
 .gb-rcp {
   --gb-rcp-white: #FFFFFF;
@@ -408,9 +251,14 @@
   scroll-behavior: smooth;
 }
 .gb-rcp-pill {
-  display: inline-flex; align-items: center; gap: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   font-family: 'DM Mono', monospace;
-  font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   color: var(--gb-rcp-color);
   margin-bottom: 16px;
 }
@@ -422,12 +270,19 @@
 }
 .gb-rcp-h1 {
   font-family: 'Montserrat', sans-serif;
-  font-weight: 800; font-size: 44px; letter-spacing: -0.02em; line-height: 1.1;
-  color: var(--gb-rcp-text); margin: 0 0 18px;
+  font-weight: 800;
+  font-size: 44px;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: var(--gb-rcp-text);
+  margin: 0 0 18px;
 }
 .gb-rcp-subtitle {
   font-family: 'DM Sans', sans-serif;
-  font-size: 17px; color: var(--gb-rcp-text-muted); line-height: 1.55; margin: 0 0 28px;
+  font-size: 17px;
+  color: var(--gb-rcp-text-muted);
+  line-height: 1.55;
+  margin: 0 0 28px;
 }
 .gb-rcp-hero-img {
   aspect-ratio: 1;
@@ -441,9 +296,13 @@
 .gb-rcp-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
 .gb-rcp-tag {
   font-family: 'DM Mono', monospace;
-  font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 700;
   padding: 4px 10px;
-  background: var(--gb-rcp-color-soft); color: var(--gb-rcp-color-dark);
+  background: var(--gb-rcp-color-soft);
+  color: var(--gb-rcp-color-dark);
   border-radius: 4px;
 }
 .gb-rcp-meta { background: var(--gb-rcp-cream); border-top: 1px solid var(--gb-rcp-border-soft); border-bottom: 1px solid var(--gb-rcp-border-soft); padding: 24px 0; }
@@ -455,22 +314,42 @@
 .gb-rcp-meta-icon { font-size: 22px; }
 .gb-rcp-meta-label {
   font-family: 'DM Mono', monospace;
-  font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--gb-rcp-text-muted); font-weight: 700; margin-top: 2px;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gb-rcp-text-muted);
+  font-weight: 700;
+  margin-top: 2px;
 }
 .gb-rcp-meta-value {
   font-family: 'Montserrat', sans-serif;
-  font-weight: 700; font-size: 13px; color: var(--gb-rcp-text); line-height: 1.2;
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--gb-rcp-text);
+  line-height: 1.2;
 }
-.gb-rcp-jump { background: var(--gb-rcp-white); border-bottom: 1px solid var(--gb-rcp-border-soft); padding: 14px 0; position: sticky; top: 0; z-index: 50; }
+.gb-rcp-jump {
+  background: var(--gb-rcp-white);
+  border-bottom: 1px solid var(--gb-rcp-border-soft);
+  padding: 14px 0;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
 .gb-rcp-jump-inner {
   max-width: 1100px; margin: 0 auto; padding: 0 24px;
   display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;
 }
 .gb-rcp-jump-link {
-  padding: 8px 16px; background: var(--gb-rcp-cream); color: var(--gb-rcp-text);
-  border-radius: 999px; font-family: 'DM Sans', sans-serif;
-  font-size: 13px; font-weight: 600; text-decoration: none; white-space: nowrap;
+  padding: 8px 16px;
+  background: var(--gb-rcp-cream);
+  color: var(--gb-rcp-text);
+  border-radius: 999px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
   transition: all 0.15s;
 }
 .gb-rcp-jump-link:hover { background: var(--gb-rcp-color-soft); color: var(--gb-rcp-color-dark); }
@@ -479,12 +358,18 @@
 .gb-rcp-section-inner { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
 .gb-rcp-h2 {
   font-family: 'Montserrat', sans-serif;
-  font-weight: 800; font-size: 32px; letter-spacing: -0.015em;
-  margin: 0 0 8px; color: var(--gb-rcp-text);
+  font-weight: 800;
+  font-size: 32px;
+  letter-spacing: -0.015em;
+  margin: 0 0 8px;
+  color: var(--gb-rcp-text);
 }
 .gb-rcp-section-sub {
   font-family: 'DM Sans', sans-serif;
-  font-size: 15px; color: var(--gb-rcp-text-muted); margin: 0 0 32px; line-height: 1.55;
+  font-size: 15px;
+  color: var(--gb-rcp-text-muted);
+  margin: 0 0 32px;
+  line-height: 1.55;
 }
 .gb-rcp-ing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .gb-rcp-ing-row {
@@ -499,14 +384,23 @@
 }
 .gb-rcp-ing-amt {
   font-family: 'Montserrat', sans-serif;
-  font-weight: 800; font-size: 14px;
+  font-weight: 800;
+  font-size: 14px;
   color: var(--gb-rcp-color-dark);
   letter-spacing: -0.01em;
   background: var(--gb-rcp-color-soft);
-  padding: 6px 10px; border-radius: 6px;
-  text-align: center; white-space: nowrap;
+  padding: 6px 10px;
+  border-radius: 6px;
+  text-align: center;
+  white-space: nowrap;
 }
-.gb-rcp-ing-name { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 15px; color: var(--gb-rcp-text); margin-bottom: 2px; }
+.gb-rcp-ing-name {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--gb-rcp-text);
+  margin-bottom: 2px;
+}
 .gb-rcp-ing-desc { font-family: 'DM Sans', sans-serif; font-size: 12px; color: var(--gb-rcp-text-muted); line-height: 1.45; }
 .gb-rcp-step {
   display: grid;
@@ -519,8 +413,6 @@
   border-radius: 16px;
   overflow: hidden;
 }
-.gb-rcp-step--text { grid-template-columns: 1fr; }
-.gb-rcp-step--text .gb-rcp-step-body { padding: 28px 32px; }
 .gb-rcp-step-img {
   aspect-ratio: 1;
   background: var(--gb-rcp-color-soft);
@@ -529,21 +421,26 @@
 }
 .gb-rcp-step-emoji { font-size: 80px; color: var(--gb-rcp-color); }
 .gb-rcp-step-num {
+  position: absolute;
+  top: 14px; left: 14px;
   width: 36px; height: 36px;
-  background: var(--gb-rcp-ink); color: var(--gb-rcp-cream);
+  background: var(--gb-rcp-ink);
+  color: var(--gb-rcp-cream);
   border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
   font-family: 'Montserrat', sans-serif;
-  font-weight: 800; font-size: 16px;
+  font-weight: 800;
+  font-size: 16px;
+  z-index: 2;
 }
-.gb-rcp-step-img .gb-rcp-step-num { position: absolute; top: 14px; left: 14px; z-index: 2; }
-.gb-rcp-step-num--inline { display: inline-flex; margin-bottom: 12px; }
 .gb-rcp-step-body { padding: 24px 32px 24px 0; }
 .gb-rcp-step-title {
   font-family: 'Montserrat', sans-serif;
-  font-weight: 800; font-size: 19px;
+  font-weight: 800;
+  font-size: 19px;
   color: var(--gb-rcp-text);
-  margin-bottom: 10px; letter-spacing: -0.01em;
+  margin-bottom: 10px;
+  letter-spacing: -0.01em;
 }
 .gb-rcp-step-desc { font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--gb-rcp-text-muted); line-height: 1.6; }
 .gb-rcp-video-block { background: var(--gb-rcp-white); border: 1px solid var(--gb-rcp-border-soft); border-radius: 16px; overflow: hidden; margin-top: 24px; }
@@ -552,7 +449,8 @@
   background: linear-gradient(135deg, var(--gb-rcp-color-dark), var(--gb-rcp-color));
   position: relative;
   display: flex; align-items: center; justify-content: center;
-  cursor: pointer; color: var(--gb-rcp-cream);
+  cursor: pointer;
+  color: var(--gb-rcp-cream);
 }
 .gb-rcp-video-play {
   width: 76px; height: 76px;
@@ -566,9 +464,11 @@
 }
 .gb-rcp-video-thumb:hover .gb-rcp-video-play { background: rgba(0,0,0,0.8); transform: scale(1.05); }
 .gb-rcp-video-title {
-  position: absolute; bottom: 16px; left: 16px; right: 16px;
+  position: absolute;
+  bottom: 16px; left: 16px; right: 16px;
   font-family: 'Montserrat', sans-serif;
-  font-weight: 700; font-size: 15px;
+  font-weight: 700;
+  font-size: 15px;
   color: var(--gb-rcp-cream);
   text-shadow: 0 2px 8px rgba(0,0,0,0.5);
 }
@@ -579,27 +479,40 @@
   padding: 16px 20px;
   margin-bottom: 12px;
   font-family: 'DM Sans', sans-serif;
-  font-size: 14px; line-height: 1.55;
+  font-size: 14px;
+  line-height: 1.55;
   color: var(--gb-rcp-text);
   border-radius: 4px;
 }
 .gb-rcp-kit { padding: 64px 0 80px; background: var(--gb-rcp-white); }
 .gb-rcp-kit-inner { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
 .gb-rcp-kit-card {
-  background: var(--gb-rcp-allinone); color: var(--gb-rcp-cream);
+  background: var(--gb-rcp-allinone);
+  color: var(--gb-rcp-cream);
   border-radius: 18px;
   padding: 40px 48px;
-  display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: center;
 }
 .gb-rcp-kit-eyebrow {
   font-family: 'DM Mono', monospace;
-  font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
-  color: var(--gb-rcp-color); font-weight: 700; margin-bottom: 10px;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gb-rcp-color);
+  font-weight: 700;
+  margin-bottom: 10px;
 }
 .gb-rcp-kit-title {
   font-family: 'Montserrat', sans-serif;
-  font-weight: 800; font-size: 28px; letter-spacing: -0.02em; line-height: 1.2;
-  margin-bottom: 12px; color: var(--gb-rcp-cream);
+  font-weight: 800;
+  font-size: 28px;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin-bottom: 12px;
+  color: var(--gb-rcp-cream);
 }
 .gb-rcp-kit-desc { font-family: 'DM Sans', sans-serif; font-size: 14px; line-height: 1.55; color: rgba(255,249,238,0.78); }
 .gb-rcp-kit-product { display: flex; align-items: center; gap: 20px; }
@@ -608,46 +521,93 @@
   background: var(--gb-rcp-color);
   border-radius: 14px;
   display: flex; align-items: center; justify-content: center;
-  font-size: 48px; color: var(--gb-rcp-cream);
-  flex-shrink: 0; overflow: hidden;
+  font-size: 48px;
+  color: var(--gb-rcp-cream);
+  flex-shrink: 0;
+  overflow: hidden;
 }
 .gb-rcp-kit-img img { width: 100%; height: 100%; object-fit: cover; }
 .gb-rcp-kit-info { flex: 1; }
-.gb-rcp-kit-name { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 14px; color: rgba(255,249,238,0.78); margin-bottom: 4px; }
-.gb-rcp-kit-price { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 28px; color: var(--gb-rcp-color); letter-spacing: -0.02em; margin-bottom: 12px; line-height: 1; }
+.gb-rcp-kit-name {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: rgba(255,249,238,0.78);
+  margin-bottom: 4px;
+}
+.gb-rcp-kit-price {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 28px;
+  color: var(--gb-rcp-color);
+  letter-spacing: -0.02em;
+  margin-bottom: 12px;
+  line-height: 1;
+}
 .gb-rcp-kit-btn {
   display: inline-block;
-  background: var(--gb-rcp-color); color: var(--gb-rcp-cream);
-  padding: 12px 24px; border-radius: 999px;
+  background: var(--gb-rcp-color);
+  color: var(--gb-rcp-cream);
+  padding: 12px 24px;
+  border-radius: 999px;
   font-family: 'DM Sans', sans-serif;
-  font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   text-decoration: none;
   transition: background 0.15s;
 }
 .gb-rcp-kit-btn:hover { background: var(--gb-rcp-color-dark); }
 .gb-rcp-related { padding: 64px 0 96px; background: var(--gb-rcp-cream); }
 .gb-rcp-related-inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
-.gb-rcp-related-eyebrow { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gb-rcp-color); font-weight: 700; margin-bottom: 14px; }
-.gb-rcp-related-h { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 28px; margin: 0 0 28px; letter-spacing: -0.015em; color: var(--gb-rcp-text); }
+.gb-rcp-related-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gb-rcp-color);
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+.gb-rcp-related-h {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 28px;
+  margin: 0 0 28px;
+  letter-spacing: -0.015em;
+  color: var(--gb-rcp-text);
+}
 .gb-rcp-related-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
 .gb-rcp-related-card {
-  display: flex; align-items: center; gap: 20px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
   padding: 24px;
   background: var(--gb-rcp-white);
   border-radius: 14px;
   border: 1px solid var(--gb-rcp-border-soft);
-  text-decoration: none; color: inherit;
+  text-decoration: none;
+  color: inherit;
   transition: transform 0.15s, box-shadow 0.15s;
 }
 .gb-rcp-related-card:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(43,31,26,0.08); }
 .gb-rcp-related-img {
   width: 70px; height: 70px;
-  flex-shrink: 0; border-radius: 12px;
+  flex-shrink: 0;
+  border-radius: 12px;
   background: var(--gb-rcp-color-soft);
   display: flex; align-items: center; justify-content: center;
   font-size: 36px;
 }
-.gb-rcp-related-title { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 16px; color: var(--gb-rcp-text); margin-bottom: 4px; line-height: 1.3; }
+.gb-rcp-related-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 16px;
+  color: var(--gb-rcp-text);
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
 .gb-rcp-related-meta { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--gb-rcp-text-soft); }
 @media (max-width: 768px) {
   .gb-rcp-hero-grid { grid-template-columns: 1fr; gap: 24px; }
@@ -693,7 +653,7 @@
     { "type": "textarea", "id": "subtitle", "label": "Subtitle fallback" },
     { "type": "text", "id": "hero_emoji", "label": "Hero emoji (when no image)", "default": "🥭" },
 
-    { "type": "header", "content": "Meta strip (defaults — overridden per article via metafields)" },
+    { "type": "header", "content": "Meta strip" },
     { "type": "text", "id": "prep_time", "label": "Prep time", "default": "20 min" },
     { "type": "text", "id": "ferment_time", "label": "Ferment time", "default": "5–7 days" },
     { "type": "text", "id": "total_time", "label": "Total time", "default": "5 days · 20 min active" },
@@ -707,7 +667,7 @@
 
     { "type": "header", "content": "Method section" },
     { "type": "text", "id": "method_heading", "label": "Heading", "default": "Method" },
-    { "type": "textarea", "id": "method_sub", "label": "Sub-line", "default": "Read all steps before starting. Set up everything in advance." },
+    { "type": "textarea", "id": "method_sub", "label": "Sub-line", "default": "Read all steps before starting. Set up everything you need in advance — fermentation goes wrong when you scramble for ingredients mid-recipe." },
 
     { "type": "header", "content": "Video section" },
     { "type": "text", "id": "video_heading", "label": "Heading", "default": "Watch the walkthrough" },
@@ -722,7 +682,7 @@
     { "type": "header", "content": "Kit CTA" },
     { "type": "text", "id": "kit_eyebrow", "label": "Eyebrow", "default": "MAKE IT EASIER" },
     { "type": "text", "id": "kit_title", "label": "Title (leave blank to hide)", "default": "Don't want to source ingredients?" },
-    { "type": "textarea", "id": "kit_desc", "label": "Description", "default": "Our kit comes with pre-measured spice mixes, the right jar, an airlock, and a glass weight." },
+    { "type": "textarea", "id": "kit_desc", "label": "Description", "default": "Our kit comes with pre-measured spice mixes, the right jar, an airlock, and a glass weight. Open the box, follow the recipe — done." },
     { "type": "product", "id": "kit_product", "label": "Linked kit (auto-fills)" },
     { "type": "text", "id": "kit_emoji", "label": "Emoji (when no image)", "default": "🫙" },
     { "type": "text", "id": "kit_name", "label": "Kit name (override)" },
@@ -759,7 +719,7 @@
       "limit": 12,
       "settings": [
         { "type": "image_picker", "id": "image", "label": "Step image (optional)" },
-        { "type": "text", "id": "emoji", "label": "Emoji (when no image, optional)" },
+        { "type": "text", "id": "emoji", "label": "Emoji (when no image)", "default": "🥄" },
         { "type": "text", "id": "title", "label": "Step title", "default": "Step title" },
         { "type": "textarea", "id": "description", "label": "Description", "default": "Describe what to do in this step." }
       ]
