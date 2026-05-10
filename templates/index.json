@@ -636,10 +636,10 @@
       "type": "gb-home-founders",
       "settings": {
         "eyebrow": "Meet the gut(sy) duo",
-        "heading": "Built in our kitchen. Now in <em>25,000+ yours.</em>",
+        "heading": "Built in our kitchen. Now in 25,000+ yours.",
         "body": "<p>GutBasket started as a curiosity — could we make grandmother's kanji at home, with the same live cultures and none of the guesswork? Three years and many failed batches later, we'd built a system anyone could follow. The kits are how we share it.</p>",
         "cta_label": "Read our story",
-        "cta_link": "/pages/about"
+        "cta_link": "shopify://pages/why-we-built-gutbasket"
       }
     },
     "newsletter": {
