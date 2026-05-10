@@ -40,13 +40,31 @@
           assign theme_class = block.settings.theme | default: 'kanji'
           assign cat_band = block.settings.cat_band
           assign limit = block.settings.products_limit | default: products_per_tab
+
+          assign use_all = false
+          if block.settings.show_all_products
+            assign use_all = true
+          elsif block.settings.tab_id == 'all'
+            assign use_all = true
+          endif
+
+          if use_all
+            assign tab_products = collections.all.products
+            assign view_all_url = '/collections/all'
+          elsif coll
+            assign tab_products = coll.products
+            assign view_all_url = coll.url
+          else
+            assign tab_products = empty
+            assign view_all_url = ''
+          endif
         -%}
         <div class="gb-shop-panel {% if forloop.first %}is-active{% endif %}"
              data-panel="{{ block.settings.tab_id }}"
              role="tabpanel">
           <div class="gb-shop-grid gb-shop-grid--{{ columns }}">
-            {%- if coll and coll.products.size > 0 -%}
-              {%- for product in coll.products limit: limit -%}
+            {%- if tab_products.size > 0 -%}
+              {%- for product in tab_products limit: limit -%}
                 {%- liquid
                   assign saved = 0
                   if product.compare_at_price and product.compare_at_price > product.price
@@ -83,9 +101,9 @@
               <p class="gb-shop-empty">Pick a collection for this tab in Theme Editor.</p>
             {%- endif -%}
           </div>
-          {%- if coll -%}
+          {%- if view_all_url != '' -%}
             <div class="gb-shop-viewall">
-              <a href="{{ coll.url }}">{{ block.settings.view_all_label | default: 'View all' }} <span class="gb-shop-arr">→</span></a>
+              <a href="{{ view_all_url }}">{{ block.settings.view_all_label | default: 'View all' }} <span class="gb-shop-arr">→</span></a>
             </div>
           {%- endif -%}
         </div>
@@ -438,8 +456,9 @@
       "limit": 10,
       "settings": [
         { "type": "text", "id": "label", "label": "Tab label", "default": "Tab" },
-        { "type": "text", "id": "tab_id", "label": "Tab ID (matches a circle's data-tab)", "info": "Lowercase, no spaces. e.g. fermentation, sprouts, prebiotic.", "default": "tab" },
-        { "type": "collection", "id": "collection", "label": "Source collection" },
+        { "type": "text", "id": "tab_id", "label": "Tab ID (matches a circle's data-tab)", "info": "Lowercase, no spaces. e.g. fermentation, sprouts, prebiotic. Set to 'all' to show every published product.", "default": "tab" },
+        { "type": "checkbox", "id": "show_all_products", "label": "Show every published product", "info": "Overrides the source collection. Auto-on when Tab ID is 'all'.", "default": false },
+        { "type": "collection", "id": "collection", "label": "Source collection (used when 'Show every published product' is off)" },
         { "type": "range", "id": "products_limit", "label": "Products in this tab (overrides section default)", "min": 0, "max": 12, "step": 1, "default": 0 },
         { "type": "text", "id": "cat_band", "label": "Category band text (top of card)", "info": "Leave blank to use product type." },
         { "type": "text", "id": "view_all_label", "label": "View-all link label", "default": "View all" },
