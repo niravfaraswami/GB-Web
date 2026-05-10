@@ -1,0 +1,26 @@
+{
+  "sections": {
+    "main": {
+      "type": "gb-content-page",
+      "blocks": {
+        "hero": {
+          "type": "hero",
+          "settings": {
+            "eyebrow": "OUR STORY",
+            "title": "Why we built GutBasket",
+            "subtitle": "<p>One paragraph that hooks the reader. Replace with your story / policy / help intro depending on the page.</p>"
+          }
+        },
+        "text1": {
+          "type": "text",
+          "settings": {
+            "heading": "Section heading",
+            "body": "<p>Replace with your content. Use multiple text blocks to break up long pages, and add features / FAQ / CTA / quote / contact blocks for richer layouts.</p>"
+          }
+        }
+      },
+      "block_order": ["hero", "text1"]
+    }
+  },
+  "order": ["main"]
+}
