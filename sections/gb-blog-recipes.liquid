@@ -1,11 +1,25 @@
 {%- comment -%}
-  Recipe blog index — listing page for the "Recipes" Shopify blog.
+  Recipe blog index — Shopify "Blog" template (the listing page for a
+  blog, not the individual article).
+
+  Shopify terminology recap:
+    - Blog template       → templates/blog.{suffix}.json → THIS file's
+      target. Controls the collection-of-posts listing page.
+    - Blog post template  → templates/article.{suffix}.json → controls
+      individual article pages (e.g. article.recipe in this theme).
+
   Renders a grid of recipe cards (image, dietary tags, title, time meta)
   reading from each article's metafields where available.
 
-  Activate: in Shopify admin → Online Store → Blog Posts → Manage blogs
-  → Add blog "Recipes" (or open existing). On the blog edit page, set
-  Theme template = blog.recipes. Articles inside use article.recipe.
+  Activate the Blog template:
+    1. Shopify admin → Online Store → Blogs → open the "Recipes" blog
+       (or create one)
+    2. In the blog editor, set Theme template = blog.recipes
+    3. Save
+
+  Pair with the Blog post template for individual recipe articles:
+    Online Store → Blog posts → open an article in the Recipes blog →
+    Theme template = article.recipe
 {%- endcomment -%}
 
 {%- liquid
