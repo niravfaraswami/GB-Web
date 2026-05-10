@@ -1,0 +1,749 @@
+{%- comment -%}
+  Recipe page main section
+  Source: gutbasket-recipe.html
+  Renders the entire recipe: hero, meta strip, jump nav, ingredients,
+  method, video, notes, kit CTA, related recipes.
+  Designed for templates/article.recipe.json (suffix template) so that
+  individual articles in a "Recipes" blog can opt in via Theme settings.
+{%- endcomment -%}
+
+{%- liquid
+  assign category_label = article.metafields.custom.category_label | default: section.settings.category_label
+  assign category_color = article.metafields.custom.color | default: section.settings.category_color
+  assign category_color_dark = article.metafields.custom.color_dark | default: section.settings.category_color_dark
+  assign category_color_soft = article.metafields.custom.color_soft | default: section.settings.category_color_soft
+  assign hero_emoji = article.metafields.custom.hero_emoji | default: section.settings.hero_emoji
+  assign subtitle = article.metafields.custom.subtitle | default: article.excerpt | strip_html | default: section.settings.subtitle
+  assign video_id = article.metafields.custom.video_youtube_id | default: section.settings.video_id
+  assign video_title = article.metafields.custom.video_title | default: section.settings.video_title
+-%}
+
+{%- capture vars -%}
+--gb-rcp-color: {{ category_color }};
+--gb-rcp-color-dark: {{ category_color_dark }};
+--gb-rcp-color-soft: {{ category_color_soft }};
+{%- endcapture -%}
+
+<div class="gb-rcp" style="{{ vars | strip_newlines }}">
+
+<section class="gb-rcp-hero">
+  <div class="gb-rcp-hero-grid">
+    <div>
+      <div class="gb-rcp-pill"><span class="gb-rcp-pill-dot"></span>{{ category_label }}</div>
+      <h1 class="gb-rcp-h1">{{ article.title | default: section.settings.placeholder_title }}</h1>
+      {%- if subtitle != blank -%}
+        <p class="gb-rcp-subtitle">{{ subtitle }}</p>
+      {%- endif -%}
+      {%- assign tag_blocks = section.blocks | where: 'type', 'dietary_tag' -%}
+      {%- if tag_blocks.size > 0 -%}
+        <div class="gb-rcp-tags">
+          {%- for block in tag_blocks -%}
+            <span class="gb-rcp-tag" {{ block.shopify_attributes }}>{{ block.settings.label }}</span>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+    <div class="gb-rcp-hero-img">
+      {%- if article.image -%}
+        <img src="{{ article.image | image_url: width: 1200 }}" alt="{{ article.image.alt | escape }}" loading="lazy">
+      {%- else -%}
+        <span class="gb-rcp-hero-emoji">{{ hero_emoji }}</span>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+<div class="gb-rcp-meta">
+  <div class="gb-rcp-meta-grid">
+    {%- assign prep    = article.metafields.custom.prep_time    | default: section.settings.prep_time -%}
+    {%- assign ferment = article.metafields.custom.ferment_time | default: section.settings.ferment_time -%}
+    {%- assign total   = article.metafields.custom.total_time   | default: section.settings.total_time -%}
+    {%- assign yld     = article.metafields.custom.yield        | default: section.settings.yield_text -%}
+    {%- assign diff    = article.metafields.custom.difficulty   | default: section.settings.difficulty -%}
+    {%- assign cuisine = article.metafields.custom.cuisine      | default: section.settings.cuisine -%}
+    <div class="gb-rcp-meta-item"><span class="gb-rcp-meta-icon">⏱️</span><span class="gb-rcp-meta-label">Prep</span><span class="gb-rcp-meta-value">{{ prep }}</span></div>
+    <div class="gb-rcp-meta-item"><span class="gb-rcp-meta-icon">🫙</span><span class="gb-rcp-meta-label">Ferment</span><span class="gb-rcp-meta-value">{{ ferment }}</span></div>
+    <div class="gb-rcp-meta-item"><span class="gb-rcp-meta-icon">📅</span><span class="gb-rcp-meta-label">Total</span><span class="gb-rcp-meta-value">{{ total }}</span></div>
+    <div class="gb-rcp-meta-item"><span class="gb-rcp-meta-icon">🍽️</span><span class="gb-rcp-meta-label">Yield</span><span class="gb-rcp-meta-value">{{ yld }}</span></div>
+    <div class="gb-rcp-meta-item"><span class="gb-rcp-meta-icon">📊</span><span class="gb-rcp-meta-label">Difficulty</span><span class="gb-rcp-meta-value">{{ diff }}</span></div>
+    <div class="gb-rcp-meta-item"><span class="gb-rcp-meta-icon">🌍</span><span class="gb-rcp-meta-label">Cuisine</span><span class="gb-rcp-meta-value">{{ cuisine }}</span></div>
+  </div>
+</div>
+
+<nav class="gb-rcp-jump">
+  <div class="gb-rcp-jump-inner">
+    <a href="#gb-rcp-ingredients" class="gb-rcp-jump-link">📋 Ingredients</a>
+    <a href="#gb-rcp-method" class="gb-rcp-jump-link">🔪 Method</a>
+    {%- if video_id != blank -%}<a href="#gb-rcp-video" class="gb-rcp-jump-link">▶️ Video</a>{%- endif -%}
+    <a href="#gb-rcp-notes" class="gb-rcp-jump-link">📝 Notes</a>
+  </div>
+</nav>
+
+<section class="gb-rcp-section gb-rcp-section--alt" id="gb-rcp-ingredients">
+  <div class="gb-rcp-section-inner">
+    <h2 class="gb-rcp-h2">{{ section.settings.ingredients_heading | default: 'Ingredients' }}</h2>
+    {%- if section.settings.ingredients_sub != blank -%}
+      <p class="gb-rcp-section-sub">{{ section.settings.ingredients_sub }}</p>
+    {%- endif -%}
+    {%- assign ing_blocks = section.blocks | where: 'type', 'ingredient' -%}
+    <div class="gb-rcp-ing-grid">
+      {%- for block in ing_blocks -%}
+        <div class="gb-rcp-ing-row" {{ block.shopify_attributes }}>
+          <div class="gb-rcp-ing-amt">{{ block.settings.amount }}</div>
+          <div>
+            <div class="gb-rcp-ing-name">{{ block.settings.name }}</div>
+            {%- if block.settings.desc != blank -%}<div class="gb-rcp-ing-desc">{{ block.settings.desc }}</div>{%- endif -%}
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+<section class="gb-rcp-section" id="gb-rcp-method">
+  <div class="gb-rcp-section-inner">
+    <h2 class="gb-rcp-h2">{{ section.settings.method_heading | default: 'Method' }}</h2>
+    {%- if section.settings.method_sub != blank -%}
+      <p class="gb-rcp-section-sub">{{ section.settings.method_sub }}</p>
+    {%- endif -%}
+    {%- assign step_blocks = section.blocks | where: 'type', 'method_step' -%}
+    {%- for block in step_blocks -%}
+      <div class="gb-rcp-step" {{ block.shopify_attributes }}>
+        <div class="gb-rcp-step-img">
+          <span class="gb-rcp-step-num">{{ forloop.index }}</span>
+          {%- if block.settings.image -%}
+            <img src="{{ block.settings.image | image_url: width: 600 }}" alt="" loading="lazy" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;">
+          {%- else -%}
+            <span class="gb-rcp-step-emoji">{{ block.settings.emoji | default: '🥄' }}</span>
+          {%- endif -%}
+        </div>
+        <div class="gb-rcp-step-body">
+          <div class="gb-rcp-step-title">{{ block.settings.title }}</div>
+          <div class="gb-rcp-step-desc">{{ block.settings.description }}</div>
+        </div>
+      </div>
+    {%- endfor -%}
+  </div>
+</section>
+
+{%- if video_id != blank -%}
+<section class="gb-rcp-section gb-rcp-section--alt" id="gb-rcp-video">
+  <div class="gb-rcp-section-inner">
+    <h2 class="gb-rcp-h2">{{ section.settings.video_heading | default: 'Watch the walkthrough' }}</h2>
+    {%- if section.settings.video_sub != blank -%}
+      <p class="gb-rcp-section-sub">{{ section.settings.video_sub }}</p>
+    {%- endif -%}
+    <div class="gb-rcp-video-block">
+      <div class="gb-rcp-video-thumb" id="gb-rcp-video-thumb-{{ section.id }}" data-video-id="{{ video_id }}">
+        <span class="gb-rcp-video-play">▶</span>
+        {%- if video_title != blank -%}
+          <div class="gb-rcp-video-title">{{ video_title }}</div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+{%- endif -%}
+
+<section class="gb-rcp-section" id="gb-rcp-notes">
+  <div class="gb-rcp-section-inner">
+    <h2 class="gb-rcp-h2">{{ section.settings.notes_heading | default: 'Notes & variations' }}</h2>
+    {%- if section.settings.notes_sub != blank -%}
+      <p class="gb-rcp-section-sub">{{ section.settings.notes_sub }}</p>
+    {%- endif -%}
+    {%- assign note_blocks = section.blocks | where: 'type', 'note' -%}
+    <ul class="gb-rcp-notes">
+      {%- for block in note_blocks -%}
+        <li {{ block.shopify_attributes }}>{{ block.settings.text }}</li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</section>
+
+{%- if section.settings.kit_title != blank -%}
+<section class="gb-rcp-kit">
+  <div class="gb-rcp-kit-inner">
+    <div class="gb-rcp-kit-card">
+      <div>
+        {%- if section.settings.kit_eyebrow != blank -%}<div class="gb-rcp-kit-eyebrow">{{ section.settings.kit_eyebrow }}</div>{%- endif -%}
+        <div class="gb-rcp-kit-title">{{ section.settings.kit_title }}</div>
+        {%- if section.settings.kit_desc != blank -%}<div class="gb-rcp-kit-desc">{{ section.settings.kit_desc }}</div>{%- endif -%}
+      </div>
+      <div class="gb-rcp-kit-product">
+        {%- liquid
+          assign kp = section.settings.kit_product
+          assign kn = section.settings.kit_name
+          assign kpr = section.settings.kit_price
+          assign kl = section.settings.kit_link
+          if kp
+            if kn == blank
+              assign kn = kp.title
+            endif
+            if kpr == blank
+              assign kpr = kp.price | money
+            endif
+            if kl == blank
+              assign kl = kp.url
+            endif
+          endif
+        -%}
+        <div class="gb-rcp-kit-img">
+          {%- if kp.featured_image -%}
+            <img src="{{ kp.featured_image | image_url: width: 200 }}" alt="">
+          {%- else -%}
+            {{ section.settings.kit_emoji | default: '🫙' }}
+          {%- endif -%}
+        </div>
+        <div class="gb-rcp-kit-info">
+          {%- if kn != blank -%}<div class="gb-rcp-kit-name">{{ kn }}</div>{%- endif -%}
+          {%- if kpr != blank -%}<div class="gb-rcp-kit-price">{{ kpr }}</div>{%- endif -%}
+          <a href="{{ kl | default: '#' }}" class="gb-rcp-kit-btn">{{ section.settings.kit_button | default: 'Shop Kit →' }}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{%- endif -%}
+
+{%- assign related_blocks = section.blocks | where: 'type', 'related_recipe' -%}
+{%- if related_blocks.size > 0 -%}
+<section class="gb-rcp-related">
+  <div class="gb-rcp-related-inner">
+    <div class="gb-rcp-related-eyebrow">{{ section.settings.related_eyebrow | default: 'COOK MORE' }}</div>
+    <h2 class="gb-rcp-related-h">{{ section.settings.related_heading | default: 'Related recipes' }}</h2>
+    <div class="gb-rcp-related-grid">
+      {%- for block in related_blocks -%}
+        {%- liquid
+          assign linked = block.settings.article
+          if linked
+            assign rurl = linked.url
+            assign rtitle = linked.title
+          else
+            assign rurl = block.settings.url | default: '#'
+            assign rtitle = block.settings.title
+          endif
+        -%}
+        <a href="{{ rurl }}" class="gb-rcp-related-card" {{ block.shopify_attributes }}>
+          <div class="gb-rcp-related-img">{{ block.settings.emoji | default: '🥗' }}</div>
+          <div class="gb-rcp-related-body">
+            <div class="gb-rcp-related-title">{{ rtitle }}</div>
+            {%- if block.settings.meta != blank -%}<div class="gb-rcp-related-meta">{{ block.settings.meta }}</div>{%- endif -%}
+          </div>
+        </a>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+{%- endif -%}
+
+</div>
+
+{% stylesheet %}
+.gb-rcp {
+  --gb-rcp-white: #FFFFFF;
+  --gb-rcp-cream: #FFF9EE;
+  --gb-rcp-allinone: #2B2218;
+  --gb-rcp-text: #1F1F1D;
+  --gb-rcp-text-muted: #5C4D3F;
+  --gb-rcp-text-soft: #888780;
+  --gb-rcp-border-soft: #F0EBDD;
+  --gb-rcp-ink: #1F1F1D;
+  scroll-behavior: smooth;
+}
+.gb-rcp-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gb-rcp-color);
+  margin-bottom: 16px;
+}
+.gb-rcp-pill-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gb-rcp-color); }
+.gb-rcp-hero { background: var(--gb-rcp-white); padding: 56px 0 48px; }
+.gb-rcp-hero-grid {
+  max-width: 1100px; margin: 0 auto; padding: 0 24px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center;
+}
+.gb-rcp-h1 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 44px;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: var(--gb-rcp-text);
+  margin: 0 0 18px;
+}
+.gb-rcp-subtitle {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 17px;
+  color: var(--gb-rcp-text-muted);
+  line-height: 1.55;
+  margin: 0 0 28px;
+}
+.gb-rcp-hero-img {
+  aspect-ratio: 1;
+  background: var(--gb-rcp-color);
+  border-radius: 18px;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+.gb-rcp-hero-img img { width: 100%; height: 100%; object-fit: cover; }
+.gb-rcp-hero-emoji { font-size: 160px; color: var(--gb-rcp-cream); }
+.gb-rcp-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+.gb-rcp-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 700;
+  padding: 4px 10px;
+  background: var(--gb-rcp-color-soft);
+  color: var(--gb-rcp-color-dark);
+  border-radius: 4px;
+}
+.gb-rcp-meta { background: var(--gb-rcp-cream); border-top: 1px solid var(--gb-rcp-border-soft); border-bottom: 1px solid var(--gb-rcp-border-soft); padding: 24px 0; }
+.gb-rcp-meta-grid {
+  max-width: 1100px; margin: 0 auto; padding: 0 24px;
+  display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px;
+}
+.gb-rcp-meta-item { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 4px; }
+.gb-rcp-meta-icon { font-size: 22px; }
+.gb-rcp-meta-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gb-rcp-text-muted);
+  font-weight: 700;
+  margin-top: 2px;
+}
+.gb-rcp-meta-value {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--gb-rcp-text);
+  line-height: 1.2;
+}
+.gb-rcp-jump {
+  background: var(--gb-rcp-white);
+  border-bottom: 1px solid var(--gb-rcp-border-soft);
+  padding: 14px 0;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+.gb-rcp-jump-inner {
+  max-width: 1100px; margin: 0 auto; padding: 0 24px;
+  display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;
+}
+.gb-rcp-jump-link {
+  padding: 8px 16px;
+  background: var(--gb-rcp-cream);
+  color: var(--gb-rcp-text);
+  border-radius: 999px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: all 0.15s;
+}
+.gb-rcp-jump-link:hover { background: var(--gb-rcp-color-soft); color: var(--gb-rcp-color-dark); }
+.gb-rcp-section { padding: 64px 0; background: var(--gb-rcp-white); scroll-margin-top: 80px; }
+.gb-rcp-section--alt { background: var(--gb-rcp-cream); }
+.gb-rcp-section-inner { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+.gb-rcp-h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 32px;
+  letter-spacing: -0.015em;
+  margin: 0 0 8px;
+  color: var(--gb-rcp-text);
+}
+.gb-rcp-section-sub {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  color: var(--gb-rcp-text-muted);
+  margin: 0 0 32px;
+  line-height: 1.55;
+}
+.gb-rcp-ing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.gb-rcp-ing-row {
+  background: var(--gb-rcp-white);
+  border: 1px solid var(--gb-rcp-border-soft);
+  border-radius: 12px;
+  padding: 16px 18px;
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 16px;
+  align-items: start;
+}
+.gb-rcp-ing-amt {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 14px;
+  color: var(--gb-rcp-color-dark);
+  letter-spacing: -0.01em;
+  background: var(--gb-rcp-color-soft);
+  padding: 6px 10px;
+  border-radius: 6px;
+  text-align: center;
+  white-space: nowrap;
+}
+.gb-rcp-ing-name {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--gb-rcp-text);
+  margin-bottom: 2px;
+}
+.gb-rcp-ing-desc { font-family: 'DM Sans', sans-serif; font-size: 12px; color: var(--gb-rcp-text-muted); line-height: 1.45; }
+.gb-rcp-step {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 32px;
+  margin-bottom: 32px;
+  align-items: center;
+  background: var(--gb-rcp-white);
+  border: 1px solid var(--gb-rcp-border-soft);
+  border-radius: 16px;
+  overflow: hidden;
+}
+.gb-rcp-step-img {
+  aspect-ratio: 1;
+  background: var(--gb-rcp-color-soft);
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+}
+.gb-rcp-step-emoji { font-size: 80px; color: var(--gb-rcp-color); }
+.gb-rcp-step-num {
+  position: absolute;
+  top: 14px; left: 14px;
+  width: 36px; height: 36px;
+  background: var(--gb-rcp-ink);
+  color: var(--gb-rcp-cream);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 16px;
+  z-index: 2;
+}
+.gb-rcp-step-body { padding: 24px 32px 24px 0; }
+.gb-rcp-step-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 19px;
+  color: var(--gb-rcp-text);
+  margin-bottom: 10px;
+  letter-spacing: -0.01em;
+}
+.gb-rcp-step-desc { font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--gb-rcp-text-muted); line-height: 1.6; }
+.gb-rcp-video-block { background: var(--gb-rcp-white); border: 1px solid var(--gb-rcp-border-soft); border-radius: 16px; overflow: hidden; margin-top: 24px; }
+.gb-rcp-video-thumb {
+  aspect-ratio: 16 / 9;
+  background: linear-gradient(135deg, var(--gb-rcp-color-dark), var(--gb-rcp-color));
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  color: var(--gb-rcp-cream);
+}
+.gb-rcp-video-play {
+  width: 76px; height: 76px;
+  background: rgba(0,0,0,0.5);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px;
+  border: 2px solid var(--gb-rcp-cream);
+  color: var(--gb-rcp-cream);
+  transition: all 0.15s;
+}
+.gb-rcp-video-thumb:hover .gb-rcp-video-play { background: rgba(0,0,0,0.8); transform: scale(1.05); }
+.gb-rcp-video-title {
+  position: absolute;
+  bottom: 16px; left: 16px; right: 16px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--gb-rcp-cream);
+  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+.gb-rcp-notes { list-style: none; padding: 0; margin: 0; }
+.gb-rcp-notes li {
+  background: var(--gb-rcp-white);
+  border-left: 4px solid var(--gb-rcp-color);
+  padding: 16px 20px;
+  margin-bottom: 12px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--gb-rcp-text);
+  border-radius: 4px;
+}
+.gb-rcp-kit { padding: 64px 0 80px; background: var(--gb-rcp-white); }
+.gb-rcp-kit-inner { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+.gb-rcp-kit-card {
+  background: var(--gb-rcp-allinone);
+  color: var(--gb-rcp-cream);
+  border-radius: 18px;
+  padding: 40px 48px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: center;
+}
+.gb-rcp-kit-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gb-rcp-color);
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.gb-rcp-kit-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 28px;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin-bottom: 12px;
+  color: var(--gb-rcp-cream);
+}
+.gb-rcp-kit-desc { font-family: 'DM Sans', sans-serif; font-size: 14px; line-height: 1.55; color: rgba(255,249,238,0.78); }
+.gb-rcp-kit-product { display: flex; align-items: center; gap: 20px; }
+.gb-rcp-kit-img {
+  width: 100px; height: 100px;
+  background: var(--gb-rcp-color);
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 48px;
+  color: var(--gb-rcp-cream);
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.gb-rcp-kit-img img { width: 100%; height: 100%; object-fit: cover; }
+.gb-rcp-kit-info { flex: 1; }
+.gb-rcp-kit-name {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: rgba(255,249,238,0.78);
+  margin-bottom: 4px;
+}
+.gb-rcp-kit-price {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 28px;
+  color: var(--gb-rcp-color);
+  letter-spacing: -0.02em;
+  margin-bottom: 12px;
+  line-height: 1;
+}
+.gb-rcp-kit-btn {
+  display: inline-block;
+  background: var(--gb-rcp-color);
+  color: var(--gb-rcp-cream);
+  padding: 12px 24px;
+  border-radius: 999px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background 0.15s;
+}
+.gb-rcp-kit-btn:hover { background: var(--gb-rcp-color-dark); }
+.gb-rcp-related { padding: 64px 0 96px; background: var(--gb-rcp-cream); }
+.gb-rcp-related-inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+.gb-rcp-related-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gb-rcp-color);
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+.gb-rcp-related-h {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 28px;
+  margin: 0 0 28px;
+  letter-spacing: -0.015em;
+  color: var(--gb-rcp-text);
+}
+.gb-rcp-related-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.gb-rcp-related-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 24px;
+  background: var(--gb-rcp-white);
+  border-radius: 14px;
+  border: 1px solid var(--gb-rcp-border-soft);
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.gb-rcp-related-card:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(43,31,26,0.08); }
+.gb-rcp-related-img {
+  width: 70px; height: 70px;
+  flex-shrink: 0;
+  border-radius: 12px;
+  background: var(--gb-rcp-color-soft);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 36px;
+}
+.gb-rcp-related-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 16px;
+  color: var(--gb-rcp-text);
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+.gb-rcp-related-meta { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--gb-rcp-text-soft); }
+@media (max-width: 768px) {
+  .gb-rcp-hero-grid { grid-template-columns: 1fr; gap: 24px; }
+  .gb-rcp-h1 { font-size: 30px; }
+  .gb-rcp-hero-emoji { font-size: 96px; }
+  .gb-rcp-meta-grid { grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .gb-rcp-jump-inner { flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start; }
+  .gb-rcp-ing-grid { grid-template-columns: 1fr; }
+  .gb-rcp-step { grid-template-columns: 1fr; }
+  .gb-rcp-step-img { aspect-ratio: 16/9; }
+  .gb-rcp-step-body { padding: 16px 20px 20px; }
+  .gb-rcp-h2 { font-size: 24px; }
+  .gb-rcp-kit-card { grid-template-columns: 1fr; padding: 28px; }
+  .gb-rcp-kit-product { flex-direction: column; align-items: flex-start; }
+  .gb-rcp-related-grid { grid-template-columns: 1fr; }
+}
+{% endstylesheet %}
+
+<script>
+(function() {
+  var thumb = document.getElementById('gb-rcp-video-thumb-{{ section.id }}');
+  if (!thumb) return;
+  thumb.addEventListener('click', function() {
+    var id = thumb.dataset.videoId;
+    if (!id) return;
+    thumb.outerHTML = '<iframe width="100%" style="aspect-ratio:16/9; border:0;" src="https://www.youtube.com/embed/' + id + '?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "GB · Recipe Main",
+  "tag": "section",
+  "class": "gb-rcp-wrap",
+  "settings": [
+    { "type": "header", "content": "Hero" },
+    { "type": "text", "id": "category_label", "label": "Category label", "default": "FERMENTATION 101" },
+    { "type": "color", "id": "category_color", "label": "Kit color", "default": "#FF7300" },
+    { "type": "color", "id": "category_color_dark", "label": "Kit color (dark)", "default": "#E66800" },
+    { "type": "color", "id": "category_color_soft", "label": "Kit color (soft)", "default": "#FFE4D1" },
+    { "type": "text", "id": "placeholder_title", "label": "Title fallback (when no article)", "default": "Recipe title" },
+    { "type": "textarea", "id": "subtitle", "label": "Subtitle fallback" },
+    { "type": "text", "id": "hero_emoji", "label": "Hero emoji (when no image)", "default": "🥭" },
+
+    { "type": "header", "content": "Meta strip" },
+    { "type": "text", "id": "prep_time", "label": "Prep time", "default": "20 min" },
+    { "type": "text", "id": "ferment_time", "label": "Ferment time", "default": "5–7 days" },
+    { "type": "text", "id": "total_time", "label": "Total time", "default": "5 days · 20 min active" },
+    { "type": "text", "id": "yield_text", "label": "Yield", "default": "~900g (jar size)" },
+    { "type": "text", "id": "difficulty", "label": "Difficulty", "default": "Beginner" },
+    { "type": "text", "id": "cuisine", "label": "Cuisine", "default": "Punjabi · Indian" },
+
+    { "type": "header", "content": "Ingredients section" },
+    { "type": "text", "id": "ingredients_heading", "label": "Heading", "default": "Ingredients" },
+    { "type": "textarea", "id": "ingredients_sub", "label": "Sub-line", "default": "Buy this list at any well-stocked Indian grocery, or get the kit below to skip the shopping." },
+
+    { "type": "header", "content": "Method section" },
+    { "type": "text", "id": "method_heading", "label": "Heading", "default": "Method" },
+    { "type": "textarea", "id": "method_sub", "label": "Sub-line", "default": "Read all steps before starting. Set up everything you need in advance — fermentation goes wrong when you scramble for ingredients mid-recipe." },
+
+    { "type": "header", "content": "Video section" },
+    { "type": "text", "id": "video_heading", "label": "Heading", "default": "Watch the walkthrough" },
+    { "type": "textarea", "id": "video_sub", "label": "Sub-line" },
+    { "type": "text", "id": "video_id", "label": "YouTube video ID (fallback)" },
+    { "type": "text", "id": "video_title", "label": "Video title" },
+
+    { "type": "header", "content": "Notes section" },
+    { "type": "text", "id": "notes_heading", "label": "Heading", "default": "Notes & variations" },
+    { "type": "textarea", "id": "notes_sub", "label": "Sub-line" },
+
+    { "type": "header", "content": "Kit CTA" },
+    { "type": "text", "id": "kit_eyebrow", "label": "Eyebrow", "default": "MAKE IT EASIER" },
+    { "type": "text", "id": "kit_title", "label": "Title (leave blank to hide)", "default": "Don't want to source ingredients?" },
+    { "type": "textarea", "id": "kit_desc", "label": "Description", "default": "Our kit comes with pre-measured spice mixes, the right jar, an airlock, and a glass weight. Open the box, follow the recipe — done." },
+    { "type": "product", "id": "kit_product", "label": "Linked kit (auto-fills)" },
+    { "type": "text", "id": "kit_emoji", "label": "Emoji (when no image)", "default": "🫙" },
+    { "type": "text", "id": "kit_name", "label": "Kit name (override)" },
+    { "type": "text", "id": "kit_price", "label": "Price (override)" },
+    { "type": "url", "id": "kit_link", "label": "Link (override)" },
+    { "type": "text", "id": "kit_button", "label": "Button label", "default": "Shop Kit →" },
+
+    { "type": "header", "content": "Related recipes" },
+    { "type": "text", "id": "related_eyebrow", "label": "Eyebrow", "default": "COOK MORE" },
+    { "type": "text", "id": "related_heading", "label": "Heading", "default": "Related recipes" }
+  ],
+  "blocks": [
+    {
+      "type": "dietary_tag",
+      "name": "Dietary tag",
+      "limit": 8,
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "Vegan" }
+      ]
+    },
+    {
+      "type": "ingredient",
+      "name": "Ingredient",
+      "limit": 30,
+      "settings": [
+        { "type": "text", "id": "amount", "label": "Amount", "default": "100g" },
+        { "type": "text", "id": "name", "label": "Name", "default": "Ingredient" },
+        { "type": "text", "id": "desc", "label": "Descriptor (optional)" }
+      ]
+    },
+    {
+      "type": "method_step",
+      "name": "Method step",
+      "limit": 12,
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Step image (optional)" },
+        { "type": "text", "id": "emoji", "label": "Emoji (when no image)", "default": "🥄" },
+        { "type": "text", "id": "title", "label": "Step title", "default": "Step title" },
+        { "type": "textarea", "id": "description", "label": "Description", "default": "Describe what to do in this step." }
+      ]
+    },
+    {
+      "type": "note",
+      "name": "Note / variation",
+      "limit": 12,
+      "settings": [
+        { "type": "richtext", "id": "text", "label": "Note", "default": "<p>Add your tip here.</p>" }
+      ]
+    },
+    {
+      "type": "related_recipe",
+      "name": "Related recipe",
+      "limit": 6,
+      "settings": [
+        { "type": "article", "id": "article", "label": "Linked article (auto-fills)" },
+        { "type": "text", "id": "title", "label": "Title (override)" },
+        { "type": "url", "id": "url", "label": "Link (override)" },
+        { "type": "text", "id": "emoji", "label": "Emoji", "default": "🥗" },
+        { "type": "text", "id": "meta", "label": "Meta line", "default": "8 min · serves 4" }
+      ]
+    }
+  ]
+}
+{% endschema %}

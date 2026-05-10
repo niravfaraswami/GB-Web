@@ -1,0 +1,83 @@
+{
+  "sections": {
+    "main": {
+      "type": "gb-guide-main",
+      "blocks": {
+        "s1": { "type": "section_pane", "settings": {
+          "title": "Pick your fermenting goal",
+          "duration": "5 min",
+          "video_title": "What do you want to ferment first?",
+          "intro": "<p>Before you build a kit, decide what you're trying to make. Each ferment family has different needs — let's match them to your kitchen.</p>",
+          "lesson": "<p><strong>Three goals to choose from:</strong></p><p>1. <strong>Probiotic drinks</strong> — kanji, water kefir, kombucha. Best if you want a daily glass of something fizzy and good for your gut.</p><p>2. <strong>Vegetable ferments</strong> — sauerkraut, kimchi, achaar. Best if you cook a lot and want condiments that pack a probiotic punch.</p><p>3. <strong>Dairy cultures</strong> — yogurt, dahi, kefir. Best if your home eats yogurt daily and you want to control what's in it.</p>",
+          "takeaways": "Pick one goal first — don't try to ferment three things at once\nMatch the goal to what your household actually eats every day\nKits are scoped per goal — you'll get a sharper recipe library that way",
+          "action_text": "<p>Pick your goal. Note it down — you'll need it in section 2.</p>",
+          "action_icon": "1"
+        }},
+        "s2": { "type": "section_pane", "settings": {
+          "title": "Choose your jar size",
+          "duration": "3 min",
+          "intro": "<p>Jar size dictates batch size, fridge real estate, and how long a single ferment lasts you. Get this right and you ferment weekly. Get it wrong and you ferment never.</p>",
+          "lesson": "<p><strong>500ml</strong> — single-person, weekly batches, fits any fridge. Best for solo fermenters or to test recipes.</p><p><strong>1L</strong> — couple's daily portion for ~5 days. Most popular size.</p><p><strong>2L</strong> — household batch, lasts ~10 days. Needs fridge space.</p>",
+          "takeaways": "Smaller jars = faster turnover, less waste\nA 1L jar fits comfortably in any fridge door\nDon't buy a 2L unless you ferment weekly already",
+          "action_text": "<p>Pick your jar size and add it to your kit.</p>",
+          "action_icon": "2"
+        }},
+        "s3": { "type": "section_pane", "settings": {
+          "title": "Add the right starter",
+          "duration": "4 min",
+          "intro": "<p>The starter is the spice mix or culture that kicks off fermentation. Each goal needs a different starter — don't mix them.</p>",
+          "lesson": "<p><strong>For probiotic drinks:</strong> Kanji spice mix (carrots, beets, mustard) or a SCOBY (kombucha) or water kefir grains.</p><p><strong>For vegetable ferments:</strong> Achaar spice mix or kimchi paste or sea salt + ferment boost.</p><p><strong>For dairy cultures:</strong> Yogurt starter (live cultures) or kefir grains.</p>",
+          "takeaways": "Match starter to goal — vegetable starters won't ferment dairy and vice versa\nFerment Boost (a prebiotic) speeds day 1 by feeding bacteria\nStore unused starter in the fridge in an airtight bag",
+          "action_text": "<p>Add the right starter pack to your kit.</p>",
+          "action_icon": "3"
+        }},
+        "s4": { "type": "section_pane", "settings": {
+          "title": "Pick your weights and lid",
+          "duration": "3 min",
+          "intro": "<p>The weight keeps your ferment under the brine. The lid releases gas without letting air in. Both are jar-size dependent.</p>",
+          "lesson": "<p>Glass weights match jar size (500ml weight for 500ml jar, etc). Airlock lids fit standard wide-mouth Mason jars.</p><p>Don't substitute a regular lid — fermenting in a sealed jar builds pressure and pops.</p>",
+          "takeaways": "Glass weight is a one-time purchase that lasts forever\nAirlock lid is the difference between successful ferments and exploding jars\nUpgrade to silicone airlocks if you ferment 3+ jars at once",
+          "action_text": "<p>Add the matching weight + airlock lid to your kit.</p>",
+          "action_icon": "4"
+        }},
+        "s5": { "type": "section_pane", "settings": {
+          "title": "Add tools that matter",
+          "duration": "3 min",
+          "intro": "<p>Three tools change the game. None are essential — but each saves time or improves quality.</p>",
+          "lesson": "<p><strong>Kitchen scale (₹500)</strong> — get the salt ratio right every time. The single best investment.</p><p><strong>pH strips (₹200)</strong> — confirm your ferment hit the safe zone (pH < 4.6).</p><p><strong>Timer card</strong> — visual reminder of when each batch goes in/out of the jar.</p>",
+          "takeaways": "Kitchen scale > eyeballing salt by a 10x margin\npH strips give you the confidence to know a batch is safe\nDon't skip the scale even if you've cooked for 20 years",
+          "action_text": "<p>Add the tools you don't already own.</p>",
+          "action_icon": "5"
+        }},
+        "s6": { "type": "section_pane", "settings": {
+          "title": "Review and order",
+          "duration": "2 min",
+          "intro": "<p>You've configured your kit across 5 sections. Time to review what's in the cart and order.</p>",
+          "lesson": "<p>Your custom kit should now contain: <strong>1 jar</strong>, <strong>1 starter pack</strong> (matched to your goal), <strong>1 weight + airlock lid</strong>, and any tools you added.</p><p>Free shipping on orders over ₹300. Ships next business day in metros, 2–4 days elsewhere.</p>",
+          "takeaways": "Double-check jar size matches starter quantity\nThe Ferment Boost prebiotic is the one upgrade everyone says was worth it\nYour first batch is the hardest — second one is muscle memory",
+          "action_text": "<p>Click Order kit below to confirm. We pack within 24h.</p>",
+          "action_icon": "→"
+        }}
+      },
+      "block_order": ["s1","s2","s3","s4","s5","s6"],
+      "settings": {
+        "category_label": "BUILD YOUR OWN KIT",
+        "category_color": "#FF7300",
+        "category_color_dark": "#E66800",
+        "category_color_soft": "#FFE4D1",
+        "placeholder_title": "Build your own fermentation kit",
+        "subtitle": "Pick what you want to ferment, configure your jar, weights, spices and starter — we'll ship the kit that matches your goal.",
+        "duration": "~20 minutes to configure",
+        "level": "Beginner-friendly",
+        "format": "Interactive · 6 sections",
+        "sidebar_label": "Steps",
+        "show_completion": true,
+        "completion_title": "Your kit is ready.",
+        "completion_desc": "You walked through every step. Now order the kit you configured and start fermenting.",
+        "cta_title": "Order your custom kit.",
+        "cta_desc": "We'll pack and ship your configured kit within 24 hours. Free shipping on orders over ₹300."
+      }
+    }
+  },
+  "order": ["main"]
+}
