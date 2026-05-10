@@ -5,9 +5,44 @@
 
 {%- liquid
   assign autoplay_seconds = section.settings.autoplay_seconds
+  assign hd = section.settings.headline_size_desktop | default: 56
+  assign hm = section.settings.headline_size_mobile | default: 32
+  assign sd = section.settings.sub_size_desktop | default: 17
+  assign sm = section.settings.sub_size_mobile | default: 13
+  assign ovw_d = section.settings.overlay_width_desktop | default: 44
+  assign ovw_m = section.settings.overlay_width_mobile | default: 88
+  assign ov_left_d = section.settings.overlay_left_desktop | default: 6
+  assign ov_left_m = section.settings.overlay_left_mobile | default: 6
+  assign cta_px = section.settings.cta_padding_x | default: 24
+  assign cta_py = section.settings.cta_padding_y | default: 12
+  assign cta_fs = section.settings.cta_font_size | default: 13
+  assign gap_h = section.settings.gap_after_headline | default: 18
+  assign gap_s = section.settings.gap_after_sub | default: 24
+  assign gap_h_m = section.settings.gap_after_headline_mobile | default: 12
+  assign gap_s_m = section.settings.gap_after_sub_mobile | default: 16
+  assign min_h_m = section.settings.min_height_mobile | default: 0
 -%}
 
-<section class="gb-hero" id="gb-hero-{{ section.id }}" data-autoplay="{{ autoplay_seconds }}">
+{%- capture hero_style -%}
+--gb-hero-h-d: {{ hd }}px;
+--gb-hero-h-m: {{ hm }}px;
+--gb-hero-s-d: {{ sd }}px;
+--gb-hero-s-m: {{ sm }}px;
+--gb-hero-ovw-d: {{ ovw_d }}%;
+--gb-hero-ovw-m: {{ ovw_m }}%;
+--gb-hero-ov-left-d: {{ ov_left_d }}%;
+--gb-hero-ov-left-m: {{ ov_left_m }}%;
+--gb-hero-cta-px: {{ cta_px }}px;
+--gb-hero-cta-py: {{ cta_py }}px;
+--gb-hero-cta-fs: {{ cta_fs }}px;
+--gb-hero-gap-h-d: {{ gap_h }}px;
+--gb-hero-gap-s-d: {{ gap_s }}px;
+--gb-hero-gap-h-m: {{ gap_h_m }}px;
+--gb-hero-gap-s-m: {{ gap_s_m }}px;
+{%- if min_h_m > 0 -%}--gb-hero-min-h-m: {{ min_h_m }}px;{%- endif -%}
+{%- endcapture -%}
+
+<section class="gb-hero" id="gb-hero-{{ section.id }}" data-autoplay="{{ autoplay_seconds }}" style="{{ hero_style | strip_newlines }}">
   <div class="gb-hero-track" id="gb-hero-track-{{ section.id }}">
     {%- for block in section.blocks -%}
       {%- liquid
@@ -105,9 +140,9 @@
 .gb-hero-overlay {
   position: absolute;
   top: 50%;
-  left: 6%;
+  left: var(--gb-hero-ov-left-d, 6%);
   transform: translateY(-50%);
-  width: 44%;
+  width: var(--gb-hero-ovw-d, 44%);
   max-width: 560px;
   z-index: 2;
   display: flex;
@@ -117,10 +152,10 @@
 .gb-hero-headline {
   font-family: 'Montserrat', sans-serif;
   font-weight: 800;
-  font-size: clamp(36px, 5.5vw, 64px);
+  font-size: var(--gb-hero-h-d, 56px);
   line-height: 0.95;
   letter-spacing: -0.025em;
-  margin: 0 0 22px;
+  margin: 0 0 var(--gb-hero-gap-h-d, 18px);
   color: var(--c-ink);
 }
 .gb-hero-headline em {
@@ -132,10 +167,10 @@
 .gb-hero--sprout .gb-hero-headline em { color: var(--c-sprout); }
 .gb-hero-sub {
   font-family: 'DM Sans', sans-serif;
-  font-size: clamp(14px, 1.3vw, 17px);
+  font-size: var(--gb-hero-s-d, 17px);
   color: var(--c-text-muted);
   line-height: 1.5;
-  margin: 0 0 28px;
+  margin: 0 0 var(--gb-hero-gap-s-d, 24px);
   max-width: 440px;
 }
 .gb-hero-sub strong { color: var(--c-text); font-weight: 700; }
@@ -162,7 +197,10 @@
   cursor: pointer;
 }
 .gb-btn:hover { background: #E66800; transform: translateY(-1px); color: #fff; }
-.gb-hero-cta { padding: 12px 24px; font-size: 13px; }
+.gb-hero-cta {
+  padding: var(--gb-hero-cta-py, 12px) var(--gb-hero-cta-px, 24px);
+  font-size: var(--gb-hero-cta-fs, 13px);
+}
 .gb-hero-dots {
   position: absolute;
   bottom: 24px;
@@ -216,7 +254,27 @@
 .gb-hero-arrow--next { right: 16px; }
 @media (max-width: 768px) {
   .gb-hero-arrow { display: none; }
-  .gb-hero-overlay { width: 80%; left: 8%; }
+  .gb-hero-slide {
+    aspect-ratio: auto;
+    min-height: var(--gb-hero-min-h-m, 420px);
+  }
+  .gb-hero-overlay {
+    width: var(--gb-hero-ovw-m, 88%);
+    left: var(--gb-hero-ov-left-m, 6%);
+    max-width: none;
+  }
+  .gb-hero-headline {
+    font-size: var(--gb-hero-h-m, 32px);
+    margin-bottom: var(--gb-hero-gap-h-m, 12px);
+  }
+  .gb-hero-sub {
+    font-size: var(--gb-hero-s-m, 13px);
+    margin-bottom: var(--gb-hero-gap-s-m, 16px);
+  }
+  .gb-hero-cta {
+    padding: calc(var(--gb-hero-cta-py, 12px) * 0.85) calc(var(--gb-hero-cta-px, 24px) * 0.85);
+    font-size: max(11px, calc(var(--gb-hero-cta-fs, 13px) * 0.92));
+  }
   .gb-hero-dots { bottom: 10px; padding: 4px 7px; }
   .gb-hero-dot { width: 16px; height: 3px; }
   .gb-hero-dot.is-active { width: 26px; }
@@ -277,7 +335,31 @@
   "tag": "section",
   "class": "gb-hero-wrap",
   "settings": [
-    { "type": "range", "id": "autoplay_seconds", "label": "Autoplay interval (seconds, 0 = off)", "min": 0, "max": 15, "step": 1, "default": 6 }
+    { "type": "range", "id": "autoplay_seconds", "label": "Autoplay interval (seconds, 0 = off)", "min": 0, "max": 15, "step": 1, "default": 6 },
+
+    { "type": "header", "content": "Typography — desktop" },
+    { "type": "range", "id": "headline_size_desktop", "label": "Headline size (desktop)", "min": 28, "max": 80, "step": 2, "default": 56, "unit": "px" },
+    { "type": "range", "id": "sub_size_desktop", "label": "Sub-line size (desktop)", "min": 12, "max": 24, "step": 1, "default": 17, "unit": "px" },
+    { "type": "range", "id": "gap_after_headline", "label": "Space below headline (desktop)", "min": 0, "max": 48, "step": 2, "default": 18, "unit": "px" },
+    { "type": "range", "id": "gap_after_sub", "label": "Space below sub-line (desktop)", "min": 0, "max": 48, "step": 2, "default": 24, "unit": "px" },
+
+    { "type": "header", "content": "Typography — mobile" },
+    { "type": "range", "id": "headline_size_mobile", "label": "Headline size (mobile)", "min": 18, "max": 56, "step": 1, "default": 32, "unit": "px" },
+    { "type": "range", "id": "sub_size_mobile", "label": "Sub-line size (mobile)", "min": 11, "max": 20, "step": 1, "default": 13, "unit": "px" },
+    { "type": "range", "id": "gap_after_headline_mobile", "label": "Space below headline (mobile)", "min": 0, "max": 32, "step": 1, "default": 12, "unit": "px" },
+    { "type": "range", "id": "gap_after_sub_mobile", "label": "Space below sub-line (mobile)", "min": 0, "max": 32, "step": 1, "default": 16, "unit": "px" },
+    { "type": "range", "id": "min_height_mobile", "label": "Mobile slide min-height (0 = use 16:9)", "min": 0, "max": 700, "step": 20, "default": 420, "unit": "px" },
+
+    { "type": "header", "content": "Overlay placement" },
+    { "type": "range", "id": "overlay_width_desktop", "label": "Overlay width (desktop, % of slide)", "min": 30, "max": 70, "step": 1, "default": 44, "unit": "%" },
+    { "type": "range", "id": "overlay_width_mobile", "label": "Overlay width (mobile, % of slide)", "min": 50, "max": 95, "step": 1, "default": 88, "unit": "%" },
+    { "type": "range", "id": "overlay_left_desktop", "label": "Overlay left offset (desktop, %)", "min": 0, "max": 20, "step": 1, "default": 6, "unit": "%" },
+    { "type": "range", "id": "overlay_left_mobile", "label": "Overlay left offset (mobile, %)", "min": 0, "max": 20, "step": 1, "default": 6, "unit": "%" },
+
+    { "type": "header", "content": "CTA button" },
+    { "type": "range", "id": "cta_padding_y", "label": "CTA vertical padding", "min": 6, "max": 24, "step": 1, "default": 12, "unit": "px" },
+    { "type": "range", "id": "cta_padding_x", "label": "CTA horizontal padding", "min": 14, "max": 48, "step": 1, "default": 24, "unit": "px" },
+    { "type": "range", "id": "cta_font_size", "label": "CTA font size", "min": 11, "max": 18, "step": 1, "default": 13, "unit": "px" }
   ],
   "blocks": [
     {

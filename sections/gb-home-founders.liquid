@@ -1,0 +1,136 @@
+{%- comment -%}
+  Section 12 · Founders — image + brief story + CTA
+  Source ref: gutbasket-home-page.html lines 2555-2577
+{%- endcomment -%}
+
+<section class="gb-fnd">
+  <div class="gb-fnd-container">
+    <div class="gb-fnd-grid">
+      <div class="gb-fnd-image">
+        {%- if section.settings.image -%}
+          <img src="{{ section.settings.image | image_url: width: 800 }}" alt="" loading="lazy">
+        {%- else -%}
+          <svg viewBox="0 0 200 200" aria-hidden="true">
+            <circle cx="70" cy="78" r="20" stroke="#1F1F1D" stroke-width="2" fill="none"/>
+            <path d="M50 175 Q50 130 70 122 Q90 130 90 175" stroke="#1F1F1D" stroke-width="2" fill="none"/>
+            <circle cx="130" cy="78" r="20" stroke="#1F1F1D" stroke-width="2" fill="none"/>
+            <path d="M110 175 Q110 130 130 122 Q150 130 150 175" stroke="#1F1F1D" stroke-width="2" fill="none"/>
+            <rect x="92" y="148" width="16" height="22" rx="2" stroke="#1F1F1D" stroke-width="1.5" fill="none"/>
+            <line x1="92" y1="154" x2="108" y2="154" stroke="#1F1F1D" stroke-width="1.2"/>
+          </svg>
+        {%- endif -%}
+      </div>
+      <div class="gb-fnd-text">
+        {%- if section.settings.eyebrow != blank -%}
+          <span class="gb-fnd-eyebrow">{{ section.settings.eyebrow }}</span>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <h2 class="gb-fnd-h2">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+        {%- if section.settings.body != blank -%}
+          <div class="gb-fnd-body">{{ section.settings.body }}</div>
+        {%- endif -%}
+        {%- if section.settings.cta_label != blank -%}
+          <a href="{{ section.settings.cta_link | default: '#' }}" class="gb-fnd-btn">{{ section.settings.cta_label }}</a>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+.gb-fnd {
+  --c-cream: #FFF9EE;
+  --c-text: #1F1F1D;
+  --c-text-muted: #5C4D3F;
+  --c-ink: #1F1F1D;
+  --c-kanji-soft: #F4DBE2;
+  --c-aam-panna-soft: #F8EAC2;
+  --c-kanji: #8B1F40;
+  background: var(--c-cream);
+  padding: 56px 0;
+}
+.gb-fnd-container { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+.gb-fnd-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 56px;
+  align-items: center;
+  max-width: 920px;
+  margin: 0 auto;
+}
+.gb-fnd-image {
+  aspect-ratio: 1/1;
+  background: linear-gradient(135deg, var(--c-aam-panna-soft) 0%, var(--c-kanji-soft) 100%);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.gb-fnd-image img { width: 100%; height: 100%; object-fit: cover; }
+.gb-fnd-image svg { width: 78%; height: auto; }
+.gb-fnd-eyebrow {
+  display: inline-block;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--c-text-muted);
+  margin-bottom: 10px;
+}
+.gb-fnd-h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: clamp(26px, 3vw, 34px);
+  margin: 0 0 14px;
+  letter-spacing: -0.02em;
+  color: var(--c-text);
+}
+.gb-fnd-h2 em { font-style: italic; font-weight: 700; color: var(--c-kanji); }
+.gb-fnd-body {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  color: var(--c-text-muted);
+  line-height: 1.6;
+  margin: 0 0 22px;
+}
+.gb-fnd-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 22px;
+  background: transparent;
+  color: var(--c-ink);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+  border: 1.5px solid var(--c-ink);
+  border-radius: 999px;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
+}
+.gb-fnd-btn:hover { background: var(--c-ink); color: var(--c-cream); transform: translateY(-1px); }
+@media (max-width: 768px) {
+  .gb-fnd-grid { grid-template-columns: 1fr; gap: 28px; }
+  .gb-fnd-image { max-width: 320px; margin: 0 auto; }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "GB · Home Founders",
+  "tag": "section",
+  "class": "gb-fnd-wrap",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Founders photo" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Meet the gut(sy) duo" },
+    { "type": "text", "id": "heading", "label": "Heading (use <em>)", "default": "Built in our kitchen. Now in <em>25,000+ yours.</em>" },
+    { "type": "richtext", "id": "body", "label": "Body", "default": "<p>GutBasket started as a curiosity — could we make grandmother's kanji at home, with the same live cultures and none of the guesswork? Three years and many failed batches later, we'd built a system anyone could follow. The kits are how we share it.</p>" },
+    { "type": "text", "id": "cta_label", "label": "CTA label", "default": "Read our story" },
+    { "type": "url", "id": "cta_link", "label": "CTA link" }
+  ],
+  "presets": [{ "name": "GB · Home Founders" }]
+}
+{% endschema %}
