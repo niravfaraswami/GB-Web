@@ -254,9 +254,9 @@
 .gb-hero-arrow--next { right: 16px; }
 @media (max-width: 768px) {
   .gb-hero-arrow { display: none; }
+  /* Keep 16:9 ratio on mobile (matches desktop) unless merchant sets a min-height */
   .gb-hero-slide {
-    aspect-ratio: auto;
-    min-height: var(--gb-hero-min-h-m, 420px);
+    min-height: var(--gb-hero-min-h-m, 0);
   }
   .gb-hero-overlay {
     width: var(--gb-hero-ovw-m, 88%);
@@ -264,18 +264,18 @@
     max-width: none;
   }
   .gb-hero-headline {
-    font-size: var(--gb-hero-h-m, 32px);
-    margin-bottom: var(--gb-hero-gap-h-m, 12px);
+    font-size: var(--gb-hero-h-m, 28px);
+    margin-bottom: var(--gb-hero-gap-h-m, 10px);
   }
   .gb-hero-sub {
-    font-size: var(--gb-hero-s-m, 13px);
-    margin-bottom: var(--gb-hero-gap-s-m, 16px);
+    font-size: var(--gb-hero-s-m, 12px);
+    margin-bottom: var(--gb-hero-gap-s-m, 12px);
   }
   .gb-hero-cta {
-    padding: calc(var(--gb-hero-cta-py, 12px) * 0.85) calc(var(--gb-hero-cta-px, 24px) * 0.85);
-    font-size: max(11px, calc(var(--gb-hero-cta-fs, 13px) * 0.92));
+    padding: calc(var(--gb-hero-cta-py, 10px) * 0.85) calc(var(--gb-hero-cta-px, 20px) * 0.85);
+    font-size: max(11px, calc(var(--gb-hero-cta-fs, 12px) * 0.95));
   }
-  .gb-hero-dots { bottom: 10px; padding: 4px 7px; }
+  .gb-hero-dots { bottom: 8px; padding: 4px 7px; }
   .gb-hero-dot { width: 16px; height: 3px; }
   .gb-hero-dot.is-active { width: 26px; }
 }
@@ -348,7 +348,7 @@
     { "type": "range", "id": "sub_size_mobile", "label": "Sub-line size (mobile)", "min": 11, "max": 20, "step": 1, "default": 13, "unit": "px" },
     { "type": "range", "id": "gap_after_headline_mobile", "label": "Space below headline (mobile)", "min": 0, "max": 32, "step": 1, "default": 12, "unit": "px" },
     { "type": "range", "id": "gap_after_sub_mobile", "label": "Space below sub-line (mobile)", "min": 0, "max": 32, "step": 1, "default": 16, "unit": "px" },
-    { "type": "range", "id": "min_height_mobile", "label": "Mobile slide min-height (0 = use 16:9)", "min": 0, "max": 700, "step": 20, "default": 420, "unit": "px" },
+    { "type": "range", "id": "min_height_mobile", "label": "Mobile slide min-height (0 = match desktop 16:9)", "min": 0, "max": 700, "step": 20, "default": 0, "unit": "px" },
 
     { "type": "header", "content": "Overlay placement" },
     { "type": "range", "id": "overlay_width_desktop", "label": "Overlay width (desktop, % of slide)", "min": 30, "max": 70, "step": 1, "default": 44, "unit": "%" },

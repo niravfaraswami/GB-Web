@@ -1,0 +1,704 @@
+{%- comment -%}
+  Guide / "Build your own kit" main section
+  Source: gutbasket-guide.html
+  Multi-section interactive walkthrough with sidebar nav, progress bar,
+  per-section video, key takeaways, action card, prev/next navigation,
+  and a completion screen with end CTA.
+  Targets: templates/page.guide.json (Shopify page with template suffix).
+{%- endcomment -%}
+
+{%- liquid
+  assign category_label = page.metafields.custom.category_label | default: section.settings.category_label
+  assign category_color = page.metafields.custom.color | default: section.settings.category_color
+  assign category_color_dark = page.metafields.custom.color_dark | default: section.settings.category_color_dark
+  assign category_color_soft = page.metafields.custom.color_soft | default: section.settings.category_color_soft
+  assign guide_subtitle = page.metafields.custom.subtitle | default: section.settings.subtitle
+  assign duration = page.metafields.custom.duration | default: section.settings.duration
+  assign level = page.metafields.custom.level | default: section.settings.level
+  assign fmt = page.metafields.custom.format | default: section.settings.format
+  assign section_blocks = section.blocks | where: 'type', 'section_pane'
+  assign sections_count = section_blocks.size
+  assign show_complete = false
+  if section.settings.show_completion
+    assign show_complete = true
+  endif
+-%}
+
+{%- capture vars -%}
+--gb-gd-color: {{ category_color }};
+--gb-gd-color-dark: {{ category_color_dark }};
+--gb-gd-color-soft: {{ category_color_soft }};
+{%- endcapture -%}
+
+<div class="gb-gd" id="gb-gd-{{ section.id }}" style="{{ vars | strip_newlines }}" data-handle="{{ page.handle | default: 'guide' }}">
+
+<section class="gb-gd-cover">
+  <div class="gb-gd-cover-inner">
+    <div class="gb-gd-pill"><span class="gb-gd-pill-dot"></span>{{ category_label }}</div>
+    <h1 class="gb-gd-h1">{{ page.title | default: section.settings.placeholder_title }}</h1>
+    {%- if guide_subtitle != blank -%}
+      <p class="gb-gd-subtitle">{{ guide_subtitle }}</p>
+    {%- endif -%}
+    <div class="gb-gd-meta-bar">
+      <div class="gb-gd-meta-item"><span class="gb-gd-meta-label">Duration</span><span class="gb-gd-meta-value">{{ duration }}</span></div>
+      <div class="gb-gd-meta-item"><span class="gb-gd-meta-label">Level</span><span class="gb-gd-meta-value">{{ level }}</span></div>
+      <div class="gb-gd-meta-item"><span class="gb-gd-meta-label">Sections</span><span class="gb-gd-meta-value">{{ sections_count }} parts</span></div>
+      <div class="gb-gd-meta-item"><span class="gb-gd-meta-label">Format</span><span class="gb-gd-meta-value">{{ fmt }}</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="gb-gd-progress">
+  <div class="gb-gd-progress-inner">
+    <div class="gb-gd-progress-track"><div class="gb-gd-progress-fill" id="gb-gd-fill-{{ section.id }}"></div></div>
+    <div class="gb-gd-progress-label" id="gb-gd-label-{{ section.id }}">SECTION 1 OF {{ sections_count }}</div>
+  </div>
+</div>
+
+<div class="gb-gd-body">
+  <div class="gb-gd-body-inner">
+    <aside class="gb-gd-sidebar">
+      <div class="gb-gd-sidebar-h">{{ section.settings.sidebar_label | default: 'Course Sections' }}</div>
+      <ul class="gb-gd-section-list" id="gb-gd-list-{{ section.id }}">
+        {%- for block in section_blocks -%}
+          <li class="gb-gd-list-item">
+            <a class="gb-gd-list-link {% if forloop.first %}is-active{% endif %}" data-section-idx="{{ forloop.index0 }}" {{ block.shopify_attributes }}>
+              <span class="gb-gd-list-num"><span>{{ forloop.index }}</span></span>
+              {{ block.settings.title }}
+            </a>
+          </li>
+        {%- endfor -%}
+        {%- if show_complete -%}
+          <li class="gb-gd-list-item">
+            <a class="gb-gd-list-link gb-gd-list-link--complete" data-section-idx="complete">
+              <span class="gb-gd-list-num"><span>★</span></span>
+              {{ section.settings.completion_sidebar | default: 'Complete!' }}
+            </a>
+          </li>
+        {%- endif -%}
+      </ul>
+    </aside>
+
+    <main class="gb-gd-content">
+      {%- for block in section_blocks -%}
+        {%- liquid
+          assign idx = forloop.index0
+          assign is_first = forloop.first
+          assign is_last = forloop.last
+        -%}
+        <div class="gb-gd-pane {% if is_first %}is-active{% endif %}" data-section-idx="{{ idx }}">
+          <div class="gb-gd-pane-header">
+            <div class="gb-gd-pane-progress">SECTION {{ forloop.index }} OF {{ sections_count }}</div>
+            <h2 class="gb-gd-pane-title">{{ block.settings.title }}</h2>
+            {%- if block.settings.duration != blank -%}
+              <span class="gb-gd-pane-duration">{{ block.settings.duration }}</span>
+            {%- endif -%}
+          </div>
+
+          {%- if block.settings.video_id != blank -%}
+            <div class="gb-gd-pane-video">
+              <div class="gb-gd-pane-video-thumb" data-video-id="{{ block.settings.video_id }}">
+                <span class="gb-gd-pane-video-play">▶</span>
+                {%- if block.settings.video_title != blank -%}
+                  <div class="gb-gd-pane-video-title">{{ block.settings.video_title }}</div>
+                {%- endif -%}
+              </div>
+            </div>
+          {%- endif -%}
+
+          {%- if block.settings.intro != blank -%}
+            <div class="gb-gd-pane-intro">{{ block.settings.intro }}</div>
+          {%- endif -%}
+
+          {%- if block.settings.lesson != blank -%}
+            <div class="gb-gd-pane-lesson">{{ block.settings.lesson }}</div>
+          {%- endif -%}
+
+          {%- if block.settings.takeaways != blank -%}
+            <div class="gb-gd-takeaways">
+              <div class="gb-gd-takeaways-h">{{ section.settings.takeaways_label | default: 'KEY TAKEAWAYS' }}</div>
+              <ul class="gb-gd-takeaways-list">
+                {%- assign tk_lines = block.settings.takeaways | newline_to_br | split: '<br />' -%}
+                {%- for line in tk_lines -%}
+                  {%- assign trimmed = line | strip -%}
+                  {%- if trimmed != blank -%}<li>{{ trimmed }}</li>{%- endif -%}
+                {%- endfor -%}
+              </ul>
+            </div>
+          {%- endif -%}
+
+          {%- if block.settings.action_text != blank -%}
+            <div class="gb-gd-action">
+              <div class="gb-gd-action-icon">{{ block.settings.action_icon | default: '→' }}</div>
+              <div class="gb-gd-action-body">
+                <div class="gb-gd-action-eyebrow">{{ section.settings.action_eyebrow | default: 'YOUR NEXT ACTION' }}</div>
+                <div class="gb-gd-action-text">{{ block.settings.action_text }}</div>
+              </div>
+            </div>
+          {%- endif -%}
+
+          <div class="gb-gd-pane-nav">
+            <button class="gb-gd-nav-btn gb-gd-nav-btn--prev" data-nav="-1" {% if is_first %}disabled{% endif %}>← Previous</button>
+            {%- if is_last and show_complete -%}
+              <button class="gb-gd-nav-btn gb-gd-nav-btn--next" data-nav="complete">Finish guide →</button>
+            {%- elsif is_last -%}
+              <button class="gb-gd-nav-btn gb-gd-nav-btn--next" data-nav="1" disabled>Last section</button>
+            {%- else -%}
+              <button class="gb-gd-nav-btn gb-gd-nav-btn--next" data-nav="1">Next section →</button>
+            {%- endif -%}
+          </div>
+        </div>
+      {%- endfor -%}
+
+      {%- if show_complete -%}
+        <div class="gb-gd-pane gb-gd-pane--complete" data-section-idx="complete">
+          <div class="gb-gd-complete">
+            <div class="gb-gd-complete-icon">★</div>
+            <div class="gb-gd-complete-title">{{ section.settings.completion_title | default: 'You did it.' }}</div>
+            <div class="gb-gd-complete-desc">{{ section.settings.completion_desc | default: 'You finished the guide. The learning sticks if you do the doing — start a batch this week.' }}</div>
+          </div>
+
+          {%- if section.settings.cta_title != blank -%}
+            {%- liquid
+              assign cp = section.settings.cta_product
+              assign cn = section.settings.cta_product_name
+              assign cpr = section.settings.cta_price
+              assign cl = section.settings.cta_link
+              if cp
+                if cn == blank
+                  assign cn = cp.title
+                endif
+                if cpr == blank
+                  assign cpr = cp.price | money
+                endif
+                if cl == blank
+                  assign cl = cp.url
+                endif
+              endif
+            -%}
+            <div class="gb-gd-cta">
+              <div>
+                <div class="gb-gd-cta-eyebrow">{{ section.settings.cta_eyebrow | default: 'READY TO START FOR REAL?' }}</div>
+                <div class="gb-gd-cta-title">{{ section.settings.cta_title }}</div>
+                {%- if section.settings.cta_desc != blank -%}<div class="gb-gd-cta-desc">{{ section.settings.cta_desc }}</div>{%- endif -%}
+              </div>
+              <div class="gb-gd-cta-product">
+                {%- if cn != blank -%}<div class="gb-gd-cta-name">{{ cn }}</div>{%- endif -%}
+                {%- if cpr != blank -%}<div class="gb-gd-cta-price">{{ cpr }}</div>{%- endif -%}
+                <a href="{{ cl | default: '#' }}" class="gb-gd-cta-btn">{{ section.settings.cta_button | default: 'Shop the kit →' }}</a>
+              </div>
+            </div>
+          {%- endif -%}
+
+          <div class="gb-gd-pane-nav">
+            <button class="gb-gd-nav-btn gb-gd-nav-btn--prev" data-nav="-1">← Previous</button>
+            <button class="gb-gd-nav-btn gb-gd-nav-btn--next" data-nav="restart">↻ Start over</button>
+          </div>
+        </div>
+      {%- endif -%}
+    </main>
+  </div>
+</div>
+
+</div>
+
+{% stylesheet %}
+.gb-gd {
+  --gb-gd-white: #FFFFFF;
+  --gb-gd-cream: #FFF9EE;
+  --gb-gd-cream-deep: #F5EDD8;
+  --gb-gd-allinone: #2B2218;
+  --gb-gd-text: #1F1F1D;
+  --gb-gd-text-muted: #5C4D3F;
+  --gb-gd-text-soft: #888780;
+  --gb-gd-border: #E8E3D5;
+  --gb-gd-border-soft: #F0EBDD;
+  --gb-gd-ink: #1F1F1D;
+}
+.gb-gd-pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--gb-gd-color);
+  margin-bottom: 16px;
+}
+.gb-gd-pill-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gb-gd-color); }
+.gb-gd-cover {
+  background: linear-gradient(135deg, var(--gb-gd-color-soft) 0%, var(--gb-gd-white) 100%);
+  padding: 72px 0 56px;
+  border-bottom: 1px solid var(--gb-gd-border-soft);
+}
+.gb-gd-cover-inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+.gb-gd-h1 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800; font-size: 52px; letter-spacing: -0.025em; line-height: 1.05;
+  color: var(--gb-gd-text);
+  margin: 0 0 18px;
+  max-width: 760px;
+}
+.gb-gd-subtitle {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 18px; line-height: 1.55;
+  color: var(--gb-gd-text-muted);
+  margin: 0 0 32px;
+  max-width: 720px;
+}
+.gb-gd-meta-bar {
+  display: flex; gap: 32px; flex-wrap: wrap;
+  padding-top: 24px;
+  border-top: 1px solid var(--gb-gd-border-soft);
+}
+.gb-gd-meta-item { display: flex; flex-direction: column; gap: 4px; }
+.gb-gd-meta-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--gb-gd-text-muted); font-weight: 700;
+}
+.gb-gd-meta-value {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700; font-size: 14px;
+  color: var(--gb-gd-text);
+}
+.gb-gd-progress {
+  position: sticky; top: 0; z-index: 50;
+  background: var(--gb-gd-white);
+  border-bottom: 1px solid var(--gb-gd-border-soft);
+  padding: 14px 0;
+}
+.gb-gd-progress-inner {
+  max-width: 1100px; margin: 0 auto; padding: 0 24px;
+  display: flex; align-items: center; gap: 20px;
+}
+.gb-gd-progress-track {
+  flex: 1; height: 6px;
+  background: var(--gb-gd-cream-deep);
+  border-radius: 999px; overflow: hidden;
+}
+.gb-gd-progress-fill {
+  height: 100%; width: 0%;
+  background: var(--gb-gd-color);
+  transition: width 0.3s ease;
+}
+.gb-gd-progress-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px; letter-spacing: 0.06em;
+  color: var(--gb-gd-text-muted); font-weight: 700;
+  white-space: nowrap;
+}
+.gb-gd-body { padding: 56px 0 96px; background: var(--gb-gd-white); }
+.gb-gd-body-inner {
+  max-width: 1180px; margin: 0 auto; padding: 0 24px;
+  display: grid; grid-template-columns: 280px 1fr; gap: 56px; align-items: start;
+}
+.gb-gd-sidebar {
+  position: sticky; top: 120px;
+  background: var(--gb-gd-white);
+  border: 1px solid var(--gb-gd-border-soft);
+  border-radius: 16px;
+  padding: 24px;
+}
+.gb-gd-sidebar-h {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--gb-gd-text-soft); font-weight: 700;
+  margin-bottom: 18px;
+}
+.gb-gd-section-list { list-style: none; padding: 0; margin: 0; }
+.gb-gd-list-item { margin-bottom: 4px; }
+.gb-gd-list-link {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--gb-gd-text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px; line-height: 1.35;
+  transition: background 0.15s;
+  cursor: pointer;
+}
+.gb-gd-list-link:hover { background: var(--gb-gd-cream); }
+.gb-gd-list-link.is-active {
+  background: var(--gb-gd-color-soft);
+  color: var(--gb-gd-color-dark);
+  font-weight: 700;
+}
+.gb-gd-list-num {
+  flex-shrink: 0;
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background: var(--gb-gd-cream-deep);
+  color: var(--gb-gd-text-muted);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700; font-size: 11px;
+  position: relative;
+}
+.gb-gd-list-link.is-active .gb-gd-list-num {
+  background: var(--gb-gd-color);
+  color: var(--gb-gd-cream);
+}
+.gb-gd-list-link.is-completed .gb-gd-list-num {
+  background: #5DBC52; color: var(--gb-gd-white);
+}
+.gb-gd-list-link.is-completed .gb-gd-list-num span { display: none; }
+.gb-gd-list-link.is-completed .gb-gd-list-num::before { content: '✓'; }
+.gb-gd-content { max-width: 760px; }
+.gb-gd-pane { display: none; }
+.gb-gd-pane.is-active { display: block; }
+.gb-gd-pane-header {
+  margin-bottom: 28px; padding-bottom: 20px;
+  border-bottom: 1px solid var(--gb-gd-border-soft);
+}
+.gb-gd-pane-progress {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--gb-gd-color); font-weight: 700;
+  margin-bottom: 10px;
+}
+.gb-gd-pane-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800; font-size: 36px; letter-spacing: -0.02em; line-height: 1.1;
+  color: var(--gb-gd-text);
+  margin: 0 0 10px;
+}
+.gb-gd-pane-duration {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px; color: var(--gb-gd-text-muted);
+}
+.gb-gd-pane-duration::before { content: '⏱'; }
+.gb-gd-pane-intro {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 17px; line-height: 1.6; color: var(--gb-gd-text);
+  margin-bottom: 28px;
+  font-style: italic;
+}
+.gb-gd-pane-video {
+  margin-bottom: 32px;
+  background: var(--gb-gd-white);
+  border: 1px solid var(--gb-gd-border-soft);
+  border-radius: 14px;
+  overflow: hidden;
+}
+.gb-gd-pane-video-thumb {
+  aspect-ratio: 16 / 9;
+  background: linear-gradient(135deg, var(--gb-gd-color-dark), var(--gb-gd-color));
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  color: var(--gb-gd-cream);
+}
+.gb-gd-pane-video-play {
+  width: 76px; height: 76px;
+  background: rgba(0,0,0,0.5);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px;
+  border: 2px solid var(--gb-gd-cream);
+  color: var(--gb-gd-cream);
+  transition: all 0.15s;
+}
+.gb-gd-pane-video-thumb:hover .gb-gd-pane-video-play { background: rgba(0,0,0,0.8); transform: scale(1.05); }
+.gb-gd-pane-video-title {
+  position: absolute; bottom: 16px; left: 16px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700; font-size: 14px;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+.gb-gd-pane-lesson { font-family: 'DM Sans', system-ui, sans-serif; }
+.gb-gd-pane-lesson p, .gb-gd-pane-lesson ul, .gb-gd-pane-lesson ol {
+  font-size: 16px; line-height: 1.7; color: var(--gb-gd-text);
+  margin: 0 0 16px;
+}
+.gb-gd-pane-lesson p strong { color: var(--gb-gd-ink); font-weight: 700; }
+.gb-gd-takeaways {
+  margin: 32px 0;
+  padding: 24px 28px;
+  background: var(--gb-gd-white);
+  border: 1px solid var(--gb-gd-border-soft);
+  border-left: 4px solid var(--gb-gd-color);
+  border-radius: 12px;
+}
+.gb-gd-takeaways-h {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--gb-gd-color-dark); font-weight: 700;
+  margin-bottom: 14px;
+}
+.gb-gd-takeaways-list { list-style: none; padding: 0; margin: 0; }
+.gb-gd-takeaways-list li {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px; line-height: 1.5; color: var(--gb-gd-text);
+  padding: 8px 0 8px 24px;
+  position: relative;
+}
+.gb-gd-takeaways-list li::before {
+  content: '✓';
+  position: absolute; left: 0;
+  color: var(--gb-gd-color); font-weight: 800;
+}
+.gb-gd-action {
+  margin: 32px 0;
+  padding: 28px 32px;
+  background: var(--gb-gd-allinone); color: var(--gb-gd-cream);
+  border-radius: 14px;
+  display: flex; align-items: center; gap: 24px;
+}
+.gb-gd-action-icon {
+  flex-shrink: 0;
+  width: 56px; height: 56px;
+  background: var(--gb-gd-color); color: var(--gb-gd-cream);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; font-weight: 800;
+}
+.gb-gd-action-body { flex: 1; }
+.gb-gd-action-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--gb-gd-color); font-weight: 700;
+  margin-bottom: 6px;
+}
+.gb-gd-action-text { font-family: 'DM Sans', sans-serif; font-size: 15px; line-height: 1.55; color: var(--gb-gd-cream); }
+.gb-gd-pane-nav {
+  display: flex; justify-content: space-between;
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid var(--gb-gd-border-soft);
+  gap: 16px;
+}
+.gb-gd-nav-btn {
+  background: var(--gb-gd-white);
+  border: 1px solid var(--gb-gd-border);
+  padding: 14px 22px;
+  border-radius: 999px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700; font-size: 13px; letter-spacing: 0.06em;
+  color: var(--gb-gd-text);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.gb-gd-nav-btn:hover:not([disabled]) {
+  border-color: var(--gb-gd-color);
+  color: var(--gb-gd-color-dark);
+}
+.gb-gd-nav-btn--next {
+  background: var(--gb-gd-color); color: var(--gb-gd-cream);
+  border-color: var(--gb-gd-color);
+}
+.gb-gd-nav-btn--next:hover:not([disabled]) { background: var(--gb-gd-color-dark); color: var(--gb-gd-cream); border-color: var(--gb-gd-color-dark); }
+.gb-gd-nav-btn[disabled] { opacity: 0.4; cursor: not-allowed; }
+.gb-gd-complete { text-align: center; padding: 48px 0; }
+.gb-gd-complete-icon {
+  width: 80px; height: 80px;
+  background: var(--gb-gd-color); color: var(--gb-gd-cream);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 36px;
+  margin: 0 auto 24px;
+}
+.gb-gd-complete-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800; font-size: 36px; letter-spacing: -0.02em;
+  color: var(--gb-gd-text);
+  margin-bottom: 14px;
+}
+.gb-gd-complete-desc {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px; line-height: 1.6; color: var(--gb-gd-text-muted);
+  max-width: 480px; margin: 0 auto 32px;
+}
+.gb-gd-cta {
+  background: var(--gb-gd-allinone); color: var(--gb-gd-cream);
+  border-radius: 18px;
+  padding: 48px;
+  display: grid; grid-template-columns: 1.5fr 1fr; gap: 40px; align-items: center;
+  margin: 32px 0;
+}
+.gb-gd-cta-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--gb-gd-color); font-weight: 700;
+  margin-bottom: 14px;
+}
+.gb-gd-cta-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800; font-size: 28px; line-height: 1.2; letter-spacing: -0.02em;
+  color: var(--gb-gd-cream);
+  margin-bottom: 12px;
+}
+.gb-gd-cta-desc { font-family: 'DM Sans', sans-serif; font-size: 14px; line-height: 1.55; color: rgba(255,249,238,0.78); }
+.gb-gd-cta-product { text-align: right; }
+.gb-gd-cta-name { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 14px; color: rgba(255,249,238,0.78); margin-bottom: 4px; }
+.gb-gd-cta-price {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800; font-size: 32px;
+  color: var(--gb-gd-color);
+  margin-bottom: 16px; letter-spacing: -0.02em; line-height: 1;
+}
+.gb-gd-cta-btn {
+  display: inline-block;
+  background: var(--gb-gd-color); color: var(--gb-gd-cream);
+  padding: 14px 26px;
+  border-radius: 999px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+  text-decoration: none;
+}
+@media (max-width: 768px) {
+  .gb-gd-h1 { font-size: 32px; }
+  .gb-gd-subtitle { font-size: 16px; }
+  .gb-gd-body-inner { grid-template-columns: 1fr; gap: 24px; }
+  .gb-gd-sidebar { position: static; margin-bottom: 12px; }
+  .gb-gd-pane-title { font-size: 26px; }
+  .gb-gd-pane-intro { font-size: 15px; }
+  .gb-gd-action { flex-direction: column; text-align: center; padding: 24px; }
+  .gb-gd-pane-nav { flex-direction: column; }
+  .gb-gd-nav-btn { width: 100%; text-align: center; }
+  .gb-gd-cta { grid-template-columns: 1fr; padding: 32px 24px; gap: 24px; text-align: left; }
+  .gb-gd-cta-product { text-align: left; }
+  .gb-gd-meta-bar { gap: 18px; }
+}
+{% endstylesheet %}
+
+<script>
+(function() {
+  var root = document.getElementById('gb-gd-{{ section.id }}');
+  if (!root) return;
+  var handle = root.dataset.handle || 'guide';
+  var totalSections = {{ sections_count }};
+  var hasComplete = {{ show_complete | json }};
+  var fill = document.getElementById('gb-gd-fill-{{ section.id }}');
+  var label = document.getElementById('gb-gd-label-{{ section.id }}');
+  var sidebarLinks = root.querySelectorAll('.gb-gd-list-link');
+  var panes = root.querySelectorAll('.gb-gd-pane');
+
+  function show(idx) {
+    var idxStr = String(idx);
+    panes.forEach(function(p) {
+      p.classList.toggle('is-active', String(p.dataset.sectionIdx) === idxStr);
+    });
+    sidebarLinks.forEach(function(l) {
+      var li = String(l.dataset.sectionIdx);
+      var n = parseInt(li, 10);
+      var current = (idx === 'complete') ? totalSections : parseInt(idxStr, 10);
+      l.classList.toggle('is-active', li === idxStr);
+      if (!isNaN(n) && n < current) l.classList.add('is-completed');
+      else l.classList.remove('is-completed');
+    });
+    if (label) {
+      if (idx === 'complete') {
+        label.textContent = 'COMPLETE';
+        if (fill) fill.style.width = '100%';
+      } else {
+        var i = parseInt(idxStr, 10);
+        label.textContent = 'SECTION ' + (i + 1) + ' OF ' + totalSections;
+        if (fill) fill.style.width = (((i + 1) / totalSections) * 100) + '%';
+      }
+    }
+    try { localStorage.setItem('gb-gd:' + handle + ':section', idxStr); } catch (e) {}
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  sidebarLinks.forEach(function(l) {
+    l.addEventListener('click', function(e) { e.preventDefault(); show(l.dataset.sectionIdx); });
+  });
+
+  root.querySelectorAll('.gb-gd-nav-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var nav = btn.dataset.nav;
+      var activePane = root.querySelector('.gb-gd-pane.is-active');
+      var current = activePane ? activePane.dataset.sectionIdx : '0';
+      if (nav === 'complete') return show('complete');
+      if (nav === 'restart') return show('0');
+      var step = parseInt(nav, 10) || 0;
+      if (current === 'complete') {
+        if (step < 0) return show(String(totalSections - 1));
+        return;
+      }
+      var ci = parseInt(current, 10);
+      var next = ci + step;
+      if (next < 0) return;
+      if (next >= totalSections) {
+        if (hasComplete) return show('complete');
+        return;
+      }
+      show(String(next));
+    });
+  });
+
+  // Video lazy-load
+  root.querySelectorAll('.gb-gd-pane-video-thumb').forEach(function(t) {
+    t.addEventListener('click', function() {
+      var id = t.dataset.videoId;
+      if (!id) return;
+      t.outerHTML = '<iframe width="100%" style="aspect-ratio:16/9; border:0;" src="https://www.youtube.com/embed/' + id + '?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
+    });
+  });
+
+  // Restore saved progress
+  try {
+    var saved = localStorage.getItem('gb-gd:' + handle + ':section');
+    if (saved !== null) show(saved);
+    else show('0');
+  } catch (e) { show('0'); }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "GB · Guide Main",
+  "tag": "section",
+  "class": "gb-gd-wrap",
+  "settings": [
+    { "type": "header", "content": "Cover" },
+    { "type": "text", "id": "category_label", "label": "Category label", "default": "BUILD YOUR OWN KIT" },
+    { "type": "color", "id": "category_color", "label": "Kit color", "default": "#FF7300" },
+    { "type": "color", "id": "category_color_dark", "label": "Kit color (dark)", "default": "#E66800" },
+    { "type": "color", "id": "category_color_soft", "label": "Kit color (soft)", "default": "#FFE4D1" },
+    { "type": "text", "id": "placeholder_title", "label": "Title (when no page)", "default": "Build your own fermentation kit" },
+    { "type": "textarea", "id": "subtitle", "label": "Subtitle", "default": "Pick what you want to ferment, configure your jar, weights, spices and starter — we'll ship the kit that matches your goal." },
+    { "type": "text", "id": "duration", "label": "Duration", "default": "~20 minutes to configure" },
+    { "type": "text", "id": "level", "label": "Level", "default": "Beginner-friendly" },
+    { "type": "text", "id": "format", "label": "Format", "default": "Interactive · 6 sections" },
+    { "type": "text", "id": "sidebar_label", "label": "Sidebar label", "default": "Steps" },
+
+    { "type": "header", "content": "Per-section labels" },
+    { "type": "text", "id": "takeaways_label", "label": "Takeaways heading", "default": "KEY TAKEAWAYS" },
+    { "type": "text", "id": "action_eyebrow", "label": "Action card eyebrow", "default": "YOUR NEXT ACTION" },
+
+    { "type": "header", "content": "Completion screen" },
+    { "type": "checkbox", "id": "show_completion", "label": "Show completion screen", "default": true },
+    { "type": "text", "id": "completion_sidebar", "label": "Completion sidebar label", "default": "Complete!" },
+    { "type": "text", "id": "completion_title", "label": "Completion title", "default": "Your kit is ready." },
+    { "type": "textarea", "id": "completion_desc", "label": "Completion description", "default": "You walked through every step. Now order the kit you configured and start fermenting." },
+
+    { "type": "header", "content": "Final CTA card" },
+    { "type": "text", "id": "cta_eyebrow", "label": "Eyebrow", "default": "READY TO START FOR REAL?" },
+    { "type": "text", "id": "cta_title", "label": "Title (leave blank to hide)", "default": "Order your custom kit." },
+    { "type": "textarea", "id": "cta_desc", "label": "Description", "default": "We'll pack and ship your configured kit within 24 hours. Free shipping on orders over ₹300." },
+    { "type": "product", "id": "cta_product", "label": "Linked product (auto-fills)" },
+    { "type": "text", "id": "cta_product_name", "label": "Product name (override)" },
+    { "type": "text", "id": "cta_price", "label": "Price (override)" },
+    { "type": "url", "id": "cta_link", "label": "Link (override)" },
+    { "type": "text", "id": "cta_button", "label": "Button label", "default": "Order kit →" }
+  ],
+  "blocks": [
+    {
+      "type": "section_pane",
+      "name": "Section",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Section title", "default": "Section title" },
+        { "type": "text", "id": "duration", "label": "Estimated duration", "default": "10 min" },
+        { "type": "text", "id": "video_id", "label": "YouTube ID (optional)" },
+        { "type": "text", "id": "video_title", "label": "Video title" },
+        { "type": "richtext", "id": "intro", "label": "Intro paragraph (italic)", "default": "<p>Brief setup before the lesson.</p>" },
+        { "type": "richtext", "id": "lesson", "label": "Lesson body", "default": "<p>Long-form lesson content goes here.</p>" },
+        { "type": "textarea", "id": "takeaways", "label": "Key takeaways (one per line)", "default": "First takeaway\nSecond takeaway\nThird takeaway" },
+        { "type": "richtext", "id": "action_text", "label": "Action card text", "default": "<p>Do this before the next section.</p>" },
+        { "type": "text", "id": "action_icon", "label": "Action icon character", "default": "→" }
+      ]
+    }
+  ]
+}
+{% endschema %}
