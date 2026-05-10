@@ -47,11 +47,18 @@
             "anchor_id": "",
             "body": "<p>Salt is the gatekeeper. At 2% salt by weight, harmful bacteria (Listeria, E. coli, Salmonella) can't reproduce. But lactic acid bacteria can. So salt creates a controlled environment where only the good guys grow.</p><p>Get the ratio wrong and the whole thing fails. Too little salt and bad bacteria take over — your jar smells like death and you throw it out. Too much salt and even the good bacteria struggle — fermentation stalls, the vegetables stay raw and sharp.</p><p>For most ferments: 2% salt by weight of the vegetables. That's 20 grams of salt per kilogram of cabbage. Use a kitchen scale. Don't eyeball it.</p>"
           }
+        },
+        "pull_quote_EAgPQd": {
+          "type": "pull_quote",
+          "settings": {
+            "text": "<p><em><strong>Salt is not a flavoring in fermentation. It's a referee. Without it, the wrong team wins.</strong></em></p>"
+          }
         }
       },
       "block_order": [
         "as-1",
-        "article_section_HPE6Bg"
+        "article_section_HPE6Bg",
+        "pull_quote_EAgPQd"
       ],
       "settings": {
         "show_toc": true,
