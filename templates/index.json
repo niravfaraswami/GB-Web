@@ -103,7 +103,7 @@
         "s3": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/achaar-without-text.png",
+            "image": "shopify://shop_images/sprout-without-text.png",
             "theme": "sprout",
             "headline": "<p>Fresh<br/>Sprouts in<br/><em>3 Days</em></p>",
             "sub": "<p>Sprout maker + four seed varieties. <strong>No mush, no smell</strong> — clean sprouts on tap.</p>",
@@ -124,15 +124,15 @@
         "gap_after_headline": 18,
         "gap_after_sub": 24,
         "headline_size_mobile": 20,
-        "sub_size_mobile": 13,
-        "gap_after_headline_mobile": 12,
+        "sub_size_mobile": 11,
+        "gap_after_headline_mobile": 8,
         "gap_after_sub_mobile": 16,
         "min_height_mobile": 0,
         "overlay_width_desktop": 44,
-        "overlay_width_mobile": 88,
+        "overlay_width_mobile": 50,
         "overlay_left_desktop": 6,
         "overlay_left_mobile": 6,
-        "cta_padding_y": 12,
+        "cta_padding_y": 6,
         "cta_padding_x": 24,
         "cta_font_size": 13
       }
