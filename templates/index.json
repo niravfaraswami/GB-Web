@@ -236,6 +236,7 @@
           "settings": {
             "label": "Shop all",
             "tab_id": "all",
+            "show_all_products": false,
             "collection": "",
             "products_limit": 0,
             "cat_band": "",
@@ -248,6 +249,7 @@
           "settings": {
             "label": "Fermentation Kits",
             "tab_id": "fermentation",
+            "show_all_products": false,
             "collection": "fermentation-kits",
             "products_limit": 6,
             "cat_band": "Probiotic Drink",
@@ -260,6 +262,7 @@
           "settings": {
             "label": "Sprouts",
             "tab_id": "sprouts",
+            "show_all_products": false,
             "collection": "",
             "products_limit": 0,
             "cat_band": "Grows Sprouts",
@@ -272,6 +275,7 @@
           "settings": {
             "label": "Prebiotic",
             "tab_id": "prebiotic",
+            "show_all_products": false,
             "collection": "",
             "products_limit": 0,
             "cat_band": "Prebiotic Powder",
@@ -284,6 +288,7 @@
           "settings": {
             "label": "Dairy Cultures",
             "tab_id": "dairy",
+            "show_all_products": false,
             "collection": "",
             "products_limit": 0,
             "cat_band": "Dairy Culture",
@@ -296,6 +301,7 @@
           "settings": {
             "label": "Refills",
             "tab_id": "refills",
+            "show_all_products": false,
             "collection": "",
             "products_limit": 0,
             "cat_band": "Spice Refill",
@@ -308,6 +314,7 @@
           "settings": {
             "label": "Baking",
             "tab_id": "baking",
+            "show_all_products": false,
             "collection": "",
             "products_limit": 0,
             "cat_band": "Baking",
@@ -320,6 +327,7 @@
           "settings": {
             "label": "Jars & Tools",
             "tab_id": "jars",
+            "show_all_products": false,
             "collection": "",
             "products_limit": 0,
             "cat_band": "Tools",
@@ -332,6 +340,7 @@
           "settings": {
             "label": "Recipe Books",
             "tab_id": "books",
+            "show_all_products": false,
             "collection": "",
             "products_limit": 0,
             "cat_band": "Reading",
@@ -393,10 +402,11 @@
       ],
       "settings": {
         "eyebrow": "Why ferment",
-        "heading": "Real probiotics. <em>Live cultures.</em> Made by you.",
+        "heading": "Real probiotics. Live cultures. Made by you.",
         "lead": "<p>Three things happen in the jar between day 1 and day 5 — and none of them happen in store-bought \"probiotic\" drinks.</p>",
-        "before_label": "Before",
-        "after_label": "After",
+        "visual_image": "shopify://shop_images/kanji_s11_consumption_cold.png",
+        "before_label": "",
+        "after_label": "",
         "jar_label": "FERMENT"
       }
     },
@@ -617,7 +627,7 @@
       ],
       "settings": {
         "eyebrow": "From the blog",
-        "heading": "Learn the science. <em>Try the recipe.</em>",
+        "heading": "Learn the science. Try the recipe.",
         "blog": "",
         "article_count": 3
       }
