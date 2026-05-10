@@ -11,9 +11,9 @@
   assign brand_suffix = section.settings.brand_suffix | default: '®'
   assign tagline = section.settings.tagline
   assign fssai = section.settings.fssai
-  assign instagram = section.settings.instagram_url | default: 'https://instagram.com/gutbasketindia'
-  assign facebook = section.settings.facebook_url
-  assign youtube = section.settings.youtube_url
+  assign instagram = section.settings.instagram | default: 'https://instagram.com/gutbasketindia'
+  assign facebook = section.settings.facebook
+  assign youtube = section.settings.youtube
   assign copyright = section.settings.copyright
   assign tagline_short = section.settings.tagline_short
   assign show_payment_icons = section.settings.show_payment_icons
@@ -262,9 +262,9 @@
     { "type": "text", "id": "brand_suffix", "label": "Trademark suffix", "default": "®" },
     { "type": "richtext", "id": "tagline", "label": "Tagline", "default": "<p>Live, gut-friendly ferments. Made at home, the way grandmother did — with kits that actually work.</p>" },
     { "type": "text", "id": "fssai", "label": "FSSAI line", "default": "FSSAI · 10021021000439" },
-    { "type": "url", "id": "instagram_url", "label": "Instagram URL", "default": "https://instagram.com/gutbasketindia" },
-    { "type": "url", "id": "facebook_url",  "label": "Facebook URL" },
-    { "type": "url", "id": "youtube_url",   "label": "YouTube URL" },
+    { "type": "url", "id": "instagram", "label": "Instagram URL", "info": "Defaults to https://instagram.com/gutbasketindia if left empty." },
+    { "type": "url", "id": "facebook",  "label": "Facebook URL" },
+    { "type": "url", "id": "youtube",   "label": "YouTube URL" },
 
     { "type": "header", "content": "Help column footer" },
     { "type": "richtext", "id": "contact_block", "label": "Contact block (under Help links)", "default": "<p>support@gutbasket.com<br>+91 78619 40110</p>" },
