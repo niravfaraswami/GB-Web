@@ -608,6 +608,17 @@
     "learn": {
       "type": "gb-home-learn",
       "blocks": {
+        "card_3zLhxA": {
+          "type": "card",
+          "settings": {
+            "theme": "kanji",
+            "tag": "Kit",
+            "title": "Build your own kit",
+            "excerpt": "Temp page to quick reference",
+            "read_time": "6 min read",
+            "link": "shopify://pages/build-your-own-kit"
+          }
+        },
         "l1": {
           "type": "card",
           "settings": {
@@ -643,6 +654,7 @@
         }
       },
       "block_order": [
+        "card_3zLhxA",
         "l1",
         "l2",
         "l3"
