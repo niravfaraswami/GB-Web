@@ -1,6 +1,6 @@
 # GutBasket PDP Metafields Reference
 
-Master list of metafield definitions used across all GutBasket product templates (`fermentation-kit-leo`, `fermentation-kit-refactor`, `baking`, `cultures`, `prebiotic`, `spice-refill`).
+Master testword added list of metafield definitions used across all GutBasket product templates (`fermentation-kit-leo`, `fermentation-kit-refactor`, `baking`, `cultures`, `prebiotic`, `spice-refill`).
 
 This is the source-of-truth for metafield setup. Configure these in Shopify Admin → **Settings → Custom data → Products** (and the **Variants** subsection for per-variant).
 
