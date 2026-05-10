@@ -1,0 +1,776 @@
+{%- comment -%}
+  Flexible content page section.
+  One section, many block types. Use for About / Help / Story / Returns
+  / Shipping / Forum / Recipes / Newsletter / Instagram pages, etc.
+
+  Activation:
+    1. Online Store → Pages → Add page (or edit an existing page)
+    2. Set "Theme template" → page.gb-content (or any suffix that uses
+       this section)
+    3. Online Store → Themes → Customize → navigate to that page
+    4. Add blocks: hero / text / features / faq / cta / quote /
+       certs / contact / divider / image
+
+  Each block is a self-contained module. Order blocks however you want
+  in Theme Editor — they render in that order on the page.
+{%- endcomment -%}
+
+<div class="gb-cp">
+  {%- for block in section.blocks -%}
+    {%- liquid
+      assign t = block.type
+    -%}
+
+    {%- case t -%}
+
+    {%- when 'hero' -%}
+      <section class="gb-cp-hero" {{ block.shopify_attributes }}>
+        <div class="gb-cp-hero-inner">
+          {%- if block.settings.eyebrow != blank -%}
+            <span class="gb-cp-eyebrow">{{ block.settings.eyebrow }}</span>
+          {%- endif -%}
+          {%- if block.settings.title != blank -%}
+            <h1 class="gb-cp-h1">{{ block.settings.title }}</h1>
+          {%- endif -%}
+          {%- if block.settings.subtitle != blank -%}
+            <div class="gb-cp-sub">{{ block.settings.subtitle }}</div>
+          {%- endif -%}
+          {%- if block.settings.image -%}
+            <div class="gb-cp-hero-img">
+              <img src="{{ block.settings.image | image_url: width: 1600 }}" alt="{{ block.settings.image.alt | escape }}" loading="eager">
+            </div>
+          {%- endif -%}
+        </div>
+      </section>
+
+    {%- when 'text' -%}
+      <section class="gb-cp-text gb-cp-text--{{ block.settings.layout | default: 'centered' }}" {{ block.shopify_attributes }}>
+        <div class="gb-cp-text-inner">
+          {%- if block.settings.image and block.settings.layout != 'centered' -%}
+            <div class="gb-cp-text-img"><img src="{{ block.settings.image | image_url: width: 800 }}" alt="" loading="lazy"></div>
+          {%- endif -%}
+          <div class="gb-cp-text-body">
+            {%- if block.settings.eyebrow != blank -%}
+              <span class="gb-cp-eyebrow">{{ block.settings.eyebrow }}</span>
+            {%- endif -%}
+            {%- if block.settings.heading != blank -%}
+              <h2 class="gb-cp-h2">{{ block.settings.heading }}</h2>
+            {%- endif -%}
+            {%- if block.settings.body != blank -%}
+              <div class="gb-cp-body">{{ block.settings.body }}</div>
+            {%- endif -%}
+          </div>
+        </div>
+      </section>
+
+    {%- when 'features' -%}
+      <section class="gb-cp-features" {{ block.shopify_attributes }}>
+        <div class="gb-cp-features-inner">
+          {%- if block.settings.heading != blank -%}
+            <h2 class="gb-cp-h2 gb-cp-features-h">{{ block.settings.heading }}</h2>
+          {%- endif -%}
+          <div class="gb-cp-features-grid">
+            {%- for i in (1..3) -%}
+              {%- liquid
+                assign t_key  = 'item_' | append: i | append: '_title'
+                assign d_key  = 'item_' | append: i | append: '_desc'
+                assign ic_key = 'item_' | append: i | append: '_icon'
+                assign ftitle = block.settings[t_key]
+                assign fdesc  = block.settings[d_key]
+                assign ficon  = block.settings[ic_key]
+              -%}
+              {%- if ftitle != blank or fdesc != blank -%}
+                <div class="gb-cp-feature">
+                  {%- if ficon != blank -%}<div class="gb-cp-feature-icon">{{ ficon }}</div>{%- endif -%}
+                  {%- if ftitle != blank -%}<div class="gb-cp-feature-title">{{ ftitle }}</div>{%- endif -%}
+                  {%- if fdesc != blank -%}<div class="gb-cp-feature-desc">{{ fdesc }}</div>{%- endif -%}
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        </div>
+      </section>
+
+    {%- when 'faq' -%}
+      <section class="gb-cp-faq" {{ block.shopify_attributes }}>
+        <div class="gb-cp-faq-inner">
+          {%- if block.settings.heading != blank -%}
+            <h2 class="gb-cp-h2">{{ block.settings.heading }}</h2>
+          {%- endif -%}
+          {%- if block.settings.intro != blank -%}
+            <div class="gb-cp-faq-intro">{{ block.settings.intro }}</div>
+          {%- endif -%}
+          <div class="gb-cp-faq-list">
+            {%- for i in (1..8) -%}
+              {%- liquid
+                assign q_key = 'q_' | append: i
+                assign a_key = 'a_' | append: i
+                assign q = block.settings[q_key]
+                assign a = block.settings[a_key]
+              -%}
+              {%- if q != blank -%}
+                <details class="gb-cp-faq-item">
+                  <summary>{{ q }}<span class="gb-cp-faq-icon" aria-hidden="true">+</span></summary>
+                  <div class="gb-cp-faq-a">{{ a }}</div>
+                </details>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        </div>
+      </section>
+
+    {%- when 'cta' -%}
+      <section class="gb-cp-cta gb-cp-cta--{{ block.settings.theme | default: 'dark' }}" {{ block.shopify_attributes }}>
+        <div class="gb-cp-cta-card">
+          <div>
+            {%- if block.settings.eyebrow != blank -%}<div class="gb-cp-eyebrow">{{ block.settings.eyebrow }}</div>{%- endif -%}
+            {%- if block.settings.title != blank -%}<h2 class="gb-cp-cta-title">{{ block.settings.title }}</h2>{%- endif -%}
+            {%- if block.settings.desc != blank -%}<div class="gb-cp-cta-desc">{{ block.settings.desc }}</div>{%- endif -%}
+          </div>
+          {%- if block.settings.button_label != blank -%}
+            <a href="{{ block.settings.button_link | default: '#' }}" class="gb-cp-cta-btn"{% if block.settings.button_link contains 'wa.me' or block.settings.button_link contains 'whatsapp' %} target="_blank" rel="noopener"{% endif %}>{{ block.settings.button_label }}</a>
+          {%- endif -%}
+        </div>
+      </section>
+
+    {%- when 'quote' -%}
+      <section class="gb-cp-quote" {{ block.shopify_attributes }}>
+        <div class="gb-cp-quote-inner">
+          <blockquote class="gb-cp-quote-text">{{ block.settings.text }}</blockquote>
+          {%- if block.settings.author != blank -%}
+            <div class="gb-cp-quote-author">— {{ block.settings.author }}</div>
+          {%- endif -%}
+        </div>
+      </section>
+
+    {%- when 'certs' -%}
+      <section class="gb-cp-certs" {{ block.shopify_attributes }}>
+        <div class="gb-cp-certs-inner">
+          {%- if block.settings.heading != blank -%}<h2 class="gb-cp-h2">{{ block.settings.heading }}</h2>{%- endif -%}
+          {%- if block.settings.intro != blank -%}<div class="gb-cp-faq-intro">{{ block.settings.intro }}</div>{%- endif -%}
+          <div class="gb-cp-certs-grid">
+            {%- for i in (1..4) -%}
+              {%- liquid
+                assign img_key = 'cert_' | append: i | append: '_image'
+                assign t_key   = 'cert_' | append: i | append: '_title'
+                assign b_key   = 'cert_' | append: i | append: '_body'
+                assign cimg = block.settings[img_key]
+                assign ct = block.settings[t_key]
+                assign cb = block.settings[b_key]
+              -%}
+              {%- if ct != blank or cb != blank or cimg -%}
+                <div class="gb-cp-cert">
+                  <div class="gb-cp-cert-img">
+                    {%- if cimg -%}<img src="{{ cimg | image_url: width: 400 }}" alt="" loading="lazy">{%- else -%}<span class="gb-cp-cert-placeholder">📜</span>{%- endif -%}
+                  </div>
+                  {%- if ct != blank -%}<div class="gb-cp-cert-title">{{ ct }}</div>{%- endif -%}
+                  {%- if cb != blank -%}<div class="gb-cp-cert-body">{{ cb }}</div>{%- endif -%}
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        </div>
+      </section>
+
+    {%- when 'contact' -%}
+      <section class="gb-cp-contact" {{ block.shopify_attributes }}>
+        <div class="gb-cp-contact-card">
+          <div class="gb-cp-contact-icon">{{ block.settings.icon | default: '💬' }}</div>
+          <div class="gb-cp-contact-body">
+            {%- if block.settings.title != blank -%}<div class="gb-cp-contact-title">{{ block.settings.title }}</div>{%- endif -%}
+            {%- if block.settings.desc != blank -%}<div class="gb-cp-contact-desc">{{ block.settings.desc }}</div>{%- endif -%}
+          </div>
+          {%- if block.settings.button_label != blank -%}
+            <a href="{{ block.settings.button_link | default: '#' }}" class="gb-cp-contact-btn"{% if block.settings.open_new_tab %} target="_blank" rel="noopener"{% endif %}>{{ block.settings.button_label }}</a>
+          {%- endif -%}
+        </div>
+      </section>
+
+    {%- when 'image' -%}
+      <section class="gb-cp-image" {{ block.shopify_attributes }}>
+        <div class="gb-cp-image-inner">
+          {%- if block.settings.image -%}
+            <img src="{{ block.settings.image | image_url: width: 1600 }}" alt="{{ block.settings.image.alt | escape }}" loading="lazy">
+          {%- endif -%}
+          {%- if block.settings.caption != blank -%}
+            <div class="gb-cp-image-cap">{{ block.settings.caption }}</div>
+          {%- endif -%}
+        </div>
+      </section>
+
+    {%- when 'divider' -%}
+      <hr class="gb-cp-divider" {{ block.shopify_attributes }}>
+
+    {%- endcase -%}
+  {%- endfor -%}
+
+  {%- if section.blocks.size == 0 -%}
+    <section class="gb-cp-empty">
+      <div class="gb-cp-empty-inner">
+        <h1 class="gb-cp-h1">{{ page.title | default: 'Page' }}</h1>
+        <p>Add blocks in Theme Editor to build this page.</p>
+        {%- if page.content != blank -%}
+          <div class="gb-cp-body">{{ page.content }}</div>
+        {%- endif -%}
+      </div>
+    </section>
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+.gb-cp {
+  --gb-cp-white: #FFFFFF;
+  --gb-cp-cream: #FFF9EE;
+  --gb-cp-ink: #1F1F1D;
+  --gb-cp-allinone: #2B2218;
+  --gb-cp-text: #1F1F1D;
+  --gb-cp-muted: #5C4D3F;
+  --gb-cp-soft: #888780;
+  --gb-cp-border: #E8E3D5;
+  --gb-cp-border-soft: #F0EBDD;
+  --gb-cp-action: #FF7300;
+  --gb-cp-kanji: #8B1F40;
+  --gb-cp-sprout: #3F7754;
+  --gb-cp-inulin: #15BA97;
+  --gb-cp-kanji-soft: #F4DBE2;
+  background: var(--gb-cp-white);
+  color: var(--gb-cp-text);
+  font-family: 'DM Sans', sans-serif;
+}
+.gb-cp-eyebrow {
+  display: inline-block;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--gb-cp-muted);
+  margin-bottom: 12px;
+}
+.gb-cp-h1 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: clamp(34px, 4.6vw, 52px);
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+  color: var(--gb-cp-text);
+  margin: 0 0 18px;
+}
+.gb-cp-h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: clamp(26px, 3vw, 34px);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: var(--gb-cp-text);
+  margin: 0 0 16px;
+}
+.gb-cp-h2 em { font-style: italic; font-weight: 700; color: var(--gb-cp-kanji); }
+.gb-cp-body, .gb-cp-text-body p {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--gb-cp-text);
+  margin: 0 0 16px;
+}
+.gb-cp-body strong { font-weight: 700; color: var(--gb-cp-ink); }
+.gb-cp-body em { font-style: italic; }
+
+/* Hero */
+.gb-cp-hero {
+  background: linear-gradient(135deg, var(--gb-cp-kanji-soft) 0%, var(--gb-cp-cream) 80%);
+  padding: 72px 0 56px;
+  border-bottom: 1px solid var(--gb-cp-border-soft);
+}
+.gb-cp-hero-inner { max-width: 880px; margin: 0 auto; padding: 0 24px; }
+.gb-cp-sub {
+  font-size: 18px;
+  color: var(--gb-cp-muted);
+  line-height: 1.55;
+  margin: 0 0 24px;
+  max-width: 720px;
+}
+.gb-cp-hero-img {
+  margin-top: 28px;
+  border-radius: 16px;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+}
+.gb-cp-hero-img img { width: 100%; height: 100%; object-fit: cover; }
+
+/* Text block */
+.gb-cp-text { padding: 56px 0; }
+.gb-cp-text-inner { max-width: 760px; margin: 0 auto; padding: 0 24px; }
+.gb-cp-text--left .gb-cp-text-inner,
+.gb-cp-text--right .gb-cp-text-inner {
+  max-width: 1100px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+}
+.gb-cp-text--right .gb-cp-text-img { order: 2; }
+.gb-cp-text-img { aspect-ratio: 4/3; border-radius: 12px; overflow: hidden; background: var(--gb-cp-cream); }
+.gb-cp-text-img img { width: 100%; height: 100%; object-fit: cover; }
+
+/* Features grid */
+.gb-cp-features { padding: 56px 0; background: var(--gb-cp-cream); }
+.gb-cp-features-inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+.gb-cp-features-h { text-align: center; margin-bottom: 36px; }
+.gb-cp-features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.gb-cp-feature {
+  background: var(--gb-cp-white);
+  border: 1px solid var(--gb-cp-border-soft);
+  border-radius: 14px;
+  padding: 28px 24px;
+}
+.gb-cp-feature-icon {
+  width: 52px; height: 52px;
+  background: var(--gb-cp-kanji-soft);
+  color: var(--gb-cp-kanji);
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+.gb-cp-feature-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 17px;
+  margin-bottom: 8px;
+  color: var(--gb-cp-text);
+}
+.gb-cp-feature-desc {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--gb-cp-muted);
+}
+
+/* FAQ */
+.gb-cp-faq { padding: 56px 0; }
+.gb-cp-faq-inner { max-width: 800px; margin: 0 auto; padding: 0 24px; }
+.gb-cp-faq-intro {
+  font-size: 16px;
+  color: var(--gb-cp-muted);
+  line-height: 1.6;
+  margin: 0 0 28px;
+}
+.gb-cp-faq-list { display: flex; flex-direction: column; gap: 8px; }
+.gb-cp-faq-item {
+  background: var(--gb-cp-cream);
+  border: 1px solid var(--gb-cp-border-soft);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.gb-cp-faq-item summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 18px 22px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--gb-cp-text);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+.gb-cp-faq-item summary::-webkit-details-marker { display: none; }
+.gb-cp-faq-icon {
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--gb-cp-muted);
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+.gb-cp-faq-item[open] .gb-cp-faq-icon { transform: rotate(45deg); }
+.gb-cp-faq-a {
+  padding: 0 22px 20px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--gb-cp-muted);
+}
+.gb-cp-faq-a p { margin: 0 0 12px; }
+.gb-cp-faq-a p:last-child { margin: 0; }
+
+/* CTA */
+.gb-cp-cta { padding: 56px 0; }
+.gb-cp-cta-card {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 40px 48px;
+  border-radius: 18px;
+  display: grid;
+  grid-template-columns: 1.5fr auto;
+  gap: 32px;
+  align-items: center;
+}
+.gb-cp-cta--dark .gb-cp-cta-card {
+  background: var(--gb-cp-allinone);
+  color: var(--gb-cp-cream);
+  margin-left: 24px; margin-right: 24px;
+}
+.gb-cp-cta--dark .gb-cp-eyebrow { color: var(--gb-cp-action); }
+.gb-cp-cta--cream .gb-cp-cta-card {
+  background: var(--gb-cp-cream);
+  border: 1px solid var(--gb-cp-border-soft);
+  margin-left: 24px; margin-right: 24px;
+}
+.gb-cp-cta-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 26px;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin: 0 0 10px;
+}
+.gb-cp-cta-desc {
+  font-size: 14px;
+  line-height: 1.55;
+  opacity: 0.85;
+}
+.gb-cp-cta-btn {
+  display: inline-block;
+  padding: 14px 28px;
+  background: var(--gb-cp-action);
+  color: var(--gb-cp-white);
+  border-radius: 999px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background 0.15s, transform 0.15s;
+  white-space: nowrap;
+}
+.gb-cp-cta-btn:hover { background: #E66800; transform: translateY(-1px); color: #fff; }
+
+/* Quote */
+.gb-cp-quote { padding: 56px 0; background: var(--gb-cp-cream); }
+.gb-cp-quote-inner { max-width: 760px; margin: 0 auto; padding: 0 24px; text-align: center; }
+.gb-cp-quote-text {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: clamp(22px, 2.6vw, 30px);
+  line-height: 1.4;
+  font-style: italic;
+  color: var(--gb-cp-text);
+  margin: 0 0 16px;
+  border-left: 4px solid var(--gb-cp-action);
+  padding-left: 24px;
+  text-align: left;
+}
+.gb-cp-quote-author {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gb-cp-muted);
+}
+
+/* Certs grid */
+.gb-cp-certs { padding: 56px 0; }
+.gb-cp-certs-inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+.gb-cp-certs-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-top: 28px;
+}
+.gb-cp-cert {
+  background: var(--gb-cp-white);
+  border: 1px solid var(--gb-cp-border-soft);
+  border-radius: 12px;
+  padding: 24px 18px;
+  text-align: center;
+}
+.gb-cp-cert-img {
+  height: 88px;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 14px;
+}
+.gb-cp-cert-img img { max-width: 100%; max-height: 88px; object-fit: contain; }
+.gb-cp-cert-placeholder { font-size: 48px; }
+.gb-cp-cert-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 14px;
+  margin-bottom: 6px;
+  color: var(--gb-cp-text);
+}
+.gb-cp-cert-body {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--gb-cp-muted);
+}
+
+/* Contact card */
+.gb-cp-contact { padding: 32px 0; }
+.gb-cp-contact-card {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 24px 28px;
+  background: var(--gb-cp-cream);
+  border: 1px solid var(--gb-cp-border-soft);
+  border-radius: 14px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 20px;
+  align-items: center;
+  margin-left: 24px; margin-right: 24px;
+}
+.gb-cp-contact-icon {
+  width: 56px; height: 56px;
+  background: var(--gb-cp-action);
+  color: var(--gb-cp-white);
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px;
+  flex-shrink: 0;
+}
+.gb-cp-contact-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 16px;
+  color: var(--gb-cp-text);
+  margin-bottom: 4px;
+}
+.gb-cp-contact-desc {
+  font-size: 13px;
+  color: var(--gb-cp-muted);
+  line-height: 1.5;
+}
+.gb-cp-contact-btn {
+  display: inline-block;
+  padding: 12px 24px;
+  background: var(--gb-cp-ink);
+  color: var(--gb-cp-cream);
+  border-radius: 999px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+.gb-cp-contact-btn:hover { background: #000; color: #fff; }
+
+/* Image block */
+.gb-cp-image { padding: 32px 0; }
+.gb-cp-image-inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+.gb-cp-image-inner img { width: 100%; height: auto; border-radius: 14px; display: block; }
+.gb-cp-image-cap {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--gb-cp-soft);
+  margin-top: 10px;
+  text-align: center;
+}
+
+/* Divider */
+.gb-cp-divider {
+  border: 0;
+  border-top: 1px solid var(--gb-cp-border);
+  margin: 24px 24px;
+}
+
+/* Empty state */
+.gb-cp-empty { padding: 64px 0; }
+.gb-cp-empty-inner { max-width: 760px; margin: 0 auto; padding: 0 24px; text-align: center; }
+.gb-cp-empty p { color: var(--gb-cp-muted); }
+
+@media (max-width: 768px) {
+  .gb-cp-features-grid { grid-template-columns: 1fr; }
+  .gb-cp-certs-grid { grid-template-columns: repeat(2, 1fr); }
+  .gb-cp-cta-card { grid-template-columns: 1fr; padding: 28px; gap: 18px; }
+  .gb-cp-contact-card { grid-template-columns: 1fr; text-align: center; padding: 22px; }
+  .gb-cp-contact-icon { margin: 0 auto; }
+  .gb-cp-text--left .gb-cp-text-inner,
+  .gb-cp-text--right .gb-cp-text-inner { grid-template-columns: 1fr; gap: 24px; }
+  .gb-cp-text--right .gb-cp-text-img { order: 1; }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "GB · Content Page",
+  "tag": "section",
+  "class": "gb-cp-wrap",
+  "settings": [
+    { "type": "paragraph", "content": "Add blocks below to build this page. Use the Hero block at the top, then text / features / FAQ / CTA / quote / certs / contact / image / divider blocks in any order." }
+  ],
+  "blocks": [
+    {
+      "type": "hero",
+      "name": "Hero",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Page title" },
+        { "type": "richtext", "id": "subtitle", "label": "Subtitle", "default": "<p>One-paragraph hook.</p>" },
+        { "type": "image_picker", "id": "image", "label": "Hero image (optional)" }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text block",
+      "settings": [
+        { "type": "select", "id": "layout", "label": "Layout",
+          "options": [
+            { "value": "centered", "label": "Centered (text only)" },
+            { "value": "left",     "label": "Image left, text right" },
+            { "value": "right",    "label": "Text left, image right" }
+          ],
+          "default": "centered" },
+        { "type": "image_picker", "id": "image", "label": "Image (for left/right layouts)" },
+        { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+        { "type": "text", "id": "heading", "label": "Heading" },
+        { "type": "richtext", "id": "body", "label": "Body", "default": "<p>Body text.</p>" }
+      ]
+    },
+    {
+      "type": "features",
+      "name": "Features (3-up)",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Section heading" },
+        { "type": "header", "content": "Item 1" },
+        { "type": "text", "id": "item_1_icon",  "label": "Icon", "default": "🌱" },
+        { "type": "text", "id": "item_1_title", "label": "Title" },
+        { "type": "textarea", "id": "item_1_desc", "label": "Description" },
+        { "type": "header", "content": "Item 2" },
+        { "type": "text", "id": "item_2_icon",  "label": "Icon" },
+        { "type": "text", "id": "item_2_title", "label": "Title" },
+        { "type": "textarea", "id": "item_2_desc", "label": "Description" },
+        { "type": "header", "content": "Item 3" },
+        { "type": "text", "id": "item_3_icon",  "label": "Icon" },
+        { "type": "text", "id": "item_3_title", "label": "Title" },
+        { "type": "textarea", "id": "item_3_desc", "label": "Description" }
+      ]
+    },
+    {
+      "type": "faq",
+      "name": "FAQ",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Frequently asked questions" },
+        { "type": "richtext", "id": "intro", "label": "Intro" },
+        { "type": "header", "content": "Q1" },
+        { "type": "text", "id": "q_1", "label": "Question" },
+        { "type": "richtext", "id": "a_1", "label": "Answer" },
+        { "type": "header", "content": "Q2" },
+        { "type": "text", "id": "q_2", "label": "Question" },
+        { "type": "richtext", "id": "a_2", "label": "Answer" },
+        { "type": "header", "content": "Q3" },
+        { "type": "text", "id": "q_3", "label": "Question" },
+        { "type": "richtext", "id": "a_3", "label": "Answer" },
+        { "type": "header", "content": "Q4" },
+        { "type": "text", "id": "q_4", "label": "Question" },
+        { "type": "richtext", "id": "a_4", "label": "Answer" },
+        { "type": "header", "content": "Q5" },
+        { "type": "text", "id": "q_5", "label": "Question" },
+        { "type": "richtext", "id": "a_5", "label": "Answer" },
+        { "type": "header", "content": "Q6" },
+        { "type": "text", "id": "q_6", "label": "Question" },
+        { "type": "richtext", "id": "a_6", "label": "Answer" },
+        { "type": "header", "content": "Q7" },
+        { "type": "text", "id": "q_7", "label": "Question" },
+        { "type": "richtext", "id": "a_7", "label": "Answer" },
+        { "type": "header", "content": "Q8" },
+        { "type": "text", "id": "q_8", "label": "Question" },
+        { "type": "richtext", "id": "a_8", "label": "Answer" }
+      ]
+    },
+    {
+      "type": "cta",
+      "name": "CTA card",
+      "settings": [
+        { "type": "select", "id": "theme", "label": "Theme",
+          "options": [
+            { "value": "dark",  "label": "Dark (ink background)" },
+            { "value": "cream", "label": "Cream" }
+          ],
+          "default": "dark" },
+        { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Call to action" },
+        { "type": "textarea", "id": "desc", "label": "Description" },
+        { "type": "text", "id": "button_label", "label": "Button label", "default": "Button" },
+        { "type": "url", "id": "button_link", "label": "Button link" }
+      ]
+    },
+    {
+      "type": "quote",
+      "name": "Quote",
+      "settings": [
+        { "type": "richtext", "id": "text", "label": "Quote", "default": "<p>Quote text here.</p>" },
+        { "type": "text", "id": "author", "label": "Attribution" }
+      ]
+    },
+    {
+      "type": "certs",
+      "name": "Certifications grid",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Certifications" },
+        { "type": "richtext", "id": "intro", "label": "Intro" },
+        { "type": "header", "content": "Cert 1" },
+        { "type": "image_picker", "id": "cert_1_image", "label": "Logo / image" },
+        { "type": "text", "id": "cert_1_title", "label": "Title" },
+        { "type": "textarea", "id": "cert_1_body", "label": "Body" },
+        { "type": "header", "content": "Cert 2" },
+        { "type": "image_picker", "id": "cert_2_image", "label": "Logo / image" },
+        { "type": "text", "id": "cert_2_title", "label": "Title" },
+        { "type": "textarea", "id": "cert_2_body", "label": "Body" },
+        { "type": "header", "content": "Cert 3" },
+        { "type": "image_picker", "id": "cert_3_image", "label": "Logo / image" },
+        { "type": "text", "id": "cert_3_title", "label": "Title" },
+        { "type": "textarea", "id": "cert_3_body", "label": "Body" },
+        { "type": "header", "content": "Cert 4" },
+        { "type": "image_picker", "id": "cert_4_image", "label": "Logo / image" },
+        { "type": "text", "id": "cert_4_title", "label": "Title" },
+        { "type": "textarea", "id": "cert_4_body", "label": "Body" }
+      ]
+    },
+    {
+      "type": "contact",
+      "name": "Contact card",
+      "settings": [
+        { "type": "text", "id": "icon", "label": "Icon character", "default": "💬" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Talk to a fermentation expert" },
+        { "type": "textarea", "id": "desc", "label": "Description", "default": "Reply within 2 hours, 9am–7pm IST." },
+        { "type": "text", "id": "button_label", "label": "Button label", "default": "Open chat" },
+        { "type": "url", "id": "button_link", "label": "Button link" },
+        { "type": "checkbox", "id": "open_new_tab", "label": "Open link in new tab", "default": true }
+      ]
+    },
+    {
+      "type": "image",
+      "name": "Image",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "caption", "label": "Caption (optional)" }
+      ]
+    },
+    {
+      "type": "divider",
+      "name": "Divider",
+      "settings": []
+    }
+  ],
+  "presets": [
+    {
+      "name": "GB · Content Page",
+      "blocks": [
+        { "type": "hero", "settings": { "title": "Page title", "subtitle": "<p>One-paragraph hook.</p>" } },
+        { "type": "text", "settings": { "heading": "Section heading", "body": "<p>Body text.</p>" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
