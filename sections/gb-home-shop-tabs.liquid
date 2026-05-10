@@ -7,9 +7,35 @@
 {%- liquid
   assign columns = section.settings.columns | default: 3
   assign products_per_tab = section.settings.products_per_tab | default: 6
+  assign title_max = section.settings.title_max_chars | default: 0
+
+  assign show_band  = section.settings.show_card_band
+  assign show_badge = section.settings.show_card_badge
+  assign show_title = section.settings.show_card_title
+  assign show_tag   = section.settings.show_card_tag
+  assign show_now   = section.settings.show_card_now
+  assign show_was   = section.settings.show_card_was
+  assign show_cta   = section.settings.show_card_cta
 -%}
 
-<section class="gb-shop" id="gb-shop-{{ section.id }}">
+{%- capture card_vars -%}
+--gb-card-band-fs: {{ section.settings.band_size | default: 13 }}px;
+--gb-card-band-fw: {{ section.settings.band_weight | default: 600 }};
+--gb-card-badge-fs: {{ section.settings.badge_size | default: 9 }}px;
+--gb-card-badge-fw: {{ section.settings.badge_weight | default: 700 }};
+--gb-card-title-fs: {{ section.settings.title_size | default: 15 }}px;
+--gb-card-title-fw: {{ section.settings.title_weight | default: 700 }};
+--gb-card-tag-fs: {{ section.settings.tag_size | default: 13 }}px;
+--gb-card-tag-fw: {{ section.settings.tag_weight | default: 400 }};
+--gb-card-now-fs: {{ section.settings.now_size | default: 17 }}px;
+--gb-card-now-fw: {{ section.settings.now_weight | default: 800 }};
+--gb-card-was-fs: {{ section.settings.was_size | default: 13 }}px;
+--gb-card-was-fw: {{ section.settings.was_weight | default: 500 }};
+--gb-card-cta-fs: {{ section.settings.cta_size | default: 12 }}px;
+--gb-card-cta-fw: {{ section.settings.cta_weight | default: 600 }};
+{%- endcapture -%}
+
+<section class="gb-shop" id="gb-shop-{{ section.id }}" style="{{ card_vars | strip_newlines }}">
   <div class="gb-shop-container">
     {%- if section.settings.heading != blank or section.settings.eyebrow != blank -%}
       <div class="gb-shop-header">
@@ -71,29 +97,48 @@
                     assign saved = product.compare_at_price | minus: product.price
                   endif
                 -%}
+                {%- liquid
+                  if title_max > 0
+                    assign card_title = product.title | truncate: title_max
+                  else
+                    assign card_title = product.title
+                  endif
+                -%}
                 <a href="{{ product.url }}" class="gb-card gb-card--{{ theme_class }}">
-                  {%- if cat_band != blank -%}
-                    <div class="gb-card-band">{{ cat_band }}</div>
-                  {%- elsif product.type != blank -%}
-                    <div class="gb-card-band">{{ product.type }}</div>
+                  {%- if show_band -%}
+                    {%- if cat_band != blank -%}
+                      <div class="gb-card-band">{{ cat_band }}</div>
+                    {%- elsif product.type != blank -%}
+                      <div class="gb-card-band">{{ product.type }}</div>
+                    {%- endif -%}
                   {%- endif -%}
                   <div class="gb-card-photo"
                        {%- if product.featured_image %} style="background-image: url('{{ product.featured_image | image_url: width: 600 }}');"{%- endif %}>
-                    {%- if saved > 0 -%}
+                    {%- if show_badge and saved > 0 -%}
                       <span class="gb-card-badge">Save {{ saved | money_without_trailing_zeros }}</span>
                     {%- endif -%}
                     <div class="gb-card-bar"></div>
                   </div>
                   <div class="gb-card-info">
-                    <h4 class="gb-card-title">{{ product.title }}</h4>
-                    <div class="gb-card-tag">{{ block.settings.label }}</div>
-                    <div class="gb-card-price">
-                      <span class="gb-card-now">{{ product.price | money_without_trailing_zeros }}</span>
-                      {%- if saved > 0 -%}
-                        <span class="gb-card-was">{{ product.compare_at_price | money_without_trailing_zeros }}</span>
-                      {%- endif -%}
-                    </div>
-                    <button type="button" class="gb-card-cta" data-product-handle="{{ product.handle }}">Add to cart</button>
+                    {%- if show_title -%}
+                      <h4 class="gb-card-title">{{ card_title }}</h4>
+                    {%- endif -%}
+                    {%- if show_tag -%}
+                      <div class="gb-card-tag">{{ block.settings.label }}</div>
+                    {%- endif -%}
+                    {%- if show_now or show_was -%}
+                      <div class="gb-card-price">
+                        {%- if show_now -%}
+                          <span class="gb-card-now">{{ product.price | money_without_trailing_zeros }}</span>
+                        {%- endif -%}
+                        {%- if show_was and saved > 0 -%}
+                          <span class="gb-card-was">{{ product.compare_at_price | money_without_trailing_zeros }}</span>
+                        {%- endif -%}
+                      </div>
+                    {%- endif -%}
+                    {%- if show_cta -%}
+                      <button type="button" class="gb-card-cta" data-product-handle="{{ product.handle }}">Add to cart</button>
+                    {%- endif -%}
                   </div>
                 </a>
               {%- endfor -%}
@@ -228,8 +273,8 @@
   background: var(--c-ink);
   color: var(--c-cream);
   font-family: 'DM Sans', sans-serif;
-  font-size: 13px;
-  font-weight: 600;
+  font-size: var(--gb-card-band-fs, 13px);
+  font-weight: var(--gb-card-band-fw, 600);
   text-align: center;
   padding: 9px 12px;
   letter-spacing: 0.01em;
@@ -260,8 +305,8 @@
   left: 12px;
   z-index: 2;
   font-family: 'DM Mono', monospace;
-  font-size: 9.5px;
-  font-weight: 700;
+  font-size: var(--gb-card-badge-fs, 9.5px);
+  font-weight: var(--gb-card-badge-fw, 700);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   padding: 5px 10px;
@@ -290,15 +335,16 @@
 }
 .gb-card-tag {
   font-family: 'DM Sans', sans-serif;
-  font-size: 13px;
+  font-size: var(--gb-card-tag-fs, 13px);
+  font-weight: var(--gb-card-tag-fw, 400);
   color: var(--c-text-soft);
   margin-bottom: 12px;
   order: 2;
 }
 .gb-card-title {
   font-family: 'Montserrat', sans-serif;
-  font-weight: 700;
-  font-size: 15.5px;
+  font-weight: var(--gb-card-title-fw, 700);
+  font-size: var(--gb-card-title-fs, 15.5px);
   letter-spacing: -0.005em;
   margin: 0 0 4px;
   line-height: 1.3;
@@ -319,14 +365,14 @@
 }
 .gb-card-now {
   font-family: 'Montserrat', sans-serif;
-  font-weight: 800;
-  font-size: 17px;
+  font-weight: var(--gb-card-now-fw, 800);
+  font-size: var(--gb-card-now-fs, 17px);
   color: var(--c-text);
 }
 .gb-card-was {
   font-family: 'DM Sans', sans-serif;
-  font-size: 13px;
-  font-weight: 500;
+  font-size: var(--gb-card-was-fs, 13px);
+  font-weight: var(--gb-card-was-fw, 500);
   color: var(--c-text-soft);
   text-decoration: line-through;
 }
@@ -338,8 +384,8 @@
   border: 1.5px solid var(--c-ink);
   border-radius: 999px;
   font-family: 'DM Sans', sans-serif;
-  font-size: 12.5px;
-  font-weight: 600;
+  font-size: var(--gb-card-cta-fs, 12.5px);
+  font-weight: var(--gb-card-cta-fw, 600);
   color: var(--c-ink);
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -447,7 +493,85 @@
         { "value": "4", "label": "4 columns" }
       ],
       "default": "3" },
-    { "type": "range", "id": "products_per_tab", "label": "Products per tab", "min": 3, "max": 12, "step": 1, "default": 6 }
+    { "type": "range", "id": "products_per_tab", "label": "Products per tab", "min": 3, "max": 12, "step": 1, "default": 6 },
+
+    { "type": "header", "content": "Card text — show / hide" },
+    { "type": "checkbox", "id": "show_card_band",  "label": "Category band (top of card)", "default": true },
+    { "type": "checkbox", "id": "show_card_badge", "label": "\"Save ₹X\" badge on image",  "default": true },
+    { "type": "checkbox", "id": "show_card_title", "label": "Product title",               "default": true },
+    { "type": "checkbox", "id": "show_card_tag",   "label": "Tab-name tag under title",    "default": true },
+    { "type": "checkbox", "id": "show_card_now",   "label": "Current price",               "default": true },
+    { "type": "checkbox", "id": "show_card_was",   "label": "Strikethrough compare price", "default": true },
+    { "type": "checkbox", "id": "show_card_cta",   "label": "Add-to-cart button",          "default": true },
+
+    { "type": "header", "content": "Card text — title truncation" },
+    { "type": "range", "id": "title_max_chars", "label": "Truncate title at characters (0 = no truncation)", "min": 0, "max": 80, "step": 2, "default": 0 },
+
+    { "type": "header", "content": "Card text — typography" },
+    { "type": "paragraph", "content": "Set size in px and weight per text element. Weights: 400 normal, 500 medium, 600 semibold, 700 bold, 800 extra-bold." },
+
+    { "type": "range", "id": "band_size",   "label": "Category band — size",   "min": 9,  "max": 18, "step": 1, "default": 13, "unit": "px" },
+    { "type": "select", "id": "band_weight", "label": "Category band — weight",
+      "options": [
+        { "value": "400", "label": "400 Normal" },
+        { "value": "500", "label": "500 Medium" },
+        { "value": "600", "label": "600 Semibold" },
+        { "value": "700", "label": "700 Bold" },
+        { "value": "800", "label": "800 Extra-bold" }
+      ], "default": "600" },
+
+    { "type": "range", "id": "badge_size",  "label": "Save badge — size",      "min": 8,  "max": 14, "step": 1, "default": 9,  "unit": "px" },
+    { "type": "select", "id": "badge_weight", "label": "Save badge — weight",
+      "options": [
+        { "value": "500", "label": "500 Medium" },
+        { "value": "600", "label": "600 Semibold" },
+        { "value": "700", "label": "700 Bold" },
+        { "value": "800", "label": "800 Extra-bold" }
+      ], "default": "700" },
+
+    { "type": "range", "id": "title_size",  "label": "Product title — size",   "min": 12, "max": 22, "step": 1, "default": 15, "unit": "px" },
+    { "type": "select", "id": "title_weight", "label": "Product title — weight",
+      "options": [
+        { "value": "500", "label": "500 Medium" },
+        { "value": "600", "label": "600 Semibold" },
+        { "value": "700", "label": "700 Bold" },
+        { "value": "800", "label": "800 Extra-bold" }
+      ], "default": "700" },
+
+    { "type": "range", "id": "tag_size",    "label": "Tab-name tag — size",    "min": 10, "max": 16, "step": 1, "default": 13, "unit": "px" },
+    { "type": "select", "id": "tag_weight", "label": "Tab-name tag — weight",
+      "options": [
+        { "value": "400", "label": "400 Normal" },
+        { "value": "500", "label": "500 Medium" },
+        { "value": "600", "label": "600 Semibold" },
+        { "value": "700", "label": "700 Bold" }
+      ], "default": "400" },
+
+    { "type": "range", "id": "now_size",    "label": "Current price — size",   "min": 14, "max": 26, "step": 1, "default": 17, "unit": "px" },
+    { "type": "select", "id": "now_weight", "label": "Current price — weight",
+      "options": [
+        { "value": "600", "label": "600 Semibold" },
+        { "value": "700", "label": "700 Bold" },
+        { "value": "800", "label": "800 Extra-bold" }
+      ], "default": "800" },
+
+    { "type": "range", "id": "was_size",    "label": "Compare price — size",   "min": 10, "max": 18, "step": 1, "default": 13, "unit": "px" },
+    { "type": "select", "id": "was_weight", "label": "Compare price — weight",
+      "options": [
+        { "value": "400", "label": "400 Normal" },
+        { "value": "500", "label": "500 Medium" },
+        { "value": "600", "label": "600 Semibold" },
+        { "value": "700", "label": "700 Bold" }
+      ], "default": "500" },
+
+    { "type": "range", "id": "cta_size",    "label": "Add-to-cart button — size",  "min": 10, "max": 16, "step": 1, "default": 12, "unit": "px" },
+    { "type": "select", "id": "cta_weight", "label": "Add-to-cart button — weight",
+      "options": [
+        { "value": "500", "label": "500 Medium" },
+        { "value": "600", "label": "600 Semibold" },
+        { "value": "700", "label": "700 Bold" },
+        { "value": "800", "label": "800 Extra-bold" }
+      ], "default": "600" }
   ],
   "blocks": [
     {
