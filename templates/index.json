@@ -225,7 +225,7 @@
       ],
       "settings": {
         "eyebrow": "Shop by collection",
-        "heading": "Find your gut-health <em>starting point.</em>"
+        "heading": "Find your gut-health starting point."
       }
     },
     "shop_tabs": {
@@ -249,7 +249,7 @@
             "label": "Fermentation Kits",
             "tab_id": "fermentation",
             "collection": "fermentation-kits",
-            "products_limit": 0,
+            "products_limit": 6,
             "cat_band": "Probiotic Drink",
             "view_all_label": "View all fermentation kits",
             "theme": "kanji"
@@ -353,7 +353,7 @@
       ],
       "settings": {
         "eyebrow": "",
-        "heading": "Complete <em>care</em> for your gut.",
+        "heading": "Complete care for your gut.",
         "columns": "3",
         "products_per_tab": 6
       }
