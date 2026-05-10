@@ -1,0 +1,2335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Build Your Own Fermentation Kit — GutBasket</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  /* Layer 1 · Identity */
+  --white: #FFFFFF;
+  --cream: #FFF9EE;
+  --cream-deeper: #F5EDD8;
+  --ink: #1F1F1D;
+  --all-in-one: #2B2218;
+
+  /* Layer 2 · Action */
+  --action: #FF7300;
+  --action-dark: #E66800;
+
+  /* Layer 3 · Page kit-color (Achaar maroon — anchors the BYOK page) */
+  --kit-color: #8B1F40;
+  --kit-color-dark: #6E1733;
+  --kit-color-soft: #F4D7DD;
+
+  /* Borders & text */
+  --border: #E8E3D5;
+  --border-soft: #F0EBDD;
+  --text: #1F1F1D;
+  --text-muted: #5C4D3F;
+  --text-soft: #888780;
+
+  /* Section accent backgrounds (per category) */
+  --c-jars: #E0E8DD;       /* sage soft */
+  --c-spice: #F8E3CC;      /* warm tan */
+  --c-tools: #DCE6EE;      /* slate soft */
+  --c-books: #F1DDC3;      /* parchment */
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  color: var(--text);
+  background: var(--cream);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+a { text-decoration: none; color: inherit; }
+img, svg { max-width: 100%; display: block; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+ul { list-style: none; }
+
+.container { max-width: 1240px; margin: 0 auto; padding: 0 28px; }
+
+h1, h2, h3, h4 {
+  font-family: 'Montserrat', sans-serif;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.eyebrow, .mono {
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* ============== PROMO BAR ============== */
+.promo-bar {
+  background: var(--all-in-one);
+  color: var(--cream);
+  font-size: 13px;
+  padding: 10px 0;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  overflow: hidden;
+}
+.promo-track {
+  display: flex;
+  gap: 40px;
+  white-space: nowrap;
+  justify-content: center;
+  padding: 0 24px;
+}
+.promo-track .item { display: inline-flex; align-items: center; gap: 6px; }
+
+/* ============== HEADER ============== */
+header.site-header {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 28px;
+  gap: 24px;
+  max-width: 1240px;
+  margin: 0 auto;
+}
+.logo {
+  display: inline-flex;
+  align-items: center;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 22px;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+.logo .gut { font-weight: 800; }
+.logo .basket { font-weight: 600; }
+
+.main-nav {
+  display: flex;
+  gap: 26px;
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.nav-link {
+  color: var(--text);
+  padding: 8px 2px;
+  position: relative;
+  transition: color 0.15s ease;
+}
+.nav-link:hover { color: var(--kit-color); }
+.nav-link.active { color: var(--kit-color); }
+.nav-link.active::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0;
+  bottom: 0;
+  height: 2px;
+  background: var(--kit-color);
+}
+.nav-link.has-tag::before {
+  content: attr(data-tag);
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--action);
+  color: white;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 999px;
+  white-space: nowrap;
+  letter-spacing: 0.08em;
+  font-family: 'DM Mono', monospace;
+}
+.nav-link.has-tag.tag-best::before { background: var(--kit-color); }
+
+.header-actions { display: flex; gap: 10px; align-items: center; }
+.header-action {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--cream);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  font-size: 16px;
+  transition: background 0.15s ease;
+}
+.header-action:hover { background: var(--cream-deeper); }
+.header-action.cart { background: var(--ink); color: var(--cream); }
+.cart-count {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: var(--action);
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'DM Mono', monospace;
+}
+.mobile-menu-toggle { display: none; background: transparent; }
+
+/* ============== BREADCRUMB ============== */
+.breadcrumb {
+  font-size: 12px;
+  color: var(--text-soft);
+  padding: 18px 0 8px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+.breadcrumb a:hover { color: var(--kit-color); }
+.breadcrumb .sep { margin: 0 6px; }
+.breadcrumb .current { color: var(--ink); font-weight: 700; }
+
+/* ============== PAGE HERO ============== */
+.byok-hero {
+  text-align: center;
+  padding: 28px 0 40px;
+  border-bottom: 1px solid var(--border-soft);
+}
+.byok-hero .eyebrow {
+  color: var(--kit-color);
+  font-size: 11px;
+  font-weight: 600;
+  margin-bottom: 14px;
+  display: inline-block;
+}
+.byok-hero h1 {
+  font-size: 44px;
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  margin-bottom: 14px;
+  text-transform: uppercase;
+}
+.byok-hero h1 em {
+  font-style: normal;
+  color: var(--kit-color);
+}
+.byok-hero p {
+  font-size: 16px;
+  color: var(--text-muted);
+  max-width: 580px;
+  margin: 0 auto;
+}
+
+/* ============== TWO-COLUMN LAYOUT ============== */
+.byok-layout {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 48px;
+  padding: 40px 0 80px;
+  align-items: start;
+}
+
+/* ============== SECTIONS ============== */
+.byok-section {
+  margin-bottom: 56px;
+}
+.byok-section:last-child { margin-bottom: 0; }
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+.section-num {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--kit-color);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'DM Mono', monospace;
+  font-weight: 700;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+.section-title {
+  font-size: 20px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.section-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: var(--cream-deeper);
+  color: var(--text-muted);
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-left: auto;
+  transition: all 0.2s ease;
+}
+.section-pill .pill-icon {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  border: 1.5px solid var(--text-muted);
+  display: inline-block;
+}
+.section-pill.has-selection {
+  background: var(--kit-color-soft);
+  color: var(--kit-color-dark);
+}
+.section-pill.has-selection .pill-icon {
+  background: var(--kit-color);
+  border-color: var(--kit-color);
+  box-shadow: inset 0 0 0 2px var(--kit-color-soft);
+}
+.section-hint {
+  flex: 1 1 100%;
+  font-size: 13px;
+  color: var(--text-soft);
+  margin-top: -4px;
+}
+
+/* ============== PRODUCT GRID ============== */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+.product-grid .extra { display: none; }
+.product-grid.expanded .extra { display: flex; }
+
+.product-card {
+  background: var(--white);
+  border: 1px solid var(--border-soft);
+  border-radius: 14px;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+}
+.product-card:hover {
+  border-color: var(--kit-color-soft);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(31, 31, 29, 0.06);
+}
+.product-card.selected {
+  border-color: var(--kit-color);
+  box-shadow: 0 0 0 2px var(--kit-color-soft), 0 6px 22px rgba(139, 31, 64, 0.10);
+}
+
+.card-media {
+  aspect-ratio: 1 / 1;
+  background: var(--cream-deeper);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.card-media svg { width: 70%; height: 70%; }
+.card-media[data-tone="jars"] { background: var(--c-jars); }
+.card-media[data-tone="spice"] { background: var(--c-spice); }
+.card-media[data-tone="tools"] { background: var(--c-tools); }
+.card-media[data-tone="books"] { background: var(--c-books); }
+
+.card-radio {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+  z-index: 2;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+.card-radio::after {
+  content: '';
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: var(--kit-color);
+  opacity: 0;
+  transform: scale(0.4);
+  transition: all 0.15s ease;
+}
+.product-card.selected .card-radio {
+  border-color: var(--kit-color);
+  background: var(--kit-color-soft);
+}
+.product-card.selected .card-radio::after {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.card-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: var(--ink);
+  color: var(--cream);
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 4px 9px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+.card-badge.bestseller { background: var(--action); color: var(--white); }
+.card-badge.new { background: var(--kit-color); color: var(--white); }
+
+.card-body {
+  padding: 16px 16px 18px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+.card-name {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+.card-desc {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  line-height: 1.45;
+  margin-bottom: 12px;
+  flex-grow: 1;
+}
+.card-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.card-compare {
+  font-size: 12px;
+  color: var(--text-soft);
+  text-decoration: line-through;
+  font-weight: 500;
+}
+.card-price {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.card-variant-select {
+  margin-top: 10px;
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 12px;
+  color: var(--text);
+  background: var(--white);
+  cursor: pointer;
+}
+.card-variant-select:focus { outline: 2px solid var(--kit-color-soft); border-color: var(--kit-color); }
+
+/* View More toggle */
+.view-more-wrap { text-align: center; margin-top: 20px; }
+.view-more {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--kit-color);
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid var(--kit-color);
+  padding: 4px 2px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.15s ease;
+}
+.view-more:hover { color: var(--kit-color-dark); border-color: var(--kit-color-dark); }
+.view-more .chev { display: inline-block; transition: transform 0.2s ease; }
+.view-more.open .chev { transform: rotate(180deg); }
+
+/* ============== BUNDLE SUMMARY (DESKTOP SIDEBAR) ============== */
+.bundle-card {
+  position: sticky;
+  top: 96px;
+  background: var(--white);
+  border: 1px solid var(--kit-color-soft);
+  border-radius: 14px;
+  padding: 24px;
+}
+.bundle-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-soft);
+  margin-bottom: 16px;
+}
+.bundle-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.bundle-item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+.bundle-item .label {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex-grow: 1;
+}
+.bundle-item .step {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  text-transform: uppercase;
+}
+.bundle-item .selection {
+  font-size: 11.5px;
+  color: var(--text-soft);
+  font-weight: 500;
+}
+.bundle-item.has-selection .step { color: var(--kit-color); }
+.bundle-item.has-selection .selection { color: var(--text-muted); font-weight: 600; }
+.bundle-item .check {
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+  font-size: 11px;
+  color: transparent;
+}
+.bundle-item.has-selection .check {
+  background: var(--kit-color);
+  border-color: var(--kit-color);
+  color: var(--white);
+}
+.bundle-item.has-selection .check::after {
+  content: '✓';
+  font-weight: 700;
+  line-height: 1;
+}
+
+.bundle-divider {
+  border-top: 1px solid var(--border-soft);
+  margin: 16px 0;
+}
+
+.bundle-total {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+.bundle-total .lbl {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--ink);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.bundle-total .val {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 22px;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+}
+.bundle-savings {
+  font-size: 11.5px;
+  color: var(--kit-color-dark);
+  font-weight: 600;
+  text-align: right;
+  margin-top: -14px;
+  margin-bottom: 16px;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.04em;
+  height: 16px;
+}
+
+.bundle-cta {
+  width: 100%;
+  background: var(--action);
+  color: var(--white);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 16px;
+  border-radius: 999px;
+  transition: all 0.15s ease;
+  font-family: 'DM Sans', sans-serif;
+}
+.bundle-cta:hover:not(:disabled) {
+  background: var(--action-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(255, 115, 0, 0.25);
+}
+.bundle-cta:disabled {
+  background: #BFB8A6;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.bundle-trust {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 14px;
+  font-size: 11.5px;
+  color: var(--text-soft);
+}
+.bundle-trust .row { display: flex; align-items: center; gap: 6px; }
+.bundle-trust .check-i { color: var(--kit-color); font-weight: 700; }
+
+/* ============== STICKY MOBILE BUNDLE BAR ============== */
+/* Backdrop dimmer when sheet is expanded */
+.mobile-bundle-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(31, 31, 29, 0.45);
+  z-index: 89;
+  opacity: 0;
+  transition: opacity 0.22s ease;
+}
+.mobile-bundle-backdrop.is-visible {
+  display: block;
+  opacity: 1;
+}
+
+.mobile-bundle {
+  display: none;
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  background: var(--white);
+  border-top: 1px solid var(--border);
+  border-radius: 16px 16px 0 0;
+  box-shadow: 0 -8px 24px rgba(31, 31, 29, 0.08);
+  z-index: 90;
+  padding: 0 18px calc(12px + env(safe-area-inset-bottom));
+  transition: box-shadow 0.22s ease;
+}
+.mobile-bundle.is-expanded {
+  box-shadow: 0 -16px 48px rgba(31, 31, 29, 0.18);
+}
+
+/* Drag handle / grabber at top of bar */
+.mobile-bundle-handle {
+  display: flex;
+  justify-content: center;
+  padding: 8px 0 4px;
+  cursor: pointer;
+}
+.mobile-bundle-handle::before {
+  content: "";
+  width: 36px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--border);
+}
+
+/* Collapsible list panel above the row */
+.mobile-bundle-sheet {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.28s ease;
+}
+.mobile-bundle.is-expanded .mobile-bundle-sheet {
+  max-height: 60vh;
+  overflow-y: auto;
+}
+.mobile-bundle-sheet-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 8px 0 14px;
+  border-bottom: 1px solid var(--border);
+}
+.mobile-bundle-sheet-header h3 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+.mobile-bundle-sheet-header .empty-msg {
+  font-size: 12px;
+  color: var(--text-soft);
+}
+.mobile-bundle-list {
+  list-style: none;
+  margin: 0;
+  padding: 8px 0;
+}
+.mobile-bundle-list li {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px dashed var(--border);
+}
+.mobile-bundle-list li:last-child { border-bottom: none; }
+.mobile-bundle-list .section-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--kit-color);
+  margin-bottom: 2px;
+}
+.mobile-bundle-list .item-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.35;
+}
+.mobile-bundle-list .item-price {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.mobile-bundle-list .item-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px; height: 22px;
+  border: 1px solid var(--border);
+  background: var(--cream);
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  color: var(--text-soft);
+  margin-top: 2px;
+}
+.mobile-bundle-list .item-remove:hover { color: var(--kit-color); border-color: var(--kit-color); }
+
+/* The always-visible bottom row */
+.mobile-bundle-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 4px 0 12px;
+}
+.mobile-bundle.is-expanded .mobile-bundle-row {
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+}
+.mobile-bundle-info {
+  flex: 1;
+  min-width: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.mobile-bundle-info-text { flex: 1; min-width: 0; }
+.mobile-bundle-info .lbl {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--text-soft);
+  text-transform: uppercase;
+}
+.mobile-bundle-info .val {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 18px;
+  color: var(--ink);
+}
+.mobile-bundle-info .meta {
+  font-size: 11px;
+  color: var(--kit-color);
+  font-weight: 600;
+}
+.mobile-bundle-chevron {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--cream);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.22s ease;
+  color: var(--ink);
+}
+.mobile-bundle.is-expanded .mobile-bundle-chevron {
+  transform: rotate(180deg);
+}
+.mobile-bundle .bundle-cta {
+  width: auto;
+  flex: 0 0 auto;
+  padding: 14px 24px;
+  font-size: 13px;
+}
+
+/* ============== FOOTER ============== */
+footer.site-footer {
+  background: var(--all-in-one);
+  color: rgba(255, 249, 238, 0.65);
+  padding: 64px 0 32px;
+  margin-top: 0;
+}
+.footer-strip {
+  border-bottom: 1px solid rgba(255, 249, 238, 0.1);
+  padding-bottom: 28px;
+  margin-bottom: 36px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: space-between;
+  font-size: 12.5px;
+  color: rgba(255, 249, 238, 0.7);
+}
+.footer-strip .item { display: inline-flex; align-items: center; gap: 6px; }
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr 1.2fr;
+  gap: 40px;
+  margin-bottom: 40px;
+}
+.footer-col .footer-logo {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 22px;
+  color: var(--cream);
+  letter-spacing: -0.02em;
+}
+.footer-col .footer-logo .basket { font-weight: 600; }
+.footer-col .tagline {
+  margin-top: 12px;
+  font-size: 13px;
+  color: rgba(255, 249, 238, 0.55);
+  max-width: 280px;
+  line-height: 1.55;
+}
+.footer-col h4 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--cream);
+  margin-bottom: 18px;
+}
+.footer-col li { margin-bottom: 10px; }
+.footer-col li a, .footer-col li {
+  font-size: 13px;
+  color: rgba(255, 249, 238, 0.6);
+  transition: color 0.15s ease;
+}
+.footer-col li a:hover { color: var(--cream); }
+.footer-social {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+.footer-social a {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: rgba(255, 249, 238, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease;
+  color: var(--cream);
+}
+.footer-social a:hover { background: var(--kit-color); }
+.footer-social svg { width: 14px; height: 14px; fill: currentColor; }
+.newsletter {
+  display: flex;
+  margin-top: 12px;
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 249, 238, 0.15);
+}
+.newsletter input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  padding: 10px 16px;
+  color: var(--cream);
+  font-family: inherit;
+  font-size: 13px;
+  outline: none;
+}
+.newsletter input::placeholder { color: rgba(255, 249, 238, 0.4); }
+.newsletter button {
+  background: var(--kit-color);
+  color: var(--white);
+  padding: 10px 20px;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-family: 'DM Mono', monospace;
+}
+.newsletter button:hover { background: var(--kit-color-dark); }
+.footer-bottom {
+  border-top: 1px solid rgba(255, 249, 238, 0.1);
+  padding-top: 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: rgba(255, 249, 238, 0.4);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+/* ============== RESPONSIVE ============== */
+@media (max-width: 980px) {
+  .byok-layout { grid-template-columns: 1fr; gap: 0; padding-bottom: 120px; }
+  .bundle-card { display: none; }
+  .mobile-bundle { display: block; }
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+}
+
+@media (max-width: 768px) {
+  .container { padding: 0 18px; }
+  .header-inner { padding: 12px 18px; }
+  .main-nav { display: none; }
+  .mobile-menu-toggle { display: flex; }
+  .header-action.search, .header-action.account { display: none; }
+  .promo-track { gap: 24px; font-size: 12px; }
+
+  .byok-hero { padding: 22px 0 28px; }
+  .byok-hero h1 { font-size: 26px; line-height: 1.15; }
+  .byok-hero p { font-size: 14px; }
+
+  .byok-section { margin-bottom: 40px; }
+  .section-title { font-size: 16px; }
+  .section-num { width: 30px; height: 30px; font-size: 13px; }
+  .section-pill { font-size: 10px; padding: 4px 10px; }
+
+  .product-grid {
+    display: flex;
+    grid-template-columns: none;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 12px;
+    padding: 4px 18px 16px;
+    margin: 0 -18px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .product-grid::-webkit-scrollbar { display: none; }
+  .product-grid > .product-card {
+    flex: 0 0 70%;
+    max-width: 280px;
+    scroll-snap-align: start;
+  }
+  .product-grid .extra { display: flex; }
+  .view-more-wrap { display: none; }
+
+  .card-name { font-size: 12px; }
+  .card-desc { font-size: 11.5px; }
+  .card-price { font-size: 14px; }
+
+  .footer-grid { grid-template-columns: 1fr; }
+  footer.site-footer { padding: 48px 0 24px; }
+}
+
+/* ============== ACCESSIBILITY ============== */
+:focus-visible {
+  outline: 2px solid var(--kit-color);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+.product-card:focus-visible {
+  outline: 2px solid var(--kit-color);
+  outline-offset: 3px;
+}
+</style>
+</head>
+<body>
+
+<!-- =========== PROMO BAR =========== -->
+<div class="promo-bar">
+  <div class="promo-track">
+    <span class="item">🍃 Free Shipping over ₹300</span>
+    <span class="item">⚡ Ships Next Working Day</span>
+    <span class="item">🇮🇳 Made in India</span>
+    <span class="item">🛡️ Secure Checkout</span>
+    <span class="item">💵 Cash On Delivery</span>
+  </div>
+</div>
+
+<!-- =========== HEADER =========== -->
+<header class="site-header">
+  <div class="header-inner">
+    <a href="#" class="logo" aria-label="GutBasket"><span class="gut">GUT</span><span class="basket">Basket</span></a>
+    <nav class="main-nav" aria-label="Primary">
+      <a class="nav-link has-tag" data-tag="NEW · START HERE" href="#">Ferment Kits</a>
+      <a class="nav-link" href="#">Kanji</a>
+      <a class="nav-link has-tag tag-best" data-tag="BEST SELLER" href="#">Sprout Kits</a>
+      <a class="nav-link" href="#">Prebiotics &amp; Superfood</a>
+      <a class="nav-link" href="#">Spice Mix</a>
+      <a class="nav-link" href="#">Jars &amp; Tools</a>
+      <a class="nav-link active" href="#">Build Your Kit</a>
+      <a class="nav-link" href="#">The Ferment Forum</a>
+      <a class="nav-link" href="#">Recipes</a>
+    </nav>
+    <div class="header-actions">
+      <button class="header-action search" aria-label="Search">⌕</button>
+      <button class="header-action account" aria-label="Account">◯</button>
+      <button class="header-action cart" aria-label="Cart">⊟<span class="cart-count" id="header-cart-count">1</span></button>
+      <button class="header-action mobile-menu-toggle" aria-label="Open menu">
+        <svg viewBox="0 0 24 24" fill="none" width="20" height="20"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- =========== BREADCRUMB =========== -->
+<div class="container">
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <a href="#">Home</a>
+    <span class="sep">/</span>
+    <span class="current">Build Your Kit</span>
+  </nav>
+</div>
+
+<!-- =========== HERO =========== -->
+<section class="byok-hero">
+  <div class="container">
+    <span class="eyebrow">CRAFT YOUR FERMENTATION SETUP</span>
+    <h1>Build Your Own <em>Fermentation Kit</em></h1>
+    <p>Mix and match — pick what you need from any section. Add a jar, a spice mix, a tool, a recipe book, or all four. Your kit, your way.</p>
+  </div>
+</section>
+
+<!-- =========== MAIN LAYOUT =========== -->
+<main class="container">
+  <div class="byok-layout">
+
+    <!-- LEFT: SECTIONS -->
+    <div class="byok-sections">
+
+      <!-- ====== SECTION 1: JARS ====== -->
+      <section class="byok-section" data-section="jars" id="section-jars">
+        <div class="section-header">
+          <div class="section-num">1</div>
+          <h2 class="section-title">Choose Your Jar</h2>
+          <span class="section-pill" data-pill="jars"><span class="pill-icon"></span><span class="pill-text">Optional</span></span>
+          <p class="section-hint">Pick one or more — different sizes for different ferments.</p>
+        </div>
+        <div class="product-grid" data-grid="jars">
+
+          <!-- JAR 1 -->
+          <article class="product-card" data-id="jar-1l" data-section="jars" data-name="Fermentation Jar with Airlock — 1L" data-price="499" data-compare="999" tabindex="0" role="button" aria-pressed="false">
+            <div class="card-media" data-tone="jars">
+              <span class="card-badge bestseller">BESTSELLER</span>
+              <span class="card-radio" aria-hidden="true"></span>
+              <!-- Jar SVG -->
+              <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                <rect x="38" y="22" width="6" height="16" fill="#3a3a3a" rx="1"/>
+                <ellipse cx="41" cy="22" rx="9" ry="3" fill="#5a5a5a"/>
+                <rect x="32" y="38" width="56" height="12" fill="#2b2218" rx="2"/>
+                <path d="M32 50 Q26 56 28 70 L28 100 Q28 108 36 108 L84 108 Q92 108 92 100 L92 70 Q94 56 88 50 Z" fill="#FFFFFF" stroke="#cdb89c" stroke-width="1.5"/>
+                <path d="M34 56 Q30 60 32 72 L32 98 Q32 104 38 104 L82 104 Q88 104 88 98 L88 72 Q90 60 86 56 Z" fill="rgba(245,237,216,0.3)"/>
+                <text x="60" y="82" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="9" font-weight="800" fill="#2b2218" letter-spacing="0.5">1L</text>
+              </svg>
+            </div>
+            <div class="card-body">
+              <div class="card-name">Fermentation Jar With Airlock — 1 Litre</div>
+              <p class="card-desc">Versatile glass jar with airlock for all ferments. Beginner size.</p>
+              <div class="card-price-row">
+                <span class="card-compare">Rs. 999.00</span>
+                <span class="card-price">Rs. 499.00</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- JAR 2 -->
+          <article class="product-card" data-id="jar-2l" data-section="jars" data-name="Fermentation Jar with Airlock — 2L Wide Mouth" data-price="949" data-compare="1499" tabindex="0" role="button" aria-pressed="false">
+            <div class="card-media" data-tone="jars">
+              <span class="card-radio" aria-hidden="true"></span>
+              <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                <rect x="40" y="18" width="6" height="18" fill="#3a3a3a" rx="1"/>
+                <ellipse cx="43" cy="18" rx="10" ry="3.5" fill="#5a5a5a"/>
+                <rect x="28" y="36" width="64" height="12" fill="#2b2218" rx="2"/>
+                <path d="M28 48 Q22 54 24 70 L24 102 Q24 110 34 110 L86 110 Q96 110 96 102 L96 70 Q98 54 92 48 Z" fill="#FFFFFF" stroke="#cdb89c" stroke-width="1.5"/>
+                <path d="M30 54 Q26 60 28 72 L28 100 Q28 106 36 106 L84 106 Q92 106 92 100 L92 72 Q94 60 90 54 Z" fill="rgba(245,237,216,0.3)"/>
+                <text x="60" y="82" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="9" font-weight="800" fill="#2b2218" letter-spacing="0.5">2L</text>
+              </svg>
+            </div>
+            <div class="card-body">
+              <div class="card-name">Fermentation Jar With Airlock — 2 Litre · Wide Mouth</div>
+              <p class="card-desc">Wide-mouth glass jar with airlock. Best for chunky veg ferments.</p>
+              <div class="card-price-row">
+                <span class="card-compare">Rs. 1,499.00</span>
+                <span class="card-price">Rs. 949.00</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- JAR 3 -->
+          <article class="product-card" data-id="jar-4l" data-section="jars" data-name="Fermentation Jar with Airlock — 4L Wide Mouth" data-price="1290" data-compare="1999" tabindex="0" role="button" aria-pressed="false">
+            <div class="card-media" data-tone="jars">
+              <span class="card-radio" aria-hidden="true"></span>
+              <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                <rect x="42" y="14" width="6" height="20" fill="#3a3a3a" rx="1"/>
+                <ellipse cx="45" cy="14" rx="11" ry="4" fill="#5a5a5a"/>
+                <rect x="22" y="34" width="76" height="12" fill="#2b2218" rx="2"/>
+                <path d="M22 46 Q16 52 18 70 L18 104 Q18 112 30 112 L90 112 Q102 112 102 104 L102 70 Q104 52 98 46 Z" fill="#FFFFFF" stroke="#cdb89c" stroke-width="1.5"/>
+                <path d="M24 52 Q20 58 22 72 L22 102 Q22 108 32 108 L88 108 Q98 108 98 102 L98 72 Q100 58 96 52 Z" fill="rgba(245,237,216,0.3)"/>
+                <text x="60" y="84" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="11" font-weight="800" fill="#2b2218" letter-spacing="0.5">4L</text>
+              </svg>
+            </div>
+            <div class="card-body">
+              <div class="card-name">Fermentation Jar With Airlock — 4 Litre · Wide Mouth</div>
+              <p class="card-desc">Family-size wide-mouth jar for big batches and group ferments.</p>
+              <div class="card-price-row">
+                <span class="card-compare">Rs. 1,999.00</span>
+                <span class="card-price">Rs. 1,290.00</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- JAR 4 -->
+          <article class="product-card" data-id="jar-kombucha" data-section="jars" data-name="Kombucha Glass Jar 4L" data-price="850" data-compare="0" tabindex="0" role="button" aria-pressed="false">
+            <div class="card-media" data-tone="jars">
+              <span class="card-radio" aria-hidden="true"></span>
+              <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                <ellipse cx="60" cy="22" rx="14" ry="3" fill="#888"/>
+                <path d="M46 22 L46 30 L42 30 L42 100 Q42 110 60 110 Q78 110 78 100 L78 30 L74 30 L74 22 Z" fill="#FFFFFF" stroke="#cdb89c" stroke-width="1.5"/>
+                <ellipse cx="60" cy="22" rx="14" ry="2.5" fill="rgba(0,0,0,0.1)"/>
+                <rect x="34" y="60" width="52" height="2" fill="#2b2218" opacity="0.3"/>
+                <text x="60" y="82" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="9" font-weight="800" fill="#2b2218" letter-spacing="0.5">KOMBUCHA</text>
+              </svg>
+            </div>
+            <div class="card-body">
+              <div class="card-name">Kombucha Glass Jar — 4 Litre</div>
+              <p class="card-desc">Lead-free glass for brewing kombucha or open-top ferments.</p>
+              <div class="card-price-row">
+                <span class="card-price">Rs. 850.00</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- JAR 5 -->
+          <article class="product-card" data-id="jar-carboy-amber" data-section="jars" data-name="Fermentation Glass Carboy — Amber 4L" data-price="1890" data-compare="0" tabindex="0" role="button" aria-pressed="false">
+            <div class="card-media" data-tone="jars">
+              <span class="card-radio" aria-hidden="true"></span>
+              <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                <rect x="56" y="16" width="8" height="14" fill="#3a3a3a" rx="1"/>
+                <ellipse cx="60" cy="16" rx="6" ry="2" fill="#5a5a5a"/>
+                <path d="M44 34 L44 50 Q34 56 30 72 L30 102 Q30 112 44 112 L76 112 Q90 112 90 102 L90 72 Q86 56 76 50 L76 34 Z" fill="#8B3A1F" stroke="#5a2510" stroke-width="1.5"/>
+                <path d="M48 38 L48 50 Q40 56 36 72 L36 100 Q36 106 46 106 L74 106 Q84 106 84 100 L84 72 Q80 56 72 50 L72 38 Z" fill="rgba(255,200,100,0.15)"/>
+                <text x="60" y="86" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="8" font-weight="800" fill="#FFF" letter-spacing="0.5">AMBER</text>
+              </svg>
+            </div>
+            <div class="card-body">
+              <div class="card-name">Fermentation Glass Carboy — Amber 4 Litre</div>
+              <p class="card-desc">Amber glass blocks light. Perfect vessel for long-stage ferments.</p>
+              <div class="card-price-row">
+                <span class="card-price">Rs. 1,890.00</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- JAR 6 -->
+          <article class="product-card" data-id="jar-hdpe" data-section="jars" data-name="HDPE Plastic Carboy — 8L" data-price="1699" data-compare="0" tabindex="0" role="button" aria-pressed="false">
+            <div class="card-media" data-tone="jars">
+              <span class="card-radio" aria-hidden="true"></span>
+              <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                <rect x="54" y="14" width="12" height="10" fill="#bcbcbc" rx="2"/>
+                <path d="M40 24 L40 40 Q30 46 26 70 L26 102 Q26 114 42 114 L78 114 Q94 114 94 102 L94 70 Q90 46 80 40 L80 24 Z" fill="#F4EFE6" stroke="#a8a09a" stroke-width="1.5"/>
+                <path d="M44 30 L44 40 Q36 46 32 70 L32 100 Q32 108 44 108 L76 108 Q88 108 88 100 L88 70 Q84 46 76 40 L76 30 Z" fill="rgba(255,255,255,0.5)"/>
+                <text x="60" y="84" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="10" font-weight="800" fill="#2b2218" letter-spacing="0.5">8L</text>
+              </svg>
+            </div>
+            <div class="card-body">
+              <div class="card-name">HDPE Plastic Carboy — 8 Litre</div>
+              <p class="card-desc">Food-grade impermeable container for big-batch beverage ferments.</p>
+              <div class="card-price-row">
+                <span class="card-price">Rs. 1,699.00</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- HIDDEN extras -->
+          <article class="product-card extra" data-id="jar-mason" data-section="jars" data-name="Mason Glass Jar with Lid" data-price="599" data-compare="0" tabindex="0" role="button" aria-pressed="false">
+            <div class="card-media" data-tone="jars">
+              <span class="card-radio" aria-hidden="true"></span>
+              <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                <ellipse cx="60" cy="22" rx="20" ry="4" fill="#d4af37"/>
+                <rect x="38" y="22" width="44" height="6" fill="#b08c2a"/>
+                <path d="M38 28 L38 100 Q38 110 60 110 Q82 110 82 100 L82 28 Z" fill="#FFFFFF" stroke="#cdb89c" stroke-width="1.5"/>
+                <text x="60" y="68" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="8" font-weight="700" fill="#888" letter-spacing="0.5">GUTBasket</text>
+              </svg>
+            </div>
+            <div class="card-body">
+              <div class="card-name">Mason Glass Jar With Lid</div>
+              <p class="card-desc">Durable food-grade mason jar. Classic shape.</p>
+              <div class="card-price-row"><span class="card-price">Rs. 599.00</span></div>
+            </div>
+          </article>
+
+          <article class="product-card extra" data-id="jar-1l-wide" data-section="jars" data-name="Fermentation Jar — 1L Wide Mouth" data-price="599" data-compare="1099" tabindex="0" role="button" aria-pressed="false">
+            <div class="card-media" data-tone="jars">
+              <span class="card-radio" aria-hidden="true"></span>
+              <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                <rect x="38" y="22" width="6" height="14" fill="#3a3a3a" rx="1"/>
+                <ellipse cx="41" cy="22" rx="9" ry="3" fill="#5a5a5a"/>
+                <rect x="28" y="36" width="64" height="12" fill="#2b2218" rx="2"/>
+                <path d="M28 48 Q24 54 26 70 L26 100 Q26 108 36 108 L84 108 Q94 108 94 100 L94 70 Q96 54 92 48 Z" fill="#FFFFFF" stroke="#cdb89c" stroke-width="1.5"/>
+                <text x="60" y="82" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="8" font-weight="800" fill="#2b2218">1L · WIDE</text>
+              </svg>
+            </div>
+            <div class="card-body">
+              <div class="card-name">Fermentation Jar — 1 Litre · Wide Mouth</div>
+              <p class="card-desc">Compact wide-mouth jar for small-batch experiments.</p>
+              <div class="card-price-row">
+                <span class="card-compare">Rs. 1,099.00</span>
+                <span class="card-price">Rs. 599.00</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card extra" data-id="jar-pet" data-section="jars" data-name="PET Plastic Fermenter — 5L" data-price="999" data-compare="0" tabindex="0" role="button" aria-pressed="false">
+            <div class="card-media" data-tone="jars">
+              <span class="card-radio" aria-hidden="true"></span>
+              <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                <rect x="52" y="14" width="16" height="10" fill="#3a3a3a" rx="2"/>
+                <path d="M40 24 L40 38 Q30 44 28 70 L28 102 Q28 114 44 114 L76 114 Q92 114 92 102 L92 70 Q90 44 80 38 L80 24 Z" fill="rgba(255,255,255,0.95)" stroke="#cdb89c" stroke-width="1.5"/>
+                <text x="60" y="84" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="10" font-weight="800" fill="#2b2218">5L</text>
+              </svg>
+            </div>
+            <div class="card-body">
+              <div class="card-name">PET Plastic Fermenter — 5 Litre</div>
+              <p class="card-desc">Lightweight, shatterproof. Travel-friendly fermenter.</p>
+              <div class="card-price-row"><span class="card-price">Rs. 999.00</span></div>
+            </div>
+          </article>
+
+        </div>
+        <div class="view-more-wrap">
+          <button class="view-more" data-toggle="jars">View More (3 more) <span class="chev">▾</span></button>
+        </div>
+      </section>
+
+      <!-- ====== SECTION 2: SPICE MIX ====== -->
+      <section class="byok-section" data-section="spice" id="section-spice">
+        <div class="section-header">
+          <div class="section-num">2</div>
+          <h2 class="section-title">Spice Mix &mdash; What Will You Make?</h2>
+          <span class="section-pill" data-pill="spice"><span class="pill-icon"></span><span class="pill-text">Optional</span></span>
+          <p class="section-hint">Pre-measured spice blends. Pick the ferments you want to make.</p>
+        </div>
+        <div class="product-grid" data-grid="spice">
+
+          <article class="product-card" data-id="spice-kanji-mega" data-section="spice" data-name="Kanji Supplies Mega Pack (10×)" data-price="799" data-compare="1499" tabindex="0" role="button" aria-pressed="false">
+            <div class="card-media" data-tone="spice">
+              <span class="card-badge bestseller">BEST VALUE</span>
+              <span class="card-radio" aria-hidden="true"></span>
+              <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                <rect x="20" y="30" width="36" height="60" rx="3" fill="#15BA97" stroke="#0F8C72" stroke-width="1"/>
+                <rect x="64" y="30" width="36" height="60" rx="3" fill="#FFFFFF" stroke="#8B1F40" stroke-width="1.5"/>
+                <text x="38" y="58" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="6" font-weight="800" fill="#FFFFFF">FERMENT</text>
+                <text x="38" y="66" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="6" font-weight="800" fill="#FFFFFF">BOOST</text>
+                <text x="82" y="58" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="6" font-weight="800" fill="#8B1F40">KANJI</text>
+                <text x="82" y="66" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="6" font-weight="800" fill="#8B1F40">SPICE MIX</text>
+                <rect x="14" y="92" width="42" height="14" rx="2" fill="#0097B2"/>
+                <text x="35" y="102" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="7" font-weight="800" fill="#FFFFFF">10×</text>
+                <rect x="64" y="92" width="42" height="14" rx="2" fill="#8B1F40"/>
+                <text x="85" y="102" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="7" font-weight="800" fill="#FFFFFF">10×</text>
+              </svg>
+            </div>
+            <div class="card-body">
+              <div class="card-name">Kanji Supplies Mega Pack — Includes Kanji Spice Mix (Pack of 10) &amp; Ferment Boost</div>
+              <p class="card-desc">Ferment up to 20 litres of probiotic kanji at home.</p>
+              <div class="card-price-row">
+                <span class="card-compare">Rs. 1,499.00</span>
+                <span class="card-price">Rs. 799.00</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card" data-id="spice-kanji-5" data-section="spice" data-name="Kanji Spice Mix — Pack of 5" data-price="289" data-compare="399" tabindex="0" role="button" aria-pressed="false">
+            <div class="card-media" data-tone="spice">
+              <span class="card-radio" aria-hidden="true"></span>
+              <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                <rect x="22" y="40" width="38" height="48" rx="3" fill="#FFFFFF" stroke="#8B1F40" stroke-width="1.5" transform="rotate(-6 41 64)"/>
+                <rect x="34" y="36" width="38" height="48" rx="3" fill="#FFFFFF" stroke="#8B1F40" stroke-width="1.5" transform="rotate(-3 53 60)"/>
+                <rect x="46" y="32" width="38" height="48" rx="3" fill="#FFFFFF" stroke="#8B1F40" stroke-width="1.5"/>
+                <rect x="58" y="36" width="38" height="48" rx="3" fill="#FFFFFF" stroke="#8B1F40" stroke-width="1.5" transform="rotate(3 77 60)"/>
+                <text x="65" y="62" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="9" font-weight="800" fill="#8B1F40">KANJI</text>
+                <text x="65" y="74" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="6" font-weight="700" fill="#8B1F40">SPICE MIX</text>
+                <rect x="32" y="98" width="56" height="14" rx="2" fill="#2b2218"/>
+                <text x="60" y="108" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="8" font-weight="800" fill="#FFFFFF">PACK OF 5</text>
+              </svg>
+            </div>
+            <div class="card-body">
+              <div class="card-name">Kanji Spice Mix — Traditional Blend (Pack of 5)</div>
+              <p class="card-desc">Craft authentic, tangy kanji at home with our blend.</p>
+              <div class="card-price-row">
+                <span class="card-compare">Rs. 399.00</span>
+                <span class="card-price">Rs. 289.00</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card" data-id="spice-kanji-starter" data-section="spice" data-name="Kanji Supplies Starter Pack (3×)" data-price="249" data-compare="499" tabindex="0" role="button" aria-pressed="false">
+            <div class="card-media" data-tone="spice">
+              <span class="card-radio" aria-hidden="true"></span>
+              <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                <rect x="22" y="32" width="36" height="56" rx="3" fill="#15BA97" stroke="#0F8C72" stroke-width="1"/>
+                <rect x="62" y="32" width="36" height="56" rx="3" fill="#FFFFFF" stroke="#8B1F40" stroke-width="1.5"/>
+                <text x="40" y="58" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="6" font-weight="800" fill="#FFFFFF">FERMENT</text>
+                <text x="40" y="65" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="6" font-weight="800" fill="#FFFFFF">BOOST</text>
+                <text x="80" y="58" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="6" font-weight="800" fill="#8B1F40">KANJI</text>
+                <text x="80" y="65" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="6" font-weight="800" fill="#8B1F40">SPICE MIX</text>
+                <rect x="14" y="92" width="44" height="14" rx="2" fill="#0097B2"/>
+                <text x="36" y="102" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="7" font-weight="800" fill="#FFFFFF">3×</text>
+                <rect x="62" y="92" width="44" height="14" rx="2" fill="#8B1F40"/>
+                <text x="84" y="102" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="7" font-weight="800" fill="#FFFFFF">3×</text>
+              </svg>
+            </div>
+            <div class="card-body">
+              <div class="card-name">Kanji Supplies Starter Pack — Spice Mix (Pack of 3) &amp; Ferment Boost</div>
+              <p class="card-desc">Ferment up to 6 litres of probiotic drinks at home.</p>
+              <div class="card-price-row">
+                <span class="card-compare">Rs. 499.00</span>
+                <span class="card-price">Rs. 249.00</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card" data-id="spice-kimchi" data-section="spice" data-name="Kimchi Making Paste" data-price="399" data-compare="999" tabindex="0" role="button" aria-pressed="false">
+            <div class="card-media" data-tone="spice">
+              <span class="card-radio" aria-hidden="true"></span>
+              <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                <rect x="32" y="22" width="56" height="80" rx="4" fill="#C24528"/>
+                <rect x="36" y="26" width="48" height="72" rx="2" fill="#E85C41"/>
+                <text x="60" y="48" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="9" font-weight="800" fill="#FFFFFF">KIMCHI</text>
+                <text x="60" y="60" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="9" font-weight="800" fill="#FFFFFF">MAKING</text>
+                <text x="60" y="72" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="9" font-weight="800" fill="#FFFFFF">PASTE</text>
+                <rect x="38" y="80" width="44" height="14" rx="2" fill="#FFF" opacity="0.95"/>
+                <text x="60" y="90" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="6" font-weight="700" fill="#C24528">RECIPE BOOK INCLUDED</text>
+              </svg>
+            </div>
+            <div class="card-body">
+              <div class="card-name">Kimchi Making Paste</div>
+              <p class="card-desc">Bring the bold, tangy punch of Korean fermentation home.</p>
+              <div class="card-price-row">
+                <span class="card-compare">Rs. 999.00</span>
+                <span class="card-price">Rs. 399.00</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card" data-id="spice-kanji-value" data-section="spice" data-name="Kanji Supplies Value Pack (5×)" data-price="449" data-compare="999" tabindex="0" role="button" aria-pressed="false">
+            <div class="card-media" data-tone="spice">
+              <span class="card-radio" aria-hidden="true"></span>
+              <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                <rect x="22" y="32" width="36" height="56" rx="3" fill="#15BA97" stroke="#0F8C72" stroke-width="1"/>
+                <rect x="62" y="32" width="36" height="56" rx="3" fill="#FFFFFF" stroke="#8B1F40" stroke-width="1.5"/>
+                <text x="40" y="56" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="6" font-weight="800" fill="#FFFFFF">FERMENT</text>
+                <text x="40" y="64" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="6" font-weight="800" fill="#FFFFFF">BOOST</text>
+                <text x="80" y="56" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="6" font-weight="800" fill="#8B1F40">KANJI</text>
+                <text x="80" y="64" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="6" font-weight="800" fill="#8B1F40">SPICE MIX</text>
+                <rect x="14" y="92" width="44" height="14" rx="2" fill="#0097B2"/>
+                <text x="36" y="102" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="7" font-weight="800" fill="#FFFFFF">5×</text>
+                <rect x="62" y="92" width="44" height="14" rx="2" fill="#8B1F40"/>
+                <text x="84" y="102" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="7" font-weight="800" fill="#FFFFFF">5×</text>
+              </svg>
+            </div>
+            <div class="card-body">
+              <div class="card-name">Kanji Supplies Value Pack — Spice Mix (Pack of 5) &amp; Ferment Boost</div>
+              <p class="card-desc">Ferment up to 10 litres of probiotic drinks at home.</p>
+              <div class="card-price-row">
+                <span class="card-compare">Rs. 999.00</span>
+                <span class="card-price">Rs. 449.00</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card" data-id="spice-aam-panna" data-section="spice" data-name="Aam Panna Kanji Spice Mix — Pack of 5" data-price="399" data-compare="999" tabindex="0" role="button" aria-pressed="false">
+            <div class="card-media" data-tone="spice">
+              <span class="card-radio" aria-hidden="true"></span>
+              <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                <rect x="28" y="22" width="64" height="80" rx="4" fill="#FFFFFF" stroke="#4F7C57" stroke-width="1.5"/>
+                <path d="M28 22 L92 22 L92 50 Q60 60 28 50 Z" fill="#4F7C57"/>
+                <text x="60" y="40" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="8" font-weight="800" fill="#FFFFFF">FERMENT</text>
+                <text x="60" y="68" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="9" font-weight="800" fill="#4F7C57">SPICE MIX</text>
+                <rect x="32" y="84" width="56" height="14" rx="2" fill="#3F6346"/>
+                <text x="60" y="94" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="8" font-weight="800" fill="#FFFFFF">PACK OF 5</text>
+              </svg>
+            </div>
+            <div class="card-body">
+              <div class="card-name">Aam Panna Kanji Spice Mix — Pack of 5</div>
+              <p class="card-desc">Spice mix to make fermented aam panna at home. Pack of 5.</p>
+              <div class="card-price-row">
+                <span class="card-compare">Rs. 999.00</span>
+                <span class="card-price">Rs. 399.00</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- HIDDEN extras -->
+          <article class="product-card extra" data-id="spice-achaar" data-section="spice" data-name="Achaar Spice Mix — Pack of 5" data-price="349" data-compare="699" tabindex="0" role="button" aria-pressed="false">
+            <div class="card-media" data-tone="spice">
+              <span class="card-radio" aria-hidden="true"></span>
+              <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                <rect x="32" y="22" width="56" height="80" rx="4" fill="#FF7300"/>
+                <text x="60" y="50" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="11" font-weight="800" fill="#FFFFFF">ACHAAR</text>
+                <text x="60" y="68" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="11" font-weight="800" fill="#FFFFFF">SPICE</text>
+                <text x="60" y="86" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="7" font-weight="700" fill="#FFFFFF">PACK OF 5</text>
+              </svg>
+            </div>
+            <div class="card-body">
+              <div class="card-name">Achaar Spice Mix — Pack of 5</div>
+              <p class="card-desc">Pre-measured probiotic achaar spice. 5 sachets, 5 batches.</p>
+              <div class="card-price-row">
+                <span class="card-compare">Rs. 699.00</span>
+                <span class="card-price">Rs. 349.00</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card extra" data-id="spice-veg" data-section="spice" data-name="Vegetable Ferment Starter — Salt + Boost" data-price="199" data-compare="349" tabindex="0" role="button" aria-pressed="false">
+            <div class="card-media" data-tone="spice">
+              <span class="card-radio" aria-hidden="true"></span>
+              <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                <rect x="22" y="32" width="36" height="56" rx="3" fill="#FFFFFF" stroke="#4F7C57" stroke-width="1.5"/>
+                <rect x="62" y="32" width="36" height="56" rx="3" fill="#15BA97" stroke="#0F8C72" stroke-width="1"/>
+                <text x="40" y="60" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="7" font-weight="800" fill="#4F7C57">SALT</text>
+                <text x="80" y="56" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="6" font-weight="800" fill="#FFFFFF">FERMENT</text>
+                <text x="80" y="64" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="6" font-weight="800" fill="#FFFFFF">BOOST</text>
+              </svg>
+            </div>
+            <div class="card-body">
+              <div class="card-name">Vegetable Ferment Starter — Salt + Boost</div>
+              <p class="card-desc">2% non-iodised salt + prebiotic boost. Universal vegetable ferment kit.</p>
+              <div class="card-price-row">
+                <span class="card-compare">Rs. 349.00</span>
+                <span class="card-price">Rs. 199.00</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card extra" data-id="spice-allinone" data-section="spice" data-name="All-in-One Spice Bundle" data-price="999" data-compare="1799" tabindex="0" role="button" aria-pressed="false">
+            <div class="card-media" data-tone="spice">
+              <span class="card-badge new">NEW</span>
+              <span class="card-radio" aria-hidden="true"></span>
+              <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                <rect x="14" y="38" width="22" height="48" rx="2" fill="#FF7300"/>
+                <rect x="38" y="34" width="22" height="52" rx="2" fill="#8B1F40"/>
+                <rect x="62" y="38" width="22" height="48" rx="2" fill="#E85C41"/>
+                <rect x="86" y="42" width="22" height="44" rx="2" fill="#DDA738"/>
+                <text x="25" y="64" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="6" font-weight="800" fill="#FFF">ACH</text>
+                <text x="49" y="62" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="6" font-weight="800" fill="#FFF">KAN</text>
+                <text x="73" y="64" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="6" font-weight="800" fill="#FFF">KIM</text>
+                <text x="97" y="66" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="6" font-weight="800" fill="#FFF">PAN</text>
+              </svg>
+            </div>
+            <div class="card-body">
+              <div class="card-name">All-in-One Spice Bundle — All 4 Mixes</div>
+              <p class="card-desc">Achaar, Kanji, Kimchi, Aam Panna. Try them all in one bundle.</p>
+              <div class="card-price-row">
+                <span class="card-compare">Rs. 1,799.00</span>
+                <span class="card-price">Rs. 999.00</span>
+              </div>
+            </div>
+          </article>
+
+        </div>
+        <div class="view-more-wrap">
+          <button class="view-more" data-toggle="spice">View More (3 more) <span class="chev">▾</span></button>
+        </div>
+      </section>
+
+      <!-- ====== SECTION 3: TOOLS & ACCESSORIES ====== -->
+      <section class="byok-section" data-section="tools" id="section-tools">
+        <div class="section-header">
+          <div class="section-num">3</div>
+          <h2 class="section-title">Tools &amp; Accessories</h2>
+          <span class="section-pill" data-pill="tools"><span class="pill-icon"></span><span class="pill-text">Optional</span></span>
+          <p class="section-hint">pH strips, weights, airlocks, grommets, funnels — the small things that matter.</p>
+        </div>
+        <div class="product-grid" data-grid="tools">
+
+          <article class="product-card" data-id="tool-weight" data-section="tools" data-name="Fermentation Glass Weight" data-price="600" data-compare="0" tabindex="0" role="button" aria-pressed="false" data-variant-options='["95mm — 1L Jar","105mm — 2L Jar","115mm — 4L Jar"]'>
+            <div class="card-media" data-tone="tools">
+              <span class="card-radio" aria-hidden="true"></span>
+              <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                <ellipse cx="42" cy="64" rx="28" ry="6" fill="#a8d4cc" opacity="0.5"/>
+                <path d="M14 64 Q14 48 42 48 Q70 48 70 64 L66 64 Q66 52 42 52 Q18 52 18 64 Z" fill="#a8d4cc"/>
+                <ellipse cx="78" cy="68" rx="26" ry="5" fill="#a8d4cc" opacity="0.5"/>
+                <path d="M52 68 Q52 54 78 54 Q104 54 104 68 L100 68 Q100 58 78 58 Q56 58 56 68 Z" fill="#a8d4cc"/>
+              </svg>
+            </div>
+            <div class="card-body">
+              <div class="card-name">Fermentation Glass Weight</div>
+              <p class="card-desc">Discover the perfect solution for fermenting foods with our glass weight.</p>
+              <div class="card-price-row">
+                <span class="card-price">Rs. 600.00</span>
+              </div>
+              <select class="card-variant-select" onclick="event.stopPropagation()">
+                <option>95mm — 1L Jar</option>
+                <option>105mm — 2L Jar</option>
+                <option>115mm — 4L Jar</option>
+              </select>
+            </div>
+          </article>
+
+          <article class="product-card" data-id="tool-airlock" data-section="tools" data-name="Airlock for Safe Fermentation" data-price="270" data-compare="300" tabindex="0" role="button" aria-pressed="false">
+            <div class="card-media" data-tone="tools">
+              <span class="card-radio" aria-hidden="true"></span>
+              <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                <rect x="48" y="14" width="24" height="14" rx="3" fill="#cfd6dc"/>
+                <rect x="56" y="28" width="8" height="40" fill="#cfd6dc"/>
+                <ellipse cx="60" cy="76" rx="22" ry="6" fill="#dde4ea"/>
+                <path d="M38 76 Q38 60 60 60 Q82 60 82 76 L82 92 Q82 102 60 102 Q38 102 38 92 Z" fill="rgba(220,228,234,0.7)" stroke="#a8b2bc" stroke-width="1"/>
+                <path d="M48 84 Q60 78 72 84 Q60 90 48 84" fill="#79c5b8" opacity="0.6"/>
+                <circle cx="55" cy="80" r="2" fill="#FFFFFF"/>
+                <circle cx="65" cy="86" r="1.5" fill="#FFFFFF"/>
+              </svg>
+            </div>
+            <div class="card-body">
+              <div class="card-name">Airlock for Safe Fermentation</div>
+              <p class="card-desc">The GutBasket airlock is a must-have tool for fermentation.</p>
+              <div class="card-price-row">
+                <span class="card-compare">Rs. 300.00</span>
+                <span class="card-price">Rs. 270.00</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card" data-id="tool-bottles" data-section="tools" data-name="Airtight Glass Bottles 1L" data-price="800" data-compare="0" tabindex="0" role="button" aria-pressed="false" data-variant-options='["Pack of 2","Pack of 4","Pack of 6"]'>
+            <div class="card-media" data-tone="tools">
+              <span class="card-radio" aria-hidden="true"></span>
+              <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                <g>
+                  <rect x="22" y="22" width="14" height="86" rx="6" fill="#FFFFFF" stroke="#a8b2bc" stroke-width="1.2"/>
+                  <rect x="26" y="14" width="6" height="14" fill="#a04545"/>
+                </g>
+                <g>
+                  <rect x="42" y="22" width="14" height="86" rx="6" fill="#FFFFFF" stroke="#a8b2bc" stroke-width="1.2"/>
+                  <rect x="46" y="14" width="6" height="14" fill="#a04545"/>
+                </g>
+                <g>
+                  <rect x="62" y="22" width="14" height="86" rx="6" fill="#FFFFFF" stroke="#a8b2bc" stroke-width="1.2"/>
+                  <rect x="66" y="14" width="6" height="14" fill="#a04545"/>
+                </g>
+                <g>
+                  <rect x="82" y="22" width="14" height="86" rx="6" fill="#FFFFFF" stroke="#a8b2bc" stroke-width="1.2"/>
+                  <rect x="86" y="14" width="6" height="14" fill="#a04545"/>
+                </g>
+              </svg>
+            </div>
+            <div class="card-body">
+              <div class="card-name">Airtight Glass Bottles — 1 Litre</div>
+              <p class="card-desc">GutBasket's airtight glass bottles are the perfect choice for storing.</p>
+              <div class="card-price-row">
+                <span class="card-price">Rs. 800.00</span>
+              </div>
+              <select class="card-variant-select" onclick="event.stopPropagation()">
+                <option>Pack of 2</option>
+                <option>Pack of 4</option>
+                <option>Pack of 6</option>
+              </select>
+            </div>
+          </article>
+
+          <article class="product-card" data-id="tool-grommet" data-section="tools" data-name="Grommet / Washer for Fermentation Lid (Set of 3)" data-price="150" data-compare="240" tabindex="0" role="button" aria-pressed="false">
+            <div class="card-media" data-tone="tools">
+              <span class="card-radio" aria-hidden="true"></span>
+              <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                <ellipse cx="30" cy="60" rx="14" ry="14" fill="#1a1a1a"/>
+                <ellipse cx="30" cy="60" rx="6" ry="6" fill="#cdcdcd"/>
+                <ellipse cx="60" cy="60" rx="14" ry="14" fill="#1a1a1a"/>
+                <ellipse cx="60" cy="60" rx="6" ry="6" fill="#cdcdcd"/>
+                <ellipse cx="90" cy="60" rx="14" ry="14" fill="#1a1a1a"/>
+                <ellipse cx="90" cy="60" rx="6" ry="6" fill="#cdcdcd"/>
+              </svg>
+            </div>
+            <div class="card-body">
+              <div class="card-name">Grommet / Washer for Fermentation Lid (Set of 3)</div>
+              <p class="card-desc">The black silicone grommet is food grade, high quality.</p>
+              <div class="card-price-row">
+                <span class="card-compare">Rs. 240.00</span>
+                <span class="card-price">Rs. 150.00</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card" data-id="tool-funnel" data-section="tools" data-name="Funnel" data-price="100" data-compare="0" tabindex="0" role="button" aria-pressed="false">
+            <div class="card-media" data-tone="tools">
+              <span class="card-radio" aria-hidden="true"></span>
+              <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 20 L100 20 L72 64 L72 96 Q72 102 60 102 Q48 102 48 96 L48 64 Z" fill="#FF6B35" stroke="#C24528" stroke-width="1.5"/>
+                <ellipse cx="60" cy="20" rx="40" ry="6" fill="#FF7E4A"/>
+                <ellipse cx="60" cy="20" rx="40" ry="3" fill="rgba(0,0,0,0.15)"/>
+              </svg>
+            </div>
+            <div class="card-body">
+              <div class="card-name">Funnel</div>
+              <p class="card-desc">The funnel is a perfect tool for transferring liquids and powders.</p>
+              <div class="card-price-row">
+                <span class="card-price">Rs. 100.00</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card" data-id="tool-ph" data-section="tools" data-name="pH Strip" data-price="100" data-compare="0" tabindex="0" role="button" aria-pressed="false">
+            <div class="card-media" data-tone="tools">
+              <span class="card-radio" aria-hidden="true"></span>
+              <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                <rect x="48" y="14" width="24" height="92" rx="3" fill="#F4EFE6" stroke="#a8a09a" stroke-width="1"/>
+                <rect x="50" y="20" width="20" height="10" fill="#3F7754"/>
+                <rect x="50" y="32" width="20" height="10" fill="#79C277"/>
+                <rect x="50" y="44" width="20" height="10" fill="#DDA738"/>
+                <rect x="50" y="56" width="20" height="10" fill="#FF7300"/>
+                <rect x="50" y="68" width="20" height="10" fill="#C24528"/>
+                <rect x="50" y="80" width="20" height="10" fill="#8B1F40"/>
+                <text x="60" y="100" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="6" font-weight="800" fill="#2b2218">pH</text>
+              </svg>
+            </div>
+            <div class="card-body">
+              <div class="card-name">pH Strip</div>
+              <p class="card-desc">GutBasket pH strips are an essential tool for monitoring fermentation.</p>
+              <div class="card-price-row">
+                <span class="card-price">Rs. 100.00</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- HIDDEN extras -->
+          <article class="product-card extra" data-id="tool-temp" data-section="tools" data-name="Temperature Strip for Brewing" data-price="299" data-compare="0" tabindex="0" role="button" aria-pressed="false">
+            <div class="card-media" data-tone="tools">
+              <span class="card-radio" aria-hidden="true"></span>
+              <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                <rect x="40" y="10" width="40" height="100" rx="4" fill="#1a3a5c"/>
+                <rect x="44" y="14" width="32" height="90" rx="2" fill="#1a3a5c"/>
+                <text x="60" y="28" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="6" font-weight="700" fill="#FFFFFF">°C</text>
+                <text x="60" y="40" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="5" fill="#FFF">40</text>
+                <text x="60" y="52" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="5" fill="#FFF">32</text>
+                <text x="60" y="64" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="5" fill="#FFF">28</text>
+                <rect x="44" y="58" width="32" height="6" fill="#FF7300"/>
+                <text x="60" y="76" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="5" fill="#FFF">22</text>
+                <text x="60" y="88" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="5" fill="#FFF">18</text>
+                <text x="60" y="100" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="5" fill="#FFF">12</text>
+              </svg>
+            </div>
+            <div class="card-body">
+              <div class="card-name">Temperature Strip for Brewing</div>
+              <p class="card-desc">Adhesive liquid-crystal thermometer. Stick on jar, read instantly.</p>
+              <div class="card-price-row">
+                <span class="card-price">Rs. 299.00</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card extra" data-id="tool-strainer" data-section="tools" data-name="Stainless Steel Strainer" data-price="350" data-compare="0" tabindex="0" role="button" aria-pressed="false">
+            <div class="card-media" data-tone="tools">
+              <span class="card-radio" aria-hidden="true"></span>
+              <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                <ellipse cx="60" cy="58" rx="34" ry="32" fill="#dde4ea"/>
+                <ellipse cx="60" cy="58" rx="30" ry="28" fill="#c2cdd6"/>
+                <g fill="#7a8693">
+                  <circle cx="50" cy="50" r="1.5"/><circle cx="60" cy="50" r="1.5"/><circle cx="70" cy="50" r="1.5"/>
+                  <circle cx="45" cy="58" r="1.5"/><circle cx="55" cy="58" r="1.5"/><circle cx="65" cy="58" r="1.5"/><circle cx="75" cy="58" r="1.5"/>
+                  <circle cx="50" cy="66" r="1.5"/><circle cx="60" cy="66" r="1.5"/><circle cx="70" cy="66" r="1.5"/>
+                </g>
+                <rect x="92" y="56" width="24" height="6" rx="2" fill="#a8b2bc"/>
+              </svg>
+            </div>
+            <div class="card-body">
+              <div class="card-name">Stainless Steel Fine Mesh Strainer</div>
+              <p class="card-desc">For straining kanji, kombucha, and other fermented liquids.</p>
+              <div class="card-price-row"><span class="card-price">Rs. 350.00</span></div>
+            </div>
+          </article>
+
+          <article class="product-card extra" data-id="tool-gloves" data-section="tools" data-name="Food-Safe Fermentation Gloves" data-price="180" data-compare="0" tabindex="0" role="button" aria-pressed="false">
+            <div class="card-media" data-tone="tools">
+              <span class="card-radio" aria-hidden="true"></span>
+              <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                <path d="M40 28 L40 52 Q40 56 36 56 Q32 56 32 52 L32 36 Q32 32 28 32 Q24 32 24 36 L24 56 Q24 62 28 66 L28 92 Q28 102 38 102 L66 102 Q76 102 76 92 L76 70 Q82 70 82 64 L82 36 Q82 32 78 32 Q74 32 74 36 L74 50 Q74 54 70 54 Q66 54 66 50 L66 28 Q66 24 62 24 Q58 24 58 28 L58 50 Q58 54 54 54 Q50 54 50 50 L50 28 Q50 24 46 24 Q42 24 42 28 L42 50 Q42 54 38 54 Q34 54 34 50 L34 28 Q34 24 38 24 Q42 24 42 28 Z" fill="#88e3d0"/>
+              </svg>
+            </div>
+            <div class="card-body">
+              <div class="card-name">Food-Safe Fermentation Gloves</div>
+              <p class="card-desc">Disposable nitrile gloves for hands-on kimchi and achaar mixing.</p>
+              <div class="card-price-row"><span class="card-price">Rs. 180.00</span></div>
+            </div>
+          </article>
+
+        </div>
+        <div class="view-more-wrap">
+          <button class="view-more" data-toggle="tools">View More (3 more) <span class="chev">▾</span></button>
+        </div>
+      </section>
+
+      <!-- ====== SECTION 4: RECIPE BOOKS ====== -->
+      <section class="byok-section" data-section="books" id="section-books">
+        <div class="section-header">
+          <div class="section-num">4</div>
+          <h2 class="section-title">Recipe Books &amp; Guides</h2>
+          <span class="section-pill" data-pill="books"><span class="pill-icon"></span><span class="pill-text">Optional</span></span>
+          <p class="section-hint">Printed books — recipes, troubleshooting, and ferment-by-ferment guides.</p>
+        </div>
+        <div class="product-grid" data-grid="books">
+
+          <article class="product-card" data-id="book-fermenting" data-section="books" data-name="Fermenting Recipe Book — Printed" data-price="599" data-compare="899" tabindex="0" role="button" aria-pressed="false">
+            <div class="card-media" data-tone="books">
+              <span class="card-badge bestseller">BESTSELLER</span>
+              <span class="card-radio" aria-hidden="true"></span>
+              <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                <rect x="22" y="14" width="76" height="92" rx="3" fill="#3F7754"/>
+                <rect x="22" y="14" width="6" height="92" fill="#2D5740"/>
+                <text x="60" y="44" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="11" font-weight="800" fill="#FFFFFF" letter-spacing="-0.5">FERMENTING</text>
+                <text x="60" y="58" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="11" font-weight="800" fill="#FFFFFF" letter-spacing="-0.5">RECIPE</text>
+                <text x="60" y="72" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="11" font-weight="800" fill="#FFFFFF" letter-spacing="-0.5">BOOK</text>
+                <rect x="40" y="84" width="40" height="2" fill="rgba(255,255,255,0.5)"/>
+                <text x="60" y="98" text-anchor="middle" font-family="DM Mono, monospace" font-size="6" fill="#FFFFFF" letter-spacing="2">GUTBasket</text>
+              </svg>
+            </div>
+            <div class="card-body">
+              <div class="card-name">Fermenting Recipe Book — Printed Edition</div>
+              <p class="card-desc">120+ pages. 36 recipes across achaar, kanji, kimchi, vegetable ferments.</p>
+              <div class="card-price-row">
+                <span class="card-compare">Rs. 899.00</span>
+                <span class="card-price">Rs. 599.00</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card" data-id="book-ferment-home" data-section="books" data-name="Ferment at Home — Beginner's Guide" data-price="499" data-compare="699" tabindex="0" role="button" aria-pressed="false">
+            <div class="card-media" data-tone="books">
+              <span class="card-radio" aria-hidden="true"></span>
+              <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                <rect x="22" y="14" width="76" height="92" rx="3" fill="#FBF3DD"/>
+                <rect x="22" y="14" width="6" height="92" fill="#DDC990"/>
+                <text x="60" y="38" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="11" font-weight="800" fill="#3F7754" letter-spacing="-0.5">FERMENT</text>
+                <text x="60" y="52" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="11" font-weight="800" fill="#3F7754" letter-spacing="-0.5">AT HOME</text>
+                <rect x="34" y="60" width="52" height="36" rx="3" fill="#FF7300" opacity="0.85"/>
+                <text x="60" y="76" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="6" font-weight="700" fill="#FFFFFF">EASY RECIPES</text>
+                <text x="60" y="84" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="6" font-weight="700" fill="#FFFFFF">FOR HEALTHY GUT</text>
+                <text x="60" y="92" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="6" font-weight="700" fill="#FFFFFF">VEGETABLES &amp; DRINKS</text>
+              </svg>
+            </div>
+            <div class="card-body">
+              <div class="card-name">Ferment at Home — Beginner's Guide</div>
+              <p class="card-desc">Step-by-step starter guide. Easy recipes for first-time fermenters.</p>
+              <div class="card-price-row">
+                <span class="card-compare">Rs. 699.00</span>
+                <span class="card-price">Rs. 499.00</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card" data-id="book-kanji" data-section="books" data-name="The Kanji Book — North Indian Probiotic Drinks" data-price="399" data-compare="0" tabindex="0" role="button" aria-pressed="false">
+            <div class="card-media" data-tone="books">
+              <span class="card-radio" aria-hidden="true"></span>
+              <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                <rect x="22" y="14" width="76" height="92" rx="3" fill="#8B1F40"/>
+                <rect x="22" y="14" width="6" height="92" fill="#6E1733"/>
+                <text x="60" y="44" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="14" font-weight="800" fill="#FFFFFF" letter-spacing="-0.5">THE</text>
+                <text x="60" y="62" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="16" font-weight="800" fill="#FFFFFF" letter-spacing="-0.5">KANJI</text>
+                <text x="60" y="78" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="14" font-weight="800" fill="#FFFFFF" letter-spacing="-0.5">BOOK</text>
+                <rect x="40" y="86" width="40" height="2" fill="#F4D7DD"/>
+                <text x="60" y="100" text-anchor="middle" font-family="DM Mono, monospace" font-size="5" fill="#F4D7DD" letter-spacing="1.5">8 RECIPES · 64 PAGES</text>
+              </svg>
+            </div>
+            <div class="card-body">
+              <div class="card-name">The Kanji Book — North Indian Probiotic Drinks</div>
+              <p class="card-desc">Deep-dive into kanji: history, 8 variations, troubleshooting.</p>
+              <div class="card-price-row"><span class="card-price">Rs. 399.00</span></div>
+            </div>
+          </article>
+
+          <article class="product-card" data-id="book-kimchi" data-section="books" data-name="Kimchi at Home — Korean Fermentation Manual" data-price="449" data-compare="0" tabindex="0" role="button" aria-pressed="false">
+            <div class="card-media" data-tone="books">
+              <span class="card-radio" aria-hidden="true"></span>
+              <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                <rect x="22" y="14" width="76" height="92" rx="3" fill="#E85C41"/>
+                <rect x="22" y="14" width="6" height="92" fill="#C24528"/>
+                <text x="60" y="44" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="13" font-weight="800" fill="#FFFFFF" letter-spacing="-0.5">KIMCHI</text>
+                <text x="60" y="60" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="11" font-weight="800" fill="#FFFFFF" letter-spacing="-0.5">AT HOME</text>
+                <text x="60" y="76" text-anchor="middle" font-family="DM Mono, monospace" font-size="6" fill="#FFFFFF" letter-spacing="2">KOREAN MANUAL</text>
+                <rect x="40" y="86" width="40" height="2" fill="rgba(255,255,255,0.5)"/>
+                <text x="60" y="100" text-anchor="middle" font-family="DM Mono, monospace" font-size="5" fill="#FFFFFF" letter-spacing="1.5">6 RECIPES · 48 PAGES</text>
+              </svg>
+            </div>
+            <div class="card-body">
+              <div class="card-name">Kimchi at Home — Korean Fermentation Manual</div>
+              <p class="card-desc">Napa, mu, white kimchi, and stew variations. Authentic methods.</p>
+              <div class="card-price-row"><span class="card-price">Rs. 449.00</span></div>
+            </div>
+          </article>
+
+          <article class="product-card" data-id="book-achaar" data-section="books" data-name="Achaar Without Oil — Probiotic Pickles Cookbook" data-price="429" data-compare="599" tabindex="0" role="button" aria-pressed="false">
+            <div class="card-media" data-tone="books">
+              <span class="card-radio" aria-hidden="true"></span>
+              <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                <rect x="22" y="14" width="76" height="92" rx="3" fill="#FF7300"/>
+                <rect x="22" y="14" width="6" height="92" fill="#E66800"/>
+                <text x="60" y="44" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="13" font-weight="800" fill="#FFFFFF" letter-spacing="-0.5">ACHAAR</text>
+                <text x="60" y="60" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="11" font-weight="800" fill="#FFFFFF" letter-spacing="-0.5">WITHOUT OIL</text>
+                <rect x="36" y="68" width="48" height="22" rx="3" fill="rgba(0,0,0,0.18)"/>
+                <text x="60" y="80" text-anchor="middle" font-family="DM Mono, monospace" font-size="5" fill="#FFFFFF" letter-spacing="1.5">PROBIOTIC</text>
+                <text x="60" y="86" text-anchor="middle" font-family="DM Mono, monospace" font-size="5" fill="#FFFFFF" letter-spacing="1.5">PICKLES COOKBOOK</text>
+              </svg>
+            </div>
+            <div class="card-body">
+              <div class="card-name">Achaar Without Oil — Probiotic Pickles Cookbook</div>
+              <p class="card-desc">10 fermented achaar recipes. The science of oil-free Indian pickles.</p>
+              <div class="card-price-row">
+                <span class="card-compare">Rs. 599.00</span>
+                <span class="card-price">Rs. 429.00</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card" data-id="book-veg" data-section="books" data-name="Vegetable Fermentation Field Guide" data-price="549" data-compare="0" tabindex="0" role="button" aria-pressed="false">
+            <div class="card-media" data-tone="books">
+              <span class="card-radio" aria-hidden="true"></span>
+              <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                <rect x="22" y="14" width="76" height="92" rx="3" fill="#1F4332"/>
+                <rect x="22" y="14" width="6" height="92" fill="#143024"/>
+                <text x="60" y="40" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="9" font-weight="800" fill="#FFFFFF" letter-spacing="-0.5">VEGETABLE</text>
+                <text x="60" y="54" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="9" font-weight="800" fill="#FFFFFF" letter-spacing="-0.5">FERMENTATION</text>
+                <text x="60" y="68" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="9" font-weight="800" fill="#FFFFFF" letter-spacing="-0.5">FIELD GUIDE</text>
+                <rect x="34" y="76" width="52" height="2" fill="#79c277"/>
+                <text x="60" y="90" text-anchor="middle" font-family="DM Mono, monospace" font-size="5" fill="#79c277" letter-spacing="1.5">12 RECIPES · 80 PAGES</text>
+              </svg>
+            </div>
+            <div class="card-body">
+              <div class="card-name">Vegetable Fermentation Field Guide</div>
+              <p class="card-desc">Sauerkraut to giardiniera. 12 recipes, brine math, troubleshooting.</p>
+              <div class="card-price-row"><span class="card-price">Rs. 549.00</span></div>
+            </div>
+          </article>
+
+          <!-- HIDDEN extras -->
+          <article class="product-card extra" data-id="book-troubleshooting" data-section="books" data-name="Fermentation Troubleshooting Handbook" data-price="299" data-compare="0" tabindex="0" role="button" aria-pressed="false">
+            <div class="card-media" data-tone="books">
+              <span class="card-radio" aria-hidden="true"></span>
+              <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                <rect x="22" y="14" width="76" height="92" rx="3" fill="#2F2A28"/>
+                <rect x="22" y="14" width="6" height="92" fill="#1F1A18"/>
+                <text x="60" y="48" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="9" font-weight="800" fill="#FFFFFF" letter-spacing="-0.5">TROUBLE</text>
+                <text x="60" y="64" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="9" font-weight="800" fill="#FFFFFF" letter-spacing="-0.5">SHOOTING</text>
+                <text x="60" y="80" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="9" font-weight="800" fill="#FFFFFF" letter-spacing="-0.5">HANDBOOK</text>
+              </svg>
+            </div>
+            <div class="card-body">
+              <div class="card-name">Fermentation Troubleshooting Handbook</div>
+              <p class="card-desc">When things go wrong: mould vs kahm, smells, stuck ferments.</p>
+              <div class="card-price-row"><span class="card-price">Rs. 299.00</span></div>
+            </div>
+          </article>
+
+          <article class="product-card extra" data-id="book-30days" data-section="books" data-name="30 Days of Fermenting — Daily Practice Journal" data-price="349" data-compare="0" tabindex="0" role="button" aria-pressed="false">
+            <div class="card-media" data-tone="books">
+              <span class="card-badge new">NEW</span>
+              <span class="card-radio" aria-hidden="true"></span>
+              <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                <rect x="22" y="14" width="76" height="92" rx="3" fill="#DDA738"/>
+                <rect x="22" y="14" width="6" height="92" fill="#B8861E"/>
+                <text x="60" y="42" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="20" font-weight="800" fill="#FFFFFF" letter-spacing="-1">30</text>
+                <text x="60" y="60" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="9" font-weight="800" fill="#FFFFFF" letter-spacing="-0.5">DAYS OF</text>
+                <text x="60" y="76" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="9" font-weight="800" fill="#FFFFFF" letter-spacing="-0.5">FERMENTING</text>
+              </svg>
+            </div>
+            <div class="card-body">
+              <div class="card-name">30 Days of Fermenting — Daily Practice Journal</div>
+              <p class="card-desc">A new ferment every day. Habit-builder for the curious.</p>
+              <div class="card-price-row"><span class="card-price">Rs. 349.00</span></div>
+            </div>
+          </article>
+
+          <article class="product-card extra" data-id="book-gut" data-section="books" data-name="The Gut Health Reader — Microbiome Science" data-price="599" data-compare="799" tabindex="0" role="button" aria-pressed="false">
+            <div class="card-media" data-tone="books">
+              <span class="card-radio" aria-hidden="true"></span>
+              <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                <rect x="22" y="14" width="76" height="92" rx="3" fill="#15BA97"/>
+                <rect x="22" y="14" width="6" height="92" fill="#0F8C72"/>
+                <text x="60" y="44" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="13" font-weight="800" fill="#FFFFFF" letter-spacing="-0.5">THE GUT</text>
+                <text x="60" y="60" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="11" font-weight="800" fill="#FFFFFF" letter-spacing="-0.5">HEALTH</text>
+                <text x="60" y="76" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="11" font-weight="800" fill="#FFFFFF" letter-spacing="-0.5">READER</text>
+              </svg>
+            </div>
+            <div class="card-body">
+              <div class="card-name">The Gut Health Reader — Microbiome Science</div>
+              <p class="card-desc">The science behind probiotic, prebiotic, postbiotic. Plain English.</p>
+              <div class="card-price-row">
+                <span class="card-compare">Rs. 799.00</span>
+                <span class="card-price">Rs. 599.00</span>
+              </div>
+            </div>
+          </article>
+
+        </div>
+        <div class="view-more-wrap">
+          <button class="view-more" data-toggle="books">View More (3 more) <span class="chev">▾</span></button>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- RIGHT: BUNDLE SUMMARY -->
+    <aside class="bundle-card" aria-label="Your bundle">
+      <div class="bundle-title">YOUR BUNDLE</div>
+      <ul class="bundle-list">
+        <li class="bundle-item" data-bundle="jars">
+          <div class="label">
+            <span class="step">1. Jar</span>
+            <span class="selection">No selection yet</span>
+          </div>
+          <span class="check" aria-hidden="true"></span>
+        </li>
+        <li class="bundle-item" data-bundle="spice">
+          <div class="label">
+            <span class="step">2. Spice Mix</span>
+            <span class="selection">No selection yet</span>
+          </div>
+          <span class="check" aria-hidden="true"></span>
+        </li>
+        <li class="bundle-item" data-bundle="tools">
+          <div class="label">
+            <span class="step">3. Tools &amp; Accessories</span>
+            <span class="selection">No selection yet</span>
+          </div>
+          <span class="check" aria-hidden="true"></span>
+        </li>
+        <li class="bundle-item" data-bundle="books">
+          <div class="label">
+            <span class="step">4. Recipe Books</span>
+            <span class="selection">No selection yet</span>
+          </div>
+          <span class="check" aria-hidden="true"></span>
+        </li>
+      </ul>
+
+      <div class="bundle-divider"></div>
+
+      <div class="bundle-total">
+        <span class="lbl">Total</span>
+        <span class="val" id="bundle-total-val">₹0</span>
+      </div>
+      <div class="bundle-savings" id="bundle-savings"></div>
+
+      <button class="bundle-cta" id="bundle-cta" disabled>Add bundle to cart</button>
+
+      <div class="bundle-trust">
+        <div class="row"><span class="check-i">✓</span> Free shipping over ₹300</div>
+        <div class="row"><span class="check-i">✓</span> Ships next working day</div>
+        <div class="row"><span class="check-i">✓</span> FSSAI Licensed · Made in India</div>
+      </div>
+    </aside>
+
+  </div>
+</main>
+
+<!-- =========== STICKY MOBILE BUNDLE BAR (expandable sheet) =========== -->
+<div class="mobile-bundle-backdrop" id="mobile-backdrop"></div>
+<div class="mobile-bundle" id="mobile-bundle" aria-hidden="true">
+  <div class="mobile-bundle-handle" id="mobile-handle" aria-label="Drag to expand bundle"></div>
+
+  <div class="mobile-bundle-sheet" id="mobile-sheet" aria-hidden="true">
+    <div class="mobile-bundle-sheet-header">
+      <h3>Your bundle</h3>
+      <span class="empty-msg" id="mobile-sheet-meta">No items yet</span>
+    </div>
+    <ul class="mobile-bundle-list" id="mobile-bundle-list"></ul>
+  </div>
+
+  <div class="mobile-bundle-row">
+    <div class="mobile-bundle-info" id="mobile-toggle" role="button" tabindex="0" aria-expanded="false" aria-controls="mobile-sheet">
+      <div class="mobile-bundle-info-text">
+        <div class="lbl">Total</div>
+        <div class="val" id="mobile-total-val">₹0</div>
+        <div class="meta" id="mobile-meta">Tap to review bundle</div>
+      </div>
+      <div class="mobile-bundle-chevron" aria-hidden="true">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 9L7 5L11 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+    <button class="bundle-cta" id="mobile-bundle-cta" disabled>Add bundle to cart</button>
+  </div>
+</div>
+
+<!-- =========== FOOTER =========== -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-strip">
+      <span class="item">🍳 Beginner-friendly recipes and guides</span>
+      <span class="item">👥 Join The Ferment Forum</span>
+      <span class="item">📦 Build your own kit</span>
+      <span class="item">📞 Questions? Call +91 7861940110 or email support@gutbasket.com</span>
+    </div>
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="footer-logo"><span class="gut">GUT</span><span class="basket">Basket</span></div>
+        <p class="tagline">India's first probiotic fermentation brand. Live cultures in every spoon.</p>
+        <div class="footer-social">
+          <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2c-2.7 0-3 .01-4.07.06-1.06.05-1.79.22-2.43.47-.66.26-1.22.6-1.77 1.16-.56.55-.9 1.11-1.16 1.77-.25.64-.42 1.37-.47 2.43C2.01 9 2 9.3 2 12s.01 3 .06 4.07c.05 1.06.22 1.79.47 2.43.26.66.6 1.22 1.16 1.77.55.56 1.11.9 1.77 1.16.64.25 1.37.42 2.43.47C9 21.99 9.3 22 12 22s3-.01 4.07-.06c1.06-.05 1.79-.22 2.43-.47.66-.26 1.22-.6 1.77-1.16.56-.55.9-1.11 1.16-1.77.25-.64.42-1.37.47-2.43.05-1.07.06-1.37.06-4.07s-.01-3-.06-4.07c-.05-1.06-.22-1.79-.47-2.43-.26-.66-.6-1.22-1.16-1.77-.55-.56-1.11-.9-1.77-1.16-.64-.25-1.37-.42-2.43-.47C15 2.01 14.7 2 12 2zm0 1.8c2.65 0 2.96.01 4.01.06.97.04 1.5.21 1.85.34.46.18.8.4 1.15.75.35.35.57.69.75 1.15.13.35.3.88.34 1.85.05 1.05.06 1.36.06 4.01s-.01 2.96-.06 4.01c-.04.97-.21 1.5-.34 1.85-.18.46-.4.8-.75 1.15-.35.35-.69.57-1.15.75-.35.13-.88.3-1.85.34-1.05.05-1.36.06-4.01.06s-2.96-.01-4.01-.06c-.97-.04-1.5-.21-1.85-.34-.46-.18-.8-.4-1.15-.75-.35-.35-.57-.69-.75-1.15-.13-.35-.3-.88-.34-1.85C3.81 14.96 3.8 14.65 3.8 12s.01-2.96.06-4.01c.04-.97.21-1.5.34-1.85.18-.46.4-.8.75-1.15.35-.35.69-.57 1.15-.75.35-.13.88-.3 1.85-.34C9.04 3.81 9.35 3.8 12 3.8zm0 3.06A5.14 5.14 0 1 0 12 17.14a5.14 5.14 0 0 0 0-10.28zm0 8.48a3.34 3.34 0 1 1 0-6.68 3.34 3.34 0 0 1 0 6.68zm5.34-8.69a1.2 1.2 0 1 1-2.4 0 1.2 1.2 0 0 1 2.4 0z"/></svg></a>
+          <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24"><path d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 4.97 3.66 9.1 8.44 9.86v-6.97H7.9v-2.89h2.54V9.85c0-2.51 1.5-3.9 3.78-3.9 1.1 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.77l-.44 2.89h-2.33V22c4.78-.76 8.43-4.89 8.43-9.94z"/></svg></a>
+          <a href="#" aria-label="YouTube"><svg viewBox="0 0 24 24"><path d="M21.58 7.19c-.23-.86-.91-1.54-1.77-1.77C18.25 5 12 5 12 5s-6.25 0-7.81.42c-.86.23-1.54.91-1.77 1.77C2 8.75 2 12 2 12s0 3.25.42 4.81c.23.86.91 1.54 1.77 1.77C5.75 19 12 19 12 19s6.25 0 7.81-.42c.86-.23 1.54-.91 1.77-1.77C22 15.25 22 12 22 12s0-3.25-.42-4.81zM10 15.27V8.73L15.5 12 10 15.27z"/></svg></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>SHOP</h4>
+        <ul>
+          <li><a href="#">Ferment Kits</a></li>
+          <li><a href="#">Kanji</a></li>
+          <li><a href="#">Sprout Kits</a></li>
+          <li><a href="#">Spice Mix</a></li>
+          <li><a href="#">Jars &amp; Tools</a></li>
+          <li><a href="#">Build Your Kit</a></li>
+          <li><a href="#">The Ferment Forum</a></li>
+          <li><a href="#">Recipes</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>QUICK LINKS</h4>
+        <ul>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Refund Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Shipping Policy</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>STAY IN THE LOOP</h4>
+        <ul>
+          <li>support@gutbasket.com</li>
+          <li>+91 123 456 7890</li>
+          <li style="margin-top: 14px;">FSSAI License: 10021021000439</li>
+        </ul>
+        <form class="newsletter" onsubmit="event.preventDefault();">
+          <input type="email" placeholder="Email address" aria-label="Email address" required>
+          <button type="submit">GO</button>
+        </form>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 GutBasket Foods Pvt. Ltd. All rights reserved.</span>
+      <span>Gandhinagar, Gujarat, India</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ============== BUILD-YOUR-OWN-KIT INTERACTIVITY ============== */
+(function() {
+  // Selection state — Set per section (allows multi-select within a section)
+  const selections = {
+    jars: new Set(),
+    spice: new Set(),
+    tools: new Set(),
+    books: new Set()
+  };
+
+  const productData = {};
+  document.querySelectorAll('.product-card').forEach(card => {
+    productData[card.dataset.id] = {
+      id: card.dataset.id,
+      section: card.dataset.section,
+      name: card.dataset.name,
+      price: parseFloat(card.dataset.price) || 0,
+      compare: parseFloat(card.dataset.compare) || 0
+    };
+  });
+
+  function fmt(n) {
+    return '₹' + n.toLocaleString('en-IN', { maximumFractionDigits: 0 });
+  }
+
+  const SECTION_LABELS = {
+    jars: 'Jar',
+    spice: 'Spice mix',
+    tools: 'Tools & accessories',
+    books: 'Recipe books'
+  };
+
+  function updateBundle() {
+    let total = 0;
+    let totalCompare = 0;
+    let totalCount = 0;
+    const mobileItemsHtml = [];
+
+    ['jars', 'spice', 'tools', 'books'].forEach(section => {
+      const ids = Array.from(selections[section]);
+      const sectionItems = ids.map(id => productData[id]);
+      const sectionTotal = sectionItems.reduce((s, p) => s + p.price, 0);
+      const sectionCompare = sectionItems.reduce((s, p) => s + (p.compare || p.price), 0);
+      total += sectionTotal;
+      totalCompare += sectionCompare;
+      totalCount += ids.length;
+
+      // Build mobile sheet rows for this section
+      ids.forEach(id => {
+        const p = productData[id];
+        mobileItemsHtml.push(
+          `<li>
+            <div style="flex:1;min-width:0;">
+              <div class="section-tag">${SECTION_LABELS[section]}</div>
+              <div class="item-name">${p.name}</div>
+            </div>
+            <div class="item-price">${fmt(p.price)}</div>
+            <button class="item-remove" data-remove-id="${id}" aria-label="Remove ${p.name}">×</button>
+          </li>`
+        );
+      });
+
+      // Update sidebar item
+      const bundleItem = document.querySelector(`.bundle-item[data-bundle="${section}"]`);
+      const selEl = bundleItem.querySelector('.selection');
+      if (ids.length === 0) {
+        bundleItem.classList.remove('has-selection');
+        selEl.textContent = 'No selection yet';
+      } else {
+        bundleItem.classList.add('has-selection');
+        if (ids.length === 1) {
+          // Show product short name
+          const name = sectionItems[0].name;
+          selEl.textContent = name.length > 38 ? name.slice(0, 36) + '…' : name;
+        } else {
+          selEl.textContent = ids.length + ' items · ' + fmt(sectionTotal);
+        }
+      }
+
+      // Update section pill
+      const pill = document.querySelector(`.section-pill[data-pill="${section}"]`);
+      const pillText = pill.querySelector('.pill-text');
+      if (ids.length === 0) {
+        pill.classList.remove('has-selection');
+        pillText.textContent = 'Optional';
+      } else {
+        pill.classList.add('has-selection');
+        pillText.textContent = ids.length + ' selected';
+      }
+    });
+
+    // Update total
+    document.getElementById('bundle-total-val').textContent = fmt(total);
+    document.getElementById('mobile-total-val').textContent = fmt(total);
+    const savings = totalCompare - total;
+    const savingsEl = document.getElementById('bundle-savings');
+    if (savings > 0) {
+      savingsEl.textContent = 'You save ' + fmt(savings) + ' on bundle';
+    } else {
+      savingsEl.textContent = '';
+    }
+
+    // Mobile meta (collapsed-state hint)
+    const mobileMeta = document.getElementById('mobile-meta');
+    if (totalCount === 0) {
+      mobileMeta.textContent = 'No items selected yet';
+    } else if (savings > 0) {
+      mobileMeta.textContent = totalCount + ' ' + (totalCount === 1 ? 'item' : 'items') + ' · save ' + fmt(savings);
+    } else {
+      mobileMeta.textContent = totalCount + ' ' + (totalCount === 1 ? 'item' : 'items') + ' selected';
+    }
+
+    // Mobile sheet list + header meta
+    const listEl = document.getElementById('mobile-bundle-list');
+    const sheetMeta = document.getElementById('mobile-sheet-meta');
+    if (totalCount === 0) {
+      listEl.innerHTML = '<li style="display:block;color:var(--text-soft);font-size:13px;padding:18px 0;text-align:center;">Pick items from any section above to start your bundle.</li>';
+      sheetMeta.textContent = 'No items yet';
+    } else {
+      listEl.innerHTML = mobileItemsHtml.join('');
+      sheetMeta.textContent = totalCount + (totalCount === 1 ? ' item' : ' items') + ' · ' + fmt(total);
+    }
+
+    // Enable / disable CTA
+    const ctaDisabled = totalCount === 0;
+    document.getElementById('bundle-cta').disabled = ctaDisabled;
+    document.getElementById('mobile-bundle-cta').disabled = ctaDisabled;
+
+    // If sheet is open and bundle is empty, auto-collapse
+    if (totalCount === 0) closeMobileSheet();
+
+    // Update cart count badge
+    document.getElementById('header-cart-count').textContent = totalCount;
+  }
+
+  function toggleCard(card) {
+    const id = card.dataset.id;
+    const section = card.dataset.section;
+    if (selections[section].has(id)) {
+      selections[section].delete(id);
+      card.classList.remove('selected');
+      card.setAttribute('aria-pressed', 'false');
+    } else {
+      selections[section].add(id);
+      card.classList.add('selected');
+      card.setAttribute('aria-pressed', 'true');
+    }
+    updateBundle();
+  }
+
+  // Wire up cards
+  document.querySelectorAll('.product-card').forEach(card => {
+    card.addEventListener('click', e => {
+      // Avoid triggering when interacting with the variant select
+      if (e.target.closest('select')) return;
+      toggleCard(card);
+    });
+    card.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggleCard(card);
+      }
+    });
+  });
+
+  // View More toggles
+  document.querySelectorAll('.view-more').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.toggle;
+      const grid = document.querySelector(`.product-grid[data-grid="${target}"]`);
+      grid.classList.toggle('expanded');
+      btn.classList.toggle('open');
+      const isOpen = btn.classList.contains('open');
+      const extras = grid.querySelectorAll('.extra').length;
+      btn.firstChild.textContent = isOpen ? `Show Less ` : `View More (${extras} more) `;
+    });
+  });
+
+  // CTA action
+  function handleCheckout() {
+    const allItems = [];
+    Object.keys(selections).forEach(s => {
+      selections[s].forEach(id => allItems.push(productData[id].name));
+    });
+    if (allItems.length === 0) return;
+    alert(`Adding ${allItems.length} item(s) to cart:\n\n• ${allItems.join('\n• ')}\n\nThis is a reference design — wire to Shopify cart in production.`);
+  }
+  document.getElementById('bundle-cta').addEventListener('click', handleCheckout);
+  document.getElementById('mobile-bundle-cta').addEventListener('click', handleCheckout);
+
+  // ===== Mobile bundle sheet toggle =====
+  const mobileBundle = document.getElementById('mobile-bundle');
+  const mobileSheet = document.getElementById('mobile-sheet');
+  const mobileToggle = document.getElementById('mobile-toggle');
+  const mobileHandle = document.getElementById('mobile-handle');
+  const mobileBackdrop = document.getElementById('mobile-backdrop');
+
+  function openMobileSheet() {
+    // Don't open an empty sheet
+    let count = 0;
+    Object.keys(selections).forEach(s => count += selections[s].size);
+    if (count === 0) return;
+    mobileBundle.classList.add('is-expanded');
+    mobileSheet.setAttribute('aria-hidden', 'false');
+    mobileToggle.setAttribute('aria-expanded', 'true');
+    mobileBackdrop.classList.add('is-visible');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeMobileSheet() {
+    mobileBundle.classList.remove('is-expanded');
+    mobileSheet.setAttribute('aria-hidden', 'true');
+    mobileToggle.setAttribute('aria-expanded', 'false');
+    mobileBackdrop.classList.remove('is-visible');
+    document.body.style.overflow = '';
+  }
+  function toggleMobileSheet() {
+    if (mobileBundle.classList.contains('is-expanded')) closeMobileSheet();
+    else openMobileSheet();
+  }
+
+  mobileToggle.addEventListener('click', toggleMobileSheet);
+  mobileToggle.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleMobileSheet(); }
+  });
+  mobileHandle.addEventListener('click', toggleMobileSheet);
+  mobileBackdrop.addEventListener('click', closeMobileSheet);
+
+  // Remove item from sheet (event delegation on the list)
+  document.getElementById('mobile-bundle-list').addEventListener('click', e => {
+    const btn = e.target.closest('[data-remove-id]');
+    if (!btn) return;
+    const id = btn.dataset.removeId;
+    // Find which section this item belongs to and remove it
+    Object.keys(selections).forEach(section => {
+      if (selections[section].has(id)) {
+        selections[section].delete(id);
+        // Update the matching card UI
+        const card = document.querySelector(`.product-card[data-id="${id}"]`);
+        if (card) {
+          card.classList.remove('selected');
+          card.setAttribute('aria-pressed', 'false');
+        }
+      }
+    });
+    updateBundle();
+  });
+
+  updateBundle();
+})();
+</script>
+
+</body>
+</html>
