@@ -1,0 +1,240 @@
+{%- comment -%}
+  Section 08 · Refills band — dark warm-brown, 5 refill kits + view-all
+  Source ref: gutbasket-home-page.html lines 2371-2429
+{%- endcomment -%}
+
+<section class="gb-refills">
+  <div class="gb-refills-container">
+    <div class="gb-refills-header">
+      {%- if section.settings.eyebrow != blank -%}
+        <span class="gb-refills-eyebrow">{{ section.settings.eyebrow }}</span>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="gb-refills-h2">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+      {%- if section.settings.lead != blank -%}
+        <div class="gb-refills-lead">{{ section.settings.lead }}</div>
+      {%- endif -%}
+    </div>
+
+    <div class="gb-refills-grid">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign theme_class = block.settings.theme | default: 'kanji'
+          assign img = block.settings.image
+          assign link = block.settings.link | default: '#'
+        -%}
+        <a href="{{ link }}" class="gb-refills-pair gb-refills-pair--{{ theme_class }}" {{ block.shopify_attributes }}>
+          <div class="gb-refills-mini"
+               {%- if img %} style="background-image: url('{{ img | image_url: width: 200 }}');"{%- endif %}>
+            <span>{{ block.settings.mini_label }}</span>
+          </div>
+          <div class="gb-refills-arrow">→</div>
+          <div class="gb-refills-info">
+            <h4>{{ block.settings.title }}</h4>
+            <p>{{ block.settings.description }}</p>
+            <div class="gb-refills-from">{{ block.settings.from_price }}</div>
+          </div>
+        </a>
+      {%- endfor -%}
+    </div>
+
+    {%- if section.settings.view_all_label != blank and section.settings.view_all_link != blank -%}
+      <div class="gb-refills-viewall">
+        <a href="{{ section.settings.view_all_link }}">{{ section.settings.view_all_label }} →</a>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% stylesheet %}
+.gb-refills {
+  --c-cream: #FFF9EE;
+  --c-allinone: #2B2218;
+  --c-action: #FF7300;
+  --c-kanji: #8B1F40;
+  --c-achaar: #C8552A;
+  --c-aam-panna: #DDA738;
+  --c-sprout: #3F7754;
+  --c-inulin: #15BA97;
+  --c-kimchi: #C8392E;
+  background: var(--c-allinone);
+  color: var(--c-cream);
+  padding: 64px 0;
+}
+.gb-refills-container { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+.gb-refills-header { margin-bottom: 36px; max-width: 720px; }
+.gb-refills-eyebrow {
+  display: inline-block;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: rgba(255, 249, 238, 0.65);
+  margin-bottom: 10px;
+}
+.gb-refills-h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: clamp(28px, 3.4vw, 38px);
+  margin: 0 0 10px;
+  letter-spacing: -0.02em;
+  color: var(--c-cream);
+}
+.gb-refills-h2 em { font-style: italic; font-weight: 700; color: var(--c-aam-panna); }
+.gb-refills-lead {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  color: rgba(255, 249, 238, 0.78);
+  line-height: 1.5;
+}
+.gb-refills-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+.gb-refills-pair {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: rgba(255, 249, 238, 0.05);
+  border: 1px solid rgba(255, 249, 238, 0.12);
+  padding: 18px;
+  border-radius: 12px;
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.gb-refills-pair:hover {
+  background: rgba(255, 249, 238, 0.1);
+  border-color: rgba(255, 249, 238, 0.28);
+}
+.gb-refills-mini {
+  width: 64px; height: 64px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 11px;
+  color: var(--c-cream);
+  text-align: center;
+  letter-spacing: 0.04em;
+  line-height: 1.1;
+  background-size: cover;
+  background-position: center;
+  background-blend-mode: multiply;
+  position: relative;
+  overflow: hidden;
+}
+.gb-refills-mini::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, rgba(255, 249, 238, 0.08) 0%, rgba(43, 31, 26, 0.4) 100%);
+  pointer-events: none;
+}
+.gb-refills-mini > span { position: relative; z-index: 1; }
+.gb-refills-pair--kanji  .gb-refills-mini { background-color: var(--c-kanji); }
+.gb-refills-pair--achaar .gb-refills-mini { background-color: var(--c-achaar); }
+.gb-refills-pair--panna  .gb-refills-mini { background-color: var(--c-aam-panna); color: #1F1F1D; }
+.gb-refills-pair--veg    .gb-refills-mini { background-color: var(--c-sprout); }
+.gb-refills-pair--kimchi .gb-refills-mini { background-color: var(--c-kimchi); }
+.gb-refills-pair--universal .gb-refills-mini { background-color: var(--c-inulin); }
+.gb-refills-arrow {
+  font-size: 16px;
+  color: rgba(255, 249, 238, 0.5);
+}
+.gb-refills-info { flex: 1; min-width: 0; }
+.gb-refills-info h4 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 14.5px;
+  color: var(--c-cream);
+  margin: 0 0 3px;
+}
+.gb-refills-info p {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12.5px;
+  color: rgba(255, 249, 238, 0.75);
+  margin: 0 0 4px;
+}
+.gb-refills-from {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--c-cream);
+  letter-spacing: 0.04em;
+}
+.gb-refills-viewall {
+  text-align: center;
+  margin-top: 24px;
+}
+.gb-refills-viewall a {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--c-cream);
+  text-decoration: underline;
+  text-underline-offset: 5px;
+  text-decoration-thickness: 1.5px;
+}
+.gb-refills-viewall a:hover { text-decoration-thickness: 2.5px; }
+@media (max-width: 768px) {
+  .gb-refills-grid { grid-template-columns: 1fr; }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "GB · Home Refills",
+  "tag": "section",
+  "class": "gb-refills-wrap",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Already have a kit?" },
+    { "type": "text", "id": "heading", "label": "Heading (use <em>)", "default": "Just <em>grab a refill.</em>" },
+    { "type": "richtext", "id": "lead", "label": "Lead", "default": "<p>Your jar, lid, and weights last forever. Next batch only needs spice mix and ferment boost.</p>" },
+    { "type": "text", "id": "view_all_label", "label": "View-all link label", "default": "View all refills" },
+    { "type": "url", "id": "view_all_link", "label": "View-all link" }
+  ],
+  "blocks": [
+    {
+      "type": "refill",
+      "name": "Refill",
+      "limit": 12,
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Mini image" },
+        { "type": "text", "id": "mini_label", "label": "Mini label (e.g. KANJI KIT)", "default": "KIT" },
+        { "type": "select", "id": "theme", "label": "Color theme",
+          "options": [
+            { "value": "kanji",     "label": "Kanji (maroon)" },
+            { "value": "achaar",    "label": "Achaar (terracotta)" },
+            { "value": "panna",     "label": "Aam panna (mustard)" },
+            { "value": "veg",       "label": "Vegetable (sprout green)" },
+            { "value": "kimchi",    "label": "Kimchi (red)" },
+            { "value": "universal", "label": "Universal (teal)" }
+          ],
+          "default": "kanji" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Refill title" },
+        { "type": "text", "id": "description", "label": "Subtitle", "default": "Spice mix + ferment boost" },
+        { "type": "text", "id": "from_price", "label": "From-price text", "default": "From ₹249" },
+        { "type": "url", "id": "link", "label": "Link" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "GB · Home Refills",
+      "blocks": [
+        { "type": "refill", "settings": { "theme": "kanji",  "mini_label": "KANJI\nKIT",  "title": "Kanji refill packs",      "description": "Spice mix + ferment boost", "from_price": "From ₹249 · 3 batches" } },
+        { "type": "refill", "settings": { "theme": "achaar", "mini_label": "ACHAAR\nKIT", "title": "Achaar 6-batch refill",   "description": "Spice mix + ferment boost", "from_price": "From ₹499 · 6 batches" } },
+        { "type": "refill", "settings": { "theme": "panna",  "mini_label": "PANNA\nKIT",  "title": "Aam panna spice mix",     "description": "Pack of 5 sachets",         "from_price": "From ₹399 · 5 batches" } },
+        { "type": "refill", "settings": { "theme": "veg",    "mini_label": "VEG\nKIT",    "title": "Sea salt & ferment boost", "description": "Sauerkraut, kimchi, all veg","from_price": "From ₹300" } },
+        { "type": "refill", "settings": { "theme": "kimchi", "mini_label": "KIMCHI\nKIT", "title": "Kimchi making paste",     "description": "Authentic gochujang base",  "from_price": "From ₹399" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

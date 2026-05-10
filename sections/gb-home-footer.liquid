@@ -1,0 +1,224 @@
+{%- comment -%}
+  Section 14 · Footer — Ink, 4-column link list
+  Source ref: gutbasket-home-page.html lines 2603-2657
+  NOTE: This is a content-section footer for the home page only. The
+  existing live theme's footer (rendered via theme.liquid) is untouched.
+  If you want this footer site-wide, replace the content of
+  sections/footer.liquid with this section, or update theme.liquid to
+  point at gb-home-footer for all templates.
+{%- endcomment -%}
+
+<section class="gb-footer">
+  <div class="gb-footer-container">
+    <div class="gb-footer-grid">
+      <div class="gb-footer-col gb-footer-col--brand">
+        {%- if section.settings.brand_name != blank -%}
+          <a href="/" class="gb-footer-wordmark">
+            {{ section.settings.brand_name }}{%- if section.settings.brand_suffix != blank -%}<sup>{{ section.settings.brand_suffix }}</sup>{%- endif -%}
+          </a>
+        {%- endif -%}
+        {%- if section.settings.tagline != blank -%}
+          <p class="gb-footer-tagline">{{ section.settings.tagline }}</p>
+        {%- endif -%}
+        {%- if section.settings.fssai != blank -%}
+          <p class="gb-footer-fssai">{{ section.settings.fssai }}</p>
+        {%- endif -%}
+        {%- if section.settings.instagram != blank or section.settings.facebook != blank or section.settings.youtube != blank -%}
+          <div class="gb-footer-social">
+            {%- if section.settings.instagram != blank -%}<a href="{{ section.settings.instagram }}" aria-label="Instagram">◉</a>{%- endif -%}
+            {%- if section.settings.facebook != blank -%}<a href="{{ section.settings.facebook }}" aria-label="Facebook">f</a>{%- endif -%}
+            {%- if section.settings.youtube != blank -%}<a href="{{ section.settings.youtube }}" aria-label="YouTube">▷</a>{%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'menu' -%}
+          <div class="gb-footer-col" {{ block.shopify_attributes }}>
+            {%- if block.settings.heading != blank -%}
+              <h4 class="gb-footer-h4">{{ block.settings.heading }}</h4>
+            {%- endif -%}
+            {%- if block.settings.menu != blank -%}
+              <ul class="gb-footer-list">
+                {%- for link in block.settings.menu.links -%}
+                  <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+                {%- endfor -%}
+              </ul>
+            {%- elsif block.settings.links_text != blank -%}
+              <ul class="gb-footer-list">
+                {%- assign lines = block.settings.links_text | newline_to_br | split: '<br />' -%}
+                {%- for line in lines -%}
+                  {%- assign parts = line | strip | split: '|' -%}
+                  {%- if parts.size >= 2 -%}
+                    <li><a href="{{ parts[1] | strip }}">{{ parts[0] | strip }}</a></li>
+                  {%- elsif parts.size == 1 and parts[0] != blank -%}
+                    <li><span>{{ parts[0] | strip }}</span></li>
+                  {%- endif -%}
+                {%- endfor -%}
+              </ul>
+            {%- endif -%}
+            {%- if block.settings.contact_block != blank -%}
+              <p class="gb-footer-fssai" style="margin-top: 18px;">{{ block.settings.contact_block }}</p>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+
+    <div class="gb-footer-bottom">
+      <span>{{ section.settings.copyright | default: '© 2026 GutBasket Foods Pvt. Ltd.' }}</span>
+      {%- if section.settings.tagline_short != blank -%}
+        <span>{{ section.settings.tagline_short }}</span>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+.gb-footer {
+  --c-cream: #FFF9EE;
+  --c-ink: #1F1F1D;
+  --c-action: #FF7300;
+  background: var(--c-ink);
+  color: var(--c-cream);
+  padding: 48px 0 24px;
+}
+.gb-footer-container { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+.gb-footer-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr;
+  gap: 48px;
+  margin-bottom: 48px;
+}
+.gb-footer-h4 {
+  font-family: 'DM Mono', monospace;
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: rgba(255, 249, 238, 0.55);
+  margin: 0 0 18px;
+}
+.gb-footer-wordmark {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 22px;
+  color: var(--c-cream);
+  margin-bottom: 16px;
+  display: inline-block;
+  text-decoration: none;
+  letter-spacing: -0.01em;
+}
+.gb-footer-tagline {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13.5px;
+  color: rgba(255, 249, 238, 0.7);
+  line-height: 1.55;
+  max-width: 280px;
+  margin: 0 0 20px;
+}
+.gb-footer-fssai {
+  font-family: 'DM Mono', monospace;
+  font-size: 10.5px;
+  color: rgba(255, 249, 238, 0.5);
+  letter-spacing: 0.06em;
+  margin: 0;
+}
+.gb-footer-list { list-style: none; padding: 0; margin: 0; }
+.gb-footer-list li {
+  margin-bottom: 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13.5px;
+}
+.gb-footer-list li a {
+  color: rgba(255, 249, 238, 0.75);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+.gb-footer-list li a:hover { color: var(--c-cream); }
+.gb-footer-social {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+.gb-footer-social a {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 249, 238, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--c-cream);
+  font-size: 14px;
+  text-decoration: none;
+  transition: background 0.15s ease;
+}
+.gb-footer-social a:hover { background: var(--c-action); }
+.gb-footer-bottom {
+  border-top: 1px solid rgba(255, 249, 238, 0.1);
+  padding-top: 28px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  color: rgba(255, 249, 238, 0.5);
+  letter-spacing: 0.04em;
+}
+@media (max-width: 768px) {
+  .gb-footer-grid { grid-template-columns: 1fr 1fr; gap: 28px; }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "GB · Home Footer",
+  "tag": "section",
+  "class": "gb-footer-wrap",
+  "settings": [
+    { "type": "header", "content": "Brand column" },
+    { "type": "text", "id": "brand_name", "label": "Wordmark", "default": "GutBasket" },
+    { "type": "text", "id": "brand_suffix", "label": "Trademark suffix", "default": "®" },
+    { "type": "richtext", "id": "tagline", "label": "Tagline", "default": "<p>Live, gut-friendly ferments. Made at home, the way grandmother did — with kits that actually work.</p>" },
+    { "type": "text", "id": "fssai", "label": "FSSAI line", "default": "FSSAI · 10021021000439" },
+    { "type": "url", "id": "instagram", "label": "Instagram URL" },
+    { "type": "url", "id": "facebook",  "label": "Facebook URL" },
+    { "type": "url", "id": "youtube",   "label": "YouTube URL" },
+
+    { "type": "header", "content": "Bottom strip" },
+    { "type": "text", "id": "copyright", "label": "Copyright line", "default": "© 2026 GutBasket Foods Pvt. Ltd. · Gandhinagar · Gujarat · India" },
+    { "type": "text", "id": "tagline_short", "label": "Right-side line", "default": "The system is the brand." }
+  ],
+  "blocks": [
+    {
+      "type": "menu",
+      "name": "Link column",
+      "limit": 4,
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Column heading", "default": "Shop" },
+        { "type": "link_list", "id": "menu", "label": "Shopify menu", "info": "Pick a menu from Online Store > Navigation. If empty, the manual list below is used." },
+        { "type": "textarea", "id": "links_text", "label": "Manual links",
+          "info": "One per line, format:  Label | /url",
+          "default": "Fermentation Kits | /collections/fermentation-kits\nSprouts Kit | /collections/sprouts\nPrebiotic Powders | /collections/prebiotic\nDairy Cultures | /collections/dairy\nBaking | /collections/baking\nRefills | /collections/refills" },
+        { "type": "textarea", "id": "contact_block", "label": "Optional contact block (under list)" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "GB · Home Footer",
+      "blocks": [
+        { "type": "menu", "settings": { "heading": "Shop",
+          "links_text": "Fermentation Kits | /collections/fermentation-kits\nSprouts Kit | /collections/sprouts\nPrebiotic Powders | /collections/prebiotic\nDairy Cultures | /collections/dairy\nBaking | /collections/baking\nRefills | /collections/refills\nBuild a kit | /build-your-kit" } },
+        { "type": "menu", "settings": { "heading": "Learn",
+          "links_text": "Fermentation 101 | /learn/fermentation-101\nGut science | /learn/gut-science\nTroubleshooting | /learn/troubleshooting\nRecipes | /recipes\nThe Ferment Forum | /forum" } },
+        { "type": "menu", "settings": { "heading": "Help",
+          "links_text": "Contact us | /contact\nShipping | /shipping\nReturns | /returns\nPrivacy | /privacy\nTerms | /terms",
+          "contact_block": "support@gutbasket.com\n+91 78619 40110" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

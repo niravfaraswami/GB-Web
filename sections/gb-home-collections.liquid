@@ -150,18 +150,15 @@
 
 <script>
 (function() {
-  document.querySelectorAll('.gb-coll-tile[data-tab]').forEach(function(tile) {
+  document.querySelectorAll('.gb-coll-tile').forEach(function(tile) {
     tile.addEventListener('click', function(e) {
       var tabId = tile.dataset.tab;
+      // Always intercept the click — never navigate to a collection page from
+      // home. If the tile has a tab_id, dispatch the scroll+activate event;
+      // otherwise we still suppress navigation (no-op).
+      e.preventDefault();
       if (!tabId) return;
-      // Dispatch event for the shop-tabs section to handle (it scrolls + activates)
-      var ev = new CustomEvent('gb:select-tab', { detail: { tab: tabId } });
-      // Only intercept if the shop-tabs section actually has this tab
-      var target = document.querySelector('[data-panel="' + tabId + '"]');
-      if (target) {
-        e.preventDefault();
-        document.dispatchEvent(ev);
-      }
+      document.dispatchEvent(new CustomEvent('gb:select-tab', { detail: { tab: tabId } }));
     });
   });
 })();
@@ -211,8 +208,8 @@
         { "type": "tile", "settings": { "label": "Dairy Cultures",    "theme": "dairy",        "tab_id": "dairy" } },
         { "type": "tile", "settings": { "label": "Spice Refills",     "theme": "refills",      "tab_id": "refills" } },
         { "type": "tile", "settings": { "label": "Baking",            "theme": "baking",       "tab_id": "baking" } },
-        { "type": "tile", "settings": { "label": "Jars & Tools",      "theme": "jars" } },
-        { "type": "tile", "settings": { "label": "Recipe Books",      "theme": "books" } }
+        { "type": "tile", "settings": { "label": "Jars & Tools",      "theme": "jars",         "tab_id": "jars" } },
+        { "type": "tile", "settings": { "label": "Recipe Books",      "theme": "books",        "tab_id": "books" } }
       ]
     }
   ]

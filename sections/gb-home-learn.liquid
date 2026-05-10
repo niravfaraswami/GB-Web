@@ -1,0 +1,234 @@
+{%- comment -%}
+  Section 11 · Learn / Recipes — 3 article cards
+  Source ref: gutbasket-home-page.html lines 2497-2549
+  Pulls from a Shopify blog (picker) when set, else falls back to manual blocks.
+{%- endcomment -%}
+
+{%- liquid
+  assign use_blog = section.settings.blog
+  assign limit = section.settings.article_count | default: 3
+-%}
+
+<section class="gb-learn">
+  <div class="gb-learn-container">
+    <div class="gb-learn-header">
+      {%- if section.settings.eyebrow != blank -%}
+        <span class="gb-learn-eyebrow">{{ section.settings.eyebrow }}</span>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="gb-learn-h2">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+    </div>
+
+    <div class="gb-learn-grid">
+      {%- if use_blog and use_blog.articles.size > 0 -%}
+        {%- for article in use_blog.articles limit: limit -%}
+          <a href="{{ article.url }}" class="gb-learn-card">
+            <div class="gb-learn-image"
+                 {%- if article.image %} style="background-image: url('{{ article.image | image_url: width: 600 }}');"{%- else %} style="background-color: #15BA97;"{%- endif %}></div>
+            <div class="gb-learn-content">
+              {%- if article.tags.size > 0 -%}
+                <div class="gb-learn-tag">{{ article.tags.first }}</div>
+              {%- endif -%}
+              <h3 class="gb-learn-title">{{ article.title }}</h3>
+              <p class="gb-learn-excerpt">{{ article.excerpt | default: article.content | strip_html | truncate: 120 }}</p>
+              {%- if article.metafields.gb.read_time -%}
+                <span class="gb-learn-read">{{ article.metafields.gb.read_time }}</span>
+              {%- else -%}
+                <span class="gb-learn-read">{{ article.content | strip_html | size | divided_by: 1000 | append: ' min read' }}</span>
+              {%- endif -%}
+            </div>
+          </a>
+        {%- endfor -%}
+      {%- else -%}
+        {%- for block in section.blocks -%}
+          {%- liquid
+            assign theme_class = block.settings.theme | default: 'inulin'
+            assign img = block.settings.image
+            assign link = block.settings.link | default: '#'
+          -%}
+          <a href="{{ link }}" class="gb-learn-card gb-learn-card--{{ theme_class }}" {{ block.shopify_attributes }}>
+            <div class="gb-learn-image"
+                 {%- if img %} style="background-image: url('{{ img | image_url: width: 600 }}');"{%- endif %}></div>
+            <div class="gb-learn-content">
+              {%- if block.settings.tag != blank -%}
+                <div class="gb-learn-tag">{{ block.settings.tag }}</div>
+              {%- endif -%}
+              <h3 class="gb-learn-title">{{ block.settings.title }}</h3>
+              <p class="gb-learn-excerpt">{{ block.settings.excerpt }}</p>
+              {%- if block.settings.read_time != blank -%}
+                <span class="gb-learn-read">{{ block.settings.read_time }}</span>
+              {%- endif -%}
+            </div>
+          </a>
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+.gb-learn {
+  --c-white: #FFFFFF;
+  --c-text: #1F1F1D;
+  --c-text-muted: #5C4D3F;
+  --c-text-soft: #888780;
+  --c-border-soft: #F0EBDD;
+  --c-ink: #1F1F1D;
+  --c-kanji: #8B1F40;
+  --c-achaar: #C8552A;
+  --c-inulin: #15BA97;
+  background: var(--c-white);
+  padding: 64px 0;
+}
+.gb-learn-container { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+.gb-learn-header { margin-bottom: 36px; }
+.gb-learn-eyebrow {
+  display: inline-block;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--c-text-muted);
+  margin-bottom: 10px;
+}
+.gb-learn-h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: clamp(28px, 3.4vw, 38px);
+  margin: 0;
+  letter-spacing: -0.02em;
+  color: var(--c-text);
+}
+.gb-learn-h2 em { font-style: italic; font-weight: 700; color: var(--c-kanji); }
+.gb-learn-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.gb-learn-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--c-white);
+  border: 1px solid var(--c-border-soft);
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.gb-learn-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(43, 31, 26, 0.06), 0 12px 32px rgba(43, 31, 26, 0.08);
+}
+.gb-learn-image {
+  aspect-ratio: 16/10;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+}
+.gb-learn-image::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 50%, rgba(43, 31, 26, 0.18) 100%);
+}
+.gb-learn-card--inulin .gb-learn-image { background-color: var(--c-inulin); }
+.gb-learn-card--achaar .gb-learn-image { background-color: var(--c-achaar); }
+.gb-learn-card--kanji  .gb-learn-image { background-color: var(--c-kanji); }
+.gb-learn-content { padding: 20px 22px 22px; flex: 1; display: flex; flex-direction: column; }
+.gb-learn-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--c-text-soft);
+  margin-bottom: 10px;
+}
+.gb-learn-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 17px;
+  font-weight: 800;
+  margin: 0 0 10px;
+  line-height: 1.25;
+  color: var(--c-text);
+}
+.gb-learn-excerpt {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13.5px;
+  color: var(--c-text-muted);
+  line-height: 1.5;
+  margin: 0 0 14px;
+  flex: 1;
+}
+.gb-learn-read {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--c-text-soft);
+  letter-spacing: 0.06em;
+}
+@media (max-width: 768px) {
+  .gb-learn-grid {
+    grid-template-columns: none;
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 12px;
+    padding: 4px 16px 16px;
+    margin: 0 -16px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .gb-learn-grid::-webkit-scrollbar { display: none; }
+  .gb-learn-card { flex: 0 0 78%; scroll-snap-align: start; }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "GB · Home Learn",
+  "tag": "section",
+  "class": "gb-learn-wrap",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "From the blog" },
+    { "type": "text", "id": "heading", "label": "Heading (use <em>)", "default": "Learn the science. <em>Try the recipe.</em>" },
+    { "type": "blog", "id": "blog", "label": "Source blog", "info": "Pick a Shopify blog to render its latest articles. If empty, the manual blocks below are used." },
+    { "type": "range", "id": "article_count", "label": "Articles to show", "min": 2, "max": 6, "step": 1, "default": 3 }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Manual card",
+      "limit": 6,
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "select", "id": "theme", "label": "Background color (when no image)",
+          "options": [
+            { "value": "inulin", "label": "Teal" },
+            { "value": "achaar", "label": "Terracotta" },
+            { "value": "kanji",  "label": "Maroon" }
+          ],
+          "default": "inulin" },
+        { "type": "text", "id": "tag", "label": "Tag", "default": "Gut science" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Article title" },
+        { "type": "textarea", "id": "excerpt", "label": "Excerpt", "default": "Short article excerpt." },
+        { "type": "text", "id": "read_time", "label": "Read time", "default": "6 min read" },
+        { "type": "url", "id": "link", "label": "Link" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "GB · Home Learn",
+      "blocks": [
+        { "type": "card", "settings": { "theme": "inulin", "tag": "Gut science",  "title": "Probiotics vs prebiotics vs postbiotics — what's the difference?", "excerpt": "The three Ps of gut health, explained simply. And which one your dahi has.", "read_time": "6 min read" } },
+        { "type": "card", "settings": { "theme": "achaar", "tag": "Recipe",       "title": "No-oil mango achaar — the original lacto-fermented version",     "excerpt": "Tangy, spiced, probiotic-rich. The old-school way before refined oils came in.", "read_time": "10 min · serves 6" } },
+        { "type": "card", "settings": { "theme": "kanji",  "tag": "Master guide", "title": "Everything you need to know about kanji",                          "excerpt": "Black carrot, beetroot, salt, mustard. India's original probiotic drink — done properly.", "read_time": "12 min read" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

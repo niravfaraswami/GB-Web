@@ -1,0 +1,114 @@
+{%- comment -%}
+  Section 13 · Newsletter strip — single-line signup
+  Source ref: gutbasket-home-page.html lines 2583-2596
+{%- endcomment -%}
+
+<section class="gb-news">
+  <div class="gb-news-container">
+    <div class="gb-news-card">
+      <div class="gb-news-text">
+        {%- if section.settings.heading != blank -%}
+          <h3 class="gb-news-h3">{{ section.settings.heading }}</h3>
+        {%- endif -%}
+        {%- if section.settings.lead != blank -%}
+          <p class="gb-news-lead">{{ section.settings.lead }}</p>
+        {%- endif -%}
+      </div>
+      {%- form 'customer', class: 'gb-news-form' -%}
+        <input type="hidden" name="contact[tags]" value="{{ section.settings.signup_tag | default: 'newsletter' }}">
+        <input type="email" name="contact[email]" placeholder="{{ section.settings.email_placeholder | default: 'your@email.com' }}" aria-label="Email" required>
+        <button type="submit" class="gb-news-btn">{{ section.settings.cta_label | default: 'Subscribe' }}</button>
+      {%- endform -%}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+.gb-news {
+  --c-white: #FFFFFF;
+  --c-cream: #FFF9EE;
+  --c-text: #1F1F1D;
+  --c-text-muted: #5C4D3F;
+  --c-border: #E8E3D5;
+  --c-border-soft: #F0EBDD;
+  --c-action: #FF7300;
+  background: var(--c-white);
+  padding: 48px 0;
+}
+.gb-news-container { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+.gb-news-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  padding: 32px 40px;
+  background: var(--c-cream);
+  border-radius: 18px;
+  border: 1px solid var(--c-border-soft);
+}
+.gb-news-text { flex: 1; min-width: 0; }
+.gb-news-h3 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 22px;
+  margin: 0 0 6px;
+  color: var(--c-text);
+}
+.gb-news-lead {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: var(--c-text-muted);
+  margin: 0;
+}
+.gb-news-form {
+  display: flex;
+  gap: 8px;
+  flex: 0 0 auto;
+}
+.gb-news-form input {
+  width: 280px;
+  padding: 14px 20px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  border: 1px solid var(--c-border);
+  background: var(--c-white);
+  border-radius: 999px;
+  outline: none;
+  color: var(--c-text);
+}
+.gb-news-form input:focus { border-color: var(--c-action); }
+.gb-news-btn {
+  padding: 14px 24px;
+  background: var(--c-action);
+  color: #fff;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+.gb-news-btn:hover { background: #E66800; transform: translateY(-1px); }
+@media (max-width: 768px) {
+  .gb-news-card { flex-direction: column; padding: 24px; text-align: center; }
+  .gb-news-form { width: 100%; flex-direction: column; }
+  .gb-news-form input { width: 100%; }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "GB · Home Newsletter",
+  "tag": "section",
+  "class": "gb-news-wrap",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Get fermentation tips in your inbox." },
+    { "type": "text", "id": "lead", "label": "Lead", "default": "One email a week. Recipes, science, troubleshooting. Unsubscribe anytime." },
+    { "type": "text", "id": "email_placeholder", "label": "Email placeholder", "default": "your@email.com" },
+    { "type": "text", "id": "cta_label", "label": "CTA label", "default": "Subscribe" },
+    { "type": "text", "id": "signup_tag", "label": "Customer tag", "default": "newsletter" }
+  ],
+  "presets": [{ "name": "GB · Home Newsletter" }]
+}
+{% endschema %}
