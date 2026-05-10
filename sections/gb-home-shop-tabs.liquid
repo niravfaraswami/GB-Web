@@ -1,0 +1,475 @@
+{%- comment -%}
+  Section 05 · Shop tabs (tabbed product grid)
+  Source ref: gutbasket-home-page.html lines 1772-2296
+  Each tab block binds to a Shopify collection.
+{%- endcomment -%}
+
+{%- liquid
+  assign columns = section.settings.columns | default: 3
+  assign products_per_tab = section.settings.products_per_tab | default: 6
+-%}
+
+<section class="gb-shop" id="gb-shop-{{ section.id }}">
+  <div class="gb-shop-container">
+    {%- if section.settings.heading != blank or section.settings.eyebrow != blank -%}
+      <div class="gb-shop-header">
+        {%- if section.settings.eyebrow != blank -%}
+          <span class="gb-shop-eyebrow">{{ section.settings.eyebrow }}</span>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <h2 class="gb-shop-h2">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="gb-shop-tabs-row" role="tablist">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'tab' -%}
+          <button class="gb-shop-tab {% if forloop.first %}is-active{% endif %}"
+                  data-tab="{{ block.settings.tab_id }}"
+                  role="tab"
+                  {{ block.shopify_attributes }}>{{ block.settings.label }}</button>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'tab' -%}
+        {%- liquid
+          assign coll = block.settings.collection
+          assign theme_class = block.settings.theme | default: 'kanji'
+          assign cat_band = block.settings.cat_band
+          assign limit = block.settings.products_limit | default: products_per_tab
+        -%}
+        <div class="gb-shop-panel {% if forloop.first %}is-active{% endif %}"
+             data-panel="{{ block.settings.tab_id }}"
+             role="tabpanel">
+          <div class="gb-shop-grid gb-shop-grid--{{ columns }}">
+            {%- if coll and coll.products.size > 0 -%}
+              {%- for product in coll.products limit: limit -%}
+                {%- liquid
+                  assign saved = 0
+                  if product.compare_at_price and product.compare_at_price > product.price
+                    assign saved = product.compare_at_price | minus: product.price
+                  endif
+                -%}
+                <a href="{{ product.url }}" class="gb-card gb-card--{{ theme_class }}">
+                  {%- if cat_band != blank -%}
+                    <div class="gb-card-band">{{ cat_band }}</div>
+                  {%- elsif product.type != blank -%}
+                    <div class="gb-card-band">{{ product.type }}</div>
+                  {%- endif -%}
+                  <div class="gb-card-photo"
+                       {%- if product.featured_image %} style="background-image: url('{{ product.featured_image | image_url: width: 600 }}');"{%- endif %}>
+                    {%- if saved > 0 -%}
+                      <span class="gb-card-badge">Save {{ saved | money_without_trailing_zeros }}</span>
+                    {%- endif -%}
+                    <div class="gb-card-bar"></div>
+                  </div>
+                  <div class="gb-card-info">
+                    <h4 class="gb-card-title">{{ product.title }}</h4>
+                    <div class="gb-card-tag">{{ block.settings.label }}</div>
+                    <div class="gb-card-price">
+                      <span class="gb-card-now">{{ product.price | money_without_trailing_zeros }}</span>
+                      {%- if saved > 0 -%}
+                        <span class="gb-card-was">{{ product.compare_at_price | money_without_trailing_zeros }}</span>
+                      {%- endif -%}
+                    </div>
+                    <button type="button" class="gb-card-cta" data-product-handle="{{ product.handle }}">Add to cart</button>
+                  </div>
+                </a>
+              {%- endfor -%}
+            {%- else -%}
+              <p class="gb-shop-empty">Pick a collection for this tab in Theme Editor.</p>
+            {%- endif -%}
+          </div>
+          {%- if coll -%}
+            <div class="gb-shop-viewall">
+              <a href="{{ coll.url }}">{{ block.settings.view_all_label | default: 'View all' }} <span class="gb-shop-arr">→</span></a>
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+</section>
+
+{% stylesheet %}
+.gb-shop {
+  --c-white: #FFFFFF;
+  --c-cream: #FFF9EE;
+  --c-border: #E8E3D5;
+  --c-border-soft: #F0EBDD;
+  --c-ink: #1F1F1D;
+  --c-text: #1F1F1D;
+  --c-text-soft: #888780;
+  --c-action: #FF7300;
+  --c-kanji: #8B1F40;       --c-kanji-soft: #F4DBE2;
+  --c-achaar: #C8552A;      --c-achaar-soft: #F8DCCB;
+  --c-sprout: #3F7754;      --c-sprout-soft: #DCEBDF;
+  --c-kefir: #6FA095;       --c-kefir-soft: #DCE7E4;
+  --c-inulin: #15BA97;      --c-inulin-soft: #C8EDE2;
+  --c-aam-panna: #DDA738;   --c-aam-panna-soft: #F8EAC2;
+  background: var(--c-white);
+  padding: 64px 0;
+}
+.gb-shop-container { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+.gb-shop-header { text-align: center; margin: 0 auto 36px; max-width: 720px; }
+.gb-shop-eyebrow {
+  display: inline-block;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: #5C4D3F;
+  margin-bottom: 10px;
+}
+.gb-shop-h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: clamp(28px, 3.4vw, 38px);
+  margin: 0 0 10px;
+  letter-spacing: -0.02em;
+  color: var(--c-text);
+}
+.gb-shop-h2 em { font-style: italic; font-weight: 700; color: var(--c-kanji); }
+
+.gb-shop-tabs-row {
+  display: flex;
+  gap: 32px;
+  border-bottom: 1px solid var(--c-border);
+  margin-bottom: 36px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity;
+}
+.gb-shop-tabs-row::-webkit-scrollbar { display: none; }
+.gb-shop-tab {
+  position: relative;
+  padding: 12px 0 16px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15.5px;
+  font-weight: 500;
+  color: var(--c-text-soft);
+  white-space: nowrap;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  transition: color 0.15s ease;
+  scroll-snap-align: start;
+}
+.gb-shop-tab.is-active { color: var(--c-ink); font-weight: 700; }
+.gb-shop-tab.is-active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2.5px;
+  background: var(--c-ink);
+}
+.gb-shop-tab:hover { color: var(--c-ink); }
+
+.gb-shop-panel { display: none; }
+.gb-shop-panel.is-active { display: block; animation: gb-shop-fade 0.25s ease; }
+@keyframes gb-shop-fade {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.gb-shop-grid { display: grid; gap: 16px; }
+.gb-shop-grid--3 { grid-template-columns: repeat(3, 1fr); }
+.gb-shop-grid--4 { grid-template-columns: repeat(4, 1fr); }
+@media (max-width: 768px) {
+  .gb-shop-grid--3, .gb-shop-grid--4 { grid-template-columns: repeat(2, 1fr); }
+}
+.gb-shop-empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: var(--c-text-soft);
+  padding: 40px 0;
+  font-family: 'DM Sans', sans-serif;
+}
+.gb-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--c-white);
+  border: 1px solid var(--c-border-soft);
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.gb-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(43, 31, 26, 0.06), 0 12px 32px rgba(43, 31, 26, 0.08);
+}
+.gb-card-band {
+  background: var(--c-ink);
+  color: var(--c-cream);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+  padding: 9px 12px;
+  letter-spacing: 0.01em;
+}
+.gb-card-photo {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  overflow: hidden;
+}
+.gb-card--kanji  .gb-card-photo { background-color: var(--c-kanji-soft); }
+.gb-card--achaar .gb-card-photo { background-color: var(--c-achaar-soft); }
+.gb-card--sprout .gb-card-photo { background-color: var(--c-sprout-soft); }
+.gb-card--kefir  .gb-card-photo { background-color: var(--c-kefir-soft); }
+.gb-card--inulin .gb-card-photo { background-color: var(--c-inulin-soft); }
+.gb-card--aam-panna .gb-card-photo { background-color: var(--c-aam-panna-soft); }
+.gb-card-photo::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 50%, rgba(43, 31, 26, 0.08) 100%);
+}
+.gb-card-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 2;
+  font-family: 'DM Mono', monospace;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: var(--c-cream);
+  color: var(--c-ink);
+}
+.gb-card-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0; right: 0;
+  height: 4px;
+  z-index: 2;
+}
+.gb-card--kanji  .gb-card-bar { background: var(--c-kanji); }
+.gb-card--achaar .gb-card-bar { background: var(--c-achaar); }
+.gb-card--sprout .gb-card-bar { background: var(--c-sprout); }
+.gb-card--kefir  .gb-card-bar { background: var(--c-kefir); }
+.gb-card--inulin .gb-card-bar { background: var(--c-inulin); }
+.gb-card--aam-panna .gb-card-bar { background: var(--c-aam-panna); }
+.gb-card-info {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 18px 18px 20px;
+}
+.gb-card-tag {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: var(--c-text-soft);
+  margin-bottom: 12px;
+  order: 2;
+}
+.gb-card-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 15.5px;
+  letter-spacing: -0.005em;
+  margin: 0 0 4px;
+  line-height: 1.3;
+  color: var(--c-ink);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.6em;
+  order: 1;
+}
+.gb-card-price {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 14px;
+  order: 3;
+}
+.gb-card-now {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 17px;
+  color: var(--c-text);
+}
+.gb-card-was {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--c-text-soft);
+  text-decoration: line-through;
+}
+.gb-card-cta {
+  display: block;
+  width: 100%;
+  padding: 11px 16px;
+  background: transparent;
+  border: 1.5px solid var(--c-ink);
+  border-radius: 999px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--c-ink);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  text-align: center;
+  margin-top: auto;
+  order: 4;
+}
+.gb-card-cta:hover {
+  background: var(--c-action);
+  border-color: var(--c-action);
+  color: var(--c-white);
+}
+.gb-shop-viewall { text-align: center; margin-top: 36px; }
+.gb-shop-viewall a {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--c-ink);
+  text-decoration: underline;
+  text-underline-offset: 6px;
+  text-decoration-thickness: 1.5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  letter-spacing: 0.01em;
+}
+.gb-shop-viewall a:hover { text-decoration-thickness: 2.5px; }
+.gb-shop-arr { display: inline-block; transition: transform 0.15s ease; }
+.gb-shop-viewall a:hover .gb-shop-arr { transform: translateX(3px); }
+{% endstylesheet %}
+
+<script>
+(function() {
+  var section = document.getElementById('gb-shop-{{ section.id }}');
+  if (!section) return;
+  var tabs = section.querySelectorAll('.gb-shop-tab');
+  var panels = section.querySelectorAll('.gb-shop-panel');
+
+  function activate(tabId) {
+    var found = false;
+    tabs.forEach(function(t) {
+      var match = t.dataset.tab === tabId;
+      t.classList.toggle('is-active', match);
+      if (match) found = true;
+    });
+    panels.forEach(function(p) {
+      p.classList.toggle('is-active', p.dataset.panel === tabId);
+    });
+    return found;
+  }
+
+  tabs.forEach(function(t) {
+    t.addEventListener('click', function() { activate(t.dataset.tab); });
+  });
+
+  document.addEventListener('gb:select-tab', function(e) {
+    var tabId = e.detail && e.detail.tab;
+    if (!tabId) return;
+    if (activate(tabId)) {
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+
+  // Cart wiring (lightweight): POST to /cart/add.js, no UI feedback yet
+  section.querySelectorAll('.gb-card-cta').forEach(function(btn) {
+    btn.addEventListener('click', function(ev) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      var handle = btn.dataset.productHandle;
+      if (!handle) return;
+      fetch('/products/' + handle + '.js')
+        .then(function(r) { return r.json(); })
+        .then(function(p) {
+          var variantId = p.variants && p.variants[0] && p.variants[0].id;
+          if (!variantId) return;
+          return fetch('/cart/add.js', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: variantId, quantity: 1 })
+          });
+        })
+        .then(function() {
+          btn.textContent = 'Added ✓';
+          setTimeout(function() { btn.textContent = 'Add to cart'; }, 1500);
+        })
+        .catch(function() { btn.textContent = 'Try again'; });
+    });
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "GB · Home Shop Tabs",
+  "tag": "section",
+  "class": "gb-shop-wrap",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+    { "type": "text", "id": "heading", "label": "Heading (use <em> for emphasis)", "default": "Complete <em>care</em> for your gut." },
+    { "type": "select", "id": "columns", "label": "Columns",
+      "options": [
+        { "value": "3", "label": "3 columns" },
+        { "value": "4", "label": "4 columns" }
+      ],
+      "default": "3" },
+    { "type": "range", "id": "products_per_tab", "label": "Products per tab", "min": 3, "max": 12, "step": 1, "default": 6 }
+  ],
+  "blocks": [
+    {
+      "type": "tab",
+      "name": "Tab",
+      "limit": 10,
+      "settings": [
+        { "type": "text", "id": "label", "label": "Tab label", "default": "Tab" },
+        { "type": "text", "id": "tab_id", "label": "Tab ID (matches a circle's data-tab)", "info": "Lowercase, no spaces. e.g. fermentation, sprouts, prebiotic.", "default": "tab" },
+        { "type": "collection", "id": "collection", "label": "Source collection" },
+        { "type": "range", "id": "products_limit", "label": "Products in this tab (overrides section default)", "min": 0, "max": 12, "step": 1, "default": 0 },
+        { "type": "text", "id": "cat_band", "label": "Category band text (top of card)", "info": "Leave blank to use product type." },
+        { "type": "text", "id": "view_all_label", "label": "View-all link label", "default": "View all" },
+        { "type": "select", "id": "theme", "label": "Color theme",
+          "options": [
+            { "value": "kanji",     "label": "Kanji (maroon)" },
+            { "value": "achaar",    "label": "Achaar (terracotta)" },
+            { "value": "sprout",    "label": "Sprout (green)" },
+            { "value": "kefir",     "label": "Kefir (sage)" },
+            { "value": "inulin",    "label": "Inulin (teal)" },
+            { "value": "aam-panna", "label": "Aam panna (mustard)" }
+          ],
+          "default": "kanji" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "GB · Home Shop Tabs",
+      "settings": { "columns": "3", "products_per_tab": 6 },
+      "blocks": [
+        { "type": "tab", "settings": { "label": "Shop all",          "tab_id": "all",          "theme": "kanji",     "view_all_label": "View all products" } },
+        { "type": "tab", "settings": { "label": "Fermentation Kits", "tab_id": "fermentation", "theme": "kanji",     "cat_band": "Probiotic Drink",  "view_all_label": "View all fermentation kits" } },
+        { "type": "tab", "settings": { "label": "Sprouts",           "tab_id": "sprouts",      "theme": "sprout",    "cat_band": "Grows Sprouts",    "view_all_label": "View all sprouts" } },
+        { "type": "tab", "settings": { "label": "Prebiotic",         "tab_id": "prebiotic",    "theme": "inulin",    "cat_band": "Prebiotic Powder", "view_all_label": "View all prebiotic" } },
+        { "type": "tab", "settings": { "label": "Dairy Cultures",    "tab_id": "dairy",        "theme": "kefir",     "cat_band": "Dairy Culture",    "view_all_label": "View all dairy cultures" } },
+        { "type": "tab", "settings": { "label": "Refills",           "tab_id": "refills",      "theme": "achaar",    "cat_band": "Spice Refill",     "view_all_label": "View all refills" } },
+        { "type": "tab", "settings": { "label": "Baking",            "tab_id": "baking",       "theme": "aam-panna", "cat_band": "Baking",           "view_all_label": "View all baking" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

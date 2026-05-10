@@ -23,7 +23,10 @@
           assign img = block.settings.image
           assign link = block.settings.link | default: '#'
         -%}
-        <a href="{{ link }}" class="gb-coll-tile gb-coll-tile--{{ tile_theme }}" {{ block.shopify_attributes }}>
+        <a href="{{ link }}"
+           class="gb-coll-tile gb-coll-tile--{{ tile_theme }}"
+           {%- if block.settings.tab_id != blank %} data-tab="{{ block.settings.tab_id }}"{%- endif %}
+           {{ block.shopify_attributes }}>
           <div class="gb-coll-photo"
                {%- if img %} style="background-image: url('{{ img | image_url: width: 600 }}');"{%- endif %}></div>
           <div class="gb-coll-label">{{ block.settings.label }}</div>
@@ -145,6 +148,25 @@
 }
 {% endstylesheet %}
 
+<script>
+(function() {
+  document.querySelectorAll('.gb-coll-tile[data-tab]').forEach(function(tile) {
+    tile.addEventListener('click', function(e) {
+      var tabId = tile.dataset.tab;
+      if (!tabId) return;
+      // Dispatch event for the shop-tabs section to handle (it scrolls + activates)
+      var ev = new CustomEvent('gb:select-tab', { detail: { tab: tabId } });
+      // Only intercept if the shop-tabs section actually has this tab
+      var target = document.querySelector('[data-panel="' + tabId + '"]');
+      if (target) {
+        e.preventDefault();
+        document.dispatchEvent(ev);
+      }
+    });
+  });
+})();
+</script>
+
 {% schema %}
 {
   "name": "GB · Home Collections",
@@ -162,7 +184,8 @@
       "settings": [
         { "type": "image_picker", "id": "image", "label": "Tile image (square)" },
         { "type": "text", "id": "label", "label": "Label", "default": "Collection" },
-        { "type": "url", "id": "link", "label": "Link" },
+        { "type": "url", "id": "link", "label": "Fallback link (used if no matching tab below)" },
+        { "type": "text", "id": "tab_id", "label": "Scroll-to tab ID", "info": "Matches a tab_id in the GB Shop Tabs section. If set, click scrolls + activates that tab instead of following the link." },
         { "type": "select", "id": "theme", "label": "Background color theme",
           "options": [
             { "value": "fermentation", "label": "Fermentation (kanji maroon)" },
@@ -182,12 +205,12 @@
     {
       "name": "GB · Home Collections",
       "blocks": [
-        { "type": "tile", "settings": { "label": "Fermentation Kits", "theme": "fermentation" } },
-        { "type": "tile", "settings": { "label": "Sprouts Kit",       "theme": "sprouts" } },
-        { "type": "tile", "settings": { "label": "Prebiotic Powders", "theme": "prebiotic" } },
-        { "type": "tile", "settings": { "label": "Dairy Cultures",    "theme": "dairy" } },
-        { "type": "tile", "settings": { "label": "Spice Refills",     "theme": "refills" } },
-        { "type": "tile", "settings": { "label": "Baking",            "theme": "baking" } },
+        { "type": "tile", "settings": { "label": "Fermentation Kits", "theme": "fermentation", "tab_id": "fermentation" } },
+        { "type": "tile", "settings": { "label": "Sprouts Kit",       "theme": "sprouts",      "tab_id": "sprouts" } },
+        { "type": "tile", "settings": { "label": "Prebiotic Powders", "theme": "prebiotic",    "tab_id": "prebiotic" } },
+        { "type": "tile", "settings": { "label": "Dairy Cultures",    "theme": "dairy",        "tab_id": "dairy" } },
+        { "type": "tile", "settings": { "label": "Spice Refills",     "theme": "refills",      "tab_id": "refills" } },
+        { "type": "tile", "settings": { "label": "Baking",            "theme": "baking",       "tab_id": "baking" } },
         { "type": "tile", "settings": { "label": "Jars & Tools",      "theme": "jars" } },
         { "type": "tile", "settings": { "label": "Recipe Books",      "theme": "books" } }
       ]
