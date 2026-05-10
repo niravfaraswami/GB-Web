@@ -1,0 +1,75 @@
+{
+  "name": "Instagram",
+  "sections": {
+    "main": {
+      "type": "gb-content-page",
+      "blocks": {
+        "hero": {
+          "type": "hero",
+          "settings": {
+            "eyebrow": "@GUTBASKETINDIA",
+            "title": "38K followers and counting.",
+            "subtitle": "<p>Daily ferment photos, recipe reels, and the occasional behind-the-scenes from our Gandhinagar workshop.</p>"
+          }
+        },
+        "follow": {
+          "type": "contact",
+          "settings": {
+            "icon": "📷",
+            "title": "@gutbasketindia",
+            "desc": "38K followers · Daily fermentation content · Reels, recipes, customer features",
+            "button_label": "Follow on Instagram",
+            "button_link": "https://instagram.com/gutbasketindia",
+            "open_new_tab": true
+          }
+        },
+        "reels": {
+          "type": "features",
+          "settings": {
+            "eyebrow": "REELS",
+            "heading": "Three series we keep going.",
+            "columns": "3",
+            "item_1_icon": "🍳",
+            "item_1_title": "60-second ferments",
+            "item_1_desc": "One recipe, sped-up to 60 seconds. From hand-chopping to jar-sealing. New episode every Monday.",
+            "item_2_icon": "🦠",
+            "item_2_title": "Strain Stories",
+            "item_2_desc": "What does L. plantarum actually do? Microbiologist Dr Anita V. breaks down one strain per week. Fermenter friendly.",
+            "item_3_icon": "📸",
+            "item_3_title": "Customer cooks",
+            "item_3_desc": "Once a week we feature a customer's batch with their permission. Tag your jar with #MyGutBasket to be considered."
+          }
+        },
+        "tag": {
+          "type": "text",
+          "settings": {
+            "eyebrow": "#MYGUTBASKET",
+            "heading": "Tag your jar. Make the grid.",
+            "body": "<p>Post a photo of your batch — finished or in-progress, success or hilarious failure — with the hashtag <strong>#MyGutBasket</strong> and tag <strong>@gutbasketindia</strong>.</p><p>We feature one customer post per week to our 38K followers, with full credit and link to your handle. No filters required, just real fermentation.</p>"
+          }
+        },
+        "live": {
+          "type": "text",
+          "settings": {
+            "eyebrow": "SATURDAY IG LIVE",
+            "heading": "Live troubleshooting, every Saturday at 4pm IST.",
+            "body": "<p>30-minute live session on the @gutbasketindia handle. Pooja answers fermentation questions in real time, walks through specific batches viewers send in, and shows new recipe experiments.</p><p>Replays saved to the highlights reel for 90 days.</p>"
+          }
+        },
+        "cta_follow": {
+          "type": "cta",
+          "settings": {
+            "eyebrow": "TWO CLICKS",
+            "title": "Follow the grid.",
+            "desc": "Daily fermentation content, customer features, behind-the-scenes from our workshop.",
+            "button_label": "Follow @gutbasketindia",
+            "button_link": "https://instagram.com/gutbasketindia",
+            "theme": "dark"
+          }
+        }
+      },
+      "block_order": ["hero", "follow", "reels", "tag", "live", "cta_follow"]
+    }
+  },
+  "order": ["main"]
+}

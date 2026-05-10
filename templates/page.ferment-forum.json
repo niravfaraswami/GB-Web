@@ -1,0 +1,90 @@
+{
+  "name": "Ferment Forum",
+  "sections": {
+    "main": {
+      "type": "gb-content-page",
+      "blocks": {
+        "hero": {
+          "type": "hero",
+          "settings": {
+            "eyebrow": "COMMUNITY · 01",
+            "title": "6,400+ home fermenters. One forum. No judgement.",
+            "subtitle": "<p>Where people post photos of failed batches, ask questions, and share recipes. Free to join.</p>"
+          }
+        },
+        "categories": {
+          "type": "features",
+          "settings": {
+            "eyebrow": "SIX CATEGORIES",
+            "heading": "Where conversations happen.",
+            "columns": "3",
+            "item_1_icon": "🫙",
+            "item_1_title": "Help me — this looks weird",
+            "item_1_desc": "Post a photo of your jar. Get diagnosis from mentors and other members. The most active category.",
+            "item_2_icon": "🍳",
+            "item_2_title": "Recipe lab",
+            "item_2_desc": "Member-developed recipes. Variations, regional adaptations, dietary mods. Top recipes graduate to /pages/recipes.",
+            "item_3_icon": "🦠",
+            "item_3_title": "Science & research",
+            "item_3_desc": "Strain talk, papers worth reading, gut-microbiome news. Heavily moderated to avoid pseudoscience.",
+            "item_4_icon": "🌱",
+            "item_4_title": "Beginner's corner",
+            "item_4_desc": "First-batch questions, kit unboxings, what-do-I-do-now. No question too basic.",
+            "item_5_icon": "🛠️",
+            "item_5_title": "Build & gear",
+            "item_5_desc": "DIY airlocks, jar mods, weight alternatives, fermentation chambers. For people who tinker.",
+            "item_6_icon": "🌍",
+            "item_6_title": "Regional ferments",
+            "item_6_desc": "State-by-state traditional ferments. Black carrot kanji (Punjab), bori (Bengal), kombucha rituals, etc."
+          }
+        },
+        "threads": {
+          "type": "features",
+          "settings": {
+            "eyebrow": "ACTIVE THREADS",
+            "heading": "Three conversations going right now.",
+            "columns": "3",
+            "item_1_icon": "🔥",
+            "item_1_title": "Why is my kanji not turning red?",
+            "item_1_desc": "47 replies · last 2 hours ago · started by Priya M. — diagnosing a black-carrot kanji that's clear instead of red. Mentor: Pooja.",
+            "item_2_icon": "💬",
+            "item_2_title": "Achaar without mustard oil — variations",
+            "item_2_desc": "23 replies · last 6 hours ago · started by Karthik S. — recipe lab thread sharing North/South/East variations on no-oil achaar.",
+            "item_3_icon": "🧪",
+            "item_3_title": "Postbiotic K2 in homemade ferments?",
+            "item_3_desc": "12 replies · last yesterday · started by Dr Anita V. — discussing menaquinone production in lacto-fermented vegetables. Cite-heavy thread."
+          }
+        },
+        "rules": {
+          "type": "text",
+          "settings": {
+            "eyebrow": "FORUM RULES",
+            "heading": "Five rules. That's it.",
+            "body": "<p><strong>1. Be kind.</strong> Most fermenters are beginners; treat every question like it's the first time it's been asked (because for that person, it is).</p><p><strong>2. No selling.</strong> Don't promote your own products, services, or other brands. Linking to a recipe or paper is fine.</p><p><strong>3. Cite when claiming.</strong> Health claims need a source. \"My grandmother said\" is a source. \"I read somewhere\" is not.</p><p><strong>4. No iodised salt arguments.</strong> We've had them. Use non-iodised. Move on.</p><p><strong>5. Photos help.</strong> A picture of your jar tells us more in 1 second than 10 paragraphs.</p>"
+          }
+        },
+        "mentors": {
+          "type": "text",
+          "settings": {
+            "eyebrow": "MAY 2026 MENTORS",
+            "heading": "Five members helping the most this month.",
+            "body": "<p><strong>Pooja D.</strong> · Lead fermenter, GutBasket team · 247 helpful replies this month</p><p><strong>Dr Anita V.</strong> · Microbiologist, Bangalore · 89 helpful replies, science thread anchor</p><p><strong>Karthik S.</strong> · Home fermenter, Chennai · 64 helpful replies, recipe lab regular</p><p><strong>Priya M.</strong> · Beginner-graduate, Pune · 51 helpful replies, beginner's corner</p><p><strong>Ramesh K.</strong> · Builder, Coimbatore · 38 helpful replies, DIY corner</p>"
+          }
+        },
+        "cta_join": {
+          "type": "cta",
+          "settings": {
+            "eyebrow": "JOIN THE FORUM",
+            "title": "Free to join. No spam, ever.",
+            "desc": "Sign in with email. We don't sell, share, or analyse your data. The forum is for fermenters, not advertisers.",
+            "button_label": "Create an account →",
+            "button_link": "/account/register",
+            "theme": "dark"
+          }
+        }
+      },
+      "block_order": ["hero", "categories", "threads", "rules", "mentors", "cta_join"]
+    }
+  },
+  "order": ["main"]
+}
