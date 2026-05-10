@@ -1,19 +1,79 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "promo": {
       "type": "gb-home-promo",
       "blocks": {
-        "p1": { "type": "item", "settings": { "text": "📦 Free shipping over ₹300" } },
-        "p2": { "type": "item", "settings": { "text": "⚡ Ships next working day" } },
-        "p3": { "type": "item", "settings": { "text": "🇮🇳 Made in India" } },
-        "p4": { "type": "item", "settings": { "text": "💸 Cash on delivery" } },
-        "p5": { "type": "item", "settings": { "text": "✓ FSSAI verified · 10021021000439" } },
-        "p6": { "type": "item", "settings": { "text": "💬 Join the Ferment Forum" } },
-        "p7": { "type": "item", "settings": { "text": "🌱 25,000+ kitchens fermenting" } },
-        "p8": { "type": "item", "settings": { "text": "★ 4.8 from 1,046 reviews" } }
+        "p1": {
+          "type": "item",
+          "settings": {
+            "text": "📦 Free shipping over ₹300"
+          }
+        },
+        "p2": {
+          "type": "item",
+          "settings": {
+            "text": "⚡ Ships next working day"
+          }
+        },
+        "p3": {
+          "type": "item",
+          "settings": {
+            "text": "🇮🇳 Made in India"
+          }
+        },
+        "p4": {
+          "type": "item",
+          "settings": {
+            "text": "💸 Cash on delivery"
+          }
+        },
+        "p5": {
+          "type": "item",
+          "settings": {
+            "text": "✓ FSSAI verified · 10021021000439"
+          }
+        },
+        "p6": {
+          "type": "item",
+          "settings": {
+            "text": "💬 Join the Ferment Forum"
+          }
+        },
+        "p7": {
+          "type": "item",
+          "settings": {
+            "text": "🌱 25,000+ kitchens fermenting"
+          }
+        },
+        "p8": {
+          "type": "item",
+          "settings": {
+            "text": "★ 4.8 from 1,046 reviews"
+          }
+        }
       },
-      "block_order": ["p1","p2","p3","p4","p5","p6","p7","p8"],
-      "settings": { "scroll_duration": 38 }
+      "block_order": [
+        "p1",
+        "p2",
+        "p3",
+        "p4",
+        "p5",
+        "p6",
+        "p7",
+        "p8"
+      ],
+      "settings": {
+        "scroll_duration": 38
+      }
     },
     "hero": {
       "type": "gb-home-hero",
@@ -21,8 +81,9 @@
         "s1": {
           "type": "slide",
           "settings": {
+            "image": "shopify://shop_images/kanji-without-text.png",
             "theme": "kanji",
-            "headline": "<p>Make India's<br>Original<br><em>Probiotic</em> Drink</p>",
+            "headline": "<p>Make India's<br/>Original<br/><em>Probiotic</em> Drink</p>",
             "sub": "<p>Carrot, beetroot, mustard. Three days. <strong>Real Lactobacillus</strong> in every glass.</p>",
             "cta_label": "Shop Kanji kit",
             "cta_link": "/products/kanji-making-kit"
@@ -31,8 +92,9 @@
         "s2": {
           "type": "slide",
           "settings": {
+            "image": "shopify://shop_images/achaar-without-text.png",
             "theme": "achaar",
-            "headline": "<p>Make Probiotic<br><em>Oil-Free</em><br>Achaar</p>",
+            "headline": "<p>Make Probiotic<br/><em>Oil-Free</em><br/>Achaar</p>",
             "sub": "<p>Naturally probiotic achaar. Just <strong>spice mix, salt, and time.</strong></p>",
             "cta_label": "Shop Achaar kit",
             "cta_link": "/products/probiotic-achaar-kit"
@@ -41,23 +103,28 @@
         "s3": {
           "type": "slide",
           "settings": {
+            "image": "shopify://shop_images/sprout-without-text.png",
             "theme": "sprout",
-            "headline": "<p>Fresh<br>Sprouts in<br><em>3 Days</em></p>",
+            "headline": "<p>Fresh<br/>Sprouts in<br/><em>3 Days</em></p>",
             "sub": "<p>Sprout maker + four seed varieties. <strong>No mush, no smell</strong> — clean sprouts on tap.</p>",
             "cta_label": "Shop Sprouts kit",
             "cta_link": "/products/sprouts-kit"
           }
         }
       },
-      "block_order": ["s1","s2","s3"],
+      "block_order": [
+        "s1",
+        "s2",
+        "s3"
+      ],
       "settings": {
         "autoplay_seconds": 6,
         "headline_size_desktop": 56,
-        "headline_size_mobile": 32,
         "sub_size_desktop": 17,
-        "sub_size_mobile": 13,
         "gap_after_headline": 18,
         "gap_after_sub": 24,
+        "headline_size_mobile": 32,
+        "sub_size_mobile": 13,
         "gap_after_headline_mobile": 12,
         "gap_after_sub_mobile": 16,
         "min_height_mobile": 420,
@@ -73,16 +140,89 @@
     "collections": {
       "type": "gb-home-collections",
       "blocks": {
-        "c1": { "type": "tile", "settings": { "label": "Fermentation Kits", "theme": "fermentation", "tab_id": "fermentation" } },
-        "c2": { "type": "tile", "settings": { "label": "Sprouts Kit",       "theme": "sprouts",      "tab_id": "sprouts" } },
-        "c3": { "type": "tile", "settings": { "label": "Prebiotic Powders", "theme": "prebiotic",    "tab_id": "prebiotic" } },
-        "c4": { "type": "tile", "settings": { "label": "Dairy Cultures",    "theme": "dairy",        "tab_id": "dairy" } },
-        "c5": { "type": "tile", "settings": { "label": "Spice Refills",     "theme": "refills",      "tab_id": "refills" } },
-        "c6": { "type": "tile", "settings": { "label": "Baking",            "theme": "baking",       "tab_id": "baking" } },
-        "c7": { "type": "tile", "settings": { "label": "Jars & Tools",      "theme": "jars",         "tab_id": "jars" } },
-        "c8": { "type": "tile", "settings": { "label": "Recipe Books",      "theme": "books",        "tab_id": "books" } }
+        "c1": {
+          "type": "tile",
+          "settings": {
+            "label": "Fermentation Kits",
+            "link": "",
+            "tab_id": "fermentation",
+            "theme": "fermentation"
+          }
+        },
+        "c2": {
+          "type": "tile",
+          "settings": {
+            "label": "Sprouts Kit",
+            "link": "",
+            "tab_id": "sprouts",
+            "theme": "sprouts"
+          }
+        },
+        "c3": {
+          "type": "tile",
+          "settings": {
+            "label": "Prebiotic Powders",
+            "link": "",
+            "tab_id": "prebiotic",
+            "theme": "prebiotic"
+          }
+        },
+        "c4": {
+          "type": "tile",
+          "settings": {
+            "label": "Dairy Cultures",
+            "link": "",
+            "tab_id": "dairy",
+            "theme": "dairy"
+          }
+        },
+        "c5": {
+          "type": "tile",
+          "settings": {
+            "label": "Spice Refills",
+            "link": "",
+            "tab_id": "refills",
+            "theme": "refills"
+          }
+        },
+        "c6": {
+          "type": "tile",
+          "settings": {
+            "label": "Baking",
+            "link": "",
+            "tab_id": "baking",
+            "theme": "baking"
+          }
+        },
+        "c7": {
+          "type": "tile",
+          "settings": {
+            "label": "Jars & Tools",
+            "link": "",
+            "tab_id": "jars",
+            "theme": "jars"
+          }
+        },
+        "c8": {
+          "type": "tile",
+          "settings": {
+            "label": "Recipe Books",
+            "link": "",
+            "tab_id": "books",
+            "theme": "books"
+          }
+        }
       },
-      "block_order": ["c1","c2","c3","c4","c5","c6","c7","c8"],
+      "block_order": [
+        "c1",
+        "c2",
+        "c3",
+        "c4",
+        "c5",
+        "c6",
+        "c7",
+        "c8"
+      ],
       "settings": {
         "eyebrow": "Shop by collection",
         "heading": "Find your gut-health <em>starting point.</em>"
@@ -91,18 +231,128 @@
     "shop_tabs": {
       "type": "gb-home-shop-tabs",
       "blocks": {
-        "t1": { "type": "tab", "settings": { "label": "Shop all",          "tab_id": "all",          "theme": "kanji",     "view_all_label": "View all products" } },
-        "t2": { "type": "tab", "settings": { "label": "Fermentation Kits", "tab_id": "fermentation", "theme": "kanji",     "cat_band": "Probiotic Drink",  "view_all_label": "View all fermentation kits" } },
-        "t3": { "type": "tab", "settings": { "label": "Sprouts",           "tab_id": "sprouts",      "theme": "sprout",    "cat_band": "Grows Sprouts",    "view_all_label": "View all sprouts" } },
-        "t4": { "type": "tab", "settings": { "label": "Prebiotic",         "tab_id": "prebiotic",    "theme": "inulin",    "cat_band": "Prebiotic Powder", "view_all_label": "View all prebiotic" } },
-        "t5": { "type": "tab", "settings": { "label": "Dairy Cultures",    "tab_id": "dairy",        "theme": "kefir",     "cat_band": "Dairy Culture",    "view_all_label": "View all dairy cultures" } },
-        "t6": { "type": "tab", "settings": { "label": "Refills",           "tab_id": "refills",      "theme": "achaar",    "cat_band": "Spice Refill",     "view_all_label": "View all refills" } },
-        "t7": { "type": "tab", "settings": { "label": "Baking",            "tab_id": "baking",       "theme": "aam-panna", "cat_band": "Baking",           "view_all_label": "View all baking" } },
-        "t8": { "type": "tab", "settings": { "label": "Jars & Tools",      "tab_id": "jars",         "theme": "kanji",     "cat_band": "Tools",            "view_all_label": "View all jars" } },
-        "t9": { "type": "tab", "settings": { "label": "Recipe Books",      "tab_id": "books",        "theme": "kanji",     "cat_band": "Reading",          "view_all_label": "View all books" } }
+        "t1": {
+          "type": "tab",
+          "settings": {
+            "label": "Shop all",
+            "tab_id": "all",
+            "collection": "",
+            "products_limit": 0,
+            "cat_band": "",
+            "view_all_label": "View all products",
+            "theme": "kanji"
+          }
+        },
+        "t2": {
+          "type": "tab",
+          "settings": {
+            "label": "Fermentation Kits",
+            "tab_id": "fermentation",
+            "collection": "",
+            "products_limit": 0,
+            "cat_band": "Probiotic Drink",
+            "view_all_label": "View all fermentation kits",
+            "theme": "kanji"
+          }
+        },
+        "t3": {
+          "type": "tab",
+          "settings": {
+            "label": "Sprouts",
+            "tab_id": "sprouts",
+            "collection": "",
+            "products_limit": 0,
+            "cat_band": "Grows Sprouts",
+            "view_all_label": "View all sprouts",
+            "theme": "sprout"
+          }
+        },
+        "t4": {
+          "type": "tab",
+          "settings": {
+            "label": "Prebiotic",
+            "tab_id": "prebiotic",
+            "collection": "",
+            "products_limit": 0,
+            "cat_band": "Prebiotic Powder",
+            "view_all_label": "View all prebiotic",
+            "theme": "inulin"
+          }
+        },
+        "t5": {
+          "type": "tab",
+          "settings": {
+            "label": "Dairy Cultures",
+            "tab_id": "dairy",
+            "collection": "",
+            "products_limit": 0,
+            "cat_band": "Dairy Culture",
+            "view_all_label": "View all dairy cultures",
+            "theme": "kefir"
+          }
+        },
+        "t6": {
+          "type": "tab",
+          "settings": {
+            "label": "Refills",
+            "tab_id": "refills",
+            "collection": "",
+            "products_limit": 0,
+            "cat_band": "Spice Refill",
+            "view_all_label": "View all refills",
+            "theme": "achaar"
+          }
+        },
+        "t7": {
+          "type": "tab",
+          "settings": {
+            "label": "Baking",
+            "tab_id": "baking",
+            "collection": "",
+            "products_limit": 0,
+            "cat_band": "Baking",
+            "view_all_label": "View all baking",
+            "theme": "aam-panna"
+          }
+        },
+        "t8": {
+          "type": "tab",
+          "settings": {
+            "label": "Jars & Tools",
+            "tab_id": "jars",
+            "collection": "",
+            "products_limit": 0,
+            "cat_band": "Tools",
+            "view_all_label": "View all jars",
+            "theme": "kanji"
+          }
+        },
+        "t9": {
+          "type": "tab",
+          "settings": {
+            "label": "Recipe Books",
+            "tab_id": "books",
+            "collection": "",
+            "products_limit": 0,
+            "cat_band": "Reading",
+            "view_all_label": "View all books",
+            "theme": "kanji"
+          }
+        }
       },
-      "block_order": ["t1","t2","t3","t4","t5","t6","t7","t8","t9"],
+      "block_order": [
+        "t1",
+        "t2",
+        "t3",
+        "t4",
+        "t5",
+        "t6",
+        "t7",
+        "t8",
+        "t9"
+      ],
       "settings": {
+        "eyebrow": "",
         "heading": "Complete <em>care</em> for your gut.",
         "columns": "3",
         "products_per_tab": 6
@@ -111,11 +361,36 @@
     "why": {
       "type": "gb-home-why",
       "blocks": {
-        "w1": { "type": "proof", "settings": { "icon": "B", "title": "Billions of good bacteria, naturally", "description": "Live Lactobacillus grown in your kitchen, not powdered in a lab." } },
-        "w2": { "type": "proof", "settings": { "icon": "N", "title": "30+ nutrients released",               "description": "Vitamins, antioxidants, and bioavailable minerals locked in fresh produce." } },
-        "w3": { "type": "proof", "settings": { "icon": "∅", "title": "Zero preservatives",                   "description": "Salt, spice, and time. The way your grandmother made it." } }
+        "w1": {
+          "type": "proof",
+          "settings": {
+            "icon": "B",
+            "title": "Billions of good bacteria, naturally",
+            "description": "Live Lactobacillus grown in your kitchen, not powdered in a lab."
+          }
+        },
+        "w2": {
+          "type": "proof",
+          "settings": {
+            "icon": "N",
+            "title": "30+ nutrients released",
+            "description": "Vitamins, antioxidants, and bioavailable minerals locked in fresh produce."
+          }
+        },
+        "w3": {
+          "type": "proof",
+          "settings": {
+            "icon": "∅",
+            "title": "Zero preservatives",
+            "description": "Salt, spice, and time. The way your grandmother made it."
+          }
+        }
       },
-      "block_order": ["w1","w2","w3"],
+      "block_order": [
+        "w1",
+        "w2",
+        "w3"
+      ],
       "settings": {
         "eyebrow": "Why ferment",
         "heading": "Real probiotics. <em>Live cultures.</em> Made by you.",
@@ -128,11 +403,33 @@
     "how": {
       "type": "gb-home-how",
       "blocks": {
-        "h1": { "type": "step", "settings": { "title": "Add ingredients", "description": "Open the kit, follow the recipe card, drop the spice mix into your fermentation jar." } },
-        "h2": { "type": "step", "settings": { "title": "Let it ferment",  "description": "Seal with the airlock lid. Mold-free, set-and-forget. Cultures do the work for 3–5 days." } },
-        "h3": { "type": "step", "settings": { "title": "Enjoy",           "description": "Refrigerate, pour, eat. One jar gives you 7–10 servings of live probiotic ferment." } }
+        "h1": {
+          "type": "step",
+          "settings": {
+            "title": "Add ingredients",
+            "description": "Open the kit, follow the recipe card, drop the spice mix into your fermentation jar."
+          }
+        },
+        "h2": {
+          "type": "step",
+          "settings": {
+            "title": "Let it ferment",
+            "description": "Seal with the airlock lid. Mold-free, set-and-forget. Cultures do the work for 3–5 days."
+          }
+        },
+        "h3": {
+          "type": "step",
+          "settings": {
+            "title": "Enjoy",
+            "description": "Refrigerate, pour, eat. One jar gives you 7–10 servings of live probiotic ferment."
+          }
+        }
       },
-      "block_order": ["h1","h2","h3"],
+      "block_order": [
+        "h1",
+        "h2",
+        "h3"
+      ],
       "settings": {
         "eyebrow": "Make probiotics at home",
         "heading": "Three steps. <em>Five days.</em> One jar."
@@ -141,13 +438,69 @@
     "refills": {
       "type": "gb-home-refills",
       "blocks": {
-        "r1": { "type": "refill", "settings": { "theme": "kanji",  "mini_label": "KANJI\nKIT",  "title": "Kanji refill packs",       "description": "Spice mix + ferment boost",    "from_price": "From ₹249 · 3 batches", "link": "/products/kanji-refill" } },
-        "r2": { "type": "refill", "settings": { "theme": "achaar", "mini_label": "ACHAAR\nKIT", "title": "Achaar 6-batch refill",    "description": "Spice mix + ferment boost",    "from_price": "From ₹499 · 6 batches", "link": "/products/achaar-refill" } },
-        "r3": { "type": "refill", "settings": { "theme": "panna",  "mini_label": "PANNA\nKIT",  "title": "Aam panna spice mix",      "description": "Pack of 5 sachets",            "from_price": "From ₹399 · 5 batches", "link": "/products/aam-panna-refill" } },
-        "r4": { "type": "refill", "settings": { "theme": "veg",    "mini_label": "VEG\nKIT",    "title": "Sea salt & ferment boost", "description": "Sauerkraut, kimchi, all veg",  "from_price": "From ₹300",             "link": "/products/veg-refill" } },
-        "r5": { "type": "refill", "settings": { "theme": "kimchi", "mini_label": "KIMCHI\nKIT", "title": "Kimchi making paste",      "description": "Authentic gochujang base",     "from_price": "From ₹399",             "link": "/products/kimchi-refill" } }
+        "r1": {
+          "type": "refill",
+          "settings": {
+            "mini_label": "KANJI\nKIT",
+            "theme": "kanji",
+            "title": "Kanji refill packs",
+            "description": "Spice mix + ferment boost",
+            "from_price": "From ₹249 · 3 batches",
+            "link": "/products/kanji-refill"
+          }
+        },
+        "r2": {
+          "type": "refill",
+          "settings": {
+            "mini_label": "ACHAAR\nKIT",
+            "theme": "achaar",
+            "title": "Achaar 6-batch refill",
+            "description": "Spice mix + ferment boost",
+            "from_price": "From ₹499 · 6 batches",
+            "link": "/products/achaar-refill"
+          }
+        },
+        "r3": {
+          "type": "refill",
+          "settings": {
+            "mini_label": "PANNA\nKIT",
+            "theme": "panna",
+            "title": "Aam panna spice mix",
+            "description": "Pack of 5 sachets",
+            "from_price": "From ₹399 · 5 batches",
+            "link": "/products/aam-panna-refill"
+          }
+        },
+        "r4": {
+          "type": "refill",
+          "settings": {
+            "mini_label": "VEG\nKIT",
+            "theme": "veg",
+            "title": "Sea salt & ferment boost",
+            "description": "Sauerkraut, kimchi, all veg",
+            "from_price": "From ₹300",
+            "link": "/products/veg-refill"
+          }
+        },
+        "r5": {
+          "type": "refill",
+          "settings": {
+            "mini_label": "KIMCHI\nKIT",
+            "theme": "kimchi",
+            "title": "Kimchi making paste",
+            "description": "Authentic gochujang base",
+            "from_price": "From ₹399",
+            "link": "/products/kimchi-refill"
+          }
+        }
       },
-      "block_order": ["r1","r2","r3","r4","r5"],
+      "block_order": [
+        "r1",
+        "r2",
+        "r3",
+        "r4",
+        "r5"
+      ],
       "settings": {
         "eyebrow": "Already have a kit?",
         "heading": "Just <em>grab a refill.</em>",
@@ -172,11 +525,45 @@
     "reviews": {
       "type": "gb-home-reviews",
       "blocks": {
-        "rv1": { "type": "review", "settings": { "rating": 5, "name": "Archana",     "meta": "Ahmedabad · Achaar kit", "avatar_letter": "A", "avatar_theme": "kanji",   "text": "\"Made raw mango achaar at home after a long time using this. The spice mix gives proper homemade taste, did not miss the oil at all.\"" } },
-        "rv2": { "type": "review", "settings": { "rating": 5, "name": "Ebe Chesney", "meta": "Mumbai · Vegetable kit", "avatar_letter": "E", "avatar_theme": "sprout",  "text": "\"I couldn't eat cruciferous vegetables and beans. With GutBasket's kit and instant guidance I made yummy fermented cauliflower. So fun, especially for an octogenarian like me.\"" } },
-        "rv3": { "type": "review", "settings": { "rating": 5, "name": "Nirav P.",    "meta": "Pune · Kanji kit",       "avatar_letter": "N", "avatar_theme": "mustard", "text": "\"The instructions were incredibly clear, with a step-by-step guide that even beginners can follow. The kit demystifies fermentation and makes it approachable.\"" } }
+        "rv1": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "text": "\"Made raw mango achaar at home after a long time using this. The spice mix gives proper homemade taste, did not miss the oil at all.\"",
+            "name": "Archana",
+            "meta": "Ahmedabad · Achaar kit",
+            "avatar_letter": "A",
+            "avatar_theme": "kanji"
+          }
+        },
+        "rv2": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "text": "\"I couldn't eat cruciferous vegetables and beans. With GutBasket's kit and instant guidance I made yummy fermented cauliflower. So fun, especially for an octogenarian like me.\"",
+            "name": "Ebe Chesney",
+            "meta": "Mumbai · Vegetable kit",
+            "avatar_letter": "E",
+            "avatar_theme": "sprout"
+          }
+        },
+        "rv3": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "text": "\"The instructions were incredibly clear, with a step-by-step guide that even beginners can follow. The kit demystifies fermentation and makes it approachable.\"",
+            "name": "Nirav P.",
+            "meta": "Pune · Kanji kit",
+            "avatar_letter": "N",
+            "avatar_theme": "mustard"
+          }
+        }
       },
-      "block_order": ["rv1","rv2","rv3"],
+      "block_order": [
+        "rv1",
+        "rv2",
+        "rv3"
+      ],
       "settings": {
         "eyebrow": "Real fermenters · real results",
         "heading": "Loved by <em>25,000+</em> kitchens.",
@@ -189,14 +576,49 @@
     "learn": {
       "type": "gb-home-learn",
       "blocks": {
-        "l1": { "type": "card", "settings": { "theme": "inulin", "tag": "Gut science",  "title": "Probiotics vs prebiotics vs postbiotics — what's the difference?", "excerpt": "The three Ps of gut health, explained simply. And which one your dahi has.", "read_time": "6 min read", "link": "/learn/probiotics-prebiotics-postbiotics" } },
-        "l2": { "type": "card", "settings": { "theme": "achaar", "tag": "Recipe",       "title": "No-oil mango achaar — the original lacto-fermented version",     "excerpt": "Tangy, spiced, probiotic-rich. The old-school way before refined oils came in.",   "read_time": "10 min · serves 6", "link": "/recipes/no-oil-mango-achaar" } },
-        "l3": { "type": "card", "settings": { "theme": "kanji",  "tag": "Master guide", "title": "Everything you need to know about kanji",                          "excerpt": "Black carrot, beetroot, salt, mustard. India's original probiotic drink — done properly.", "read_time": "12 min read", "link": "/learn/kanji-master-guide" } }
+        "l1": {
+          "type": "card",
+          "settings": {
+            "theme": "inulin",
+            "tag": "Gut science",
+            "title": "Probiotics vs prebiotics vs postbiotics — what's the difference?",
+            "excerpt": "The three Ps of gut health, explained simply. And which one your dahi has.",
+            "read_time": "6 min read",
+            "link": "/learn/probiotics-prebiotics-postbiotics"
+          }
+        },
+        "l2": {
+          "type": "card",
+          "settings": {
+            "theme": "achaar",
+            "tag": "Recipe",
+            "title": "No-oil mango achaar — the original lacto-fermented version",
+            "excerpt": "Tangy, spiced, probiotic-rich. The old-school way before refined oils came in.",
+            "read_time": "10 min · serves 6",
+            "link": "/recipes/no-oil-mango-achaar"
+          }
+        },
+        "l3": {
+          "type": "card",
+          "settings": {
+            "theme": "kanji",
+            "tag": "Master guide",
+            "title": "Everything you need to know about kanji",
+            "excerpt": "Black carrot, beetroot, salt, mustard. India's original probiotic drink — done properly.",
+            "read_time": "12 min read",
+            "link": "/learn/kanji-master-guide"
+          }
+        }
       },
-      "block_order": ["l1","l2","l3"],
+      "block_order": [
+        "l1",
+        "l2",
+        "l3"
+      ],
       "settings": {
         "eyebrow": "From the blog",
         "heading": "Learn the science. <em>Try the recipe.</em>",
+        "blog": "",
         "article_count": 3
       }
     },
