@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "hero": {
@@ -7,20 +16,52 @@
         "fallback_subtitle": "Lead paragraph or excerpt — appears below the title in italic.",
         "fallback_category": "FERMENTATION 101",
         "fallback_read_time": "8 min read",
-        "fallback_emoji": "🫙"
+        "fallback_emoji": "🫙",
+        "pad_top_d": 56,
+        "pad_bot_d": 48,
+        "pad_top_m": 40,
+        "pad_bot_m": 32,
+        "mar_top_d": 0,
+        "mar_bot_d": 0,
+        "mar_top_m": 0,
+        "mar_bot_m": 0,
+        "heading_size_d": 48,
+        "heading_size_m": 32
       }
     },
     "body": {
       "type": "gb-learn-blog-body",
+      "blocks": {
+        "as-1": {
+          "type": "article_section",
+          "settings": {
+            "heading": "The Basics: What Happens When You Lacto-Ferment",
+            "anchor_id": "section-1",
+            "body": "<p>Lacto-fermentation is a controlled bacterial process. You combine vegetables with salt and water, then wait. The naturally-occurring lactic acid bacteria — which live on every vegetable surface — start eating the sugars in the food and producing lactic acid. The acid drops the pH low enough that harmful bacteria can't survive, while the good bacteria thrive.</p><p>There's no heat. No starter culture needed. No special equipment beyond a jar. The bacteria do all the work. What you get back is food that's preserved for months, packed with live probiotics, with a tang that comes from real lactic acid (the same compound that makes yogurt sour, or your muscles ache after a hard run).</p><p>This is how humans preserved cabbage in Korea, mangoes in Punjab, cucumbers in Eastern Europe, and milk everywhere — for thousands of years before refrigeration existed.</p>"
+          }
+        },
+        "article_section_HPE6Bg": {
+          "type": "article_section",
+          "settings": {
+            "heading": "Why Salt Matters (And the Right Ratio)",
+            "anchor_id": "",
+            "body": "<p>Salt is the gatekeeper. At 2% salt by weight, harmful bacteria (Listeria, E. coli, Salmonella) can't reproduce. But lactic acid bacteria can. So salt creates a controlled environment where only the good guys grow.</p><p>Get the ratio wrong and the whole thing fails. Too little salt and bad bacteria take over — your jar smells like death and you throw it out. Too much salt and even the good bacteria struggle — fermentation stalls, the vegetables stay raw and sharp.</p><p>For most ferments: 2% salt by weight of the vegetables. That's 20 grams of salt per kilogram of cabbage. Use a kitchen scale. Don't eyeball it.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "as-1",
+        "article_section_HPE6Bg"
+      ],
       "settings": {
         "show_toc": true,
         "toc_label": "In This Article",
-        "show_article_content": false
-      },
-      "blocks": {
-        "as-1": { "type": "article_section", "settings": { "heading": "Section heading", "anchor_id": "section-1", "body": "<p>Edit this in the theme customizer or replace with the article body.</p>" } }
-      },
-      "block_order": ["as-1"]
+        "show_article_content": false,
+        "pad_top_d": 64,
+        "pad_bot_d": 96,
+        "pad_top_m": 48,
+        "pad_bot_m": 64
+      }
     },
     "end-cta": {
       "type": "gb-learn-blog-end-cta",
@@ -28,18 +69,33 @@
         "eyebrow": "READY TO START?",
         "title": "Try lacto-fermentation hands-on.",
         "desc": "Our beginner kits come with pre-measured spice mixes, the right jar, an airlock, and a glass weight. No guessing. No failed batches.",
+        "product": "",
         "name_override": "All-in-One Fermentation Kit",
         "price_override": "From ₹2,999",
-        "cta_label": "Shop Now →"
+        "cta_label": "Shop Now →",
+        "cta_url": "",
+        "pad_top_d": 0,
+        "pad_bot_d": 96,
+        "pad_top_m": 0,
+        "pad_bot_m": 64
       }
     },
     "related": {
       "type": "gb-learn-blog-related",
       "settings": {
         "eyebrow": "KEEP READING",
-        "heading": "Related articles"
+        "heading": "Related articles",
+        "pad_top_d": 80,
+        "pad_bot_d": 80,
+        "pad_top_m": 56,
+        "pad_bot_m": 56
       }
     }
   },
-  "order": ["hero","body","end-cta","related"]
+  "order": [
+    "hero",
+    "body",
+    "end-cta",
+    "related"
+  ]
 }
