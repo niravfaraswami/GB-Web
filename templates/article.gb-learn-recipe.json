@@ -48,10 +48,10 @@
         "sub": "Step-by-step."
       },
       "blocks": {
-        "ms-1": { "type": "method_step", "settings": { "emoji": "🔪", "title": "Prep the vegetables", "desc": "Wash, dry, chop into pieces. Don't dice too fine — chunky holds shape better through fermentation." } },
-        "ms-2": { "type": "method_step", "settings": { "emoji": "🧂", "title": "Salt + brine", "desc": "Massage salt into vegetables for 5 min until they release water. Top up with filtered water if needed." } },
-        "ms-3": { "type": "method_step", "settings": { "emoji": "🫙", "title": "Pack into jar", "desc": "Press everything below the brine line. Add glass weight. Seal with airlock." } },
-        "ms-4": { "type": "method_step", "settings": { "emoji": "⏳", "title": "Wait", "desc": "Day 3–5: bubbles. Day 5–7: tang develops. Taste from day 5; refrigerate when you like the flavour." } }
+        "ms-1": { "type": "method_step", "settings": { "emoji": "🔪", "title": "Prep the vegetables", "desc": "<p>Wash, dry, chop into pieces. Don't dice too fine — chunky holds shape better through fermentation.</p>"} },
+        "ms-2": { "type": "method_step", "settings": { "emoji": "🧂", "title": "Salt + brine", "desc": "<p>Massage salt into vegetables for 5 min until they release water. Top up with filtered water if needed.</p>" } },
+        "ms-3": { "type": "method_step", "settings": { "emoji": "🫙", "title": "Pack into jar", "desc": "<p>Press everything below the brine line. Add glass weight. Seal with airlock.</p>" } },
+        "ms-4": { "type": "method_step", "settings": { "emoji": "⏳", "title": "Wait", "desc": "<p>Day 3–5: bubbles. Day 5–7: tang develops. Taste from day 5; refrigerate when you like the flavour.</p>" } }
       },
       "block_order": ["ms-1","ms-2","ms-3","ms-4"]
     },
@@ -72,9 +72,9 @@
         "sub": "Tweaks, swaps, what we've learned."
       },
       "blocks": {
-        "n-1": { "type": "note", "settings": { "text": "<strong>Spice level:</strong> if it's too hot for you, halve the chilli in the spice mix. Won't affect fermentation." } },
-        "n-2": { "type": "note", "settings": { "text": "<strong>Cooler kitchens:</strong> below 22°C, fermentation can take 7–10 days instead of 5. Be patient." } },
-        "n-3": { "type": "note", "settings": { "text": "<strong>Storage:</strong> once you like the tang, refrigerate. Stays good 4–6 weeks; flavour deepens." } }
+        "n-1": { "type": "note", "settings": { "text": "<p><strong>Spice level:</strong> if it's too hot for you, halve the chilli in the spice mix. Won't affect fermentation.</p>" } },
+        "n-2": { "type": "note", "settings": { "text": "<p><strong>Cooler kitchens:</strong> below 22°C, fermentation can take 7–10 days instead of 5. Be patient.</p>" } },
+        "n-3": { "type": "note", "settings": { "text": "<p><strong>Storage:</strong> once you like the tang, refrigerate. Stays good 4–6 weeks; flavour deepens.</p>" } }
       },
       "block_order": ["n-1","n-2","n-3"]
     },
