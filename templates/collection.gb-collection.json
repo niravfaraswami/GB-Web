@@ -57,6 +57,7 @@
         "f2",
         "f3"
       ],
+      "disabled": true,
       "settings": {
         "pad_top_d": 64,
         "pad_bot_d": 64,
@@ -66,6 +67,7 @@
     },
     "testimonial": {
       "type": "gb-coll-testimonial",
+      "disabled": true,
       "settings": {
         "show_stars": true,
         "quote": "<p>Started with the achaar kit, ended up making my own kombucha. The instructions are honest about timing and the cultures are alive — you can tell on day one.</p>",
