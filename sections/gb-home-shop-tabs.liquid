@@ -36,6 +36,11 @@
 --gb-card-cta-py: {{ section.settings.cta_padding_y | default: 11 }}px;
 --gb-card-cta-px: {{ section.settings.cta_padding_x | default: 16 }}px;
 --gb-card-cta-radius: {{ section.settings.cta_border_radius | default: 50 }}px;
+--gb-card-info-pad-x: {{ section.settings.info_padding_x | default: 18 }}px;
+--gb-card-info-pad-y: {{ section.settings.info_padding_y | default: 18 }}px;
+--gb-card-gap-title: {{ section.settings.gap_below_title | default: 4 }}px;
+--gb-card-gap-tag: {{ section.settings.gap_below_tag | default: 12 }}px;
+--gb-card-gap-price: {{ section.settings.gap_below_price | default: 14 }}px;
 {%- endcapture -%}
 
 {%- assign cta_style_class = section.settings.cta_style | default: 'outlined' -%}
@@ -336,14 +341,14 @@
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  padding: 18px 18px 20px;
+  padding: var(--gb-card-info-pad-y, 18px) var(--gb-card-info-pad-x, 18px);
 }
 .gb-card-tag {
   font-family: 'DM Sans', sans-serif;
   font-size: var(--gb-card-tag-fs, 13px);
   font-weight: var(--gb-card-tag-fw, 400);
   color: var(--c-text-soft);
-  margin-bottom: 12px;
+  margin: 0 0 var(--gb-card-gap-tag, 12px);
   order: 2;
 }
 .gb-card-title {
@@ -351,7 +356,7 @@
   font-weight: var(--gb-card-title-fw, 700);
   font-size: var(--gb-card-title-fs, 15.5px);
   letter-spacing: -0.005em;
-  margin: 0 0 4px;
+  margin: 0 0 var(--gb-card-gap-title, 4px);
   line-height: 1.3;
   color: var(--c-ink);
   display: -webkit-box;
@@ -365,7 +370,7 @@
   display: flex;
   align-items: baseline;
   gap: 8px;
-  margin-bottom: 14px;
+  margin: 0 0 var(--gb-card-gap-price, 14px);
   order: 3;
 }
 .gb-card-now {
@@ -625,7 +630,15 @@
         { "value": "dark",     "label": "Dark (filled ink, cream text)" },
         { "value": "ghost",    "label": "Ghost (no border, text only)" },
         { "value": "link",     "label": "Underlined link" }
-      ], "default": "outlined" }
+      ], "default": "outlined" },
+
+    { "type": "header", "content": "Card text — spacing" },
+    { "type": "paragraph", "content": "Margin below each text element. The CTA stays anchored to the bottom of the card via auto-spacing — gap below price sets the minimum gap above the CTA, the rest is absorbed automatically when card heights vary." },
+    { "type": "range", "id": "gap_below_title", "label": "Gap below title",                "min": 0, "max": 40, "step": 1, "default": 4,  "unit": "px" },
+    { "type": "range", "id": "gap_below_tag",   "label": "Gap below tab-name tag",         "min": 0, "max": 40, "step": 1, "default": 12, "unit": "px" },
+    { "type": "range", "id": "gap_below_price", "label": "Gap below price (above CTA)",    "min": 0, "max": 60, "step": 1, "default": 14, "unit": "px" },
+    { "type": "range", "id": "info_padding_y",  "label": "Card body — vertical padding",   "min": 0, "max": 40, "step": 1, "default": 18, "unit": "px" },
+    { "type": "range", "id": "info_padding_x",  "label": "Card body — horizontal padding", "min": 0, "max": 40, "step": 1, "default": 18, "unit": "px" }
   ],
   "blocks": [
     {
