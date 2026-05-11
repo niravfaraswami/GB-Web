@@ -87,7 +87,7 @@
             "headline": "<p>Make India's<br/>Original<br/><em>Probiotic</em> Drink</p>",
             "sub": "<p>Carrot, beetroot, mustard. Three days. <strong>Real Probiotics</strong> <br/>in every glass.</p>",
             "cta_label": "Shop Kanji kit",
-            "cta_link": "/products/kanji-making-kit"
+            "cta_link": "shopify://products/kanji-making-kit"
           }
         },
         "s2": {
