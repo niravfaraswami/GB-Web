@@ -509,29 +509,50 @@
     }
   });
 
-  // Cart wiring (lightweight): POST to /cart/add.js, no UI feedback yet
+  // Cart wiring: POST to /cart/add.js then fire cart:update so the
+  // theme's cart-drawer-component (which listens for that event with
+  // auto-open enabled) slides open with the new item.
   section.querySelectorAll('.gb-card-cta').forEach(function(btn) {
     btn.addEventListener('click', function(ev) {
       ev.preventDefault();
       ev.stopPropagation();
       var handle = btn.dataset.productHandle;
       if (!handle) return;
+      var origLabel = btn.textContent;
+      btn.textContent = 'Adding…';
       fetch('/products/' + handle + '.js')
         .then(function(r) { return r.json(); })
         .then(function(p) {
           var variantId = p.variants && p.variants[0] && p.variants[0].id;
-          if (!variantId) return;
+          if (!variantId) return Promise.reject(new Error('No variant'));
           return fetch('/cart/add.js', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
             body: JSON.stringify({ id: variantId, quantity: 1 })
+          }).then(function(r) {
+            if (!r.ok) return r.json().then(function(e) { return Promise.reject(e); });
+            return r.json();
           });
         })
         .then(function() {
-          btn.textContent = 'Added ✓';
-          setTimeout(function() { btn.textContent = 'Add to cart'; }, 1500);
+          // Fetch the fresh cart so the drawer's count/contents reflect it
+          return fetch('/cart.js').then(function(r) { return r.json(); });
         })
-        .catch(function() { btn.textContent = 'Try again'; });
+        .then(function(cart) {
+          btn.textContent = 'Added ✓';
+          setTimeout(function() { btn.textContent = origLabel; }, 1500);
+          // Dispatch cart:update — cart-drawer-component listens and
+          // auto-opens because it has the `auto-open` attribute set
+          // (see snippets/header-actions.liquid line ~158).
+          document.dispatchEvent(new CustomEvent('cart:update', {
+            bubbles: true,
+            detail: { resource: cart, sourceId: 'gb-home-shop-tabs', data: { source: 'gb-shop-card', itemCount: cart && cart.item_count } }
+          }));
+        })
+        .catch(function() {
+          btn.textContent = 'Try again';
+          setTimeout(function() { btn.textContent = origLabel; }, 1800);
+        });
     });
   });
 })();
