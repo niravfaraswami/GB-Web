@@ -44,8 +44,13 @@
 
   function img(src, width) {
     if (!src) return '';
-    if (src.indexOf('?') > -1) return src;
-    return src.replace(/\.(jpg|jpeg|png|webp|gif)(\?|$)/i, '_' + (width || 200) + 'x.$1$2');
+    var w = width || 200;
+    // Normalize: strip query string + any existing _NNNx size suffix,
+    // then add a consistent _NNNx suffix. This produces a deterministic
+    // URL so optimistic and real cart items hit the same browser cache
+    // entry — no image flash on the optimistic→real swap.
+    var clean = src.split('?')[0].replace(/_\d+x(?=\.\w+$)/i, '');
+    return clean.replace(/\.(jpg|jpeg|png|webp|gif)$/i, '_' + w + 'x.$1');
   }
 
   // ---------- API ----------
@@ -113,42 +118,124 @@
     root.querySelector('[data-gbcd-foot]').style.display = isEmpty ? 'none' : '';
   }
 
-  function renderItems(cart) {
-    var host = root.querySelector('[data-gbcd-items]');
-    if (!host) return;
-    host.innerHTML = cart.items.map(function(it) {
+  function lineItemId(it) {
+    var isGift = it.properties && (it.properties._gift === 'true' || it.properties._gift === true);
+    return (isGift ? 'gift-' : 'var-') + it.variant_id;
+  }
+
+  function lineItemHtml(it) {
+    var compare = '';
+    if (it.original_price > it.final_price) {
+      compare = '<span class="gbcd-item-compare">' + money(it.original_price) + '</span>';
+    }
+    var isGift = it.properties && (it.properties._gift === 'true' || it.properties._gift === true);
+    var giftBadge = isGift ? '<span class="gbcd-item-gift">🎁 Free Gift</span>' : '';
+    var variantLine = (it.variant_title && it.variant_title !== 'Default Title') ?
+      '<div class="gbcd-item-variant">' + escapeHtml(it.variant_title) + '</div>' : '';
+    var disableMinus = isGift || it.quantity <= 1;
+    var disableAll = isGift;
+    return '' +
+      '<div class="gbcd-item-img">' +
+        (it.image ? '<img loading="lazy" src="' + escapeHtml(img(it.image, 200)) + '" alt="">' : '🫙') +
+      '</div>' +
+      '<div class="gbcd-item-info">' +
+        (it.product_type ? '<div class="gbcd-item-eyebrow">' + escapeHtml(it.product_type) + '</div>' : '') +
+        '<a class="gbcd-item-name" href="' + escapeHtml(it.url) + '">' + escapeHtml(it.product_title) + '</a>' +
+        variantLine +
+        giftBadge +
+        '<div class="gbcd-item-row">' +
+          '<div class="gbcd-qty">' +
+            '<button type="button" data-gbcd-qty="' + (it.quantity - 1) + '" ' + (disableAll || disableMinus ? 'disabled' : '') + '>−</button>' +
+            '<span class="gbcd-qty-val">' + it.quantity + '</span>' +
+            '<button type="button" data-gbcd-qty="' + (it.quantity + 1) + '" ' + (disableAll ? 'disabled' : '') + '>+</button>' +
+          '</div>' +
+          '<div class="gbcd-item-price">' + money(it.final_line_price) + compare + '</div>' +
+        '</div>' +
+      '</div>' +
+      (disableAll ? '' : '<button type="button" class="gbcd-item-remove" data-gbcd-remove>Remove</button>');
+  }
+
+  function buildLineNode(it) {
+    var node = document.createElement('div');
+    node.className = 'gbcd-item';
+    node.setAttribute('data-line-id', lineItemId(it));
+    node.setAttribute('data-line-key', it.key);
+    node.innerHTML = lineItemHtml(it);
+    return node;
+  }
+
+  // Update mutable fields in place — preserves the <img> element so the
+  // browser doesn't recreate it (and re-decode the image) on every render.
+  function updateLineNode(node, it) {
+    var isGift = it.properties && (it.properties._gift === 'true' || it.properties._gift === true);
+    node.setAttribute('data-line-key', it.key);
+
+    var qtyVal = node.querySelector('.gbcd-qty-val');
+    if (qtyVal) qtyVal.textContent = it.quantity;
+
+    var qtyBtns = node.querySelectorAll('[data-gbcd-qty]');
+    if (qtyBtns[0]) {
+      qtyBtns[0].setAttribute('data-gbcd-qty', String(it.quantity - 1));
+      if (isGift || it.quantity <= 1) qtyBtns[0].setAttribute('disabled', 'disabled');
+      else qtyBtns[0].removeAttribute('disabled');
+    }
+    if (qtyBtns[1]) {
+      qtyBtns[1].setAttribute('data-gbcd-qty', String(it.quantity + 1));
+      if (isGift) qtyBtns[1].setAttribute('disabled', 'disabled');
+      else qtyBtns[1].removeAttribute('disabled');
+    }
+
+    var priceEl = node.querySelector('.gbcd-item-price');
+    if (priceEl) {
       var compare = '';
       if (it.original_price > it.final_price) {
         compare = '<span class="gbcd-item-compare">' + money(it.original_price) + '</span>';
       }
-      var isGift = it.properties && (it.properties._gift === 'true' || it.properties._gift === true);
-      var giftBadge = isGift ? '<span class="gbcd-item-gift">🎁 Free Gift</span>' : '';
-      var variantLine = (it.variant_title && it.variant_title !== 'Default Title') ?
-        '<div class="gbcd-item-variant">' + escapeHtml(it.variant_title) + '</div>' : '';
-      var disableMinus = isGift || it.quantity <= 1;
-      var disableAll = isGift;
-      return '' +
-        '<div class="gbcd-item" data-line-key="' + escapeHtml(it.key) + '">' +
-          '<div class="gbcd-item-img">' +
-            (it.image ? '<img loading="lazy" src="' + escapeHtml(img(it.image, 200)) + '" alt="">' : '🫙') +
-          '</div>' +
-          '<div class="gbcd-item-info">' +
-            (it.product_type ? '<div class="gbcd-item-eyebrow">' + escapeHtml(it.product_type) + '</div>' : '') +
-            '<a class="gbcd-item-name" href="' + escapeHtml(it.url) + '">' + escapeHtml(it.product_title) + '</a>' +
-            variantLine +
-            giftBadge +
-            '<div class="gbcd-item-row">' +
-              '<div class="gbcd-qty">' +
-                '<button type="button" data-gbcd-qty="' + (it.quantity - 1) + '" ' + (disableAll || disableMinus ? 'disabled' : '') + '>−</button>' +
-                '<span class="gbcd-qty-val">' + it.quantity + '</span>' +
-                '<button type="button" data-gbcd-qty="' + (it.quantity + 1) + '" ' + (disableAll ? 'disabled' : '') + '>+</button>' +
-              '</div>' +
-              '<div class="gbcd-item-price">' + money(it.final_line_price) + compare + '</div>' +
-            '</div>' +
-          '</div>' +
-          (disableAll ? '' : '<button type="button" class="gbcd-item-remove" data-gbcd-remove>Remove</button>') +
-        '</div>';
-    }).join('');
+      priceEl.innerHTML = money(it.final_line_price) + compare;
+    }
+
+    var nameEl = node.querySelector('.gbcd-item-name');
+    if (nameEl && nameEl.textContent !== it.product_title) {
+      nameEl.textContent = it.product_title;
+      nameEl.setAttribute('href', it.url || '#');
+    }
+
+    // Only touch <img src> if the (normalized) URL actually changed.
+    var imgEl = node.querySelector('.gbcd-item-img img');
+    var newSrc = it.image ? img(it.image, 200) : '';
+    if (imgEl && newSrc && imgEl.getAttribute('src') !== newSrc) {
+      imgEl.setAttribute('src', newSrc);
+    }
+  }
+
+  // Keyed diff render: match items by variant_id, reuse existing DOM
+  // nodes for kept items. Only the text fields (key/qty/price/name)
+  // change; the <img> element survives the optimistic→real swap.
+  function renderItems(cart) {
+    var host = root.querySelector('[data-gbcd-items]');
+    if (!host) return;
+    var existing = {};
+    Array.prototype.forEach.call(host.children, function(el) {
+      var id = el.getAttribute('data-line-id');
+      if (id) existing[id] = el;
+    });
+    var newNodes = cart.items.map(function(it) {
+      var id = lineItemId(it);
+      var node = existing[id];
+      if (node) {
+        updateLineNode(node, it);
+        delete existing[id];
+      } else {
+        node = buildLineNode(it);
+      }
+      return node;
+    });
+    Object.keys(existing).forEach(function(k) { existing[k].remove(); });
+    newNodes.forEach(function(node, idx) {
+      if (host.children[idx] !== node) {
+        host.insertBefore(node, host.children[idx] || null);
+      }
+    });
   }
 
   function renderProgress(cart) {
@@ -575,24 +662,29 @@
     var origLabel = btn ? btn.textContent : null;
     if (btn) { btn.setAttribute('disabled', 'disabled'); }
 
-    // Optimistic preview if the variant + product context can be inferred
+    // Open the drawer immediately and inject an optimistic preview row.
     var variantInput = form.querySelector('[name="id"]');
     var variantId = variantInput ? parseInt(variantInput.value, 10) : null;
     if (variantId) {
       open();
-      // Pull product context from the closest container that exposes it
       var ctx = form.closest('[data-product-id], [data-product-handle]');
-      if (ctx && window.GBCartDrawer && typeof window.GBCartDrawer.previewAdd === 'function') {
-        window.GBCartDrawer.previewAdd({
-          variant_id: variantId,
-          product_id: parseInt(ctx.dataset.productId || '0', 10),
-          title: ctx.dataset.productTitle || '',
-          image: ctx.dataset.productImage || '',
-          price: parseInt(ctx.dataset.productPrice || '0', 10),
-          url: ctx.dataset.productUrl || ''
-        });
+      var preview = { variant_id: variantId, quantity: 1 };
+      if (ctx) {
+        preview.product_id = parseInt(ctx.dataset.productId || '0', 10);
+        preview.title = ctx.dataset.productTitle || '';
+        preview.image = ctx.dataset.productImage || '';
+        preview.price = parseInt(ctx.dataset.productPrice || '0', 10);
+        preview.url = ctx.dataset.productUrl || '';
       } else {
-        open();
+        // Fallback: scrape title/image from the page so even raw default
+        // product templates get an optimistic preview.
+        var titleEl = document.querySelector('h1.product__title, h1.product-title, [data-product-title], main h1');
+        if (titleEl) preview.title = (titleEl.textContent || '').trim();
+        var imgEl = document.querySelector('.product__media img, .product-media img, .product-gallery img, [data-product-featured-image]');
+        if (imgEl && imgEl.getAttribute('src')) preview.image = imgEl.getAttribute('src');
+      }
+      if (window.GBCartDrawer && typeof window.GBCartDrawer.previewAdd === 'function') {
+        window.GBCartDrawer.previewAdd(preview);
       }
     }
 
