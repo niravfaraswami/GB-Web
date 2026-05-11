@@ -157,6 +157,11 @@
                       <button type="button" class="gb-card-cta gb-card-cta--{{ cta_style_class }}"
                               data-product-handle="{{ product.handle }}"
                               data-variant-id="{{ product.selected_or_first_available_variant.id | default: product.variants.first.id }}"
+                              data-product-id="{{ product.id }}"
+                              data-product-title="{{ product.title | escape }}"
+                              data-product-image="{{ product.featured_image | image_url: width: 200 }}"
+                              data-product-price="{{ product.price }}"
+                              data-product-url="{{ product.url }}"
                               {% unless product.available %}disabled{% endunless %}>Add to cart</button>
                     </div>
                   {%- endif -%}
@@ -570,10 +575,21 @@
       var origLabel = btn.textContent;
       btn.textContent = 'Adding…';
       btn.setAttribute('disabled', 'disabled');
-      // Open the drawer immediately so the user sees it slide in while
-      // the network round-trip is in flight. The drawer renders its
-      // current cart state and updates when cart:update fires.
+      // Open the drawer + inject an optimistic line item so the user
+      // sees the product land in the cart instantly. Server response
+      // overwrites it ~300-500ms later with the real cart.
       openCartDrawer();
+      if (window.GBCartDrawer && typeof window.GBCartDrawer.previewAdd === 'function') {
+        window.GBCartDrawer.previewAdd({
+          variant_id: parseInt(variantId, 10),
+          product_id: parseInt(btn.dataset.productId || '0', 10),
+          title: btn.dataset.productTitle,
+          image: btn.dataset.productImage,
+          price: parseInt(btn.dataset.productPrice || '0', 10),
+          url: btn.dataset.productUrl,
+          quantity: 1
+        });
+      }
       fetch('/cart/add.js', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },

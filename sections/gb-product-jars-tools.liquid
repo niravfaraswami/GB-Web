@@ -366,7 +366,14 @@
 
           {%- form 'product', p, id: 'jt-product-form-' | append: section.id, class: 'jt-atc-form' -%}
             <input type="hidden" name="id" value="{{ p.selected_or_first_available_variant.id }}">
-            <button type="submit" name="add" class="atc-btn" data-atc {% unless p.available %}disabled{% endunless %}>
+            <button type="submit" name="add" class="atc-btn" data-atc
+                    data-variant-id="{{ p.selected_or_first_available_variant.id }}"
+                    data-product-id="{{ p.id }}"
+                    data-product-title="{{ p.title | escape }}"
+                    data-product-image="{{ p.featured_image | image_url: width: 200 }}"
+                    data-product-price="{{ p.price }}"
+                    data-product-url="{{ p.url }}"
+                    {% unless p.available %}disabled{% endunless %}>
               {%- if p.available -%}ADD TO CART{%- else -%}SOLD OUT{%- endif -%}
             </button>
           {%- endform -%}
@@ -635,6 +642,17 @@
       btn.setAttribute('disabled', 'disabled');
       if (window.GBCartDrawer && typeof window.GBCartDrawer.open === 'function') {
         window.GBCartDrawer.open();
+        if (typeof window.GBCartDrawer.previewAdd === 'function' && btn.dataset.variantId) {
+          window.GBCartDrawer.previewAdd({
+            variant_id: parseInt(btn.dataset.variantId, 10),
+            product_id: parseInt(btn.dataset.productId || '0', 10),
+            title: btn.dataset.productTitle,
+            image: btn.dataset.productImage,
+            price: parseInt(btn.dataset.productPrice || '0', 10),
+            url: btn.dataset.productUrl,
+            quantity: 1
+          });
+        }
       }
       var fd = new FormData(form);
       fetch('/cart/add.js', {

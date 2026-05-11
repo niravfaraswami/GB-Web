@@ -125,7 +125,7 @@
       var disableMinus = isGift || it.quantity <= 1;
       var disableAll = isGift;
       return '' +
-        '<div class="gbcd-item" data-line-key="' + escapeHtml(it.key) + '">' +
+        '<div class="gbcd-item' + (it._pending ? ' is-pending' : '') + '" data-line-key="' + escapeHtml(it.key) + '">' +
           '<div class="gbcd-item-img">' +
             (it.image ? '<img loading="lazy" src="' + escapeHtml(img(it.image, 200)) + '" alt="">' : '🫙') +
           '</div>' +
@@ -273,6 +273,73 @@
     return fetchCart().then(function(c) { state.cart = c; render(); return c; });
   }
 
+  // Optimistic helpers — mutate state.cart in place and re-render.
+  // The server response replaces state.cart when it lands.
+  function optimisticChangeQty(key, newQty) {
+    if (!state.cart) return;
+    var idx = -1;
+    for (var i = 0; i < state.cart.items.length; i++) {
+      if (state.cart.items[i].key === key) { idx = i; break; }
+    }
+    if (idx < 0) return;
+    var item = state.cart.items[idx];
+    if (newQty <= 0) {
+      state.cart.item_count -= item.quantity;
+      state.cart.total_price -= item.final_line_price;
+      state.cart.items_subtotal_price = Math.max(0, (state.cart.items_subtotal_price || 0) - (item.original_line_price || item.final_line_price));
+      state.cart.items.splice(idx, 1);
+    } else {
+      var oldQty = item.quantity;
+      var unitFinal = item.final_line_price / Math.max(1, oldQty);
+      var unitOrig  = (item.original_line_price || item.final_line_price) / Math.max(1, oldQty);
+      var diff = newQty - oldQty;
+      item.quantity = newQty;
+      item.final_line_price    = Math.round(unitFinal * newQty);
+      item.original_line_price = Math.round(unitOrig  * newQty);
+      state.cart.item_count += diff;
+      state.cart.total_price += Math.round(unitFinal * diff);
+      if (state.cart.items_subtotal_price != null) {
+        state.cart.items_subtotal_price += Math.round(unitOrig * diff);
+      }
+    }
+    render();
+  }
+
+  function optimisticAdd(line) {
+    if (!state.cart) state.cart = { items: [], item_count: 0, total_price: 0, items_subtotal_price: 0 };
+    var existing = state.cart.items.find(function(it) { return it.variant_id === line.variant_id && !(it.properties && it.properties._gift); });
+    if (existing) {
+      optimisticChangeQty(existing.key, existing.quantity + (line.quantity || 1));
+      return;
+    }
+    var qty = line.quantity || 1;
+    var unitPrice = line.price || 0;
+    var unitOrig  = line.compare_at_price || line.price || 0;
+    state.cart.items.push({
+      key: 'pending-' + line.variant_id + '-' + Date.now(),
+      _pending: true,
+      product_id: line.product_id || 0,
+      variant_id: line.variant_id,
+      product_title: line.title || 'Loading…',
+      variant_title: line.variant_title || '',
+      product_type: line.product_type || '',
+      url: line.url || '#',
+      image: line.image || '',
+      quantity: qty,
+      final_line_price:    unitPrice * qty,
+      original_line_price: unitOrig  * qty,
+      final_price: unitPrice,
+      original_price: unitOrig,
+      properties: line.properties || {}
+    });
+    state.cart.item_count += qty;
+    state.cart.total_price += unitPrice * qty;
+    if (state.cart.items_subtotal_price != null) {
+      state.cart.items_subtotal_price += unitOrig * qty;
+    }
+    render();
+  }
+
   function open() {
     state.isOpen = true;
     root.classList.add('is-open');
@@ -325,9 +392,10 @@
       var line = qtyBtn.closest('.gbcd-item');
       var newQty = parseInt(qtyBtn.getAttribute('data-gbcd-qty'), 10);
       var key = line.getAttribute('data-line-key');
+      optimisticChangeQty(key, Math.max(0, newQty));
       changeLine(key, Math.max(0, newQty))
         .then(function(c) { state.cart = c; render(); })
-        .catch(function() {});
+        .catch(function() { refresh(); });
       return;
     }
     var removeBtn = ev.target.closest('[data-gbcd-remove]');
@@ -335,10 +403,13 @@
       var line2 = removeBtn.closest('.gbcd-item');
       var key2 = line2.getAttribute('data-line-key');
       var removedItem = state.cart.items.find(function(it) { return it.key === key2; });
-      changeLine(key2, 0).then(function(c) {
-        state.cart = c; render();
-        if (removedItem) showToast('Removed ' + removedItem.product_title, { id: removedItem.variant_id, qty: removedItem.quantity, props: removedItem.properties });
-      });
+      if (removedItem) {
+        showToast('Removed ' + removedItem.product_title, { id: removedItem.variant_id, qty: removedItem.quantity, props: removedItem.properties });
+      }
+      optimisticChangeQty(key2, 0);
+      changeLine(key2, 0)
+        .then(function(c) { state.cart = c; render(); })
+        .catch(function() { refresh(); });
       return;
     }
     var undoBtn = ev.target.closest('[data-gbcd-toast-undo]');
@@ -354,8 +425,22 @@
       var vid = parseInt(addonBtn.getAttribute('data-gbcd-addon'), 10);
       addonBtn.setAttribute('disabled', 'disabled');
       addonBtn.textContent = 'Adding…';
+      // optimistic add — pull title/image/price from the addon card
+      var card = addonBtn.closest('.gbcd-addon-card');
+      var addonCandidate = (cfg.addon_candidates || []).find(function(p) { return p.variant_id === vid; });
+      if (addonCandidate) {
+        optimisticAdd({
+          variant_id: vid,
+          product_id: addonCandidate.id,
+          title: addonCandidate.title,
+          image: addonCandidate.image,
+          price: addonCandidate.price,
+          quantity: 1
+        });
+      }
       addLine(vid, 1).then(function() { return fetchCart(); }).then(function(c) { state.cart = c; render(); }).catch(function() {
         addonBtn.removeAttribute('disabled'); addonBtn.textContent = 'Add';
+        refresh();
       });
       return;
     }
@@ -363,14 +448,23 @@
     if (upBtn) {
       var uvid = parseInt(upBtn.getAttribute('data-gbcd-upsell'), 10);
       upBtn.setAttribute('disabled', 'disabled');
-      addLine(uvid, 1).then(function() { return fetchCart(); }).then(function(c) { state.cart = c; render(); });
+      if (cfg.upsell && cfg.upsell.variant_id === uvid) {
+        optimisticAdd({
+          variant_id: uvid,
+          title: cfg.upsell.title || cfg.upsell.headline,
+          image: cfg.upsell.image,
+          price: cfg.upsell.price,
+          quantity: 1
+        });
+      }
+      addLine(uvid, 1).then(function() { return fetchCart(); }).then(function(c) { state.cart = c; render(); }).catch(function() { refresh(); });
       return;
     }
     var emptyAdd = ev.target.closest('[data-gbcd-empty-add]');
     if (emptyAdd) {
       var evid = parseInt(emptyAdd.getAttribute('data-gbcd-empty-add'), 10);
       emptyAdd.setAttribute('disabled', 'disabled');
-      addLine(evid, 1).then(function() { return fetchCart(); }).then(function(c) { state.cart = c; render(); });
+      addLine(evid, 1).then(function() { return fetchCart(); }).then(function(c) { state.cart = c; render(); }).catch(function() { refresh(); });
       return;
     }
     var checkoutBtn = ev.target.closest('[data-gbcd-checkout]');
@@ -441,6 +535,7 @@
     open: open,
     close: close,
     refresh: refresh,
+    previewAdd: optimisticAdd,
     state: state
   };
 

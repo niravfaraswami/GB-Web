@@ -266,6 +266,19 @@
   padding: 4px;
 }
 #gb-cart-drawer .gbcd-item-remove:hover { color: #B33A2A; }
+#gb-cart-drawer .gbcd-item.is-pending { opacity: 0.7; }
+#gb-cart-drawer .gbcd-item.is-pending .gbcd-item-price::after {
+  content: '';
+  display: inline-block;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--kit-color, var(--gbcd-action));
+  margin-left: 8px;
+  animation: gbcd-pulse 0.9s ease-in-out infinite;
+  vertical-align: middle;
+}
+@keyframes gbcd-pulse { 0%, 100% { opacity: 0.35; } 50% { opacity: 1; } }
+
 #gb-cart-drawer .gbcd-item-gift {
   display: inline-block;
   background: var(--gbcd-success-soft);
