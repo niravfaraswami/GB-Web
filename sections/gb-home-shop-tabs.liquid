@@ -523,9 +523,36 @@
     }
   });
 
-  // Cart wiring: POST to /cart/add.js then fire cart:update so the
-  // theme's cart-drawer-component (which listens for that event with
-  // auto-open enabled) slides open with the new item.
+  function openCartDrawer() {
+    var drawer = document.querySelector('cart-drawer-component');
+    console.log('[gb-shop-tabs] drawer element:', drawer);
+    if (!drawer) {
+      console.warn('[gb-shop-tabs] no cart-drawer-component in DOM, navigating to /cart');
+      window.location.href = '/cart';
+      return;
+    }
+    var tryOpen = function() {
+      console.log('[gb-shop-tabs] tryOpen — open type:', typeof drawer.open, 'showDialog type:', typeof drawer.showDialog);
+      if (typeof drawer.open === 'function') { drawer.open(); return true; }
+      if (typeof drawer.showDialog === 'function') { drawer.showDialog(); return true; }
+      var trigger = drawer.querySelector('[data-testid="cart-drawer-trigger"], button[on\\:click="/open"]');
+      if (trigger) { console.log('[gb-shop-tabs] clicking drawer trigger button'); trigger.click(); return true; }
+      return false;
+    };
+    if (tryOpen()) return;
+    if (window.customElements && customElements.whenDefined) {
+      customElements.whenDefined('cart-drawer-component').then(function() {
+        console.log('[gb-shop-tabs] cart-drawer-component now defined, retrying');
+        if (!tryOpen()) {
+          console.warn('[gb-shop-tabs] still cannot open after upgrade, navigating to /cart');
+          window.location.href = '/cart';
+        }
+      });
+    } else {
+      window.location.href = '/cart';
+    }
+  }
+
   section.querySelectorAll('.gb-card-cta').forEach(function(btn) {
     btn.addEventListener('click', function(ev) {
       ev.preventDefault();
@@ -555,20 +582,12 @@
         .then(function(cart) {
           btn.textContent = 'Added ✓';
           setTimeout(function() { btn.textContent = origLabel; }, 1500);
-          // Notify the theme so the cart bubble/count refreshes
+          console.log('[gb-shop-tabs] add succeeded, item_count=', cart && cart.item_count);
           document.dispatchEvent(new CustomEvent('cart:update', {
             bubbles: true,
             detail: { resource: cart, sourceId: 'gb-home-shop-tabs', data: { source: 'gb-shop-card', itemCount: cart && cart.item_count } }
           }));
-          // Directly open the cart drawer. The theme's auto-open
-          // attribute is gated by a setting that may be off, so we
-          // call .open() on the component itself to guarantee it slides in.
-          var drawer = document.querySelector('cart-drawer-component');
-          if (drawer && typeof drawer.open === 'function') {
-            drawer.open();
-          } else if (drawer && typeof drawer.showDialog === 'function') {
-            drawer.showDialog();
-          }
+          openCartDrawer();
         })
         .catch(function() {
           btn.textContent = 'Try again';
