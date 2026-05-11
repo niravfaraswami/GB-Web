@@ -72,5 +72,10 @@
 
     {%- comment -%} ===== GUTBASKET CART DRAWER ===== {%- endcomment -%}
     {% section 'gb-cart-drawer' %}
+
+    {%- comment -%} ===== GUTBASKET STICKY ATC (product pages only) ===== {%- endcomment -%}
+    {%- if request.page_type == 'product' -%}
+      {% section 'gb-sticky-atc' %}
+    {%- endif -%}
   </body>
 </html>
