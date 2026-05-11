@@ -966,8 +966,17 @@
     })
     .then(function(r) {
       if (!r.ok) throw new Error('cart add failed');
-      document.dispatchEvent(new CustomEvent('cart:refresh'));
-      window.location.href = '/cart';
+      // Fetch the fresh cart for the drawer's count/contents update
+      return fetch('/cart.js').then(function(r2) { return r2.json(); });
+    })
+    .then(function(cart) {
+      if (ctaD) { ctaD.disabled = false; ctaD.textContent = origLabel; }
+      if (ctaM) { ctaM.disabled = false; ctaM.textContent = origLabel; }
+      // Dispatch cart:update — cart-drawer-component auto-opens
+      document.dispatchEvent(new CustomEvent('cart:update', {
+        bubbles: true,
+        detail: { resource: cart, sourceId: 'gb-byok-builder', data: { source: 'gb-byok', itemCount: cart && cart.item_count } }
+      }));
     })
     .catch(function() {
       if (ctaD) { ctaD.disabled = false; ctaD.textContent = origLabel; }
