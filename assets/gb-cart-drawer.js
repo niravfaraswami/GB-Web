@@ -199,11 +199,23 @@
       nameEl.setAttribute('href', it.url || '#');
     }
 
-    // Only touch <img src> if the (normalized) URL actually changed.
-    var imgEl = node.querySelector('.gbcd-item-img img');
-    var newSrc = it.image ? img(it.image, 200) : '';
-    if (imgEl && newSrc && imgEl.getAttribute('src') !== newSrc) {
-      imgEl.setAttribute('src', newSrc);
+    // Image: handle three transitions
+    //   - no img → has img    (optimistic preview missed image, real cart has one) → inject <img>
+    //   - has img → has img   (URL changed) → swap src
+    //   - has img → no img    (rare; e.g. removed) → replace with emoji fallback
+    var imgWrap = node.querySelector('.gbcd-item-img');
+    if (imgWrap) {
+      var imgEl = imgWrap.querySelector('img');
+      var newSrc = it.image ? img(it.image, 200) : '';
+      if (newSrc) {
+        if (!imgEl) {
+          imgWrap.innerHTML = '<img loading="lazy" src="' + escapeHtml(newSrc) + '" alt="">';
+        } else if (imgEl.getAttribute('src') !== newSrc) {
+          imgEl.setAttribute('src', newSrc);
+        }
+      } else if (imgEl) {
+        imgWrap.innerHTML = '🫙';
+      }
     }
   }
 
@@ -640,20 +652,26 @@
     var variantId = variantInput ? parseInt(variantInput.value, 10) : null;
     if (variantId) {
       open();
-      var ctx = form.closest('[data-product-id], [data-product-handle]');
       var preview = { variant_id: variantId, quantity: 1 };
-      if (ctx) {
-        preview.product_id = parseInt(ctx.dataset.productId || '0', 10);
-        preview.title = ctx.dataset.productTitle || '';
-        preview.image = ctx.dataset.productImage || '';
-        preview.price = parseInt(ctx.dataset.productPrice || '0', 10);
-        preview.url = ctx.dataset.productUrl || '';
-      } else {
-        // Fallback: scrape title/image from the page so even raw default
-        // product templates get an optimistic preview.
-        var titleEl = document.querySelector('h1.product__title, h1.product-title, [data-product-title], main h1');
+      // Read product context from (in order of preference):
+      //   1. the submit button's data-product-* attrs
+      //   2. a closest ancestor with data-product-id / data-product-handle
+      //   3. scraping the page's <h1> + featured image
+      var src = (btn && btn.dataset && btn.dataset.productImage) ? btn :
+                form.closest('[data-product-id], [data-product-handle]');
+      if (src && src.dataset) {
+        preview.product_id = parseInt(src.dataset.productId || '0', 10);
+        preview.title = src.dataset.productTitle || '';
+        preview.image = src.dataset.productImage || '';
+        preview.price = parseInt(src.dataset.productPrice || '0', 10);
+        preview.url = src.dataset.productUrl || '';
+      }
+      if (!preview.title) {
+        var titleEl = document.querySelector('h1.product__title, h1.product-title, h1.product-name, [data-product-title], main h1');
         if (titleEl) preview.title = (titleEl.textContent || '').trim();
-        var imgEl = document.querySelector('.product__media img, .product-media img, .product-gallery img, [data-product-featured-image]');
+      }
+      if (!preview.image) {
+        var imgEl = document.querySelector('.gallery-main-img, .gallery-main img, .product__media img, .product-media img, .product-gallery img, [data-product-featured-image]');
         if (imgEl && imgEl.getAttribute('src')) preview.image = imgEl.getAttribute('src');
       }
       if (window.GBCartDrawer && typeof window.GBCartDrawer.previewAdd === 'function') {
