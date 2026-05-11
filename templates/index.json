@@ -109,7 +109,7 @@
             "headline": "<p>Fresh<br/>Sprouts in<br/><em>3 Days</em></p>",
             "sub": "<p>Sprout maker + sprouting seeds. <br/><strong>No mush, no smell</strong> — <br/>100% clean sprouts.</p>",
             "cta_label": "Shop Sprouts kit",
-            "cta_link": "/products/sprouts-kit"
+            "cta_link": "shopify://products/sprout-making-jar"
           }
         }
       },
