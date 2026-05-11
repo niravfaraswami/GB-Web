@@ -12,52 +12,239 @@
     "main": {
       "type": "gb-recipe-main",
       "blocks": {
-        "dt1": { "type": "dietary_tag", "settings": { "label": "Vegan" } },
-        "dt2": { "type": "dietary_tag", "settings": { "label": "Gluten-Free" } },
-        "dt3": { "type": "dietary_tag", "settings": { "label": "No Oil" } },
-        "dt4": { "type": "dietary_tag", "settings": { "label": "No Sugar" } },
-        "i1": { "type": "ingredient", "settings": { "amount": "900g",  "name": "Raw green mangoes",       "desc": "unripe, washed, chopped into 2cm cubes" } },
-        "i2": { "type": "ingredient", "settings": { "amount": "20g",   "name": "Sea salt or rock salt",   "desc": "no iodised salt — kills bacteria" } },
-        "i3": { "type": "ingredient", "settings": { "amount": "8g",    "name": "Black mustard seeds",     "desc": "whole" } },
-        "i4": { "type": "ingredient", "settings": { "amount": "7g",    "name": "Red chilli powder",       "desc": "adjust to taste" } },
-        "i5": { "type": "ingredient", "settings": { "amount": "6g",    "name": "Fennel seeds",            "desc": "whole" } },
-        "i6": { "type": "ingredient", "settings": { "amount": "3g",    "name": "Turmeric powder" } },
-        "i7": { "type": "ingredient", "settings": { "amount": "2g",    "name": "Split fenugreek (methi dal)", "desc": "optional, adds bitterness" } },
-        "i8": { "type": "ingredient", "settings": { "amount": "1 tsp", "name": "Ferment Boost",           "desc": "prebiotic starter — speeds up day 1" } },
-        "i9": { "type": "ingredient", "settings": { "amount": "Water", "name": "Filtered",                "desc": "just enough to cover mango" } },
-        "m1": { "type": "method_step", "settings": { "emoji": "🥭", "title": "Wash and chop the mangoes",  "description": "Wash 900g of unripe green mangoes thoroughly. Don't peel — the skin holds the wild lactic acid bacteria you need. Chop into 2cm cubes." } },
-        "m2": { "type": "method_step", "settings": { "emoji": "🧂", "title": "Salt and let them sweat",   "description": "In a large bowl, mix the chopped mangoes with 20g salt. Massage gently for 2 minutes. Let sit 30 minutes." } },
-        "m3": { "type": "method_step", "settings": { "emoji": "🌶️", "title": "Add the spice mix",          "description": "Add the mustard seeds, red chilli, fennel, turmeric, and fenugreek. Mix thoroughly. Add 1 tsp of Ferment Boost." } },
-        "m4": { "type": "method_step", "settings": { "emoji": "🫙", "title": "Pack into the jar",          "description": "Transfer into a clean fermenter jar. Press down hard to release brine. Top up with filtered water if needed. Place a glass weight on top." } },
-        "m5": { "type": "method_step", "settings": { "emoji": "⏳", "title": "Seal and wait",              "description": "Attach the airlock lid. Place the jar in a cool spot (20–25°C). Within 24 hours you'll see bubbles forming." } },
-        "m6": { "type": "method_step", "settings": { "emoji": "🍽️", "title": "Taste from day 5",           "description": "On day 5, taste a small piece. If tangy and crunchy, transfer to the fridge. Once refrigerated, keeps 2–3 months." } },
-        "n1": { "type": "note", "settings": { "text": "<p>For a milder version: reduce red chilli to 3g and skip fenugreek.</p>" } },
-        "n2": { "type": "note", "settings": { "text": "<p>For a sweeter take: add 1 tsp jaggery powder along with the salt — note this slows fermentation by ~1 day.</p>" } },
-        "n3": { "type": "note", "settings": { "text": "<p>If you see white film on the surface (kahm yeast), skim it off and continue. It's harmless.</p>" } },
-        "n4": { "type": "note", "settings": { "text": "<p>Don't use iodised salt or chlorinated tap water — both kill the bacteria you want.</p>" } }
+        "dt1": {
+          "type": "dietary_tag",
+          "settings": {
+            "label": "Vegan"
+          }
+        },
+        "dt2": {
+          "type": "dietary_tag",
+          "settings": {
+            "label": "Gluten-Free"
+          }
+        },
+        "dt3": {
+          "type": "dietary_tag",
+          "settings": {
+            "label": "No Oil"
+          }
+        },
+        "dt4": {
+          "type": "dietary_tag",
+          "settings": {
+            "label": "No Sugar"
+          }
+        },
+        "i1": {
+          "type": "ingredient",
+          "settings": {
+            "amount": "900g",
+            "name": "Raw green mangoes",
+            "desc": "unripe, washed, chopped into 2cm cubes"
+          }
+        },
+        "i2": {
+          "type": "ingredient",
+          "settings": {
+            "amount": "20g",
+            "name": "Sea salt or rock salt",
+            "desc": "no iodised salt — kills bacteria"
+          }
+        },
+        "i3": {
+          "type": "ingredient",
+          "settings": {
+            "amount": "8g",
+            "name": "Black mustard seeds",
+            "desc": "whole"
+          }
+        },
+        "i4": {
+          "type": "ingredient",
+          "settings": {
+            "amount": "7g",
+            "name": "Red chilli powder",
+            "desc": "adjust to taste"
+          }
+        },
+        "i5": {
+          "type": "ingredient",
+          "settings": {
+            "amount": "6g",
+            "name": "Fennel seeds",
+            "desc": "whole"
+          }
+        },
+        "i6": {
+          "type": "ingredient",
+          "settings": {
+            "amount": "3g",
+            "name": "Turmeric powder",
+            "desc": ""
+          }
+        },
+        "i7": {
+          "type": "ingredient",
+          "settings": {
+            "amount": "2g",
+            "name": "Split fenugreek (methi dal)",
+            "desc": "optional, adds bitterness"
+          }
+        },
+        "i8": {
+          "type": "ingredient",
+          "settings": {
+            "amount": "1 tsp",
+            "name": "Ferment Boost",
+            "desc": "prebiotic starter — speeds up day 1"
+          }
+        },
+        "i9": {
+          "type": "ingredient",
+          "settings": {
+            "amount": "Water",
+            "name": "Filtered",
+            "desc": "just enough to cover mango"
+          }
+        },
+        "m1": {
+          "type": "method_step",
+          "settings": {
+            "emoji": "",
+            "title": "Wash and chop the mangoes",
+            "description": "Wash 900g of unripe green mangoes thoroughly. Don't peel — the skin holds the wild lactic acid bacteria you need. Chop into 2cm cubes."
+          }
+        },
+        "m2": {
+          "type": "method_step",
+          "settings": {
+            "emoji": "🧂",
+            "title": "Salt and let them sweat",
+            "description": "In a large bowl, mix the chopped mangoes with 20g salt. Massage gently for 2 minutes. Let sit 30 minutes."
+          }
+        },
+        "m3": {
+          "type": "method_step",
+          "settings": {
+            "emoji": "🌶️",
+            "title": "Add the spice mix",
+            "description": "Add the mustard seeds, red chilli, fennel, turmeric, and fenugreek. Mix thoroughly. Add 1 tsp of Ferment Boost."
+          }
+        },
+        "m4": {
+          "type": "method_step",
+          "settings": {
+            "emoji": "🫙",
+            "title": "Pack into the jar",
+            "description": "Transfer into a clean fermenter jar. Press down hard to release brine. Top up with filtered water if needed. Place a glass weight on top."
+          }
+        },
+        "m5": {
+          "type": "method_step",
+          "settings": {
+            "emoji": "⏳",
+            "title": "Seal and wait",
+            "description": "Attach the airlock lid. Place the jar in a cool spot (20–25°C). Within 24 hours you'll see bubbles forming."
+          }
+        },
+        "m6": {
+          "type": "method_step",
+          "settings": {
+            "emoji": "🍽️",
+            "title": "Taste from day 5",
+            "description": "On day 5, taste a small piece. If tangy and crunchy, transfer to the fridge. Once refrigerated, keeps 2–3 months."
+          }
+        },
+        "n1": {
+          "type": "note",
+          "settings": {
+            "text": "<p>For a milder version: reduce red chilli to 3g and skip fenugreek.</p>"
+          }
+        },
+        "n2": {
+          "type": "note",
+          "settings": {
+            "text": "<p>For a sweeter take: add 1 tsp jaggery powder along with the salt — note this slows fermentation by ~1 day.</p>"
+          }
+        },
+        "n3": {
+          "type": "note",
+          "settings": {
+            "text": "<p>If you see white film on the surface (kahm yeast), skim it off and continue. It's harmless.</p>"
+          }
+        },
+        "n4": {
+          "type": "note",
+          "settings": {
+            "text": "<p>Don't use iodised salt or chlorinated tap water — both kill the bacteria you want.</p>"
+          }
+        }
       },
       "block_order": [
-        "dt1","dt2","dt3","dt4",
-        "i1","i2","i3","i4","i5","i6","i7","i8","i9",
-        "m1","m2","m3","m4","m5","m6",
-        "n1","n2","n3","n4"
+        "dt1",
+        "dt2",
+        "dt3",
+        "dt4",
+        "i1",
+        "i2",
+        "i3",
+        "i4",
+        "i5",
+        "i6",
+        "i7",
+        "i8",
+        "i9",
+        "m1",
+        "m2",
+        "m3",
+        "m4",
+        "m5",
+        "m6",
+        "n1",
+        "n2",
+        "n3",
+        "n4"
       ],
       "settings": {
         "category_label": "FERMENTATION 101",
-        "category_color": "#FF7300",
-        "category_color_dark": "#E66800",
-        "category_color_soft": "#FFE4D1",
+        "category_color": "#ff7300",
+        "category_color_dark": "#e66800",
+        "category_color_soft": "#ffe4d1",
         "placeholder_title": "Raw Mango Probiotic Achaar",
         "subtitle": "Lacto-fermented raw mango achaar with mustard, fennel and turmeric. No oil. Real probiotics. Ready in 5 days.",
         "hero_emoji": "🥭",
+        "prep_time": "20 min",
+        "ferment_time": "5–7 days",
+        "total_time": "5 days · 20 min active",
+        "yield_text": "~900g (jar size)",
+        "difficulty": "Beginner",
+        "cuisine": "Punjabi · Indian",
+        "ingredients_heading": "Ingredients",
+        "ingredients_sub": "Buy this list at any well-stocked Indian grocery, or get the kit below to skip the shopping.",
+        "method_heading": "Method",
+        "method_sub": "Read all steps before starting. Set up everything you need in advance — fermentation goes wrong when you scramble for ingredients mid-recipe.",
+        "video_heading": "Watch the walkthrough",
+        "video_sub": "",
+        "video_id": "",
+        "video_title": "",
+        "notes_heading": "Notes & variations",
+        "notes_sub": "",
+        "kit_eyebrow": "MAKE IT EASIER",
         "kit_title": "Don't want to source ingredients?",
         "kit_desc": "Our kit comes with pre-measured spice mixes, the right jar, an airlock, and a glass weight. Open the box, follow the recipe — done.",
+        "kit_product": "",
         "kit_emoji": "🫙",
         "kit_name": "Probiotic Achaar Making Kit",
         "kit_price": "₹1,399",
-        "kit_button": "Shop Kit →"
+        "kit_link": "",
+        "kit_button": "Shop Kit →",
+        "related_eyebrow": "COOK MORE",
+        "related_heading": "Related recipes"
       }
     }
   },
-  "order": ["main"]
+  "order": [
+    "main"
+  ]
 }

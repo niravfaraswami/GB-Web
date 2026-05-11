@@ -83,6 +83,58 @@
         "settings": {
           "foot_text": "FSSAI License: 10021021000439"
         }
+      },
+      "gb-cart-drawer": {
+        "type": "gb-cart-drawer",
+        "settings": {
+          "enabled": true,
+          "header_title": "Your Cart",
+          "show_progress": true,
+          "show_addons": true,
+          "show_upsell": true,
+          "show_discount": true,
+          "show_trust": true,
+          "show_express": true,
+          "free_gift_enabled": false,
+          "tier_1_label": "Free shipping",
+          "tier_1_icon": "🚚",
+          "tier_1_type": "free_shipping",
+          "tier_1_variant": "",
+          "tier_1_code": "",
+          "tier_2_label": "Free recipe book",
+          "tier_2_icon": "📖",
+          "tier_2_type": "free_gift",
+          "tier_2_variant": "",
+          "tier_2_code": "",
+          "tier_3_label": "10% off code",
+          "tier_3_icon": "🎁",
+          "tier_3_type": "discount_code",
+          "tier_3_variant": "",
+          "tier_3_code": "",
+          "addons_title": "Frequently added",
+          "universal_addons_collection": "",
+          "upsell_product": "",
+          "upsell_eyebrow": "COMPLETE THE SET",
+          "upsell_headline": "Bundle savings unlocked",
+          "empty_emoji": "🛒",
+          "empty_heading": "Your cart is empty",
+          "empty_subtitle": "Start with one of our bestsellers — small kits, big change.",
+          "empty_eyebrow": "Top sellers",
+          "empty_collection": "",
+          "subtotal_label": "Subtotal",
+          "checkout_label": "Checkout · Secure"
+        }
+      },
+      "gb-sticky-atc": {
+        "type": "gb-sticky-atc",
+        "settings": {
+          "enabled": true,
+          "cta_label": "Add to cart",
+          "show_on_desktop": false,
+          "name_truncate": 28,
+          "up_threshold": 30,
+          "show_delay": 300
+        }
       }
     },
     "content_for_index": [],
