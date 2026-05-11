@@ -320,7 +320,7 @@
             "tab_id": "baking",
             "show_all_products": false,
             "collection": "",
-            "products_limit": 0,
+            "products_limit": 6,
             "cat_band": "Baking",
             "view_all_label": "View all baking",
             "theme": "aam-panna"
@@ -332,8 +332,8 @@
             "label": "Jars & Tools",
             "tab_id": "jars",
             "show_all_products": false,
-            "collection": "",
-            "products_limit": 0,
+            "collection": "jars-and-tools",
+            "products_limit": 6,
             "cat_band": "Tools",
             "view_all_label": "View all jars",
             "theme": "kanji"
