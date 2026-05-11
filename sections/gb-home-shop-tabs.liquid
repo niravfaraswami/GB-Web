@@ -259,10 +259,6 @@
 .gb-shop-grid--4 { grid-template-columns: repeat(4, 1fr); }
 @media (max-width: 768px) {
   .gb-shop-grid--3, .gb-shop-grid--4 { grid-template-columns: repeat(2, 1fr); }
-  .gb-card-cta {
-    font-size: var(--gb-card-cta-fs-m, var(--gb-card-cta-fs, 12.5px));
-    padding: var(--gb-card-cta-py-m, var(--gb-card-cta-py, 11px)) var(--gb-card-cta-px-m, var(--gb-card-cta-px, 16px));
-  }
 }
 .gb-shop-empty {
   grid-column: 1 / -1;
@@ -470,6 +466,15 @@
 .gb-shop-viewall a:hover { text-decoration-thickness: 2.5px; }
 .gb-shop-arr { display: inline-block; transition: transform 0.15s ease; }
 .gb-shop-viewall a:hover .gb-shop-arr { transform: translateX(3px); }
+
+/* Mobile CTA overrides — placed after .gb-card-cta base + modifiers so
+   source-order cascade ensures these win at ≤ 768px viewport. */
+@media (max-width: 768px) {
+  .gb-card-cta {
+    font-size: var(--gb-card-cta-fs-m, var(--gb-card-cta-fs, 12.5px));
+    padding: var(--gb-card-cta-py-m, var(--gb-card-cta-py, 11px)) var(--gb-card-cta-px-m, var(--gb-card-cta-px, 16px));
+  }
+}
 {% endstylesheet %}
 
 <script>
