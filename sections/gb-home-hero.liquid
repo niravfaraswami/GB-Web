@@ -16,6 +16,9 @@
   assign cta_px = section.settings.cta_padding_x | default: 24
   assign cta_py = section.settings.cta_padding_y | default: 12
   assign cta_fs = section.settings.cta_font_size | default: 13
+  assign cta_px_m = section.settings.cta_padding_x_mobile | default: cta_px
+  assign cta_py_m = section.settings.cta_padding_y_mobile | default: cta_py
+  assign cta_fs_m = section.settings.cta_font_size_mobile | default: cta_fs
   assign gap_h = section.settings.gap_after_headline | default: 18
   assign gap_s = section.settings.gap_after_sub | default: 24
   assign gap_h_m = section.settings.gap_after_headline_mobile | default: 12
@@ -35,6 +38,9 @@
 --gb-hero-cta-px: {{ cta_px }}px;
 --gb-hero-cta-py: {{ cta_py }}px;
 --gb-hero-cta-fs: {{ cta_fs }}px;
+--gb-hero-cta-px-m: {{ cta_px_m }}px;
+--gb-hero-cta-py-m: {{ cta_py_m }}px;
+--gb-hero-cta-fs-m: {{ cta_fs_m }}px;
 --gb-hero-gap-h-d: {{ gap_h }}px;
 --gb-hero-gap-s-d: {{ gap_s }}px;
 --gb-hero-gap-h-m: {{ gap_h_m }}px;
@@ -272,8 +278,8 @@
     margin-bottom: var(--gb-hero-gap-s-m, 12px);
   }
   .gb-hero-cta {
-    padding: calc(var(--gb-hero-cta-py, 10px) * 0.85) calc(var(--gb-hero-cta-px, 20px) * 0.85);
-    font-size: max(11px, calc(var(--gb-hero-cta-fs, 12px) * 0.95));
+    padding: var(--gb-hero-cta-py-m, var(--gb-hero-cta-py, 10px)) var(--gb-hero-cta-px-m, var(--gb-hero-cta-px, 20px));
+    font-size: var(--gb-hero-cta-fs-m, var(--gb-hero-cta-fs, 12px));
   }
   .gb-hero-dots { bottom: 8px; padding: 4px 7px; }
   .gb-hero-dot { width: 16px; height: 3px; }
@@ -357,9 +363,12 @@
     { "type": "range", "id": "overlay_left_mobile", "label": "Overlay left offset (mobile, %)", "min": 0, "max": 20, "step": 1, "default": 6, "unit": "%" },
 
     { "type": "header", "content": "CTA button" },
-    { "type": "range", "id": "cta_padding_y", "label": "CTA vertical padding", "min": 6, "max": 24, "step": 1, "default": 12, "unit": "px" },
-    { "type": "range", "id": "cta_padding_x", "label": "CTA horizontal padding", "min": 14, "max": 48, "step": 1, "default": 24, "unit": "px" },
-    { "type": "range", "id": "cta_font_size", "label": "CTA font size", "min": 11, "max": 18, "step": 1, "default": 13, "unit": "px" }
+    { "type": "range", "id": "cta_padding_y",        "label": "CTA vertical padding (desktop)",   "min": 0,  "max": 30, "step": 1, "default": 12, "unit": "px" },
+    { "type": "range", "id": "cta_padding_y_mobile", "label": "CTA vertical padding (mobile)",    "min": 0,  "max": 30, "step": 1, "default": 12, "unit": "px" },
+    { "type": "range", "id": "cta_padding_x",        "label": "CTA horizontal padding (desktop)", "min": 6,  "max": 60, "step": 1, "default": 24, "unit": "px" },
+    { "type": "range", "id": "cta_padding_x_mobile", "label": "CTA horizontal padding (mobile)",  "min": 6,  "max": 60, "step": 1, "default": 24, "unit": "px" },
+    { "type": "range", "id": "cta_font_size",        "label": "CTA font size (desktop)",          "min": 6,  "max": 24, "step": 1, "default": 13, "unit": "px" },
+    { "type": "range", "id": "cta_font_size_mobile", "label": "CTA font size (mobile)",           "min": 6,  "max": 24, "step": 1, "default": 13, "unit": "px" }
   ],
   "blocks": [
     {
