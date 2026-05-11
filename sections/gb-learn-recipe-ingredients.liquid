@@ -4,17 +4,17 @@
 {%- assign body_html = body_html | strip -%}
 {%- assign ing_blocks = section.blocks | where: 'type', 'ingredient' -%}
 {%- assign has_body = false -%}
-{%- if body_html contains '<li' -%}{%- assign has_body = true -%}{%- endif -%}
+{%- if body_html != '' -%}{%- assign has_body = true -%}{%- endif -%}
 
 {%- if has_body or ing_blocks.size > 0 -%}
-  <section class="recipe-section" id="{{ section.settings.anchor | default: 'ingredients' }}" {%- render 'leo_kit_attrs' -%}>
+  <section class="recipe-section recipe-section--natural" id="{{ section.settings.anchor | default: 'ingredients' }}" {%- render 'leo_kit_attrs' -%}>
     <div class="container">
       {%- if section.settings.heading != blank -%}<h2>{{ section.settings.heading }}</h2>{%- endif -%}
       {%- if section.settings.sub != blank -%}<div class="section-sub">{{ section.settings.sub }}</div>{%- endif -%}
-      <div class="ingredients-grid">
-        {%- if has_body -%}
-          {%- render 'gb-recipe-parse-items', html: body_html, style: 'ingredient' -%}
-        {%- else -%}
+      {%- if has_body -%}
+        <div class="recipe-body-content recipe-body-content--ingredients">{{ body_html }}</div>
+      {%- else -%}
+        <div class="ingredients-grid">
           {%- for block in ing_blocks -%}
             <div class="ingredient-row" {{ block.shopify_attributes }}>
               <div class="ing-amount">{{ block.settings.amount }}</div>
@@ -24,8 +24,8 @@
               </div>
             </div>
           {%- endfor -%}
-        {%- endif -%}
-      </div>
+        </div>
+      {%- endif -%}
     </div>
   </section>
 {%- endif -%}

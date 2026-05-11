@@ -2686,3 +2686,141 @@
     gap: 18px;
   }
 }
+
+/* ============================================================
+   Recipe body content — when sections render article.content
+   chunks directly (writer authors freely in Shopify rich-text).
+   ============================================================ */
+.recipe-body-content {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--gb-text, #1F1F1D);
+  max-width: 720px;
+  margin: 0 auto;
+}
+.recipe-body-content > * + * { margin-top: 14px; }
+.recipe-body-content p { margin: 0; }
+.recipe-body-content a { color: var(--gb-action, #FF7300); text-decoration: underline; text-underline-offset: 3px; }
+.recipe-body-content strong { font-weight: 700; color: var(--gb-ink, #1F1F1D); }
+.recipe-body-content em { font-style: italic; }
+.recipe-body-content h3 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 18px;
+  letter-spacing: -0.01em;
+  color: var(--gb-ink, #1F1F1D);
+  margin-top: 24px;
+  margin-bottom: 6px;
+}
+.recipe-body-content blockquote {
+  border-left: 3px solid var(--gb-action, #FF7300);
+  padding-left: 16px;
+  margin: 18px 0;
+  color: var(--gb-text-muted, #5C4D3F);
+  font-style: italic;
+}
+
+/* Ingredients list — natural <ul> rendered as roomy rows */
+.recipe-body-content--ingredients ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border-top: 1px solid var(--gb-border-soft, #F0EBDD);
+}
+.recipe-body-content--ingredients ul li {
+  display: block;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--gb-border-soft, #F0EBDD);
+  font-size: 15px;
+}
+.recipe-body-content--ingredients ul li::before {
+  content: '';
+  display: inline-block;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--gb-action, #FF7300);
+  margin-right: 12px;
+  vertical-align: middle;
+}
+.recipe-body-content--ingredients ul li strong {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 15px;
+  margin-right: 6px;
+}
+
+/* Method list — <ol> rendered as numbered steps */
+.recipe-body-content--method ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  counter-reset: gb-step;
+}
+.recipe-body-content--method ol li {
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  gap: 16px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--gb-border-soft, #F0EBDD);
+  counter-increment: gb-step;
+}
+.recipe-body-content--method ol li::before {
+  content: counter(gb-step);
+  display: flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px;
+  background: var(--gb-action, #FF7300);
+  color: var(--gb-cream, #FFF9EE);
+  border-radius: 50%;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+.recipe-body-content--method ol li > * { margin: 0; }
+.recipe-body-content--method ol li strong {
+  display: block;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 15px;
+  margin-bottom: 4px;
+}
+
+/* Method also supports plain <ul> if writer prefers bullets */
+.recipe-body-content--method ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.recipe-body-content--method ul li {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--gb-border-soft, #F0EBDD);
+}
+
+/* Notes list — <ul> rendered with tip-style left bar */
+.recipe-body-content--notes ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.recipe-body-content--notes ul li {
+  background: var(--gb-cream, #FFF9EE);
+  border-left: 3px solid var(--gb-action, #FF7300);
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+.recipe-body-content--notes p {
+  background: var(--gb-cream, #FFF9EE);
+  border-left: 3px solid var(--gb-action, #FF7300);
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  .recipe-body-content { font-size: 15px; }
+  .recipe-body-content--method ol li { grid-template-columns: 32px 1fr; gap: 12px; }
+  .recipe-body-content--method ol li::before { width: 28px; height: 28px; font-size: 13px; }
+}
