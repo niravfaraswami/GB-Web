@@ -601,6 +601,10 @@
 
   // ATC: intercept submit, add via fetch, open cart drawer
   function openCartDrawer() {
+    if (window.GBCartDrawer && typeof window.GBCartDrawer.open === 'function') {
+      window.GBCartDrawer.open();
+      return;
+    }
     var drawer = document.querySelector('cart-drawer-component');
     if (!drawer) { window.location.href = '/cart'; return; }
     var tryOpen = function() {
