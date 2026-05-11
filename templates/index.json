@@ -264,8 +264,8 @@
             "label": "Sprouts",
             "tab_id": "sprouts",
             "show_all_products": false,
-            "collection": "",
-            "products_limit": 0,
+            "collection": "sprouts",
+            "products_limit": 6,
             "cat_band": "Grows Sprouts",
             "view_all_label": "View all sprouts",
             "theme": "sprout"
