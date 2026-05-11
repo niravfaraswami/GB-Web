@@ -524,6 +524,10 @@
   });
 
   function openCartDrawer() {
+    if (window.GBCartDrawer && typeof window.GBCartDrawer.open === 'function') {
+      window.GBCartDrawer.open();
+      return;
+    }
     var drawer = document.querySelector('cart-drawer-component');
     console.log('[gb-shop-tabs] drawer element:', drawer);
     if (!drawer) {

@@ -976,13 +976,12 @@
         bubbles: true,
         detail: { resource: cart, sourceId: 'gb-byok-builder', data: { source: 'gb-byok', itemCount: cart && cart.item_count } }
       }));
-      // auto-open attribute is gated by a theme setting that may be off,
-      // so call .open() directly on the component to guarantee the drawer slides in.
-      var drawer = document.querySelector('cart-drawer-component');
-      if (drawer && typeof drawer.open === 'function') {
-        drawer.open();
-      } else if (drawer && typeof drawer.showDialog === 'function') {
-        drawer.showDialog();
+      if (window.GBCartDrawer && typeof window.GBCartDrawer.open === 'function') {
+        window.GBCartDrawer.open();
+      } else {
+        var drawer = document.querySelector('cart-drawer-component');
+        if (drawer && typeof drawer.open === 'function') drawer.open();
+        else if (drawer && typeof drawer.showDialog === 'function') drawer.showDialog();
       }
     })
     .catch(function() {
