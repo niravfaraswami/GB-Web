@@ -303,11 +303,11 @@
       if (unlocked && !existing) {
         addLine(t.variant_id, 1, { _gift: 'true', _tier: t.label || ('tier-' + t.threshold) })
           .then(function() { return fetchCart(); })
-          .then(function(c) { state.cart = c; bumpVersion(); render(); })
+          .then(function(c) { setCart(c); render(); })
           .catch(function() {});
       } else if (!unlocked && existing) {
         changeLine(existing.key, 0)
-          .then(function(c) { state.cart = c; bumpVersion(); render(); })
+          .then(function(c) { setCart(c); render(); })
           .catch(function() {});
       }
     });
@@ -370,14 +370,48 @@
   }
 
   // ---------- State updates ----------
+
+  // Preserve drawer item ordering across cart replacements.
+  // Items the drawer already showed keep their relative position;
+  // anything new (added by another tab, by the optimistic flow, etc.)
+  // floats to the top. Stops the "added item appears at bottom then
+  // jumps to top" glitch when the server's cart order disagrees with
+  // our optimistic order.
+  function preserveItemOrder(newCart, prevItems) {
+    if (!newCart || !newCart.items || newCart.items.length < 2) return newCart;
+    if (!prevItems || prevItems.length === 0) return newCart;
+    var oldPos = {};
+    prevItems.forEach(function(it, idx) {
+      var id = (it.properties && (it.properties._gift === 'true' || it.properties._gift === true) ? 'gift-' : 'var-') + it.variant_id;
+      oldPos[id] = idx;
+    });
+    newCart.items.sort(function(a, b) {
+      var aId = (a.properties && (a.properties._gift === 'true' || a.properties._gift === true) ? 'gift-' : 'var-') + a.variant_id;
+      var bId = (b.properties && (b.properties._gift === 'true' || b.properties._gift === true) ? 'gift-' : 'var-') + b.variant_id;
+      var ap = oldPos[aId], bp = oldPos[bId];
+      if (ap === undefined && bp === undefined) return 0;
+      if (ap === undefined) return -1;   // genuinely new → top
+      if (bp === undefined) return 1;
+      return ap - bp;                    // both seen before → keep relative order
+    });
+    return newCart;
+  }
+
+  // Set state.cart in one place so we always apply preserveItemOrder
+  // + bumpVersion together. Don't write to state.cart directly anywhere
+  // except via this helper or the optimistic helpers below.
+  function setCart(c) {
+    var prev = (state.cart && state.cart.items) ? state.cart.items : null;
+    state.cart = c;
+    preserveItemOrder(state.cart, prev);
+    bumpVersion();
+  }
+
   function refresh() {
     var v = state.cartVersion;
     return fetchCart().then(function(c) {
-      // If a local mutation bumped the version while we were fetching,
-      // the server response is stale relative to the optimistic state.
       if (v !== state.cartVersion) return c;
-      state.cart = c;
-      bumpVersion();
+      setCart(c);
       render();
       return c;
     });
@@ -427,7 +461,9 @@
     var qty = line.quantity || 1;
     var unitPrice = line.price || 0;
     var unitOrig  = line.compare_at_price || line.price || 0;
-    state.cart.items.push({
+    // Prepend (newest at top) so the optimistic position matches what
+    // most users expect and what the server typically returns.
+    state.cart.items.unshift({
       key: 'pending-' + line.variant_id + '-' + Date.now(),
       _pending: true,
       product_id: line.product_id || 0,
@@ -470,8 +506,7 @@
       var v = state.cartVersion;
       fetchCart().then(function(c) {
         if (v !== state.cartVersion) return;
-        state.cart = c;
-        bumpVersion();
+        setCart(c);
         render();
       }).catch(function() {});
     } else {
@@ -500,7 +535,7 @@
       var key = line.getAttribute('data-line-key');
       optimisticChangeQty(key, Math.max(0, newQty));
       changeLine(key, Math.max(0, newQty))
-        .then(function(c) { state.cart = c; bumpVersion(); render(); })
+        .then(function(c) { setCart(c); render(); })
         .catch(function() { refresh(); });
       return;
     }
@@ -510,7 +545,7 @@
       var key2 = line2.getAttribute('data-line-key');
       optimisticChangeQty(key2, 0);
       changeLine(key2, 0)
-        .then(function(c) { state.cart = c; bumpVersion(); render(); })
+        .then(function(c) { setCart(c); render(); })
         .catch(function() { refresh(); });
       return;
     }
@@ -532,7 +567,7 @@
           quantity: 1
         });
       }
-      addLine(vid, 1).then(function() { return fetchCart(); }).then(function(c) { state.cart = c; bumpVersion(); render(); }).catch(function() {
+      addLine(vid, 1).then(function() { return fetchCart(); }).then(function(c) { setCart(c); render(); }).catch(function() {
         addonBtn.removeAttribute('disabled'); addonBtn.textContent = 'Add';
         refresh();
       });
@@ -551,14 +586,14 @@
           quantity: 1
         });
       }
-      addLine(uvid, 1).then(function() { return fetchCart(); }).then(function(c) { state.cart = c; bumpVersion(); render(); }).catch(function() { refresh(); });
+      addLine(uvid, 1).then(function() { return fetchCart(); }).then(function(c) { setCart(c); render(); }).catch(function() { refresh(); });
       return;
     }
     var emptyAdd = ev.target.closest('[data-gbcd-empty-add]');
     if (emptyAdd) {
       var evid = parseInt(emptyAdd.getAttribute('data-gbcd-empty-add'), 10);
       emptyAdd.setAttribute('disabled', 'disabled');
-      addLine(evid, 1).then(function() { return fetchCart(); }).then(function(c) { state.cart = c; bumpVersion(); render(); }).catch(function() { refresh(); });
+      addLine(evid, 1).then(function() { return fetchCart(); }).then(function(c) { setCart(c); render(); }).catch(function() { refresh(); });
       return;
     }
     var checkoutBtn = ev.target.closest('[data-gbcd-checkout]');
@@ -577,7 +612,7 @@
       applyDiscount(code).then(function() {
         return fetchCart();
       }).then(function(c) {
-        state.cart = c; render();
+        setCart(c); render();
         msgEl.textContent = 'Code ' + code + ' will apply at checkout';
         msgEl.className = 'gbcd-discount-msg success';
       }).catch(function() {
@@ -607,8 +642,7 @@
     var detail = ev.detail || {};
     var data = detail.data || {};
     if (detail.resource) {
-      state.cart = detail.resource;
-      bumpVersion();
+      setCart(detail.resource);
       render();
     } else if (state.isOpen) {
       refresh();
