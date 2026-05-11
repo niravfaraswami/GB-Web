@@ -959,6 +959,9 @@
     var origLabel = ctaD ? ctaD.textContent : 'Add bundle to cart';
     if (ctaD) { ctaD.disabled = true; ctaD.textContent = 'Adding…'; }
     if (ctaM) { ctaM.disabled = true; ctaM.textContent = 'Adding…'; }
+    if (window.GBCartDrawer && typeof window.GBCartDrawer.open === 'function') {
+      window.GBCartDrawer.open();
+    }
     fetch('/cart/add.js', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
@@ -976,9 +979,7 @@
         bubbles: true,
         detail: { resource: cart, sourceId: 'gb-byok-builder', data: { source: 'gb-byok', itemCount: cart && cart.item_count } }
       }));
-      if (window.GBCartDrawer && typeof window.GBCartDrawer.open === 'function') {
-        window.GBCartDrawer.open();
-      } else {
+      if (!(window.GBCartDrawer && typeof window.GBCartDrawer.open === 'function')) {
         var drawer = document.querySelector('cart-drawer-component');
         if (drawer && typeof drawer.open === 'function') drawer.open();
         else if (drawer && typeof drawer.showDialog === 'function') drawer.showDialog();

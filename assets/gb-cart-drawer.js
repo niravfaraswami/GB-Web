@@ -281,7 +281,15 @@
     state.lastFocus = document.activeElement;
     var closeBtn = root.querySelector('[data-gbcd-close]');
     if (closeBtn) setTimeout(function() { closeBtn.focus(); }, 320);
-    refresh();
+    // If we already have a cart in memory, render it immediately —
+    // no network round-trip blocks the open animation. Refresh lazily
+    // in the background so any stale data converges.
+    if (state.cart) {
+      render();
+      fetchCart().then(function(c) { state.cart = c; render(); }).catch(function() {});
+    } else {
+      refresh();
+    }
   }
 
   function close() {
@@ -396,16 +404,16 @@
     if (e.key === 'Escape' && state.isOpen) close();
   });
 
-  // Listen for cart:update from anywhere (PDP ATC, BYOK, shop tabs)
+  // Listen for cart:update from anywhere (PDP ATC, BYOK, shop tabs).
+  // The cart is attached on detail.resource — render directly without
+  // an extra /cart.js round-trip. We do NOT auto-open here; the ATC
+  // caller opens the drawer optimistically before the network call.
   document.addEventListener('cart:update', function(ev) {
     var detail = ev.detail || {};
-    if (detail.resource) state.cart = detail.resource;
-    if (state.isOpen) { render(); }
-    // Open drawer on any add unless the event explicitly opts out
-    if (detail.data && detail.data.source !== 'gbcd-internal') {
-      open();
-    } else if (!state.isOpen) {
-      // Still refresh cart silently so bubbles update
+    if (detail.resource) {
+      state.cart = detail.resource;
+      render();
+    } else if (state.isOpen) {
       refresh();
     }
   });

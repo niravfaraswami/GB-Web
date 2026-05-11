@@ -633,6 +633,9 @@
       var origLabel = btn.textContent;
       btn.textContent = 'Adding…';
       btn.setAttribute('disabled', 'disabled');
+      if (window.GBCartDrawer && typeof window.GBCartDrawer.open === 'function') {
+        window.GBCartDrawer.open();
+      }
       var fd = new FormData(form);
       fetch('/cart/add.js', {
         method: 'POST',
@@ -651,7 +654,9 @@
           bubbles: true,
           detail: { resource: cart, sourceId: 'gb-product-jars-tools', data: { source: 'jt-pdp', itemCount: cart && cart.item_count } }
         }));
-        openCartDrawer();
+        if (!(window.GBCartDrawer && typeof window.GBCartDrawer.open === 'function')) {
+          openCartDrawer();
+        }
       })
       .catch(function() {
         btn.textContent = 'Try again';
