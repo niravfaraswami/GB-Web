@@ -38,6 +38,7 @@
         },
         "p5": {
           "type": "item",
+          "disabled": true,
           "settings": {
             "text": "✓ FSSAI verified · 10021021000439"
           }
@@ -134,7 +135,7 @@
         "overlay_left_mobile": 6,
         "cta_padding_y": 6,
         "cta_padding_x": 24,
-        "cta_font_size": 13
+        "cta_font_size": 12
       }
     },
     "collections": {
@@ -373,7 +374,7 @@
         "show_card_was": false,
         "show_card_cta": true,
         "title_max_chars": 30,
-        "band_size": 13,
+        "band_size": 10,
         "band_weight": "600",
         "badge_size": 9,
         "badge_weight": "700",
