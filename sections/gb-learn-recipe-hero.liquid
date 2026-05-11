@@ -38,7 +38,43 @@
   </div>
 </section>
 
-{%- if meta_blocks.size > 0 -%}
+{%- liquid
+  assign mf_prep   = article.metafields.custom.prep_time
+  assign mf_ferm   = article.metafields.custom.ferment_time
+  assign mf_total  = article.metafields.custom.total_time
+  assign mf_yield  = article.metafields.custom.yield
+  assign mf_diff   = article.metafields.custom.difficulty
+  assign mf_cuis   = article.metafields.custom.cuisine
+  assign has_mf_meta = false
+  if mf_prep != blank or mf_ferm != blank or mf_total != blank or mf_yield != blank or mf_diff != blank or mf_cuis != blank
+    assign has_mf_meta = true
+  endif
+-%}
+
+{%- if has_mf_meta -%}
+  <div class="recipe-meta-strip">
+    <div class="container">
+      {%- if mf_prep != blank -%}
+        <div class="meta-item"><div class="meta-icon">⏱</div><div class="meta-label">PREP</div><div class="meta-value">{{ mf_prep }}</div></div>
+      {%- endif -%}
+      {%- if mf_ferm != blank -%}
+        <div class="meta-item"><div class="meta-icon">🫙</div><div class="meta-label">FERMENT</div><div class="meta-value">{{ mf_ferm }}</div></div>
+      {%- endif -%}
+      {%- if mf_total != blank -%}
+        <div class="meta-item"><div class="meta-icon">⌛</div><div class="meta-label">TOTAL</div><div class="meta-value">{{ mf_total }}</div></div>
+      {%- endif -%}
+      {%- if mf_yield != blank -%}
+        <div class="meta-item"><div class="meta-icon">🍽</div><div class="meta-label">YIELD</div><div class="meta-value">{{ mf_yield }}</div></div>
+      {%- endif -%}
+      {%- if mf_diff != blank -%}
+        <div class="meta-item"><div class="meta-icon">📊</div><div class="meta-label">DIFFICULTY</div><div class="meta-value">{{ mf_diff }}</div></div>
+      {%- endif -%}
+      {%- if mf_cuis != blank -%}
+        <div class="meta-item"><div class="meta-icon">🌍</div><div class="meta-label">CUISINE</div><div class="meta-value">{{ mf_cuis }}</div></div>
+      {%- endif -%}
+    </div>
+  </div>
+{%- elsif meta_blocks.size > 0 -%}
   <div class="recipe-meta-strip">
     <div class="container">
       {%- for block in meta_blocks -%}

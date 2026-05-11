@@ -1,17 +1,36 @@
 {%- render 'leo_kit_chrome' -%}
 
+{%- capture body_html -%}{%- render 'gb-recipe-body-section', section_name: 'notes', section_aliases: 'notes|notes & variations|notes and variations|tips|tips & notes' -%}{%- endcapture -%}
+{%- assign body_html = body_html | strip -%}
 {%- assign note_blocks = section.blocks | where: 'type', 'note' -%}
+{%- assign has_body = false -%}
+{%- if body_html contains '<li' -%}{%- assign has_body = true -%}{%- endif -%}
 
-{%- if note_blocks.size > 0 -%}
+{%- if has_body or note_blocks.size > 0 -%}
   <section class="recipe-section" id="{{ section.settings.anchor | default: 'notes' }}" {%- render 'leo_kit_attrs' -%}>
     <div class="container">
       {%- if section.settings.heading != blank -%}<h2>{{ section.settings.heading }}</h2>{%- endif -%}
       {%- if section.settings.sub != blank -%}<div class="section-sub">{{ section.settings.sub }}</div>{%- endif -%}
-      <ul class="notes-list">
-        {%- for block in note_blocks -%}
-          <li {{ block.shopify_attributes }}>{{ block.settings.text }}</li>
-        {%- endfor -%}
-      </ul>
+      {%- if has_body -%}
+        <ul class="notes-list">
+          {%- assign li_chunks = body_html | split: '<li' -%}
+          {%- for chunk in li_chunks -%}
+            {%- if chunk contains '</li>' -%}
+              {%- assign tail = chunk | split: '</li>' | first -%}
+              {%- assign after_open = tail | split: '>' | shift | join: '>' | strip -%}
+              {%- if after_open != '' -%}
+                <li>{{ after_open }}</li>
+              {%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+      {%- else -%}
+        <ul class="notes-list">
+          {%- for block in note_blocks -%}
+            <li {{ block.shopify_attributes }}>{{ block.settings.text }}</li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
     </div>
   </section>
 {%- endif -%}

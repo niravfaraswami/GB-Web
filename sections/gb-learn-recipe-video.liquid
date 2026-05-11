@@ -1,7 +1,28 @@
 {%- render 'leo_kit_chrome' -%}
 
-{%- assign yt_id = article.metafields.custom.video_youtube_id | default: section.settings.youtube_id -%}
-{%- assign yt_title = article.metafields.custom.video_title | default: section.settings.video_title -%}
+{%- liquid
+  assign yt_id = article.metafields.custom.video_youtube_id | default: section.settings.youtube_id
+  assign yt_title = article.metafields.custom.video_title | default: section.settings.video_title
+
+  # If a Video section is present in the body, scan it for a YouTube link.
+  if yt_id == blank
+    capture body_html
+      render 'gb-recipe-body-section', section_name: 'video', section_aliases: 'video|watch|walkthrough'
+    endcapture
+    assign body_html = body_html | strip
+    # Try multiple URL patterns: youtu.be/<id> and youtube.com/watch?v=<id>
+    if body_html contains 'youtu.be/'
+      assign id_part = body_html | split: 'youtu.be/' | last
+      assign yt_id = id_part | split: '"' | first | split: ' ' | first | split: '<' | first | split: '?' | first | split: '&' | first | strip
+    elsif body_html contains 'v='
+      assign id_part = body_html | split: 'v=' | last
+      assign yt_id = id_part | split: '"' | first | split: ' ' | first | split: '<' | first | split: '&' | first | strip
+    elsif body_html contains 'embed/'
+      assign id_part = body_html | split: 'embed/' | last
+      assign yt_id = id_part | split: '"' | first | split: '?' | first | split: '<' | first | strip
+    endif
+  endif
+-%}
 
 {%- if yt_id != blank -%}
   <section class="recipe-section" id="{{ section.settings.anchor | default: 'video' }}" {%- render 'leo_kit_attrs' -%}>
