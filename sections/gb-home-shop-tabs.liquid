@@ -154,7 +154,10 @@
                   </a>
                   {%- if show_cta -%}
                     <div class="gb-card-cta-wrap">
-                      <button type="button" class="gb-card-cta gb-card-cta--{{ cta_style_class }}" data-product-handle="{{ product.handle }}">Add to cart</button>
+                      <button type="button" class="gb-card-cta gb-card-cta--{{ cta_style_class }}"
+                              data-product-handle="{{ product.handle }}"
+                              data-variant-id="{{ product.selected_or_first_available_variant.id | default: product.variants.first.id }}"
+                              {% unless product.available %}disabled{% endunless %}>Add to cart</button>
                     </div>
                   {%- endif -%}
                 </div>
@@ -561,42 +564,37 @@
     btn.addEventListener('click', function(ev) {
       ev.preventDefault();
       ev.stopPropagation();
-      var handle = btn.dataset.productHandle;
-      if (!handle) return;
+      if (btn.hasAttribute('disabled')) return;
+      var variantId = btn.dataset.variantId;
+      if (!variantId) return;
       var origLabel = btn.textContent;
       btn.textContent = 'Adding…';
-      fetch('/products/' + handle + '.js')
-        .then(function(r) { return r.json(); })
-        .then(function(p) {
-          var variantId = p.variants && p.variants[0] && p.variants[0].id;
-          if (!variantId) return Promise.reject(new Error('No variant'));
-          return fetch('/cart/add.js', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-            body: JSON.stringify({ id: variantId, quantity: 1 })
-          }).then(function(r) {
-            if (!r.ok) return r.json().then(function(e) { return Promise.reject(e); });
-            return r.json();
-          });
-        })
-        .then(function() {
-          // Fetch the fresh cart so the drawer's count/contents reflect it
-          return fetch('/cart.js').then(function(r) { return r.json(); });
-        })
-        .then(function(cart) {
-          btn.textContent = 'Added ✓';
-          setTimeout(function() { btn.textContent = origLabel; }, 1500);
-          console.log('[gb-shop-tabs] add succeeded, item_count=', cart && cart.item_count);
-          document.dispatchEvent(new CustomEvent('cart:update', {
-            bubbles: true,
-            detail: { resource: cart, sourceId: 'gb-home-shop-tabs', data: { source: 'gb-shop-card', itemCount: cart && cart.item_count } }
-          }));
-          openCartDrawer();
-        })
-        .catch(function() {
-          btn.textContent = 'Try again';
-          setTimeout(function() { btn.textContent = origLabel; }, 1800);
-        });
+      btn.setAttribute('disabled', 'disabled');
+      // Open the drawer immediately so the user sees it slide in while
+      // the network round-trip is in flight. The drawer renders its
+      // current cart state and updates when cart:update fires.
+      openCartDrawer();
+      fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ id: variantId, quantity: 1 })
+      })
+      .then(function(r) {
+        if (!r.ok) return r.json().then(function(e) { return Promise.reject(e); });
+        return fetch('/cart.js').then(function(r2) { return r2.json(); });
+      })
+      .then(function(cart) {
+        btn.textContent = 'Added ✓';
+        setTimeout(function() { btn.textContent = origLabel; btn.removeAttribute('disabled'); }, 1500);
+        document.dispatchEvent(new CustomEvent('cart:update', {
+          bubbles: true,
+          detail: { resource: cart, sourceId: 'gb-home-shop-tabs', data: { source: 'gb-shop-card', itemCount: cart && cart.item_count } }
+        }));
+      })
+      .catch(function() {
+        btn.textContent = 'Try again';
+        setTimeout(function() { btn.textContent = origLabel; btn.removeAttribute('disabled'); }, 1800);
+      });
     });
   });
 })();
