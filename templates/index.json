@@ -306,8 +306,8 @@
             "label": "Refills",
             "tab_id": "refills",
             "show_all_products": false,
-            "collection": "",
-            "products_limit": 0,
+            "collection": "spice-mix-supplies",
+            "products_limit": 6,
             "cat_band": "Spice Refill",
             "view_all_label": "View all refills",
             "theme": "achaar"
