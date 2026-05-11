@@ -541,13 +541,20 @@
         .then(function(cart) {
           btn.textContent = 'Added ✓';
           setTimeout(function() { btn.textContent = origLabel; }, 1500);
-          // Dispatch cart:update — cart-drawer-component listens and
-          // auto-opens because it has the `auto-open` attribute set
-          // (see snippets/header-actions.liquid line ~158).
+          // Notify the theme so the cart bubble/count refreshes
           document.dispatchEvent(new CustomEvent('cart:update', {
             bubbles: true,
             detail: { resource: cart, sourceId: 'gb-home-shop-tabs', data: { source: 'gb-shop-card', itemCount: cart && cart.item_count } }
           }));
+          // Directly open the cart drawer. The theme's auto-open
+          // attribute is gated by a setting that may be off, so we
+          // call .open() on the component itself to guarantee it slides in.
+          var drawer = document.querySelector('cart-drawer-component');
+          if (drawer && typeof drawer.open === 'function') {
+            drawer.open();
+          } else if (drawer && typeof drawer.showDialog === 'function') {
+            drawer.showDialog();
+          }
         })
         .catch(function() {
           btn.textContent = 'Try again';
