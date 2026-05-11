@@ -117,7 +117,7 @@
                     assign card_title = product.title
                   endif
                 -%}
-                <a href="{{ product.url }}" class="gb-card gb-card--{{ theme_class }}">
+                <div class="gb-card gb-card--{{ theme_class }}">
                   {%- if show_band -%}
                     {%- if cat_band != blank -%}
                       <div class="gb-card-band">{{ cat_band }}</div>
@@ -125,35 +125,39 @@
                       <div class="gb-card-band">{{ product.type }}</div>
                     {%- endif -%}
                   {%- endif -%}
-                  <div class="gb-card-photo"
-                       {%- if product.featured_image %} style="background-image: url('{{ product.featured_image | image_url: width: 600 }}');"{%- endif %}>
-                    {%- if show_badge and saved > 0 -%}
-                      <span class="gb-card-badge">Save {{ saved | money_without_trailing_zeros }}</span>
-                    {%- endif -%}
-                    <div class="gb-card-bar"></div>
-                  </div>
-                  <div class="gb-card-info">
-                    {%- if show_title -%}
-                      <h4 class="gb-card-title">{{ card_title }}</h4>
-                    {%- endif -%}
-                    {%- if show_tag -%}
-                      <div class="gb-card-tag">{{ block.settings.label }}</div>
-                    {%- endif -%}
-                    {%- if show_now or show_was -%}
-                      <div class="gb-card-price">
-                        {%- if show_now -%}
-                          <span class="gb-card-now">{{ product.price | money_without_trailing_zeros }}</span>
-                        {%- endif -%}
-                        {%- if show_was and saved > 0 -%}
-                          <span class="gb-card-was">{{ product.compare_at_price | money_without_trailing_zeros }}</span>
-                        {%- endif -%}
-                      </div>
-                    {%- endif -%}
-                    {%- if show_cta -%}
+                  <a href="{{ product.url }}" class="gb-card-link" aria-label="{{ product.title | escape }}">
+                    <div class="gb-card-photo"
+                         {%- if product.featured_image %} style="background-image: url('{{ product.featured_image | image_url: width: 600 }}');"{%- endif %}>
+                      {%- if show_badge and saved > 0 -%}
+                        <span class="gb-card-badge">Save {{ saved | money_without_trailing_zeros }}</span>
+                      {%- endif -%}
+                      <div class="gb-card-bar"></div>
+                    </div>
+                    <div class="gb-card-info">
+                      {%- if show_title -%}
+                        <h4 class="gb-card-title">{{ card_title }}</h4>
+                      {%- endif -%}
+                      {%- if show_tag -%}
+                        <div class="gb-card-tag">{{ block.settings.label }}</div>
+                      {%- endif -%}
+                      {%- if show_now or show_was -%}
+                        <div class="gb-card-price">
+                          {%- if show_now -%}
+                            <span class="gb-card-now">{{ product.price | money_without_trailing_zeros }}</span>
+                          {%- endif -%}
+                          {%- if show_was and saved > 0 -%}
+                            <span class="gb-card-was">{{ product.compare_at_price | money_without_trailing_zeros }}</span>
+                          {%- endif -%}
+                        </div>
+                      {%- endif -%}
+                    </div>
+                  </a>
+                  {%- if show_cta -%}
+                    <div class="gb-card-cta-wrap">
                       <button type="button" class="gb-card-cta gb-card-cta--{{ cta_style_class }}" data-product-handle="{{ product.handle }}">Add to cart</button>
-                    {%- endif -%}
-                  </div>
-                </a>
+                    </div>
+                  {%- endif -%}
+                </div>
               {%- endfor -%}
             {%- else -%}
               <p class="gb-shop-empty">Pick a collection for this tab in Theme Editor.</p>
@@ -340,11 +344,21 @@
 .gb-card--kefir  .gb-card-bar { background: var(--c-kefir); }
 .gb-card--inulin .gb-card-bar { background: var(--c-inulin); }
 .gb-card--aam-panna .gb-card-bar { background: var(--c-aam-panna); }
+.gb-card-link {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  text-decoration: none;
+  color: inherit;
+}
 .gb-card-info {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  padding: var(--gb-card-info-pad-y, 18px) var(--gb-card-info-pad-x, 18px);
+  padding: var(--gb-card-info-pad-y, 18px) var(--gb-card-info-pad-x, 18px) 0;
+}
+.gb-card-cta-wrap {
+  padding: 0 var(--gb-card-info-pad-x, 18px) var(--gb-card-info-pad-y, 18px);
 }
 .gb-card-tag {
   font-family: 'DM Sans', sans-serif;
