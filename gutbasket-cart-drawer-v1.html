@@ -1,0 +1,1807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GutBasket · Cart Drawer · CRO v1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   GUTBASKET BRAND TOKENS · v1.2
+   ============================================================ */
+:root {
+  --white: #FFFFFF;
+  --cream: #FFF9EE;
+  --cream-deeper: #F5EDD8;
+  --border: #E8E3D5;
+  --border-soft: #F0EBDD;
+  --ink: #1F1F1D;
+  --all-in-one: #2B2218;
+  --text: #1F1F1D;
+  --text-muted: #5C4D3F;
+  --text-soft: #888780;
+  --action: #FF7300;
+  --action-dark: #E66800;
+  --success: #2D7A52;
+  --success-soft: #D8E8DD;
+
+  /* Kit color = most recently added line item (Kanji as default demo) */
+  --kit-color: #8B1F40;
+  --kit-color-dark: #6E1733;
+  --kit-color-soft: #F4D7DD;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: #D6CDB5;
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+button { font-family: inherit; cursor: pointer; }
+
+/* ============================================================
+   DEMO CONTROL BAR (not part of the spec — for review only)
+   ============================================================ */
+.demo-bar {
+  position: sticky;
+  top: 0;
+  z-index: 500;
+  background: var(--ink);
+  color: var(--cream);
+  padding: 14px 20px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 18px;
+  border-bottom: 2px solid var(--action);
+}
+.demo-bar .demo-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--action);
+  font-weight: 700;
+  margin-right: auto;
+}
+.demo-bar .demo-title span { color: var(--cream); margin-left: 8px; font-weight: 500; }
+.demo-bar .seg {
+  display: inline-flex;
+  background: rgba(255, 249, 238, 0.08);
+  border-radius: 999px;
+  padding: 3px;
+}
+.demo-bar .seg button {
+  background: transparent;
+  color: rgba(255, 249, 238, 0.6);
+  border: none;
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-family: 'DM Mono', monospace;
+  transition: all 0.18s;
+}
+.demo-bar .seg button.active {
+  background: var(--cream);
+  color: var(--ink);
+}
+.demo-bar .seg button:hover:not(.active) { color: var(--cream); }
+.demo-bar .open-btn {
+  background: var(--action);
+  color: var(--cream);
+  border: none;
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: background 0.18s;
+}
+.demo-bar .open-btn:hover { background: var(--action-dark); }
+
+/* ============================================================
+   FAUX PAGE BACKGROUND (so drawer floats over something real)
+   ============================================================ */
+.demo-stage {
+  position: relative;
+  min-height: calc(100vh - 56px);
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px;
+  transition: padding 0.3s;
+}
+.demo-stage.mobile-mode { padding: 30px 20px; }
+
+/* Desktop faux-page */
+.faux-page {
+  width: 100%;
+  max-width: 1200px;
+  background: var(--white);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(31, 31, 29, 0.18);
+  position: relative;
+}
+
+/* Phone frame for mobile mode */
+.demo-stage.mobile-mode .faux-page {
+  max-width: 390px;
+  border-radius: 36px;
+  border: 10px solid var(--ink);
+  box-shadow: 0 24px 80px rgba(31, 31, 29, 0.35);
+}
+.demo-stage.mobile-mode .faux-page::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 28px;
+  background: var(--ink);
+  border-radius: 0 0 18px 18px;
+  z-index: 10;
+}
+
+.faux-promo {
+  background: var(--all-in-one);
+  color: var(--cream);
+  text-align: center;
+  font-size: 12px;
+  padding: 10px;
+  letter-spacing: 0.04em;
+}
+.faux-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--border);
+}
+.faux-logo {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 22px;
+  letter-spacing: -0.01em;
+}
+.faux-logo .gut { color: var(--ink); }
+.faux-logo .basket { font-weight: 500; color: var(--ink); }
+.faux-header-icons { display: flex; gap: 16px; align-items: center; }
+.faux-cart-icon {
+  position: relative;
+  background: var(--cream);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.faux-cart-icon .badge {
+  background: var(--action);
+  color: var(--cream);
+  font-size: 10px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  font-weight: 800;
+}
+
+.faux-body { padding: 40px 24px 80px; }
+.faux-body h1 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 42px;
+  margin: 0 0 8px;
+  letter-spacing: -0.01em;
+}
+.faux-body .tagline { color: var(--text-muted); margin: 0 0 32px; }
+.faux-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+.demo-stage.mobile-mode .faux-grid { grid-template-columns: 1fr; }
+.demo-stage.mobile-mode .faux-body h1 { font-size: 28px; }
+.demo-stage.mobile-mode .faux-body { padding: 24px 18px 60px; }
+.faux-card {
+  background: var(--cream);
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--border-soft);
+}
+.faux-card-img {
+  height: 140px;
+  background: var(--kit-color-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+}
+.faux-card-body { padding: 16px; }
+.faux-card .eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.faux-card .name { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 15px; margin-bottom: 8px; }
+.faux-card .price { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 16px; }
+
+/* ============================================================
+   CART DRAWER · the actual thing being designed
+   ============================================================ */
+.cart-drawer {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  pointer-events: none;
+  visibility: hidden;
+  transition: visibility 0s linear 0.32s;
+}
+.cart-drawer.open {
+  pointer-events: auto;
+  visibility: visible;
+  transition: visibility 0s linear 0s;
+}
+.cart-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(31, 31, 29, 0.5);
+  opacity: 0;
+  transition: opacity 0.28s ease;
+}
+.cart-drawer.open .cart-overlay { opacity: 1; }
+
+.cart-panel {
+  position: absolute;
+  top: 0; right: 0;
+  width: 440px;
+  max-width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  background: var(--white);
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: -12px 0 40px rgba(31, 31, 29, 0.16);
+}
+.cart-drawer.open .cart-panel { transform: translateX(0); }
+
+/* Mobile mode override */
+.demo-stage.mobile-mode .cart-panel {
+  width: min(92vw, 390px);
+}
+@media (max-width: 480px) {
+  .cart-panel { width: 100vw; }
+}
+
+/* === HEAD === */
+.cart-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--border-soft);
+  flex-shrink: 0;
+}
+.cart-head h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 17px;
+  margin: 0;
+  letter-spacing: 0.01em;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.cart-head .count {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+.cart-close {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--cream);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text);
+  transition: background 0.18s;
+}
+.cart-close:hover { background: var(--cream-deeper); }
+.cart-close svg { width: 14px; height: 14px; }
+
+/* === BODY (scrolls) === */
+.cart-body {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* === PROGRESS BAR (multi-tier) === */
+.progress-section {
+  padding: 18px 22px 22px;
+  background: linear-gradient(180deg, var(--cream) 0%, var(--white) 100%);
+  border-bottom: 1px solid var(--border-soft);
+}
+.progress-headline {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13.5px;
+  line-height: 1.4;
+  margin-bottom: 14px;
+  color: var(--text);
+}
+.progress-headline strong {
+  color: var(--kit-color-dark);
+  font-weight: 700;
+}
+.progress-headline .all-done {
+  color: var(--success);
+  font-weight: 700;
+}
+.progress-track {
+  position: relative;
+  height: 6px;
+  background: var(--border-soft);
+  border-radius: 999px;
+  margin: 0 0 22px;
+}
+.progress-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: linear-gradient(90deg, var(--kit-color) 0%, var(--kit-color-dark) 100%);
+  border-radius: 999px;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 0%;
+}
+.progress-tier {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--white);
+  border: 2px solid var(--border);
+  transition: all 0.3s;
+}
+.progress-tier.unlocked {
+  background: var(--kit-color);
+  border-color: var(--kit-color);
+  box-shadow: 0 0 0 3px var(--kit-color-soft);
+}
+.progress-tier .tier-label {
+  position: absolute;
+  top: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 1.3;
+}
+.progress-tier.unlocked .tier-label { color: var(--kit-color-dark); font-weight: 700; }
+.progress-tier .tier-label .reward {
+  display: block;
+  color: var(--text);
+  font-weight: 700;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0;
+  text-transform: none;
+  margin-top: 2px;
+}
+.progress-tier.unlocked .tier-label .reward { color: var(--ink); }
+
+/* === LINE ITEMS === */
+.line-items { padding: 8px 0; }
+.line-item {
+  display: grid;
+  grid-template-columns: 78px 1fr;
+  gap: 14px;
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--border-soft);
+  position: relative;
+}
+.line-item-img {
+  width: 78px;
+  height: 90px;
+  border-radius: 8px;
+  background: var(--kit-color-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  position: relative;
+  flex-shrink: 0;
+  border: 1px solid var(--border-soft);
+}
+.line-item-img[data-kit="kanji"] { background: #F4D7DD; }
+.line-item-img[data-kit="achaar"] { background: #FFE4D1; }
+.line-item-img[data-kit="sprout"] { background: #D8E4DC; }
+.line-item-img[data-kit="ferment-boost"] { background: #F8E9C2; }
+.line-item-img[data-kit="prebiotic"] { background: #CDEDE3; }
+
+.line-item-meta { min-width: 0; }
+.line-item .eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 3px;
+}
+.line-item .name {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1.3;
+  margin: 0 0 4px;
+  color: var(--text);
+}
+.line-item .variant {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.line-item .variant .dot {
+  width: 4px; height: 4px;
+  background: var(--text-soft);
+  border-radius: 50%;
+}
+.line-item-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.qty-stepper {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--white);
+}
+.qty-stepper button {
+  background: transparent;
+  border: none;
+  width: 28px;
+  height: 28px;
+  font-size: 14px;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  transition: background 0.15s;
+}
+.qty-stepper button:hover { background: var(--cream); }
+.qty-stepper button:disabled { color: var(--text-soft); cursor: not-allowed; }
+.qty-stepper .qty {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  min-width: 26px;
+  text-align: center;
+  color: var(--text);
+}
+.line-item-price {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+.line-item-price .now {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 15px;
+  color: var(--text);
+}
+.line-item-price .old {
+  font-size: 11px;
+  color: var(--text-soft);
+  text-decoration: line-through;
+}
+.line-item-actions {
+  display: flex;
+  gap: 14px;
+  margin-top: 10px;
+}
+.line-item-actions button {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 11px;
+  color: var(--text-muted);
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.04em;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: color 0.15s;
+}
+.line-item-actions button:hover { color: var(--ink); }
+.line-item-actions .remove-btn:hover { color: #B83A2E; }
+
+.stock-warn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 8px;
+  padding: 3px 8px;
+  background: #FFF1E5;
+  color: #B85A1A;
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+/* === ADD-ONS (context-aware, horizontal scroll) === */
+.section-block { padding: 22px 0 18px; }
+.section-block.bg-cream { background: var(--cream); }
+.section-heading {
+  padding: 0 22px;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+.section-heading .eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.section-heading .hint {
+  font-size: 10px;
+  color: var(--text-soft);
+  font-family: 'DM Mono', monospace;
+}
+
+.addon-scroll {
+  display: flex;
+  gap: 10px;
+  padding: 0 22px 4px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+.addon-scroll::-webkit-scrollbar { height: 4px; }
+.addon-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 999px; }
+
+.addon-card {
+  flex: 0 0 138px;
+  scroll-snap-align: start;
+  background: var(--white);
+  border: 1px solid var(--border-soft);
+  border-radius: 12px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.18s;
+}
+.addon-card:hover { border-color: var(--kit-color); box-shadow: 0 4px 16px rgba(139, 31, 64, 0.1); }
+.addon-card.added { background: var(--kit-color-soft); border-color: var(--kit-color); }
+
+.addon-img {
+  width: 100%;
+  height: 80px;
+  border-radius: 8px;
+  background: var(--cream);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  margin-bottom: 8px;
+}
+.addon-name {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 11.5px;
+  line-height: 1.25;
+  color: var(--text);
+  margin-bottom: 4px;
+  min-height: 28px;
+}
+.addon-price-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+}
+.addon-price {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 13px;
+  color: var(--text);
+}
+.addon-price .old {
+  display: block;
+  font-size: 9px;
+  color: var(--text-soft);
+  text-decoration: line-through;
+  font-weight: 500;
+}
+.addon-btn {
+  background: var(--ink);
+  color: var(--cream);
+  border: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-size: 16px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transition: all 0.15s;
+}
+.addon-btn:hover { background: var(--action); transform: scale(1.08); }
+.addon-card.added .addon-btn {
+  background: var(--success);
+}
+.addon-card.added .addon-btn::before { content: '✓'; font-size: 12px; }
+.addon-card.added .addon-btn-text { display: none; }
+
+/* === SMART UPSELL CARD === */
+.upsell-card {
+  margin: 6px 22px 22px;
+  background: var(--all-in-one);
+  color: var(--cream);
+  border-radius: 14px;
+  padding: 18px;
+  display: grid;
+  grid-template-columns: 70px 1fr;
+  gap: 14px;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+.upsell-card::before {
+  content: '';
+  position: absolute;
+  top: -40px; right: -40px;
+  width: 140px; height: 140px;
+  background: radial-gradient(circle, rgba(255, 115, 0, 0.18) 0%, transparent 70%);
+}
+.upsell-thumb {
+  width: 70px;
+  height: 70px;
+  border-radius: 10px;
+  background: var(--kit-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  position: relative;
+}
+.upsell-meta { position: relative; min-width: 0; }
+.upsell-meta .eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  color: var(--action);
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.upsell-meta .name {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  margin: 0 0 8px;
+  line-height: 1.3;
+}
+.upsell-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.upsell-price {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 14px;
+}
+.upsell-price .save {
+  display: block;
+  font-size: 10px;
+  color: var(--action);
+  font-weight: 600;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.04em;
+}
+.upsell-add {
+  background: var(--action);
+  color: var(--cream);
+  border: none;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: background 0.18s;
+}
+.upsell-add:hover { background: var(--action-dark); }
+
+/* === DISCOUNT ROW === */
+.discount-row {
+  padding: 14px 22px;
+  border-bottom: 1px solid var(--border-soft);
+}
+.discount-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: transparent;
+  border: none;
+  padding: 0;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12.5px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+.discount-toggle .chev { transition: transform 0.2s; font-size: 10px; }
+.discount-row.open .discount-toggle .chev { transform: rotate(180deg); }
+.discount-input-wrap {
+  display: none;
+  margin-top: 10px;
+  gap: 8px;
+}
+.discount-row.open .discount-input-wrap { display: flex; }
+.discount-input-wrap input {
+  flex: 1;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 9px 12px;
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background: var(--cream);
+  color: var(--text);
+  outline: none;
+}
+.discount-input-wrap input:focus { border-color: var(--kit-color); }
+.discount-input-wrap button {
+  background: var(--ink);
+  color: var(--cream);
+  border: none;
+  padding: 0 16px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.applied-discount {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  padding: 6px 10px;
+  background: var(--success-soft);
+  border: 1px dashed var(--success);
+  border-radius: 6px;
+  font-size: 11px;
+  font-family: 'DM Mono', monospace;
+  color: var(--success);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.applied-discount .remove { cursor: pointer; opacity: 0.6; }
+
+/* === DELIVERY + TRUST STRIP === */
+.delivery-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 22px;
+  background: var(--cream);
+  border-bottom: 1px solid var(--border-soft);
+  font-size: 12px;
+  gap: 12px;
+}
+.delivery-row .left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.delivery-row .truck { font-size: 18px; }
+.delivery-row .text { line-height: 1.35; min-width: 0; }
+.delivery-row .text strong { display: block; font-weight: 700; color: var(--text); font-size: 12.5px; }
+.delivery-row .text .sub { color: var(--text-muted); font-size: 11px; }
+.delivery-row .pin-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+}
+.delivery-row .pin-btn:hover { border-color: var(--ink); color: var(--ink); }
+
+.trust-strip {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 22px;
+  background: var(--white);
+  border-bottom: 1px solid var(--border-soft);
+  gap: 8px;
+}
+.trust-strip .trust-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: 'DM Mono', monospace;
+  font-size: 9.5px;
+  color: var(--text-muted);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.trust-strip .check {
+  width: 12px; height: 12px;
+  background: var(--success);
+  color: var(--cream);
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 8px;
+  flex-shrink: 0;
+}
+
+/* === FOOTER (sticky) === */
+.cart-foot {
+  background: var(--white);
+  border-top: 1px solid var(--border);
+  padding: 16px 22px 18px;
+  box-shadow: 0 -6px 24px rgba(31, 31, 29, 0.06);
+  flex-shrink: 0;
+}
+.foot-totals {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 4px;
+}
+.foot-totals .label {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.foot-totals .amount {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 22px;
+  color: var(--text);
+}
+.foot-shipping {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+.foot-shipping .free-tag {
+  color: var(--success);
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.04em;
+}
+.foot-savings {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 12px;
+  padding: 4px 8px;
+  background: var(--success-soft);
+  border-radius: 4px;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--success);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.checkout-btn {
+  width: 100%;
+  background: var(--action);
+  color: var(--cream);
+  border: none;
+  padding: 16px;
+  border-radius: 999px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: background 0.18s, transform 0.1s;
+}
+.checkout-btn:hover { background: var(--action-dark); }
+.checkout-btn:active { transform: scale(0.98); }
+.checkout-btn .arrow { transition: transform 0.2s; }
+.checkout-btn:hover .arrow { transform: translateX(4px); }
+
+.express-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+.express-row .label {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  color: var(--text-soft);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.express-chips {
+  display: flex;
+  gap: 6px;
+  flex: 1;
+}
+.express-chip {
+  flex: 1;
+  height: 30px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: 0.04em;
+  transition: all 0.15s;
+  cursor: pointer;
+}
+.express-chip:hover { border-color: var(--ink); background: var(--cream); }
+.express-chip.cod { background: var(--ink); color: var(--cream); border-color: var(--ink); }
+
+.continue-link {
+  display: block;
+  text-align: center;
+  margin-top: 10px;
+  font-size: 11px;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.continue-link:hover { color: var(--ink); }
+
+/* === EMPTY STATE === */
+.empty-state {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 40px 22px;
+}
+.empty-state .empty-icon {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: var(--cream);
+  border: 2px dashed var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 44px;
+  margin-bottom: 24px;
+}
+.empty-state h3 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 22px;
+  margin: 0 0 6px;
+  letter-spacing: -0.01em;
+}
+.empty-state p {
+  color: var(--text-muted);
+  font-size: 13px;
+  margin: 0 0 28px;
+  line-height: 1.5;
+  max-width: 280px;
+}
+.empty-state .eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 14px;
+  align-self: stretch;
+  text-align: left;
+}
+.empty-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+.empty-card {
+  display: grid;
+  grid-template-columns: 56px 1fr auto;
+  gap: 12px;
+  align-items: center;
+  padding: 10px;
+  background: var(--cream);
+  border: 1px solid var(--border-soft);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.18s;
+  text-align: left;
+}
+.empty-card:hover { border-color: var(--ink); background: var(--white); }
+.empty-card .img {
+  width: 56px; height: 56px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+}
+.empty-card .info { min-width: 0; }
+.empty-card .info .n {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+.empty-card .info .p {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 13px;
+  color: var(--text);
+}
+.empty-card .info .p .old {
+  font-size: 10px;
+  color: var(--text-soft);
+  text-decoration: line-through;
+  font-weight: 500;
+  margin-left: 4px;
+}
+.empty-card .add {
+  background: var(--ink);
+  color: var(--cream);
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 18px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+.empty-card .add:hover { background: var(--action); transform: scale(1.08); }
+
+.byo-link {
+  margin-top: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 12px 18px;
+  background: transparent;
+  color: var(--action);
+  border: 1px solid var(--action);
+  border-radius: 999px;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  width: 100%;
+}
+
+/* Empty-state foot */
+.empty-foot {
+  padding: 14px 22px;
+  border-top: 1px solid var(--border-soft);
+  text-align: center;
+  font-size: 11px;
+  color: var(--text-muted);
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.04em;
+}
+
+/* === Toast (undo remove) === */
+.toast {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: var(--ink);
+  color: var(--cream);
+  padding: 12px 18px;
+  border-radius: 10px;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  transform: translateY(120%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 2000;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+.toast.show { transform: translateY(0); }
+.toast .undo {
+  background: var(--action);
+  color: var(--cream);
+  border: none;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* === Celebrate animation on tier unlock === */
+@keyframes pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.4); }
+  100% { transform: scale(1); }
+}
+.progress-tier.just-unlocked {
+  animation: pop 0.4s ease;
+}
+@keyframes shimmer {
+  0% { background-position: -200px 0; }
+  100% { background-position: 200px 0; }
+}
+
+/* Mobile: trust strip becomes two rows */
+@media (max-width: 480px) {
+  .trust-strip { flex-wrap: wrap; row-gap: 6px; }
+  .upsell-card { padding: 14px; }
+  .upsell-thumb { width: 60px; height: 60px; font-size: 26px; }
+  .progress-tier .tier-label { font-size: 8px; }
+  .progress-tier .tier-label .reward { font-size: 9px; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     DEMO CONTROL BAR — for review only, not part of the spec
+     ============================================================ -->
+<div class="demo-bar">
+  <div class="demo-title">CART DRAWER · CRO v1<span>· GutBasket</span></div>
+
+  <div class="seg" id="device-seg">
+    <button class="active" onclick="setDevice('desktop')">Desktop</button>
+    <button onclick="setDevice('mobile')">Mobile</button>
+  </div>
+
+  <div class="seg" id="state-seg">
+    <button class="active" onclick="setState('filled')">Filled</button>
+    <button onclick="setState('empty')">Empty</button>
+  </div>
+
+  <button class="open-btn" onclick="openCart()">Open Cart Drawer →</button>
+</div>
+
+<!-- ============================================================
+     FAUX PAGE (background for drawer to float over)
+     ============================================================ -->
+<div class="demo-stage" id="stage">
+  <div class="faux-page">
+    <div class="faux-promo">🍃 Free Shipping over ₹300 · ⚡ Ships Next Working Day · 💵 Cash On Delivery</div>
+    <div class="faux-header">
+      <div class="faux-logo"><span class="gut">GUT</span><span class="basket">Basket</span></div>
+      <div class="faux-header-icons">
+        <button class="faux-cart-icon" onclick="openCart()">
+          <span>🧺 Basket</span>
+          <span class="badge" id="cart-count-badge">2</span>
+        </button>
+      </div>
+    </div>
+    <div class="faux-body">
+      <h1>Pantry Bestsellers.</h1>
+      <p class="tagline">— PDP page is behind. The cart drawer is what we're reviewing.</p>
+      <div class="faux-grid">
+        <div class="faux-card">
+          <div class="faux-card-img" style="background: #F4D7DD;">🥕</div>
+          <div class="faux-card-body">
+            <div class="eyebrow">FERMENTATION KIT</div>
+            <div class="name">Kanji Making Kit</div>
+            <div class="price">From ₹1,399</div>
+          </div>
+        </div>
+        <div class="faux-card">
+          <div class="faux-card-img" style="background: #FFE4D1;">🥒</div>
+          <div class="faux-card-body">
+            <div class="eyebrow">FERMENTATION KIT</div>
+            <div class="name">Probiotic Achaar Kit</div>
+            <div class="price">From ₹1,399</div>
+          </div>
+        </div>
+        <div class="faux-card">
+          <div class="faux-card-img" style="background: #D8E4DC;">🌱</div>
+          <div class="faux-card-body">
+            <div class="eyebrow">SPROUT KIT</div>
+            <div class="name">Sprout Maker · SS</div>
+            <div class="price">From ₹599</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     CART DRAWER — the actual component
+     ============================================================ -->
+<div class="cart-drawer" id="cart-drawer">
+  <div class="cart-overlay" onclick="closeCart()"></div>
+  <aside class="cart-panel" role="dialog" aria-label="Shopping cart">
+
+    <!-- HEAD -->
+    <header class="cart-head">
+      <h2>Your Basket <span class="count" id="head-count">· 2 items</span></h2>
+      <button class="cart-close" onclick="closeCart()" aria-label="Close">
+        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <path d="M1 1 L13 13 M13 1 L1 13"/>
+        </svg>
+      </button>
+    </header>
+
+    <!-- BODY -->
+    <div class="cart-body" id="cart-body">
+      <!-- Populated by JS based on state -->
+    </div>
+
+    <!-- FOOT -->
+    <footer class="cart-foot" id="cart-foot">
+      <!-- Populated by JS based on state -->
+    </footer>
+
+  </aside>
+</div>
+
+<!-- Toast for undo remove -->
+<div class="toast" id="toast">
+  <span id="toast-text">Removed Kanji Kit</span>
+  <button class="undo" onclick="undoRemove()">Undo</button>
+</div>
+
+<script>
+/* ============================================================
+   STATE
+   ============================================================ */
+
+// Tier configuration (admin-driven in real life)
+const TIERS = [
+  { threshold: 300,  label: 'Free Shipping',  reward: '🚚' },
+  { threshold: 999,  label: 'Free Recipe e-Book', reward: '📖' },
+  { threshold: 1499, label: 'Free Spice Refill',  reward: '🌶️ ₹249 value' }
+];
+
+// Cart state
+let cart = {
+  items: [
+    {
+      id: 'kanji-1l',
+      name: 'Kanji Making Kit',
+      eyebrow: 'FERMENTATION KIT',
+      variant: '1L · For Beginners',
+      kit: 'kanji',
+      emoji: '🥕',
+      price: 1399,
+      compare: 1799,
+      qty: 1,
+      stock: null,
+      kitColor: '#8B1F40',
+      kitColorDark: '#6E1733',
+      kitColorSoft: '#F4D7DD'
+    },
+    {
+      id: 'ferment-boost-3pk',
+      name: 'Ferment Boost · Prebiotic',
+      eyebrow: 'STARTER · 3-PACK',
+      variant: 'Sachet · 3 batches',
+      kit: 'ferment-boost',
+      emoji: '🌾',
+      price: 199,
+      compare: 249,
+      qty: 1,
+      stock: 4,
+      kitColor: '#DDA738',
+      kitColorDark: '#B8861E',
+      kitColorSoft: '#F8E9C2'
+    }
+  ],
+  addons: [
+    { id: 'kanji-refill', name: 'Kanji Spice Refill', emoji: '🌶️', price: 249, compare: 299, kit: 'kanji' },
+    { id: 'glass-weight', name: 'Glass Fermentation Weight', emoji: '⚪', price: 249, compare: null, kit: 'jar' },
+    { id: 'airlock-spare', name: 'Spare Airlock Set', emoji: '🔵', price: 149, compare: 199, kit: 'jar' },
+    { id: 'recipe-booklet', name: 'Kanji Recipe Booklet', emoji: '📖', price: 49, compare: null, kit: 'kanji' },
+    { id: 'extra-cap', name: 'Replacement Lid', emoji: '⚫', price: 99, compare: null, kit: 'jar' }
+  ],
+  upsell: {
+    id: 'all-in-one',
+    name: 'All-in-One Fermentation Kit',
+    eyebrow: 'COMPLETE THE SET · SAVE ₹600',
+    emoji: '🎁',
+    price: 2999,
+    compare: 3999
+  },
+  discount: null,
+  pincode: '382XXX',
+  appliedAddons: new Set(),
+  recentlyRemoved: null
+};
+
+let device = 'desktop';
+let viewState = 'filled';
+
+/* ============================================================
+   DEMO CONTROLS
+   ============================================================ */
+function setDevice(d) {
+  device = d;
+  document.querySelectorAll('#device-seg button').forEach(b => b.classList.toggle('active', b.textContent.toLowerCase() === d));
+  document.getElementById('stage').classList.toggle('mobile-mode', d === 'mobile');
+}
+function setState(s) {
+  viewState = s;
+  document.querySelectorAll('#state-seg button').forEach(b => b.classList.toggle('active', b.textContent.toLowerCase() === s));
+  render();
+}
+function openCart() {
+  document.getElementById('cart-drawer').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeCart() {
+  document.getElementById('cart-drawer').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+/* ============================================================
+   CART OPERATIONS
+   ============================================================ */
+function subtotal() {
+  return cart.items.reduce((sum, it) => sum + it.price * it.qty, 0)
+       + Array.from(cart.appliedAddons).reduce((sum, id) => {
+           const a = cart.addons.find(x => x.id === id);
+           return sum + (a ? a.price : 0);
+         }, 0);
+}
+function savings() {
+  return cart.items.reduce((sum, it) => sum + ((it.compare || it.price) - it.price) * it.qty, 0)
+       + Array.from(cart.appliedAddons).reduce((sum, id) => {
+           const a = cart.addons.find(x => x.id === id);
+           return sum + (a && a.compare ? a.compare - a.price : 0);
+         }, 0);
+}
+function itemCount() {
+  return cart.items.reduce((s, it) => s + it.qty, 0)
+       + cart.appliedAddons.size;
+}
+
+function changeQty(itemId, delta) {
+  const item = cart.items.find(it => it.id === itemId);
+  if (!item) return;
+  item.qty = Math.max(1, item.qty + delta);
+  render();
+}
+function removeItem(itemId) {
+  const idx = cart.items.findIndex(it => it.id === itemId);
+  if (idx === -1) return;
+  cart.recentlyRemoved = { item: cart.items[idx], index: idx };
+  cart.items.splice(idx, 1);
+  showToast(`Removed ${cart.recentlyRemoved.item.name}`);
+  render();
+}
+function undoRemove() {
+  if (!cart.recentlyRemoved) return;
+  cart.items.splice(cart.recentlyRemoved.index, 0, cart.recentlyRemoved.item);
+  cart.recentlyRemoved = null;
+  hideToast();
+  render();
+}
+function toggleAddon(id) {
+  if (cart.appliedAddons.has(id)) cart.appliedAddons.delete(id);
+  else cart.appliedAddons.add(id);
+  render();
+}
+function applyDiscount() {
+  const code = document.getElementById('discount-input').value.trim().toUpperCase();
+  if (code === 'GUTKANJI') cart.discount = { code, amount: 50 };
+  render();
+}
+function removeDiscount() {
+  cart.discount = null;
+  render();
+}
+function toggleDiscount() {
+  document.querySelector('.discount-row').classList.toggle('open');
+}
+
+function showToast(text) {
+  const t = document.getElementById('toast');
+  document.getElementById('toast-text').textContent = text;
+  t.classList.add('show');
+  clearTimeout(showToast._timer);
+  showToast._timer = setTimeout(hideToast, 5000);
+}
+function hideToast() {
+  document.getElementById('toast').classList.remove('show');
+}
+
+/* ============================================================
+   RENDER
+   ============================================================ */
+function render() {
+  // Sync kit-color CSS variable to the most recently added line item
+  const lastItem = cart.items[cart.items.length - 1];
+  if (lastItem) {
+    document.documentElement.style.setProperty('--kit-color', lastItem.kitColor);
+    document.documentElement.style.setProperty('--kit-color-dark', lastItem.kitColorDark);
+    document.documentElement.style.setProperty('--kit-color-soft', lastItem.kitColorSoft);
+  } else {
+    document.documentElement.style.setProperty('--kit-color', 'var(--action)');
+    document.documentElement.style.setProperty('--kit-color-dark', 'var(--action-dark)');
+    document.documentElement.style.setProperty('--kit-color-soft', '#FFE4D1');
+  }
+
+  const body = document.getElementById('cart-body');
+  const foot = document.getElementById('cart-foot');
+  const headCount = document.getElementById('head-count');
+  const badge = document.getElementById('cart-count-badge');
+
+  const count = itemCount();
+  headCount.textContent = count ? `· ${count} item${count > 1 ? 's' : ''}` : '';
+  badge.textContent = count;
+  badge.style.display = count ? 'inline-flex' : 'none';
+
+  if (viewState === 'empty' || cart.items.length === 0) {
+    body.innerHTML = renderEmpty();
+    foot.innerHTML = `<div class="empty-foot">🛡️ Secure Payment · 🇮🇳 Made in India · 🔄 Easy Returns</div>`;
+    return;
+  }
+
+  body.innerHTML = `
+    ${renderProgressBar()}
+    ${renderLineItems()}
+    ${renderAddons()}
+    ${renderUpsell()}
+    ${renderDiscount()}
+    ${renderDelivery()}
+    ${renderTrustStrip()}
+  `;
+  foot.innerHTML = renderFooter();
+}
+
+function renderProgressBar() {
+  const sub = subtotal();
+  const maxTier = TIERS[TIERS.length - 1].threshold;
+  const fillPct = Math.min(100, (sub / maxTier) * 100);
+
+  // Next-tier copy
+  const nextTier = TIERS.find(t => sub < t.threshold);
+  let headline = '';
+  if (!nextTier) {
+    headline = `<span class="all-done">🎉 All rewards unlocked!</span> Your basket is fully optimised.`;
+  } else {
+    const remaining = nextTier.threshold - sub;
+    const unlocked = TIERS.filter(t => sub >= t.threshold).length;
+    if (unlocked === 0) {
+      headline = `Add <strong>₹${remaining}</strong> more to unlock <strong>${nextTier.label}</strong>`;
+    } else {
+      headline = `🎉 Just <strong>₹${remaining}</strong> more to unlock <strong>${nextTier.label}</strong>`;
+    }
+  }
+
+  const tierPins = TIERS.map(t => {
+    const pct = (t.threshold / maxTier) * 100;
+    const unlocked = sub >= t.threshold;
+    return `<div class="progress-tier ${unlocked ? 'unlocked' : ''}" style="left: ${pct}%;">
+      <div class="tier-label">
+        ₹${t.threshold}
+        <span class="reward">${t.reward}</span>
+      </div>
+    </div>`;
+  }).join('');
+
+  return `
+    <section class="progress-section">
+      <div class="progress-headline">${headline}</div>
+      <div class="progress-track">
+        <div class="progress-fill" style="width: ${fillPct}%;"></div>
+        ${tierPins}
+      </div>
+    </section>
+  `;
+}
+
+function renderLineItems() {
+  return `<div class="line-items">${cart.items.map(it => `
+    <div class="line-item">
+      <div class="line-item-img" data-kit="${it.kit}">${it.emoji}</div>
+      <div class="line-item-meta">
+        <div class="eyebrow">${it.eyebrow}</div>
+        <h3 class="name">${it.name}</h3>
+        <div class="variant"><span>${it.variant}</span></div>
+        <div class="line-item-row">
+          <div class="qty-stepper">
+            <button onclick="changeQty('${it.id}', -1)" ${it.qty <= 1 ? 'disabled' : ''}>−</button>
+            <span class="qty">${it.qty}</span>
+            <button onclick="changeQty('${it.id}', 1)">+</button>
+          </div>
+          <div class="line-item-price">
+            <span class="now">₹${(it.price * it.qty).toLocaleString('en-IN')}</span>
+            ${it.compare ? `<span class="old">₹${(it.compare * it.qty).toLocaleString('en-IN')}</span>` : ''}
+          </div>
+        </div>
+        ${it.stock && it.stock < 10 ? `<div class="stock-warn">⚡ Only ${it.stock} left</div>` : ''}
+        <div class="line-item-actions">
+          <button class="remove-btn" onclick="removeItem('${it.id}')">✕ Remove</button>
+          <button>♡ Save for later</button>
+        </div>
+      </div>
+    </div>
+  `).join('')}</div>`;
+}
+
+function renderAddons() {
+  // Context-aware: only show add-ons relevant to items currently in cart
+  // Logic: an add-on is relevant if its `kit` matches any line item's `kit`,
+  // OR is universally tagged ('jar' = compatible with all kits).
+  const cartKits = new Set(cart.items.map(it => it.kit));
+  const relevant = cart.addons.filter(a => cartKits.has(a.kit) || a.kit === 'jar');
+
+  if (!relevant.length) return '';
+
+  return `
+    <section class="section-block bg-cream">
+      <div class="section-heading">
+        <span class="eyebrow">+ Often added with your basket</span>
+        <span class="hint">scroll →</span>
+      </div>
+      <div class="addon-scroll">
+        ${relevant.map(a => {
+          const added = cart.appliedAddons.has(a.id);
+          return `
+            <div class="addon-card ${added ? 'added' : ''}">
+              <div class="addon-img">${a.emoji}</div>
+              <div class="addon-name">${a.name}</div>
+              <div class="addon-price-row">
+                <div class="addon-price">
+                  ₹${a.price}
+                  ${a.compare ? `<span class="old">₹${a.compare}</span>` : ''}
+                </div>
+                <button class="addon-btn" onclick="toggleAddon('${a.id}')" aria-label="${added ? 'Remove' : 'Add'}">
+                  <span class="addon-btn-text">+</span>
+                </button>
+              </div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    </section>
+  `;
+}
+
+function renderUpsell() {
+  const u = cart.upsell;
+  return `
+    <section class="upsell-card">
+      <div class="upsell-thumb">${u.emoji}</div>
+      <div class="upsell-meta">
+        <div class="eyebrow">${u.eyebrow}</div>
+        <div class="name">${u.name}</div>
+        <div class="upsell-bottom">
+          <div class="upsell-price">
+            ₹${u.price.toLocaleString('en-IN')}
+            <span class="save">vs ₹${u.compare.toLocaleString('en-IN')} sep</span>
+          </div>
+          <button class="upsell-add" onclick="alert('Would swap basket for All-in-One bundle')">Add →</button>
+        </div>
+      </div>
+    </section>
+  `;
+}
+
+function renderDiscount() {
+  if (cart.discount) {
+    return `
+      <div class="discount-row">
+        <div class="applied-discount">
+          ✓ ${cart.discount.code} APPLIED · −₹${cart.discount.amount}
+          <span class="remove" onclick="removeDiscount()" title="Remove">✕</span>
+        </div>
+      </div>
+    `;
+  }
+  return `
+    <div class="discount-row">
+      <button class="discount-toggle" onclick="toggleDiscount()">
+        <span>🎟 Have a discount code?</span>
+        <span class="chev">▾</span>
+      </button>
+      <div class="discount-input-wrap">
+        <input id="discount-input" type="text" placeholder="Enter code (try GUTKANJI)" />
+        <button onclick="applyDiscount()">Apply</button>
+      </div>
+    </div>
+  `;
+}
+
+function renderDelivery() {
+  return `
+    <div class="delivery-row">
+      <div class="left">
+        <span class="truck">🚚</span>
+        <div class="text">
+          <strong>Delivery by Mon, May 18</strong>
+          <span class="sub">Ships next working day · COD available</span>
+        </div>
+      </div>
+      <button class="pin-btn">📍 ${cart.pincode}</button>
+    </div>
+  `;
+}
+
+function renderTrustStrip() {
+  return `
+    <div class="trust-strip">
+      <span class="trust-item"><span class="check">✓</span> FSSAI Licensed</span>
+      <span class="trust-item"><span class="check">✓</span> Secure Pay</span>
+      <span class="trust-item"><span class="check">✓</span> Easy Returns</span>
+    </div>
+  `;
+}
+
+function renderFooter() {
+  const sub = subtotal();
+  const sav = savings() + (cart.discount ? cart.discount.amount : 0);
+  const total = sub - (cart.discount ? cart.discount.amount : 0);
+  const freeShip = sub >= TIERS[0].threshold;
+
+  return `
+    <div class="foot-totals">
+      <span class="label">Subtotal</span>
+      <span class="amount">₹${total.toLocaleString('en-IN')}</span>
+    </div>
+    <div class="foot-shipping">
+      <span>Shipping</span>
+      <span class="${freeShip ? 'free-tag' : ''}">${freeShip ? 'FREE' : 'Calculated at checkout'}</span>
+    </div>
+    ${sav > 0 ? `<div class="foot-savings">💰 You saved ₹${sav.toLocaleString('en-IN')} today</div>` : ''}
+    <button class="checkout-btn" onclick="alert('→ Checkout flow starts here')">
+      <span>Checkout Securely</span>
+      <span class="arrow">→</span>
+    </button>
+    <div class="express-row">
+      <span class="label">Express:</span>
+      <div class="express-chips">
+        <div class="express-chip">UPI</div>
+        <div class="express-chip">GPay</div>
+        <div class="express-chip">PhonePe</div>
+        <div class="express-chip cod">COD</div>
+      </div>
+    </div>
+    <a class="continue-link" onclick="closeCart()">← Continue shopping</a>
+  `;
+}
+
+function renderEmpty() {
+  return `
+    <div class="empty-state">
+      <div class="empty-icon">🧺</div>
+      <h3>Your basket is empty.</h3>
+      <p>Start with what most first-timers pick — the kits below are our bestsellers.</p>
+
+      <div class="eyebrow">— Bestsellers</div>
+      <div class="empty-cards">
+        <button class="empty-card">
+          <div class="img" style="background: #F4D7DD;">🥕</div>
+          <div class="info">
+            <div class="n">Kanji Making Kit · 1L</div>
+            <div class="p">₹1,399 <span class="old">₹1,799</span></div>
+          </div>
+          <div class="add">+</div>
+        </button>
+        <button class="empty-card">
+          <div class="img" style="background: #FFE4D1;">🥒</div>
+          <div class="info">
+            <div class="n">Probiotic Achaar Kit · 1kg</div>
+            <div class="p">₹1,399 <span class="old">₹1,999</span></div>
+          </div>
+          <div class="add">+</div>
+        </button>
+        <button class="empty-card">
+          <div class="img" style="background: #CDEDE3;">🌾</div>
+          <div class="info">
+            <div class="n">Prebiotic Fiber Boost</div>
+            <div class="p">₹699</div>
+          </div>
+          <div class="add">+</div>
+        </button>
+      </div>
+
+      <a href="#byo" class="byo-link">Build your own kit →</a>
+    </div>
+  `;
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+render();
+// Auto-open after a beat so reviewers see it immediately
+setTimeout(openCart, 400);
+
+</script>
+
+</body>
+</html>
