@@ -237,6 +237,7 @@
       "blocks": {
         "t1": {
           "type": "tab",
+          "disabled": true,
           "settings": {
             "label": "Shop all",
             "tab_id": "all",
