@@ -132,7 +132,7 @@
           "cta_label": "Add to cart",
           "show_on_desktop": false,
           "name_truncate": 28,
-          "up_threshold": 30,
+          "up_threshold": 20,
           "show_delay": 300
         }
       }
