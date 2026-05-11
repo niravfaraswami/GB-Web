@@ -524,8 +524,16 @@
   // The cart is attached on detail.resource — render directly without
   // an extra /cart.js round-trip. We do NOT auto-open here; the ATC
   // caller opens the drawer optimistically before the network call.
+  // Sources we should NOT open the drawer for. Cart-page line-item
+  // changes (qty -/+, remove) dispatch cart:update from the
+  // cart-items-component and should stay silent; the user is already
+  // on the cart page. Our own internal mutations don't dispatch
+  // cart:update at all so they never reach here.
+  var SILENT_SOURCES = { 'cart-items-component': true, 'gbcd-internal': true };
+
   document.addEventListener('cart:update', function(ev) {
     var detail = ev.detail || {};
+    var data = detail.data || {};
     if (detail.resource) {
       state.cart = detail.resource;
       bumpVersion();
@@ -533,7 +541,83 @@
     } else if (state.isOpen) {
       refresh();
     }
+    // Auto-open the drawer on any external add. SILENT_SOURCES bypass.
+    if (data.didError) return;
+    if (data.source && SILENT_SOURCES[data.source]) return;
+    if (!state.isOpen) open();
   });
+
+  // ----- Global form intercept -----
+  // Any <form action="/cart/add"> on the page (raw Shopify product
+  // forms, third-party widgets, collection card quick-add forms etc.)
+  // submits to /cart/add and navigates the page. Intercept all such
+  // submits, do an AJAX add, then open our drawer.
+  function isCartAddForm(form) {
+    if (!form || form.tagName !== 'FORM') return false;
+    var action = form.getAttribute('action') || '';
+    return /\/cart\/add(\.js)?(\?|$)/.test(action);
+  }
+
+  document.addEventListener('submit', function(ev) {
+    var form = ev.target;
+    if (!isCartAddForm(form)) return;
+    if (form.dataset.gbcdSkip === '1') return;
+    // Theme's <product-form-component> wrapper does its own AJAX add +
+    // dispatches cart:update — that flow already opens our drawer via
+    // the cart:update listener. Don't double-handle it.
+    if (form.closest('product-form-component')) return;
+    // Same for any element that wants to opt out.
+    if (form.closest('[data-gbcd-skip-intercept]')) return;
+    ev.preventDefault();
+    ev.stopPropagation();
+
+    var btn = form.querySelector('[type="submit"], [name="add"]');
+    var origLabel = btn ? btn.textContent : null;
+    if (btn) { btn.setAttribute('disabled', 'disabled'); }
+
+    // Optimistic preview if the variant + product context can be inferred
+    var variantInput = form.querySelector('[name="id"]');
+    var variantId = variantInput ? parseInt(variantInput.value, 10) : null;
+    if (variantId) {
+      open();
+      // Pull product context from the closest container that exposes it
+      var ctx = form.closest('[data-product-id], [data-product-handle]');
+      if (ctx && window.GBCartDrawer && typeof window.GBCartDrawer.previewAdd === 'function') {
+        window.GBCartDrawer.previewAdd({
+          variant_id: variantId,
+          product_id: parseInt(ctx.dataset.productId || '0', 10),
+          title: ctx.dataset.productTitle || '',
+          image: ctx.dataset.productImage || '',
+          price: parseInt(ctx.dataset.productPrice || '0', 10),
+          url: ctx.dataset.productUrl || ''
+        });
+      } else {
+        open();
+      }
+    }
+
+    var fd = new FormData(form);
+    fetch('/cart/add.js', {
+      method: 'POST',
+      headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+      body: fd
+    })
+      .then(function(r) {
+        if (!r.ok) return r.json().then(function(e) { return Promise.reject(e); });
+        return fetchCart();
+      })
+      .then(function(cart) {
+        if (btn) { btn.removeAttribute('disabled'); if (origLabel != null) btn.textContent = origLabel; }
+        document.dispatchEvent(new CustomEvent('cart:update', {
+          bubbles: true,
+          detail: { resource: cart, sourceId: 'gb-form-intercept', data: { source: 'gb-form-intercept', itemCount: cart && cart.item_count } }
+        }));
+      })
+      .catch(function() {
+        if (btn) { btn.removeAttribute('disabled'); if (origLabel != null) btn.textContent = origLabel; }
+        refresh();
+      });
+  }, true);
 
   // Make the header cart icon open our drawer instead of the theme one
   function bindHeaderCartIcon() {
