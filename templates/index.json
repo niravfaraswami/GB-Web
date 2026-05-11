@@ -120,9 +120,9 @@
       ],
       "settings": {
         "autoplay_seconds": 6,
-        "headline_size_desktop": 56,
-        "sub_size_desktop": 17,
-        "gap_after_headline": 18,
+        "headline_size_desktop": 70,
+        "sub_size_desktop": 24,
+        "gap_after_headline": 30,
         "gap_after_sub": 24,
         "headline_size_mobile": 20,
         "sub_size_mobile": 11,
@@ -132,7 +132,7 @@
         "overlay_width_desktop": 44,
         "overlay_width_mobile": 50,
         "overlay_left_desktop": 6,
-        "overlay_left_mobile": 6,
+        "overlay_left_mobile": 4,
         "cta_padding_y": 6,
         "cta_padding_x": 24,
         "cta_font_size": 12
