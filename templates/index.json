@@ -294,7 +294,7 @@
             "label": "Dairy Cultures",
             "tab_id": "dairy",
             "show_all_products": false,
-            "collection": "",
+            "collection": "cultures",
             "products_limit": 0,
             "cat_band": "Dairy Culture",
             "view_all_label": "View all dairy cultures",
