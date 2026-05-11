@@ -553,6 +553,13 @@
     { "type": "header", "content": "Card text — title truncation" },
     { "type": "range", "id": "title_max_chars", "label": "Truncate title at characters (0 = no truncation)", "min": 0, "max": 80, "step": 2, "default": 0 },
 
+    { "type": "header", "content": "Card text — spacing" },
+    { "type": "range", "id": "gap_below_title", "label": "Gap below title",                "min": 0, "max": 40, "step": 1, "default": 4,  "unit": "px" },
+    { "type": "range", "id": "gap_below_tag",   "label": "Gap below tab-name tag",         "min": 0, "max": 40, "step": 1, "default": 12, "unit": "px" },
+    { "type": "range", "id": "gap_below_price", "label": "Gap below price (above CTA)",    "min": 0, "max": 60, "step": 1, "default": 14, "unit": "px" },
+    { "type": "range", "id": "info_padding_y",  "label": "Card body — vertical padding",   "min": 0, "max": 40, "step": 1, "default": 18, "unit": "px" },
+    { "type": "range", "id": "info_padding_x",  "label": "Card body — horizontal padding", "min": 0, "max": 40, "step": 1, "default": 18, "unit": "px" },
+
     { "type": "header", "content": "Card text — typography" },
     { "type": "paragraph", "content": "Set size in px and weight per text element. Weights: 400 normal, 500 medium, 600 semibold, 700 bold, 800 extra-bold." },
 
@@ -630,15 +637,7 @@
         { "value": "dark",     "label": "Dark (filled ink, cream text)" },
         { "value": "ghost",    "label": "Ghost (no border, text only)" },
         { "value": "link",     "label": "Underlined link" }
-      ], "default": "outlined" },
-
-    { "type": "header", "content": "Card text — spacing" },
-    { "type": "paragraph", "content": "Margin below each text element. The CTA stays anchored to the bottom of the card via auto-spacing — gap below price sets the minimum gap above the CTA, the rest is absorbed automatically when card heights vary." },
-    { "type": "range", "id": "gap_below_title", "label": "Gap below title",                "min": 0, "max": 40, "step": 1, "default": 4,  "unit": "px" },
-    { "type": "range", "id": "gap_below_tag",   "label": "Gap below tab-name tag",         "min": 0, "max": 40, "step": 1, "default": 12, "unit": "px" },
-    { "type": "range", "id": "gap_below_price", "label": "Gap below price (above CTA)",    "min": 0, "max": 60, "step": 1, "default": 14, "unit": "px" },
-    { "type": "range", "id": "info_padding_y",  "label": "Card body — vertical padding",   "min": 0, "max": 40, "step": 1, "default": 18, "unit": "px" },
-    { "type": "range", "id": "info_padding_x",  "label": "Card body — horizontal padding", "min": 0, "max": 40, "step": 1, "default": 18, "unit": "px" }
+      ], "default": "outlined" }
   ],
   "blocks": [
     {
