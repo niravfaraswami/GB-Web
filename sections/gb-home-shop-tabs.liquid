@@ -32,9 +32,12 @@
 --gb-card-was-fs: {{ section.settings.was_size | default: 13 }}px;
 --gb-card-was-fw: {{ section.settings.was_weight | default: 500 }};
 --gb-card-cta-fs: {{ section.settings.cta_size | default: 12 }}px;
+--gb-card-cta-fs-m: {{ section.settings.cta_size_mobile | default: section.settings.cta_size | default: 12 }}px;
 --gb-card-cta-fw: {{ section.settings.cta_weight | default: 600 }};
 --gb-card-cta-py: {{ section.settings.cta_padding_y | default: 11 }}px;
+--gb-card-cta-py-m: {{ section.settings.cta_padding_y_mobile | default: section.settings.cta_padding_y | default: 11 }}px;
 --gb-card-cta-px: {{ section.settings.cta_padding_x | default: 16 }}px;
+--gb-card-cta-px-m: {{ section.settings.cta_padding_x_mobile | default: section.settings.cta_padding_x | default: 16 }}px;
 --gb-card-cta-radius: {{ section.settings.cta_border_radius | default: 50 }}px;
 --gb-card-info-pad-x: {{ section.settings.info_padding_x | default: 18 }}px;
 --gb-card-info-pad-y: {{ section.settings.info_padding_y | default: 18 }}px;
@@ -256,6 +259,10 @@
 .gb-shop-grid--4 { grid-template-columns: repeat(4, 1fr); }
 @media (max-width: 768px) {
   .gb-shop-grid--3, .gb-shop-grid--4 { grid-template-columns: repeat(2, 1fr); }
+  .gb-card-cta {
+    font-size: var(--gb-card-cta-fs-m, var(--gb-card-cta-fs, 12.5px));
+    padding: var(--gb-card-cta-py-m, var(--gb-card-cta-py, 11px)) var(--gb-card-cta-px-m, var(--gb-card-cta-px, 16px));
+  }
 }
 .gb-shop-empty {
   grid-column: 1 / -1;
@@ -617,7 +624,8 @@
         { "value": "700", "label": "700 Bold" }
       ], "default": "500" },
 
-    { "type": "range", "id": "cta_size",    "label": "Add-to-cart button — size",  "min": 6, "max": 22, "step": 1, "default": 12, "unit": "px" },
+    { "type": "range", "id": "cta_size",        "label": "Add-to-cart button — size (desktop)",  "min": 6, "max": 22, "step": 1, "default": 12, "unit": "px" },
+    { "type": "range", "id": "cta_size_mobile", "label": "Add-to-cart button — size (mobile)",   "min": 6, "max": 22, "step": 1, "default": 12, "unit": "px" },
     { "type": "select", "id": "cta_weight", "label": "Add-to-cart button — weight",
       "options": [
         { "value": "400", "label": "400 Normal" },
@@ -626,8 +634,10 @@
         { "value": "700", "label": "700 Bold" },
         { "value": "800", "label": "800 Extra-bold" }
       ], "default": "600" },
-    { "type": "range", "id": "cta_padding_y", "label": "Add-to-cart button — vertical padding",   "min": 0, "max": 30, "step": 1, "default": 11, "unit": "px" },
-    { "type": "range", "id": "cta_padding_x", "label": "Add-to-cart button — horizontal padding", "min": 0, "max": 40, "step": 1, "default": 16, "unit": "px" },
+    { "type": "range", "id": "cta_padding_y",        "label": "Add-to-cart button — vertical padding (desktop)",   "min": 0, "max": 30, "step": 1, "default": 11, "unit": "px" },
+    { "type": "range", "id": "cta_padding_y_mobile", "label": "Add-to-cart button — vertical padding (mobile)",    "min": 0, "max": 30, "step": 1, "default": 11, "unit": "px" },
+    { "type": "range", "id": "cta_padding_x",        "label": "Add-to-cart button — horizontal padding (desktop)", "min": 0, "max": 40, "step": 1, "default": 16, "unit": "px" },
+    { "type": "range", "id": "cta_padding_x_mobile", "label": "Add-to-cart button — horizontal padding (mobile)",  "min": 0, "max": 40, "step": 1, "default": 16, "unit": "px" },
     { "type": "range", "id": "cta_border_radius", "label": "Add-to-cart button — corner radius",  "min": 0, "max": 50, "step": 1, "default": 50, "unit": "px",
       "info": "50 = pill shape. 0 = sharp corners." },
     { "type": "select", "id": "cta_style", "label": "Add-to-cart button — style",
