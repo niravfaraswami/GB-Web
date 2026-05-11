@@ -16,7 +16,6 @@
     cart: null,
     isOpen: false,
     lastUnlockedCount: 0,
-    lastRemovedLine: null,
     moneyFormat: cfg.money_format || '₹{{amount}}',
     cartVersion: 0  // bumped on every local mutation or authoritative cart write; stale fetches check against this and bail.
   };
@@ -476,20 +475,6 @@
     if (state.lastFocus && state.lastFocus.focus) state.lastFocus.focus();
   }
 
-  // ---------- Toast (undo remove) ----------
-  var toastTimer = null;
-  function showToast(message, undoLine) {
-    var t = root.querySelector('[data-gbcd-toast]');
-    var msg = t.querySelector('[data-gbcd-toast-msg]');
-    var undo = t.querySelector('[data-gbcd-toast-undo]');
-    msg.textContent = message;
-    state.lastRemovedLine = undoLine;
-    undo.style.display = undoLine ? '' : 'none';
-    t.classList.add('show');
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(function() { t.classList.remove('show'); state.lastRemovedLine = null; }, 5000);
-  }
-
   // ---------- Events ----------
   root.addEventListener('click', function(ev) {
     if (ev.target.closest('[data-gbcd-close]') || ev.target.classList.contains('gbcd-overlay')) {
@@ -511,22 +496,10 @@
     if (removeBtn) {
       var line2 = removeBtn.closest('.gbcd-item');
       var key2 = line2.getAttribute('data-line-key');
-      var removedItem = state.cart.items.find(function(it) { return it.key === key2; });
-      if (removedItem) {
-        showToast('Removed ' + removedItem.product_title, { id: removedItem.variant_id, qty: removedItem.quantity, props: removedItem.properties });
-      }
       optimisticChangeQty(key2, 0);
       changeLine(key2, 0)
         .then(function(c) { state.cart = c; bumpVersion(); render(); })
         .catch(function() { refresh(); });
-      return;
-    }
-    var undoBtn = ev.target.closest('[data-gbcd-toast-undo]');
-    if (undoBtn && state.lastRemovedLine) {
-      var u = state.lastRemovedLine;
-      addLine(u.id, u.qty, u.props).then(function() { return fetchCart(); }).then(function(c) { state.cart = c; bumpVersion(); render(); });
-      root.querySelector('[data-gbcd-toast]').classList.remove('show');
-      state.lastRemovedLine = null;
       return;
     }
     var addonBtn = ev.target.closest('[data-gbcd-addon]');
