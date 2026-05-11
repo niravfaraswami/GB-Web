@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jars &amp; Tools — GutBasket</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   GUTBASKET — TEMPLATE 07 · JARS & TOOLS (PDP)
+   Layout reference. One product page, swap variants via the
+   top-right picker. Six accessories share the same layout.
+   ============================================================ */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  /* Surfaces */
+  --white: #FFFFFF;
+  --cream: #FFF9EE;
+  --cream-deeper: #F5EDD8;
+  --border: #E8E3D5;
+  --border-soft: #F0EBDD;
+
+  /* Identity & action */
+  --ink: #1F1F1D;
+  --all-in-one: #2B2218;
+
+  /* Text scale */
+  --text: #1F1F1D;
+  --text-muted: #5C4D3F;
+  --text-soft: #888780;
+
+  /* Kit color — overridden per-variant by JS (setAccessory) */
+  --kit-color: #4F7C57;
+  --kit-color-dark: #3F6346;
+  --kit-color-soft: #D8E4DC;
+}
+
+html, body { overflow-x: hidden; max-width: 100vw; }
+
+body {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  color: var(--text);
+  background: var(--cream);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { text-decoration: none; color: inherit; }
+img { max-width: 100%; display: block; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+
+.container { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+
+h1, h2, h3, h4 {
+  font-family: 'Montserrat', sans-serif;
+  letter-spacing: -0.015em;
+  line-height: 1.1;
+}
+
+/* ============== KIT PICKER (variant switcher, top-right) ============== */
+.kit-picker-toggle {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 1000;
+  background: var(--ink);
+  color: var(--cream);
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-family: 'DM Mono', monospace;
+  border: 1px solid rgba(255, 249, 238, 0.2);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+}
+.kit-picker {
+  position: fixed;
+  top: 56px;
+  right: 12px;
+  z-index: 999;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 10px 40px rgba(43, 31, 26, 0.12);
+  max-width: 320px;
+  display: none;
+}
+.kit-picker.open { display: block; }
+.kit-picker-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 10px;
+}
+.kit-picker-grid { display: grid; gap: 8px; }
+.kit-pick-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 6px;
+  border-radius: 8px;
+  background: var(--cream);
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.kit-pick-btn:hover { background: var(--cream-deeper); }
+.kit-pick-btn.active {
+  border-color: var(--kit-color);
+  background: var(--kit-color-soft);
+}
+.kit-pick-swatch {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+}
+.kit-pick-name {
+  font-size: 10px;
+  font-weight: 700;
+  text-align: center;
+  line-height: 1.2;
+  color: var(--text);
+}
+
+/* ============== PDP HERO ============== */
+.pdp-hero {
+  background: var(--white);
+  padding: 48px 0 80px;
+}
+.breadcrumb {
+  padding: 16px 0;
+  font-size: 13px;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border-soft);
+}
+.breadcrumb a { color: var(--text-muted); }
+.breadcrumb a:hover { color: var(--kit-color); }
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 56px;
+  margin-top: 32px;
+}
+
+.gallery-stack { display: flex; flex-direction: column; gap: 14px; }
+.gallery-main {
+  background: var(--kit-color-soft);
+  border-radius: 16px;
+  aspect-ratio: 1;
+  position: relative;
+  overflow: hidden;
+}
+.gallery-main .save-badge {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background: var(--ink);
+  color: var(--cream);
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.gallery-illustration {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 120px;
+  opacity: 0.4;
+  color: var(--kit-color);
+}
+.gallery-thumbs { display: flex; gap: 10px; overflow-x: auto; }
+.gallery-thumb {
+  flex: 0 0 90px;
+  height: 90px;
+  background: var(--cream);
+  border: 2px solid var(--border-soft);
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 10px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 8px;
+}
+.gallery-thumb.active { border-color: var(--kit-color); }
+
+.product-info { padding-top: 8px; }
+.rating-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+}
+.stars { color: #DDA738; font-size: 15px; letter-spacing: 1px; }
+.rating-link {
+  color: var(--text-muted);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.product-name {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 32px;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin-bottom: 14px;
+  text-transform: uppercase;
+}
+.product-tagline {
+  font-size: 16px;
+  color: var(--text-muted);
+  line-height: 1.55;
+  margin-bottom: 24px;
+}
+
+.activity-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 24px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.activity-row .item { display: flex; align-items: center; gap: 8px; }
+.activity-row .dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: #5DBC52;
+}
+
+/* ============== TEMPLATE 07 — SINGLE-PACK PRICE BLOCK ============== */
+/* No variant grid here. Each accessory has one SKU, so we surface a
+   single bold price block above the ATC button.                       */
+.single-price-block {
+  background: var(--white);
+  border: 2px solid var(--kit-color);
+  border-radius: 14px;
+  padding: 22px 24px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+.single-price-amount {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 32px;
+  color: var(--kit-color-dark);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.single-price-compare {
+  font-size: 14px;
+  color: var(--text-soft);
+  text-decoration: line-through;
+  margin-left: 10px;
+  font-weight: 400;
+}
+.single-price-save {
+  display: block;
+  font-size: 12px;
+  color: var(--ink);
+  font-weight: 600;
+  margin-top: 4px;
+}
+.single-price-tag {
+  background: var(--ink);
+  color: var(--cream);
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.atc-btn {
+  width: 100%;
+  background: var(--all-in-one);
+  color: var(--cream);
+  padding: 18px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-top: 8px;
+  transition: background 0.15s;
+}
+.atc-btn:hover { background: var(--ink); }
+
+.trust-strip {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-top: 14px;
+  font-size: 12px;
+  color: var(--text-muted);
+  flex-wrap: wrap;
+}
+.trust-strip .item { display: flex; align-items: center; gap: 6px; }
+.trust-strip .check {
+  display: inline-flex;
+  width: 14px; height: 14px;
+  align-items: center; justify-content: center;
+  background: #5DBC52;
+  color: white;
+  font-size: 9px;
+  border-radius: 3px;
+  font-weight: 800;
+}
+
+/* ============== SECTIONS ============== */
+section { padding: 80px 0; }
+section + section { border-top: 1px solid var(--border-soft); }
+
+.section-header { margin-bottom: 56px; max-width: 720px; }
+.section-header.centered { text-align: center; margin-left: auto; margin-right: auto; }
+.eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--kit-color);
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 44px;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  text-transform: uppercase;
+}
+h2 em { font-style: normal; color: var(--kit-color); }
+.section-header p {
+  font-size: 16px;
+  color: var(--text-muted);
+  margin-top: 16px;
+  line-height: 1.6;
+}
+
+/* Alternating section backgrounds + accent override */
+body > section { background: var(--white); }
+body > section.pdp-hero { background: var(--white); }
+body > section:nth-of-type(2n+2) { background: var(--cream); }
+section.section-accent { background: var(--kit-color-soft) !important; }
+
+/* ============== FEATURES (Why this design) ============== */
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+.feature-card {
+  background: var(--white);
+  border: 1px solid var(--border-soft);
+  border-radius: 14px;
+  padding: 28px 22px;
+  text-align: center;
+}
+.feature-icon {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  background: var(--kit-color-soft);
+  color: var(--kit-color);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  margin: 0 auto 14px;
+  font-weight: 800;
+}
+.feature-h {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 13px;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+.feature-d { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+
+/* ============== SPECS TABLE ============== */
+.specs-table {
+  background: var(--white);
+  border: 1px solid var(--border-soft);
+  border-radius: 14px;
+  overflow: hidden;
+}
+.specs-row {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  border-bottom: 1px solid var(--border-soft);
+}
+.specs-row:last-child { border-bottom: none; }
+.specs-cell { padding: 14px 22px; font-size: 13px; }
+.specs-cell.label {
+  background: var(--cream);
+  font-family: 'DM Mono', monospace;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  font-size: 11px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.specs-cell.value { font-weight: 600; color: var(--text); }
+
+.compatible-strip {
+  margin-top: 32px;
+  padding: 22px 28px;
+  background: var(--kit-color-soft);
+  border-radius: 12px;
+  border-left: 4px solid var(--kit-color);
+}
+.compatible-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--kit-color-dark);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.compatible-text { font-size: 14px; color: var(--text); line-height: 1.55; }
+
+/* ============== USE CASES ============== */
+.uses-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.use-card {
+  background: var(--white);
+  border-radius: 14px;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--border-soft);
+}
+.use-img {
+  height: 120px;
+  background: var(--kit-color-soft);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 44px;
+  color: var(--kit-color);
+}
+.use-body { padding: 16px; }
+.use-h {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 13px;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+.use-d { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+
+/* ============== REVIEWS ============== */
+.reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+.review-card {
+  background: var(--white);
+  border-radius: 14px;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  border: 1px solid var(--border-soft);
+  box-shadow: 0 2px 10px rgba(43, 31, 26, 0.04);
+}
+.review-photo {
+  height: 200px;
+  background: var(--cream-deeper);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 64px;
+  color: var(--text-soft);
+  opacity: 0.4;
+}
+.review-body { padding: 22px; }
+.review-stars {
+  color: #DDA738;
+  font-size: 16px;
+  letter-spacing: 1.5px;
+  margin-bottom: 8px;
+}
+.review-h {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 17px;
+  color: var(--text);
+  line-height: 1.3;
+  margin-bottom: 10px;
+}
+.review-author {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 22px;
+  background: var(--cream);
+  font-size: 13px;
+}
+.review-avatar {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: var(--kit-color);
+  color: var(--white);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+}
+.review-name { font-weight: 700; color: var(--text); }
+.review-sub { font-size: 12px; color: var(--text-muted); }
+
+/* ============== FAQ ============== */
+.faq-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  max-width: 760px;
+  margin: 0 auto;
+}
+.faq-item {
+  background: var(--white);
+  border: 1px solid var(--border-soft);
+  border-radius: 12px;
+  padding: 18px 22px;
+  cursor: pointer;
+}
+.faq-q {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--text);
+}
+.faq-toggle {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background: var(--cream);
+  color: var(--kit-color);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+  margin-left: 14px;
+  transition: transform 0.15s;
+}
+.faq-item.open .faq-toggle { transform: rotate(45deg); }
+.faq-a {
+  margin-top: 14px;
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  display: none;
+}
+.faq-item.open .faq-a { display: block; }
+
+/* ============== CROSS SELL ============== */
+.crosssell-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+.cs-card {
+  background: var(--white);
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--border-soft);
+  box-shadow: 0 2px 10px rgba(43, 31, 26, 0.04);
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+.cs-img {
+  height: 140px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 48px;
+  color: var(--cream);
+  position: relative;
+}
+.cs-pill {
+  position: absolute;
+  top: 12px; left: 12px;
+  background: var(--ink);
+  color: var(--cream);
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-weight: 700;
+}
+.cs-body { padding: 18px; }
+.cs-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+.cs-h {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--text);
+  margin-bottom: 10px;
+  line-height: 1.3;
+}
+.cs-price {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 16px;
+  color: var(--text);
+}
+
+/* ============== MOBILE ============== */
+@media (max-width: 768px) {
+  .hero-grid { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+  .hero-grid > * { min-width: 0; max-width: 100%; }
+  .product-name { font-size: 26px; word-wrap: break-word; }
+  h2 { font-size: 28px; }
+  section { padding: 56px 0; }
+  .feature-grid,
+  .uses-grid,
+  .crosssell-grid { grid-template-columns: repeat(2, 1fr); }
+  .reviews-grid { grid-template-columns: 1fr; }
+  .single-price-block { padding: 18px 18px; }
+  .single-price-amount { font-size: 26px; }
+  .kit-picker-toggle { top: 8px; right: 8px; padding: 6px 10px; font-size: 10px; }
+  .kit-picker { right: 8px; max-width: calc(100vw - 16px); }
+  .specs-row { grid-template-columns: 1fr; }
+  .specs-cell.label { padding: 10px 18px; }
+}
+</style>
+</head>
+<body data-kit="fermenter_2l">
+
+<!-- =============== VARIANT PICKER (DEV / NAV TOOL) =============== -->
+<!-- Top-right toggle that opens a grid of all 6 accessories.
+     On a real shop, this maps to Shopify variant or related-product nav. -->
+<button class="kit-picker-toggle" onclick="document.getElementById('kit-picker').classList.toggle('open')">
+  <span id="picker-label">Fermenter 2L ▾</span>
+</button>
+<div class="kit-picker" id="kit-picker">
+  <div class="kit-picker-title">SELECT ACCESSORY</div>
+  <div class="kit-picker-grid" style="grid-template-columns: repeat(2, 1fr);" id="kit-picker-grid"></div>
+</div>
+
+
+<!-- =============== 1. PDP HERO =============== -->
+<section class="pdp-hero">
+  <div class="container">
+    <div class="breadcrumb"><a href="#">Home</a> / <a href="#">Jars &amp; Tools</a> / <span data-bind="name">Fermenter Jar — 2 L</span></div>
+    <div class="hero-grid">
+      <div class="gallery-stack">
+        <div class="gallery-main">
+          <span class="save-badge" data-bind="discount">-₹300</span>
+          <div class="gallery-illustration">🫙</div>
+        </div>
+        <div class="gallery-thumbs">
+          <div class="gallery-thumb active">Hero shot</div>
+          <div class="gallery-thumb">Detail</div>
+          <div class="gallery-thumb">In use</div>
+          <div class="gallery-thumb">Pairing</div>
+          <div class="gallery-thumb">Lifestyle</div>
+        </div>
+      </div>
+
+      <div class="product-info">
+        <div class="rating-row">
+          <span class="stars">★★★★★</span>
+          <span class="rating-link" data-bind="rating-text">4.86 (342 reviews)</span>
+        </div>
+        <h1 class="product-name" data-bind="product-name">FERMENTER JAR — 2 L</h1>
+        <p class="product-tagline" data-bind="tagline">Wide-mouth glass jar with airlock-ready lid. The hero of your fermentation kitchen.</p>
+
+        <div class="activity-row">
+          <div class="item"><span class="dot"></span><span><strong data-bind="bought-today">128</strong> people bought this today</span></div>
+          <div class="item"><span>♻️</span><span>Lifetime use · zero plastic degradation</span></div>
+          <div class="item"><span>🧼</span><span>Dishwasher safe · easy clean</span></div>
+        </div>
+
+        <div class="single-price-block">
+          <div>
+            <div class="single-price-amount">
+              <span data-bind="price">₹699</span>
+              <span class="single-price-compare" data-bind="compare-price">₹999</span>
+            </div>
+            <span class="single-price-save" data-bind="save-text">You save ₹300</span>
+          </div>
+          <span class="single-price-tag">IN STOCK</span>
+        </div>
+
+        <button class="atc-btn">ADD TO CART</button>
+
+        <div class="trust-strip">
+          <div class="item"><span class="check">✓</span> Food-grade</div>
+          <div class="item"><span class="check">✓</span> Lifetime use</div>
+          <div class="item"><span class="check">✓</span> FSSAI Licensed</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- =============== 2. WHY THIS DESIGN (Features) =============== -->
+<section class="section-accent">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow">WHY THIS DESIGN</div>
+      <h2 data-bind="features-h1">BUILT FOR FERMENTATION.</h2>
+      <p data-bind="features-intro">Most jars in your kitchen weren't designed for fermentation. This one is. Wide mouth fits chunks. Smooth interior makes cleaning easy. Lid threads accept airlocks. Glass holds shape over years of use.</p>
+    </div>
+    <div class="feature-grid" id="feature-grid">
+      <div class="feature-card"><div class="feature-icon">⊕</div><div class="feature-h">WIDE MOUTH</div><div class="feature-d">Fits whole vegetables — sliced cabbage heads, large mango chunks, full carrots.</div></div>
+      <div class="feature-card"><div class="feature-icon">◇</div><div class="feature-h">BOROSILICATE</div><div class="feature-d">Heat-stable, doesn't crack with temperature swings.</div></div>
+      <div class="feature-card"><div class="feature-icon">△</div><div class="feature-h">AIRLOCK READY</div><div class="feature-d">Standard thread accepts our airlock and others.</div></div>
+      <div class="feature-card"><div class="feature-icon">◎</div><div class="feature-h">LIFETIME</div><div class="feature-d">Glass + steel lid · no plastic to degrade · use for years.</div></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- =============== 3. SPECS TABLE + COMPATIBLE STRIP =============== -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow">SPECIFICATIONS</div>
+      <h2>EVERY <em>DETAIL</em>, MEASURED.</h2>
+    </div>
+    <div class="specs-table" id="specs-table">
+      <div class="specs-row"><div class="specs-cell label">Capacity</div><div class="specs-cell value">2 L (66 fl oz)</div></div>
+      <div class="specs-row"><div class="specs-cell label">Material</div><div class="specs-cell value">Borosilicate glass · BPA-free</div></div>
+      <div class="specs-row"><div class="specs-cell label">Mouth Width</div><div class="specs-cell value">90mm · wide for chunky vegetables</div></div>
+      <div class="specs-row"><div class="specs-cell label">Compatibility</div><div class="specs-cell value">Standard airlock + glass weight</div></div>
+      <div class="specs-row"><div class="specs-cell label">Dishwasher Safe</div><div class="specs-cell value">Yes — both jar and lid</div></div>
+      <div class="specs-row"><div class="specs-cell label">Microwave Safe</div><div class="specs-cell value">Yes (without lid)</div></div>
+    </div>
+
+    <div class="compatible-strip">
+      <div class="compatible-eyebrow">WORKS WITH</div>
+      <div class="compatible-text" data-bind="compatible-with">Probiotic Achaar Kit · Kanji Making Kit · Aam Panna Kit · Vegetable Fermentation Kit · Kimchi Making Kit · Sprouts Maker Kit</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- =============== 4. USE CASES =============== -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow">FOUR USES</div>
+      <h2>NOT JUST FOR <em>ONE THING</em>.</h2>
+    </div>
+    <div class="uses-grid" id="uses-grid">
+      <div class="use-card"><div class="use-img">🥬</div><div class="use-body"><div class="use-h">FERMENT KITS</div><div class="use-d">Achaar, kanji, kimchi, vegetable ferments</div></div></div>
+      <div class="use-card"><div class="use-img">🌱</div><div class="use-body"><div class="use-h">SPROUTING</div><div class="use-d">Mesh-lid swap converts to sprouter</div></div></div>
+      <div class="use-card"><div class="use-img">🥒</div><div class="use-body"><div class="use-h">PICKLING</div><div class="use-d">Salt-only fermented pickles</div></div></div>
+      <div class="use-card"><div class="use-img">❄️</div><div class="use-body"><div class="use-h">STORAGE</div><div class="use-d">After fermentation: keeps in fridge</div></div></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- =============== 5. REVIEWS =============== -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow">REPEAT BUYERS</div>
+      <h2>WHY THEY <em>STOCK MULTIPLE</em>.</h2>
+    </div>
+    <div class="reviews-grid">
+      <div class="review-card">
+        <div class="review-photo">📷</div>
+        <div class="review-body"><div class="review-stars">★★★★★</div><div class="review-h">Got two more for my second batch</div></div>
+        <div class="review-author"><div class="review-avatar">A</div><div><div class="review-name">Aditi G.</div><div class="review-sub">(28, Goa)</div></div></div>
+      </div>
+      <div class="review-card">
+        <div class="review-photo">📷</div>
+        <div class="review-body"><div class="review-stars">★★★★★</div><div class="review-h">Solid glass, doesn't break in the dishwasher</div></div>
+        <div class="review-author"><div class="review-avatar">S</div><div><div class="review-name">Sameer V.</div><div class="review-sub">(35, Mumbai)</div></div></div>
+      </div>
+      <div class="review-card">
+        <div class="review-photo">📷</div>
+        <div class="review-body"><div class="review-stars">★★★★★</div><div class="review-h">Use it for everything, not just fermenting</div></div>
+        <div class="review-author"><div class="review-avatar">L</div><div><div class="review-name">Lakshmi R.</div><div class="review-sub">(45, Chennai)</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- =============== 6. FAQ =============== -->
+<section>
+  <div class="container">
+    <div class="section-header centered">
+      <div class="eyebrow">QUESTIONS?</div>
+      <h2>COMMON <em>QUESTIONS</em></h2>
+    </div>
+    <div class="faq-grid">
+      <div class="faq-item open" onclick="this.classList.toggle('open')"><div class="faq-q"><span>Why borosilicate glass instead of regular glass?</span><span class="faq-toggle">+</span></div><div class="faq-a">Borosilicate handles temperature swings better — pour hot brine in, transfer to fridge, no cracking. Regular glass cracks under thermal shock.</div></div>
+      <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q"><span>Will it fit my existing kit?</span><span class="faq-toggle">+</span></div><div class="faq-a">Yes if you have a GutBasket kit. For other brands, the wide-mouth thread is standard — fits 90% of mason jar accessories.</div></div>
+      <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q"><span>How do I clean it?</span><span class="faq-toggle">+</span></div><div class="faq-a">Dishwasher safe (top rack). Or hand wash with hot water + mild soap. For stuck-on residue, soak overnight with baking soda.</div></div>
+      <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q"><span>Lifetime use — how long is "lifetime"?</span><span class="faq-toggle">+</span></div><div class="faq-a">As long as the glass doesn't break. We've had customers using their original jars for 4+ years. The lid threads stay good for 5+ years.</div></div>
+      <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q"><span>Is the lid airtight?</span><span class="faq-toggle">+</span></div><div class="faq-a">Yes when sealed properly. For active fermentation, you should attach an airlock instead — the airtight lid will pressurise from CO2 buildup.</div></div>
+      <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q"><span>Microwave safe?</span><span class="faq-toggle">+</span></div><div class="faq-a">Yes — without the lid. Borosilicate handles microwave heat. Don't microwave with the metal lid attached.</div></div>
+      <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q"><span>Replacement parts?</span><span class="faq-toggle">+</span></div><div class="faq-a">Lids and grommets are sold separately. Glass jar is rarely replaced unless dropped — we replace under warranty for manufacturing defects.</div></div>
+      <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q"><span>Storage when not in use?</span><span class="faq-toggle">+</span></div><div class="faq-a">Air-dry completely before storing. Stack with lids loose to avoid trapping moisture.</div></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- =============== 7. CROSS SELL (Pair with…) =============== -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow">PAIR WITH</div>
+      <h2>BUILD A <em>FERMENTATION KIT</em>.</h2>
+    </div>
+    <div class="crosssell-grid">
+      <div class="cs-card"><div class="cs-img" style="background: #4F7C57;"><span class="cs-pill">JAR</span>🫙</div><div class="cs-body"><div class="cs-eyebrow">FERMENTER</div><div class="cs-h">Fermenter Jar — 2L</div><div class="cs-price">From ₹699</div></div></div>
+      <div class="cs-card"><div class="cs-img" style="background: #15BA97;"><span class="cs-pill">TOOL</span>🔵</div><div class="cs-body"><div class="cs-eyebrow">AIRLOCK</div><div class="cs-h">Airlock Set — 2 pcs</div><div class="cs-price">From ₹299</div></div></div>
+      <div class="cs-card"><div class="cs-img" style="background: #0097B2;"><span class="cs-pill">TOOL</span>⚖️</div><div class="cs-body"><div class="cs-eyebrow">WEIGHT</div><div class="cs-h">Glass Fermentation Weight</div><div class="cs-price">From ₹249</div></div></div>
+      <div class="cs-card"><div class="cs-img" style="background: #2B2218;"><span class="cs-pill">BUNDLE</span>🎁</div><div class="cs-body"><div class="cs-eyebrow">COMPLETE KIT</div><div class="cs-h">Build-Your-Own Bundle</div><div class="cs-price">From ₹1,099</div></div></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- =============== ACCESSORIES DATA + VARIANT SWITCHER =============== -->
+<script>
+const ACCESSORIES = {
+  "fermenter_2l": {
+    "name": "Fermenter Jar — 2 L",
+    "short_name": "Fermenter 2L",
+    "tagline": "Wide-mouth glass jar with airlock-ready lid. The hero of your fermentation kitchen.",
+    "kit_color": "#4F7C57", "kit_color_dark": "#3F6346", "kit_color_soft": "#D8E4DC",
+    "category_label": "JAR",
+    "price": "₹699", "compare_price": "₹999", "save": "₹300",
+    "rating": "4.86", "review_count": "342", "bought_today": "128",
+    "specs": [
+      ["Capacity", "2 L (66 fl oz)"],
+      ["Material", "Borosilicate glass · BPA-free"],
+      ["Mouth Width", "90mm · wide for chunky vegetables"],
+      ["Compatibility", "Standard airlock + glass weight"],
+      ["Dishwasher Safe", "Yes — both jar and lid"],
+      ["Microwave Safe", "Yes (without lid)"]
+    ],
+    "features_h1": "BUILT FOR FERMENTATION.",
+    "features_intro": "Most jars in your kitchen weren't designed for fermentation. This one is. Wide mouth fits chunks. Smooth interior makes cleaning easy. Lid threads accept airlocks. Glass holds shape over years of use.",
+    "features": [
+      ["WIDE MOUTH", "Fits whole vegetables — sliced cabbage heads, large mango chunks, full carrots."],
+      ["BOROSILICATE", "Heat-stable, doesn't crack with temperature swings."],
+      ["AIRLOCK READY", "Standard thread accepts our airlock and others."],
+      ["LIFETIME", "Glass + steel lid · no plastic to degrade · use for years."]
+    ],
+    "use_cases": [
+      ["FERMENT KITS", "Achaar, kanji, kimchi, vegetable ferments"],
+      ["SPROUTING", "Mesh-lid swap converts to sprouter"],
+      ["PICKLING", "Salt-only fermented pickles"],
+      ["STORAGE", "After fermentation: keeps in fridge"]
+    ],
+    "compatible_with": "Probiotic Achaar Kit · Kanji Making Kit · Aam Panna Kit · Vegetable Fermentation Kit · Kimchi Making Kit · Sprouts Maker Kit"
+  },
+  "fermenter_1l": {
+    "name": "Fermenter Jar — 1 L",
+    "short_name": "Fermenter 1L",
+    "tagline": "Smaller version of our hero jar. For single-serving ferments and starter batches.",
+    "kit_color": "#4F7C57", "kit_color_dark": "#3F6346", "kit_color_soft": "#D8E4DC",
+    "category_label": "JAR",
+    "price": "₹449", "compare_price": "₹699", "save": "₹250",
+    "rating": "4.82", "review_count": "218", "bought_today": "76",
+    "specs": [
+      ["Capacity", "1 L (33 fl oz)"],
+      ["Material", "Borosilicate glass · BPA-free"],
+      ["Mouth Width", "85mm · wide for vegetables"],
+      ["Compatibility", "Standard airlock + glass weight"],
+      ["Dishwasher Safe", "Yes — both jar and lid"],
+      ["Microwave Safe", "Yes (without lid)"]
+    ],
+    "features_h1": "SOLO FERMENTERS, START HERE.",
+    "features_intro": "Single-person households or trial-batch fermenting? The 1L jar is sized for ~600g of vegetables — perfect for one person eating fermented foods daily.",
+    "features": [
+      ["SOLO-SIZED", "One person's 2-week supply of achaar, kanji, or kimchi."],
+      ["SAME QUALITY", "Same borosilicate glass, same lid threads as the 2L."],
+      ["AIRLOCK READY", "Same airlock and glass weight as the 2L jar."],
+      ["TRY-FIRST", "Cheaper entry point if you're new to fermenting."]
+    ],
+    "use_cases": [
+      ["SINGLE FERMENTS", "~600g vegetables / 700ml liquid"],
+      ["TRIAL BATCHES", "Test recipes before committing"],
+      ["COUPLES", "One-week supply for two"],
+      ["STORAGE", "Compact fridge storage"]
+    ],
+    "compatible_with": "All fermentation kits · works as smaller batch alternative"
+  },
+  "airlock": {
+    "name": "Airlock Set",
+    "short_name": "Airlock",
+    "tagline": "Lets CO2 out. Keeps oxygen out. The single most important fermentation accessory.",
+    "kit_color": "#15BA97", "kit_color_dark": "#0F8C72", "kit_color_soft": "#CDEDE3",
+    "category_label": "TOOL",
+    "price": "₹299", "compare_price": "₹449", "save": "₹150",
+    "rating": "4.79", "review_count": "187", "bought_today": "54",
+    "specs": [
+      ["Includes", "2 airlocks · 2 silicone grommets · jar lid"],
+      ["Material", "Food-grade silicone + BPA-free plastic"],
+      ["Compatible With", "Mason jars · GutBasket fermenter jars · standard wide-mouth"],
+      ["Reusable", "Yes — washable, lifetime use"],
+      ["Dishwasher Safe", "Top rack only"],
+      ["How It Works", "CO2 bubbles out · oxygen blocked"]
+    ],
+    "features_h1": "NO MORE DAILY BURPING.",
+    "features_intro": "Without an airlock, your jar builds CO2 pressure and you have to \"burp\" it daily. With an airlock, the CO2 escapes through a water-sealed valve — and oxygen (which causes mould) can't get back in.",
+    "features": [
+      ["CO2 OUT", "Fermentation gas escapes through water seal · no pressure buildup."],
+      ["OXYGEN BLOCKED", "No oxygen in = no mould risk · safer ferments."],
+      ["NO BURPING", "Truly hands-off · just check water level weekly."],
+      ["REUSABLE", "Lifetime use with proper cleaning."]
+    ],
+    "use_cases": [
+      ["VEGETABLE FERMENTS", "Sauerkraut, kimchi, achaar"],
+      ["DRINKS", "Kanji, kombucha second ferment"],
+      ["SOURDOUGH", "Bulk ferment + retarding"],
+      ["ANY 1L+ JAR", "Universal fit"]
+    ],
+    "compatible_with": "All GutBasket fermenter jars · standard wide-mouth mason jars"
+  },
+  "glass_weight": {
+    "name": "Glass Fermentation Weight",
+    "short_name": "Glass Weight",
+    "tagline": "Pushes vegetables under brine. Above brine = mould risk. Glass weight = safe ferment.",
+    "kit_color": "#0097B2", "kit_color_dark": "#077E94", "kit_color_soft": "#C2E5ED",
+    "category_label": "TOOL",
+    "price": "₹249", "compare_price": "₹399", "save": "₹150",
+    "rating": "4.81", "review_count": "154", "bought_today": "47",
+    "specs": [
+      ["Pack", "2 weights per set"],
+      ["Material", "Pure glass · no metal · no plastic"],
+      ["Diameter", "70mm · fits wide-mouth jars"],
+      ["Compatible With", "GutBasket 1L + 2L · standard mason jars"],
+      ["Dishwasher Safe", "Yes"],
+      ["Notch", "For easy retrieval"]
+    ],
+    "features_h1": "KEEP VEGGIES UNDER BRINE.",
+    "features_intro": "During fermentation, vegetables float to the top. Anything above the brine line is exposed to air = mould. The glass weight pushes vegetables under, keeping every bite submerged and safe.",
+    "features": [
+      ["SUBMERGED", "Pushes veggies fully under brine."],
+      ["PURE GLASS", "No leaching · no rust · food-safe."],
+      ["NOTCHED", "Easy to lift out without contamination."],
+      ["SET OF 2", "One per jar · spare for second batch."]
+    ],
+    "use_cases": [
+      ["SAUERKRAUT", "Submerge cabbage strands"],
+      ["CARROTS", "Hold sticks under brine"],
+      ["PICKLED VEGGIES", "Any submerged ferment"],
+      ["GARLIC", "Whole-clove fermenting"]
+    ],
+    "compatible_with": "All wide-mouth fermentation jars · 1L and 2L sizes"
+  },
+  "mesh_lid": {
+    "name": "Sprouting Mesh Lid",
+    "short_name": "Mesh Lid",
+    "tagline": "Converts your jar into a self-draining sprouter. No tools, just swap the lid.",
+    "kit_color": "#3F7754", "kit_color_dark": "#2F5C40", "kit_color_soft": "#D8E4DC",
+    "category_label": "TOOL",
+    "price": "₹199", "compare_price": "₹299", "save": "₹100",
+    "rating": "4.74", "review_count": "128", "bought_today": "38",
+    "specs": [
+      ["Pack", "2 lids per set"],
+      ["Material", "Stainless steel mesh + BPA-free plastic ring"],
+      ["Mesh Size", "1mm · drains seeds + small sprouts"],
+      ["Compatible With", "GutBasket fermenter jars · standard wide-mouth"],
+      ["Dishwasher Safe", "Yes"],
+      ["Reusable", "Lifetime use"]
+    ],
+    "features_h1": "JAR + LID = SPROUTER.",
+    "features_intro": "Sprouting needs constant drainage and airflow. The mesh lid screws onto your fermenter jar, tilts upside-down on a stand, and self-drains. Same jar, two functions.",
+    "features": [
+      ["SELF-DRAINS", "Tilt jar upside-down · water flows out · sprouts stay."],
+      ["AIRFLOW", "Mesh lets air circulate · prevents mould."],
+      ["STAINLESS", "Food-grade · doesn't rust."],
+      ["SET OF 2", "Sprout two batches at once."]
+    ],
+    "use_cases": [
+      ["SPROUTING", "Moong, alfalfa, mixed seeds"],
+      ["STRAINING", "Cheesemaking, yogurt"],
+      ["DRYING HERBS", "Inverted in dry place"],
+      ["AS A LID", "Allows air for cooling foods"]
+    ],
+    "compatible_with": "All GutBasket jars · standard wide-mouth mason jars"
+  },
+  "drainage_stand": {
+    "name": "Sprouting Drainage Stand",
+    "short_name": "Drainage Stand",
+    "tagline": "Holds your sprouting jar at the right angle. Drains water, lets air in. Set and forget.",
+    "kit_color": "#A88554", "kit_color_dark": "#7E6340", "kit_color_soft": "#E8DAC4",
+    "category_label": "TOOL",
+    "price": "₹249", "compare_price": "₹399", "save": "₹150",
+    "rating": "4.7", "review_count": "94", "bought_today": "24",
+    "specs": [
+      ["Material", "Powder-coated steel · rust-resistant"],
+      ["Holds", "Up to 2L jars"],
+      ["Tilt Angle", "45° optimal for drainage + airflow"],
+      ["Footprint", "15cm × 12cm · fits any countertop"],
+      ["Dishwasher Safe", "No · wipe with damp cloth"],
+      ["Reusable", "Yes — lifetime use"]
+    ],
+    "features_h1": "SET. FORGET. SPROUT.",
+    "features_intro": "Sprouting needs the jar upside-down at 45° for drainage and airflow. Without a stand, you're propping the jar against the kitchen edge. With this, just place and walk away.",
+    "features": [
+      ["45° TILT", "Optimal drainage + airflow geometry."],
+      ["STEEL", "Stable, durable, doesn't tip over."],
+      ["UNIVERSAL", "Holds 1L or 2L jars."],
+      ["COMPACT", "Fits next to your sink."]
+    ],
+    "use_cases": [
+      ["SPROUTING", "Pair with mesh lid"],
+      ["DRYING JARS", "After washing"],
+      ["STRAINING", "Cheese / yogurt"],
+      ["STORAGE", "Keeps jar accessible"]
+    ],
+    "compatible_with": "All sprouting jars · 1L and 2L sizes"
+  }
+};
+
+/* ============================================================
+   setAccessory(id)
+   1. Sets CSS variables (kit-color, dark, soft) on :root
+   2. Pushes data into every [data-bind="…"] element on the page
+   3. Re-renders the feature grid, specs table, and uses grid
+   4. Updates the picker label
+   ============================================================ */
+function setAccessory(id) {
+  const a = ACCESSORIES[id];
+  if (!a) return;
+
+  const root = document.documentElement;
+  root.style.setProperty('--kit-color', a.kit_color);
+  root.style.setProperty('--kit-color-dark', a.kit_color_dark);
+  root.style.setProperty('--kit-color-soft', a.kit_color_soft);
+  document.body.dataset.kit = id;
+  document.title = a.name + ' — GutBasket';
+
+  const bindings = {
+    'name': a.name,
+    'product-name': a.name.toUpperCase(),
+    'tagline': a.tagline,
+    'rating-text': a.rating + ' (' + a.review_count + ' reviews)',
+    'bought-today': a.bought_today,
+    'discount': '-' + a.save,
+    'price': a.price,
+    'compare-price': a.compare_price,
+    'save-text': 'You save ' + a.save,
+    'features-h1': a.features_h1,
+    'features-intro': a.features_intro,
+    'compatible-with': a.compatible_with,
+  };
+  Object.entries(bindings).forEach(([k, v]) => {
+    document.querySelectorAll(`[data-bind="${k}"]`).forEach(el => el.textContent = v);
+  });
+
+  // Feature cards
+  const fIcons = ['⊕', '◇', '△', '◎'];
+  document.getElementById('feature-grid').innerHTML = a.features.map((f, i) =>
+    `<div class="feature-card"><div class="feature-icon">${fIcons[i]}</div><div class="feature-h">${f[0]}</div><div class="feature-d">${f[1]}</div></div>`
+  ).join('');
+
+  // Specs table
+  document.getElementById('specs-table').innerHTML = a.specs.map(s =>
+    `<div class="specs-row"><div class="specs-cell label">${s[0]}</div><div class="specs-cell value">${s[1]}</div></div>`
+  ).join('');
+
+  // Use cases
+  const useIcons = ['🥬', '🌱', '🥒', '❄️'];
+  document.getElementById('uses-grid').innerHTML = a.use_cases.map((u, i) =>
+    `<div class="use-card"><div class="use-img">${useIcons[i]}</div><div class="use-body"><div class="use-h">${u[0]}</div><div class="use-d">${u[1]}</div></div></div>`
+  ).join('');
+
+  // Picker active state + label
+  document.querySelectorAll('.kit-pick-btn').forEach(b => b.classList.toggle('active', b.dataset.kit === id));
+  document.getElementById('picker-label').innerHTML = a.short_name + ' ▾';
+}
+
+function buildPicker() {
+  document.getElementById('kit-picker-grid').innerHTML = Object.entries(ACCESSORIES).map(([id, k]) =>
+    `<button class="kit-pick-btn${id === document.body.dataset.kit ? ' active' : ''}" data-kit="${id}" onclick="setAccessory('${id}'); document.getElementById('kit-picker').classList.remove('open');">
+      <span class="kit-pick-swatch" style="background: ${k.kit_color};"></span>
+      <span class="kit-pick-name">${k.short_name}</span>
+    </button>`
+  ).join('');
+}
+
+buildPicker();
+setAccessory('fermenter_2l');
+</script>
+
+</body>
+</html>
