@@ -33,7 +33,12 @@
 --gb-card-was-fw: {{ section.settings.was_weight | default: 500 }};
 --gb-card-cta-fs: {{ section.settings.cta_size | default: 12 }}px;
 --gb-card-cta-fw: {{ section.settings.cta_weight | default: 600 }};
+--gb-card-cta-py: {{ section.settings.cta_padding_y | default: 11 }}px;
+--gb-card-cta-px: {{ section.settings.cta_padding_x | default: 16 }}px;
+--gb-card-cta-radius: {{ section.settings.cta_border_radius | default: 50 }}px;
 {%- endcapture -%}
+
+{%- assign cta_style_class = section.settings.cta_style | default: 'outlined' -%}
 
 <section class="gb-shop" id="gb-shop-{{ section.id }}" style="{{ card_vars | strip_newlines }}">
   <div class="gb-shop-container">
@@ -137,7 +142,7 @@
                       </div>
                     {%- endif -%}
                     {%- if show_cta -%}
-                      <button type="button" class="gb-card-cta" data-product-handle="{{ product.handle }}">Add to cart</button>
+                      <button type="button" class="gb-card-cta gb-card-cta--{{ cta_style_class }}" data-product-handle="{{ product.handle }}">Add to cart</button>
                     {%- endif -%}
                   </div>
                 </a>
@@ -379,27 +384,63 @@
 .gb-card-cta {
   display: block;
   width: 100%;
-  padding: 11px 16px;
-  background: transparent;
-  border: 1.5px solid var(--c-ink);
-  border-radius: 999px;
+  padding: var(--gb-card-cta-py, 11px) var(--gb-card-cta-px, 16px);
+  border-radius: var(--gb-card-cta-radius, 999px);
   font-family: 'DM Sans', sans-serif;
   font-size: var(--gb-card-cta-fs, 12.5px);
   font-weight: var(--gb-card-cta-fw, 600);
-  color: var(--c-ink);
   text-transform: uppercase;
   letter-spacing: 0.1em;
   cursor: pointer;
-  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.15s ease;
   text-align: center;
   margin-top: auto;
   order: 4;
+  border: none;
+  background: transparent;
+  color: var(--c-ink);
 }
-.gb-card-cta:hover {
+.gb-card-cta--outlined {
+  background: transparent;
+  border: 1.5px solid var(--c-ink);
+  color: var(--c-ink);
+}
+.gb-card-cta--outlined:hover {
   background: var(--c-action);
   border-color: var(--c-action);
   color: var(--c-white);
 }
+.gb-card-cta--solid {
+  background: var(--c-action);
+  border: none;
+  color: var(--c-white);
+}
+.gb-card-cta--solid:hover { background: #E66800; transform: translateY(-1px); }
+.gb-card-cta--dark {
+  background: var(--c-ink);
+  border: none;
+  color: var(--c-cream);
+}
+.gb-card-cta--dark:hover { background: var(--c-action); color: var(--c-white); }
+.gb-card-cta--ghost {
+  background: transparent;
+  border: none;
+  color: var(--c-ink);
+}
+.gb-card-cta--ghost:hover { color: var(--c-action); }
+.gb-card-cta--link {
+  background: transparent;
+  border: none;
+  color: var(--c-ink);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1.5px;
+  text-transform: none;
+  letter-spacing: 0.02em;
+  padding-left: 0;
+  padding-right: 0;
+}
+.gb-card-cta--link:hover { color: var(--c-action); text-decoration-thickness: 2.5px; }
 .gb-shop-viewall { text-align: center; margin-top: 36px; }
 .gb-shop-viewall a {
   font-family: 'DM Sans', sans-serif;
@@ -510,7 +551,7 @@
     { "type": "header", "content": "Card text — typography" },
     { "type": "paragraph", "content": "Set size in px and weight per text element. Weights: 400 normal, 500 medium, 600 semibold, 700 bold, 800 extra-bold." },
 
-    { "type": "range", "id": "band_size",   "label": "Category band — size",   "min": 9,  "max": 18, "step": 1, "default": 13, "unit": "px" },
+    { "type": "range", "id": "band_size",   "label": "Category band — size",   "min": 6,  "max": 24, "step": 1, "default": 13, "unit": "px" },
     { "type": "select", "id": "band_weight", "label": "Category band — weight",
       "options": [
         { "value": "400", "label": "400 Normal" },
@@ -520,7 +561,7 @@
         { "value": "800", "label": "800 Extra-bold" }
       ], "default": "600" },
 
-    { "type": "range", "id": "badge_size",  "label": "Save badge — size",      "min": 8,  "max": 14, "step": 1, "default": 9,  "unit": "px" },
+    { "type": "range", "id": "badge_size",  "label": "Save badge — size",      "min": 6,  "max": 18, "step": 1, "default": 9,  "unit": "px" },
     { "type": "select", "id": "badge_weight", "label": "Save badge — weight",
       "options": [
         { "value": "500", "label": "500 Medium" },
@@ -529,7 +570,7 @@
         { "value": "800", "label": "800 Extra-bold" }
       ], "default": "700" },
 
-    { "type": "range", "id": "title_size",  "label": "Product title — size",   "min": 12, "max": 22, "step": 1, "default": 15, "unit": "px" },
+    { "type": "range", "id": "title_size",  "label": "Product title — size",   "min": 6,  "max": 32, "step": 1, "default": 15, "unit": "px" },
     { "type": "select", "id": "title_weight", "label": "Product title — weight",
       "options": [
         { "value": "500", "label": "500 Medium" },
@@ -538,7 +579,7 @@
         { "value": "800", "label": "800 Extra-bold" }
       ], "default": "700" },
 
-    { "type": "range", "id": "tag_size",    "label": "Tab-name tag — size",    "min": 10, "max": 16, "step": 1, "default": 13, "unit": "px" },
+    { "type": "range", "id": "tag_size",    "label": "Tab-name tag — size",    "min": 6,  "max": 24, "step": 1, "default": 13, "unit": "px" },
     { "type": "select", "id": "tag_weight", "label": "Tab-name tag — weight",
       "options": [
         { "value": "400", "label": "400 Normal" },
@@ -547,7 +588,7 @@
         { "value": "700", "label": "700 Bold" }
       ], "default": "400" },
 
-    { "type": "range", "id": "now_size",    "label": "Current price — size",   "min": 14, "max": 26, "step": 1, "default": 17, "unit": "px" },
+    { "type": "range", "id": "now_size",    "label": "Current price — size",   "min": 6,  "max": 36, "step": 1, "default": 17, "unit": "px" },
     { "type": "select", "id": "now_weight", "label": "Current price — weight",
       "options": [
         { "value": "600", "label": "600 Semibold" },
@@ -555,7 +596,7 @@
         { "value": "800", "label": "800 Extra-bold" }
       ], "default": "800" },
 
-    { "type": "range", "id": "was_size",    "label": "Compare price — size",   "min": 10, "max": 18, "step": 1, "default": 13, "unit": "px" },
+    { "type": "range", "id": "was_size",    "label": "Compare price — size",   "min": 6,  "max": 24, "step": 1, "default": 13, "unit": "px" },
     { "type": "select", "id": "was_weight", "label": "Compare price — weight",
       "options": [
         { "value": "400", "label": "400 Normal" },
@@ -564,14 +605,27 @@
         { "value": "700", "label": "700 Bold" }
       ], "default": "500" },
 
-    { "type": "range", "id": "cta_size",    "label": "Add-to-cart button — size",  "min": 10, "max": 16, "step": 1, "default": 12, "unit": "px" },
+    { "type": "range", "id": "cta_size",    "label": "Add-to-cart button — size",  "min": 6, "max": 22, "step": 1, "default": 12, "unit": "px" },
     { "type": "select", "id": "cta_weight", "label": "Add-to-cart button — weight",
       "options": [
+        { "value": "400", "label": "400 Normal" },
         { "value": "500", "label": "500 Medium" },
         { "value": "600", "label": "600 Semibold" },
         { "value": "700", "label": "700 Bold" },
         { "value": "800", "label": "800 Extra-bold" }
-      ], "default": "600" }
+      ], "default": "600" },
+    { "type": "range", "id": "cta_padding_y", "label": "Add-to-cart button — vertical padding",   "min": 0, "max": 30, "step": 1, "default": 11, "unit": "px" },
+    { "type": "range", "id": "cta_padding_x", "label": "Add-to-cart button — horizontal padding", "min": 0, "max": 40, "step": 1, "default": 16, "unit": "px" },
+    { "type": "range", "id": "cta_border_radius", "label": "Add-to-cart button — corner radius",  "min": 0, "max": 50, "step": 1, "default": 50, "unit": "px",
+      "info": "50 = pill shape. 0 = sharp corners." },
+    { "type": "select", "id": "cta_style", "label": "Add-to-cart button — style",
+      "options": [
+        { "value": "outlined", "label": "Outlined (transparent + ink border, hover orange)" },
+        { "value": "solid",    "label": "Solid (filled orange, white text)" },
+        { "value": "dark",     "label": "Dark (filled ink, cream text)" },
+        { "value": "ghost",    "label": "Ghost (no border, text only)" },
+        { "value": "link",     "label": "Underlined link" }
+      ], "default": "outlined" }
   ],
   "blocks": [
     {
