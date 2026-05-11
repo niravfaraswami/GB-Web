@@ -8,9 +8,6 @@
 {{ 'gb-cart-drawer.css' | asset_url | stylesheet_tag }}
 
 {%- liquid
-  comment
-    Collect tiers (max 3 in v1 — per implementation notes §3 Option B)
-  endcomment
   assign tiers_arr = ''
   for i in (1..3)
     assign thr_key   = 'tier_' | append: i | append: '_threshold'
@@ -47,10 +44,6 @@
     endif
   endfor
 
-  comment
-    Collect add-on candidates from cart items' metafield gutbasket.cart_addon_ids
-    plus a universal-addons collection (optional).
-  endcomment
   assign addon_json = ''
   assign seen_ids = ''
   for item in cart.items
@@ -93,7 +86,6 @@
     endif
   endif
 
-  comment Build the upsell payload endcomment
   assign upsell_json = ''
   if section.settings.show_upsell and section.settings.upsell_product != blank
     assign up = section.settings.upsell_product
@@ -102,7 +94,6 @@
     assign upsell_json = '{"variant_id":' | append: up_vid | append: ',"price":' | append: up.price | append: ',"title":' | append: up.title | json | append: ',"headline":' | append: section.settings.upsell_headline | json | append: ',"eyebrow":' | append: section.settings.upsell_eyebrow | json | append: ',"image":' | append: up_img | json | append: '}'
   endif
 
-  comment Kit color lookup for products currently in cart endcomment
   assign kc_json = ''
   for item in cart.items
     assign kc = item.product.metafields.gutbasket.kit_color | default: item.product.metafields.gutbasket.tools.kit_color
