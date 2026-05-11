@@ -17,8 +17,11 @@
     isOpen: false,
     lastUnlockedCount: 0,
     lastRemovedLine: null,
-    moneyFormat: cfg.money_format || '₹{{amount}}'
+    moneyFormat: cfg.money_format || '₹{{amount}}',
+    cartVersion: 0  // bumped on every local mutation or authoritative cart write; stale fetches check against this and bail.
   };
+
+  function bumpVersion() { state.cartVersion++; }
 
   // ---------- Money formatting ----------
   function money(cents) {
@@ -125,7 +128,7 @@
       var disableMinus = isGift || it.quantity <= 1;
       var disableAll = isGift;
       return '' +
-        '<div class="gbcd-item' + (it._pending ? ' is-pending' : '') + '" data-line-key="' + escapeHtml(it.key) + '">' +
+        '<div class="gbcd-item" data-line-key="' + escapeHtml(it.key) + '">' +
           '<div class="gbcd-item-img">' +
             (it.image ? '<img loading="lazy" src="' + escapeHtml(img(it.image, 200)) + '" alt="">' : '🫙') +
           '</div>' +
@@ -202,11 +205,11 @@
       if (unlocked && !existing) {
         addLine(t.variant_id, 1, { _gift: 'true', _tier: t.label || ('tier-' + t.threshold) })
           .then(function() { return fetchCart(); })
-          .then(function(c) { state.cart = c; render(); })
+          .then(function(c) { state.cart = c; bumpVersion(); render(); })
           .catch(function() {});
       } else if (!unlocked && existing) {
         changeLine(existing.key, 0)
-          .then(function(c) { state.cart = c; render(); })
+          .then(function(c) { state.cart = c; bumpVersion(); render(); })
           .catch(function() {});
       }
     });
@@ -270,7 +273,16 @@
 
   // ---------- State updates ----------
   function refresh() {
-    return fetchCart().then(function(c) { state.cart = c; render(); return c; });
+    var v = state.cartVersion;
+    return fetchCart().then(function(c) {
+      // If a local mutation bumped the version while we were fetching,
+      // the server response is stale relative to the optimistic state.
+      if (v !== state.cartVersion) return c;
+      state.cart = c;
+      bumpVersion();
+      render();
+      return c;
+    });
   }
 
   // Optimistic helpers — mutate state.cart in place and re-render.
@@ -283,6 +295,7 @@
     }
     if (idx < 0) return;
     var item = state.cart.items[idx];
+    bumpVersion();
     if (newQty <= 0) {
       state.cart.item_count -= item.quantity;
       state.cart.total_price -= item.final_line_price;
@@ -312,6 +325,7 @@
       optimisticChangeQty(existing.key, existing.quantity + (line.quantity || 1));
       return;
     }
+    bumpVersion();
     var qty = line.quantity || 1;
     var unitPrice = line.price || 0;
     var unitOrig  = line.compare_at_price || line.price || 0;
@@ -353,7 +367,15 @@
     // in the background so any stale data converges.
     if (state.cart) {
       render();
-      fetchCart().then(function(c) { state.cart = c; render(); }).catch(function() {});
+      // Background refresh — but discard if any optimistic mutation
+      // bumps the version while it's in flight.
+      var v = state.cartVersion;
+      fetchCart().then(function(c) {
+        if (v !== state.cartVersion) return;
+        state.cart = c;
+        bumpVersion();
+        render();
+      }).catch(function() {});
     } else {
       refresh();
     }
@@ -394,7 +416,7 @@
       var key = line.getAttribute('data-line-key');
       optimisticChangeQty(key, Math.max(0, newQty));
       changeLine(key, Math.max(0, newQty))
-        .then(function(c) { state.cart = c; render(); })
+        .then(function(c) { state.cart = c; bumpVersion(); render(); })
         .catch(function() { refresh(); });
       return;
     }
@@ -408,14 +430,14 @@
       }
       optimisticChangeQty(key2, 0);
       changeLine(key2, 0)
-        .then(function(c) { state.cart = c; render(); })
+        .then(function(c) { state.cart = c; bumpVersion(); render(); })
         .catch(function() { refresh(); });
       return;
     }
     var undoBtn = ev.target.closest('[data-gbcd-toast-undo]');
     if (undoBtn && state.lastRemovedLine) {
       var u = state.lastRemovedLine;
-      addLine(u.id, u.qty, u.props).then(function() { return fetchCart(); }).then(function(c) { state.cart = c; render(); });
+      addLine(u.id, u.qty, u.props).then(function() { return fetchCart(); }).then(function(c) { state.cart = c; bumpVersion(); render(); });
       root.querySelector('[data-gbcd-toast]').classList.remove('show');
       state.lastRemovedLine = null;
       return;
@@ -438,7 +460,7 @@
           quantity: 1
         });
       }
-      addLine(vid, 1).then(function() { return fetchCart(); }).then(function(c) { state.cart = c; render(); }).catch(function() {
+      addLine(vid, 1).then(function() { return fetchCart(); }).then(function(c) { state.cart = c; bumpVersion(); render(); }).catch(function() {
         addonBtn.removeAttribute('disabled'); addonBtn.textContent = 'Add';
         refresh();
       });
@@ -457,14 +479,14 @@
           quantity: 1
         });
       }
-      addLine(uvid, 1).then(function() { return fetchCart(); }).then(function(c) { state.cart = c; render(); }).catch(function() { refresh(); });
+      addLine(uvid, 1).then(function() { return fetchCart(); }).then(function(c) { state.cart = c; bumpVersion(); render(); }).catch(function() { refresh(); });
       return;
     }
     var emptyAdd = ev.target.closest('[data-gbcd-empty-add]');
     if (emptyAdd) {
       var evid = parseInt(emptyAdd.getAttribute('data-gbcd-empty-add'), 10);
       emptyAdd.setAttribute('disabled', 'disabled');
-      addLine(evid, 1).then(function() { return fetchCart(); }).then(function(c) { state.cart = c; render(); }).catch(function() { refresh(); });
+      addLine(evid, 1).then(function() { return fetchCart(); }).then(function(c) { state.cart = c; bumpVersion(); render(); }).catch(function() { refresh(); });
       return;
     }
     var checkoutBtn = ev.target.closest('[data-gbcd-checkout]');
@@ -506,6 +528,7 @@
     var detail = ev.detail || {};
     if (detail.resource) {
       state.cart = detail.resource;
+      bumpVersion();
       render();
     } else if (state.isOpen) {
       refresh();
