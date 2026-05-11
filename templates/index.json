@@ -98,7 +98,7 @@
             "headline": "<p>Make Probiotic<br/><em>Oil-Free</em><br/>Achaar</p>",
             "sub": "<p>Naturally probiotic achaar. <br/>Just <strong>spice mix, salt, and time.</strong></p>",
             "cta_label": "Shop Achaar kit",
-            "cta_link": "/products/probiotic-achaar-kit"
+            "cta_link": "shopify://products/probiotic-achaar-making-kit"
           }
         },
         "s3": {
