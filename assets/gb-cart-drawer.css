@@ -627,42 +627,11 @@
   text-transform: uppercase;
 }
 
-/* === TOAST === */
-#gb-cart-drawer .gbcd-toast {
-  position: absolute;
-  bottom: 18px;
-  left: 22px;
-  right: 22px;
-  background: var(--gbcd-ink);
-  color: var(--gbcd-cream);
-  padding: 12px 16px;
-  border-radius: 10px;
-  font-size: 13px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  transform: translateY(120%);
-  opacity: 0;
-  transition: transform 0.32s ease, opacity 0.32s ease;
-  pointer-events: none;
-  z-index: 5;
-}
-#gb-cart-drawer .gbcd-toast.show { transform: translateY(0); opacity: 1; pointer-events: auto; }
-#gb-cart-drawer .gbcd-toast button {
-  color: var(--gbcd-action);
-  font-weight: 700;
-  font-size: 12px;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   #gb-cart-drawer .gbcd-panel,
   #gb-cart-drawer .gbcd-overlay,
-  #gb-cart-drawer .gbcd-progress-fill,
-  #gb-cart-drawer .gbcd-toast {
+  #gb-cart-drawer .gbcd-progress-fill {
     transition: none !important;
   }
   #gb-cart-drawer .gbcd-pin.just-unlocked .gbcd-pin-icon { animation: none !important; }
