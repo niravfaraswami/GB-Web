@@ -387,7 +387,7 @@
         "was_size": 13,
         "was_weight": "500",
         "cta_size": 10,
-        "cta_weight": "700",
+        "cta_weight": "600",
         "cta_padding_y": 8,
         "cta_padding_x": 12,
         "cta_border_radius": 50,
