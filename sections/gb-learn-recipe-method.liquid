@@ -1,29 +1,37 @@
 {%- render 'leo_kit_chrome' -%}
 
+{%- capture body_html -%}{%- render 'gb-recipe-body-section', section_name: 'method', section_aliases: 'method|steps|how to|how-to|directions' -%}{%- endcapture -%}
+{%- assign body_html = body_html | strip -%}
 {%- assign step_blocks = section.blocks | where: 'type', 'method_step' -%}
+{%- assign has_body = false -%}
+{%- if body_html contains '<li' -%}{%- assign has_body = true -%}{%- endif -%}
 
-{%- if step_blocks.size > 0 -%}
+{%- if has_body or step_blocks.size > 0 -%}
   <section class="recipe-section" id="{{ section.settings.anchor | default: 'method' }}" {%- render 'leo_kit_attrs' -%}>
     <div class="container">
       {%- if section.settings.heading != blank -%}<h2>{{ section.settings.heading }}</h2>{%- endif -%}
       {%- if section.settings.sub != blank -%}<div class="section-sub">{{ section.settings.sub }}</div>{%- endif -%}
 
-      {%- for block in step_blocks -%}
-        <div class="method-step" {{ block.shopify_attributes }}>
-          <div class="step-image">
-            <span class="step-num">{{ forloop.index }}</span>
-            {%- if block.settings.image != blank -%}
-              <img src="{{ block.settings.image | image_url: width: 600 }}" alt="{{ block.settings.title | escape }}" loading="lazy" width="280" height="280">
-            {%- elsif block.settings.emoji != blank -%}
-              {{ block.settings.emoji }}
-            {%- endif -%}
+      {%- if has_body -%}
+        {%- render 'gb-recipe-parse-items', html: body_html, style: 'method' -%}
+      {%- else -%}
+        {%- for block in step_blocks -%}
+          <div class="method-step" {{ block.shopify_attributes }}>
+            <div class="step-image">
+              <span class="step-num">{{ forloop.index }}</span>
+              {%- if block.settings.image != blank -%}
+                <img src="{{ block.settings.image | image_url: width: 600 }}" alt="{{ block.settings.title | escape }}" loading="lazy" width="280" height="280">
+              {%- elsif block.settings.emoji != blank -%}
+                {{ block.settings.emoji }}
+              {%- endif -%}
+            </div>
+            <div class="step-body">
+              <div class="step-title">{{ block.settings.title }}</div>
+              <div class="step-desc">{{ block.settings.desc }}</div>
+            </div>
           </div>
-          <div class="step-body">
-            <div class="step-title">{{ block.settings.title }}</div>
-            <div class="step-desc">{{ block.settings.desc }}</div>
-          </div>
-        </div>
-      {%- endfor -%}
+        {%- endfor -%}
+      {%- endif -%}
     </div>
   </section>
 {%- endif -%}
