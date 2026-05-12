@@ -1,0 +1,262 @@
+{%- render 'leo_kit_chrome' -%}
+
+{%- liquid
+  assign p = product
+  assign mf_who_eyebrow = p.metafields.custom.who_eyebrow
+  assign mf_who_heading = p.metafields.custom.who_heading
+  assign mf_who_sub = p.metafields.custom.who_sub
+  assign mf_who_yes = p.metafields.custom.who_yes.value
+  assign mf_who_no = p.metafields.custom.who_no.value
+  assign who_eyebrow = mf_who_eyebrow | default: section.settings.eyebrow
+  assign who_heading = mf_who_heading | default: section.settings.heading
+  assign who_sub = mf_who_sub | default: section.settings.intro
+  assign has_yes_mf = false
+  if mf_who_yes and mf_who_yes.size > 0
+    assign has_yes_mf = true
+  endif
+  assign has_no_mf = false
+  if mf_who_no and mf_who_no.size > 0
+    assign has_no_mf = true
+  endif
+-%}
+
+{%- if who_heading != blank or has_yes_mf or has_no_mf or section.settings.yes_bullets != blank or section.settings.no_bullets != blank -%}
+  <section class="gb-who-section ferment-pdp-leo" {%- render 'leo_kit_attrs' -%}>
+    <div class="container">
+      <div class="section-header centered">
+        {%- if who_eyebrow != blank -%}<div class="eyebrow">{{ who_eyebrow }}</div>{%- endif -%}
+        {%- if who_heading != blank -%}<h2>{{ who_heading }} <em>{{ section.settings.heading_em }}</em></h2>{%- endif -%}
+        {%- if who_sub != blank -%}<p>{{ who_sub }}</p>{%- endif -%}
+      </div>
+
+      <div class="gb-who-grid">
+        <div class="gb-who-card gb-who-yes">
+          {%- if section.settings.yes_label != blank -%}<div class="gb-who-pill">{{ section.settings.yes_label }}</div>{%- endif -%}
+          <div class="gb-who-h">{{ section.settings.yes_heading | default: 'Perfect for you' }}</div>
+          {%- if has_yes_mf -%}
+            <ul class="gb-who-list">
+              {%- for item in mf_who_yes -%}
+                {%- assign t = item | strip -%}
+                {%- if t != blank -%}<li>{{ t }}</li>{%- endif -%}
+              {%- endfor -%}
+            </ul>
+          {%- elsif section.settings.yes_bullets != blank -%}
+            <ul class="gb-who-list">
+              {%- assign lines = section.settings.yes_bullets | newline_to_br | split: '<br />' -%}
+              {%- for line in lines -%}{%- assign t = line | strip -%}{%- if t != blank -%}<li>{{ t }}</li>{%- endif -%}{%- endfor -%}
+            </ul>
+          {%- endif -%}
+        </div>
+        <div class="gb-who-card gb-who-no">
+          {%- if section.settings.no_label != blank -%}<div class="gb-who-pill">{{ section.settings.no_label }}</div>{%- endif -%}
+          <div class="gb-who-h">{{ section.settings.no_heading | default: 'Maybe not for you' }}</div>
+          {%- if has_no_mf -%}
+            <ul class="gb-who-list">
+              {%- for item in mf_who_no -%}
+                {%- assign t = item | strip -%}
+                {%- if t != blank -%}<li>{{ t }}</li>{%- endif -%}
+              {%- endfor -%}
+            </ul>
+          {%- elsif section.settings.no_bullets != blank -%}
+            <ul class="gb-who-list">
+              {%- assign lines = section.settings.no_bullets | newline_to_br | split: '<br />' -%}
+              {%- for line in lines -%}{%- assign t = line | strip -%}{%- if t != blank -%}<li>{{ t }}</li>{%- endif -%}{%- endfor -%}
+            </ul>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "GB · Who It's For (v2)",
+  "tag": "section",
+  "class": "gb-who-wrap",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "WHO IS THIS FOR"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "IS THIS"
+    },
+    {
+      "type": "text",
+      "id": "heading_em",
+      "label": "Heading (highlighted)",
+      "default": "RIGHT FOR YOU?"
+    },
+    {
+      "type": "textarea",
+      "id": "intro",
+      "label": "Intro"
+    },
+    {
+      "type": "header",
+      "content": "Yes column"
+    },
+    {
+      "type": "text",
+      "id": "yes_label",
+      "label": "Yes — pill label",
+      "default": "PERFECT FOR"
+    },
+    {
+      "type": "text",
+      "id": "yes_heading",
+      "label": "Yes — heading",
+      "default": "You're a great fit if…"
+    },
+    {
+      "type": "textarea",
+      "id": "yes_bullets",
+      "label": "Yes — bullets (one per line)"
+    },
+    {
+      "type": "header",
+      "content": "No column"
+    },
+    {
+      "type": "text",
+      "id": "no_label",
+      "label": "No — pill label",
+      "default": "MAYBE NOT FOR"
+    },
+    {
+      "type": "text",
+      "id": "no_heading",
+      "label": "No — heading",
+      "default": "Skip this if…"
+    },
+    {
+      "type": "textarea",
+      "id": "no_bullets",
+      "label": "No — bullets (one per line)"
+    },
+    {
+      "type": "header",
+      "content": "Spacing & Typography"
+    },
+    {
+      "type": "range",
+      "id": "pad_top_d",
+      "label": "Padding top — desktop (px)",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "pad_bot_d",
+      "label": "Padding bottom — desktop (px)",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "pad_top_m",
+      "label": "Padding top — mobile (px)",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "pad_bot_m",
+      "label": "Padding bottom — mobile (px)",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "mar_top_d",
+      "label": "Margin top — desktop (px)",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "mar_bot_d",
+      "label": "Margin bottom — desktop (px)",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "mar_top_m",
+      "label": "Margin top — mobile (px)",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "mar_bot_m",
+      "label": "Margin bottom — mobile (px)",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_size_d",
+      "label": "Eyebrow font size — desktop (px)",
+      "min": 9,
+      "max": 32,
+      "step": 1,
+      "default": 22
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_size_m",
+      "label": "Eyebrow font size — mobile (px)",
+      "min": 9,
+      "max": 24,
+      "step": 1,
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "heading_size_d",
+      "label": "Heading font size — desktop (px)",
+      "min": 18,
+      "max": 80,
+      "step": 2,
+      "default": 44
+    },
+    {
+      "type": "range",
+      "id": "heading_size_m",
+      "label": "Heading font size — mobile (px)",
+      "min": 16,
+      "max": 60,
+      "step": 2,
+      "default": 30
+    }
+  ],
+  "presets": [
+    {
+      "name": "GB · Who It's For (v2)"
+    }
+  ]
+}
+{% endschema %}
