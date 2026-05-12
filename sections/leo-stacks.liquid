@@ -1,8 +1,16 @@
 {%- render 'leo_kit_chrome' -%}
 
-{%- assign stacks_row_blocks = section.blocks | where: 'type', 'stacks_row' -%}
+{%- liquid
+  assign p = product
+  assign mf_rows = p.metafields.custom.featured_comparison_rows.value
+  assign stacks_row_blocks = section.blocks | where: 'type', 'stacks_row'
+  assign has_mf = false
+  if mf_rows and mf_rows.size > 0
+    assign has_mf = true
+  endif
+-%}
 
-{%- if stacks_row_blocks.size > 0 -%}
+{%- if has_mf or stacks_row_blocks.size > 0 -%}
   <section class="stacks-section ferment-pdp-leo" {%- render 'leo_kit_attrs' -%}>
     <div class="container">
       <div class="section-header centered">
@@ -20,26 +28,49 @@
             <div class="st-h-cell">{{ section.settings.stacks_col_4 | default: 'Probiotic Capsule' }}</div>
           </div>
 
-          {%- for block in stacks_row_blocks -%}
-            <div class="st-row" {{ block.shopify_attributes }}>
-              <div class="st-cell st-cell-label">{{ block.settings.label }}</div>
-              <div class="st-cell st-cell-kit">
-                {%- if block.settings.kit_mark == 'yes' -%}<span class="st-mark st-mark-yes"></span>
-                {%- elsif block.settings.kit_mark == 'no' -%}<span class="st-mark st-mark-no"></span>{%- endif -%}
-                {{ block.settings.kit_text }}
+          {%- if has_mf -%}
+            {%- for r in mf_rows -%}
+              <div class="st-row">
+                <div class="st-cell st-cell-label">{{ r.label }}</div>
+                <div class="st-cell st-cell-kit">
+                  {%- if r.kit_mark == 'yes' -%}<span class="st-mark st-mark-yes"></span>
+                  {%- elsif r.kit_mark == 'no' -%}<span class="st-mark st-mark-no"></span>{%- endif -%}
+                  {{ r.kit_text }}
+                </div>
+                <div class="st-cell st-cell-other">
+                  {%- if r.col3_mark == 'yes' -%}<span class="st-mark st-mark-yes"></span>
+                  {%- elsif r.col3_mark == 'no' -%}<span class="st-mark st-mark-no"></span>{%- endif -%}
+                  {{ r.col3_text }}
+                </div>
+                <div class="st-cell st-cell-other">
+                  {%- if r.col4_mark == 'yes' -%}<span class="st-mark st-mark-yes"></span>
+                  {%- elsif r.col4_mark == 'no' -%}<span class="st-mark st-mark-no"></span>{%- endif -%}
+                  {{ r.col4_text }}
+                </div>
               </div>
-              <div class="st-cell st-cell-other">
-                {%- if block.settings.col3_mark == 'yes' -%}<span class="st-mark st-mark-yes"></span>
-                {%- elsif block.settings.col3_mark == 'no' -%}<span class="st-mark st-mark-no"></span>{%- endif -%}
-                {{ block.settings.col3_text }}
+            {%- endfor -%}
+          {%- else -%}
+            {%- for block in stacks_row_blocks -%}
+              <div class="st-row" {{ block.shopify_attributes }}>
+                <div class="st-cell st-cell-label">{{ block.settings.label }}</div>
+                <div class="st-cell st-cell-kit">
+                  {%- if block.settings.kit_mark == 'yes' -%}<span class="st-mark st-mark-yes"></span>
+                  {%- elsif block.settings.kit_mark == 'no' -%}<span class="st-mark st-mark-no"></span>{%- endif -%}
+                  {{ block.settings.kit_text }}
+                </div>
+                <div class="st-cell st-cell-other">
+                  {%- if block.settings.col3_mark == 'yes' -%}<span class="st-mark st-mark-yes"></span>
+                  {%- elsif block.settings.col3_mark == 'no' -%}<span class="st-mark st-mark-no"></span>{%- endif -%}
+                  {{ block.settings.col3_text }}
+                </div>
+                <div class="st-cell st-cell-other">
+                  {%- if block.settings.col4_mark == 'yes' -%}<span class="st-mark st-mark-yes"></span>
+                  {%- elsif block.settings.col4_mark == 'no' -%}<span class="st-mark st-mark-no"></span>{%- endif -%}
+                  {{ block.settings.col4_text }}
+                </div>
               </div>
-              <div class="st-cell st-cell-other">
-                {%- if block.settings.col4_mark == 'yes' -%}<span class="st-mark st-mark-yes"></span>
-                {%- elsif block.settings.col4_mark == 'no' -%}<span class="st-mark st-mark-no"></span>{%- endif -%}
-                {{ block.settings.col4_text }}
-              </div>
-            </div>
-          {%- endfor -%}
+            {%- endfor -%}
+          {%- endif -%}
         </div>
       </div>
     </div>

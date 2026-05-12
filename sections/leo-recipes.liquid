@@ -1,21 +1,47 @@
 {%- render 'leo_kit_chrome' -%}
 
-{%- assign recipe_pill_blocks = section.blocks | where: 'type', 'recipe_pill' -%}
+{%- liquid
+  assign p = product
+  assign mf_recipe_tags = p.metafields.custom.featured_recipe_tags.value
+  assign mf_banner = p.metafields.custom.recipe_banner_image
+  assign mf_count = p.metafields.custom.recipe_count
+  assign mf_h_label = p.metafields.custom.recipe_h_label
+  assign mf_h_text = p.metafields.custom.recipe_h_text
+  assign recipe_pill_blocks = section.blocks | where: 'type', 'recipe_pill'
+  assign recipe_banner = mf_banner | default: section.settings.recipe_banner
+  assign recipe_count = mf_count | default: section.settings.recipe_count
+  assign recipe_h_label = mf_h_label | default: section.settings.recipe_h_label
+  assign recipe_h_text = mf_h_text | default: section.settings.recipe_h_text
+  assign has_mf_tags = false
+  if mf_recipe_tags and mf_recipe_tags.size > 0
+    assign has_mf_tags = true
+  endif
+-%}
 
-{%- if section.settings.recipe_banner != blank or section.settings.recipe_count != blank or recipe_pill_blocks.size > 0 -%}
+{%- if recipe_banner != blank or recipe_count != blank or has_mf_tags or recipe_pill_blocks.size > 0 -%}
   <section class="recipes-section ferment-pdp-leo" {%- render 'leo_kit_attrs' -%}>
     <div class="container">
       <div class="section-header">
         <div class="eyebrow">{{ section.settings.recipes_eyebrow }}</div>
         <div class="recipes-h-row">
-          {%- if section.settings.recipe_count != blank -%}<div class="recipes-num">{{ section.settings.recipe_count }}</div>{%- endif -%}
-          <div class="recipes-h-text"><em>{{ section.settings.recipe_h_label }}</em> <span>{{ section.settings.recipe_h_text }}</span></div>
+          {%- if recipe_count != blank -%}<div class="recipes-num">{{ recipe_count }}</div>{%- endif -%}
+          <div class="recipes-h-text"><em>{{ recipe_h_label }}</em> <span>{{ recipe_h_text }}</span></div>
         </div>
       </div>
-      {%- if section.settings.recipe_banner != blank -%}
-        <div class="recipes-banner"><img src="{{ section.settings.recipe_banner | image_url: width: 1600 }}" alt="Recipes" loading="lazy" width="1600" height="700"></div>
+      {%- if recipe_banner != blank -%}
+        <div class="recipes-banner"><img src="{{ recipe_banner | image_url: width: 1600 }}" alt="Recipes" loading="lazy" width="1600" height="700"></div>
       {%- endif -%}
-      {%- if recipe_pill_blocks.size > 0 -%}
+      {%- if has_mf_tags -%}
+        <div class="recipe-tags">
+          {%- for t in mf_recipe_tags -%}
+            {%- if t.url != blank -%}
+              <a class="recipe-tag" href="{{ t.url }}"><span class="dot"></span>{%- if t.emoji != blank %}{{ t.emoji }} {% endif -%}{{ t.name }}</a>
+            {%- else -%}
+              <span class="recipe-tag"><span class="dot"></span>{%- if t.emoji != blank %}{{ t.emoji }} {% endif -%}{{ t.name }}</span>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      {%- elsif recipe_pill_blocks.size > 0 -%}
         <div class="recipe-tags">
           {%- for block in recipe_pill_blocks -%}
             {%- if block.settings.url != blank -%}
