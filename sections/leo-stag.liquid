@@ -1,8 +1,16 @@
 {%- render 'leo_kit_chrome' -%}
 
-{%- assign stag_card_blocks = section.blocks | where: 'type', 'stag_card' -%}
+{%- liquid
+  assign p = product
+  assign mf_steps = p.metafields.custom.featured_timeline_steps.value
+  assign stag_card_blocks = section.blocks | where: 'type', 'stag_card'
+  assign has_mf = false
+  if mf_steps and mf_steps.size > 0
+    assign has_mf = true
+  endif
+-%}
 
-{%- if stag_card_blocks.size > 0 -%}
+{%- if has_mf or stag_card_blocks.size > 0 -%}
   <section class="stag-section ferment-pdp-leo" {%- render 'leo_kit_attrs' -%}>
     <div class="container">
       <div class="section-header">
@@ -11,6 +19,87 @@
       </div>
 
       <div class="stag-grid">
+        {%- if has_mf -%}
+          {%- for item in mf_steps -%}
+            {%- assign variant = item.variant | default: 'light' -%}
+            {%- assign span_cls = '' -%}
+            {%- if item.span_row_2 -%}{%- assign span_cls = ' span-row-2' -%}{%- endif -%}
+            {%- if item.span_col_2 -%}{%- assign span_cls = span_cls | append: ' span-col-2' -%}{%- endif -%}
+
+            {%- if variant == 'image_only' -%}
+              <div class="stag-card stag-image-only{{ span_cls }}">
+                {%- if item.image != blank -%}
+                  {%- if item.image_mobile != blank -%}
+                    <picture>
+                      <source media="(max-width: 768px)" srcset="{{ item.image_mobile | image_url: width: 800 }}">
+                      <img src="{{ item.image | image_url: width: 800 }}" alt="{{ item.heading | escape }}" loading="lazy" width="800" height="800">
+                    </picture>
+                  {%- else -%}
+                    <img src="{{ item.image | image_url: width: 800 }}" alt="{{ item.heading | escape }}" loading="lazy" width="800" height="800">
+                  {%- endif -%}
+                {%- endif -%}
+              </div>
+
+            {%- elsif variant == 'dark' -%}
+              <div class="stag-card stag-dark{{ span_cls }}">
+                {%- if item.numeral != blank -%}<div class="stag-num">{{ item.numeral }}</div>{%- endif -%}
+                <div class="stag-body">
+                  {%- if item.eyebrow != blank -%}<span class="stag-num-small">{{ item.eyebrow }}</span>{%- endif -%}
+                  <div class="stag-h">{{ item.heading }}</div>
+                  <div class="stag-d">{{ item.description }}</div>
+                </div>
+              </div>
+
+            {%- elsif variant == 'dark_photo' -%}
+              <div class="stag-card stag-dark stag-dark-photo{{ span_cls }}">
+                {%- if item.image != blank -%}<img class="stag-dark-img" src="{{ item.image | image_url: width: 800 }}" alt="{{ item.heading | escape }}" loading="lazy" width="800" height="450">{%- endif -%}
+                <div class="stag-dark-content">
+                  {%- if item.numeral != blank -%}<div class="stag-num">{{ item.numeral }}</div>{%- endif -%}
+                  <div class="stag-body">
+                    {%- if item.eyebrow != blank -%}<span class="stag-num-small">{{ item.eyebrow }}</span>{%- endif -%}
+                    <div class="stag-h">{{ item.heading }}</div>
+                    <div class="stag-d">{{ item.description }}</div>
+                  </div>
+                </div>
+              </div>
+
+            {%- elsif variant == 'detail' -%}
+              <div class="stag-card stag-detail{{ span_cls }}">
+                <div class="stag-detail-head">
+                  <div class="stag-detail-thumb">
+                    {%- if item.image != blank -%}<img src="{{ item.image | image_url: width: 200 }}" alt="{{ item.heading | escape }}" loading="lazy" width="96" height="96">{%- endif -%}
+                  </div>
+                  <div class="stag-detail-titles">
+                    {%- if item.eyebrow != blank -%}<div class="stag-detail-eyebrow">{{ item.eyebrow }}</div>{%- endif -%}
+                    <div class="stag-detail-h">{{ item.heading }}</div>
+                  </div>
+                </div>
+                {%- if item.bullets != blank -%}
+                  <ul class="stag-detail-list">
+                    {%- assign lines = item.bullets | newline_to_br | split: '<br />' -%}
+                    {%- for line in lines -%}
+                      {%- assign trimmed = line | strip -%}
+                      {%- if trimmed != blank -%}<li>{{ trimmed }}</li>{%- endif -%}
+                    {%- endfor -%}
+                  </ul>
+                {%- endif -%}
+              </div>
+
+            {%- else -%}
+              {%- comment -%} 'light' (default) {%- endcomment -%}
+              <div class="stag-card stag-light{{ span_cls }}">
+                <div class="stag-light-img">
+                  {%- if item.image != blank -%}<img src="{{ item.image | image_url: width: 600 }}" alt="{{ item.heading | escape }}" loading="lazy" width="600" height="400">{%- endif -%}
+                </div>
+                <div class="stag-light-body">
+                  {%- if item.eyebrow != blank -%}<span class="stag-pill">{{ item.eyebrow }}</span>{%- endif -%}
+                  <div class="stag-h">{{ item.heading }}</div>
+                  <div class="stag-d">{{ item.description }}</div>
+                </div>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        {%- else -%}
         {%- for block in stag_card_blocks -%}
           {%- assign variant = block.settings.variant -%}
           {%- assign span_cls = '' -%}
@@ -87,6 +176,7 @@
             </div>
           {%- endif -%}
         {%- endfor -%}
+        {%- endif -%}
       </div>
 
       {%- if section.settings.stag_note != blank -%}
