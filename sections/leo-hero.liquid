@@ -92,9 +92,12 @@
             <div class="label">Benefits</div>
             <div class="benefits-grid">
               {%- for block in hero_benefit_blocks -%}
+                {%- assign mf_icon = mf_benefits[forloop.index0] -%}
                 <div class="benefit-item" {{ block.shopify_attributes }}>
-                  <span class="benefit-icon-svg">
-                    {%- if block.settings.icon_svg != blank -%}{%- render 'kit_icon', icon: block.settings.icon_svg, size: 28 -%}
+                  <span class="benefit-icon-svg{% if mf_icon != blank %} benefit-icon-svg--img{% endif %}">
+                    {%- if mf_icon != blank -%}
+                      <img src="{{ mf_icon | image_url: width: 56 }}" alt="" loading="lazy" width="28" height="28">
+                    {%- elsif block.settings.icon_svg != blank -%}{%- render 'kit_icon', icon: block.settings.icon_svg, size: 28 -%}
                     {%- elsif block.settings.icon_emoji != blank -%}{{ block.settings.icon_emoji }}{%- endif -%}
                   </span>
                   <span>{{ block.settings.label }}</span>
