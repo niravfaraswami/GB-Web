@@ -96,22 +96,37 @@
           Items may be plain text OR "emoji|text" (legacy format from kits).
           Falls back to Theme Editor `hero_benefit` blocks if neither metafield is set.
         {%- endcomment -%}
-        {%- comment -%} Diagnostic: visible to admins only via ?debug=svg URL param {%- endcomment -%}
-        {%- if request.path contains '?debug' or template contains 'admin' -%}
-          <pre style="background:#fffacc;border:1px solid #b08c00;padding:8px;font-size:10px;line-height:1.3;font-family:monospace;color:#333;margin:8px 0">
+        {%- comment -%}
+          TEMP DIAGNOSTIC — always visible for SVG icon debugging.
+          Remove this block once benefits icons render correctly.
+          Wrapped in <details> so it's collapsed by default and doesn't
+          interfere with the layout.
+        {%- endcomment -%}
+        <details style="margin:8px 0;font-family:monospace;font-size:11px">
+          <summary style="cursor:pointer;color:#b08c00;font-weight:700">⚠ Benefits SVG diagnostic (debug-only — remove after fix)</summary>
+          <pre style="background:#fffacc;border:1px solid #b08c00;padding:8px;line-height:1.3;color:#333;margin:8px 0;white-space:pre-wrap">
+product.handle            = {{ product.handle }}
+template                  = {{ template }}
 benefits_items.size       = {{ mf_benefit_items.size | default: 0 }}
 hero_benefits_icons.size  = {{ mf_benefits.size | default: 0 }}
 hero_benefit_blocks.size  = {{ hero_benefit_blocks.size }}
+benefits_items value:
+{%- for it in mf_benefit_items -%}
+  [{{ forloop.index0 }}] {{ it }}
+{% endfor %}
+hero_benefits_icons value:
 {%- for ic in mf_benefits -%}
 [{{ forloop.index0 }}]
+  raw       = {{ ic }}
   image_url = {{ ic | image_url: width: 28 }}
   .url      = {{ ic.url }}
   .src      = {{ ic.src }}
+  alt       = {{ ic.alt }}
 {% endfor -%}
           </pre>
-        {%- endif -%}
+        </details>
 
-        {%- if mf_benefit_items.size > 0 or hero_benefit_blocks.size > 0 -%}
+        {%- if mf_benefit_items.size > 0 or mf_benefits.size > 0 or hero_benefit_blocks.size > 0 -%}
           <div class="benefits-block">
             <div class="label">Benefits</div>
             <div class="benefits-grid">
