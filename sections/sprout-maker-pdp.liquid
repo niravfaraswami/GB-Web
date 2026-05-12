@@ -318,7 +318,9 @@ All product custom metafields with non-empty values:
             {%- endfor -%}
           {%- else -%}
             {%- for block in trust_blocks -%}
-              {%- assign mf_icon = mf_trust_icons[forloop.index0] -%}
+              {%- assign target_idx = forloop.index0 -%}
+              {%- assign mf_icon = nil -%}
+              {%- if mf_trust_icons -%}{%- for ic in mf_trust_icons -%}{%- if forloop.index0 == target_idx -%}{%- assign mf_icon = ic -%}{%- endif -%}{%- endfor -%}{%- endif -%}
               <div class="tr-card" {{ block.shopify_attributes }}>
                 <div class="tr-icon">
                   {%- if mf_icon != blank -%}
@@ -378,7 +380,9 @@ All product custom metafields with non-empty values:
               {%- endfor -%}
             {%- else -%}
               {%- for block in step_blocks -%}
-                {%- assign mf_icon = mf_step_icons[forloop.index0] -%}
+                {%- assign target_idx = forloop.index0 -%}
+                {%- assign mf_icon = nil -%}
+                {%- if mf_step_icons -%}{%- for ic in mf_step_icons -%}{%- if forloop.index0 == target_idx -%}{%- assign mf_icon = ic -%}{%- endif -%}{%- endfor -%}{%- endif -%}
                 <div class="hm-step" {{ block.shopify_attributes }}>
                   <div class="hm-num">
                     {%- if mf_icon != blank -%}
@@ -490,7 +494,9 @@ All product custom metafields with non-empty values:
             {%- endfor -%}
           {%- else -%}
             {%- for block in benefit_blocks -%}
-              {%- assign mf_icon = mf_benefit_icons[forloop.index0] -%}
+              {%- assign target_idx = forloop.index0 -%}
+              {%- assign mf_icon = nil -%}
+              {%- if mf_benefit_icons -%}{%- for ic in mf_benefit_icons -%}{%- if forloop.index0 == target_idx -%}{%- assign mf_icon = ic -%}{%- endif -%}{%- endfor -%}{%- endif -%}
               <div class="qb-card" {{ block.shopify_attributes }}>
                 <div class="qb-icon">
                   {%- if mf_icon != blank -%}
