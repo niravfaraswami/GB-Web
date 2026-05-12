@@ -2834,3 +2834,17 @@
   .recipe-body-content--method ol li { grid-template-columns: 32px 1fr; gap: 12px; }
   .recipe-body-content--method ol li::before { width: 28px; height: 28px; font-size: 13px; }
 }
+
+/* ============== SVG dual-render fallback (PR #63) ==============
+   gb-* sections render both <span data-svg-src> and <img> for SVG
+   icons. CSS hides the <img> once leo-pdp.js injects inline SVG. */
+.gb-card-grid-icon .kit-icon-svg,
+.gb-image-pill-icon .kit-icon-svg,
+.gb-step-card-icon .kit-icon-svg { display: contents; }
+.gb-card-grid-icon .kit-icon-img,
+.gb-image-pill-icon .kit-icon-img,
+.gb-step-card-icon .kit-icon-img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.gb-card-grid-icon:has(.kit-icon-svg svg) .kit-icon-img,
+.gb-image-pill-icon:has(.kit-icon-svg svg) .kit-icon-img,
+.gb-step-card-icon:has(.kit-icon-svg svg) .kit-icon-img { display: none; }
+

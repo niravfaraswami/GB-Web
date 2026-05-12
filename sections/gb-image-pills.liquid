@@ -29,9 +29,14 @@
           <div class="gb-image-pills-list">
             {%- if has_mf -%}
               {%- for c in mf_components -%}
+                {%- assign isrc = c.icon | image_url: width: 120 -%}
+                {%- if isrc == blank -%}{%- assign isrc = c.icon.url -%}{%- endif -%}
+                {%- if isrc == blank -%}{%- assign isrc = c.icon.src -%}{%- endif -%}
                 <div class="gb-image-pill">
                   <div class="gb-image-pill-icon">
-                    {%- if c.icon != blank -%}<img src="{{ c.icon | image_url: width: 120 }}" alt="{{ c.name | escape }}" loading="lazy" width="60" height="60">
+                    {%- if isrc != blank -%}
+                      <span class="kit-icon-svg" data-svg-src="{{ isrc }}" aria-hidden="true"></span>
+                      <img class="kit-icon-img" src="{{ isrc }}" alt="{{ c.name | escape }}" loading="lazy" width="60" height="60">
                     {%- elsif c.icon_emoji != blank -%}{{ c.icon_emoji }}{%- endif -%}
                   </div>
                   <div class="gb-image-pill-text">
@@ -43,9 +48,14 @@
               {%- endfor -%}
             {%- else -%}
               {%- for block in pill_blocks -%}
+                {%- assign bsrc = block.settings.image | image_url: width: 120 -%}
+                {%- if bsrc == blank -%}{%- assign bsrc = block.settings.image.url -%}{%- endif -%}
+                {%- if bsrc == blank -%}{%- assign bsrc = block.settings.image.src -%}{%- endif -%}
                 <div class="gb-image-pill" {{ block.shopify_attributes }}>
                   <div class="gb-image-pill-icon">
-                    {%- if block.settings.image != blank -%}<img src="{{ block.settings.image | image_url: width: 120 }}" alt="{{ block.settings.heading | escape }}" loading="lazy" width="60" height="60">
+                    {%- if bsrc != blank -%}
+                      <span class="kit-icon-svg" data-svg-src="{{ bsrc }}" aria-hidden="true"></span>
+                      <img class="kit-icon-img" src="{{ bsrc }}" alt="{{ block.settings.heading | escape }}" loading="lazy" width="60" height="60">
                     {%- elsif block.settings.icon_emoji != blank -%}{{ block.settings.icon_emoji }}{%- endif -%}
                   </div>
                   <div class="gb-image-pill-text">

@@ -27,12 +27,17 @@
       <div class="gb-card-grid">
         {%- if has_mf -%}
           {%- for c in mf_items -%}
+            {%- assign cicon = c.icon -%}
+            {%- assign cemoji = c.icon_emoji -%}
+            {%- assign isrc = cicon | image_url: width: 56 -%}
+            {%- if isrc == blank -%}{%- assign isrc = cicon.url -%}{%- endif -%}
+            {%- if isrc == blank -%}{%- assign isrc = cicon.src -%}{%- endif -%}
             <div class="gb-card-grid-item">
-              {%- assign cicon = c.icon -%}
-              {%- assign cemoji = c.icon_emoji -%}
-              {%- if cicon != blank or cemoji != blank -%}
+              {%- if isrc != blank or cemoji != blank -%}
                 <div class="gb-card-grid-icon">
-                  {%- if cicon != blank -%}{%- render 'kit_icon', icon: cicon, size: 28, extra: 'gb-card-icon-svg' -%}
+                  {%- if isrc != blank -%}
+                    <span class="kit-icon-svg gb-card-icon-svg" data-svg-src="{{ isrc }}" aria-hidden="true"></span>
+                    <img class="kit-icon-img" src="{{ isrc }}" alt="" loading="lazy" width="28" height="28">
                   {%- elsif cemoji != blank -%}{{ cemoji }}{%- endif -%}
                 </div>
               {%- endif -%}
@@ -45,10 +50,15 @@
           {%- endfor -%}
         {%- else -%}
           {%- for block in card_blocks -%}
+            {%- assign bsrc = block.settings.icon_svg | image_url: width: 56 -%}
+            {%- if bsrc == blank -%}{%- assign bsrc = block.settings.icon_svg.url -%}{%- endif -%}
+            {%- if bsrc == blank -%}{%- assign bsrc = block.settings.icon_svg.src -%}{%- endif -%}
             <div class="gb-card-grid-item" {{ block.shopify_attributes }}>
-              {%- if block.settings.icon_svg != blank or block.settings.icon_emoji != blank -%}
+              {%- if bsrc != blank or block.settings.icon_emoji != blank -%}
                 <div class="gb-card-grid-icon">
-                  {%- if block.settings.icon_svg != blank -%}{%- render 'kit_icon', icon: block.settings.icon_svg, size: 28, extra: 'gb-card-icon-svg' -%}
+                  {%- if bsrc != blank -%}
+                    <span class="kit-icon-svg gb-card-icon-svg" data-svg-src="{{ bsrc }}" aria-hidden="true"></span>
+                    <img class="kit-icon-img" src="{{ bsrc }}" alt="" loading="lazy" width="28" height="28">
                   {%- elsif block.settings.icon_emoji != blank -%}{{ block.settings.icon_emoji }}{%- endif -%}
                 </div>
               {%- endif -%}
