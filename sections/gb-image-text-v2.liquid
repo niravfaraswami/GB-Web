@@ -1,0 +1,212 @@
+{%- render 'leo_kit_chrome' -%}
+
+{%- if section.settings.heading != blank or section.settings.image != blank -%}
+  <section class="gb-image-text-section ferment-pdp-leo" data-image-pos="{{ section.settings.image_position | default: 'left' }}" {%- render 'leo_kit_attrs' -%}>
+    <div class="container">
+      <div class="gb-image-text-grid">
+        <div class="gb-image-text-image">
+          {%- if section.settings.image != blank -%}
+            <img src="{{ section.settings.image | image_url: width: 1000 }}" alt="{{ section.settings.heading | escape }}" loading="lazy" width="1000" height="800">
+          {%- endif -%}
+        </div>
+        <div class="gb-image-text-body">
+          {%- if section.settings.eyebrow != blank -%}<div class="eyebrow">{{ section.settings.eyebrow }}</div>{%- endif -%}
+          {%- if section.settings.heading != blank -%}<h2 class="gb-image-text-h">{{ section.settings.heading }} {%- if section.settings.heading_em != blank %}<em>{{ section.settings.heading_em }}</em>{%- endif -%}</h2>{%- endif -%}
+          {%- if section.settings.body != blank -%}<div class="gb-image-text-body-copy">{{ section.settings.body }}</div>{%- endif -%}
+          {%- if section.settings.bullets != blank -%}
+            <ul class="gb-image-text-list">
+              {%- assign lines = section.settings.bullets | newline_to_br | split: '<br />' -%}
+              {%- for line in lines -%}{%- assign t = line | strip -%}{%- if t != blank -%}<li>{{ t }}</li>{%- endif -%}{%- endfor -%}
+            </ul>
+          {%- endif -%}
+          {%- if section.settings.cta_label != blank -%}
+            <a class="gb-image-text-cta" href="{{ section.settings.cta_url | default: '#' }}">{{ section.settings.cta_label }}</a>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "GB · Image + Text (v2)",
+  "tag": "section",
+  "class": "gb-image-text-wrap",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "heading_em",
+      "label": "Heading (highlighted)"
+    },
+    {
+      "type": "richtext",
+      "id": "body",
+      "label": "Body copy"
+    },
+    {
+      "type": "textarea",
+      "id": "bullets",
+      "label": "Bullet list (one per line)"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "CTA label (optional)"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "CTA URL"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Image position (desktop)",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "header",
+      "content": "Spacing & Typography"
+    },
+    {
+      "type": "range",
+      "id": "pad_top_d",
+      "label": "Padding top — desktop (px)",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "pad_bot_d",
+      "label": "Padding bottom — desktop (px)",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "pad_top_m",
+      "label": "Padding top — mobile (px)",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "pad_bot_m",
+      "label": "Padding bottom — mobile (px)",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "mar_top_d",
+      "label": "Margin top — desktop (px)",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "mar_bot_d",
+      "label": "Margin bottom — desktop (px)",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "mar_top_m",
+      "label": "Margin top — mobile (px)",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "mar_bot_m",
+      "label": "Margin bottom — mobile (px)",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_size_d",
+      "label": "Eyebrow font size — desktop (px)",
+      "min": 9,
+      "max": 32,
+      "step": 1,
+      "default": 22
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_size_m",
+      "label": "Eyebrow font size — mobile (px)",
+      "min": 9,
+      "max": 24,
+      "step": 1,
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "heading_size_d",
+      "label": "Heading font size — desktop (px)",
+      "min": 18,
+      "max": 80,
+      "step": 2,
+      "default": 44
+    },
+    {
+      "type": "range",
+      "id": "heading_size_m",
+      "label": "Heading font size — mobile (px)",
+      "min": 16,
+      "max": 60,
+      "step": 2,
+      "default": 30
+    }
+  ],
+  "presets": [
+    {
+      "name": "GB · Image + Text (v2)"
+    }
+  ]
+}
+{% endschema %}
