@@ -1,8 +1,16 @@
 {%- render 'leo_kit_chrome' -%}
 
-{%- assign ugc_blocks = section.blocks | where: 'type', 'ugc_review' -%}
+{%- liquid
+  assign p = product
+  assign mf_reviews = p.metafields.custom.featured_reviews.value
+  assign ugc_blocks = section.blocks | where: 'type', 'ugc_review'
+  assign has_mf = false
+  if mf_reviews and mf_reviews.size > 0
+    assign has_mf = true
+  endif
+-%}
 
-{%- if ugc_blocks.size > 0 -%}
+{%- if has_mf or ugc_blocks.size > 0 -%}
   <section class="reviews-section ferment-pdp-leo" data-leo="1" {%- render 'leo_kit_attrs' -%}>
     <div class="container">
       <div class="section-header centered">
@@ -10,19 +18,35 @@
         <h2>{{ section.settings.heading }} <em>{{ section.settings.heading_em }}</em></h2>
       </div>
       <div class="ugc-grid">
-        {%- for block in ugc_blocks -%}
-          <div class="ugc-card" {{ block.shopify_attributes }}>
-            <div class="ugc-card-photo">
-              {%- if block.settings.photo != blank -%}<img src="{{ block.settings.photo | image_url: width: 800 }}" alt="{{ block.settings.name | escape }}" loading="lazy" width="600" height="800">{%- endif -%}
+        {%- if has_mf -%}
+          {%- for r in mf_reviews -%}
+            <div class="ugc-card">
+              <div class="ugc-card-photo">
+                {%- if r.photo != blank -%}<img src="{{ r.photo | image_url: width: 800 }}" alt="{{ r.name | escape }}" loading="lazy" width="600" height="800">{%- endif -%}
+              </div>
+              <div class="ugc-card-text">
+                <div class="ugc-card-quote">{{ r.quote }}</div>
+                <div class="ugc-card-name">{{ r.name }}</div>
+                {%- if r.meta != blank -%}<div class="ugc-card-age">{{ r.meta }}</div>{%- endif -%}
+              </div>
+              <div class="ugc-card-spacer"></div>
             </div>
-            <div class="ugc-card-text">
-              <div class="ugc-card-quote">{{ block.settings.quote }}</div>
-              <div class="ugc-card-name">{{ block.settings.name }}</div>
-              {%- if block.settings.meta != blank -%}<div class="ugc-card-age">{{ block.settings.meta }}</div>{%- endif -%}
+          {%- endfor -%}
+        {%- else -%}
+          {%- for block in ugc_blocks -%}
+            <div class="ugc-card" {{ block.shopify_attributes }}>
+              <div class="ugc-card-photo">
+                {%- if block.settings.photo != blank -%}<img src="{{ block.settings.photo | image_url: width: 800 }}" alt="{{ block.settings.name | escape }}" loading="lazy" width="600" height="800">{%- endif -%}
+              </div>
+              <div class="ugc-card-text">
+                <div class="ugc-card-quote">{{ block.settings.quote }}</div>
+                <div class="ugc-card-name">{{ block.settings.name }}</div>
+                {%- if block.settings.meta != blank -%}<div class="ugc-card-age">{{ block.settings.meta }}</div>{%- endif -%}
+              </div>
+              <div class="ugc-card-spacer"></div>
             </div>
-            <div class="ugc-card-spacer"></div>
-          </div>
-        {%- endfor -%}
+          {%- endfor -%}
+        {%- endif -%}
       </div>
     </div>
   </section>

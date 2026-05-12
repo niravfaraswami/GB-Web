@@ -3,11 +3,16 @@
 {%- liquid
   assign p = product
   assign mf_how_video = p.metafields.custom.how_to_make_video.value
+  assign mf_steps = p.metafields.custom.featured_steps.value
   assign step_blocks = section.blocks | where: 'type', 'step'
   assign how_video = mf_how_video | default: section.settings.how_video
+  assign has_mf_steps = false
+  if mf_steps and mf_steps.size > 0
+    assign has_mf_steps = true
+  endif
 -%}
 
-{%- if step_blocks.size > 0 or how_video != blank or section.settings.how_poster != blank -%}
+{%- if has_mf_steps or step_blocks.size > 0 or how_video != blank or section.settings.how_poster != blank -%}
   <section class="how-make-section section-accent ferment-pdp-leo" {%- render 'leo_kit_attrs' -%}>
     <div class="container">
       <div class="section-header centered">
@@ -32,15 +37,33 @@
           {%- endif -%}
         </div>
         <div class="hm-steps">
-          {%- for block in step_blocks -%}
-            <div class="hm-step" {{ block.shopify_attributes }}>
-              <div class="hm-num">{{ forloop.index }}</div>
-              <div class="hm-step-body">
-                <div class="hm-title">{{ block.settings.title }}</div>
-                <div class="hm-desc">{{ block.settings.description }}</div>
+          {%- if has_mf_steps -%}
+            {%- for step in mf_steps -%}
+              <div class="hm-step">
+                <div class="hm-num">
+                  {%- if step.icon != blank -%}
+                    <img src="{{ step.icon | image_url: width: 72 }}" alt="{{ step.title | escape }}" loading="lazy" width="36" height="36" class="hm-num-img">
+                  {%- else -%}
+                    {{ forloop.index }}
+                  {%- endif -%}
+                </div>
+                <div class="hm-step-body">
+                  <div class="hm-title">{{ step.title }}</div>
+                  <div class="hm-desc">{{ step.description }}</div>
+                </div>
               </div>
-            </div>
-          {%- endfor -%}
+            {%- endfor -%}
+          {%- else -%}
+            {%- for block in step_blocks -%}
+              <div class="hm-step" {{ block.shopify_attributes }}>
+                <div class="hm-num">{{ forloop.index }}</div>
+                <div class="hm-step-body">
+                  <div class="hm-title">{{ block.settings.title }}</div>
+                  <div class="hm-desc">{{ block.settings.description }}</div>
+                </div>
+              </div>
+            {%- endfor -%}
+          {%- endif -%}
         </div>
       </div>
     </div>

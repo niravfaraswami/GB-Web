@@ -1,25 +1,48 @@
 {%- render 'leo_kit_chrome' -%}
 
+{%- liquid
+  assign p = product
+  assign mf_trust_cards = p.metafields.custom.featured_trust_cards.value
+  assign has_mf = false
+  if mf_trust_cards and mf_trust_cards.size > 0
+    assign has_mf = true
+  endif
+-%}
+
 <section class="trust-row-section ferment-pdp-leo" {%- render 'leo_kit_attrs' -%}>
   <div class="container">
     <div class="trust-row-grid">
-      {%- for n in (1..4) -%}
-        {%- assign h_key = 'trust' | append: n | append: '_h' -%}
-        {%- assign d_key = 'trust' | append: n | append: '_d' -%}
-        {%- assign i_key = 'trust' | append: n | append: '_icon' -%}
-        {%- assign th = section.settings[h_key] -%}
-        {%- assign td = section.settings[d_key] -%}
-        {%- assign ti = section.settings[i_key] -%}
-        {%- if th != blank -%}
-          <div class="tr-card">
-            <div class="tr-icon">
-              {%- if ti != blank -%}{%- render 'kit_icon', icon: ti, size: 28, extra: 'gb-icon' -%}{%- endif -%}
+      {%- if has_mf -%}
+        {%- for tc in mf_trust_cards -%}
+          {%- if tc.heading != blank -%}
+            <div class="tr-card">
+              <div class="tr-icon">
+                {%- if tc.icon != blank -%}{%- render 'kit_icon', icon: tc.icon, size: 28, extra: 'gb-icon' -%}{%- endif -%}
+              </div>
+              <div class="tr-h">{{ tc.heading }}</div>
+              <div class="tr-d">{{ tc.body | default: tc.description }}</div>
             </div>
-            <div class="tr-h">{{ th }}</div>
-            <div class="tr-d">{{ td }}</div>
-          </div>
-        {%- endif -%}
-      {%- endfor -%}
+          {%- endif -%}
+        {%- endfor -%}
+      {%- else -%}
+        {%- for n in (1..4) -%}
+          {%- assign h_key = 'trust' | append: n | append: '_h' -%}
+          {%- assign d_key = 'trust' | append: n | append: '_d' -%}
+          {%- assign i_key = 'trust' | append: n | append: '_icon' -%}
+          {%- assign th = section.settings[h_key] -%}
+          {%- assign td = section.settings[d_key] -%}
+          {%- assign ti = section.settings[i_key] -%}
+          {%- if th != blank -%}
+            <div class="tr-card">
+              <div class="tr-icon">
+                {%- if ti != blank -%}{%- render 'kit_icon', icon: ti, size: 28, extra: 'gb-icon' -%}{%- endif -%}
+              </div>
+              <div class="tr-h">{{ th }}</div>
+              <div class="tr-d">{{ td }}</div>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endif -%}
     </div>
   </div>
 </section>

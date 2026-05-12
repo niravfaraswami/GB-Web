@@ -1,8 +1,16 @@
 {%- render 'leo_kit_chrome' -%}
 
-{%- assign faq_blocks = section.blocks | where: 'type', 'faq' -%}
+{%- liquid
+  assign p = product
+  assign mf_faqs = p.metafields.custom.featured_faqs.value
+  assign faq_blocks = section.blocks | where: 'type', 'faq'
+  assign has_mf = false
+  if mf_faqs and mf_faqs.size > 0
+    assign has_mf = true
+  endif
+-%}
 
-{%- if faq_blocks.size > 0 -%}
+{%- if has_mf or faq_blocks.size > 0 -%}
   <section class="faq-section ferment-pdp-leo" {%- render 'leo_kit_attrs' -%}>
     <div class="container">
       <div class="section-header centered">
@@ -10,12 +18,21 @@
         <h2>{{ section.settings.faq_heading }} <em>{{ section.settings.faq_heading_em }}</em></h2>
       </div>
       <div class="faq-list">
-        {%- for block in faq_blocks -%}
-          <div class="faq-item {% if forloop.first %}open{% endif %}" data-faq {{ block.shopify_attributes }}>
-            <div class="faq-q"><span>{{ block.settings.question }}</span><span class="faq-toggle">+</span></div>
-            <div class="faq-a">{{ block.settings.answer }}</div>
-          </div>
-        {%- endfor -%}
+        {%- if has_mf -%}
+          {%- for f in mf_faqs -%}
+            <div class="faq-item {% if forloop.first %}open{% endif %}" data-faq>
+              <div class="faq-q"><span>{{ f.question }}</span><span class="faq-toggle">+</span></div>
+              <div class="faq-a">{{ f.answer | newline_to_br }}</div>
+            </div>
+          {%- endfor -%}
+        {%- else -%}
+          {%- for block in faq_blocks -%}
+            <div class="faq-item {% if forloop.first %}open{% endif %}" data-faq {{ block.shopify_attributes }}>
+              <div class="faq-q"><span>{{ block.settings.question }}</span><span class="faq-toggle">+</span></div>
+              <div class="faq-a">{{ block.settings.answer }}</div>
+            </div>
+          {%- endfor -%}
+        {%- endif -%}
       </div>
     </div>
   </section>

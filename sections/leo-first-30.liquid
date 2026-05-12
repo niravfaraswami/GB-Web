@@ -1,11 +1,22 @@
 {%- render 'leo_kit_chrome' -%}
 
 {%- liquid
+  assign p = product
   assign f30_row_blocks  = section.blocks | where: 'type', 'f30_row'
   assign f30_stat_blocks = section.blocks | where: 'type', 'f30_stat'
+  assign mf_outcome_stats = p.metafields.custom.featured_outcomes_stats.value
+  assign mf_quick_benefits = p.metafields.custom.featured_quick_benefits.value
+  assign has_mf_stats = false
+  if mf_outcome_stats and mf_outcome_stats.size > 0
+    assign has_mf_stats = true
+  endif
+  assign has_mf_rows = false
+  if mf_quick_benefits and mf_quick_benefits.size > 0
+    assign has_mf_rows = true
+  endif
 -%}
 
-{%- if f30_row_blocks.size > 0 or section.settings.f30_h != blank -%}
+{%- if has_mf_rows or has_mf_stats or f30_row_blocks.size > 0 or section.settings.f30_h != blank -%}
   <section class="first30-section ferment-pdp-leo" {%- render 'leo_kit_attrs' -%}>
     <div class="container">
       <div class="first30-grid">
@@ -17,7 +28,22 @@
         <div class="first30-rest">
           {%- if section.settings.f30_intro != blank -%}<p class="first30-intro">{{ section.settings.f30_intro }}</p>{%- endif -%}
 
-          {%- if f30_row_blocks.size > 0 -%}
+          {%- if has_mf_rows -%}
+            <div class="first30-rows">
+              {%- for qb in mf_quick_benefits -%}
+                <div class="first30-row">
+                  <div class="f30-icon">
+                    {%- if qb.icon != blank -%}{%- render 'kit_icon', icon: qb.icon, size: 24 -%}
+                    {%- elsif qb.icon_emoji != blank -%}{{ qb.icon_emoji }}{%- endif -%}
+                  </div>
+                  <div class="f30-body">
+                    <div class="f30-h">{{ qb.heading | default: qb.title }}</div>
+                    <div class="f30-d">{{ qb.description | default: qb.body }}</div>
+                  </div>
+                </div>
+              {%- endfor -%}
+            </div>
+          {%- elsif f30_row_blocks.size > 0 -%}
             <div class="first30-rows">
               {%- for block in f30_row_blocks -%}
                 <div class="first30-row" {{ block.shopify_attributes }}>
@@ -34,10 +60,19 @@
             </div>
           {%- endif -%}
 
-          {%- if f30_stat_blocks.size > 0 or section.settings.f30_stats_line != blank -%}
+          {%- if has_mf_stats or f30_stat_blocks.size > 0 or section.settings.f30_stats_line != blank -%}
             <div class="first30-stats-strip">
               {%- if section.settings.f30_stats_line != blank -%}<div class="first30-stats-line">{{ section.settings.f30_stats_line }}</div>{%- endif -%}
-              {%- if f30_stat_blocks.size > 0 -%}
+              {%- if has_mf_stats -%}
+                <div class="first30-stats-row">
+                  {%- for s in mf_outcome_stats -%}
+                    <div class="first30-stat-cell">
+                      <div class="first30-stat-circle"><div class="first30-stat-num">{{ s.num | default: s.value }}{%- if s.num_unit != blank or s.unit != blank %}<span>{{ s.num_unit | default: s.unit }}</span>{%- endif -%}</div></div>
+                      <div class="first30-stat-label">{{ s.label }}</div>
+                    </div>
+                  {%- endfor -%}
+                </div>
+              {%- elsif f30_stat_blocks.size > 0 -%}
                 <div class="first30-stats-row">
                   {%- for block in f30_stat_blocks -%}
                     <div class="first30-stat-cell" {{ block.shopify_attributes }}>
