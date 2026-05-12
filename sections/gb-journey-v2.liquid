@@ -1,37 +1,66 @@
 {%- render 'leo_kit_chrome' -%}
 
-{%- assign stage_blocks = section.blocks | where: 'type', 'stage' -%}
+{%- liquid
+  assign p = product
+  assign mf_journey_eyebrow = p.metafields.custom.journey_eyebrow
+  assign mf_journey_heading = p.metafields.custom.journey_heading
+  assign mf_journey_sub = p.metafields.custom.journey_sub
+  assign mf_cross_sell = p.metafields.custom.cross_sell_products.value
+  assign stage_blocks = section.blocks | where: 'type', 'stage'
+  assign jn_eyebrow = mf_journey_eyebrow | default: section.settings.eyebrow
+  assign jn_heading = mf_journey_heading | default: section.settings.heading
+  assign jn_intro = mf_journey_sub | default: section.settings.intro
+  assign has_mf_cross = false
+  if mf_cross_sell and mf_cross_sell.size > 0
+    assign has_mf_cross = true
+  endif
+-%}
 
-{%- if stage_blocks.size > 0 -%}
+{%- if has_mf_cross or stage_blocks.size > 0 or jn_heading != blank -%}
   <section class="gb-journey-section ferment-pdp-leo" {%- render 'leo_kit_attrs' -%}>
     <div class="container">
       <div class="section-header centered">
-        {%- if section.settings.eyebrow != blank -%}<div class="eyebrow">{{ section.settings.eyebrow }}</div>{%- endif -%}
-        {%- if section.settings.heading != blank -%}<h2>{{ section.settings.heading }} <em>{{ section.settings.heading_em }}</em></h2>{%- endif -%}
-        {%- if section.settings.intro != blank -%}<p>{{ section.settings.intro }}</p>{%- endif -%}
+        {%- if jn_eyebrow != blank -%}<div class="eyebrow">{{ jn_eyebrow }}</div>{%- endif -%}
+        {%- if jn_heading != blank -%}<h2>{{ jn_heading }} <em>{{ section.settings.heading_em }}</em></h2>{%- endif -%}
+        {%- if jn_intro != blank -%}<p>{{ jn_intro }}</p>{%- endif -%}
       </div>
 
       <div class="gb-journey-grid">
-        {%- for block in stage_blocks -%}
-          <div class="gb-journey-card{% if block.settings.featured %} gb-journey-featured{% endif %}" {{ block.shopify_attributes }}>
-            {%- if block.settings.stage_label != blank -%}<div class="gb-journey-stage">{{ block.settings.stage_label }}</div>{%- endif -%}
-            {%- if block.settings.image != blank -%}
-              <div class="gb-journey-img"><img src="{{ block.settings.image | image_url: width: 600 }}" alt="{{ block.settings.product_name | escape }}" loading="lazy" width="400" height="400"></div>
-            {%- endif -%}
-            {%- if block.settings.product_name != blank -%}<div class="gb-journey-product">{{ block.settings.product_name }}</div>{%- endif -%}
-            {%- if block.settings.tag != blank -%}<div class="gb-journey-tag">{{ block.settings.tag }}</div>{%- endif -%}
-            {%- if block.settings.bullets != blank -%}
-              <ul class="gb-journey-points">
-                {%- assign lines = block.settings.bullets | newline_to_br | split: '<br />' -%}
-                {%- for line in lines -%}{%- assign t = line | strip -%}{%- if t != blank -%}<li>{{ t }}</li>{%- endif -%}{%- endfor -%}
-              </ul>
-            {%- endif -%}
-            {%- if block.settings.price != blank -%}<div class="gb-journey-price">{{ block.settings.price }}</div>{%- endif -%}
-            {%- if block.settings.cta_label != blank -%}
-              <a class="gb-journey-cta" href="{{ block.settings.cta_url | default: '#' }}">{{ block.settings.cta_label }}</a>
-            {%- endif -%}
-          </div>
-        {%- endfor -%}
+        {%- if has_mf_cross -%}
+          {%- for cs in mf_cross_sell -%}
+            <div class="gb-journey-card">
+              {%- if cs.featured_image != blank -%}
+                <div class="gb-journey-img"><img src="{{ cs.featured_image | image_url: width: 600 }}" alt="{{ cs.title | escape }}" loading="lazy" width="400" height="400"></div>
+              {%- endif -%}
+              <div class="gb-journey-product">{{ cs.title }}</div>
+              {%- assign cs_tag = cs.metafields.custom.hero_tagline -%}
+              {%- if cs_tag != blank -%}<div class="gb-journey-tag">{{ cs_tag }}</div>{%- endif -%}
+              <div class="gb-journey-price">{{ cs.price | money }}</div>
+              <a class="gb-journey-cta" href="{{ cs.url }}">Shop →</a>
+            </div>
+          {%- endfor -%}
+        {%- else -%}
+          {%- for block in stage_blocks -%}
+            <div class="gb-journey-card{% if block.settings.featured %} gb-journey-featured{% endif %}" {{ block.shopify_attributes }}>
+              {%- if block.settings.stage_label != blank -%}<div class="gb-journey-stage">{{ block.settings.stage_label }}</div>{%- endif -%}
+              {%- if block.settings.image != blank -%}
+                <div class="gb-journey-img"><img src="{{ block.settings.image | image_url: width: 600 }}" alt="{{ block.settings.product_name | escape }}" loading="lazy" width="400" height="400"></div>
+              {%- endif -%}
+              {%- if block.settings.product_name != blank -%}<div class="gb-journey-product">{{ block.settings.product_name }}</div>{%- endif -%}
+              {%- if block.settings.tag != blank -%}<div class="gb-journey-tag">{{ block.settings.tag }}</div>{%- endif -%}
+              {%- if block.settings.bullets != blank -%}
+                <ul class="gb-journey-points">
+                  {%- assign lines = block.settings.bullets | newline_to_br | split: '<br />' -%}
+                  {%- for line in lines -%}{%- assign t = line | strip -%}{%- if t != blank -%}<li>{{ t }}</li>{%- endif -%}{%- endfor -%}
+                </ul>
+              {%- endif -%}
+              {%- if block.settings.price != blank -%}<div class="gb-journey-price">{{ block.settings.price }}</div>{%- endif -%}
+              {%- if block.settings.cta_label != blank -%}
+                <a class="gb-journey-cta" href="{{ block.settings.cta_url | default: '#' }}">{{ block.settings.cta_label }}</a>
+              {%- endif -%}
+            </div>
+          {%- endfor -%}
+        {%- endif -%}
       </div>
     </div>
   </section>

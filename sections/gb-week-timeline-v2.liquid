@@ -3,20 +3,30 @@
 {%- liquid
   assign p = product
   assign mf_steps = p.metafields.custom.featured_timeline_steps.value
+  assign mf_timeline_eyebrow = p.metafields.custom.timeline_eyebrow
+  assign mf_timeline_h = p.metafields.custom.timeline_h
+  assign mf_timeline_subtitle = p.metafields.custom.timeline_subtitle
   assign week_blocks = section.blocks | where: 'type', 'week'
   assign has_mf = false
   if mf_steps and mf_steps.size > 0
     assign has_mf = true
   endif
+  assign wk_eyebrow = mf_timeline_eyebrow | default: section.settings.eyebrow
+  assign wk_heading = mf_timeline_h | default: section.settings.heading
+  assign wk_intro = mf_timeline_subtitle | default: section.settings.intro
 -%}
 
-{%- if has_mf or week_blocks.size > 0 -%}
+{%- if has_mf or week_blocks.size > 0 or wk_heading != blank -%}
   <section class="gb-week-timeline-section ferment-pdp-leo" {%- render 'leo_kit_attrs' -%}>
     <div class="container">
       <div class="section-header centered">
-        {%- if section.settings.eyebrow != blank -%}<div class="eyebrow">{{ section.settings.eyebrow }}</div>{%- endif -%}
-        {%- if section.settings.heading != blank -%}<h2>{{ section.settings.heading }} <em>{{ section.settings.heading_em }}</em></h2>{%- endif -%}
-        {%- if section.settings.intro != blank -%}<p>{{ section.settings.intro }}</p>{%- endif -%}
+        {%- if wk_eyebrow != blank -%}<div class="eyebrow">{{ wk_eyebrow }}</div>{%- endif -%}
+        {%- if mf_timeline_h != blank -%}
+          <h2>{{ mf_timeline_h }}</h2>
+        {%- elsif section.settings.heading != blank -%}
+          <h2>{{ section.settings.heading }} <em>{{ section.settings.heading_em }}</em></h2>
+        {%- endif -%}
+        {%- if wk_intro != blank -%}<p>{{ wk_intro }}</p>{%- endif -%}
       </div>
 
       <div class="gb-week-grid">

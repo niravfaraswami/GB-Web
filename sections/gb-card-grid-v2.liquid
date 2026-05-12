@@ -2,7 +2,14 @@
 
 {%- liquid
   assign p = product
-  assign mf_items = p.metafields.custom.featured_quick_benefits.value
+  assign mf_trust_cards = p.metafields.custom.featured_trust_cards.value
+  assign mf_why_eyebrow = p.metafields.custom.why_eyebrow
+  assign mf_why_heading = p.metafields.custom.why_heading
+  assign mf_why_intro = p.metafields.custom.why_intro
+  assign mf_items = mf_trust_cards
+  if mf_items == blank or mf_items.size == 0
+    assign mf_items = p.metafields.custom.featured_quick_benefits.value
+  endif
   if mf_items == blank or mf_items.size == 0
     assign mf_items = p.metafields.custom.featured_components.value
   endif
@@ -11,16 +18,19 @@
   if mf_items and mf_items.size > 0
     assign has_mf = true
   endif
+  assign card_eyebrow = mf_why_eyebrow | default: section.settings.eyebrow
+  assign card_heading = mf_why_heading | default: section.settings.heading
+  assign card_intro = mf_why_intro | default: section.settings.intro
 -%}
 
-{%- if has_mf or card_blocks.size > 0 or section.settings.heading != blank -%}
+{%- if has_mf or card_blocks.size > 0 or card_heading != blank -%}
   <section class="gb-card-grid-section ferment-pdp-leo" data-cols="{{ section.settings.columns | default: 4 }}" {%- render 'leo_kit_attrs' -%}>
     <div class="container">
-      {%- if section.settings.heading != blank or section.settings.eyebrow != blank -%}
+      {%- if card_heading != blank or card_eyebrow != blank -%}
         <div class="section-header centered">
-          {%- if section.settings.eyebrow != blank -%}<div class="eyebrow">{{ section.settings.eyebrow }}</div>{%- endif -%}
-          {%- if section.settings.heading != blank -%}<h2>{{ section.settings.heading }} {%- if section.settings.heading_em != blank %}<em>{{ section.settings.heading_em }}</em>{%- endif -%}{{ section.settings.heading_tail }}</h2>{%- endif -%}
-          {%- if section.settings.intro != blank -%}<p>{{ section.settings.intro }}</p>{%- endif -%}
+          {%- if card_eyebrow != blank -%}<div class="eyebrow">{{ card_eyebrow }}</div>{%- endif -%}
+          {%- if card_heading != blank -%}<h2>{{ card_heading }} {%- if section.settings.heading_em != blank %}<em>{{ section.settings.heading_em }}</em>{%- endif -%}{{ section.settings.heading_tail }}</h2>{%- endif -%}
+          {%- if card_intro != blank -%}<p>{{ card_intro }}</p>{%- endif -%}
         </div>
       {%- endif -%}
 

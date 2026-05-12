@@ -3,29 +3,37 @@
 {%- liquid
   assign p = product
   assign mf_rows = p.metafields.custom.featured_comparison_rows.value
+  assign mf_diff_eyebrow = p.metafields.custom.diff_eyebrow
+  assign mf_diff_heading = p.metafields.custom.diff_heading
+  assign mf_compare_left = p.metafields.custom.compare_left_label
+  assign mf_compare_right = p.metafields.custom.compare_right_label
+  assign mf_comparison_intro = p.metafields.custom.comparison_intro
   assign cmp_blocks = section.blocks | where: 'type', 'cmp_row'
   assign has_mf = false
   if mf_rows and mf_rows.size > 0
     assign has_mf = true
   endif
+  assign cmp_eyebrow = mf_diff_eyebrow | default: section.settings.eyebrow
+  assign cmp_heading = mf_diff_heading | default: section.settings.heading
+  assign cmp_intro = mf_comparison_intro | default: section.settings.intro
 -%}
 
-{%- if has_mf or cmp_blocks.size > 0 -%}
+{%- if has_mf or cmp_blocks.size > 0 or cmp_heading != blank -%}
   {%- assign col_count = section.settings.col_count | default: 3 -%}
   <section class="gb-comparison-section ferment-pdp-leo" data-cols="{{ col_count }}" {%- render 'leo_kit_attrs' -%}>
     <div class="container">
       <div class="section-header centered">
-        {%- if section.settings.eyebrow != blank -%}<div class="eyebrow">{{ section.settings.eyebrow }}</div>{%- endif -%}
-        {%- if section.settings.heading != blank -%}<h2>{{ section.settings.heading }} <em>{{ section.settings.heading_em }}</em></h2>{%- endif -%}
-        {%- if section.settings.intro != blank -%}<p>{{ section.settings.intro }}</p>{%- endif -%}
+        {%- if cmp_eyebrow != blank -%}<div class="eyebrow">{{ cmp_eyebrow }}</div>{%- endif -%}
+        {%- if cmp_heading != blank -%}<h2>{{ cmp_heading }} <em>{{ section.settings.heading_em }}</em></h2>{%- endif -%}
+        {%- if cmp_intro != blank -%}<p>{{ cmp_intro }}</p>{%- endif -%}
       </div>
 
       <div class="gb-cmp-table-wrap">
         <div class="gb-cmp-table">
           <div class="gb-cmp-head">
             <div class="gb-cmp-h-cell gb-cmp-h-label">&nbsp;</div>
-            <div class="gb-cmp-h-cell gb-cmp-h-kit">{{ section.settings.col_kit_label | default: 'GutBasket' }}</div>
-            <div class="gb-cmp-h-cell">{{ section.settings.col_2_label | default: 'Alternative A' }}</div>
+            <div class="gb-cmp-h-cell gb-cmp-h-kit">{{ mf_compare_left | default: section.settings.col_kit_label | default: 'GutBasket' }}</div>
+            <div class="gb-cmp-h-cell">{{ mf_compare_right | default: section.settings.col_2_label | default: 'Alternative A' }}</div>
             {%- if col_count == 3 or col_count == '3' -%}
               <div class="gb-cmp-h-cell">{{ section.settings.col_3_label | default: 'Alternative B' }}</div>
             {%- endif -%}

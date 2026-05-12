@@ -1,19 +1,39 @@
 {%- render 'leo_kit_chrome' -%}
 
-{%- if section.settings.heading != blank or section.settings.image != blank -%}
+{%- liquid
+  assign p = product
+  assign mf_pd_eyebrow = p.metafields.custom.pd_eyebrow
+  assign mf_pd_heading = p.metafields.custom.pd_heading
+  assign mf_pd_certs = p.metafields.custom.pd_certifications.value
+  assign pd_eyebrow = mf_pd_eyebrow | default: section.settings.eyebrow
+  assign pd_heading = mf_pd_heading | default: section.settings.heading
+  assign has_mf_certs = false
+  if mf_pd_certs and mf_pd_certs.size > 0
+    assign has_mf_certs = true
+  endif
+-%}
+
+{%- if pd_heading != blank or section.settings.image != blank or has_mf_certs -%}
   <section class="gb-image-text-section ferment-pdp-leo" data-image-pos="{{ section.settings.image_position | default: 'left' }}" {%- render 'leo_kit_attrs' -%}>
     <div class="container">
       <div class="gb-image-text-grid">
         <div class="gb-image-text-image">
           {%- if section.settings.image != blank -%}
-            <img src="{{ section.settings.image | image_url: width: 1000 }}" alt="{{ section.settings.heading | escape }}" loading="lazy" width="1000" height="800">
+            <img src="{{ section.settings.image | image_url: width: 1000 }}" alt="{{ pd_heading | escape }}" loading="lazy" width="1000" height="800">
           {%- endif -%}
         </div>
         <div class="gb-image-text-body">
-          {%- if section.settings.eyebrow != blank -%}<div class="eyebrow">{{ section.settings.eyebrow }}</div>{%- endif -%}
-          {%- if section.settings.heading != blank -%}<h2 class="gb-image-text-h">{{ section.settings.heading }} {%- if section.settings.heading_em != blank %}<em>{{ section.settings.heading_em }}</em>{%- endif -%}</h2>{%- endif -%}
+          {%- if pd_eyebrow != blank -%}<div class="eyebrow">{{ pd_eyebrow }}</div>{%- endif -%}
+          {%- if pd_heading != blank -%}<h2 class="gb-image-text-h">{{ pd_heading }} {%- if section.settings.heading_em != blank %}<em>{{ section.settings.heading_em }}</em>{%- endif -%}</h2>{%- endif -%}
           {%- if section.settings.body != blank -%}<div class="gb-image-text-body-copy">{{ section.settings.body }}</div>{%- endif -%}
-          {%- if section.settings.bullets != blank -%}
+          {%- if has_mf_certs -%}
+            <ul class="gb-image-text-list gb-image-text-certs">
+              {%- for cert in mf_pd_certs -%}
+                {%- assign t = cert | strip -%}
+                {%- if t != blank -%}<li>{{ t }}</li>{%- endif -%}
+              {%- endfor -%}
+            </ul>
+          {%- elsif section.settings.bullets != blank -%}
             <ul class="gb-image-text-list">
               {%- assign lines = section.settings.bullets | newline_to_br | split: '<br />' -%}
               {%- for line in lines -%}{%- assign t = line | strip -%}{%- if t != blank -%}<li>{{ t }}</li>{%- endif -%}{%- endfor -%}

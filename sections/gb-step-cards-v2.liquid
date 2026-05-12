@@ -3,19 +3,28 @@
 {%- liquid
   assign p = product
   assign mf_steps = p.metafields.custom.featured_steps.value
+  assign mf_consume_eyebrow = p.metafields.custom.consume_eyebrow
+  assign mf_consume_heading = p.metafields.custom.consume_heading
+  assign mf_consume_tips = p.metafields.custom.consume_tips.value
   assign step_blocks = section.blocks | where: 'type', 'step_card'
   assign has_mf = false
   if mf_steps and mf_steps.size > 0
     assign has_mf = true
   endif
+  assign has_mf_tips = false
+  if mf_consume_tips and mf_consume_tips.size > 0
+    assign has_mf_tips = true
+  endif
+  assign sc_eyebrow = mf_consume_eyebrow | default: section.settings.eyebrow
+  assign sc_heading = mf_consume_heading | default: section.settings.heading
 -%}
 
-{%- if has_mf or step_blocks.size > 0 or section.settings.heading != blank -%}
+{%- if has_mf or step_blocks.size > 0 or sc_heading != blank -%}
   <section class="gb-step-cards-section ferment-pdp-leo" {%- render 'leo_kit_attrs' -%}>
     <div class="container">
       <div class="section-header centered">
-        {%- if section.settings.eyebrow != blank -%}<div class="eyebrow">{{ section.settings.eyebrow }}</div>{%- endif -%}
-        {%- if section.settings.heading != blank -%}<h2>{{ section.settings.heading }} <em>{{ section.settings.heading_em }}</em></h2>{%- endif -%}
+        {%- if sc_eyebrow != blank -%}<div class="eyebrow">{{ sc_eyebrow }}</div>{%- endif -%}
+        {%- if sc_heading != blank -%}<h2>{{ sc_heading }} <em>{{ section.settings.heading_em }}</em></h2>{%- endif -%}
         {%- if section.settings.intro != blank -%}<p>{{ section.settings.intro }}</p>{%- endif -%}
       </div>
 
@@ -59,10 +68,17 @@
         {%- endif -%}
       </div>
 
-      {%- if section.settings.tips_heading != blank or section.settings.tips_bullets != blank -%}
+      {%- if section.settings.tips_heading != blank or has_mf_tips or section.settings.tips_bullets != blank -%}
         <div class="gb-step-cards-tips">
           {%- if section.settings.tips_heading != blank -%}<div class="gb-step-cards-tips-h">{{ section.settings.tips_heading }}</div>{%- endif -%}
-          {%- if section.settings.tips_bullets != blank -%}
+          {%- if has_mf_tips -%}
+            <ul class="gb-step-cards-tips-list">
+              {%- for item in mf_consume_tips -%}
+                {%- assign t = item | strip -%}
+                {%- if t != blank -%}<li>{{ t }}</li>{%- endif -%}
+              {%- endfor -%}
+            </ul>
+          {%- elsif section.settings.tips_bullets != blank -%}
             <ul class="gb-step-cards-tips-list">
               {%- assign lines = section.settings.tips_bullets | newline_to_br | split: '<br />' -%}
               {%- for line in lines -%}{%- assign t = line | strip -%}{%- if t != blank -%}<li>{{ t }}</li>{%- endif -%}{%- endfor -%}

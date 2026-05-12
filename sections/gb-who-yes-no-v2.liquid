@@ -1,19 +1,46 @@
 {%- render 'leo_kit_chrome' -%}
 
-{%- if section.settings.heading != blank or section.settings.yes_bullets != blank or section.settings.no_bullets != blank -%}
+{%- liquid
+  assign p = product
+  assign mf_who_eyebrow = p.metafields.custom.who_eyebrow
+  assign mf_who_heading = p.metafields.custom.who_heading
+  assign mf_who_sub = p.metafields.custom.who_sub
+  assign mf_who_yes = p.metafields.custom.who_yes.value
+  assign mf_who_no = p.metafields.custom.who_no.value
+  assign who_eyebrow = mf_who_eyebrow | default: section.settings.eyebrow
+  assign who_heading = mf_who_heading | default: section.settings.heading
+  assign who_sub = mf_who_sub | default: section.settings.intro
+  assign has_yes_mf = false
+  if mf_who_yes and mf_who_yes.size > 0
+    assign has_yes_mf = true
+  endif
+  assign has_no_mf = false
+  if mf_who_no and mf_who_no.size > 0
+    assign has_no_mf = true
+  endif
+-%}
+
+{%- if who_heading != blank or has_yes_mf or has_no_mf or section.settings.yes_bullets != blank or section.settings.no_bullets != blank -%}
   <section class="gb-who-section ferment-pdp-leo" {%- render 'leo_kit_attrs' -%}>
     <div class="container">
       <div class="section-header centered">
-        {%- if section.settings.eyebrow != blank -%}<div class="eyebrow">{{ section.settings.eyebrow }}</div>{%- endif -%}
-        {%- if section.settings.heading != blank -%}<h2>{{ section.settings.heading }} <em>{{ section.settings.heading_em }}</em></h2>{%- endif -%}
-        {%- if section.settings.intro != blank -%}<p>{{ section.settings.intro }}</p>{%- endif -%}
+        {%- if who_eyebrow != blank -%}<div class="eyebrow">{{ who_eyebrow }}</div>{%- endif -%}
+        {%- if who_heading != blank -%}<h2>{{ who_heading }} <em>{{ section.settings.heading_em }}</em></h2>{%- endif -%}
+        {%- if who_sub != blank -%}<p>{{ who_sub }}</p>{%- endif -%}
       </div>
 
       <div class="gb-who-grid">
         <div class="gb-who-card gb-who-yes">
           {%- if section.settings.yes_label != blank -%}<div class="gb-who-pill">{{ section.settings.yes_label }}</div>{%- endif -%}
           <div class="gb-who-h">{{ section.settings.yes_heading | default: 'Perfect for you' }}</div>
-          {%- if section.settings.yes_bullets != blank -%}
+          {%- if has_yes_mf -%}
+            <ul class="gb-who-list">
+              {%- for item in mf_who_yes -%}
+                {%- assign t = item | strip -%}
+                {%- if t != blank -%}<li>{{ t }}</li>{%- endif -%}
+              {%- endfor -%}
+            </ul>
+          {%- elsif section.settings.yes_bullets != blank -%}
             <ul class="gb-who-list">
               {%- assign lines = section.settings.yes_bullets | newline_to_br | split: '<br />' -%}
               {%- for line in lines -%}{%- assign t = line | strip -%}{%- if t != blank -%}<li>{{ t }}</li>{%- endif -%}{%- endfor -%}
@@ -23,7 +50,14 @@
         <div class="gb-who-card gb-who-no">
           {%- if section.settings.no_label != blank -%}<div class="gb-who-pill">{{ section.settings.no_label }}</div>{%- endif -%}
           <div class="gb-who-h">{{ section.settings.no_heading | default: 'Maybe not for you' }}</div>
-          {%- if section.settings.no_bullets != blank -%}
+          {%- if has_no_mf -%}
+            <ul class="gb-who-list">
+              {%- for item in mf_who_no -%}
+                {%- assign t = item | strip -%}
+                {%- if t != blank -%}<li>{{ t }}</li>{%- endif -%}
+              {%- endfor -%}
+            </ul>
+          {%- elsif section.settings.no_bullets != blank -%}
             <ul class="gb-who-list">
               {%- assign lines = section.settings.no_bullets | newline_to_br | split: '<br />' -%}
               {%- for line in lines -%}{%- assign t = line | strip -%}{%- if t != blank -%}<li>{{ t }}</li>{%- endif -%}{%- endfor -%}
