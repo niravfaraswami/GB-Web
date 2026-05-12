@@ -1,8 +1,19 @@
 {%- render 'leo_kit_chrome' -%}
 
-{%- assign card_blocks = section.blocks | where: 'type', 'card' -%}
+{%- liquid
+  assign p = product
+  assign mf_items = p.metafields.custom.featured_quick_benefits.value
+  if mf_items == blank or mf_items.size == 0
+    assign mf_items = p.metafields.custom.featured_components.value
+  endif
+  assign card_blocks = section.blocks | where: 'type', 'card'
+  assign has_mf = false
+  if mf_items and mf_items.size > 0
+    assign has_mf = true
+  endif
+-%}
 
-{%- if card_blocks.size > 0 or section.settings.heading != blank -%}
+{%- if has_mf or card_blocks.size > 0 or section.settings.heading != blank -%}
   <section class="gb-card-grid-section ferment-pdp-leo" data-cols="{{ section.settings.columns | default: 4 }}" {%- render 'leo_kit_attrs' -%}>
     <div class="container">
       {%- if section.settings.heading != blank or section.settings.eyebrow != blank -%}
@@ -14,19 +25,39 @@
       {%- endif -%}
 
       <div class="gb-card-grid">
-        {%- for block in card_blocks -%}
-          <div class="gb-card-grid-item" {{ block.shopify_attributes }}>
-            {%- if block.settings.icon_svg != blank or block.settings.icon_emoji != blank -%}
-              <div class="gb-card-grid-icon">
-                {%- if block.settings.icon_svg != blank -%}{%- render 'kit_icon', icon: block.settings.icon_svg, size: 28, extra: 'gb-card-icon-svg' -%}
-                {%- elsif block.settings.icon_emoji != blank -%}{{ block.settings.icon_emoji }}{%- endif -%}
-              </div>
-            {%- endif -%}
-            {%- if block.settings.label != blank -%}<div class="gb-card-grid-label">{{ block.settings.label }}</div>{%- endif -%}
-            {%- if block.settings.heading != blank -%}<div class="gb-card-grid-h">{{ block.settings.heading }}</div>{%- endif -%}
-            {%- if block.settings.description != blank -%}<div class="gb-card-grid-d">{{ block.settings.description }}</div>{%- endif -%}
-          </div>
-        {%- endfor -%}
+        {%- if has_mf -%}
+          {%- for c in mf_items -%}
+            <div class="gb-card-grid-item">
+              {%- assign cicon = c.icon -%}
+              {%- assign cemoji = c.icon_emoji -%}
+              {%- if cicon != blank or cemoji != blank -%}
+                <div class="gb-card-grid-icon">
+                  {%- if cicon != blank -%}{%- render 'kit_icon', icon: cicon, size: 28, extra: 'gb-card-icon-svg' -%}
+                  {%- elsif cemoji != blank -%}{{ cemoji }}{%- endif -%}
+                </div>
+              {%- endif -%}
+              {%- if c.label != blank -%}<div class="gb-card-grid-label">{{ c.label }}</div>{%- endif -%}
+              {%- assign chead = c.heading | default: c.name | default: c.title -%}
+              {%- if chead != blank -%}<div class="gb-card-grid-h">{{ chead }}</div>{%- endif -%}
+              {%- assign cdesc = c.description | default: c.body | default: c.sub -%}
+              {%- if cdesc != blank -%}<div class="gb-card-grid-d">{{ cdesc }}</div>{%- endif -%}
+            </div>
+          {%- endfor -%}
+        {%- else -%}
+          {%- for block in card_blocks -%}
+            <div class="gb-card-grid-item" {{ block.shopify_attributes }}>
+              {%- if block.settings.icon_svg != blank or block.settings.icon_emoji != blank -%}
+                <div class="gb-card-grid-icon">
+                  {%- if block.settings.icon_svg != blank -%}{%- render 'kit_icon', icon: block.settings.icon_svg, size: 28, extra: 'gb-card-icon-svg' -%}
+                  {%- elsif block.settings.icon_emoji != blank -%}{{ block.settings.icon_emoji }}{%- endif -%}
+                </div>
+              {%- endif -%}
+              {%- if block.settings.label != blank -%}<div class="gb-card-grid-label">{{ block.settings.label }}</div>{%- endif -%}
+              {%- if block.settings.heading != blank -%}<div class="gb-card-grid-h">{{ block.settings.heading }}</div>{%- endif -%}
+              {%- if block.settings.description != blank -%}<div class="gb-card-grid-d">{{ block.settings.description }}</div>{%- endif -%}
+            </div>
+          {%- endfor -%}
+        {%- endif -%}
       </div>
     </div>
   </section>

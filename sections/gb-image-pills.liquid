@@ -1,8 +1,16 @@
 {%- render 'leo_kit_chrome' -%}
 
-{%- assign pill_blocks = section.blocks | where: 'type', 'pill' -%}
+{%- liquid
+  assign p = product
+  assign mf_components = p.metafields.custom.featured_components.value
+  assign pill_blocks = section.blocks | where: 'type', 'pill'
+  assign has_mf = false
+  if mf_components and mf_components.size > 0
+    assign has_mf = true
+  endif
+-%}
 
-{%- if pill_blocks.size > 0 or section.settings.image != blank -%}
+{%- if has_mf or pill_blocks.size > 0 or section.settings.image != blank -%}
   <section class="gb-image-pills-section ferment-pdp-leo" data-image-pos="{{ section.settings.image_position | default: 'left' }}" {%- render 'leo_kit_attrs' -%}>
     <div class="container">
       <div class="section-header centered">
@@ -19,18 +27,34 @@
         <div class="gb-image-pills-body">
           {%- if section.settings.body_heading != blank -%}<div class="gb-image-pills-body-h">{{ section.settings.body_heading }}</div>{%- endif -%}
           <div class="gb-image-pills-list">
-            {%- for block in pill_blocks -%}
-              <div class="gb-image-pill" {{ block.shopify_attributes }}>
-                <div class="gb-image-pill-icon">
-                  {%- if block.settings.image != blank -%}<img src="{{ block.settings.image | image_url: width: 120 }}" alt="{{ block.settings.heading | escape }}" loading="lazy" width="60" height="60">
-                  {%- elsif block.settings.icon_emoji != blank -%}{{ block.settings.icon_emoji }}{%- endif -%}
+            {%- if has_mf -%}
+              {%- for c in mf_components -%}
+                <div class="gb-image-pill">
+                  <div class="gb-image-pill-icon">
+                    {%- if c.icon != blank -%}<img src="{{ c.icon | image_url: width: 120 }}" alt="{{ c.name | escape }}" loading="lazy" width="60" height="60">
+                    {%- elsif c.icon_emoji != blank -%}{{ c.icon_emoji }}{%- endif -%}
+                  </div>
+                  <div class="gb-image-pill-text">
+                    <div class="gb-image-pill-h">{{ c.name | default: c.heading }}</div>
+                    {%- assign csub = c.description | default: c.sub -%}
+                    {%- if csub != blank -%}<div class="gb-image-pill-sub">{{ csub }}</div>{%- endif -%}
+                  </div>
                 </div>
-                <div class="gb-image-pill-text">
-                  <div class="gb-image-pill-h">{{ block.settings.heading }}</div>
-                  {%- if block.settings.sub != blank -%}<div class="gb-image-pill-sub">{{ block.settings.sub }}</div>{%- endif -%}
+              {%- endfor -%}
+            {%- else -%}
+              {%- for block in pill_blocks -%}
+                <div class="gb-image-pill" {{ block.shopify_attributes }}>
+                  <div class="gb-image-pill-icon">
+                    {%- if block.settings.image != blank -%}<img src="{{ block.settings.image | image_url: width: 120 }}" alt="{{ block.settings.heading | escape }}" loading="lazy" width="60" height="60">
+                    {%- elsif block.settings.icon_emoji != blank -%}{{ block.settings.icon_emoji }}{%- endif -%}
+                  </div>
+                  <div class="gb-image-pill-text">
+                    <div class="gb-image-pill-h">{{ block.settings.heading }}</div>
+                    {%- if block.settings.sub != blank -%}<div class="gb-image-pill-sub">{{ block.settings.sub }}</div>{%- endif -%}
+                  </div>
                 </div>
-              </div>
-            {%- endfor -%}
+              {%- endfor -%}
+            {%- endif -%}
           </div>
           {%- if section.settings.body_note != blank -%}<div class="gb-image-pills-note">{{ section.settings.body_note }}</div>{%- endif -%}
         </div>

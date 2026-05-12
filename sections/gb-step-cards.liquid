@@ -1,8 +1,16 @@
 {%- render 'leo_kit_chrome' -%}
 
-{%- assign step_blocks = section.blocks | where: 'type', 'step_card' -%}
+{%- liquid
+  assign p = product
+  assign mf_steps = p.metafields.custom.featured_steps.value
+  assign step_blocks = section.blocks | where: 'type', 'step_card'
+  assign has_mf = false
+  if mf_steps and mf_steps.size > 0
+    assign has_mf = true
+  endif
+-%}
 
-{%- if step_blocks.size > 0 or section.settings.heading != blank -%}
+{%- if has_mf or step_blocks.size > 0 or section.settings.heading != blank -%}
   <section class="gb-step-cards-section ferment-pdp-leo" {%- render 'leo_kit_attrs' -%}>
     <div class="container">
       <div class="section-header centered">
@@ -12,17 +20,33 @@
       </div>
 
       <div class="gb-step-cards-grid">
-        {%- for block in step_blocks -%}
-          <div class="gb-step-card" {{ block.shopify_attributes }}>
-            <div class="gb-step-card-num">{{ forloop.index }}</div>
-            <div class="gb-step-card-icon">
-              {%- if block.settings.image != blank -%}<img src="{{ block.settings.image | image_url: width: 400 }}" alt="{{ block.settings.heading | escape }}" loading="lazy" width="200" height="200">
-              {%- elsif block.settings.icon_emoji != blank -%}{{ block.settings.icon_emoji }}{%- endif -%}
+        {%- if has_mf -%}
+          {%- for s in mf_steps -%}
+            {%- assign s_h = s.title | default: s.heading -%}
+            {%- assign s_d = s.description | default: s.body -%}
+            <div class="gb-step-card">
+              <div class="gb-step-card-num">{{ forloop.index }}</div>
+              <div class="gb-step-card-icon">
+                {%- if s.icon != blank -%}<img src="{{ s.icon | image_url: width: 400 }}" alt="{{ s_h | escape }}" loading="lazy" width="200" height="200">
+                {%- elsif s.icon_emoji != blank -%}{{ s.icon_emoji }}{%- endif -%}
+              </div>
+              <div class="gb-step-card-h">{{ s_h }}</div>
+              {%- if s_d != blank -%}<div class="gb-step-card-d">{{ s_d }}</div>{%- endif -%}
             </div>
-            <div class="gb-step-card-h">{{ block.settings.heading }}</div>
-            {%- if block.settings.description != blank -%}<div class="gb-step-card-d">{{ block.settings.description }}</div>{%- endif -%}
-          </div>
-        {%- endfor -%}
+          {%- endfor -%}
+        {%- else -%}
+          {%- for block in step_blocks -%}
+            <div class="gb-step-card" {{ block.shopify_attributes }}>
+              <div class="gb-step-card-num">{{ forloop.index }}</div>
+              <div class="gb-step-card-icon">
+                {%- if block.settings.image != blank -%}<img src="{{ block.settings.image | image_url: width: 400 }}" alt="{{ block.settings.heading | escape }}" loading="lazy" width="200" height="200">
+                {%- elsif block.settings.icon_emoji != blank -%}{{ block.settings.icon_emoji }}{%- endif -%}
+              </div>
+              <div class="gb-step-card-h">{{ block.settings.heading }}</div>
+              {%- if block.settings.description != blank -%}<div class="gb-step-card-d">{{ block.settings.description }}</div>{%- endif -%}
+            </div>
+          {%- endfor -%}
+        {%- endif -%}
       </div>
 
       {%- if section.settings.tips_heading != blank or section.settings.tips_bullets != blank -%}
