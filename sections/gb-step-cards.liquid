@@ -26,8 +26,13 @@
             {%- assign s_d = s.description | default: s.body -%}
             <div class="gb-step-card">
               <div class="gb-step-card-num">{{ forloop.index }}</div>
+              {%- assign isrc = s.icon | image_url: width: 400 -%}
+              {%- if isrc == blank -%}{%- assign isrc = s.icon.url -%}{%- endif -%}
+              {%- if isrc == blank -%}{%- assign isrc = s.icon.src -%}{%- endif -%}
               <div class="gb-step-card-icon">
-                {%- if s.icon != blank -%}<img src="{{ s.icon | image_url: width: 400 }}" alt="{{ s_h | escape }}" loading="lazy" width="200" height="200">
+                {%- if isrc != blank -%}
+                  <span class="kit-icon-svg" data-svg-src="{{ isrc }}" aria-hidden="true"></span>
+                  <img class="kit-icon-img" src="{{ isrc }}" alt="{{ s_h | escape }}" loading="lazy" width="200" height="200">
                 {%- elsif s.icon_emoji != blank -%}{{ s.icon_emoji }}{%- endif -%}
               </div>
               <div class="gb-step-card-h">{{ s_h }}</div>
@@ -38,8 +43,13 @@
           {%- for block in step_blocks -%}
             <div class="gb-step-card" {{ block.shopify_attributes }}>
               <div class="gb-step-card-num">{{ forloop.index }}</div>
+              {%- assign bsrc = block.settings.image | image_url: width: 400 -%}
+              {%- if bsrc == blank -%}{%- assign bsrc = block.settings.image.url -%}{%- endif -%}
+              {%- if bsrc == blank -%}{%- assign bsrc = block.settings.image.src -%}{%- endif -%}
               <div class="gb-step-card-icon">
-                {%- if block.settings.image != blank -%}<img src="{{ block.settings.image | image_url: width: 400 }}" alt="{{ block.settings.heading | escape }}" loading="lazy" width="200" height="200">
+                {%- if bsrc != blank -%}
+                  <span class="kit-icon-svg" data-svg-src="{{ bsrc }}" aria-hidden="true"></span>
+                  <img class="kit-icon-img" src="{{ bsrc }}" alt="{{ block.settings.heading | escape }}" loading="lazy" width="200" height="200">
                 {%- elsif block.settings.icon_emoji != blank -%}{{ block.settings.icon_emoji }}{%- endif -%}
               </div>
               <div class="gb-step-card-h">{{ block.settings.heading }}</div>
