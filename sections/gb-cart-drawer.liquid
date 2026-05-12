@@ -47,7 +47,7 @@
   assign addon_json = ''
   assign seen_ids = ''
   for item in cart.items
-    assign related = item.product.metafields.gutbasket.cart_addon_ids.value
+    assign related = item.product.metafields.custom.cart_addon_ids.value
     if related
       for rp in related
         assign rid_str = rp.id | append: ','
@@ -96,7 +96,7 @@
 
   assign kc_json = ''
   for item in cart.items
-    assign kc = item.product.metafields.gutbasket.kit_color | default: item.product.metafields.gutbasket.tools.kit_color
+    assign kc = item.product.metafields.custom.theme_accent
     if kc != blank
       assign kc_entry = '"' | append: item.product_id | append: '":' | append: kc | json
       if kc_json == ''
@@ -314,7 +314,7 @@
     { "type": "header", "content": "Context add-ons" },
     { "type": "text", "id": "addons_title", "label": "Section title", "default": "Frequently added" },
     { "type": "collection", "id": "universal_addons_collection", "label": "Universal add-ons collection",
-      "info": "Products in this collection are offered as add-ons in addition to per-product metafield (gutbasket.cart_addon_ids)." },
+      "info": "Products in this collection are offered as add-ons in addition to per-product metafield (custom.cart_addon_ids)." },
 
     { "type": "header", "content": "Smart upsell" },
     { "type": "product", "id": "upsell_product", "label": "Upsell product" },

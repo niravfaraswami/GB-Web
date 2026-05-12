@@ -1,21 +1,7 @@
 Owner Resource,Command,Namespace,Key,Type,Name,Description,Pin,Visible to Storefront
-PRODUCT,MERGE,gutbasket.tools,category_label,single_line_text_field,Category label,JAR / CARBOY / BOTTLE / TOOL / TESTER / PART — the chip shown under the product name on the Jars & Tools PDP.,true,true
-PRODUCT,MERGE,gutbasket.tools,tagline,single_line_text_field,Tagline,One-line product tagline under the title on the Jars & Tools PDP.,true,true
-PRODUCT,MERGE,gutbasket.tools,bought_today,number_integer,Bought today,Number shown in the hero activity row: 'X people bought this today'.,true,true
-PRODUCT,MERGE,gutbasket.tools,rating,single_line_text_field,Rating,Average rating shown in hero (e.g. '4.86'). Text to preserve trailing zero.,true,true
-PRODUCT,MERGE,gutbasket.tools,review_count,number_integer,Review count,Number of reviews shown beside the rating.,true,true
-PRODUCT,MERGE,gutbasket.tools,kit_color,color,Kit color,"Page accent (button, dot, chip background). Used in Jars & Tools PDP only — for the cart drawer accent, also set gutbasket.kit_color.",true,true
-PRODUCT,MERGE,gutbasket.tools,kit_color_dark,color,Kit color (dark),"Dark variant of the kit color (price text, button hover).",true,true
-PRODUCT,MERGE,gutbasket.tools,kit_color_soft,color,Kit color (soft),"Soft variant for backgrounds (chip bg, image bg).",true,true
-PRODUCT,MERGE,gutbasket.tools,features_h1,single_line_text_field,Features section heading,Heading for the 'Why this design' section.,true,true
-PRODUCT,MERGE,gutbasket.tools,features_intro,multi_line_text_field,Features section intro,1-2 sentence intro paragraph under the heading.,true,true
-PRODUCT,MERGE,gutbasket.tools,features,json,Features grid,"Array of [label, description] pairs for the 4 feature cards.",true,true
-PRODUCT,MERGE,gutbasket.tools,feature_icons,list.single_line_text_field,Feature icons,"4 emoji or unicode icon characters, one per feature card.",true,true
-PRODUCT,MERGE,gutbasket.tools,specs,json,Specs table,"Array of [label, value] pairs for the specifications table rows.",true,true
-PRODUCT,MERGE,gutbasket.tools,use_cases,json,Use cases,"Array of [label, description] pairs for the 4 use-case cards.",true,true
-PRODUCT,MERGE,gutbasket.tools,use_case_icons,list.single_line_text_field,Use case icons,"4 emoji icons, one per use case.",true,true
-PRODUCT,MERGE,gutbasket.tools,compatible_with,multi_line_text_field,Compatible with,Text for the 'Works with' strip under the specs table.,true,true
-PRODUCT,MERGE,gutbasket,kit_color,color,Kit color (global),Used by the GB cart drawer to tint the progress bar / accent stripe when this product is in the cart.,true,true
-PRODUCT,MERGE,gutbasket,kit_color_dark,color,Kit color dark (global),Dark variant of the cart-drawer accent.,true,true
-PRODUCT,MERGE,gutbasket,kit_color_soft,color,Kit color soft (global),Soft variant of the cart-drawer accent (line-item highlight background).,true,true
-PRODUCT,MERGE,gutbasket,cart_addon_ids,list.product_reference,Cart add-on suggestions,List of related products the GB cart drawer suggests as 'Frequently added' when this product is in the cart.,true,true
+PRODUCT,MERGE,custom,category_label,single_line_text_field,Category chip,JAR / CARBOY / BOTTLE / TOOL / TESTER / PART chip on the Jars & Tools PDP. Reused by cart drawer line items and cross-sell cards.,true,true
+PRODUCT,MERGE,custom,features_h1,single_line_text_field,Features section heading,Heading for the 'Why this design' section on the Jars & Tools PDP.,true,true
+PRODUCT,MERGE,custom,features_intro,multi_line_text_field,Features section intro,1-2 sentence intro paragraph above the features grid.,true,true
+PRODUCT,MERGE,custom,specs,json,Specs table,"Array of [label, value] pairs for the specifications table. Used by the Jars & Tools PDP.",true,true
+PRODUCT,MERGE,custom,compatible_with,multi_line_text_field,Compatible with,Text for the 'Works with' strip under the specs table.,true,true
+PRODUCT,MERGE,custom,cart_addon_ids,list.product_reference,Cart add-on suggestions,List of related products the GB cart drawer suggests as 'Frequently added' when this product is in the cart.,true,true

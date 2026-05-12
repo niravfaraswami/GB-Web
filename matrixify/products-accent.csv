@@ -1,4 +1,4 @@
-Handle,Metafield: gutbasket.kit_color [color],Metafield: gutbasket.kit_color_dark [color],Metafield: gutbasket.kit_color_soft [color]
+Handle,Metafield: custom.theme_accent [color],Metafield: custom.theme_accent_dark [color],Metafield: custom.theme_accent_soft [color]
 ferment-spice-mix-pack-of-5,#E66800,#B85100,#FFE2C7
 kanji-spice-mix-traditional-blend-for-probiotic-drinks-pack-of-5,#8B1F40,#6E1733,#F4D7DD
 kimchi-making-paste,#E85C41,#B83D26,#FAD3CB
