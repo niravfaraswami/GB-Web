@@ -1,8 +1,16 @@
 {%- render 'leo_kit_chrome' -%}
 
-{%- assign week_blocks = section.blocks | where: 'type', 'week' -%}
+{%- liquid
+  assign p = product
+  assign mf_steps = p.metafields.custom.featured_timeline_steps.value
+  assign week_blocks = section.blocks | where: 'type', 'week'
+  assign has_mf = false
+  if mf_steps and mf_steps.size > 0
+    assign has_mf = true
+  endif
+-%}
 
-{%- if week_blocks.size > 0 -%}
+{%- if has_mf or week_blocks.size > 0 -%}
   <section class="gb-week-timeline-section ferment-pdp-leo" {%- render 'leo_kit_attrs' -%}>
     <div class="container">
       <div class="section-header centered">
@@ -12,13 +20,26 @@
       </div>
 
       <div class="gb-week-grid">
-        {%- for block in week_blocks -%}
-          <div class="gb-week-card" {{ block.shopify_attributes }}>
-            {%- if block.settings.day_label != blank -%}<div class="gb-week-day">{{ block.settings.day_label }}</div>{%- endif -%}
-            <div class="gb-week-h">{{ block.settings.heading }}</div>
-            {%- if block.settings.description != blank -%}<div class="gb-week-d">{{ block.settings.description }}</div>{%- endif -%}
-          </div>
-        {%- endfor -%}
+        {%- if has_mf -%}
+          {%- for s in mf_steps -%}
+            {%- assign s_day = s.day_label | default: s.eyebrow | default: s.numeral -%}
+            {%- assign s_h = s.heading | default: s.title -%}
+            {%- assign s_d = s.description | default: s.body -%}
+            <div class="gb-week-card">
+              {%- if s_day != blank -%}<div class="gb-week-day">{{ s_day }}</div>{%- endif -%}
+              <div class="gb-week-h">{{ s_h }}</div>
+              {%- if s_d != blank -%}<div class="gb-week-d">{{ s_d }}</div>{%- endif -%}
+            </div>
+          {%- endfor -%}
+        {%- else -%}
+          {%- for block in week_blocks -%}
+            <div class="gb-week-card" {{ block.shopify_attributes }}>
+              {%- if block.settings.day_label != blank -%}<div class="gb-week-day">{{ block.settings.day_label }}</div>{%- endif -%}
+              <div class="gb-week-h">{{ block.settings.heading }}</div>
+              {%- if block.settings.description != blank -%}<div class="gb-week-d">{{ block.settings.description }}</div>{%- endif -%}
+            </div>
+          {%- endfor -%}
+        {%- endif -%}
       </div>
 
       {%- if section.settings.disclaimer != blank -%}

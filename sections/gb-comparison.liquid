@@ -1,8 +1,16 @@
 {%- render 'leo_kit_chrome' -%}
 
-{%- assign cmp_blocks = section.blocks | where: 'type', 'cmp_row' -%}
+{%- liquid
+  assign p = product
+  assign mf_rows = p.metafields.custom.featured_comparison_rows.value
+  assign cmp_blocks = section.blocks | where: 'type', 'cmp_row'
+  assign has_mf = false
+  if mf_rows and mf_rows.size > 0
+    assign has_mf = true
+  endif
+-%}
 
-{%- if cmp_blocks.size > 0 -%}
+{%- if has_mf or cmp_blocks.size > 0 -%}
   {%- assign col_count = section.settings.col_count | default: 3 -%}
   <section class="gb-comparison-section ferment-pdp-leo" data-cols="{{ col_count }}" {%- render 'leo_kit_attrs' -%}>
     <div class="container">
@@ -23,28 +31,57 @@
             {%- endif -%}
           </div>
 
-          {%- for block in cmp_blocks -%}
-            <div class="gb-cmp-row" {{ block.shopify_attributes }}>
-              <div class="gb-cmp-cell gb-cmp-cell-label">{{ block.settings.label }}</div>
-              <div class="gb-cmp-cell gb-cmp-cell-kit">
-                {%- if block.settings.kit_mark == 'yes' -%}<span class="gb-cmp-mark gb-cmp-mark-yes"></span>
-                {%- elsif block.settings.kit_mark == 'no' -%}<span class="gb-cmp-mark gb-cmp-mark-no"></span>{%- endif -%}
-                {{ block.settings.kit_text }}
-              </div>
-              <div class="gb-cmp-cell gb-cmp-cell-other">
-                {%- if block.settings.col2_mark == 'yes' -%}<span class="gb-cmp-mark gb-cmp-mark-yes"></span>
-                {%- elsif block.settings.col2_mark == 'no' -%}<span class="gb-cmp-mark gb-cmp-mark-no"></span>{%- endif -%}
-                {{ block.settings.col2_text }}
-              </div>
-              {%- if col_count == 3 or col_count == '3' -%}
-                <div class="gb-cmp-cell gb-cmp-cell-other">
-                  {%- if block.settings.col3_mark == 'yes' -%}<span class="gb-cmp-mark gb-cmp-mark-yes"></span>
-                  {%- elsif block.settings.col3_mark == 'no' -%}<span class="gb-cmp-mark gb-cmp-mark-no"></span>{%- endif -%}
-                  {{ block.settings.col3_text }}
+          {%- if has_mf -%}
+            {%- for r in mf_rows -%}
+              {%- assign r_col2_mark = r.col2_mark | default: r.col3_mark -%}
+              {%- assign r_col2_text = r.col2_text | default: r.col3_text -%}
+              {%- assign r_col3_mark = r.col3_mark_2 | default: r.col4_mark -%}
+              {%- assign r_col3_text = r.col3_text_2 | default: r.col4_text -%}
+              <div class="gb-cmp-row">
+                <div class="gb-cmp-cell gb-cmp-cell-label">{{ r.label }}</div>
+                <div class="gb-cmp-cell gb-cmp-cell-kit">
+                  {%- if r.kit_mark == 'yes' -%}<span class="gb-cmp-mark gb-cmp-mark-yes"></span>
+                  {%- elsif r.kit_mark == 'no' -%}<span class="gb-cmp-mark gb-cmp-mark-no"></span>{%- endif -%}
+                  {{ r.kit_text }}
                 </div>
-              {%- endif -%}
-            </div>
-          {%- endfor -%}
+                <div class="gb-cmp-cell gb-cmp-cell-other">
+                  {%- if r_col2_mark == 'yes' -%}<span class="gb-cmp-mark gb-cmp-mark-yes"></span>
+                  {%- elsif r_col2_mark == 'no' -%}<span class="gb-cmp-mark gb-cmp-mark-no"></span>{%- endif -%}
+                  {{ r_col2_text }}
+                </div>
+                {%- if col_count == 3 or col_count == '3' -%}
+                  <div class="gb-cmp-cell gb-cmp-cell-other">
+                    {%- if r_col3_mark == 'yes' -%}<span class="gb-cmp-mark gb-cmp-mark-yes"></span>
+                    {%- elsif r_col3_mark == 'no' -%}<span class="gb-cmp-mark gb-cmp-mark-no"></span>{%- endif -%}
+                    {{ r_col3_text }}
+                  </div>
+                {%- endif -%}
+              </div>
+            {%- endfor -%}
+          {%- else -%}
+            {%- for block in cmp_blocks -%}
+              <div class="gb-cmp-row" {{ block.shopify_attributes }}>
+                <div class="gb-cmp-cell gb-cmp-cell-label">{{ block.settings.label }}</div>
+                <div class="gb-cmp-cell gb-cmp-cell-kit">
+                  {%- if block.settings.kit_mark == 'yes' -%}<span class="gb-cmp-mark gb-cmp-mark-yes"></span>
+                  {%- elsif block.settings.kit_mark == 'no' -%}<span class="gb-cmp-mark gb-cmp-mark-no"></span>{%- endif -%}
+                  {{ block.settings.kit_text }}
+                </div>
+                <div class="gb-cmp-cell gb-cmp-cell-other">
+                  {%- if block.settings.col2_mark == 'yes' -%}<span class="gb-cmp-mark gb-cmp-mark-yes"></span>
+                  {%- elsif block.settings.col2_mark == 'no' -%}<span class="gb-cmp-mark gb-cmp-mark-no"></span>{%- endif -%}
+                  {{ block.settings.col2_text }}
+                </div>
+                {%- if col_count == 3 or col_count == '3' -%}
+                  <div class="gb-cmp-cell gb-cmp-cell-other">
+                    {%- if block.settings.col3_mark == 'yes' -%}<span class="gb-cmp-mark gb-cmp-mark-yes"></span>
+                    {%- elsif block.settings.col3_mark == 'no' -%}<span class="gb-cmp-mark gb-cmp-mark-no"></span>{%- endif -%}
+                    {{ block.settings.col3_text }}
+                  </div>
+                {%- endif -%}
+              </div>
+            {%- endfor -%}
+          {%- endif -%}
         </div>
       </div>
     </div>
