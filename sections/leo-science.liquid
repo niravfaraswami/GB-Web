@@ -1,6 +1,20 @@
 {%- render 'leo_kit_chrome' -%}
 
-{%- if section.settings.sci_h != blank -%}
+{%- liquid
+  assign p = product
+  assign mf_science_cards = p.metafields.custom.featured_science_cards.value
+  assign mf_science_stats = p.metafields.custom.featured_science_stats.value
+  assign has_mf_cards = false
+  if mf_science_cards and mf_science_cards.size > 0
+    assign has_mf_cards = true
+  endif
+  assign has_mf_stats = false
+  if mf_science_stats and mf_science_stats.size > 0
+    assign has_mf_stats = true
+  endif
+-%}
+
+{%- if section.settings.sci_h != blank or has_mf_cards or has_mf_stats -%}
   <section class="science-stag-section ferment-pdp-leo" {%- render 'leo_kit_attrs' -%}>
     <div class="container">
       <div class="section-header centered">
@@ -8,46 +22,86 @@
         <h2>{{ section.settings.sci_h }} <em>{{ section.settings.sci_h_em }}</em></h2>
       </div>
 
-      <div class="science-stag-grid">
-        {%- assign stat_idx = 1 -%}
-        {%- assign img_idx = 1 -%}
-        {%- assign order = 'stat,img,stat,img,img,stat,img,stat' | split: ',' -%}
-        {%- for kind in order -%}
-          {%- if kind == 'stat' -%}
-            {%- assign num_key = 'sci_stat' | append: stat_idx | append: '_num' -%}
-            {%- assign unit_key = 'sci_stat' | append: stat_idx | append: '_unit' -%}
-            {%- assign h_key = 'sci_stat' | append: stat_idx | append: '_h' -%}
-            {%- assign d_key = 'sci_stat' | append: stat_idx | append: '_d' -%}
-            {%- assign img_key = 'sci_stat' | append: stat_idx | append: '_img' -%}
-            {%- assign s_num = section.settings[num_key] -%}
-            {%- assign s_unit = section.settings[unit_key] -%}
-            {%- assign s_h = section.settings[h_key] -%}
-            {%- assign s_d = section.settings[d_key] -%}
-            {%- assign s_img = section.settings[img_key] -%}
-            {%- if s_num != blank or s_h != blank -%}
-              <div class="science-stag-card sci-stat">
-                {%- if s_img != blank -%}<img class="sci-stat-bg" src="{{ s_img | image_url: width: 800 }}" alt="{{ s_h | escape }}" loading="lazy" width="600" height="450">{%- endif -%}
-                <div class="sci-stat-eyebrow">{{ section.settings.sci_stat_eyebrow | default: 'REPORTED' }}</div>
-                <div>
-                  <div class="sci-stat-num">{{ s_num }}{%- if s_unit != blank %}<span>{{ s_unit }}</span>{%- endif -%}</div>
-                  <div class="sci-stat-h">{{ s_h }}</div>
-                  <div class="sci-stat-d">{{ s_d }}</div>
+      {%- if has_mf_cards or has_mf_stats -%}
+        {%- if has_mf_cards -%}
+          <div class="science-cards-grid">
+            {%- for s in mf_science_cards -%}
+              <div class="ag-card">
+                <div class="ag-image">{%- if s.image != blank -%}<img src="{{ s.image | image_url: width: 800 }}" alt="{{ s.name | escape }}" loading="lazy" width="800" height="500">{%- endif -%}</div>
+                <div class="ag-body">
+                  <div class="ag-name">{{ s.name }}</div>
+                  {%- if s.what_it_does != blank -%}
+                    <div class="ag-label">WHAT IT DOES</div>
+                    <div class="ag-text">{{ s.what_it_does }}</div>
+                  {%- endif -%}
+                  {%- if s.why_it_matters != blank -%}
+                    <div class="ag-label">WHY IT MATTERS</div>
+                    <div class="ag-text">{{ s.why_it_matters }}</div>
+                  {%- endif -%}
+                  {%- if s.chip != blank -%}<div class="ag-chip">{{ s.chip }}</div>{%- endif -%}
                 </div>
               </div>
-            {%- endif -%}
-            {%- assign stat_idx = stat_idx | plus: 1 -%}
-          {%- else -%}
-            {%- assign img_key2 = 'sci_img' | append: img_idx -%}
-            {%- assign s_img2 = section.settings[img_key2] -%}
-            {%- if s_img2 != blank -%}
-              <div class="science-stag-card sci-image">
-                <img src="{{ s_img2 | image_url: width: 800 }}" alt="Science image {{ img_idx }}" loading="lazy" width="600" height="450">
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+
+        {%- if has_mf_stats -%}
+          <div class="science-stats-grid">
+            {%- for s in mf_science_stats -%}
+              <div class="zoe-card">
+                <div class="zoe-icon">{%- if s.icon != blank -%}{{ s.icon }}{%- endif -%}</div>
+                <div>
+                  <div class="zoe-stat">{{ s.stat | default: s.value }}</div>
+                  <div class="zoe-h">{{ s.heading }}</div>
+                  <div class="zoe-d">{{ s.description }}</div>
+                </div>
               </div>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+
+      {%- else -%}
+        <div class="science-stag-grid">
+          {%- assign stat_idx = 1 -%}
+          {%- assign img_idx = 1 -%}
+          {%- assign order = 'stat,img,stat,img,img,stat,img,stat' | split: ',' -%}
+          {%- for kind in order -%}
+            {%- if kind == 'stat' -%}
+              {%- assign num_key = 'sci_stat' | append: stat_idx | append: '_num' -%}
+              {%- assign unit_key = 'sci_stat' | append: stat_idx | append: '_unit' -%}
+              {%- assign h_key = 'sci_stat' | append: stat_idx | append: '_h' -%}
+              {%- assign d_key = 'sci_stat' | append: stat_idx | append: '_d' -%}
+              {%- assign img_key = 'sci_stat' | append: stat_idx | append: '_img' -%}
+              {%- assign s_num = section.settings[num_key] -%}
+              {%- assign s_unit = section.settings[unit_key] -%}
+              {%- assign s_h = section.settings[h_key] -%}
+              {%- assign s_d = section.settings[d_key] -%}
+              {%- assign s_img = section.settings[img_key] -%}
+              {%- if s_num != blank or s_h != blank -%}
+                <div class="science-stag-card sci-stat">
+                  {%- if s_img != blank -%}<img class="sci-stat-bg" src="{{ s_img | image_url: width: 800 }}" alt="{{ s_h | escape }}" loading="lazy" width="600" height="450">{%- endif -%}
+                  <div class="sci-stat-eyebrow">{{ section.settings.sci_stat_eyebrow | default: 'REPORTED' }}</div>
+                  <div>
+                    <div class="sci-stat-num">{{ s_num }}{%- if s_unit != blank %}<span>{{ s_unit }}</span>{%- endif -%}</div>
+                    <div class="sci-stat-h">{{ s_h }}</div>
+                    <div class="sci-stat-d">{{ s_d }}</div>
+                  </div>
+                </div>
+              {%- endif -%}
+              {%- assign stat_idx = stat_idx | plus: 1 -%}
+            {%- else -%}
+              {%- assign img_key2 = 'sci_img' | append: img_idx -%}
+              {%- assign s_img2 = section.settings[img_key2] -%}
+              {%- if s_img2 != blank -%}
+                <div class="science-stag-card sci-image">
+                  <img src="{{ s_img2 | image_url: width: 800 }}" alt="Science image {{ img_idx }}" loading="lazy" width="600" height="450">
+                </div>
+              {%- endif -%}
+              {%- assign img_idx = img_idx | plus: 1 -%}
             {%- endif -%}
-            {%- assign img_idx = img_idx | plus: 1 -%}
-          {%- endif -%}
-        {%- endfor -%}
-      </div>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
 
       {%- if section.settings.sci_caption != blank -%}<div class="science-stag-caption">{{ section.settings.sci_caption }}</div>{%- endif -%}
       {%- if section.settings.sci_disclaimer != blank -%}<div class="science-stag-disclaimer">{{ section.settings.sci_disclaimer }}</div>{%- endif -%}
