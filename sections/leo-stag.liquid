@@ -5,6 +5,24 @@
   assign mf_steps = p.metafields.custom.featured_timeline_steps.value
   assign mf_box_h1 = p.metafields.custom.box_h1
   assign mf_box_h2 = p.metafields.custom.box_h2
+  assign mf_refill_image = p.metafields.custom.refill_image
+  assign mf_refill_heading = p.metafields.custom.refill_note_heading
+  assign mf_refill_description = p.metafields.custom.refill_note_description
+  assign mf_refill_bullets = p.metafields.custom.refill_note_bullets.value
+  assign mf_refill_cta_label = p.metafields.custom.refill_cta_label
+  assign mf_refill_cta_url = p.metafields.custom.refill_cta_url
+  assign refill_image = mf_refill_image | default: section.settings.refill_image
+  assign refill_heading = mf_refill_heading | default: section.settings.refill_h
+  assign refill_cta_label = mf_refill_cta_label | default: section.settings.refill_cta_label
+  assign refill_cta_url = mf_refill_cta_url | default: section.settings.refill_cta_url
+  assign refill_has_bullets = false
+  if mf_refill_bullets and mf_refill_bullets.size > 0
+    assign refill_has_bullets = true
+  endif
+  assign refill_has_content = false
+  if refill_heading != blank or refill_has_bullets or mf_refill_description != blank or section.settings.refill_bullets != blank or refill_cta_label != blank
+    assign refill_has_content = true
+  endif
   assign stag_card_blocks = section.blocks | where: 'type', 'stag_card'
   assign has_mf = false
   if mf_steps and mf_steps.size > 0
@@ -189,20 +207,33 @@
         <p class="stag-note-strip">{{ section.settings.stag_note }}</p>
       {%- endif -%}
 
-      {%- if section.settings.refill_show -%}
-        <div class="refill-card">
+      {%- if section.settings.refill_show and refill_has_content -%}
+        <div class="refill-card{% if refill_image == blank %} refill-card--no-image{% endif %}">
           <div class="refill-img">
-            {%- if section.settings.refill_image != blank -%}<img src="{{ section.settings.refill_image | image_url: width: 800 }}" alt="{{ section.settings.refill_h | escape }}" loading="lazy" width="800" height="600">{%- endif -%}
+            {%- if refill_image != blank -%}
+              <img src="{{ refill_image | image_url: width: 800 }}" alt="{{ refill_heading | escape }}" loading="lazy" width="800" height="600">
+            {%- else -%}
+              <div class="refill-img-placeholder" aria-hidden="true"></div>
+            {%- endif -%}
           </div>
           <div class="refill-body">
-            {%- if section.settings.refill_h != blank -%}<div class="refill-h">{{ section.settings.refill_h }}</div>{%- endif -%}
-            {%- if section.settings.refill_bullets != blank -%}
+            {%- if refill_heading != blank -%}<div class="refill-h">{{ refill_heading }}</div>{%- endif -%}
+            {%- if refill_has_bullets -%}
+              <ul class="refill-list">
+                {%- for line in mf_refill_bullets -%}
+                  {%- assign t = line | strip -%}
+                  {%- if t != blank -%}<li>{{ t }}</li>{%- endif -%}
+                {%- endfor -%}
+              </ul>
+            {%- elsif mf_refill_description != blank -%}
+              <p class="refill-desc">{{ mf_refill_description }}</p>
+            {%- elsif section.settings.refill_bullets != blank -%}
               <ul class="refill-list">
                 {%- assign rl = section.settings.refill_bullets | newline_to_br | split: '<br />' -%}
                 {%- for line in rl -%}{%- assign t = line | strip -%}{%- if t != blank -%}<li>{{ t }}</li>{%- endif -%}{%- endfor -%}
               </ul>
             {%- endif -%}
-            {%- if section.settings.refill_cta_label != blank -%}<a class="refill-cta" href="{{ section.settings.refill_cta_url | default: '#' }}">{{ section.settings.refill_cta_label }}</a>{%- endif -%}
+            {%- if refill_cta_label != blank -%}<a class="refill-cta" href="{{ refill_cta_url | default: '#' }}">{{ refill_cta_label }}</a>{%- endif -%}
           </div>
         </div>
       {%- endif -%}
