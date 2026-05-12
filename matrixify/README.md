@@ -7,6 +7,18 @@ on 2026-05-11; all 64 products in the catalogue are covered.
 
 ## Files
 
+### `metafield-definitions.csv` — 20 rows · run this FIRST
+Bulk-creates the 20 product metafield definitions in the new
+`gutbasket.tools.*` and `gutbasket.*` namespaces. Import this BEFORE
+the product CSVs so the metafield columns in those CSVs resolve.
+
+Definitions are listed in PDP top-to-bottom order so the Theme Editor
+metafields panel reads naturally from hero → accent → features →
+specs → use cases. All 20 are pinned and storefront-visible.
+
+To import: Matrixify → Import → upload `metafield-definitions.csv`.
+Confirm the sheet "Metafield Definitions" is selected. Run.
+
 ### `products-jars-tools.csv` — 18 rows
 Full product rows for the Jars & Tools track. Sets `Template Suffix
 = jars-tools` so each product renders on `templates/product.jars-tools.json`,
