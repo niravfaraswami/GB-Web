@@ -211,6 +211,10 @@
   box-sizing: border-box;
 }
 [data-template="leo"] .benefit-icon-svg svg { width: 100%; height: 100%; display: block; }
+/* Same sizing when the icon comes from a file_reference metafield
+   (rendered as <img>) — SVGs without intrinsic width otherwise paint
+   at 0px inside this 36x36 wrapper. */
+[data-template="leo"] .benefit-icon-svg img { width: 100%; height: 100%; object-fit: contain; display: block; }
 /* SVG recolor — stroke uses kit color, fill uses kit-soft */
 [data-template="leo"] .benefit-icon-svg svg [data-has-stroke="1"] { stroke: var(--kit-color); }
 [data-template="leo"] .benefit-icon-svg svg [data-fill-tone="dark"] { fill: var(--kit-color); }
