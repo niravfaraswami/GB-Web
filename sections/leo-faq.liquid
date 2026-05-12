@@ -3,6 +3,7 @@
 {%- liquid
   assign p = product
   assign mf_faqs = p.metafields.custom.featured_faqs.value
+  assign mf_faq_h = p.metafields.custom.faq_h
   assign faq_blocks = section.blocks | where: 'type', 'faq'
   assign has_mf = false
   if mf_faqs and mf_faqs.size > 0
@@ -15,7 +16,11 @@
     <div class="container">
       <div class="section-header centered">
         <div class="eyebrow">{{ section.settings.faq_eyebrow }}</div>
-        <h2>{{ section.settings.faq_heading }} <em>{{ section.settings.faq_heading_em }}</em></h2>
+        {%- if mf_faq_h != blank -%}
+          <h2>{{ mf_faq_h }}</h2>
+        {%- else -%}
+          <h2>{{ section.settings.faq_heading }} <em>{{ section.settings.faq_heading_em }}</em></h2>
+        {%- endif -%}
       </div>
       <div class="faq-list">
         {%- if has_mf -%}

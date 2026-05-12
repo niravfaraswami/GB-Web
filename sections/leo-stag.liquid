@@ -3,6 +3,8 @@
 {%- liquid
   assign p = product
   assign mf_steps = p.metafields.custom.featured_timeline_steps.value
+  assign mf_box_h1 = p.metafields.custom.box_h1
+  assign mf_box_h2 = p.metafields.custom.box_h2
   assign stag_card_blocks = section.blocks | where: 'type', 'stag_card'
   assign has_mf = false
   if mf_steps and mf_steps.size > 0
@@ -15,7 +17,11 @@
     <div class="container">
       <div class="section-header">
         <div class="eyebrow">{{ section.settings.stag_eyebrow }}</div>
-        <h2>{{ section.settings.stag_heading }} <em>{{ section.settings.stag_heading_em }}</em></h2>
+        {%- if mf_box_h1 != blank or mf_box_h2 != blank -%}
+          <h2>{{ mf_box_h1 }}{%- if mf_box_h2 != blank %} <em>{{ mf_box_h2 }}</em>{%- endif -%}</h2>
+        {%- else -%}
+          <h2>{{ section.settings.stag_heading }} <em>{{ section.settings.stag_heading_em }}</em></h2>
+        {%- endif -%}
       </div>
 
       <div class="stag-grid">

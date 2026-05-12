@@ -4,6 +4,9 @@
   assign p = product
   assign mf_science_cards = p.metafields.custom.featured_science_cards.value
   assign mf_science_stats = p.metafields.custom.featured_science_stats.value
+  assign mf_science_h1 = p.metafields.custom.science_h1
+  assign mf_science_h2 = p.metafields.custom.science_h2
+  assign mf_science_disclaimer = p.metafields.custom.science_stats_disclaimer
   assign has_mf_cards = false
   if mf_science_cards and mf_science_cards.size > 0
     assign has_mf_cards = true
@@ -14,12 +17,16 @@
   endif
 -%}
 
-{%- if section.settings.sci_h != blank or has_mf_cards or has_mf_stats -%}
+{%- if section.settings.sci_h != blank or has_mf_cards or has_mf_stats or mf_science_h1 != blank -%}
   <section class="science-stag-section ferment-pdp-leo" {%- render 'leo_kit_attrs' -%}>
     <div class="container">
       <div class="section-header centered">
         <div class="eyebrow">{{ section.settings.sci_eyebrow }}</div>
-        <h2>{{ section.settings.sci_h }} <em>{{ section.settings.sci_h_em }}</em></h2>
+        {%- if mf_science_h1 != blank or mf_science_h2 != blank -%}
+          <h2>{{ mf_science_h1 }}{%- if mf_science_h2 != blank %} <em>{{ mf_science_h2 }}</em>{%- endif -%}</h2>
+        {%- else -%}
+          <h2>{{ section.settings.sci_h }} <em>{{ section.settings.sci_h_em }}</em></h2>
+        {%- endif -%}
       </div>
 
       {%- if has_mf_cards or has_mf_stats -%}
@@ -104,7 +111,8 @@
       {%- endif -%}
 
       {%- if section.settings.sci_caption != blank -%}<div class="science-stag-caption">{{ section.settings.sci_caption }}</div>{%- endif -%}
-      {%- if section.settings.sci_disclaimer != blank -%}<div class="science-stag-disclaimer">{{ section.settings.sci_disclaimer }}</div>{%- endif -%}
+      {%- assign science_disclaimer = mf_science_disclaimer | default: section.settings.sci_disclaimer -%}
+      {%- if science_disclaimer != blank -%}<div class="science-stag-disclaimer">{{ science_disclaimer }}</div>{%- endif -%}
     </div>
   </section>
 {%- endif -%}

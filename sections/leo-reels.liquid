@@ -3,6 +3,7 @@
 {%- liquid
   assign p = product
   assign mf_reels = p.metafields.custom.featured_reels.value
+  assign mf_reels_h = p.metafields.custom.reels_h
   assign app_blocks = section.blocks | where: 'type', '@app'
   assign has_mf = false
   if mf_reels and mf_reels.size > 0
@@ -10,13 +11,17 @@
   endif
 -%}
 
-{%- if has_mf or app_blocks.size > 0 or section.settings.heading != blank -%}
+{%- if has_mf or app_blocks.size > 0 or section.settings.heading != blank or mf_reels_h != blank -%}
   <section class="reels-section ferment-pdp-leo" {%- render 'leo_kit_attrs' -%}>
     <div class="container">
-      {%- if section.settings.heading != blank or section.settings.eyebrow != blank -%}
+      {%- if mf_reels_h != blank or section.settings.heading != blank or section.settings.eyebrow != blank -%}
         <div class="section-header centered">
           {%- if section.settings.eyebrow != blank -%}<div class="eyebrow">{{ section.settings.eyebrow }}</div>{%- endif -%}
-          {%- if section.settings.heading != blank -%}<h2>{{ section.settings.heading }} <em>{{ section.settings.heading_em }}</em></h2>{%- endif -%}
+          {%- if mf_reels_h != blank -%}
+            <h2>{{ mf_reels_h }}</h2>
+          {%- elsif section.settings.heading != blank -%}
+            <h2>{{ section.settings.heading }} <em>{{ section.settings.heading_em }}</em></h2>
+          {%- endif -%}
         </div>
       {%- endif -%}
       {%- if has_mf -%}
