@@ -7,17 +7,27 @@ on 2026-05-11; all 64 products in the catalogue are covered.
 
 ## Files
 
-### `metafield-definitions.csv` — 20 rows · run this FIRST
-Bulk-creates the 20 product metafield definitions in the new
-`gutbasket.tools.*` and `gutbasket.*` namespaces. Import this BEFORE
-the product CSVs so the metafield columns in those CSVs resolve.
+### `metafield-definitions.csv` — 6 rows · run this FIRST
+Adds only the **6 genuinely-new `custom.*` product metafields** the
+Jars & Tools PDP and cart drawer need. Everything else (theme accent
+colors, hero tagline, rating, review count, etc.) already exists
+under `custom.*` and is reused.
 
-Definitions are listed in PDP top-to-bottom order so the Theme Editor
-metafields panel reads naturally from hero → accent → features →
-specs → use cases. All 20 are pinned and storefront-visible.
+| Key | Type | Used by |
+|-----|------|---------|
+| `custom.category_label` | Single line text | Jars & Tools chip + cart-drawer line items |
+| `custom.features_h1` | Single line text | Jars & Tools features heading |
+| `custom.features_intro` | Multi-line text | Jars & Tools features intro |
+| `custom.specs` | JSON | Jars & Tools specs table (`[[label, value], …]`) |
+| `custom.compatible_with` | Multi-line text | Jars & Tools "works with" strip |
+| `custom.cart_addon_ids` | List of product references | Cart drawer add-on suggestions |
 
-To import: Matrixify → Import → upload `metafield-definitions.csv`.
-Confirm the sheet "Metafield Definitions" is selected. Run.
+Repeating content for features and use cases reuses the existing
+`Kit Quick Benefit` and `Kit Consumption Method` metaobjects via
+`custom.featured_quick_benefits` and `custom.featured_consumption_methods`
+(both already defined in the store).
+
+To import: Matrixify → Import → drop `metafield-definitions.csv` → Run.
 
 ### `products-jars-tools.csv` — 18 rows
 Full product rows for the Jars & Tools track. Sets `Template Suffix

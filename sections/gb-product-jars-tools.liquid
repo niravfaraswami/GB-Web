@@ -4,28 +4,34 @@
 
 {%- liquid
   assign p = product
-  assign mf = p.metafields.gutbasket.tools
+  assign cm = p.metafields.custom
 
-  assign category_label = mf.category_label | default: section.settings.default_category_label | default: 'TOOL'
-  assign tagline        = mf.tagline        | default: section.settings.default_tagline | default: p.description | strip_html | truncatewords: 28
-  assign bought_today   = mf.bought_today   | default: section.settings.default_bought_today
+  # Consolidated to custom.* namespace — same fields the kit PDPs use.
+  # No more parallel gutbasket.tools.* duplicates.
+  assign category_label = cm.category_label | default: section.settings.default_category_label | default: 'TOOL'
+  assign tagline        = cm.hero_tagline   | default: section.settings.default_tagline | default: p.description | strip_html | truncatewords: 28
+  assign bought_today   = cm.bought_today   | default: section.settings.default_bought_today
 
-  assign features_h1    = mf.features_h1    | default: section.settings.features_h1    | default: 'Built for fermentation.'
-  assign features_intro = mf.features_intro | default: section.settings.features_intro | default: 'Most kitchen jars weren’t designed for fermentation. This one is.'
-  assign compatible_with = mf.compatible_with | default: section.settings.compatible_with
+  assign features_h1    = cm.features_h1    | default: section.settings.features_h1    | default: 'Built for fermentation.'
+  assign features_intro = cm.features_intro | default: section.settings.features_intro | default: 'Most kitchen jars weren’t designed for fermentation. This one is.'
+  assign compatible_with = cm.compatible_with | default: section.settings.compatible_with
 
-  assign kit_color      = mf.kit_color      | default: section.settings.kit_color      | default: '#4F7C57'
-  assign kit_color_dark = mf.kit_color_dark | default: section.settings.kit_color_dark | default: '#3F6346'
-  assign kit_color_soft = mf.kit_color_soft | default: section.settings.kit_color_soft | default: '#D8E4DC'
+  # Accent — reuse the existing kit theme_accent triple from custom.*
+  assign kit_color      = cm.theme_accent      | default: section.settings.kit_color      | default: '#4F7C57'
+  assign kit_color_dark = cm.theme_accent_dark | default: section.settings.kit_color_dark | default: '#3F6346'
+  assign kit_color_soft = cm.theme_accent_soft | default: section.settings.kit_color_soft | default: '#D8E4DC'
 
-  assign rating         = mf.rating | default: p.metafields.custom.rating | default: section.settings.default_rating
-  assign review_count   = mf.review_count | default: p.metafields.custom.review_count
+  assign rating         = cm.rating | default: section.settings.default_rating
+  assign review_count   = cm.review_count
 
-  assign features_data    = mf.features.value
-  assign feature_icons    = mf.feature_icons.value
-  assign specs_data       = mf.specs.value
-  assign use_cases_data   = mf.use_cases.value
-  assign use_case_icons   = mf.use_case_icons.value
+  # Features list: reuse the existing Kit Quick Benefit metaobject list.
+  # Each entry needs: heading | name, description, icon (file) | icon_emoji.
+  assign features_data    = cm.featured_quick_benefits.value
+  # Specs: new custom.specs JSON metafield (no existing metaobject fits the simple label/value shape)
+  assign specs_data       = cm.specs.value
+  # Use cases: reuse the existing Kit Consumption Method metaobject list.
+  # Each entry needs: heading | title, description | body, icon (file) | icon_emoji.
+  assign use_cases_data   = cm.featured_consumption_methods.value
   assign cross_sell_coll  = collections[section.settings.cross_sell_collection]
 -%}
 
@@ -408,10 +414,17 @@
       <div class="feature-grid">
         {%- if features_data != blank -%}
           {%- for f in features_data -%}
+            {%- assign f_h = f.heading | default: f.name | default: f.title -%}
+            {%- assign f_d = f.description | default: f.body | default: f.sub -%}
+            {%- assign f_icon_emoji = f.icon_emoji -%}
+            {%- assign f_icon = f.icon -%}
             <div class="feature-card">
-              <div class="feature-icon">{{ feature_icons[forloop.index0] | default: '◇' }}</div>
-              <div class="feature-h">{{ f[0] }}</div>
-              <div class="feature-d">{{ f[1] }}</div>
+              <div class="feature-icon">
+                {%- if f_icon != blank -%}<img src="{{ f_icon | image_url: width: 80 }}" alt="" width="40" height="40">
+                {%- else -%}{{ f_icon_emoji | default: '◇' }}{%- endif -%}
+              </div>
+              <div class="feature-h">{{ f_h }}</div>
+              <div class="feature-d">{{ f_d }}</div>
             </div>
           {%- endfor -%}
         {%- else -%}
@@ -475,9 +488,16 @@
       <div class="uses-grid">
         {%- if use_cases_data != blank -%}
           {%- for u in use_cases_data -%}
+            {%- assign u_h = u.heading | default: u.title -%}
+            {%- assign u_d = u.description | default: u.body -%}
+            {%- assign u_icon_emoji = u.icon_emoji -%}
+            {%- assign u_icon = u.icon | default: u.image -%}
             <div class="use-card">
-              <div class="use-img">{{ use_case_icons[forloop.index0] | default: '◆' }}</div>
-              <div class="use-body"><div class="use-h">{{ u[0] }}</div><div class="use-d">{{ u[1] }}</div></div>
+              <div class="use-img">
+                {%- if u_icon != blank -%}<img src="{{ u_icon | image_url: width: 200 }}" alt="" width="60" height="60">
+                {%- else -%}{{ u_icon_emoji | default: '◆' }}{%- endif -%}
+              </div>
+              <div class="use-body"><div class="use-h">{{ u_h }}</div><div class="use-d">{{ u_d }}</div></div>
             </div>
           {%- endfor -%}
         {%- else -%}
@@ -559,8 +579,8 @@
           {%- assign shown = 0 -%}
           {%- for cp in cross_sell_coll.products -%}
             {%- if cp.id != p.id and cp.available and shown < 4 -%}
-              {%- assign cp_label = cp.metafields.gutbasket.tools.category_label | default: 'JAR' -%}
-              {%- assign cp_color = cp.metafields.gutbasket.tools.kit_color | default: '#4F7C57' -%}
+              {%- assign cp_label = cp.metafields.custom.category_label | default: 'JAR' -%}
+              {%- assign cp_color = cp.metafields.custom.theme_accent | default: '#4F7C57' -%}
               <a href="{{ cp.url }}" class="cs-card">
                 <div class="cs-img" style="background: {{ cp_color }};">
                   <span class="cs-pill">{{ cp_label }}</span>
@@ -692,9 +712,9 @@
   "settings": [
     { "type": "header", "content": "Identity" },
     { "type": "text",  "id": "default_category_label", "label": "Default category chip",
-      "default": "TOOL", "info": "Override per-product via metafield gutbasket.tools.category_label" },
+      "default": "TOOL", "info": "Override per-product via metafield custom.category_label" },
     { "type": "text",  "id": "default_tagline", "label": "Default tagline",
-      "info": "Override per-product via metafield gutbasket.tools.tagline" },
+      "info": "Override per-product via metafield custom.hero_tagline" },
     { "type": "number", "id": "default_bought_today", "label": "Default 'bought today' count" },
     { "type": "text",   "id": "default_rating", "label": "Default rating (e.g. 4.86)", "default": "4.86" },
 
