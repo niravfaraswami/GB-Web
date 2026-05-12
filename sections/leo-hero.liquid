@@ -96,6 +96,21 @@
           Items may be plain text OR "emoji|text" (legacy format from kits).
           Falls back to Theme Editor `hero_benefit` blocks if neither metafield is set.
         {%- endcomment -%}
+        {%- comment -%} Diagnostic: visible to admins only via ?debug=svg URL param {%- endcomment -%}
+        {%- if request.path contains '?debug' or template contains 'admin' -%}
+          <pre style="background:#fffacc;border:1px solid #b08c00;padding:8px;font-size:10px;line-height:1.3;font-family:monospace;color:#333;margin:8px 0">
+benefits_items.size       = {{ mf_benefit_items.size | default: 0 }}
+hero_benefits_icons.size  = {{ mf_benefits.size | default: 0 }}
+hero_benefit_blocks.size  = {{ hero_benefit_blocks.size }}
+{%- for ic in mf_benefits -%}
+[{{ forloop.index0 }}]
+  image_url = {{ ic | image_url: width: 28 }}
+  .url      = {{ ic.url }}
+  .src      = {{ ic.src }}
+{% endfor -%}
+          </pre>
+        {%- endif -%}
+
         {%- if mf_benefit_items.size > 0 or hero_benefit_blocks.size > 0 -%}
           <div class="benefits-block">
             <div class="label">Benefits</div>
@@ -103,6 +118,10 @@
               {%- if mf_benefit_items.size > 0 -%}
                 {%- for raw in mf_benefit_items -%}
                   {%- assign mf_icon = mf_benefits[forloop.index0] -%}
+                  {%- assign icon_src = mf_icon | image_url: width: 56 -%}
+                  {%- if icon_src == blank -%}{%- assign icon_src = mf_icon.url -%}{%- endif -%}
+                  {%- if icon_src == blank -%}{%- assign icon_src = mf_icon.src -%}{%- endif -%}
+                  {%- if icon_src == blank -%}{%- assign icon_src = mf_icon.preview_image.src -%}{%- endif -%}
                   {%- assign parts = raw | split: '|' -%}
                   {%- if parts.size > 1 -%}
                     {%- assign emoji = parts[0] | strip -%}
@@ -112,9 +131,11 @@
                     {%- assign label = raw | strip -%}
                   {%- endif -%}
                   <div class="benefit-item">
-                    <span class="benefit-icon-svg{% if mf_icon != blank %} benefit-icon-svg--img{% endif %}">
-                      {%- if mf_icon != blank -%}
-                        {%- render 'kit_icon', icon: mf_icon, size: 28 -%}
+                    <span class="benefit-icon-svg{% if icon_src != blank %} benefit-icon-svg--img{% endif %}">
+                      {%- if icon_src != blank -%}
+                        {%- comment -%} Render both an inline-SVG container AND a raster fallback. CSS hides the img once the span has SVG content (data-svg-src removed by JS). {%- endcomment -%}
+                        <span class="kit-icon-svg" data-svg-src="{{ icon_src }}" aria-hidden="true"></span>
+                        <img class="kit-icon-img" src="{{ icon_src }}" alt="" loading="lazy" width="28" height="28">
                       {%- elsif emoji != blank -%}{{ emoji }}{%- endif -%}
                     </span>
                     <span>{{ label }}</span>
@@ -123,10 +144,15 @@
               {%- else -%}
                 {%- for block in hero_benefit_blocks -%}
                   {%- assign mf_icon = mf_benefits[forloop.index0] -%}
+                  {%- assign icon_src = mf_icon | image_url: width: 56 -%}
+                  {%- if icon_src == blank -%}{%- assign icon_src = mf_icon.url -%}{%- endif -%}
+                  {%- if icon_src == blank -%}{%- assign icon_src = mf_icon.src -%}{%- endif -%}
+                  {%- if icon_src == blank -%}{%- assign icon_src = mf_icon.preview_image.src -%}{%- endif -%}
                   <div class="benefit-item" {{ block.shopify_attributes }}>
-                    <span class="benefit-icon-svg{% if mf_icon != blank %} benefit-icon-svg--img{% endif %}">
-                      {%- if mf_icon != blank -%}
-                        {%- render 'kit_icon', icon: mf_icon, size: 28 -%}
+                    <span class="benefit-icon-svg{% if icon_src != blank %} benefit-icon-svg--img{% endif %}">
+                      {%- if icon_src != blank -%}
+                        <span class="kit-icon-svg" data-svg-src="{{ icon_src }}" aria-hidden="true"></span>
+                        <img class="kit-icon-img" src="{{ icon_src }}" alt="" loading="lazy" width="28" height="28">
                       {%- elsif block.settings.icon_svg != blank -%}{%- render 'kit_icon', icon: block.settings.icon_svg, size: 28 -%}
                       {%- elsif block.settings.icon_emoji != blank -%}{{ block.settings.icon_emoji }}{%- endif -%}
                     </span>
