@@ -175,7 +175,14 @@ All product custom metafields with non-empty values:
               <div class="benefits-grid">
                 {%- for b in benefits -%}
                   {%- assign parts = b | split: '|' -%}
-                  {%- assign mf_icon = mf_hero_icons[forloop.index0] -%}
+                  {%- comment -%} Shopify file_reference list Drops don't support [i] indexing — pluck via nested loop {%- endcomment -%}
+                  {%- assign target_idx = forloop.index0 -%}
+                  {%- assign mf_icon = nil -%}
+                  {%- if mf_hero_icons -%}
+                    {%- for ic in mf_hero_icons -%}
+                      {%- if forloop.index0 == target_idx -%}{%- assign mf_icon = ic -%}{%- endif -%}
+                    {%- endfor -%}
+                  {%- endif -%}
                   {%- assign icon_src = mf_icon | image_url: width: 56 -%}
                   {%- if icon_src == blank -%}{%- assign icon_src = mf_icon.url -%}{%- endif -%}
                   {%- if icon_src == blank -%}{%- assign icon_src = mf_icon.src -%}{%- endif -%}

@@ -127,7 +127,13 @@ hero_benefits_icons value:
           <div style="margin-top:8px;padding:8px;background:#fff;border:1px solid #ccc">
             <div style="font-weight:700;margin-bottom:6px">Simulated main-render output (same pattern as the real benefit chips):</div>
             {%- for raw in mf_benefit_items -%}
-              {%- assign mf_icon = mf_benefits[forloop.index0] -%}
+              {%- assign target_idx = forloop.index0 -%}
+              {%- assign mf_icon = nil -%}
+              {%- if mf_benefits -%}
+                {%- for ic in mf_benefits -%}
+                  {%- if forloop.index0 == target_idx -%}{%- assign mf_icon = ic -%}{%- endif -%}
+                {%- endfor -%}
+              {%- endif -%}
               {%- assign icon_src = mf_icon | image_url: width: 56 -%}
               {%- if icon_src == blank -%}{%- assign icon_src = mf_icon.url -%}{%- endif -%}
               {%- if icon_src == blank -%}{%- assign icon_src = mf_icon.src -%}{%- endif -%}
@@ -151,7 +157,14 @@ hero_benefits_icons value:
             <div class="benefits-grid">
               {%- if mf_benefit_items.size > 0 -%}
                 {%- for raw in mf_benefit_items -%}
-                  {%- assign mf_icon = mf_benefits[forloop.index0] -%}
+                  {%- comment -%} mf_benefits is a file_reference list Drop; Shopify's [i] indexing returns blank on these Drops. Use a nested loop to pluck the i-th element. {%- endcomment -%}
+                  {%- assign target_idx = forloop.index0 -%}
+                  {%- assign mf_icon = nil -%}
+                  {%- if mf_benefits -%}
+                    {%- for ic in mf_benefits -%}
+                      {%- if forloop.index0 == target_idx -%}{%- assign mf_icon = ic -%}{%- endif -%}
+                    {%- endfor -%}
+                  {%- endif -%}
                   {%- assign icon_src = mf_icon | image_url: width: 56 -%}
                   {%- if icon_src == blank -%}{%- assign icon_src = mf_icon.url -%}{%- endif -%}
                   {%- if icon_src == blank -%}{%- assign icon_src = mf_icon.src -%}{%- endif -%}
@@ -167,7 +180,6 @@ hero_benefits_icons value:
                   <div class="benefit-item">
                     <span class="benefit-icon-svg{% if icon_src != blank %} benefit-icon-svg--img{% endif %}">
                       {%- if icon_src != blank -%}
-                        {%- comment -%} Render both an inline-SVG container AND a raster fallback. CSS hides the img once the span has SVG content (data-svg-src removed by JS). {%- endcomment -%}
                         <span class="kit-icon-svg" data-svg-src="{{ icon_src }}" aria-hidden="true"></span>
                         <img class="kit-icon-img" src="{{ icon_src }}" alt="" loading="lazy" width="28" height="28">
                       {%- elsif emoji != blank -%}{{ emoji }}{%- endif -%}
@@ -177,11 +189,16 @@ hero_benefits_icons value:
                 {%- endfor -%}
               {%- else -%}
                 {%- for block in hero_benefit_blocks -%}
-                  {%- assign mf_icon = mf_benefits[forloop.index0] -%}
+                  {%- assign target_idx = forloop.index0 -%}
+                  {%- assign mf_icon = nil -%}
+                  {%- if mf_benefits -%}
+                    {%- for ic in mf_benefits -%}
+                      {%- if forloop.index0 == target_idx -%}{%- assign mf_icon = ic -%}{%- endif -%}
+                    {%- endfor -%}
+                  {%- endif -%}
                   {%- assign icon_src = mf_icon | image_url: width: 56 -%}
                   {%- if icon_src == blank -%}{%- assign icon_src = mf_icon.url -%}{%- endif -%}
                   {%- if icon_src == blank -%}{%- assign icon_src = mf_icon.src -%}{%- endif -%}
-                  {%- if icon_src == blank -%}{%- assign icon_src = mf_icon.preview_image.src -%}{%- endif -%}
                   <div class="benefit-item" {{ block.shopify_attributes }}>
                     <span class="benefit-icon-svg{% if icon_src != blank %} benefit-icon-svg--img{% endif %}">
                       {%- if icon_src != blank -%}
