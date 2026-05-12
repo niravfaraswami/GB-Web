@@ -124,6 +124,32 @@ hero_benefits_icons value:
   alt       = {{ ic.alt }}
 {% endfor -%}
           </pre>
+          <div style="margin-top:8px;padding:8px;background:#fff;border:1px solid #ccc">
+            <div style="font-weight:700;margin-bottom:6px">Live render tests (each should show the leaf icon):</div>
+            <div style="display:flex;gap:24px;align-items:center;flex-wrap:wrap">
+              {%- assign test_icon = mf_benefits.first -%}
+              {%- if test_icon -%}
+                <div>
+                  <div style="font-size:10px;color:#666">A) plain &lt;img&gt; with image_url filter</div>
+                  <img src="{{ test_icon | image_url: width: 48 }}" width="48" height="48" style="border:1px dashed #999" onerror="this.outerHTML='<span style=color:red;font-size:10px>image_url broken</span>'">
+                </div>
+                <div>
+                  <div style="font-size:10px;color:#666">B) plain &lt;img&gt; with .src</div>
+                  <img src="{{ test_icon.src }}" width="48" height="48" style="border:1px dashed #999" onerror="this.outerHTML='<span style=color:red;font-size:10px>.src broken</span>'">
+                </div>
+                <div>
+                  <div style="font-size:10px;color:#666">C) absolute https URL (likely works)</div>
+                  <img src="https:{{ test_icon | image_url: width: 48 }}" width="48" height="48" style="border:1px dashed #999" onerror="this.outerHTML='<span style=color:red;font-size:10px>https URL broken</span>'">
+                </div>
+                <div>
+                  <div style="font-size:10px;color:#666">D) clickable URL (open new tab)</div>
+                  <a href="{{ test_icon | image_url: width: 48 }}" target="_blank" style="font-size:10px;color:#06c">open icon-{{ forloop.index0 }}</a>
+                </div>
+              {%- else -%}
+                <div style="color:red">no icons in metafield</div>
+              {%- endif -%}
+            </div>
+          </div>
         </details>
 
         {%- if mf_benefit_items.size > 0 or mf_benefits.size > 0 or hero_benefit_blocks.size > 0 -%}
