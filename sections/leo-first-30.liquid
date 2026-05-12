@@ -6,6 +6,8 @@
   assign f30_stat_blocks = section.blocks | where: 'type', 'f30_stat'
   assign mf_outcome_stats = p.metafields.custom.featured_outcomes_stats.value
   assign mf_quick_benefits = p.metafields.custom.featured_quick_benefits.value
+  assign mf_timeline_h = p.metafields.custom.timeline_h
+  assign mf_timeline_subtitle = p.metafields.custom.timeline_subtitle
   assign has_mf_stats = false
   if mf_outcome_stats and mf_outcome_stats.size > 0
     assign has_mf_stats = true
@@ -16,17 +18,22 @@
   endif
 -%}
 
-{%- if has_mf_rows or has_mf_stats or f30_row_blocks.size > 0 or section.settings.f30_h != blank -%}
+{%- if has_mf_rows or has_mf_stats or f30_row_blocks.size > 0 or section.settings.f30_h != blank or mf_timeline_h != blank -%}
   <section class="first30-section ferment-pdp-leo" {%- render 'leo_kit_attrs' -%}>
     <div class="container">
       <div class="first30-grid">
         <div class="first30-header">
           {%- if section.settings.f30_eyebrow != blank -%}<div class="first30-eyebrow">{{ section.settings.f30_eyebrow }}</div>{%- endif -%}
-          <h2 class="first30-h">{{ section.settings.f30_h }} {%- if section.settings.f30_h_em != blank %}<em>{{ section.settings.f30_h_em }}</em>{%- endif -%}{{ section.settings.f30_h_tail }}</h2>
+          {%- if mf_timeline_h != blank -%}
+            <h2 class="first30-h">{{ mf_timeline_h }}</h2>
+          {%- else -%}
+            <h2 class="first30-h">{{ section.settings.f30_h }} {%- if section.settings.f30_h_em != blank %}<em>{{ section.settings.f30_h_em }}</em>{%- endif -%}{{ section.settings.f30_h_tail }}</h2>
+          {%- endif -%}
         </div>
 
         <div class="first30-rest">
-          {%- if section.settings.f30_intro != blank -%}<p class="first30-intro">{{ section.settings.f30_intro }}</p>{%- endif -%}
+          {%- assign first30_intro = mf_timeline_subtitle | default: section.settings.f30_intro -%}
+          {%- if first30_intro != blank -%}<p class="first30-intro">{{ first30_intro }}</p>{%- endif -%}
 
           {%- if has_mf_rows -%}
             <div class="first30-rows">

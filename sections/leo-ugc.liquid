@@ -3,6 +3,7 @@
 {%- liquid
   assign p = product
   assign mf_reviews = p.metafields.custom.featured_reviews.value
+  assign mf_reviews_h = p.metafields.custom.reviews_h
   assign ugc_blocks = section.blocks | where: 'type', 'ugc_review'
   assign has_mf = false
   if mf_reviews and mf_reviews.size > 0
@@ -15,7 +16,11 @@
     <div class="container">
       <div class="section-header centered">
         <div class="eyebrow">{{ section.settings.eyebrow }}</div>
-        <h2>{{ section.settings.heading }} <em>{{ section.settings.heading_em }}</em></h2>
+        {%- if mf_reviews_h != blank -%}
+          <h2>{{ mf_reviews_h }}</h2>
+        {%- else -%}
+          <h2>{{ section.settings.heading }} <em>{{ section.settings.heading_em }}</em></h2>
+        {%- endif -%}
       </div>
       <div class="ugc-grid">
         {%- if has_mf -%}

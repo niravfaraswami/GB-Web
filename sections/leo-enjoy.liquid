@@ -3,6 +3,9 @@
 {%- liquid
   assign p = product
   assign mf_methods = p.metafields.custom.featured_consumption_methods.value
+  assign mf_eat_h = p.metafields.custom.eat_h
+  assign mf_dosage_amount = p.metafields.custom.dosage_amount
+  assign mf_dosage_caption = p.metafields.custom.dosage_caption
   assign enjoy_blocks = section.blocks | where: 'type', 'enjoy_card'
   assign has_mf = false
   if mf_methods and mf_methods.size > 0
@@ -10,12 +13,16 @@
   endif
 -%}
 
-{%- if has_mf or enjoy_blocks.size > 0 or section.settings.enjoy_h != blank -%}
+{%- if has_mf or enjoy_blocks.size > 0 or section.settings.enjoy_h != blank or mf_eat_h != blank -%}
   <section class="eat-section ferment-pdp-leo" data-leo="1" {%- render 'leo_kit_attrs' -%}>
     <div class="container">
       <div class="section-header centered">
         <div class="eyebrow">{{ section.settings.enjoy_eyebrow }}</div>
-        <h2>{{ section.settings.enjoy_h }} <em>{{ section.settings.enjoy_h_em }}</em>{{ section.settings.enjoy_h_tail }}</h2>
+        {%- if mf_eat_h != blank -%}
+          <h2>{{ mf_eat_h }}</h2>
+        {%- else -%}
+          <h2>{{ section.settings.enjoy_h }} <em>{{ section.settings.enjoy_h_em }}</em>{{ section.settings.enjoy_h_tail }}</h2>
+        {%- endif -%}
       </div>
 
       <div class="enjoy-grid">
@@ -48,11 +55,13 @@
         {%- endif -%}
       </div>
 
-      {%- if section.settings.spoons_num != blank -%}
+      {%- assign dosage_num = mf_dosage_amount | default: section.settings.spoons_num -%}
+      {%- assign dosage_cap = mf_dosage_caption | default: section.settings.spoons_cap -%}
+      {%- if dosage_num != blank -%}
         <div class="spoons-strip">
-          <div class="spoons-num">{{ section.settings.spoons_num }}</div>
+          <div class="spoons-num">{{ dosage_num }}</div>
           {%- if section.settings.spoons_label != blank -%}<div class="spoons-label">{{ section.settings.spoons_label }}</div>{%- endif -%}
-          {%- if section.settings.spoons_cap != blank -%}<div class="spoons-cap">{{ section.settings.spoons_cap }}</div>{%- endif -%}
+          {%- if dosage_cap != blank -%}<div class="spoons-cap">{{ dosage_cap }}</div>{%- endif -%}
         </div>
       {%- endif -%}
     </div>

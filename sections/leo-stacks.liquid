@@ -3,6 +3,12 @@
 {%- liquid
   assign p = product
   assign mf_rows = p.metafields.custom.featured_comparison_rows.value
+  assign mf_myth_eyebrow = p.metafields.custom.myth_eyebrow
+  assign mf_myth_h1 = p.metafields.custom.myth_h1
+  assign mf_myth_h2 = p.metafields.custom.myth_h2
+  assign mf_comparison_intro = p.metafields.custom.comparison_intro
+  assign mf_compare_left = p.metafields.custom.compare_left_label
+  assign mf_compare_right = p.metafields.custom.compare_right_label
   assign stacks_row_blocks = section.blocks | where: 'type', 'stacks_row'
   assign has_mf = false
   if mf_rows and mf_rows.size > 0
@@ -10,21 +16,27 @@
   endif
 -%}
 
-{%- if has_mf or stacks_row_blocks.size > 0 -%}
+{%- if has_mf or stacks_row_blocks.size > 0 or mf_myth_h1 != blank -%}
   <section class="stacks-section ferment-pdp-leo" {%- render 'leo_kit_attrs' -%}>
     <div class="container">
       <div class="section-header centered">
-        <div class="eyebrow">{{ section.settings.stacks_eyebrow }}</div>
-        <h2>{{ section.settings.stacks_heading }} <em>{{ section.settings.stacks_heading_em }}</em></h2>
-        {%- if section.settings.stacks_intro != blank -%}<p>{{ section.settings.stacks_intro }}</p>{%- endif -%}
+        {%- assign stacks_eyebrow = mf_myth_eyebrow | default: section.settings.stacks_eyebrow -%}
+        {%- if stacks_eyebrow != blank -%}<div class="eyebrow">{{ stacks_eyebrow }}</div>{%- endif -%}
+        {%- if mf_myth_h1 != blank or mf_myth_h2 != blank -%}
+          <h2>{{ mf_myth_h1 }}{%- if mf_myth_h2 != blank %} <em>{{ mf_myth_h2 }}</em>{%- endif -%}</h2>
+        {%- else -%}
+          <h2>{{ section.settings.stacks_heading }} <em>{{ section.settings.stacks_heading_em }}</em></h2>
+        {%- endif -%}
+        {%- assign stacks_intro = mf_comparison_intro | default: section.settings.stacks_intro -%}
+        {%- if stacks_intro != blank -%}<p>{{ stacks_intro }}</p>{%- endif -%}
       </div>
 
       <div class="stacks-table-wrap">
         <div class="stacks-table">
           <div class="st-head">
             <div class="st-h-cell st-h-label">&nbsp;</div>
-            <div class="st-h-cell st-h-kit">{{ section.settings.stacks_col_kit | default: 'GutBasket Kit' }}</div>
-            <div class="st-h-cell">{{ section.settings.stacks_col_3 | default: 'Traditional Homemade' }}</div>
+            <div class="st-h-cell st-h-kit">{{ mf_compare_left | default: section.settings.stacks_col_kit | default: 'GutBasket Kit' }}</div>
+            <div class="st-h-cell">{{ mf_compare_right | default: section.settings.stacks_col_3 | default: 'Traditional Homemade' }}</div>
             <div class="st-h-cell">{{ section.settings.stacks_col_4 | default: 'Probiotic Capsule' }}</div>
           </div>
 

@@ -4,6 +4,7 @@
   assign p = product
   assign mf_how_video = p.metafields.custom.how_to_make_video.value
   assign mf_steps = p.metafields.custom.featured_steps.value
+  assign mf_how_h = p.metafields.custom.how_make_h
   assign step_blocks = section.blocks | where: 'type', 'step'
   assign how_video = mf_how_video | default: section.settings.how_video
   assign has_mf_steps = false
@@ -17,7 +18,11 @@
     <div class="container">
       <div class="section-header centered">
         <div class="eyebrow">{{ section.settings.how_eyebrow }}</div>
-        <h2>{{ section.settings.how_heading }} <em>{{ section.settings.how_heading_em }}</em></h2>
+        {%- if mf_how_h != blank -%}
+          <h2>{{ mf_how_h }}</h2>
+        {%- else -%}
+          <h2>{{ section.settings.how_heading }} <em>{{ section.settings.how_heading_em }}</em></h2>
+        {%- endif -%}
       </div>
       <div class="how-make-grid">
         <div class="hm-video-hero {% if how_video != blank %}hm-video-hero--has-video{% endif %}">
