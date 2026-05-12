@@ -211,10 +211,16 @@
   box-sizing: border-box;
 }
 [data-template="leo"] .benefit-icon-svg svg { width: 100%; height: 100%; display: block; }
-/* Same sizing when the icon comes from a file_reference metafield
-   (rendered as <img>) — SVGs without intrinsic width otherwise paint
-   at 0px inside this 36x36 wrapper. */
+/* SVG file-reference metafields render as TWO elements stacked in the
+   same chip — an inline-svg placeholder + a raster <img> fallback.
+   - When leo-pdp.js injects SVG content into .kit-icon-svg, hide the
+     <img class="kit-icon-img"> sibling so we don't render twice.
+   - When JS injection fails (CORS, blocked fetch, etc.) the <img>
+     stays visible and shows the icon. */
+[data-template="leo"] .benefit-icon-svg .kit-icon-svg { display: contents; }
+[data-template="leo"] .benefit-icon-svg .kit-icon-svg svg,
 [data-template="leo"] .benefit-icon-svg img { width: 100%; height: 100%; object-fit: contain; display: block; }
+[data-template="leo"] .benefit-icon-svg:has(.kit-icon-svg svg) .kit-icon-img { display: none; }
 /* SVG recolor — stroke uses kit color, fill uses kit-soft */
 [data-template="leo"] .benefit-icon-svg svg [data-has-stroke="1"] { stroke: var(--kit-color); }
 [data-template="leo"] .benefit-icon-svg svg [data-fill-tone="dark"] { fill: var(--kit-color); }
