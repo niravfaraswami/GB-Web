@@ -16,6 +16,7 @@
   assign short_name    = p.metafields.custom.short_name | default: p.metafields.custom.product_name_short
 
   assign mf_benefits   = p.metafields.custom.hero_benefits_icons.value
+  assign mf_benefit_items = p.metafields.custom.benefits_items.value
   assign hero_benefit_blocks = section.blocks | where: 'type', 'hero_benefit'
   assign accordion_blocks    = section.blocks | where: 'type', 'hero_accordion_tab'
 -%}
@@ -87,22 +88,52 @@
           </div>
         {%- endif -%}
 
-        {%- if hero_benefit_blocks.size > 0 -%}
+        {%- comment -%}
+          Benefits — read from two parallel metafields per the spec:
+            custom.benefits_items       (list.single_line_text_field) — labels
+            custom.hero_benefits_icons  (list.file_reference)         — SVG icons
+          Index-aligned: items[i] pairs with icons[i].
+          Items may be plain text OR "emoji|text" (legacy format from kits).
+          Falls back to Theme Editor `hero_benefit` blocks if neither metafield is set.
+        {%- endcomment -%}
+        {%- if mf_benefit_items.size > 0 or hero_benefit_blocks.size > 0 -%}
           <div class="benefits-block">
             <div class="label">Benefits</div>
             <div class="benefits-grid">
-              {%- for block in hero_benefit_blocks -%}
-                {%- assign mf_icon = mf_benefits[forloop.index0] -%}
-                <div class="benefit-item" {{ block.shopify_attributes }}>
-                  <span class="benefit-icon-svg{% if mf_icon != blank %} benefit-icon-svg--img{% endif %}">
-                    {%- if mf_icon != blank -%}
-                      <img src="{{ mf_icon | image_url: width: 56 }}" alt="" loading="lazy" width="28" height="28">
-                    {%- elsif block.settings.icon_svg != blank -%}{%- render 'kit_icon', icon: block.settings.icon_svg, size: 28 -%}
-                    {%- elsif block.settings.icon_emoji != blank -%}{{ block.settings.icon_emoji }}{%- endif -%}
-                  </span>
-                  <span>{{ block.settings.label }}</span>
-                </div>
-              {%- endfor -%}
+              {%- if mf_benefit_items.size > 0 -%}
+                {%- for raw in mf_benefit_items -%}
+                  {%- assign mf_icon = mf_benefits[forloop.index0] -%}
+                  {%- assign parts = raw | split: '|' -%}
+                  {%- if parts.size > 1 -%}
+                    {%- assign emoji = parts[0] | strip -%}
+                    {%- assign label = parts[1] | strip -%}
+                  {%- else -%}
+                    {%- assign emoji = '' -%}
+                    {%- assign label = raw | strip -%}
+                  {%- endif -%}
+                  <div class="benefit-item">
+                    <span class="benefit-icon-svg{% if mf_icon != blank %} benefit-icon-svg--img{% endif %}">
+                      {%- if mf_icon != blank -%}
+                        <img src="{{ mf_icon | image_url: width: 56 }}" alt="" loading="lazy" width="28" height="28">
+                      {%- elsif emoji != blank -%}{{ emoji }}{%- endif -%}
+                    </span>
+                    <span>{{ label }}</span>
+                  </div>
+                {%- endfor -%}
+              {%- else -%}
+                {%- for block in hero_benefit_blocks -%}
+                  {%- assign mf_icon = mf_benefits[forloop.index0] -%}
+                  <div class="benefit-item" {{ block.shopify_attributes }}>
+                    <span class="benefit-icon-svg{% if mf_icon != blank %} benefit-icon-svg--img{% endif %}">
+                      {%- if mf_icon != blank -%}
+                        <img src="{{ mf_icon | image_url: width: 56 }}" alt="" loading="lazy" width="28" height="28">
+                      {%- elsif block.settings.icon_svg != blank -%}{%- render 'kit_icon', icon: block.settings.icon_svg, size: 28 -%}
+                      {%- elsif block.settings.icon_emoji != blank -%}{{ block.settings.icon_emoji }}{%- endif -%}
+                    </span>
+                    <span>{{ block.settings.label }}</span>
+                  </div>
+                {%- endfor -%}
+              {%- endif -%}
             </div>
           </div>
         {%- endif -%}
