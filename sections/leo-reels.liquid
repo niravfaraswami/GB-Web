@@ -1,8 +1,16 @@
 {%- render 'leo_kit_chrome' -%}
 
-{%- assign app_blocks = section.blocks | where: 'type', '@app' -%}
+{%- liquid
+  assign p = product
+  assign mf_reels = p.metafields.custom.featured_reels.value
+  assign app_blocks = section.blocks | where: 'type', '@app'
+  assign has_mf = false
+  if mf_reels and mf_reels.size > 0
+    assign has_mf = true
+  endif
+-%}
 
-{%- if app_blocks.size > 0 or section.settings.heading != blank -%}
+{%- if has_mf or app_blocks.size > 0 or section.settings.heading != blank -%}
   <section class="reels-section ferment-pdp-leo" {%- render 'leo_kit_attrs' -%}>
     <div class="container">
       {%- if section.settings.heading != blank or section.settings.eyebrow != blank -%}
@@ -11,9 +19,33 @@
           {%- if section.settings.heading != blank -%}<h2>{{ section.settings.heading }} <em>{{ section.settings.heading_em }}</em></h2>{%- endif -%}
         </div>
       {%- endif -%}
-      {%- for block in app_blocks -%}
-        {% render block %}
-      {%- endfor -%}
+      {%- if has_mf -%}
+        <div class="reels-grid">
+          {%- for r in mf_reels -%}
+            <div class="reel-tile">
+              {%- if r.video != blank -%}
+                {%- if r.video.sources or r.video.media_type == 'video' -%}
+                  {{ r.video | video_tag: image_size: '600x', controls: false, loop: true, muted: true, autoplay: true }}
+                {%- else -%}
+                  {%- assign reel_src = r.video.url | default: r.video.src -%}
+                  {%- if reel_src != blank -%}
+                    <video src="{{ reel_src }}" autoplay loop muted playsinline preload="metadata" style="width:100%;height:100%;object-fit:cover;"></video>
+                  {%- endif -%}
+                {%- endif -%}
+              {%- elsif r.poster != blank -%}
+                <img src="{{ r.poster | image_url: width: 600 }}" alt="{{ r.caption | default: r.author_handle | default: 'Customer reel' | escape }}" loading="lazy" width="600" height="1067">
+              {%- else -%}📷{%- endif -%}
+              {%- if r.author_handle != blank -%}
+                <span class="reel-handle">{{ r.author_handle }}</span>
+              {%- endif -%}
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- else -%}
+        {%- for block in app_blocks -%}
+          {% render block %}
+        {%- endfor -%}
+      {%- endif -%}
     </div>
   </section>
 {%- endif -%}

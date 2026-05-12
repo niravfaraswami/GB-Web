@@ -1,8 +1,16 @@
 {%- render 'leo_kit_chrome' -%}
 
-{%- assign enjoy_blocks = section.blocks | where: 'type', 'enjoy_card' -%}
+{%- liquid
+  assign p = product
+  assign mf_methods = p.metafields.custom.featured_consumption_methods.value
+  assign enjoy_blocks = section.blocks | where: 'type', 'enjoy_card'
+  assign has_mf = false
+  if mf_methods and mf_methods.size > 0
+    assign has_mf = true
+  endif
+-%}
 
-{%- if enjoy_blocks.size > 0 or section.settings.enjoy_h != blank -%}
+{%- if has_mf or enjoy_blocks.size > 0 or section.settings.enjoy_h != blank -%}
   <section class="eat-section ferment-pdp-leo" data-leo="1" {%- render 'leo_kit_attrs' -%}>
     <div class="container">
       <div class="section-header centered">
@@ -11,18 +19,33 @@
       </div>
 
       <div class="enjoy-grid">
-        {%- for block in enjoy_blocks -%}
-          <div class="enjoy-card" {{ block.shopify_attributes }}>
-            <div class="enjoy-card-img">
-              {%- if block.settings.image != blank -%}<img src="{{ block.settings.image | image_url: width: 600 }}" alt="{{ block.settings.heading | escape }}" loading="lazy" width="450" height="600">{%- endif -%}
+        {%- if has_mf -%}
+          {%- for m in mf_methods -%}
+            <div class="enjoy-card">
+              <div class="enjoy-card-img">
+                {%- if m.image != blank -%}<img src="{{ m.image | image_url: width: 600 }}" alt="{{ m.heading | escape }}" loading="lazy" width="450" height="600">{%- endif -%}
+              </div>
+              <div class="enjoy-card-num">{{ forloop.index }}</div>
+              <div class="enjoy-card-text">
+                <div class="enjoy-card-h">{{ m.heading | default: m.title }}</div>
+                <div class="enjoy-card-d">{{ m.description | default: m.body }}</div>
+              </div>
             </div>
-            <div class="enjoy-card-num">{{ forloop.index }}</div>
-            <div class="enjoy-card-text">
-              <div class="enjoy-card-h">{{ block.settings.heading }}</div>
-              <div class="enjoy-card-d">{{ block.settings.description }}</div>
+          {%- endfor -%}
+        {%- else -%}
+          {%- for block in enjoy_blocks -%}
+            <div class="enjoy-card" {{ block.shopify_attributes }}>
+              <div class="enjoy-card-img">
+                {%- if block.settings.image != blank -%}<img src="{{ block.settings.image | image_url: width: 600 }}" alt="{{ block.settings.heading | escape }}" loading="lazy" width="450" height="600">{%- endif -%}
+              </div>
+              <div class="enjoy-card-num">{{ forloop.index }}</div>
+              <div class="enjoy-card-text">
+                <div class="enjoy-card-h">{{ block.settings.heading }}</div>
+                <div class="enjoy-card-d">{{ block.settings.description }}</div>
+              </div>
             </div>
-          </div>
-        {%- endfor -%}
+          {%- endfor -%}
+        {%- endif -%}
       </div>
 
       {%- if section.settings.spoons_num != blank -%}

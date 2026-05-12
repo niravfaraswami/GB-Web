@@ -12,7 +12,10 @@
   assign hero_trust    = p.metafields.custom.hero_trust_strip.value
   assign coupon_text   = p.metafields.custom.coupon_text
   assign coupon_code   = p.metafields.custom.coupon_code
+  assign discount_badge = p.metafields.custom.discount_badge | default: section.settings.discount_badge
+  assign short_name    = p.metafields.custom.short_name | default: p.metafields.custom.product_name_short
 
+  assign mf_benefits   = p.metafields.custom.hero_benefits_icons.value
   assign hero_benefit_blocks = section.blocks | where: 'type', 'hero_benefit'
   assign accordion_blocks    = section.blocks | where: 'type', 'hero_accordion_tab'
 -%}
