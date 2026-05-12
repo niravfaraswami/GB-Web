@@ -1,0 +1,51 @@
+﻿Type,Name,Description,Display field,Entries count,Field key,Field name,Field type
+kit_review,Kit Review,UGC review card on PDP,quote,6,photo,Photo,file_reference (Image)
+,,,,,quote,Quote,single_line_text_field
+,,,,,name,Name,single_line_text_field
+,,,,,meta,Meta (location/role),single_line_text_field
+kit_faq,Kit FAQ,Q/A pair shown in PDP FAQ accordion,question,0,question,Question,single_line_text_field
+,,,,,answer,Answer,multi_line_text_field
+kit_step,Kit Step,Numbered how-to-make step,title,0,title,Title,single_line_text_field
+,,,,,description,Description,multi_line_text_field
+,,,,,icon,Icon,file_reference (Image)
+kit_component,Kit Component,What's-in-the-box pill,name,1,name,Name,single_line_text_field
+,,,,,description,Description,multi_line_text_field
+,,,,,icon,Icon,file_reference (Image)
+kit_trust_card,Kit Trust Card,Trust strip card (icon + heading + description),heading,0,heading,Heading,single_line_text_field
+,,,,,description,Description,multi_line_text_field
+,,,,,icon,Icon,file_reference (Image)
+kit_quick_benefit,Kit Quick Benefit,Quick benefit card,heading,0,heading,Heading,single_line_text_field
+,,,,,description,Description,multi_line_text_field
+,,,,,icon,Icon,file_reference (Image)
+kit_comparison_row,Kit Comparison Row,One row in the comparison table,left_heading,0,left_heading,Left Heading,single_line_text_field
+,,,,,left_subtext,Left Subtext,multi_line_text_field
+,,,,,right_heading,Right Heading,single_line_text_field
+,,,,,right_subtext,Right Subtext,multi_line_text_field
+kit_reel,Kit Reel,Video reel card,caption,0,video,Video,file_reference (Video)
+,,,,,poster,Poster,file_reference (Image)
+,,,,,caption,Caption,single_line_text_field
+,,,,,author_handle,Author Handle,single_line_text_field
+kit_stat_pair,Kit Stat Pair,Outcome / stat,value,0,value,Value,single_line_text_field
+,,,,,caption,Caption,single_line_text_field
+kit_science_card,Kit Science Card,Science explainer card,name,0,name,Name,single_line_text_field
+,,,,,image,Image,file_reference (Image)
+,,,,,what_it_does,What it does,multi_line_text_field
+,,,,,why_it_matters,Why it matters,multi_line_text_field
+,,,,,chip,Chip,single_line_text_field
+kit_timeline_step,Kit Timeline Step,Health-timeline step,period_label,0,period_label,Period label,single_line_text_field
+,,,,,heading,Heading,single_line_text_field
+,,,,,description,Description,multi_line_text_field
+kit_consumable,Kit Consumable,Consumable inside kit,heading,0,image,Image,file_reference (Image)
+,,,,,heading,Heading,single_line_text_field
+,,,,,sub_heading,Sub-heading,multi_line_text_field
+,,,,,ingredients,Ingredients,list.single_line_text_field
+,,,,,category,Category,single_line_text_field
+kit_science_stat,Kit Science Stat,Outcome stat with icon,icon,0,icon,Icon (text/emoji),single_line_text_field
+,,,,,stat,Stat,single_line_text_field
+,,,,,heading,Heading,single_line_text_field
+,,,,,description,Description,multi_line_text_field
+kit_consumption_method,Kit Consumption Method,How-to-consume / use-case card,heading,0,image,Image,file_reference (Image)
+,,,,,heading,Heading,single_line_text_field
+,,,,,description,Description,multi_line_text_field
+kit_recipe_tag,Kit Recipe Tag,Recipe tag chip,emoji,1,emoji,Emoji,single_line_text_field
+,,,,,name,Name,single_line_text_field

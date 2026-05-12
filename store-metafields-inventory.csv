@@ -1,0 +1,79 @@
+﻿Namespace,Key,Name,Type,Validations,In-use count,PDP section
+custom,content_id,Content ID,single_line_text_field,,0,Identity
+custom,pdp_template,PDP Template,single_line_text_field,,9,Identity
+custom,short_name,Short Name,single_line_text_field,,9,Identity
+custom,product_name_short,Product Name Short,single_line_text_field,,9,Identity
+custom,kit_label_format,Kit Label Format,single_line_text_field,,0,Identity
+custom,category_label,Category chip,single_line_text_field,,0,Identity
+custom,variant_tag,Variant Tag,single_line_text_field,,0,Identity
+custom,theme_accent,Theme Accent,color,,9,Theme
+custom,theme_accent_dark,Theme Accent Dark,color,,9,Theme
+custom,theme_accent_soft,Theme Accent Soft,color,,9,Theme
+custom,hero_tagline,Hero Tagline,multi_line_text_field,,10,Hero
+custom,discount_badge,Discount Badge,single_line_text_field,,9,Hero
+custom,rating,Rating,number_decimal,,9,Hero
+custom,review_count,Review Count,number_integer,,9,Hero
+custom,bought_today,Bought Today,number_integer,,9,Hero
+custom,days_to_ferment,Days to Ferment,single_line_text_field,,9,Hero
+custom,days_subtitle,Days Subtitle,multi_line_text_field,,9,Hero
+custom,capacity,Capacity,single_line_text_field,,7,Hero
+custom,jar_capacity,Jar Capacity,single_line_text_field,,2,Hero
+custom,best_for,Best For,single_line_text_field,,0,Hero
+custom,hero_trust_strip,Hero Trust Strip,list.single_line_text_field,,9,Hero
+custom,trust_strip_icons,Trust Strip Icons,list.file_reference,Images only,0,Hero
+custom,benefits_items,Benefits Items,list.single_line_text_field,,10,Benefits (parallel-array)
+custom,benefits_icons,Benefits Icons,list.file_reference,Images only,2,Benefits (parallel-array)
+custom,hero_benefits_icons,Hero Benefits Icons,list.file_reference,Images only,5,Benefits (parallel-array)
+custom,activity_items,Activity Items,list.single_line_text_field,,9,Activity strip
+custom,coupon_text,Coupon Text,single_line_text_field,,7,Promo strip
+custom,coupon_code,Coupon Code,single_line_text_field,,7,Promo strip
+custom,features_h1,Features section heading,single_line_text_field,,0,Features (jars-tools)
+custom,features_intro,Features section intro,multi_line_text_field,,0,Features (jars-tools)
+custom,specs,Specs table,json,,0,Features (jars-tools)
+custom,compatible_with,Compatible with,multi_line_text_field,,0,Features (jars-tools)
+custom,comparison_intro,Comparison Intro,multi_line_text_field,,0,Comparison
+custom,comparison_left_image,Comparison Left Image,file_reference,Images only,2,Comparison
+custom,comparison_right_image,Comparison Right Image,file_reference,Images only,2,Comparison
+custom,box_image,Box Image,file_reference,Images only,2,Box
+custom,box_note,Box Note,multi_line_text_field,,0,Box
+custom,how_to_make_video,How to Make Video,file_reference,Videos only,3,How-to-make
+custom,step_icons,Step Icons,list.file_reference,Images only,0,How-to-make
+custom,help_note,Help Note,multi_line_text_field,,2,Misc
+custom,companion_size_product,Companion Size Product,product_reference,,2,Cross-sell
+custom,cross_sell_products,Cross-sell Products,list.product_reference,,7,Cross-sell
+custom,cart_addon_ids,Cart add-on suggestions,list.product_reference,,0,Cross-sell
+custom,size_chart_image,Size Chart Image,file_reference,Images only,0,Size chart
+custom,jar_size_chart_image,Jar Size Chart Image,file_reference,Images only,0,Size chart
+custom,seo_title_override,SEO Title Override,single_line_text_field,,0,SEO
+custom,seo_description_override,SEO Description Override,multi_line_text_field,,0,SEO
+custom,refill_cta_label,Refill CTA Label,single_line_text_field,,0,Refill block
+custom,refill_cta_url,Refill CTA URL,url,,0,Refill block
+custom,refill_note_heading,Refill Note Heading,multi_line_text_field,,0,Refill block
+custom,refill_note_description,Refill Note Description,multi_line_text_field,,0,Refill block
+custom,recipe_count,Recipe Count,number_integer,,2,Recipes
+custom,recipe_banner_image,Recipe Banner Image,file_reference,Images only,2,Recipes
+custom,recipe_h_label,Recipe H Label,single_line_text_field,,0,Recipes
+custom,recipe_h_text,Recipe H Text,single_line_text_field,,0,Recipes
+custom,variant_illustration,Variant Illustration,file_reference,Images only,0,Variants
+custom,dosage_amount,Dosage Amount,single_line_text_field,,0,Dosage (prebiotic)
+custom,dosage_label,Dosage Label,single_line_text_field,,0,Dosage (prebiotic)
+custom,dosage_caption,Dosage Caption,multi_line_text_field,,0,Dosage (prebiotic)
+custom,timeline_subtitle,Timeline Subtitle,multi_line_text_field,,0,Timeline
+custom,itk_intro,ITK Intro,multi_line_text_field,,0,ITK / Science
+custom,science_stats_caption,Science Stats Caption,multi_line_text_field,,0,ITK / Science
+custom,science_stats_disclaimer,Science Stats Disclaimer,multi_line_text_field,,0,ITK / Science
+custom,featured_reviews,Featured Reviews,list.metaobject_reference→kit_review,,2,→ Metaobject
+custom,featured_faqs,Featured FAQs,list.metaobject_reference→kit_faq,,0,→ Metaobject
+custom,featured_steps,Featured Steps,list.metaobject_reference→kit_step,,0,→ Metaobject
+custom,featured_components,Featured Components,list.metaobject_reference→kit_component,,2,→ Metaobject
+custom,featured_trust_cards,Featured Trust Cards,list.metaobject_reference→kit_trust_card,,0,→ Metaobject
+custom,featured_quick_benefits,Featured Quick Benefits,list.metaobject_reference→kit_quick_benefit,,0,→ Metaobject
+custom,featured_comparison_rows,Featured Comparison Rows,list.metaobject_reference→kit_comparison_row,,0,→ Metaobject
+custom,featured_reels,Featured Reels,list.metaobject_reference→kit_reel,,0,→ Metaobject
+custom,featured_outcomes_stats,Featured Outcomes Stats,list.metaobject_reference→kit_stat_pair,,0,→ Metaobject
+custom,featured_science_cards,Featured Science Cards,list.metaobject_reference→kit_science_card,,0,→ Metaobject
+custom,featured_timeline_steps,Featured Timeline Steps,list.metaobject_reference→kit_timeline_step,,0,→ Metaobject
+custom,featured_consumables,Featured Consumables,list.metaobject_reference→kit_consumable,,0,→ Metaobject
+custom,featured_science_stats,Featured Science Stats,list.metaobject_reference→kit_science_stat,,0,→ Metaobject
+custom,featured_consumption_methods,Featured Consumption Methods,list.metaobject_reference→kit_consumption_method,,0,→ Metaobject
+custom,featured_recipe_tags,Featured Recipe Tags,list.metaobject_reference→kit_recipe_tag,,2,→ Metaobject

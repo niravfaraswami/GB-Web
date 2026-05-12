@@ -1,0 +1,219 @@
+﻿Brief,Section,Brief proposed key,Brief proposed type,Action,Canonical key (store) / Notes,Notes
+gutbasket-fermentation-kit-brief.docx,1.0 Accent,custom.theme_accent,color,✓ KEEP,custom.theme_accent,
+gutbasket-fermentation-kit-brief.docx,1.0 Accent,custom.theme_accent_dark,color,✓ KEEP,custom.theme_accent_dark,
+gutbasket-fermentation-kit-brief.docx,1.0 Accent,custom.theme_accent_soft,color,✓ KEEP,custom.theme_accent_soft,
+gutbasket-fermentation-kit-brief.docx,1.1 Hero,custom.short_name,single_line,✓ KEEP,custom.short_name,
+gutbasket-fermentation-kit-brief.docx,1.1 Hero,custom.product_name_short,single_line,✓ KEEP,custom.product_name_short,
+gutbasket-fermentation-kit-brief.docx,1.1 Hero,custom.hero_tagline,multi_line,✓ KEEP,custom.hero_tagline,
+gutbasket-fermentation-kit-brief.docx,1.1 Hero,custom.kit_label_format,single_line,✓ KEEP,custom.kit_label_format,
+gutbasket-fermentation-kit-brief.docx,1.1 Hero,custom.discount_badge,single_line,✓ KEEP,custom.discount_badge,
+gutbasket-fermentation-kit-brief.docx,1.1 Hero,custom.rating,number_decimal,✓ KEEP,custom.rating,Brief says 'single line text' — store has number_decimal. Use number_decimal.
+gutbasket-fermentation-kit-brief.docx,1.1 Hero,custom.review_count,number_integer,✓ KEEP,custom.review_count,
+gutbasket-fermentation-kit-brief.docx,1.1 Hero,custom.bought_today,number_integer,✓ KEEP,custom.bought_today,Brief says 'single line text' — store has number_integer. Use number_integer.
+gutbasket-fermentation-kit-brief.docx,1.1 Hero,custom.hero_gallery,list.file_ref (Image),🆕 CREATE,—,Truly new. Alternative: use product images natively.
+gutbasket-fermentation-kit-brief.docx,1.1 Hero,custom.hero_gallery_labels,list.single_line,🆕 CREATE,—,Truly new.
+gutbasket-fermentation-kit-brief.docx,1.1 Hero,custom.hero_video,file_ref (Video),🆕 CREATE,—,Truly new. Note: store has `how_to_make_video` for tutorials — different purpose.
+gutbasket-fermentation-kit-brief.docx,1.2 Variants,custom.pack_1_label,single_line,⚠️ DECISION,—,Recommend: use Shopify product variants for sizes/prices. Only create pack_*_sub / pack_*_save metafields if variant labels can't carry the copy.
+gutbasket-fermentation-kit-brief.docx,1.2 Variants,custom.pack_1_sub,single_line,🆕 CREATE,—,"If variants are used, only sub/save are metafields."
+gutbasket-fermentation-kit-brief.docx,1.2 Variants,custom.pack_1_save,single_line,🆕 CREATE,—,
+gutbasket-fermentation-kit-brief.docx,1.2 Variants,custom.pack_2_label,single_line,⚠️ DECISION,—,See 1.2 above.
+gutbasket-fermentation-kit-brief.docx,1.2 Variants,custom.pack_2_sub,single_line,🆕 CREATE,—,
+gutbasket-fermentation-kit-brief.docx,1.2 Variants,custom.pack_2_save,single_line,🆕 CREATE,—,
+gutbasket-fermentation-kit-brief.docx,1.2 Variants,custom.pack_3_label,single_line,⚠️ DECISION,—,See 1.2 above.
+gutbasket-fermentation-kit-brief.docx,1.2 Variants,custom.pack_3_sub,single_line,🆕 CREATE,—,
+gutbasket-fermentation-kit-brief.docx,1.2 Variants,custom.pack_3_save,single_line,🆕 CREATE,—,
+gutbasket-fermentation-kit-brief.docx,1.2 Variants,custom.variant_help_note,multi_line,✏️ RENAME,custom.help_note,"Store has `help_note` (multi_line, 2 in use). Use it instead of creating duplicate."
+gutbasket-fermentation-kit-brief.docx,1.3 Hero accordions,custom.hero_description,rich_text,🆕 CREATE,—,Alternative: use Shopify native `body_html`.
+gutbasket-fermentation-kit-brief.docx,1.3 Hero accordions,custom.hero_whats_inside,multi_line,🔁 REUSE OBJ,custom.featured_components,"Reuse `featured_components` (→ kit_component metaobject). Same purpose, richer structure."
+gutbasket-fermentation-kit-brief.docx,1.4 Trust row,custom.trust_row_cards,list.metaobject_ref → trust_row_card,🔁 REUSE OBJ,custom.featured_trust_cards → kit_trust_card,Brief proposed new metaobject. Use existing kit_trust_card (heading + description + icon — identical shape).
+gutbasket-fermentation-kit-brief.docx,1.5 How-make,custom.how_make_h,single_line,🆕 CREATE,—,Truly new (section heading).
+gutbasket-fermentation-kit-brief.docx,1.5 How-make,custom.how_make_video,file_ref (Video),✏️ RENAME,custom.how_to_make_video,Store has `how_to_make_video`. Brief used `how_make_video`.
+gutbasket-fermentation-kit-brief.docx,1.5 How-make,custom.featured_steps,list.metaobject_ref,✓ KEEP,custom.featured_steps → kit_step,
+gutbasket-fermentation-kit-brief.docx,1.6 Myth+compare,custom.myth_eyebrow,single_line,🆕 CREATE,—,Truly new.
+gutbasket-fermentation-kit-brief.docx,1.6 Myth+compare,custom.myth_h1,single_line,🆕 CREATE,—,
+gutbasket-fermentation-kit-brief.docx,1.6 Myth+compare,custom.myth_h2,single_line,🆕 CREATE,—,
+gutbasket-fermentation-kit-brief.docx,1.6 Myth+compare,custom.myth_intro,multi_line,✏️ RENAME,custom.comparison_intro,Store has `comparison_intro` (multi_line). Same purpose.
+gutbasket-fermentation-kit-brief.docx,1.6 Myth+compare,custom.myth_pill_text,single_line,🆕 CREATE,—,
+gutbasket-fermentation-kit-brief.docx,1.6 Myth+compare,custom.fact_pill_text,single_line,🆕 CREATE,—,
+gutbasket-fermentation-kit-brief.docx,1.6 Myth+compare,custom.compare_left_label,single_line,🆕 CREATE,—,
+gutbasket-fermentation-kit-brief.docx,1.6 Myth+compare,custom.compare_right_label,single_line,🆕 CREATE,—,
+gutbasket-fermentation-kit-brief.docx,1.6 Myth+compare,custom.featured_comparison_rows,list.metaobject_ref,✓ KEEP,custom.featured_comparison_rows → kit_comparison_row,
+gutbasket-fermentation-kit-brief.docx,1.6 Myth+compare,custom.compare_summary_left,single_line,🆕 CREATE,—,
+gutbasket-fermentation-kit-brief.docx,1.6 Myth+compare,custom.compare_summary_right,single_line,🆕 CREATE,—,
+gutbasket-fermentation-kit-brief.docx,1.6 Myth+compare,custom.compare_summary_caption,single_line,🆕 CREATE,—,
+gutbasket-fermentation-kit-brief.docx,1.9 Box,custom.box_image,file_ref (Image),✓ KEEP,custom.box_image,
+gutbasket-fermentation-kit-brief.docx,1.9 Box,custom.featured_components,list.metaobject_ref,✓ KEEP,custom.featured_components → kit_component,
+gutbasket-fermentation-kit-brief.docx,1.9 Box,custom.box_note,multi_line,✓ KEEP,custom.box_note,
+gutbasket-fermentation-kit-brief.docx,1.10 Airlock spotlight,custom.airlock_spotlight_h,single_line,🆕 CREATE,—,Optional heading.
+gutbasket-fermentation-kit-brief.docx,1.10 Airlock spotlight,custom.airlock_cards,list.metaobject_ref → airlock_card,🔁 REUSE OBJ,custom.featured_science_cards → kit_science_card,"kit_science_card has same shape (name, image, what_it_does, why_it_matters, chip)."
+gutbasket-fermentation-kit-brief.docx,1.11 Timeline,custom.timeline_h,single_line,🆕 CREATE,—,
+gutbasket-fermentation-kit-brief.docx,1.11 Timeline,custom.timeline_subtitle,multi_line,✓ KEEP,custom.timeline_subtitle,
+gutbasket-fermentation-kit-brief.docx,1.11 Timeline,custom.featured_timeline_steps,list.metaobject_ref,✓ KEEP,custom.featured_timeline_steps → kit_timeline_step,
+gutbasket-fermentation-kit-brief.docx,1.12 ITK,custom.itk_intro,multi_line,✓ KEEP,custom.itk_intro,
+gutbasket-fermentation-kit-brief.docx,1.12 ITK,custom.itk_spice_h,single_line,🆕 CREATE,—,Truly new (kit-specific consumable detail).
+gutbasket-fermentation-kit-brief.docx,1.12 ITK,custom.itk_spice_sub,single_line,🆕 CREATE,—,
+gutbasket-fermentation-kit-brief.docx,1.12 ITK,custom.itk_spice_list,list.single_line,🆕 CREATE,—,"Alternative: reuse `featured_consumables` metaobject (heading, sub_heading, ingredients, category) — one entry per inside-the-kit item."
+gutbasket-fermentation-kit-brief.docx,1.12 ITK,custom.itk_boost_h,single_line,🆕 CREATE,—,
+gutbasket-fermentation-kit-brief.docx,1.12 ITK,custom.itk_boost_sub,single_line,🆕 CREATE,—,
+gutbasket-fermentation-kit-brief.docx,1.12 ITK,custom.itk_boost_list,list.single_line,🆕 CREATE,—,
+gutbasket-fermentation-kit-brief.docx,1.12 ITK,custom.refill_note_heading,single_line,✏️ RENAME,custom.refill_note_heading,Store has multi_line not single_line — adapt copy to multi_line.
+gutbasket-fermentation-kit-brief.docx,1.12 ITK,custom.refill_note_description,multi_line,✓ KEEP,custom.refill_note_description,
+gutbasket-fermentation-kit-brief.docx,1.12 ITK,custom.refill_cta_label,single_line,✓ KEEP,custom.refill_cta_label,
+gutbasket-fermentation-kit-brief.docx,1.12 ITK,custom.refill_cta_url,url,✓ KEEP,custom.refill_cta_url,
+gutbasket-fermentation-kit-brief.docx,1.13 Blends,custom.featured_blends,list.metaobject_ref → kit_blend (new),🆕 CREATE,—,"kit_blend metaobject needed (name, sub_line, description, color_var). Alternative: reuse kit_consumable (already has heading, sub_heading, ingredients, category). Recommend: reuse kit_consumable."
+gutbasket-fermentation-kit-brief.docx,1.14 ZOE,custom.featured_science_stats,list.metaobject_ref,✓ KEEP,custom.featured_science_stats → kit_science_stat,
+gutbasket-fermentation-kit-brief.docx,1.14 ZOE,custom.science_stats_caption,multi_line,✓ KEEP,custom.science_stats_caption,
+gutbasket-fermentation-kit-brief.docx,1.14 ZOE,custom.science_stats_disclaimer,multi_line,✓ KEEP,custom.science_stats_disclaimer,
+gutbasket-fermentation-kit-brief.docx,1.15 Reviews,custom.reviews_h,single_line,🆕 CREATE,—,Truly new (section heading).
+gutbasket-fermentation-kit-brief.docx,1.15 Reviews,custom.featured_reviews,list.metaobject_ref,✓ KEEP,custom.featured_reviews → kit_review,
+gutbasket-fermentation-kit-brief.docx,1.16 Eat,custom.eat_h,single_line,🆕 CREATE,—,Truly new.
+gutbasket-fermentation-kit-brief.docx,1.16 Eat,custom.featured_consumption_methods,list.metaobject_ref,✓ KEEP,custom.featured_consumption_methods → kit_consumption_method,
+gutbasket-fermentation-kit-brief.docx,1.16 Eat,custom.spoons_per_meal,single_line,✏️ RENAME,custom.dosage_amount,Brief itself flagged uncertainty — confirmed: use `dosage_amount`.
+gutbasket-fermentation-kit-brief.docx,1.16 Eat,custom.spoons_label,single_line,✏️ RENAME,custom.dosage_label,Use existing `dosage_label`.
+gutbasket-fermentation-kit-brief.docx,1.16 Eat,custom.spoons_caption,multi_line,✏️ RENAME,custom.dosage_caption,Use existing `dosage_caption`.
+gutbasket-fermentation-kit-brief.docx,1.17 Recipes,custom.recipe_count,number_integer,✓ KEEP,custom.recipe_count,
+gutbasket-fermentation-kit-brief.docx,1.17 Recipes,custom.recipe_h_label,single_line,✓ KEEP,custom.recipe_h_label,
+gutbasket-fermentation-kit-brief.docx,1.17 Recipes,custom.recipe_h_text,single_line,✓ KEEP,custom.recipe_h_text,
+gutbasket-fermentation-kit-brief.docx,1.17 Recipes,custom.recipes_banner_image,file_ref (Image),✏️ RENAME,custom.recipe_banner_image,Singular not plural. Use `recipe_banner_image`.
+gutbasket-fermentation-kit-brief.docx,1.17 Recipes,custom.featured_recipe_tags,list.metaobject_ref,✓ KEEP,custom.featured_recipe_tags → kit_recipe_tag,Brief said `list of single line text` — store has it as list.metaobject_reference. Use metaobject.
+gutbasket-fermentation-kit-brief.docx,1.18 FAQ,custom.faq_h,single_line,🆕 CREATE,—,
+gutbasket-fermentation-kit-brief.docx,1.18 FAQ,custom.featured_faqs,list.metaobject_ref,✓ KEEP,custom.featured_faqs → kit_faq,
+gutbasket-fermentation-kit-brief.docx,1.19 Cross-sell,custom.crosssell_h,single_line,🆕 CREATE,—,Optional; theme default may work.
+gutbasket-fermentation-kit-brief.docx,1.19 Cross-sell,custom.crosssell_subtitle,multi_line,🆕 CREATE,—,Optional.
+gutbasket-fermentation-kit-brief.docx,1.19 Cross-sell,custom.cross_sell_products,list.product_ref,✓ KEEP,custom.cross_sell_products,
+gutbasket-fermentation-kit-brief.docx,1.20 SEO,custom.seo_title_override,single_line,✓ KEEP,custom.seo_title_override,
+gutbasket-fermentation-kit-brief.docx,1.20 SEO,custom.seo_description_override,multi_line,✓ KEEP,custom.seo_description_override,
+gutbasket-spice-refill-brief.docx,1.0 Accent,custom.theme_accent,color,✓ KEEP,custom.theme_accent,
+gutbasket-spice-refill-brief.docx,1.0 Accent,custom.theme_accent_dark,color,✓ KEEP,custom.theme_accent_dark,
+gutbasket-spice-refill-brief.docx,1.0 Accent,custom.theme_accent_soft,color,✓ KEEP,custom.theme_accent_soft,
+gutbasket-spice-refill-brief.docx,1.1 Refill flag,custom.kit_label_format,single_line,✓ KEEP,custom.kit_label_format,
+gutbasket-spice-refill-brief.docx,1.1 Refill flag,custom.parent_kit_name,single_line,⚠️ DECISION,custom.companion_size_product,"Store has `companion_size_product` (product_ref, 2 in use). Could derive name from referenced product. Brief's parent_kit_name is a denormalised copy — keep as new if you want a custom display name, else reuse companion_size_product."
+gutbasket-spice-refill-brief.docx,1.1 Refill flag,custom.parent_kit_url,url,⚠️ DECISION,custom.companion_size_product,Same as above — derive URL from companion_size_product reference.
+gutbasket-spice-refill-brief.docx,1.1 Refill flag,custom.parent_kit_link_text,single_line,🆕 CREATE,—,Truly new (CTA label).
+gutbasket-spice-refill-brief.docx,1.2 Hero,custom.short_name,single_line,✓ KEEP,custom.short_name,
+gutbasket-spice-refill-brief.docx,1.2 Hero,custom.product_name_short,single_line,✓ KEEP,custom.product_name_short,
+gutbasket-spice-refill-brief.docx,1.2 Hero,custom.hero_tagline,multi_line,✓ KEEP,custom.hero_tagline,
+gutbasket-spice-refill-brief.docx,1.2 Hero,custom.discount_badge,single_line,✓ KEEP,custom.discount_badge,
+gutbasket-spice-refill-brief.docx,1.2 Hero,custom.rating,number_decimal,✓ KEEP,custom.rating,
+gutbasket-spice-refill-brief.docx,1.2 Hero,custom.review_count,number_integer,✓ KEEP,custom.review_count,
+gutbasket-spice-refill-brief.docx,1.2 Hero,custom.bought_today,number_integer,✓ KEEP,custom.bought_today,
+gutbasket-spice-refill-brief.docx,1.2 Hero,custom.batch_makes,single_line,🆕 CREATE,—,Truly new. Alternative: roll into `specs [json]`.
+gutbasket-spice-refill-brief.docx,1.2 Hero,custom.cost_savings,single_line,🆕 CREATE,—,Truly new.
+gutbasket-spice-refill-brief.docx,1.2 Hero,custom.hero_gallery,list.file_ref,🆕 CREATE,—,
+gutbasket-spice-refill-brief.docx,1.2 Hero,custom.hero_gallery_labels,list.single_line,🆕 CREATE,—,
+gutbasket-spice-refill-brief.docx,1.3 Benefits,custom.benefits_grid,list.metaobject_ref,🔁 REUSE OBJ,custom.featured_quick_benefits → kit_quick_benefit,Or use parallel-array pattern: benefits_items + benefits_icons (already on every kit).
+gutbasket-spice-refill-brief.docx,1.5 Subscribe,custom.sub_offer_title,single_line,🆕 CREATE,—,
+gutbasket-spice-refill-brief.docx,1.5 Subscribe,custom.sub_offer_desc,multi_line,🆕 CREATE,—,
+gutbasket-spice-refill-brief.docx,1.6 Hero accordions,custom.hero_description,rich_text,🆕 CREATE,—,Same field as fermentation-kit brief.
+gutbasket-spice-refill-brief.docx,1.6 Hero accordions,custom.hero_whats_inside,multi_line,🔁 REUSE OBJ,custom.featured_components,Reuse featured_components.
+gutbasket-spice-refill-brief.docx,1.7 Why-refill,custom.why_image,file_ref (Image),🆕 CREATE,—,Could reuse `comparison_left_image` or `recipe_banner_image` depending on usage.
+gutbasket-spice-refill-brief.docx,1.7 Why-refill,custom.why_eyebrow,single_line,🆕 CREATE,—,
+gutbasket-spice-refill-brief.docx,1.7 Why-refill,custom.why_headline,rich_text,🆕 CREATE,—,
+gutbasket-spice-refill-brief.docx,1.7 Why-refill,custom.why_text,multi_line,🆕 CREATE,—,
+gutbasket-spice-refill-brief.docx,1.7 Why-refill,custom.why_bullets,list.single_line,✏️ RENAME,custom.benefits_items,Reuse `benefits_items` (parallel-array). Or use featured_quick_benefits metaobject.
+gutbasket-spice-refill-brief.docx,1.8 Box,custom.box_image,file_ref (Image),✓ KEEP,custom.box_image,
+gutbasket-spice-refill-brief.docx,1.8 Box,custom.featured_components,list.metaobject_ref,✓ KEEP,custom.featured_components → kit_component,
+gutbasket-spice-refill-brief.docx,1.8 Box,custom.box_note,multi_line,✓ KEEP,custom.box_note,
+gutbasket-spice-refill-brief.docx,1.9 How-make,custom.how_make_h,single_line,🆕 CREATE,—,Same as fermentation-kit.
+gutbasket-spice-refill-brief.docx,1.9 How-make,custom.how_make_video,file_ref (Video),✏️ RENAME,custom.how_to_make_video,Use existing `how_to_make_video`.
+gutbasket-spice-refill-brief.docx,1.9 How-make,custom.featured_steps,list.metaobject_ref,✓ KEEP,custom.featured_steps → kit_step,
+gutbasket-spice-refill-brief.docx,1.10 Reviews,custom.reviews_h,single_line,🆕 CREATE,—,
+gutbasket-spice-refill-brief.docx,1.10 Reviews,custom.featured_reviews,list.metaobject_ref,✓ KEEP,custom.featured_reviews → kit_review,
+gutbasket-spice-refill-brief.docx,1.11 Cross-sell,custom.crosssell_h,single_line,🆕 CREATE,—,
+gutbasket-spice-refill-brief.docx,1.11 Cross-sell,custom.cross_sell_products,list.product_ref,✓ KEEP,custom.cross_sell_products,
+gutbasket-jars-tools-brief.docx,1.0 Accent,custom.theme_accent,color,✓ KEEP,custom.theme_accent,
+gutbasket-jars-tools-brief.docx,1.0 Accent,custom.theme_accent_dark,color,✓ KEEP,custom.theme_accent_dark,
+gutbasket-jars-tools-brief.docx,1.0 Accent,custom.theme_accent_soft,color,✓ KEEP,custom.theme_accent_soft,
+gutbasket-jars-tools-brief.docx,1.1 Hero,custom.short_name,single_line,✓ KEEP,custom.short_name,
+gutbasket-jars-tools-brief.docx,1.1 Hero,custom.product_name_short,single_line,✓ KEEP,custom.product_name_short,
+gutbasket-jars-tools-brief.docx,1.1 Hero,custom.hero_tagline,multi_line,✓ KEEP,custom.hero_tagline,
+gutbasket-jars-tools-brief.docx,1.1 Hero,custom.kit_label_format,single_line,✓ KEEP,custom.kit_label_format,Used as eyebrow (JAR / AIRLOCK / TOOL / BOTTLE).
+gutbasket-jars-tools-brief.docx,1.1 Hero,custom.rating,number_decimal,✓ KEEP,custom.rating,
+gutbasket-jars-tools-brief.docx,1.1 Hero,custom.review_count,number_integer,✓ KEEP,custom.review_count,
+gutbasket-jars-tools-brief.docx,1.1 Hero,custom.bought_today,number_integer,✓ KEEP,custom.bought_today,
+gutbasket-jars-tools-brief.docx,1.1 Hero,custom.hero_gallery,list.file_ref,🆕 CREATE,—,Or use Shopify native product images.
+gutbasket-jars-tools-brief.docx,1.1 Hero,custom.hero_gallery_labels,list.single_line,🆕 CREATE,—,
+gutbasket-jars-tools-brief.docx,1.2 Variants,custom.pack_1_label,single_line,⚠️ DECISION,—,Same as fermentation-kit. Use product variants where possible.
+gutbasket-jars-tools-brief.docx,1.2 Variants,custom.pack_2_label,single_line,⚠️ DECISION,—,
+gutbasket-jars-tools-brief.docx,1.2 Variants,custom.pack_3_label,single_line,⚠️ DECISION,—,
+gutbasket-jars-tools-brief.docx,1.3 Hero accordions,custom.hero_description,rich_text,🆕 CREATE,—,
+gutbasket-jars-tools-brief.docx,1.3 Hero accordions,custom.hero_whats_included,multi_line,🔁 REUSE OBJ,custom.featured_components,Note: jars-tools brief uses `hero_whats_included` while fermentation-kit brief uses `hero_whats_inside` — pick one canonical name. Recommend reusing `featured_components` metaobject for both.
+gutbasket-jars-tools-brief.docx,1.4 Specifications,custom.featured_specifications,list.metaobject_ref → new metaobject,❌ DON'T CREATE,custom.specs,"Store has `custom.specs [json]` field already. Use it instead of a new metaobject. JSON shape: [{label, value, icon?}, …]."
+gutbasket-jars-tools-brief.docx,1.4 Specifications,custom.material,single_line,🆕 CREATE,—,Or roll into `specs` JSON.
+gutbasket-jars-tools-brief.docx,1.4 Specifications,custom.capacity,single_line,✓ KEEP,custom.capacity,Already exists (7 in use).
+gutbasket-jars-tools-brief.docx,1.4 Specifications,custom.dimensions,single_line,🆕 CREATE,—,Or roll into `specs` JSON.
+gutbasket-jars-tools-brief.docx,1.4 Specifications,custom.food_grade_label,single_line,🆕 CREATE,—,Or roll into `specs` JSON.
+gutbasket-jars-tools-brief.docx,1.5 Use cases,custom.use_cases_h,single_line,✏️ RENAME,custom.features_h1,Reuse `features_h1` (single_line). Or just create use_cases_h if separation matters.
+gutbasket-jars-tools-brief.docx,1.5 Use cases,custom.featured_use_cases,list.metaobject_ref,✓ KEEP,custom.featured_quick_benefits → kit_quick_benefit,Already says reuse featured_quick_benefits in brief — confirmed correct.
+gutbasket-jars-tools-brief.docx,1.6 Care,custom.care_h,single_line,🆕 CREATE,—,
+gutbasket-jars-tools-brief.docx,1.6 Care,custom.care_instructions,list.single_line,🆕 CREATE,—,
+gutbasket-jars-tools-brief.docx,1.6 Care,custom.replacement_parts,list.product_ref,⚠️ DECISION,custom.cross_sell_products,Could reuse `cross_sell_products`. Or keep separate if you want distinct sections on PDP.
+gutbasket-jars-tools-brief.docx,1.6 Care,custom.warranty_note,multi_line,🆕 CREATE,—,
+gutbasket-jars-tools-brief.docx,1.7 Reviews,custom.reviews_h,single_line,🆕 CREATE,—,
+gutbasket-jars-tools-brief.docx,1.7 Reviews,custom.featured_reviews,list.metaobject_ref,✓ KEEP,custom.featured_reviews → kit_review,
+gutbasket-jars-tools-brief.docx,1.8 FAQ,custom.faq_h,single_line,🆕 CREATE,—,
+gutbasket-jars-tools-brief.docx,1.8 FAQ,custom.featured_faqs,list.metaobject_ref,✓ KEEP,custom.featured_faqs → kit_faq,
+gutbasket-jars-tools-brief.docx,1.9 Cross-sell,custom.cross_sell_products,list.product_ref,✓ KEEP,custom.cross_sell_products,
+gutbasket-jars-tools-brief.docx,1.10 SEO,custom.seo_title_override,single_line,✓ KEEP,custom.seo_title_override,
+gutbasket-jars-tools-brief.docx,1.10 SEO,custom.seo_description_override,multi_line,✓ KEEP,custom.seo_description_override,
+gutbasket-prebiotic-brief.docx,1.0 Accent,custom.theme_accent,color,✓ KEEP,custom.theme_accent,
+gutbasket-prebiotic-brief.docx,1.0 Accent,custom.theme_accent_dark,color,✓ KEEP,custom.theme_accent_dark,
+gutbasket-prebiotic-brief.docx,1.0 Accent,custom.theme_accent_soft,color,✓ KEEP,custom.theme_accent_soft,
+gutbasket-prebiotic-brief.docx,1.1 Hero,custom.category_label,single_line,✓ KEEP,custom.category_label,Brief marked NEW; was created recently — exists in store now.
+gutbasket-prebiotic-brief.docx,1.1 Hero,custom.short_name,single_line,✓ KEEP,custom.short_name,
+gutbasket-prebiotic-brief.docx,1.1 Hero,custom.product_name_display,single_line,✏️ RENAME,custom.product_name_short,Use existing `product_name_short` instead of creating a new key.
+gutbasket-prebiotic-brief.docx,1.1 Hero,custom.hero_tagline,multi_line,✓ KEEP,custom.hero_tagline,Brief said `single line text` — store has `multi_line_text_field`. Use multi_line.
+gutbasket-prebiotic-brief.docx,1.1 Hero,custom.hero_video,file_ref (Video),🆕 CREATE,—,Truly new (different purpose from how_to_make_video).
+gutbasket-prebiotic-brief.docx,1.1 Hero,custom.hero_gallery,list.file_ref,🆕 CREATE,—,
+gutbasket-prebiotic-brief.docx,1.1 Hero,custom.hero_gallery_labels,list.single_line,🆕 CREATE,—,
+gutbasket-prebiotic-brief.docx,1.1 Hero,custom.discount_badge,single_line,✓ KEEP,custom.discount_badge,
+gutbasket-prebiotic-brief.docx,1.1 Hero,custom.rating,number_decimal,✓ KEEP,custom.rating,
+gutbasket-prebiotic-brief.docx,1.1 Hero,custom.review_count,number_integer,✓ KEEP,custom.review_count,
+gutbasket-prebiotic-brief.docx,1.1 Hero,custom.fiber_per_serve,single_line,🆕 CREATE,—,Hero meta cell. Or roll into `specs` JSON.
+gutbasket-prebiotic-brief.docx,1.1 Hero,custom.serves_count,single_line,🆕 CREATE,—,Or roll into `specs` JSON.
+gutbasket-prebiotic-brief.docx,1.1 Hero,custom.source,single_line,🆕 CREATE,—,Or roll into `specs` JSON.
+gutbasket-prebiotic-brief.docx,1.1 Hero,custom.taste,single_line,🆕 CREATE,—,Or roll into `specs` JSON.
+gutbasket-prebiotic-brief.docx,1.1 Hero,custom.bought_today,number_integer,✓ KEEP,custom.bought_today,
+gutbasket-prebiotic-brief.docx,1.1 Hero,custom.hero_trust_items,list.single_line,✏️ RENAME,custom.hero_trust_strip,Reuse existing `hero_trust_strip` (9 in use).
+gutbasket-prebiotic-brief.docx,1.1 Hero,custom.hero_trust_icons,list.single_line,✏️ RENAME,custom.trust_strip_icons,Store has `trust_strip_icons` (list.file_reference). Brief proposed list.single_line (emoji); change either to file_ref (matches store) or repurpose by recreating as list.single_line.
+gutbasket-prebiotic-brief.docx,1.2 Why,custom.why_eyebrow,single_line,🆕 CREATE,—,
+gutbasket-prebiotic-brief.docx,1.2 Why,custom.why_heading,multi_line,🆕 CREATE,—,
+gutbasket-prebiotic-brief.docx,1.2 Why,custom.why_intro,multi_line,🆕 CREATE,—,Optional.
+gutbasket-prebiotic-brief.docx,1.2 Why,custom.featured_trust_cards,list.metaobject_ref,✓ KEEP,custom.featured_trust_cards → kit_trust_card,
+gutbasket-prebiotic-brief.docx,1.3 Who,custom.who_eyebrow,single_line,🆕 CREATE,—,
+gutbasket-prebiotic-brief.docx,1.3 Who,custom.who_heading,multi_line,🆕 CREATE,—,
+gutbasket-prebiotic-brief.docx,1.3 Who,custom.who_sub,multi_line,🆕 CREATE,—,
+gutbasket-prebiotic-brief.docx,1.3 Who,custom.who_yes,list.single_line,🆕 CREATE,—,
+gutbasket-prebiotic-brief.docx,1.3 Who,custom.who_no,list.single_line,🆕 CREATE,—,
+gutbasket-prebiotic-brief.docx,1.4 Vs alternative,custom.diff_eyebrow,single_line,🆕 CREATE,—,
+gutbasket-prebiotic-brief.docx,1.4 Vs alternative,custom.diff_heading,multi_line,🆕 CREATE,—,
+gutbasket-prebiotic-brief.docx,1.4 Vs alternative,custom.diff_left_label,single_line,🆕 CREATE,—,Same conceptual as `compare_left_label` from fermentation-kit brief. Recommend canonical name `compare_left_label` for both.
+gutbasket-prebiotic-brief.docx,1.4 Vs alternative,custom.diff_right_label,single_line,🆕 CREATE,—,Same — recommend `compare_right_label`.
+gutbasket-prebiotic-brief.docx,1.4 Vs alternative,custom.featured_comparison_rows,list.metaobject_ref,✓ KEEP,custom.featured_comparison_rows → kit_comparison_row,
+gutbasket-prebiotic-brief.docx,1.5 Consume,custom.consume_eyebrow,single_line,🆕 CREATE,—,
+gutbasket-prebiotic-brief.docx,1.5 Consume,custom.consume_heading,multi_line,🆕 CREATE,—,
+gutbasket-prebiotic-brief.docx,1.5 Consume,custom.featured_steps,list.metaobject_ref,✓ KEEP,custom.featured_steps → kit_step,
+gutbasket-prebiotic-brief.docx,1.5 Consume,custom.consume_tips,list.single_line,🆕 CREATE,—,Or reuse `benefits_items`/`activity_items` if context fits.
+gutbasket-prebiotic-brief.docx,1.6 Timeline,custom.timeline_eyebrow,single_line,🆕 CREATE,—,
+gutbasket-prebiotic-brief.docx,1.6 Timeline,custom.timeline_heading,multi_line,🆕 CREATE,—,Conceptually same as `timeline_h` in fermentation-kit brief — canonical name TBD.
+gutbasket-prebiotic-brief.docx,1.6 Timeline,custom.featured_timeline_steps,list.metaobject_ref,✓ KEEP,custom.featured_timeline_steps → kit_timeline_step,
+gutbasket-prebiotic-brief.docx,1.7 Ingredients,custom.pd_eyebrow,single_line,🆕 CREATE,—,
+gutbasket-prebiotic-brief.docx,1.7 Ingredients,custom.pd_heading,multi_line,🆕 CREATE,—,
+gutbasket-prebiotic-brief.docx,1.7 Ingredients,custom.featured_components,list.metaobject_ref,✓ KEEP,custom.featured_components → kit_component,
+gutbasket-prebiotic-brief.docx,1.7 Ingredients,custom.pd_source_icon,single_line,🔁 REUSE OBJ,custom.featured_science_cards → kit_science_card,"Roll pd_source_* fields into one kit_science_card entry (name, image, what_it_does=source story, why_it_matters, chip=cert)."
+gutbasket-prebiotic-brief.docx,1.7 Ingredients,custom.pd_source_image,file_ref (Image),🔁 REUSE OBJ,kit_science_card.image,See above.
+gutbasket-prebiotic-brief.docx,1.7 Ingredients,custom.pd_source_name,single_line,🔁 REUSE OBJ,kit_science_card.name,See above.
+gutbasket-prebiotic-brief.docx,1.7 Ingredients,custom.pd_source_desc,multi_line,🔁 REUSE OBJ,kit_science_card.what_it_does,See above.
+gutbasket-prebiotic-brief.docx,1.7 Ingredients,custom.pd_certifications,list.single_line,🆕 CREATE,—,Or reuse `hero_trust_strip`.
+gutbasket-prebiotic-brief.docx,1.8 FAQs,custom.faq_eyebrow,single_line,🆕 CREATE,—,
+gutbasket-prebiotic-brief.docx,1.8 FAQs,custom.faq_heading,multi_line,🆕 CREATE,—,Same conceptual as `faq_h` — recommend canonical `faq_h`.
+gutbasket-prebiotic-brief.docx,1.8 FAQs,custom.featured_faqs,list.metaobject_ref,✓ KEEP,custom.featured_faqs → kit_faq,
+gutbasket-prebiotic-brief.docx,1.9 UGC,custom.ugc_eyebrow,single_line,🆕 CREATE,—,
+gutbasket-prebiotic-brief.docx,1.9 UGC,custom.ugc_heading,multi_line,🆕 CREATE,—,Same conceptual as `reviews_h` — recommend canonical.
+gutbasket-prebiotic-brief.docx,1.9 UGC,custom.featured_reviews,list.metaobject_ref,✓ KEEP,custom.featured_reviews → kit_review,
+gutbasket-prebiotic-brief.docx,1.10 Journey,custom.journey_eyebrow,single_line,🆕 CREATE,—,
+gutbasket-prebiotic-brief.docx,1.10 Journey,custom.journey_heading,multi_line,🆕 CREATE,—,
+gutbasket-prebiotic-brief.docx,1.10 Journey,custom.journey_sub,multi_line,🆕 CREATE,—,
+gutbasket-prebiotic-brief.docx,1.10 Journey,custom.journey_cards,list.metaobject_ref → prebiotic_journey_card (new),🔁 REUSE OBJ,custom.featured_timeline_steps → kit_timeline_step,"Brief proposed new metaobject. kit_timeline_step has the same shape (period_label, heading, description) — reuse it for the journey cards."
+gutbasket-prebiotic-brief.docx,1.11 SEO,custom.seo_title_override,single_line,✓ KEEP,custom.seo_title_override,
+gutbasket-prebiotic-brief.docx,1.11 SEO,custom.seo_description_override,multi_line,✓ KEEP,custom.seo_description_override,
