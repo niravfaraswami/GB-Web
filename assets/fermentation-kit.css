@@ -114,6 +114,10 @@
 .pdp-hero .benefit-item { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; color: var(--gb-text); line-height: 1.4; }
 .pdp-hero .benefit-icon { flex-shrink: 0; width: 24px; height: 24px; border-radius: 6px; background: var(--kit-color-soft); display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 800; color: var(--kit-color); }
 .pdp-hero .benefit-icon:has(.kit-icon-svg, .kit-icon-img) { padding: 0; }
+.pdp-hero .benefit-icon .kit-icon-svg { display: contents; }
+.pdp-hero .benefit-icon .kit-icon-img { width: 100%; height: 100%; object-fit: contain; display: block; }
+/* Hide the raster fallback once leo-pdp.js has injected SVG content */
+.pdp-hero .benefit-icon:has(.kit-icon-svg svg) .kit-icon-img { display: none; }
 
 /* ========== KIT ICON HELPERS ==========
    <span class="kit-icon-mask"> for SVG — adopts parent's `color` via currentColor.

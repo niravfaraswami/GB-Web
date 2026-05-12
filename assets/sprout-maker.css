@@ -229,9 +229,13 @@
   background: transparent;
   padding: 0;
 }
-.pdp-hero .benefit-icon--img img {
-  width: 100%; height: 100%; object-fit: contain;
+.pdp-hero .benefit-icon--img img,
+.pdp-hero .benefit-icon--img .kit-icon-svg svg {
+  width: 100%; height: 100%; object-fit: contain; display: block;
 }
+.pdp-hero .benefit-icon--img .kit-icon-svg { display: contents; }
+/* Hide the raster fallback once leo-pdp.js has injected SVG content */
+.pdp-hero .benefit-icon--img:has(.kit-icon-svg svg) .kit-icon-img { display: none; }
 
 /* size selector (replaces variant pack chooser) */
 .pdp-hero .variant-block { margin-bottom: 24px; }
