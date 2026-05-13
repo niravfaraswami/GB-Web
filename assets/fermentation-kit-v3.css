@@ -53,7 +53,7 @@
 .ferment-pdp .fkv3-airlock-section .ag-grid--single {
   grid-template-columns: 1fr !important;
   max-width: 880px;
-  margin: 0 auto;
+  margin: 0;
 }
 .ferment-pdp .fkv3-airlock-section--single .ag-grid--single .ag-card {
   width: 100%;
@@ -178,4 +178,122 @@
   font-size: 12px;
   color: var(--text-muted, #5C4D3F);
   text-align: center;
+}
+
+/* ============================================================
+ * Tweak 3 — per-section spacing controls (Theme Editor)
+ * Each fkv3-*-wrap div carries CSS custom properties emitted by
+ * snippets/fkv3-section-attrs.liquid. Defaults of 0 mean "no
+ * extra spacing" — existing in-section padding is preserved.
+ * ============================================================ */
+.ferment-pdp[class*="fkv3-"][class*="-wrap"],
+.ferment-pdp.fkv3-hero-wrap,
+.ferment-pdp.fkv3-kit-switcher-wrap,
+.ferment-pdp.fkv3-trust-row-wrap,
+.ferment-pdp.fkv3-how-make-wrap,
+.ferment-pdp.fkv3-myth-wrap,
+.ferment-pdp.fkv3-outcomes-wrap,
+.ferment-pdp.fkv3-reels-wrap,
+.ferment-pdp.fkv3-box-wrap,
+.ferment-pdp.fkv3-airlock-wrap,
+.ferment-pdp.fkv3-reviews-wrap,
+.ferment-pdp.fkv3-timeline-wrap,
+.ferment-pdp.fkv3-itk-wrap,
+.ferment-pdp.fkv3-zoe-wrap,
+.ferment-pdp.fkv3-eat-wrap,
+.ferment-pdp.fkv3-recipes-wrap,
+.ferment-pdp.fkv3-faq-wrap,
+.ferment-pdp.fkv3-cross-wrap,
+.ferment-pdp.fkv3-judgeme-wrap {
+  padding-top: var(--fkv3-pad-top-d, 0px);
+  padding-bottom: var(--fkv3-pad-bot-d, 0px);
+  margin-top: var(--fkv3-mar-top-d, 0px);
+  margin-bottom: var(--fkv3-mar-bot-d, 0px);
+}
+@media (max-width: 767px) {
+  .ferment-pdp[class*="fkv3-"][class*="-wrap"],
+  .ferment-pdp.fkv3-hero-wrap,
+  .ferment-pdp.fkv3-kit-switcher-wrap,
+  .ferment-pdp.fkv3-trust-row-wrap,
+  .ferment-pdp.fkv3-how-make-wrap,
+  .ferment-pdp.fkv3-myth-wrap,
+  .ferment-pdp.fkv3-outcomes-wrap,
+  .ferment-pdp.fkv3-reels-wrap,
+  .ferment-pdp.fkv3-box-wrap,
+  .ferment-pdp.fkv3-airlock-wrap,
+  .ferment-pdp.fkv3-reviews-wrap,
+  .ferment-pdp.fkv3-timeline-wrap,
+  .ferment-pdp.fkv3-itk-wrap,
+  .ferment-pdp.fkv3-zoe-wrap,
+  .ferment-pdp.fkv3-eat-wrap,
+  .ferment-pdp.fkv3-recipes-wrap,
+  .ferment-pdp.fkv3-faq-wrap,
+  .ferment-pdp.fkv3-cross-wrap,
+  .ferment-pdp.fkv3-judgeme-wrap {
+    padding-top: var(--fkv3-pad-top-m, 0px);
+    padding-bottom: var(--fkv3-pad-bot-m, 0px);
+    margin-top: var(--fkv3-mar-top-m, 0px);
+    margin-bottom: var(--fkv3-mar-bot-m, 0px);
+  }
+}
+
+/* ============================================================
+ * Tweak 4 — per-section typography controls (Theme Editor)
+ * Override only when the CSS var is set (snippet emits the var
+ * only when > 0). Targets the standard section-header structure
+ * plus body copy.
+ * ============================================================ */
+.ferment-pdp [class^="fkv3-"][class$="-wrap"] .eyebrow,
+.ferment-pdp [class*="fkv3-"][class*="-wrap"] .eyebrow {
+  font-size: var(--fkv3-eyebrow-size-d, inherit);
+}
+.ferment-pdp [class*="fkv3-"][class*="-wrap"] .section-header h2,
+.ferment-pdp [class*="fkv3-"][class*="-wrap"] h2 {
+  font-size: var(--fkv3-heading-size-d, inherit);
+}
+.ferment-pdp [class*="fkv3-"][class*="-wrap"] .section-header p,
+.ferment-pdp [class*="fkv3-"][class*="-wrap"] .ht-sub,
+.ferment-pdp [class*="fkv3-"][class*="-wrap"] .myth-header p {
+  font-size: var(--fkv3-sub-size-d, inherit);
+}
+@media (max-width: 767px) {
+  .ferment-pdp [class*="fkv3-"][class*="-wrap"] .eyebrow {
+    font-size: var(--fkv3-eyebrow-size-m, inherit);
+  }
+  .ferment-pdp [class*="fkv3-"][class*="-wrap"] .section-header h2,
+  .ferment-pdp [class*="fkv3-"][class*="-wrap"] h2 {
+    font-size: var(--fkv3-heading-size-m, inherit);
+  }
+  .ferment-pdp [class*="fkv3-"][class*="-wrap"] .section-header p,
+  .ferment-pdp [class*="fkv3-"][class*="-wrap"] .ht-sub,
+  .ferment-pdp [class*="fkv3-"][class*="-wrap"] .myth-header p {
+    font-size: var(--fkv3-sub-size-m, inherit);
+  }
+}
+
+/* ============================================================
+ * Tweak 5 — mobile carousel left padding
+ * Horizontal-scroll card lists need first-card breathing room
+ * on mobile so the first card isn't flush to the viewport edge.
+ * ============================================================ */
+@media (max-width: 767px) {
+  .ferment-pdp .reels-grid,
+  .ferment-pdp .eat-grid,
+  .ferment-pdp .ht-timeline,
+  .ferment-pdp .qb-grid,
+  .ferment-pdp .reviews-grid,
+  .ferment-pdp .cross-grid,
+  .ferment-pdp .recipe-tags,
+  .ferment-pdp .ag-grid {
+    padding-left: 24px;
+    padding-right: 24px;
+    box-sizing: border-box;
+  }
+  /* When a grid scrolls horizontally, ensure cards don't get clipped */
+  .ferment-pdp .reels-grid,
+  .ferment-pdp .eat-grid,
+  .ferment-pdp .qb-grid,
+  .ferment-pdp .recipe-tags {
+    scroll-padding-left: 24px;
+  }
 }

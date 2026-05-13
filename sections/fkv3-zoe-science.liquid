@@ -8,9 +8,9 @@
   assign science_stat_blocks = section.blocks | where: 'type', 'science_stat'
 -%}
 {%- if mf_science_stats != blank or science_stat_blocks.size > 0 -%}
-  <div data-kit="fermentation" class="ferment-pdp fkv3-zoe-wrap">
+  <div data-kit="fermentation" class="ferment-pdp fkv3-zoe-wrap" {%- render 'fkv3-section-attrs' -%}>
     {%- render 'fkv3-color-cascade' -%}
-    <section class="zoe-section" style="background:{{ section.settings.section_bg }}">
+    <section class="zoe-section">
       <div class="container">
         <div class="section-header centered">
           <div class="eyebrow">{{ section.settings.zoe_eyebrow }}</div>
@@ -49,7 +49,25 @@
     { "type": "text", "id": "zoe_heading_em", "label": "Heading (em)", "default": "FOR YOU" },
     { "type": "richtext", "id": "zoe_caption", "label": "Caption (optional)" },
     { "type": "textarea", "id": "zoe_disclaimer", "label": "Disclaimer (optional)" }
-  ],
+  ,
+    { "type": "header", "content": "Spacing — desktop" },
+    { "type": "range", "id": "pad_top_d", "label": "Padding top (px)", "min": 0, "max": 200, "step": 4, "default": 0 },
+    { "type": "range", "id": "pad_bot_d", "label": "Padding bottom (px)", "min": 0, "max": 200, "step": 4, "default": 0 },
+    { "type": "range", "id": "mar_top_d", "label": "Margin top (px)", "min": 0, "max": 100, "step": 4, "default": 0 },
+    { "type": "range", "id": "mar_bot_d", "label": "Margin bottom (px)", "min": 0, "max": 100, "step": 4, "default": 0 },
+    { "type": "header", "content": "Spacing — mobile" },
+    { "type": "range", "id": "pad_top_m", "label": "Padding top (px)", "min": 0, "max": 120, "step": 4, "default": 0 },
+    { "type": "range", "id": "pad_bot_m", "label": "Padding bottom (px)", "min": 0, "max": 120, "step": 4, "default": 0 },
+    { "type": "range", "id": "mar_top_m", "label": "Margin top (px)", "min": 0, "max": 80, "step": 4, "default": 0 },
+    { "type": "range", "id": "mar_bot_m", "label": "Margin bottom (px)", "min": 0, "max": 80, "step": 4, "default": 0 },
+    { "type": "header", "content": "Typography — desktop" },
+    { "type": "range", "id": "eyebrow_size_d", "label": "Eyebrow size (px)", "min": 0, "max": 28, "step": 1, "default": 0 },
+    { "type": "range", "id": "heading_size_d", "label": "Heading size (px)", "min": 0, "max": 80, "step": 2, "default": 0 },
+    { "type": "range", "id": "sub_size_d", "label": "Sub-heading / body size (px)", "min": 0, "max": 28, "step": 1, "default": 0 },
+    { "type": "header", "content": "Typography — mobile" },
+    { "type": "range", "id": "eyebrow_size_m", "label": "Eyebrow size (px)", "min": 0, "max": 22, "step": 1, "default": 0 },
+    { "type": "range", "id": "heading_size_m", "label": "Heading size (px)", "min": 0, "max": 60, "step": 2, "default": 0 },
+    { "type": "range", "id": "sub_size_m", "label": "Sub-heading / body size (px)", "min": 0, "max": 22, "step": 1, "default": 0 }],
   "blocks": [
     { "type": "science_stat", "name": "Science stat", "limit": 6, "settings": [
       { "type": "text", "id": "icon", "label": "Icon (emoji)", "default": "🌟" },
