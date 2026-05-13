@@ -1,0 +1,37 @@
+{%- liquid
+  assign p = product
+  assign review_count = p.metafields.custom.review_count | default: 0
+-%}
+{%- if section.settings.show_judgeme -%}
+  <div class="ferment-pdp fkv3-judgeme-wrap">
+    {%- render 'fkv3-color-cascade' -%}
+    <section class="judgeme-section" id="judgeme-reviews" style="background:{{ section.settings.section_bg }}">
+      <div class="container">
+        <div class="section-header centered">
+          <div class="eyebrow">{{ section.settings.judgeme_eyebrow }}</div>
+          <h2>{% if review_count > 0 %}{{ review_count }} {% endif %}{{ section.settings.judgeme_heading }} <em>{{ section.settings.judgeme_heading_em }}</em></h2>
+        </div>
+        {%- if section.settings.judgeme_embed != blank -%}{{ section.settings.judgeme_embed }}
+        {%- else -%}<div class="jdgm-widget jdgm-review-widget" data-id="{{ p.id }}"></div>{%- endif -%}
+      </div>
+    </section>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "FK v3 — Judge.me",
+  "tag": "section",
+  "class": "fkv3-judgeme-wrap",
+  "settings": [
+    { "type": "checkbox", "id": "show_judgeme", "label": "Show Judge.me section", "default": true },
+    { "type": "color", "id": "section_bg", "label": "Section background", "default": "#ffffff" },
+    { "type": "text", "id": "judgeme_eyebrow", "label": "Eyebrow", "default": "ALL REVIEWS" },
+    { "type": "text", "id": "judgeme_heading", "label": "Heading", "default": "VERIFIED" },
+    { "type": "text", "id": "judgeme_heading_em", "label": "Heading (em)", "default": "REVIEWS" },
+    { "type": "html", "id": "judgeme_embed", "label": "Custom embed (optional)" }
+  ],
+  "presets": [ { "name": "FK v3 — Judge.me" } ],
+  "enabled_on": { "templates": ["product"] }
+}
+{% endschema %}

@@ -1,0 +1,60 @@
+{%- liquid
+  assign p = product
+  assign mf_faqs = p.metafields.custom.featured_faqs.value
+  assign mf_faq_h = p.metafields.custom.faq_h
+  assign mf_faq_eyebrow = p.metafields.custom.faq_eyebrow
+  assign faq_blocks = section.blocks | where: 'type', 'faq'
+-%}
+{%- if mf_faqs != blank or faq_blocks.size > 0 -%}
+  <div class="ferment-pdp fkv3-faq-wrap">
+    {%- render 'fkv3-color-cascade' -%}
+    <section class="faq-section" style="background:{{ section.settings.section_bg }}">
+      <div class="container">
+        <div class="section-header centered">
+          <div class="eyebrow">{{ mf_faq_eyebrow | default: section.settings.faq_eyebrow }}</div>
+          {%- if mf_faq_h != blank -%}<h2>{{ mf_faq_h }}</h2>
+          {%- else -%}<h2>{{ section.settings.faq_heading }} <em>{{ section.settings.faq_heading_em }}</em></h2>{%- endif -%}
+        </div>
+        <div class="faq-list">
+          {%- if mf_faqs != blank -%}
+            {%- for f in mf_faqs -%}
+              <div class="faq-item {% if forloop.first %}open{% endif %}" data-faq>
+                <div class="faq-q"><span>{{ f.question }}</span><span class="faq-toggle">+</span></div>
+                <div class="faq-a">{{ f.answer | newline_to_br }}</div>
+              </div>
+            {%- endfor -%}
+          {%- else -%}
+            {%- for block in faq_blocks -%}
+              <div class="faq-item {% if forloop.first %}open{% endif %}" data-faq {{ block.shopify_attributes }}>
+                <div class="faq-q"><span>{{ block.settings.question }}</span><span class="faq-toggle">+</span></div>
+                <div class="faq-a">{{ block.settings.answer }}</div>
+              </div>
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+      </div>
+    </section>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "FK v3 — FAQ",
+  "tag": "section",
+  "class": "fkv3-faq-wrap",
+  "settings": [
+    { "type": "color", "id": "section_bg", "label": "Section background", "default": "#ffffff" },
+    { "type": "text", "id": "faq_eyebrow", "label": "Eyebrow", "default": "QUESTIONS?" },
+    { "type": "text", "id": "faq_heading", "label": "Heading", "default": "COMMON" },
+    { "type": "text", "id": "faq_heading_em", "label": "Heading (em)", "default": "QUESTIONS" }
+  ],
+  "blocks": [
+    { "type": "faq", "name": "FAQ", "limit": 20, "settings": [
+      { "type": "text", "id": "question", "label": "Question" },
+      { "type": "richtext", "id": "answer", "label": "Answer" }
+    ]}
+  ],
+  "presets": [ { "name": "FK v3 — FAQ" } ],
+  "enabled_on": { "templates": ["product"] }
+}
+{% endschema %}

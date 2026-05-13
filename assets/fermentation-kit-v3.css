@@ -1,0 +1,181 @@
+/* ============================================================
+ * fermentation-kit-v3.css
+ * Stacks on top of assets/fermentation-kit.css (loaded by fkv3-hero).
+ * Contains:
+ *  1. How-to-make: desktop column-height parity (video <-> steps)
+ *  2. Airlock spotlight: 1-card full-width variant
+ *  3. Small additions used by v3 (refill bullets, myth/fact pills,
+ *     coupon copy button) — not present in the original stylesheet.
+ * ============================================================ */
+
+/* ============================================================
+ * Tweak 1 — How to Make (desktop)
+ * Video and Steps columns share a row; force equal heights.
+ * Mobile stays single-column (no change).
+ * ============================================================ */
+@media (min-width: 768px) {
+  .ferment-pdp .fkv3-how-make-section .how-make-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    align-items: stretch;
+  }
+  .ferment-pdp .fkv3-how-make-section .hm-video-hero {
+    height: 100%;
+    align-self: stretch;
+  }
+  .ferment-pdp .fkv3-how-make-section .hm-video-hero video,
+  .ferment-pdp .fkv3-how-make-section .hm-video-hero img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+  }
+  .ferment-pdp .fkv3-how-make-section .hm-steps {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 16px;
+    height: 100%;
+    align-self: stretch;
+  }
+  .ferment-pdp .fkv3-how-make-section .hm-step {
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+  }
+}
+
+/* ============================================================
+ * Tweak 2 — Airlock spotlight, 1-card variant
+ * When only one science card is present, make it full-width.
+ * Default (.ag-grid) keeps the existing 2-column layout.
+ * ============================================================ */
+.ferment-pdp .fkv3-airlock-section .ag-grid--single {
+  grid-template-columns: 1fr !important;
+  max-width: 880px;
+  margin: 0 auto;
+}
+.ferment-pdp .fkv3-airlock-section--single .ag-grid--single .ag-card {
+  width: 100%;
+}
+@media (min-width: 768px) {
+  .ferment-pdp .fkv3-airlock-section--single .ag-grid--single .ag-card {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 32px;
+    align-items: center;
+  }
+  .ferment-pdp .fkv3-airlock-section--single .ag-grid--single .ag-image {
+    height: 100%;
+  }
+  .ferment-pdp .fkv3-airlock-section--single .ag-grid--single .ag-image img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 16px;
+  }
+}
+
+/* ============================================================
+ * v3 additions — not in the original stylesheet
+ * ============================================================ */
+
+/* Myth/fact pills overlaid on compare images */
+.ferment-pdp .compare-image { position: relative; }
+.ferment-pdp .myth-pill {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.ferment-pdp .myth-pill--myth { background: rgba(31, 31, 29, 0.85); color: #FFF6F2; }
+.ferment-pdp .myth-pill--fact { background: var(--kit-color, #FF7300); color: #fff; }
+
+/* Refill note bullets */
+.ferment-pdp .irn-bullets {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0;
+}
+.ferment-pdp .irn-bullets li {
+  position: relative;
+  padding-left: 20px;
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: var(--text-muted, #5C4D3F);
+}
+.ferment-pdp .irn-bullets li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--kit-color, #FF7300);
+  font-weight: 700;
+}
+.ferment-pdp .itk-refill-note--no-image .irn-icon {
+  background: var(--kit-color-soft, #FFE4D1);
+  border-radius: 999px;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+}
+.ferment-pdp .irn-icon img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+/* Coupon code copy button */
+.ferment-pdp .coupon-bar [data-coupon-code] {
+  cursor: pointer;
+  font-family: inherit;
+  border: none;
+  background: rgba(255, 255, 255, 0.2);
+  color: inherit;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  transition: background 120ms ease;
+}
+.ferment-pdp .coupon-bar [data-coupon-code]:hover { background: rgba(255, 255, 255, 0.35); }
+.ferment-pdp .coupon-bar [data-coupon-code].is-copied { background: rgba(255, 255, 255, 0.5); }
+.ferment-pdp .coupon-bar [data-coupon-code].is-copied::after { content: ' ✓'; }
+
+/* Best-for chips inside hero accordion */
+.ferment-pdp .hero-best-for {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+.ferment-pdp .hero-best-chip {
+  display: inline-block;
+  padding: 4px 10px;
+  background: var(--kit-color-soft, #FFE4D1);
+  color: var(--kit-color-dark, #E66800);
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: 999px;
+}
+
+/* How-make help note */
+.ferment-pdp .hm-help-note {
+  margin-top: 24px;
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  color: var(--text-muted, #5C4D3F);
+  text-align: center;
+}

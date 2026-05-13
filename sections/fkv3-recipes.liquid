@@ -1,0 +1,53 @@
+{%- liquid
+  assign p = product
+  assign mf_recipe_tags = p.metafields.custom.featured_recipe_tags.value
+  assign recipe_count = p.metafields.custom.recipe_count
+  assign recipe_banner = p.metafields.custom.recipe_banner_image
+  assign recipe_h_label = p.metafields.custom.recipe_h_label | default: p.metafields.custom.short_name
+  assign recipe_h_text = p.metafields.custom.recipe_h_text | default: 'RECIPES INSIDE'
+  assign recipe_tag_blocks = section.blocks | where: 'type', 'recipe_tag'
+-%}
+{%- if mf_recipe_tags != blank or recipe_tag_blocks.size > 0 or recipe_count != blank -%}
+  <div class="ferment-pdp fkv3-recipes-wrap">
+    {%- render 'fkv3-color-cascade' -%}
+    <section class="recipes-section" style="background:{{ section.settings.section_bg }}">
+      <div class="container">
+        <div class="section-header">
+          <div class="eyebrow">{{ section.settings.recipes_eyebrow }}</div>
+          <div class="recipes-h-row">
+            {%- if recipe_count != blank -%}<div class="recipes-num">{{ recipe_count }}</div>{%- endif -%}
+            <div class="recipes-h-text"><em>{{ recipe_h_label }}</em> <span>{{ recipe_h_text }}</span></div>
+          </div>
+        </div>
+        {%- if recipe_banner != blank -%}<div class="recipes-banner"><img src="{{ recipe_banner | image_url: width: 1600 }}" alt="Recipes" loading="lazy" width="1600" height="700"></div>{%- endif -%}
+        <div class="recipe-tags">
+          {%- if mf_recipe_tags != blank -%}
+            {%- for t in mf_recipe_tags -%}<span class="recipe-tag"><span class="dot"></span>{{ t.emoji }} {{ t.name }}</span>{%- endfor -%}
+          {%- else -%}
+            {%- for block in recipe_tag_blocks -%}<span class="recipe-tag" {{ block.shopify_attributes }}><span class="dot"></span>{{ block.settings.emoji }} {{ block.settings.name }}</span>{%- endfor -%}
+          {%- endif -%}
+        </div>
+      </div>
+    </section>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "FK v3 — Recipes",
+  "tag": "section",
+  "class": "fkv3-recipes-wrap",
+  "settings": [
+    { "type": "color", "id": "section_bg", "label": "Section background", "default": "#ffffff" },
+    { "type": "text", "id": "recipes_eyebrow", "label": "Eyebrow", "default": "ONE KIT. ENDLESS VARIETY." }
+  ],
+  "blocks": [
+    { "type": "recipe_tag", "name": "Recipe tag", "limit": 12, "settings": [
+      { "type": "text", "id": "emoji", "label": "Emoji" },
+      { "type": "text", "id": "name", "label": "Name" }
+    ]}
+  ],
+  "presets": [ { "name": "FK v3 — Recipes" } ],
+  "enabled_on": { "templates": ["product"] }
+}
+{% endschema %}

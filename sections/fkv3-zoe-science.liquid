@@ -1,0 +1,64 @@
+{%- liquid
+  assign p = product
+  assign mf_science_stats = p.metafields.custom.featured_science_stats.value
+  assign science_caption = p.metafields.custom.science_stats_caption
+  assign science_disclaimer = p.metafields.custom.science_stats_disclaimer
+  assign mf_science_h1 = p.metafields.custom.science_h1
+  assign mf_science_h2 = p.metafields.custom.science_h2
+  assign science_stat_blocks = section.blocks | where: 'type', 'science_stat'
+-%}
+{%- if mf_science_stats != blank or science_stat_blocks.size > 0 -%}
+  <div class="ferment-pdp fkv3-zoe-wrap">
+    {%- render 'fkv3-color-cascade' -%}
+    <section class="zoe-section" style="background:{{ section.settings.section_bg }}">
+      <div class="container">
+        <div class="section-header centered">
+          <div class="eyebrow">{{ section.settings.zoe_eyebrow }}</div>
+          {%- if mf_science_h1 != blank or mf_science_h2 != blank -%}<h2>{{ mf_science_h1 }}<br><em>{{ mf_science_h2 }}</em></h2>
+          {%- else -%}<h2>{{ section.settings.zoe_heading }}<br><em>{{ section.settings.zoe_heading_em }}</em></h2>{%- endif -%}
+        </div>
+        <div class="zoe-grid">
+          {%- if mf_science_stats != blank -%}
+            {%- for s in mf_science_stats -%}
+              <div class="zoe-card"><div class="zoe-icon">{%- if s.icon != blank -%}{{ s.icon }}{%- endif -%}</div><div><div class="zoe-stat">{{ s.stat }}</div><div class="zoe-h">{{ s.heading }}</div><div class="zoe-d">{{ s.description }}</div></div></div>
+            {%- endfor -%}
+          {%- else -%}
+            {%- for block in science_stat_blocks -%}
+              <div class="zoe-card" {{ block.shopify_attributes }}><div class="zoe-icon">{{ block.settings.icon }}</div><div><div class="zoe-stat">{{ block.settings.stat }}</div><div class="zoe-h">{{ block.settings.heading }}</div><div class="zoe-d">{{ block.settings.description }}</div></div></div>
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+        {%- assign cap_text = science_caption | default: section.settings.zoe_caption -%}
+        {%- assign disc_text = science_disclaimer | default: section.settings.zoe_disclaimer -%}
+        {%- if cap_text != blank -%}<div class="zoe-caption">{{ cap_text }}</div>{%- endif -%}
+        {%- if disc_text != blank -%}<div class="zoe-disclaimer">{{ disc_text }}</div>{%- endif -%}
+      </div>
+    </section>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "FK v3 — Zoe Science",
+  "tag": "section",
+  "class": "fkv3-zoe-wrap",
+  "settings": [
+    { "type": "color", "id": "section_bg", "label": "Section background", "default": "#ffffff" },
+    { "type": "text", "id": "zoe_eyebrow", "label": "Eyebrow", "default": "THE SCIENCE" },
+    { "type": "text", "id": "zoe_heading", "label": "Heading", "default": "WHAT FERMENTED FOODS DO" },
+    { "type": "text", "id": "zoe_heading_em", "label": "Heading (em)", "default": "FOR YOU" },
+    { "type": "richtext", "id": "zoe_caption", "label": "Caption (optional)" },
+    { "type": "textarea", "id": "zoe_disclaimer", "label": "Disclaimer (optional)" }
+  ],
+  "blocks": [
+    { "type": "science_stat", "name": "Science stat", "limit": 6, "settings": [
+      { "type": "text", "id": "icon", "label": "Icon (emoji)", "default": "🌟" },
+      { "type": "text", "id": "stat", "label": "Stat", "default": "47%" },
+      { "type": "text", "id": "heading", "label": "Heading" },
+      { "type": "textarea", "id": "description", "label": "Description" }
+    ]}
+  ],
+  "presets": [ { "name": "FK v3 — Zoe Science" } ],
+  "enabled_on": { "templates": ["product"] }
+}
+{% endschema %}

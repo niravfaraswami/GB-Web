@@ -1,0 +1,21 @@
+{%- comment -%}
+  fkv3-jar-size-modal — jar size comparison modal.
+  Render once (typically from fkv3-hero). Opens from any [data-open-size-modal] button.
+{%- endcomment -%}
+{%- liquid
+  assign p = product
+  assign size_chart = p.metafields.custom.jar_size_chart_image | default: p.metafields.custom.size_chart_image
+  assign capacity_label = p.metafields.custom.jar_capacity | default: p.metafields.custom.capacity
+-%}
+{%- if size_chart != blank -%}
+  <div class="size-modal" id="jar-size-modal" data-size-modal>
+    <div class="size-modal-card">
+      <button type="button" class="size-modal-close" data-close-size-modal aria-label="Close">×</button>
+      <div class="size-modal-eyebrow">JAR SIZE COMPARISON</div>
+      <h3 class="size-modal-title">{{ capacity_label | default: p.title }}</h3>
+      <div class="size-modal-image">
+        <img src="{{ size_chart | image_url: width: 1200 }}" alt="Size chart" loading="lazy" width="1200" height="900">
+      </div>
+    </div>
+  </div>
+{%- endif -%}

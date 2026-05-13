@@ -1,0 +1,28 @@
+{
+  "sections": {
+    "kit-switcher": { "type": "fkv3-kit-switcher", "settings": {} },
+    "hero":         { "type": "fkv3-hero", "settings": {} },
+    "trust-row":    { "type": "fkv3-trust-row", "settings": {} },
+    "how-make":     { "type": "fkv3-how-make", "settings": {} },
+    "myth":         { "type": "fkv3-myth", "settings": {} },
+    "outcomes":     { "type": "fkv3-outcomes", "settings": {} },
+    "reels":        { "type": "fkv3-reels", "settings": {} },
+    "box":          { "type": "fkv3-box", "settings": {} },
+    "airlock":      { "type": "fkv3-airlock-spotlight", "settings": {} },
+    "reviews":      { "type": "fkv3-reviews", "settings": {} },
+    "timeline":     { "type": "fkv3-timeline", "settings": {} },
+    "itk":          { "type": "fkv3-itk", "settings": {} },
+    "zoe":          { "type": "fkv3-zoe-science", "settings": {} },
+    "eat":          { "type": "fkv3-eat", "settings": {} },
+    "recipes":      { "type": "fkv3-recipes", "settings": {} },
+    "faq":          { "type": "fkv3-faq", "settings": {} },
+    "cross-sell":   { "type": "fkv3-cross-sell", "settings": {} },
+    "judgeme":      { "type": "fkv3-judgeme", "settings": {} }
+  },
+  "order": [
+    "kit-switcher", "hero", "trust-row", "how-make", "myth",
+    "outcomes", "reels", "box", "airlock", "reviews",
+    "timeline", "itk", "zoe", "eat", "recipes",
+    "faq", "cross-sell", "judgeme"
+  ]
+}
