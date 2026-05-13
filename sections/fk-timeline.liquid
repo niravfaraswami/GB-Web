@@ -17,7 +17,7 @@
           {%- if mf_timeline_h != blank -%}
             <h2>{{ mf_timeline_h }}</h2>
           {%- else -%}
-            <h2>{{ section.settings.timeline_heading | default: 'YOUR GUT\'S' }}<br><em>{{ section.settings.timeline_heading_em | default: 'FIRST 30 DAYS.' }}</em></h2>
+            <h2>{{ section.settings.timeline_heading | default: "YOUR GUT'S" }}<br><em>{{ section.settings.timeline_heading_em | default: 'FIRST 30 DAYS.' }}</em></h2>
           {%- endif -%}
           {%- if mf_timeline_subtitle != blank -%}<p class="ht-sub">{{ mf_timeline_subtitle }}</p>{%- endif -%}
         </div>
