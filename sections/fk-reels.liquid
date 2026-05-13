@@ -1,0 +1,61 @@
+{%- liquid
+  assign p = product
+  assign mf_reels = p.metafields.custom.featured_reels.value
+  assign mf_ugc_eyebrow = p.metafields.custom.ugc_eyebrow
+  assign mf_reels_h = p.metafields.custom.reels_h
+-%}
+{%- if section.settings.show_section -%}
+  {%- if mf_reels == blank or mf_reels.size == 0 -%}
+    {%- comment -%} No reels — hide section {%- endcomment -%}
+  {%- else -%}
+    <section class="fk-page ferment-pdp fk-reels-section reels-section" style="background:{{ section.settings.section_bg }}">
+      {%- render 'fk-color-cascade' -%}
+      <div class="container">
+        <div class="reels-header">
+          {%- if mf_ugc_eyebrow != blank -%}<div class="eyebrow">{{ mf_ugc_eyebrow }}</div>{%- endif -%}
+          {%- if mf_reels_h != blank -%}
+            <h2>{{ mf_reels_h }}</h2>
+          {%- else -%}
+            <h2>{{ section.settings.reels_heading | default: 'Real People, Real Ferments,' }}<br><em>{{ section.settings.reels_heading_em | default: 'Real Magic' }}</em></h2>
+          {%- endif -%}
+        </div>
+        <div class="reels-grid">
+          {%- for r in mf_reels -%}
+            <div class="reel-tile">
+              {%- if r.video != blank -%}
+                {%- if r.video.sources or r.video.media_type == 'video' -%}
+                  {{ r.video | video_tag: image_size: '600x', controls: false, loop: true, muted: true, autoplay: true }}
+                {%- else -%}
+                  {%- assign reel_src = r.video.url | default: r.video.src -%}
+                  {%- if reel_src != blank -%}
+                    <video src="{{ reel_src }}" autoplay loop muted playsinline preload="metadata" style="width:100%;height:100%;object-fit:cover;"></video>
+                  {%- endif -%}
+                {%- endif -%}
+              {%- elsif r.poster != blank -%}
+                <img src="{{ r.poster | image_url: width: 600 }}" alt="{{ r.caption | escape }}" loading="lazy" width="600" height="1067">
+              {%- endif -%}
+              {%- if r.author_handle != blank -%}<span class="reels-handle">{{ r.author_handle }}</span>{%- endif -%}
+              {%- if r.caption != blank -%}<span class="reels-cap">{{ r.caption }}</span>{%- endif -%}
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "FK — Reels",
+  "tag": "section",
+  "class": "fk-reels-section",
+  "settings": [
+    { "type": "checkbox", "id": "show_section", "label": "Show section", "default": true },
+    { "type": "color", "id": "section_bg", "label": "Section background", "default": "#ffffff" },
+    { "type": "text", "id": "reels_heading", "label": "Heading fallback", "default": "Real People, Real Ferments," },
+    { "type": "text", "id": "reels_heading_em", "label": "Heading (em) fallback", "default": "Real Magic" }
+  ],
+  "presets": [ { "name": "FK — Reels" } ],
+  "enabled_on": { "templates": ["product"] }
+}
+{% endschema %}

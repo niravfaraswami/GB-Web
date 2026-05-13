@@ -1,0 +1,58 @@
+{%- liquid
+  assign p = product
+  assign mf_science_stats = p.metafields.custom.featured_science_stats.value
+  assign science_h1 = p.metafields.custom.science_h1
+  assign science_h2 = p.metafields.custom.science_h2
+  assign science_caption = p.metafields.custom.science_stats_caption
+  assign science_disclaimer = p.metafields.custom.science_stats_disclaimer
+-%}
+{%- if section.settings.show_section -%}
+  {%- if mf_science_stats == blank or mf_science_stats.size == 0 -%}
+    {%- comment -%} No science stats — hide section {%- endcomment -%}
+  {%- else -%}
+    <section class="fk-page ferment-pdp fk-zoe-science-section zoe-section" style="background:{{ section.settings.section_bg }}">
+      {%- render 'fk-color-cascade' -%}
+      <div class="container">
+        <div class="section-header centered">
+          <div class="eyebrow">{{ section.settings.zoe_eyebrow | default: 'THE SCIENCE' }}</div>
+          {%- if science_h1 != blank or science_h2 != blank -%}
+            <h2>{{ science_h1 }}<br><em>{{ science_h2 }}</em></h2>
+          {%- else -%}
+            <h2>{{ section.settings.zoe_heading | default: 'WHAT FERMENTED FOODS DO' }}<br><em>{{ section.settings.zoe_heading_em | default: 'FOR YOU' }}</em></h2>
+          {%- endif -%}
+        </div>
+        <div class="zoe-grid">
+          {%- for s in mf_science_stats -%}
+            <div class="zoe-card">
+              <div class="zoe-icon">{%- if s.icon != blank -%}{{ s.icon }}{%- endif -%}</div>
+              <div>
+                <div class="zoe-stat">{{ s.stat }}</div>
+                <div class="zoe-h">{{ s.heading }}</div>
+                <div class="zoe-d">{{ s.description }}</div>
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+        {%- if science_caption != blank -%}<div class="zoe-caption">{{ science_caption }}</div>{%- endif -%}
+        {%- if science_disclaimer != blank -%}<div class="zoe-disclaimer">{{ science_disclaimer }}</div>{%- endif -%}
+      </div>
+    </section>
+  {%- endif -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "FK — Zoe science",
+  "tag": "section",
+  "class": "fk-zoe-section",
+  "settings": [
+    { "type": "checkbox", "id": "show_section", "label": "Show section", "default": true },
+    { "type": "color", "id": "section_bg", "label": "Section background", "default": "#ffffff" },
+    { "type": "text", "id": "zoe_eyebrow", "label": "Eyebrow", "default": "THE SCIENCE" },
+    { "type": "text", "id": "zoe_heading", "label": "Heading fallback", "default": "WHAT FERMENTED FOODS DO" },
+    { "type": "text", "id": "zoe_heading_em", "label": "Heading (em) fallback", "default": "FOR YOU" }
+  ],
+  "presets": [ { "name": "FK — Zoe science" } ],
+  "enabled_on": { "templates": ["product"] }
+}
+{% endschema %}

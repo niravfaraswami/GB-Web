@@ -1,0 +1,56 @@
+{%- liquid
+  assign p = product
+  assign mf_recipe_tags = p.metafields.custom.featured_recipe_tags.value
+  assign recipe_count = p.metafields.custom.recipe_count
+  assign recipe_banner = p.metafields.custom.recipe_banner_image
+  assign recipe_h_label = p.metafields.custom.recipe_h_label | default: p.metafields.custom.short_name
+  assign recipe_h_text = p.metafields.custom.recipe_h_text | default: 'RECIPES INSIDE'
+-%}
+{%- if section.settings.show_section -%}
+  {%- if mf_recipe_tags == blank or mf_recipe_tags.size == 0 -%}
+    {%- if recipe_count == blank and recipe_banner == blank -%}
+      {%- comment -%} No recipe data — hide section {%- endcomment -%}
+    {%- endif -%}
+  {%- endif -%}
+  {%- if mf_recipe_tags != blank or recipe_count != blank or recipe_banner != blank -%}
+    <section class="fk-page ferment-pdp fk-recipes-section recipes-section" style="background:{{ section.settings.section_bg }}">
+      {%- render 'fk-color-cascade' -%}
+      <div class="container">
+        <div class="section-header">
+          <div class="eyebrow">{{ section.settings.recipes_eyebrow | default: 'ONE KIT. ENDLESS VARIETY.' }}</div>
+          <div class="recipes-h-row">
+            {%- if recipe_count != blank -%}<div class="recipes-num">{{ recipe_count }}</div>{%- endif -%}
+            <div class="recipes-h-text"><em>{{ recipe_h_label }}</em> <span>{{ recipe_h_text }}</span></div>
+          </div>
+        </div>
+        {%- if recipe_banner != blank -%}
+          <div class="recipes-banner">
+            <img src="{{ recipe_banner | image_url: width: 1600 }}" alt="Recipes" loading="lazy" width="1600" height="700">
+          </div>
+        {%- endif -%}
+        {%- if mf_recipe_tags != blank -%}
+          <div class="recipe-tags">
+            {%- for t in mf_recipe_tags -%}
+              <span class="recipe-tag"><span class="dot"></span>{{ t.emoji }} {{ t.name }}</span>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+    </section>
+  {%- endif -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "FK — Recipes",
+  "tag": "section",
+  "class": "fk-recipes-section",
+  "settings": [
+    { "type": "checkbox", "id": "show_section", "label": "Show section", "default": true },
+    { "type": "color", "id": "section_bg", "label": "Section background", "default": "#ffffff" },
+    { "type": "text", "id": "recipes_eyebrow", "label": "Eyebrow fallback", "default": "ONE KIT. ENDLESS VARIETY." }
+  ],
+  "presets": [ { "name": "FK — Recipes" } ],
+  "enabled_on": { "templates": ["product"] }
+}
+{% endschema %}

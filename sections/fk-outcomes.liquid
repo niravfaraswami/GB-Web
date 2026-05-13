@@ -1,0 +1,70 @@
+{%- liquid
+  assign p = product
+  assign mf_quick_bens = p.metafields.custom.featured_quick_benefits.value
+  assign mf_outcome_stats = p.metafields.custom.featured_outcomes_stats.value
+  assign mf_outcomes_h = p.metafields.custom.outcomes_h
+-%}
+{%- if section.settings.show_section -%}
+  {%- if mf_quick_bens == blank or mf_quick_bens.size == 0 -%}
+    {%- if mf_outcome_stats == blank or mf_outcome_stats.size == 0 -%}
+      {%- comment -%} No outcomes data — hide section {%- endcomment -%}
+    {%- endif -%}
+  {%- endif -%}
+  {%- if mf_quick_bens != blank or mf_outcome_stats != blank -%}
+    <section class="fk-page ferment-pdp fk-outcomes-section outcomes-section" style="background:{{ section.settings.section_bg }}">
+      {%- render 'fk-color-cascade' -%}
+      <div class="container">
+        <div class="section-header centered">
+          <div class="eyebrow">{{ section.settings.benefits_eyebrow | default: 'QUICK BENEFITS' }}</div>
+          {%- if mf_outcomes_h != blank -%}
+            <h2>{{ mf_outcomes_h }}</h2>
+          {%- else -%}
+            <h2>{{ section.settings.benefits_heading | default: 'WHY DAILY FERMENTS' }}<br><em>{{ section.settings.benefits_heading_em | default: 'CHANGE YOUR GUT.' }}</em></h2>
+          {%- endif -%}
+        </div>
+        {%- if mf_quick_bens != blank -%}
+          <div class="qb-grid">
+            {%- for qb in mf_quick_bens -%}
+              <div class="qb-card">
+                <div class="qb-icon">
+                  {%- if qb.icon != blank -%}
+                    {%- render 'kit_icon', icon: qb.icon, size: 56, alt: '', extra: 'qb-icon-img' -%}
+                  {%- endif -%}
+                </div>
+                <div class="qb-h">{{ qb.heading }}</div>
+                <div class="qb-d">{{ qb.description }}</div>
+              </div>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+        {%- if mf_outcome_stats != blank -%}
+          <div class="indians-strip">
+            {%- for s in mf_outcome_stats limit: 2 -%}
+              <div class="indians-cell {% if forloop.first %}left{% else %}right{% endif %}">
+                <div class="indians-stat">{{ s.value }}</div>
+                <div class="indians-cap">{{ s.caption }}</div>
+              </div>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+    </section>
+  {%- endif -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "FK — Outcomes",
+  "tag": "section",
+  "class": "fk-outcomes-section",
+  "settings": [
+    { "type": "checkbox", "id": "show_section", "label": "Show section", "default": true },
+    { "type": "color", "id": "section_bg", "label": "Section background", "default": "#ffffff" },
+    { "type": "text", "id": "benefits_eyebrow", "label": "Eyebrow", "default": "QUICK BENEFITS" },
+    { "type": "text", "id": "benefits_heading", "label": "Heading fallback", "default": "WHY DAILY FERMENTS" },
+    { "type": "text", "id": "benefits_heading_em", "label": "Heading (em) fallback", "default": "CHANGE YOUR GUT." }
+  ],
+  "presets": [ { "name": "FK — Outcomes" } ],
+  "enabled_on": { "templates": ["product"] }
+}
+{% endschema %}

@@ -1,0 +1,65 @@
+{%- liquid
+  assign p = product
+  assign mf_science_cards = p.metafields.custom.featured_science_cards.value
+  assign mf_airlock_h = p.metafields.custom.airlock_spotlight_h
+-%}
+{%- if section.settings.show_section -%}
+  {%- if mf_science_cards == blank or mf_science_cards.size == 0 -%}
+    {%- comment -%} No science cards — hide section {%- endcomment -%}
+  {%- else -%}
+    <section class="fk-page ferment-pdp fk-airlock-spotlight-section science-section airlock-spotlight-section" style="background:{{ section.settings.section_bg }}">
+      {%- render 'fk-color-cascade' -%}
+      <div class="container">
+        <div class="section-header">
+          <div class="eyebrow">{{ section.settings.science_eyebrow | default: 'SCIENCE-BACKED DESIGN' }}</div>
+          {%- if mf_airlock_h != blank -%}
+            <h2>{{ mf_airlock_h }}</h2>
+          {%- else -%}
+            <h2>{{ section.settings.science_heading | default: 'BUILT FOR' }}<br><em>{{ section.settings.science_heading_em | default: 'PERFECT' }}</em>{{ section.settings.science_heading_tail | default: ' FERMENTS.' }}</h2>
+          {%- endif -%}
+        </div>
+        <div class="ag-grid">
+          {%- for s in mf_science_cards -%}
+            <div class="ag-card">
+              <div class="ag-image">
+                {%- if s.image != blank -%}
+                  <img src="{{ s.image | image_url: width: 800 }}" alt="{{ s.name | escape }}" loading="lazy" width="800" height="500">
+                {%- endif -%}
+              </div>
+              <div class="ag-body">
+                <div class="ag-name">{{ s.name }}</div>
+                {%- if s.what_it_does != blank -%}
+                  <div class="ag-label">WHAT IT DOES</div>
+                  <div class="ag-text">{{ s.what_it_does }}</div>
+                {%- endif -%}
+                {%- if s.why_it_matters != blank -%}
+                  <div class="ag-label">WHY IT MATTERS</div>
+                  <div class="ag-text">{{ s.why_it_matters }}</div>
+                {%- endif -%}
+                {%- if s.chip != blank -%}<div class="ag-chip">{{ s.chip }}</div>{%- endif -%}
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "FK — Airlock spotlight",
+  "tag": "section",
+  "class": "fk-airlock-spotlight-section",
+  "settings": [
+    { "type": "checkbox", "id": "show_section", "label": "Show section", "default": true },
+    { "type": "color", "id": "section_bg", "label": "Section background", "default": "#ffffff" },
+    { "type": "text", "id": "science_eyebrow", "label": "Eyebrow", "default": "SCIENCE-BACKED DESIGN" },
+    { "type": "text", "id": "science_heading", "label": "Heading fallback", "default": "BUILT FOR" },
+    { "type": "text", "id": "science_heading_em", "label": "Heading (em) fallback", "default": "PERFECT" },
+    { "type": "text", "id": "science_heading_tail", "label": "Heading (tail) fallback", "default": " FERMENTS." }
+  ],
+  "presets": [ { "name": "FK — Airlock spotlight" } ],
+  "enabled_on": { "templates": ["product"] }
+}
+{% endschema %}
