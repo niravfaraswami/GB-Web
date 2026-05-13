@@ -5,7 +5,7 @@
   assign trust_blocks = section.blocks | where: 'type', 'trust_card'
 -%}
 {%- if mf_trust_cards != blank or trust_blocks.size > 0 -%}
-  <div class="ferment-pdp fkv3-trust-row-wrap">
+  <div data-kit="fermentation" class="ferment-pdp fkv3-trust-row-wrap">
     {%- render 'fkv3-color-cascade' -%}
     <section class="trust-row-section" style="background:{{ section.settings.section_bg }}">
       <div class="container">

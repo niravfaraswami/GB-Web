@@ -7,7 +7,7 @@
   assign timeline_blocks = section.blocks | where: 'type', 'timeline_step'
 -%}
 {%- if mf_timeline != blank or timeline_blocks.size > 0 -%}
-  <div class="ferment-pdp fkv3-timeline-wrap">
+  <div data-kit="fermentation" class="ferment-pdp fkv3-timeline-wrap">
     {%- render 'fkv3-color-cascade' -%}
     <section class="health-timeline-section" style="background:{{ section.settings.section_bg }}">
       <div class="container">

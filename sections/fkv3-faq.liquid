@@ -6,7 +6,7 @@
   assign faq_blocks = section.blocks | where: 'type', 'faq'
 -%}
 {%- if mf_faqs != blank or faq_blocks.size > 0 -%}
-  <div class="ferment-pdp fkv3-faq-wrap">
+  <div data-kit="fermentation" class="ferment-pdp fkv3-faq-wrap">
     {%- render 'fkv3-color-cascade' -%}
     <section class="faq-section" style="background:{{ section.settings.section_bg }}">
       <div class="container">

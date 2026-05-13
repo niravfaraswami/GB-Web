@@ -3,7 +3,7 @@
   assign review_count = p.metafields.custom.review_count | default: 0
 -%}
 {%- if section.settings.show_judgeme -%}
-  <div class="ferment-pdp fkv3-judgeme-wrap">
+  <div data-kit="fermentation" class="ferment-pdp fkv3-judgeme-wrap">
     {%- render 'fkv3-color-cascade' -%}
     <section class="judgeme-section" id="judgeme-reviews" style="background:{{ section.settings.section_bg }}">
       <div class="container">

@@ -8,7 +8,7 @@
   assign component_blocks = section.blocks | where: 'type', 'box_component'
 -%}
 {%- if mf_components != blank or component_blocks.size > 0 -%}
-  <div class="ferment-pdp fkv3-box-wrap">
+  <div data-kit="fermentation" class="ferment-pdp fkv3-box-wrap">
     {%- render 'fkv3-color-cascade' -%}
     <section class="box-section" style="background:{{ section.settings.section_bg }}">
       <div class="container">

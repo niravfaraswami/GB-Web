@@ -9,7 +9,7 @@
   assign how_video = mf_how_video | default: section.settings.how_video
 -%}
 {%- if mf_steps != blank or step_blocks.size > 0 -%}
-  <div class="ferment-pdp fkv3-how-make-wrap">
+  <div data-kit="fermentation" class="ferment-pdp fkv3-how-make-wrap">
     {%- render 'fkv3-color-cascade' -%}
     <section class="how-make-section section-accent fkv3-how-make-section" style="background:{{ section.settings.section_bg }}">
       <div class="container">

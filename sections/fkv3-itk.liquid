@@ -11,7 +11,7 @@
   assign consumable_blocks = section.blocks | where: 'type', 'consumable'
 -%}
 {%- if mf_consumables != blank or consumable_blocks.size > 0 -%}
-  <div class="ferment-pdp fkv3-itk-wrap">
+  <div data-kit="fermentation" class="ferment-pdp fkv3-itk-wrap">
     {%- render 'fkv3-color-cascade' -%}
     <section class="itk-section" style="background:{{ section.settings.section_bg }}">
       <div class="container">

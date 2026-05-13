@@ -6,7 +6,7 @@
   assign reel_blocks = section.blocks | where: 'type', 'reel'
 -%}
 {%- if mf_reels != blank or section.settings.quinn_embed != blank or reel_blocks.size > 0 -%}
-  <div class="ferment-pdp fkv3-reels-wrap">
+  <div data-kit="fermentation" class="ferment-pdp fkv3-reels-wrap">
     {%- render 'fkv3-color-cascade' -%}
     <section class="reels-section" style="background:{{ section.settings.section_bg }}">
       <div class="container">

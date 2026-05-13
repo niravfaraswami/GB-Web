@@ -7,7 +7,7 @@
   assign benefit_blocks = section.blocks | where: 'type', 'benefit'
 -%}
 {%- if mf_quick_bens != blank or benefit_blocks.size > 0 or mf_outcome_stats != blank -%}
-  <div class="ferment-pdp fkv3-outcomes-wrap">
+  <div data-kit="fermentation" class="ferment-pdp fkv3-outcomes-wrap">
     {%- render 'fkv3-color-cascade' -%}
     <section class="outcomes-section" style="background:{{ section.settings.section_bg }}">
       <div class="container">

@@ -23,7 +23,7 @@
   endif
 -%}
 {%- if card_count > 0 -%}
-  <div class="ferment-pdp fkv3-airlock-wrap">
+  <div data-kit="fermentation" class="ferment-pdp fkv3-airlock-wrap">
     {%- render 'fkv3-color-cascade' -%}
     <section class="science-section airlock-spotlight-section fkv3-airlock-section{% if single_card %} fkv3-airlock-section--single{% endif %}" style="background:{{ section.settings.section_bg }}">
       <div class="container">

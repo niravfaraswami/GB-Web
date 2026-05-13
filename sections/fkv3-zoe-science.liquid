@@ -8,7 +8,7 @@
   assign science_stat_blocks = section.blocks | where: 'type', 'science_stat'
 -%}
 {%- if mf_science_stats != blank or science_stat_blocks.size > 0 -%}
-  <div class="ferment-pdp fkv3-zoe-wrap">
+  <div data-kit="fermentation" class="ferment-pdp fkv3-zoe-wrap">
     {%- render 'fkv3-color-cascade' -%}
     <section class="zoe-section" style="background:{{ section.settings.section_bg }}">
       <div class="container">
