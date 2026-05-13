@@ -2,7 +2,33 @@
   "sections": {
     "kit-switcher": { "type": "fkv3-kit-switcher", "settings": {} },
     "hero":         { "type": "fkv3-hero", "settings": {} },
-    "trust-row":    { "type": "fkv3-trust-row", "settings": {} },
+    "trust-row":    {
+      "type": "fkv3-trust-row",
+      "settings": {},
+      "blocks": {
+        "tc-1": { "type": "trust_card", "settings": {
+          "icon": "👥",
+          "heading": "50K+ CUSTOMERS SERVED",
+          "description": "Trusted by Indian homes since 2020."
+        }},
+        "tc-2": { "type": "trust_card", "settings": {
+          "icon": "💬",
+          "heading": "FERMENTATION EXPERT HELP",
+          "description": "WhatsApp us a photo if your batch looks confusing."
+        }},
+        "tc-3": { "type": "trust_card", "settings": {
+          "icon": "🤝",
+          "heading": "DAMAGE SUPPORT INCLUDED",
+          "description": "We help quickly if anything arrives damaged."
+        }},
+        "tc-4": { "type": "trust_card", "settings": {
+          "icon": "🌿",
+          "heading": "HAND-PACKED",
+          "description": "Small-batch spice mix, made by people who drink kanji daily."
+        }}
+      },
+      "block_order": ["tc-1", "tc-2", "tc-3", "tc-4"]
+    },
     "how-make":     { "type": "fkv3-how-make", "settings": {} },
     "myth":         { "type": "fkv3-myth", "settings": {} },
     "outcomes":     { "type": "fkv3-outcomes", "settings": {} },
