@@ -6,15 +6,39 @@
   Render INSIDE the opening tag of every fkv3 section's outer wrapper:
     <div data-kit="fermentation" class="..." {%- render 'fkv3-section-attrs' -%}>
   CSS in fermentation-kit-v3.css consumes the variables.
+
+  Note: Theme Editor may save a slider as 0 from earlier schema
+  versions, and Liquid's `default:` does NOT replace 0 (only nil /
+  blank). Each value is explicitly coerced to its sensible default
+  when saved as 0 so text never renders at font-size:0.
 {%- endcomment -%}
 {%- liquid
   assign s = section.settings
   assign bg = s.section_bg | default: '#ffffff'
-  assign eyebrow_d = s.eyebrow_size_d | default: 11
-  assign eyebrow_m = s.eyebrow_size_m | default: 11
-  assign heading_d = s.heading_size_d | default: 44
-  assign heading_m = s.heading_size_m | default: 28
-  assign sub_d = s.sub_size_d | default: 16
-  assign sub_m = s.sub_size_m | default: 14
+
+  assign eyebrow_d = s.eyebrow_size_d
+  if eyebrow_d == blank or eyebrow_d == 0
+    assign eyebrow_d = 11
+  endif
+  assign eyebrow_m = s.eyebrow_size_m
+  if eyebrow_m == blank or eyebrow_m == 0
+    assign eyebrow_m = 11
+  endif
+  assign heading_d = s.heading_size_d
+  if heading_d == blank or heading_d == 0
+    assign heading_d = 44
+  endif
+  assign heading_m = s.heading_size_m
+  if heading_m == blank or heading_m == 0
+    assign heading_m = 28
+  endif
+  assign sub_d = s.sub_size_d
+  if sub_d == blank or sub_d == 0
+    assign sub_d = 16
+  endif
+  assign sub_m = s.sub_size_m
+  if sub_m == blank or sub_m == 0
+    assign sub_m = 14
+  endif
 -%}
  style="background: {{ bg }}; --fkv3-eyebrow-size-d: {{ eyebrow_d }}px; --fkv3-eyebrow-size-m: {{ eyebrow_m }}px; --fkv3-heading-size-d: {{ heading_d }}px; --fkv3-heading-size-m: {{ heading_m }}px; --fkv3-sub-size-d: {{ sub_d }}px; --fkv3-sub-size-m: {{ sub_m }}px;"
