@@ -1,0 +1,64 @@
+{%- liquid
+  assign p = product
+  assign mf_trust_cards = p.metafields.custom.featured_trust_cards.value
+  assign mf_trust_icons = p.metafields.custom.trust_strip_icons.value
+  assign trust_blocks = section.blocks | where: 'type', 'trust_card'
+-%}
+{%- if mf_trust_cards != blank or trust_blocks.size > 0 -%}
+  <div class="ferment-pdp fkv3-trust-row-wrap">
+    {%- render 'fkv3-color-cascade' -%}
+    <section class="trust-row-section" style="background:{{ section.settings.section_bg }}">
+      <div class="container">
+        <div class="trust-row-grid">
+          {%- if mf_trust_cards != blank -%}
+            {%- for tc in mf_trust_cards -%}
+              <div class="tr-card">
+                <div class="tr-icon">
+                  {%- if tc.icon != blank -%}{%- render 'kit_icon', icon: tc.icon, size: 44, alt: tc.heading, extra: 'tr-icon-img' -%}{%- endif -%}
+                </div>
+                <div class="tr-h">{{ tc.heading }}</div>
+                <div class="tr-d">{{ tc.description }}</div>
+              </div>
+            {%- endfor -%}
+          {%- else -%}
+            {%- for block in trust_blocks -%}
+              {%- assign target_idx = forloop.index0 -%}
+              {%- assign mf_icon = nil -%}
+              {%- if mf_trust_icons -%}{%- for ic in mf_trust_icons -%}{%- if forloop.index0 == target_idx -%}{%- assign mf_icon = ic -%}{%- endif -%}{%- endfor -%}{%- endif -%}
+              <div class="tr-card" {{ block.shopify_attributes }}>
+                <div class="tr-icon">
+                  {%- if mf_icon != blank -%}{%- render 'kit_icon', icon: mf_icon, size: 44, alt: block.settings.heading, extra: 'tr-icon-img' -%}
+                  {%- elsif block.settings.icon_image != blank -%}{%- render 'kit_icon', icon: block.settings.icon_image, size: 44, alt: block.settings.heading, extra: 'tr-icon-img' -%}
+                  {%- else -%}{{ block.settings.icon }}{%- endif -%}
+                </div>
+                <div class="tr-h">{{ block.settings.heading }}</div>
+                <div class="tr-d">{{ block.settings.description }}</div>
+              </div>
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+      </div>
+    </section>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "FK v3 — Trust row",
+  "tag": "section",
+  "class": "fkv3-trust-row-wrap",
+  "settings": [
+    { "type": "color", "id": "section_bg", "label": "Section background", "default": "#ffffff" }
+  ],
+  "blocks": [
+    { "type": "trust_card", "name": "Trust card", "limit": 8, "settings": [
+      { "type": "image_picker", "id": "icon_image", "label": "Icon image" },
+      { "type": "text", "id": "icon", "label": "Icon (emoji fallback)" },
+      { "type": "text", "id": "heading", "label": "Heading" },
+      { "type": "textarea", "id": "description", "label": "Description" }
+    ]}
+  ],
+  "presets": [ { "name": "FK v3 — Trust row" } ],
+  "enabled_on": { "templates": ["product"] }
+}
+{% endschema %}

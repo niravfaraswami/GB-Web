@@ -1,0 +1,59 @@
+{%- liquid
+  assign p = product
+  assign mf_timeline = p.metafields.custom.featured_timeline_steps.value
+  assign mf_timeline_eyebrow = p.metafields.custom.timeline_eyebrow
+  assign mf_timeline_h = p.metafields.custom.timeline_h
+  assign mf_timeline_subtitle = p.metafields.custom.timeline_subtitle
+  assign timeline_blocks = section.blocks | where: 'type', 'timeline_step'
+-%}
+{%- if mf_timeline != blank or timeline_blocks.size > 0 -%}
+  <div class="ferment-pdp fkv3-timeline-wrap">
+    {%- render 'fkv3-color-cascade' -%}
+    <section class="health-timeline-section" style="background:{{ section.settings.section_bg }}">
+      <div class="container">
+        <div class="section-header">
+          <div class="eyebrow">{{ mf_timeline_eyebrow | default: section.settings.timeline_eyebrow }}</div>
+          {%- if mf_timeline_h != blank -%}<h2>{{ mf_timeline_h }}</h2>
+          {%- else -%}<h2>{{ section.settings.timeline_heading | default: "YOUR GUT'S" }}<br><em>{{ section.settings.timeline_heading_em }}</em></h2>{%- endif -%}
+          {%- assign tsub = mf_timeline_subtitle | default: section.settings.timeline_subtitle -%}
+          {%- if tsub != blank -%}<p class="ht-sub">{{ tsub }}</p>{%- endif -%}
+        </div>
+        <div class="ht-timeline">
+          {%- if mf_timeline != blank -%}
+            {%- for t in mf_timeline -%}
+              <div class="ht-card"><span class="ht-day">{{ t.period_label }}</span><div class="ht-h">{{ t.heading }}</div><div class="ht-d">{{ t.description }}</div></div>
+            {%- endfor -%}
+          {%- else -%}
+            {%- for block in timeline_blocks -%}
+              <div class="ht-card" {{ block.shopify_attributes }}><span class="ht-day">{{ block.settings.period_label }}</span><div class="ht-h">{{ block.settings.heading }}</div><div class="ht-d">{{ block.settings.description }}</div></div>
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+      </div>
+    </section>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "FK v3 — Timeline",
+  "tag": "section",
+  "class": "fkv3-timeline-wrap",
+  "settings": [
+    { "type": "color", "id": "section_bg", "label": "Section background", "default": "#ffffff" },
+    { "type": "text", "id": "timeline_eyebrow", "label": "Eyebrow", "default": "WHAT TO EXPECT" },
+    { "type": "text", "id": "timeline_heading", "label": "Heading", "default": "YOUR GUT'S" },
+    { "type": "text", "id": "timeline_heading_em", "label": "Heading (em)", "default": "FIRST 30 DAYS." },
+    { "type": "textarea", "id": "timeline_subtitle", "label": "Subtitle" }
+  ],
+  "blocks": [
+    { "type": "timeline_step", "name": "Timeline step", "limit": 8, "settings": [
+      { "type": "text", "id": "period_label", "label": "Period label", "default": "WEEK 1" },
+      { "type": "text", "id": "heading", "label": "Heading" },
+      { "type": "textarea", "id": "description", "label": "Description" }
+    ]}
+  ],
+  "presets": [ { "name": "FK v3 — Timeline" } ],
+  "enabled_on": { "templates": ["product"] }
+}
+{% endschema %}

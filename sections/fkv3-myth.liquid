@@ -1,0 +1,100 @@
+{%- liquid
+  assign p = product
+  assign mf_compare_rows = p.metafields.custom.featured_comparison_rows.value
+  assign mf_compare_left = p.metafields.custom.comparison_left_image
+  assign mf_compare_right = p.metafields.custom.comparison_right_image
+  assign mf_compare_intro = p.metafields.custom.comparison_intro
+  assign mf_myth_eyebrow = p.metafields.custom.myth_eyebrow
+  assign mf_myth_h1 = p.metafields.custom.myth_h1
+  assign mf_myth_h2 = p.metafields.custom.myth_h2
+  assign mf_compare_left_label = p.metafields.custom.compare_left_label
+  assign mf_compare_right_label = p.metafields.custom.compare_right_label
+  assign mf_myth_pill = p.metafields.custom.myth_pill_text
+  assign mf_fact_pill = p.metafields.custom.fact_pill_text
+  assign compare_blocks = section.blocks | where: 'type', 'comparison_row'
+-%}
+{%- if mf_compare_rows != blank or compare_blocks.size > 0 -%}
+  <div class="ferment-pdp fkv3-myth-wrap">
+    {%- render 'fkv3-color-cascade' -%}
+    <section class="myth-section" style="background:{{ section.settings.section_bg }}">
+      <div class="container">
+        <div class="myth-header">
+          <div class="eyebrow">{{ mf_myth_eyebrow | default: section.settings.compare_eyebrow }}</div>
+          {%- if mf_myth_h1 != blank or mf_myth_h2 != blank -%}
+            <h2>{{ mf_myth_h1 }}<br><em>{{ mf_myth_h2 }}</em></h2>
+          {%- else -%}
+            <h2>{{ section.settings.compare_heading }}<br><em>{{ section.settings.compare_heading_em }}</em></h2>
+          {%- endif -%}
+          {%- assign cintro = mf_compare_intro | default: section.settings.compare_intro -%}
+          {%- if cintro != blank -%}<p style="margin-top:18px;">{{ cintro }}</p>{%- endif -%}
+        </div>
+        {%- assign cmp_left = mf_compare_left | default: section.settings.compare_left_image -%}
+        {%- assign cmp_right = mf_compare_right | default: section.settings.compare_right_image -%}
+        <div class="compare-block">
+          <div class="compare-images">
+            <div class="compare-image">
+              {%- if cmp_left != blank -%}<img src="{{ cmp_left | image_url: width: 800 }}" alt="{{ mf_compare_left_label | default: section.settings.compare_left_label }}" loading="lazy" width="800" height="600">{%- else -%}{{ section.settings.compare_left_emoji }}{%- endif -%}
+              {%- if mf_myth_pill != blank -%}<span class="myth-pill myth-pill--myth">{{ mf_myth_pill }}</span>{%- endif -%}
+            </div>
+            <div class="compare-image">
+              {%- if cmp_right != blank -%}<img src="{{ cmp_right | image_url: width: 800 }}" alt="{{ mf_compare_right_label | default: section.settings.compare_right_label }}" loading="lazy" width="800" height="600">{%- else -%}{{ section.settings.compare_right_emoji }}{%- endif -%}
+              {%- if mf_fact_pill != blank -%}<span class="myth-pill myth-pill--fact">{{ mf_fact_pill }}</span>{%- endif -%}
+            </div>
+          </div>
+          <div class="compare-labels">
+            <span>{{ mf_compare_left_label | default: section.settings.compare_left_label }}</span>
+            <span>{{ mf_compare_right_label | default: section.settings.compare_right_label }}</span>
+          </div>
+          <div class="compare-table">
+            {%- if mf_compare_rows != blank -%}
+              {%- for row in mf_compare_rows -%}
+                <div class="compare-row">
+                  <div class="compare-cell left"><div class="h">{{ row.left_heading }}</div><div class="s">{{ row.left_subtext }}</div></div>
+                  <div class="compare-cell right"><div class="h">{{ row.right_heading }}</div><div class="s">{{ row.right_subtext }}</div></div>
+                </div>
+              {%- endfor -%}
+            {%- else -%}
+              {%- for block in compare_blocks -%}
+                <div class="compare-row" {{ block.shopify_attributes }}>
+                  <div class="compare-cell left"><div class="h">{{ block.settings.left_h }}</div><div class="s">{{ block.settings.left_s }}</div></div>
+                  <div class="compare-cell right"><div class="h">{{ block.settings.right_h }}</div><div class="s">{{ block.settings.right_s }}</div></div>
+                </div>
+              {%- endfor -%}
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "FK v3 — Myth/Compare",
+  "tag": "section",
+  "class": "fkv3-myth-wrap",
+  "settings": [
+    { "type": "color", "id": "section_bg", "label": "Section background", "default": "#ffffff" },
+    { "type": "text", "id": "compare_eyebrow", "label": "Eyebrow", "default": "TRADITIONAL VS AIRLOCK" },
+    { "type": "text", "id": "compare_heading", "label": "Heading", "default": "CLOTH METHOD" },
+    { "type": "text", "id": "compare_heading_em", "label": "Heading (em)", "default": "VS AIRLOCK." },
+    { "type": "textarea", "id": "compare_intro", "label": "Intro paragraph" },
+    { "type": "image_picker", "id": "compare_left_image", "label": "Left image" },
+    { "type": "image_picker", "id": "compare_right_image", "label": "Right image" },
+    { "type": "text", "id": "compare_left_emoji", "label": "Left emoji fallback", "default": "🧺" },
+    { "type": "text", "id": "compare_right_emoji", "label": "Right emoji fallback", "default": "🫙" },
+    { "type": "text", "id": "compare_left_label", "label": "Left column label", "default": "TRADITIONAL METHOD" },
+    { "type": "text", "id": "compare_right_label", "label": "Right column label", "default": "GUTBASKET KIT" }
+  ],
+  "blocks": [
+    { "type": "comparison_row", "name": "Comparison row", "limit": 12, "settings": [
+      { "type": "text", "id": "left_h", "label": "Left heading" },
+      { "type": "textarea", "id": "left_s", "label": "Left subtext" },
+      { "type": "text", "id": "right_h", "label": "Right heading" },
+      { "type": "textarea", "id": "right_s", "label": "Right subtext" }
+    ]}
+  ],
+  "presets": [ { "name": "FK v3 — Myth/Compare" } ],
+  "enabled_on": { "templates": ["product"] }
+}
+{% endschema %}

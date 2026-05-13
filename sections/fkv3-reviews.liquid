@@ -1,0 +1,61 @@
+{%- liquid
+  assign p = product
+  assign mf_reviews = p.metafields.custom.featured_reviews.value
+  assign mf_reviews_h = p.metafields.custom.reviews_h
+  assign review_blocks = section.blocks | where: 'type', 'review'
+-%}
+{%- if mf_reviews != blank or review_blocks.size > 0 -%}
+  <div class="ferment-pdp fkv3-reviews-wrap">
+    {%- render 'fkv3-color-cascade' -%}
+    <section class="reviews-section" style="background:{{ section.settings.section_bg }}">
+      <div class="container">
+        <div class="section-header">
+          <div class="eyebrow">{{ section.settings.reviews_eyebrow }}</div>
+          {%- if mf_reviews_h != blank -%}<h2>{{ mf_reviews_h }}</h2>
+          {%- else -%}<h2>{{ section.settings.reviews_heading }} <em>{{ section.settings.reviews_heading_em }}</em></h2>{%- endif -%}
+        </div>
+        <div class="reviews-grid">
+          {%- if mf_reviews != blank -%}
+            {%- for r in mf_reviews -%}
+              <div class="review-card">
+                <div class="rev-content"><h3 class="rev-title">"{{ r.quote }}"</h3><div class="rev-foot"><div class="rev-stars">★★★★★</div><div class="rev-name">{{ r.name }}</div><div class="rev-meta">{{ r.meta }}</div></div></div>
+                <div class="rev-photo">{%- if r.photo != blank -%}<img src="{{ r.photo | image_url: width: 800 }}" alt="{{ r.name | escape }}" loading="lazy" width="800" height="800">{%- else -%}<span class="photo-placeholder">📷</span>{%- endif -%}</div>
+              </div>
+            {%- endfor -%}
+          {%- else -%}
+            {%- for block in review_blocks -%}
+              <div class="review-card" {{ block.shopify_attributes }}>
+                <div class="rev-content"><h3 class="rev-title">"{{ block.settings.quote }}"</h3><div class="rev-foot"><div class="rev-stars">★★★★★</div><div class="rev-name">{{ block.settings.name }}</div><div class="rev-meta">{{ block.settings.meta }}</div></div></div>
+                <div class="rev-photo">{%- if block.settings.photo != blank -%}<img src="{{ block.settings.photo | image_url: width: 800 }}" alt="{{ block.settings.name | escape }}" loading="lazy" width="800" height="800">{%- else -%}<span class="photo-placeholder">📷</span>{%- endif -%}</div>
+              </div>
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+      </div>
+    </section>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "FK v3 — Reviews",
+  "tag": "section",
+  "class": "fkv3-reviews-wrap",
+  "settings": [
+    { "type": "color", "id": "section_bg", "label": "Section background", "default": "#ffffff" },
+    { "type": "text", "id": "reviews_eyebrow", "label": "Eyebrow", "default": "REAL RESULTS" },
+    { "type": "text", "id": "reviews_heading", "label": "Heading", "default": "WHAT OUR" },
+    { "type": "text", "id": "reviews_heading_em", "label": "Heading (em)", "default": "CUSTOMERS SAY" }
+  ],
+  "blocks": [
+    { "type": "review", "name": "Review", "limit": 9, "settings": [
+      { "type": "textarea", "id": "quote", "label": "Quote" },
+      { "type": "text", "id": "name", "label": "Name" },
+      { "type": "text", "id": "meta", "label": "Meta" },
+      { "type": "image_picker", "id": "photo", "label": "Photo" }
+    ]}
+  ],
+  "presets": [ { "name": "FK v3 — Reviews" } ],
+  "enabled_on": { "templates": ["product"] }
+}
+{% endschema %}

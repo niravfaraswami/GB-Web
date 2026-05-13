@@ -1,0 +1,102 @@
+{%- liquid
+  assign p = product
+  assign mf_consumables = p.metafields.custom.featured_consumables.value
+  assign itk_intro = p.metafields.custom.itk_intro
+  assign refill_h = p.metafields.custom.refill_note_heading
+  assign refill_d = p.metafields.custom.refill_note_description
+  assign refill_bullets = p.metafields.custom.refill_note_bullets.value
+  assign refill_label = p.metafields.custom.refill_cta_label
+  assign refill_url = p.metafields.custom.refill_cta_url
+  assign refill_image = p.metafields.custom.refill_image
+  assign consumable_blocks = section.blocks | where: 'type', 'consumable'
+-%}
+{%- if mf_consumables != blank or consumable_blocks.size > 0 -%}
+  <div class="ferment-pdp fkv3-itk-wrap">
+    {%- render 'fkv3-color-cascade' -%}
+    <section class="itk-section" style="background:{{ section.settings.section_bg }}">
+      <div class="container">
+        <div class="section-header centered">
+          <div class="eyebrow">{{ section.settings.itk_eyebrow }}</div>
+          <h2>{{ section.settings.itk_heading }}<br><em>{{ section.settings.itk_heading_em }}</em></h2>
+          {%- assign intro_text = itk_intro | default: section.settings.itk_intro -%}
+          {%- if intro_text != blank -%}<p>{{ intro_text }}</p>{%- endif -%}
+        </div>
+        <div class="itk-grid">
+          {%- if mf_consumables != blank -%}
+            {%- for c in mf_consumables -%}
+              <div class="itk-card">
+                <div class="itk-img">{%- if c.image != blank -%}<img src="{{ c.image | image_url: width: 800 }}" alt="{{ c.heading | escape }}" loading="lazy" width="800" height="600">{%- endif -%}</div>
+                <div class="itk-body">
+                  <div class="itk-h">{{ c.heading }}</div>
+                  <div class="itk-sub">{{ c.sub }}</div>
+                  {%- if c.ingredients.size > 0 -%}
+                    <ul class="itk-list itk-list-{{ c.category | default: 'spice' }}">
+                      {%- for ing in c.ingredients -%}<li>{{ ing }}</li>{%- endfor -%}
+                    </ul>
+                  {%- endif -%}
+                </div>
+              </div>
+            {%- endfor -%}
+          {%- else -%}
+            {%- for block in consumable_blocks -%}
+              <div class="itk-card" {{ block.shopify_attributes }}>
+                <div class="itk-img">{%- if block.settings.image != blank -%}<img src="{{ block.settings.image | image_url: width: 800 }}" alt="{{ block.settings.heading | escape }}" loading="lazy" width="800" height="600">{%- endif -%}</div>
+                <div class="itk-body">
+                  <div class="itk-h">{{ block.settings.heading }}</div>
+                  <div class="itk-sub">{{ block.settings.sub }}</div>
+                  {%- assign ingredients = block.settings.ingredients | newline_to_br | split: '<br />' -%}
+                  {%- if block.settings.ingredients != blank -%}
+                    <ul class="itk-list itk-list-{{ block.settings.category | default: 'spice' }}">
+                      {%- for ing in ingredients -%}{%- if ing != blank -%}<li>{{ ing | strip }}</li>{%- endif -%}{%- endfor -%}
+                    </ul>
+                  {%- endif -%}
+                </div>
+              </div>
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+        {%- if refill_h != blank or refill_d != blank or refill_url != blank -%}
+          <div class="itk-refill-note{% if refill_image == blank %} itk-refill-note--no-image{% endif %}">
+            <div class="irn-icon">{%- if refill_image != blank -%}<img src="{{ refill_image | image_url: width: 200 }}" alt="" loading="lazy" width="100" height="100">{%- else -%}♻️{%- endif -%}</div>
+            <div class="irn-body">
+              {%- if refill_h != blank -%}<div class="irn-h">{{ refill_h }}</div>{%- endif -%}
+              {%- if refill_bullets != blank and refill_bullets.size > 0 -%}
+                <ul class="irn-bullets">{%- for line in refill_bullets -%}<li>{{ line }}</li>{%- endfor -%}</ul>
+              {%- elsif refill_d != blank -%}<div class="irn-d">{{ refill_d }}</div>{%- endif -%}
+            </div>
+            {%- if refill_url != blank -%}<a class="irn-cta" href="{{ refill_url }}">{{ refill_label | default: 'Get the refill →' }}</a>{%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
+    </section>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "FK v3 — Inside the kit",
+  "tag": "section",
+  "class": "fkv3-itk-wrap",
+  "settings": [
+    { "type": "color", "id": "section_bg", "label": "Section background", "default": "#ffffff" },
+    { "type": "text", "id": "itk_eyebrow", "label": "Eyebrow", "default": "INSIDE THE KIT" },
+    { "type": "text", "id": "itk_heading", "label": "Heading", "default": "SPICE MIX +" },
+    { "type": "text", "id": "itk_heading_em", "label": "Heading (em)", "default": "FERMENT BOOST." },
+    { "type": "textarea", "id": "itk_intro", "label": "Intro paragraph" }
+  ],
+  "blocks": [
+    { "type": "consumable", "name": "Consumable detail", "limit": 6, "settings": [
+      { "type": "image_picker", "id": "image", "label": "Image" },
+      { "type": "text", "id": "heading", "label": "Heading" },
+      { "type": "textarea", "id": "sub", "label": "Sub-heading" },
+      { "type": "textarea", "id": "ingredients", "label": "Ingredients (one per line)" },
+      { "type": "select", "id": "category", "label": "Category", "options": [
+        { "value": "spice", "label": "Spice" },
+        { "value": "boost", "label": "Boost" }
+      ], "default": "spice" }
+    ]}
+  ],
+  "presets": [ { "name": "FK v3 — Inside the kit" } ],
+  "enabled_on": { "templates": ["product"] }
+}
+{% endschema %}
