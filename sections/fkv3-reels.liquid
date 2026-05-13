@@ -4,8 +4,9 @@
   assign mf_ugc_eyebrow = p.metafields.custom.ugc_eyebrow
   assign mf_reels_h = p.metafields.custom.reels_h
   assign reel_blocks = section.blocks | where: 'type', 'reel'
+  assign app_blocks = section.blocks | where: 'type', '@app'
 -%}
-{%- if mf_reels != blank or section.settings.quinn_embed != blank or reel_blocks.size > 0 -%}
+{%- if mf_reels != blank or section.settings.quinn_embed != blank or reel_blocks.size > 0 or app_blocks.size > 0 -%}
   <div data-kit="fermentation" class="ferment-pdp fkv3-reels-wrap" {%- render 'fkv3-section-attrs' -%}>
     {%- render 'fkv3-color-cascade' -%}
     <section class="reels-section">
@@ -33,9 +34,15 @@
               </div>
             {%- endfor -%}
           </div>
+        {%- elsif app_blocks.size > 0 -%}
+          <div class="reels-app">
+            {%- for block in app_blocks -%}
+              {% render block %}
+            {%- endfor -%}
+          </div>
         {%- elsif section.settings.quinn_embed != blank -%}
           <div class="reels-quinn">{{ section.settings.quinn_embed }}</div>
-        {%- else -%}
+        {%- elsif reel_blocks.size > 0 -%}
           <div class="reels-grid">
             {%- for block in reel_blocks -%}
               <div class="reel-tile" {{ block.shopify_attributes }}>
@@ -80,6 +87,7 @@
     { "type": "range", "id": "heading_size_m", "label": "Heading size (px)", "min": 0, "max": 60, "step": 2, "default": 0 },
     { "type": "range", "id": "sub_size_m", "label": "Sub-heading / body size (px)", "min": 0, "max": 22, "step": 1, "default": 0 }],
   "blocks": [
+    { "type": "@app" },
     { "type": "reel", "name": "UGC reel", "limit": 6, "settings": [
       { "type": "video", "id": "video", "label": "Vertical 9:16 video" },
       { "type": "image_picker", "id": "poster", "label": "Poster (fallback)" },
