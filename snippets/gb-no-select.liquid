@@ -2,74 +2,68 @@
   Site-wide selection / right-click / drag protection.
   Rendered once near the top of <body> in layout/theme.liquid.
 
-  Suppressed in Theme Editor (request.design_mode) so authors can still
-  select / right-click while customising the theme.
+  ────────────────────────────────────────────────────────────
+  DISABLED 2026-05-13: right-click and content copy are now
+  allowed throughout the site. The previous enforcement is
+  preserved below (inside this {% comment %} block) so it can
+  be re-enabled by unwrapping the comment if ever needed.
+  ────────────────────────────────────────────────────────────
 
-  Form fields (<input>, <textarea>, [contenteditable]) keep native
-  selection so users can type and edit.
+  Previous behaviour (suppressed in Theme Editor via
+  request.design_mode; left form fields editable):
 
-  Note: this is presentational only — anyone can still view source,
-  inspect, or fetch images via DevTools / curl. Treat as a deterrent,
-  not a security control.
-{%- endcomment -%}
-{%- unless request.design_mode -%}
-<style>
-  body, body * {
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    -webkit-touch-callout: none;
-  }
-  input, textarea, select, [contenteditable], [contenteditable] * {
-    -webkit-user-select: text !important;
-    -moz-user-select: text !important;
-    -ms-user-select: text !important;
-    user-select: text !important;
-    -webkit-touch-callout: default !important;
-  }
-  img, video, picture {
-    -webkit-user-drag: none;
-    -khtml-user-drag: none;
-    -moz-user-drag: none;
-    -o-user-drag: none;
-    user-drag: none;
-    -webkit-touch-callout: none;
-    pointer-events: auto;
-  }
-</style>
-<script>
-(function() {
-  // Block right-click context menu site-wide (allow inside form fields)
-  document.addEventListener('contextmenu', function(e) {
-    var t = e.target;
-    if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
-    e.preventDefault();
-  }, false);
-
-  // Block image/element drag (drag-to-save, drag to address bar)
-  document.addEventListener('dragstart', function(e) {
-    e.preventDefault();
-  }, false);
-
-  // Block selection start outside of form fields
-  document.addEventListener('selectstart', function(e) {
-    var t = e.target;
-    if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
-    e.preventDefault();
-  }, false);
-
-  // Block common keyboard shortcuts that would copy/save content.
-  // Cmd/Ctrl-S, Cmd/Ctrl-A (outside fields), Cmd/Ctrl-C/X (outside fields).
-  document.addEventListener('keydown', function(e) {
-    var t = e.target;
-    var inField = t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable);
-    var k = e.key ? e.key.toLowerCase() : '';
-    if ((e.ctrlKey || e.metaKey) && k === 's') { e.preventDefault(); return; }
-    if (!inField && (e.ctrlKey || e.metaKey) && (k === 'a' || k === 'c' || k === 'x' || k === 'p')) {
-      e.preventDefault();
+  <style>
+    body, body * {
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      -webkit-touch-callout: none;
     }
-  }, false);
-})();
-</script>
-{%- endunless -%}
+    input, textarea, select, [contenteditable], [contenteditable] * {
+      -webkit-user-select: text !important;
+      -moz-user-select: text !important;
+      -ms-user-select: text !important;
+      user-select: text !important;
+      -webkit-touch-callout: default !important;
+    }
+    img, video, picture {
+      -webkit-user-drag: none;
+      -khtml-user-drag: none;
+      -moz-user-drag: none;
+      -o-user-drag: none;
+      user-drag: none;
+      -webkit-touch-callout: none;
+      pointer-events: auto;
+    }
+  </style>
+  <script>
+  (function() {
+    document.addEventListener('contextmenu', function(e) {
+      var t = e.target;
+      if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+      e.preventDefault();
+    }, false);
+    document.addEventListener('dragstart', function(e) {
+      e.preventDefault();
+    }, false);
+    document.addEventListener('selectstart', function(e) {
+      var t = e.target;
+      if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+      e.preventDefault();
+    }, false);
+    document.addEventListener('keydown', function(e) {
+      var t = e.target;
+      var inField = t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable);
+      var k = e.key ? e.key.toLowerCase() : '';
+      if ((e.ctrlKey || e.metaKey) && k === 's') { e.preventDefault(); return; }
+      if (!inField && (e.ctrlKey || e.metaKey) && (k === 'a' || k === 'c' || k === 'x' || k === 'p')) {
+        e.preventDefault();
+      }
+    }, false);
+  })();
+  </script>
+
+  To re-enable: move the </comment> tag above the <style> opening
+  and the {% comment %} tag below the </script> closing.
+{%- endcomment -%}
