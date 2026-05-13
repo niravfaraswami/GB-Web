@@ -14,9 +14,8 @@
   assign compare_blocks = section.blocks | where: 'type', 'comparison_row'
 -%}
 {%- if mf_compare_rows != blank or compare_blocks.size > 0 -%}
-  <div data-kit="fermentation" class="ferment-pdp fkv3-myth-wrap" {%- render 'fkv3-section-attrs' -%}>
-    {%- render 'fkv3-color-cascade' -%}
-    <section class="myth-section">
+  <div data-kit="fermentation" class="ferment-pdp fkv3-myth-wrap">
+    <section class="myth-section" {%- render 'fkv3-section-attrs' -%}>
       <div class="container">
         <div class="myth-header">
           <div class="eyebrow">{{ mf_myth_eyebrow | default: section.settings.compare_eyebrow }}</div>
@@ -86,14 +85,19 @@
     { "type": "text", "id": "compare_left_label", "label": "Left column label", "default": "TRADITIONAL METHOD" },
     { "type": "text", "id": "compare_right_label", "label": "Right column label", "default": "GUTBASKET KIT" }
   ,
-    { "type": "header", "content": "Typography — desktop" },
-    { "type": "range", "id": "eyebrow_size_d", "label": "Eyebrow size (px)", "min": 0, "max": 28, "step": 1, "default": 11 },
-    { "type": "range", "id": "heading_size_d", "label": "Heading size (px)", "min": 0, "max": 80, "step": 2, "default": 44 },
-    { "type": "range", "id": "sub_size_d", "label": "Sub-heading / body size (px)", "min": 0, "max": 28, "step": 1, "default": 16 },
-    { "type": "header", "content": "Typography — mobile" },
-    { "type": "range", "id": "eyebrow_size_m", "label": "Eyebrow size (px)", "min": 0, "max": 22, "step": 1, "default": 11 },
-    { "type": "range", "id": "heading_size_m", "label": "Heading size (px)", "min": 0, "max": 60, "step": 2, "default": 28 },
-    { "type": "range", "id": "sub_size_m", "label": "Sub-heading / body size (px)", "min": 0, "max": 22, "step": 1, "default": 14 }],
+    { "type": "header", "content": "Spacing & Typography" },
+    { "type": "range", "id": "pad_top_d", "label": "Padding top — desktop (px)", "min": 0, "max": 200, "step": 4, "default": 80 },
+    { "type": "range", "id": "pad_bot_d", "label": "Padding bottom — desktop (px)", "min": 0, "max": 200, "step": 4, "default": 80 },
+    { "type": "range", "id": "pad_top_m", "label": "Padding top — mobile (px)", "min": 0, "max": 120, "step": 4, "default": 56 },
+    { "type": "range", "id": "pad_bot_m", "label": "Padding bottom — mobile (px)", "min": 0, "max": 120, "step": 4, "default": 56 },
+    { "type": "range", "id": "mar_top_d", "label": "Margin top — desktop (px)", "min": 0, "max": 100, "step": 4, "default": 0 },
+    { "type": "range", "id": "mar_bot_d", "label": "Margin bottom — desktop (px)", "min": 0, "max": 100, "step": 4, "default": 0 },
+    { "type": "range", "id": "mar_top_m", "label": "Margin top — mobile (px)", "min": 0, "max": 80, "step": 4, "default": 0 },
+    { "type": "range", "id": "mar_bot_m", "label": "Margin bottom — mobile (px)", "min": 0, "max": 80, "step": 4, "default": 0 },
+    { "type": "range", "id": "eyebrow_size_d", "label": "Eyebrow font size — desktop (px)", "min": 9, "max": 32, "step": 1, "default": 22 },
+    { "type": "range", "id": "eyebrow_size_m", "label": "Eyebrow font size — mobile (px)", "min": 9, "max": 24, "step": 1, "default": 14 },
+    { "type": "range", "id": "heading_size_d", "label": "Heading font size — desktop (px)", "min": 18, "max": 80, "step": 2, "default": 44 },
+    { "type": "range", "id": "heading_size_m", "label": "Heading font size — mobile (px)", "min": 16, "max": 60, "step": 2, "default": 30 }],
   "blocks": [
     { "type": "comparison_row", "name": "Comparison row", "limit": 12, "settings": [
       { "type": "text", "id": "left_h", "label": "Left heading" },
