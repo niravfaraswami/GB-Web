@@ -8,7 +8,7 @@
   assign recipe_tag_blocks = section.blocks | where: 'type', 'recipe_tag'
 -%}
 {%- if mf_recipe_tags != blank or recipe_tag_blocks.size > 0 or recipe_count != blank -%}
-  <div class="ferment-pdp fkv3-recipes-wrap">
+  <div data-kit="fermentation" class="ferment-pdp fkv3-recipes-wrap">
     {%- render 'fkv3-color-cascade' -%}
     <section class="recipes-section" style="background:{{ section.settings.section_bg }}">
       <div class="container">

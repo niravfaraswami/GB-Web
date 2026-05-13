@@ -5,7 +5,7 @@
   assign handles = kit_handles | split: ','
   assign labels = kit_labels | split: ','
 -%}
-<div class="ferment-pdp fkv3-kit-switcher-wrap">
+<div data-kit="fermentation" class="ferment-pdp fkv3-kit-switcher-wrap">
   {%- render 'fkv3-color-cascade' -%}
   <section class="fkv3-kit-switcher-section" style="background:{{ section.settings.section_bg }}">
     <div class="container">

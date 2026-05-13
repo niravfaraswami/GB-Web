@@ -14,7 +14,7 @@
   assign compare_blocks = section.blocks | where: 'type', 'comparison_row'
 -%}
 {%- if mf_compare_rows != blank or compare_blocks.size > 0 -%}
-  <div class="ferment-pdp fkv3-myth-wrap">
+  <div data-kit="fermentation" class="ferment-pdp fkv3-myth-wrap">
     {%- render 'fkv3-color-cascade' -%}
     <section class="myth-section" style="background:{{ section.settings.section_bg }}">
       <div class="container">

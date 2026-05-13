@@ -5,7 +5,7 @@
   assign review_blocks = section.blocks | where: 'type', 'review'
 -%}
 {%- if mf_reviews != blank or review_blocks.size > 0 -%}
-  <div class="ferment-pdp fkv3-reviews-wrap">
+  <div data-kit="fermentation" class="ferment-pdp fkv3-reviews-wrap">
     {%- render 'fkv3-color-cascade' -%}
     <section class="reviews-section" style="background:{{ section.settings.section_bg }}">
       <div class="container">
