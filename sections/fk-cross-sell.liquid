@@ -1,0 +1,45 @@
+{%- liquid
+  assign p = product
+  assign cross_sell = p.metafields.custom.cross_sell_products.value
+-%}
+{%- if section.settings.show_section -%}
+  {%- if cross_sell != blank or section.settings.cross_collection != blank -%}
+    <section class="fk-page ferment-pdp fk-cross-sell-section cross-section" style="background:{{ section.settings.section_bg }}">
+      {%- render 'fk-color-cascade' -%}
+      <div class="container">
+        <div class="section-header centered">
+          <div class="eyebrow">{{ section.settings.cross_eyebrow | default: 'PAIR IT WITH' }}</div>
+          <h2>{{ section.settings.cross_heading | default: 'CUSTOMERS ALSO BOUGHT' }}</h2>
+        </div>
+        <div class="cross-grid">
+          {%- if cross_sell != blank -%}
+            {%- for cp in cross_sell limit: 3 -%}
+              {%- render 'ferment_cross_card', p: cp -%}
+            {%- endfor -%}
+          {%- elsif section.settings.cross_collection.products.size > 0 -%}
+            {%- for cp in section.settings.cross_collection.products limit: 3 -%}
+              {%- render 'ferment_cross_card', p: cp -%}
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "FK — Cross-sell",
+  "tag": "section",
+  "class": "fk-cross-sell-section",
+  "settings": [
+    { "type": "checkbox", "id": "show_section", "label": "Show section", "default": true },
+    { "type": "color", "id": "section_bg", "label": "Section background", "default": "#ffffff" },
+    { "type": "text", "id": "cross_eyebrow", "label": "Eyebrow", "default": "PAIR IT WITH" },
+    { "type": "text", "id": "cross_heading", "label": "Heading", "default": "CUSTOMERS ALSO BOUGHT" },
+    { "type": "collection", "id": "cross_collection", "label": "Fallback collection" }
+  ],
+  "presets": [ { "name": "FK — Cross-sell" } ],
+  "enabled_on": { "templates": ["product"] }
+}
+{% endschema %}

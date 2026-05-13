@@ -1,0 +1,148 @@
+/* ============================================================
+ * fermentation-kit-v2.css
+ * Additive CSS for the FK v2 split-section refactor.
+ * Stacks on top of the existing assets/fermentation-kit.css
+ * (which fk-hero.liquid loads first). The v2 sections wear both
+ * .fk-page and .ferment-pdp classes so every existing
+ * .ferment-pdp selector continues to apply, then this stylesheet
+ * adds small tweaks unique to the v2 architecture.
+ * ============================================================ */
+
+/* Per-page wrapper — set by fk-color-cascade snippet via CSS vars.
+   Already namespaces .fk-page; nothing to add here at the global level. */
+
+/* Hero pills row (days_to_ferment + capacity) */
+.fk-page .hero-pills-row {
+  display: flex;
+  gap: 8px;
+  margin: 12px 0 8px;
+  flex-wrap: wrap;
+}
+.fk-page .hero-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: var(--kit-color-soft, #FFE4D1);
+  color: var(--kit-color-dark, #E66800);
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: 999px;
+}
+.fk-page .hero-pill strong {
+  font-weight: 700;
+}
+
+/* Hero accordions — "best for" chips inside the Description body */
+.fk-page .hero-best-for {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+.fk-page .hero-best-chip {
+  display: inline-block;
+  padding: 4px 10px;
+  background: var(--kit-color-soft, #FFE4D1);
+  color: var(--kit-color-dark, #E66800);
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: 999px;
+}
+
+/* How-to-make help note */
+.fk-page .hm-help-note {
+  margin-top: 24px;
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  color: var(--text-muted, #5C4D3F);
+  text-align: center;
+}
+
+/* Myth/fact pills overlaid on compare images */
+.fk-page .compare-image { position: relative; }
+.fk-page .myth-pill {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.fk-page .myth-pill--myth {
+  background: rgba(31, 31, 29, 0.85);
+  color: #FFF6F2;
+}
+.fk-page .myth-pill--fact {
+  background: var(--kit-color, #FF7300);
+  color: #fff;
+}
+
+/* Refill note (ITK) — bullet list variant + image variant */
+.fk-page .irn-bullets {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0;
+}
+.fk-page .irn-bullets li {
+  position: relative;
+  padding-left: 20px;
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: var(--text-muted, #5C4D3F);
+}
+.fk-page .irn-bullets li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--kit-color, #FF7300);
+  font-weight: 700;
+}
+.fk-page .itk-refill-note--no-image .irn-icon {
+  background: var(--kit-color-soft, #FFE4D1);
+  border-radius: 999px;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+}
+.fk-page .irn-icon img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+/* Coupon code button (was a span before; now copy-to-clipboard) */
+.fk-page .coupon-bar [data-coupon-code] {
+  cursor: pointer;
+  font-family: inherit;
+  border: none;
+  background: rgba(255, 255, 255, 0.2);
+  color: inherit;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  transition: background 120ms ease;
+}
+.fk-page .coupon-bar [data-coupon-code]:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+.fk-page .coupon-bar [data-coupon-code].is-copied {
+  background: rgba(255, 255, 255, 0.5);
+}
+.fk-page .coupon-bar [data-coupon-code].is-copied::after {
+  content: ' ✓';
+}

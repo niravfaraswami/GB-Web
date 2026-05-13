@@ -1,0 +1,83 @@
+{%- liquid
+  assign p = product
+  assign mf_steps = p.metafields.custom.featured_steps.value
+  assign mf_how_video = p.metafields.custom.how_to_make_video.value
+  assign mf_how_make_h = p.metafields.custom.how_make_h
+  assign mf_help_note = p.metafields.custom.help_note
+  assign how_video = mf_how_video | default: section.settings.how_video
+-%}
+{%- if section.settings.show_section -%}
+  {%- if mf_steps == blank or mf_steps.size == 0 -%}
+    {%- comment -%} No steps — hide section {%- endcomment -%}
+  {%- else -%}
+    <section class="fk-page ferment-pdp fk-how-make-section how-make-section section-accent" style="background:{{ section.settings.section_bg }}">
+      {%- render 'fk-color-cascade' -%}
+      <div class="container">
+        <div class="section-header centered">
+          <div class="eyebrow">{{ section.settings.how_eyebrow | default: 'HOW TO MAKE' }}</div>
+          {%- if mf_how_make_h != blank -%}
+            <h2>{{ mf_how_make_h }}</h2>
+          {%- else -%}
+            <h2>{{ section.settings.how_heading | default: '4 STEPS.' }} <em>{{ section.settings.how_heading_em | default: 'FRESH FERMENT.' }}</em></h2>
+          {%- endif -%}
+        </div>
+        <div class="how-make-grid">
+          <div class="hm-video-hero {% if how_video != blank %}hm-video-hero--has-video{% endif %}">
+            {%- if how_video != blank -%}
+              {%- if how_video.sources or how_video.media_type == 'video' -%}
+                {{ how_video | video_tag: image_size: '1100x', controls: false, loop: true, muted: true, autoplay: true, playsinline: true }}
+              {%- else -%}
+                {%- assign video_src = how_video.url | default: how_video.src -%}
+                {%- if video_src != blank -%}
+                  <video src="{{ video_src }}" autoplay loop muted playsinline preload="auto" style="width:100%;height:100%;object-fit:cover;"></video>
+                {%- endif -%}
+              {%- endif -%}
+            {%- elsif section.settings.how_poster != blank -%}
+              <img src="{{ section.settings.how_poster | image_url: width: 1200 }}" alt="How to make" loading="lazy" width="1200" height="1200">
+              {%- if section.settings.how_pill != blank -%}<span class="hm-watch-pill">{{ section.settings.how_pill }}</span>{%- endif -%}
+            {%- else -%}
+              <div class="hm-video-placeholder"><span class="hm-play">▶</span></div>
+              {%- if section.settings.how_pill != blank -%}<span class="hm-watch-pill">{{ section.settings.how_pill }}</span>{%- endif -%}
+            {%- endif -%}
+          </div>
+          <div class="hm-steps">
+            {%- for step in mf_steps -%}
+              <div class="hm-step">
+                <div class="hm-num">
+                  {%- if step.icon != blank -%}
+                    {%- render 'kit_icon', icon: step.icon, size: 36, extra: 'hm-num-img' -%}
+                  {%- else -%}{{ forloop.index }}{%- endif -%}
+                </div>
+                <div class="hm-step-body">
+                  <div class="hm-title">{{ step.title }}</div>
+                  <div class="hm-desc">{{ step.description }}</div>
+                </div>
+              </div>
+            {%- endfor -%}
+          </div>
+        </div>
+        {%- if mf_help_note != blank -%}<p class="hm-help-note">{{ mf_help_note }}</p>{%- endif -%}
+      </div>
+    </section>
+  {%- endif -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "FK — How to make",
+  "tag": "section",
+  "class": "fk-how-make-section",
+  "settings": [
+    { "type": "checkbox", "id": "show_section", "label": "Show section", "default": true },
+    { "type": "color", "id": "section_bg", "label": "Section background", "default": "#ffffff" },
+    { "type": "text", "id": "how_eyebrow", "label": "Eyebrow", "default": "HOW TO MAKE" },
+    { "type": "text", "id": "how_heading", "label": "Heading fallback", "default": "4 STEPS." },
+    { "type": "text", "id": "how_heading_em", "label": "Heading (em) fallback", "default": "FRESH FERMENT." },
+    { "type": "video", "id": "how_video", "label": "Demo video fallback" },
+    { "type": "image_picker", "id": "how_poster", "label": "Poster image fallback" },
+    { "type": "text", "id": "how_pill", "label": "Pill text fallback", "default": "▶ WATCH · 60 SEC" }
+  ],
+  "presets": [ { "name": "FK — How to make" } ],
+  "enabled_on": { "templates": ["product"] }
+}
+{% endschema %}

@@ -1,0 +1,91 @@
+{%- liquid
+  assign p = product
+  assign mf_consumables = p.metafields.custom.featured_consumables.value
+  assign itk_intro = p.metafields.custom.itk_intro
+  assign refill_h = p.metafields.custom.refill_note_heading
+  assign refill_d = p.metafields.custom.refill_note_description
+  assign refill_bullets = p.metafields.custom.refill_note_bullets.value
+  assign refill_label = p.metafields.custom.refill_cta_label
+  assign refill_url = p.metafields.custom.refill_cta_url
+  assign refill_image = p.metafields.custom.refill_image
+-%}
+{%- if section.settings.show_section -%}
+  {%- if mf_consumables == blank or mf_consumables.size == 0 -%}
+    {%- if refill_url == blank -%}
+      {%- comment -%} No ITK content — hide section {%- endcomment -%}
+    {%- endif -%}
+  {%- endif -%}
+  {%- if mf_consumables != blank or refill_url != blank -%}
+    <section class="fk-page ferment-pdp fk-itk-section itk-section" style="background:{{ section.settings.section_bg }}">
+      {%- render 'fk-color-cascade' -%}
+      <div class="container">
+        <div class="section-header centered">
+          <div class="eyebrow">{{ section.settings.itk_eyebrow | default: 'INSIDE THE KIT' }}</div>
+          <h2>{{ section.settings.itk_heading | default: 'SPICE MIX +' }}<br><em>{{ section.settings.itk_heading_em | default: 'FERMENT BOOST.' }}</em></h2>
+          {%- if itk_intro != blank -%}<p>{{ itk_intro }}</p>{%- endif -%}
+        </div>
+        {%- if mf_consumables != blank -%}
+          <div class="itk-grid">
+            {%- for c in mf_consumables -%}
+              <div class="itk-card">
+                <div class="itk-img">
+                  {%- if c.image != blank -%}
+                    <img src="{{ c.image | image_url: width: 800 }}" alt="{{ c.heading | escape }}" loading="lazy" width="800" height="600">
+                  {%- endif -%}
+                </div>
+                <div class="itk-body">
+                  <div class="itk-h">{{ c.heading }}</div>
+                  <div class="itk-sub">{{ c.sub }}</div>
+                  {%- if c.ingredients.size > 0 -%}
+                    <ul class="itk-list itk-list-{{ c.category | default: 'spice' }}">
+                      {%- for ing in c.ingredients -%}<li>{{ ing }}</li>{%- endfor -%}
+                    </ul>
+                  {%- endif -%}
+                </div>
+              </div>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+        {%- if refill_url != blank or refill_h != blank or refill_d != blank -%}
+          <div class="itk-refill-note{% if refill_image == blank %} itk-refill-note--no-image{% endif %}">
+            <div class="irn-icon">
+              {%- if refill_image != blank -%}
+                <img src="{{ refill_image | image_url: width: 200 }}" alt="" loading="lazy" width="100" height="100">
+              {%- else -%}♻️{%- endif -%}
+            </div>
+            <div class="irn-body">
+              {%- if refill_h != blank -%}<div class="irn-h">{{ refill_h }}</div>{%- endif -%}
+              {%- if refill_bullets != blank and refill_bullets.size > 0 -%}
+                <ul class="irn-bullets">
+                  {%- for line in refill_bullets -%}<li>{{ line }}</li>{%- endfor -%}
+                </ul>
+              {%- elsif refill_d != blank -%}
+                <div class="irn-d">{{ refill_d }}</div>
+              {%- endif -%}
+            </div>
+            {%- if refill_url != blank -%}
+              <a class="irn-cta" href="{{ refill_url }}">{{ refill_label | default: 'Get the refill →' }}</a>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
+    </section>
+  {%- endif -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "FK — Inside the kit",
+  "tag": "section",
+  "class": "fk-itk-section",
+  "settings": [
+    { "type": "checkbox", "id": "show_section", "label": "Show section", "default": true },
+    { "type": "color", "id": "section_bg", "label": "Section background", "default": "#ffffff" },
+    { "type": "text", "id": "itk_eyebrow", "label": "Eyebrow", "default": "INSIDE THE KIT" },
+    { "type": "text", "id": "itk_heading", "label": "Heading fallback", "default": "SPICE MIX +" },
+    { "type": "text", "id": "itk_heading_em", "label": "Heading (em) fallback", "default": "FERMENT BOOST." }
+  ],
+  "presets": [ { "name": "FK — Inside the kit" } ],
+  "enabled_on": { "templates": ["product"] }
+}
+{% endschema %}

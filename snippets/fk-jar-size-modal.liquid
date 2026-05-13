@@ -1,0 +1,20 @@
+{%- comment -%}
+  fk-jar-size-modal — jar size comparison modal.
+  Renders only if the product has a size_chart metafield. Opened by
+  a button in fk-hero with data-open-size-modal.
+{%- endcomment -%}
+{%- assign p = product -%}
+{%- assign size_chart = p.metafields.custom.jar_size_chart_image | default: p.metafields.custom.size_chart_image -%}
+{%- assign capacity_label = p.metafields.custom.jar_capacity | default: p.metafields.custom.capacity -%}
+{%- if size_chart != blank -%}
+  <div class="size-modal" id="jar-size-modal" data-size-modal>
+    <div class="size-modal-card">
+      <button type="button" class="size-modal-close" data-close-size-modal aria-label="Close">×</button>
+      <div class="size-modal-eyebrow">JAR SIZE COMPARISON</div>
+      <h3 class="size-modal-title">{{ capacity_label | default: p.title }}</h3>
+      <div class="size-modal-image">
+        <img src="{{ size_chart | image_url: width: 1200 }}" alt="Size chart" loading="lazy" width="1200" height="900">
+      </div>
+    </div>
+  </div>
+{%- endif -%}
