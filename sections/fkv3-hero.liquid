@@ -24,9 +24,9 @@
   assign mf_components   = p.metafields.custom.featured_components.value
   assign best_for        = p.metafields.custom.best_for.value
 -%}
-<div data-kit="fermentation" class="ferment-pdp fkv3-hero-wrap">
+<div data-kit="fermentation" class="ferment-pdp fkv3-hero-wrap" {%- render 'fkv3-section-attrs' -%}>
   {%- render 'fkv3-color-cascade' -%}
-  <section class="pdp-hero" style="background:{{ section.settings.section_bg }}">
+  <section class="pdp-hero">
     <div class="container">
       {%- if section.settings.show_breadcrumb -%}
         <div class="breadcrumb">
@@ -215,7 +215,25 @@
     { "type": "header", "content": "Accordion labels" },
     { "type": "text", "id": "description_label", "label": "Description label", "default": "Description" },
     { "type": "text", "id": "inside_label", "label": "What's Inside label", "default": "What's Inside" }
-  ],
+  ,
+    { "type": "header", "content": "Spacing — desktop" },
+    { "type": "range", "id": "pad_top_d", "label": "Padding top (px)", "min": 0, "max": 200, "step": 4, "default": 0 },
+    { "type": "range", "id": "pad_bot_d", "label": "Padding bottom (px)", "min": 0, "max": 200, "step": 4, "default": 0 },
+    { "type": "range", "id": "mar_top_d", "label": "Margin top (px)", "min": 0, "max": 100, "step": 4, "default": 0 },
+    { "type": "range", "id": "mar_bot_d", "label": "Margin bottom (px)", "min": 0, "max": 100, "step": 4, "default": 0 },
+    { "type": "header", "content": "Spacing — mobile" },
+    { "type": "range", "id": "pad_top_m", "label": "Padding top (px)", "min": 0, "max": 120, "step": 4, "default": 0 },
+    { "type": "range", "id": "pad_bot_m", "label": "Padding bottom (px)", "min": 0, "max": 120, "step": 4, "default": 0 },
+    { "type": "range", "id": "mar_top_m", "label": "Margin top (px)", "min": 0, "max": 80, "step": 4, "default": 0 },
+    { "type": "range", "id": "mar_bot_m", "label": "Margin bottom (px)", "min": 0, "max": 80, "step": 4, "default": 0 },
+    { "type": "header", "content": "Typography — desktop" },
+    { "type": "range", "id": "eyebrow_size_d", "label": "Eyebrow size (px)", "min": 0, "max": 28, "step": 1, "default": 0 },
+    { "type": "range", "id": "heading_size_d", "label": "Heading size (px)", "min": 0, "max": 80, "step": 2, "default": 0 },
+    { "type": "range", "id": "sub_size_d", "label": "Sub-heading / body size (px)", "min": 0, "max": 28, "step": 1, "default": 0 },
+    { "type": "header", "content": "Typography — mobile" },
+    { "type": "range", "id": "eyebrow_size_m", "label": "Eyebrow size (px)", "min": 0, "max": 22, "step": 1, "default": 0 },
+    { "type": "range", "id": "heading_size_m", "label": "Heading size (px)", "min": 0, "max": 60, "step": 2, "default": 0 },
+    { "type": "range", "id": "sub_size_m", "label": "Sub-heading / body size (px)", "min": 0, "max": 22, "step": 1, "default": 0 }],
   "presets": [ { "name": "FK v3 — Hero" } ],
   "enabled_on": { "templates": ["product"] }
 }

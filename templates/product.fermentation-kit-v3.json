@@ -1,10 +1,10 @@
 {
   "sections": {
-    "kit-switcher": { "type": "fkv3-kit-switcher", "settings": {} },
-    "hero":         { "type": "fkv3-hero", "settings": {} },
+    "kit-switcher": { "type": "fkv3-kit-switcher", "settings": { "section_bg": "#FFF9EE" } },
+    "hero":         { "type": "fkv3-hero",         "settings": { "section_bg": "#FFFFFF" } },
     "trust-row":    {
       "type": "fkv3-trust-row",
-      "settings": {},
+      "settings": { "section_bg": "#FFF9EE" },
       "blocks": {
         "tc-1": { "type": "trust_card", "settings": {
           "icon": "👥",
@@ -29,21 +29,21 @@
       },
       "block_order": ["tc-1", "tc-2", "tc-3", "tc-4"]
     },
-    "how-make":     { "type": "fkv3-how-make", "settings": {} },
-    "myth":         { "type": "fkv3-myth", "settings": {} },
-    "outcomes":     { "type": "fkv3-outcomes", "settings": {} },
-    "reels":        { "type": "fkv3-reels", "settings": {} },
-    "box":          { "type": "fkv3-box", "settings": {} },
-    "airlock":      { "type": "fkv3-airlock-spotlight", "settings": {} },
-    "reviews":      { "type": "fkv3-reviews", "settings": {} },
-    "timeline":     { "type": "fkv3-timeline", "settings": {} },
-    "itk":          { "type": "fkv3-itk", "settings": {} },
-    "zoe":          { "type": "fkv3-zoe-science", "settings": {} },
-    "eat":          { "type": "fkv3-eat", "settings": {} },
-    "recipes":      { "type": "fkv3-recipes", "settings": {} },
-    "faq":          { "type": "fkv3-faq", "settings": {} },
-    "cross-sell":   { "type": "fkv3-cross-sell", "settings": {} },
-    "judgeme":      { "type": "fkv3-judgeme", "settings": {} }
+    "how-make":     { "type": "fkv3-how-make",          "settings": { "section_bg": "#FFFFFF" } },
+    "myth":         { "type": "fkv3-myth",              "settings": { "section_bg": "#FFF9EE" } },
+    "outcomes":     { "type": "fkv3-outcomes",          "settings": { "section_bg": "#FFFFFF" } },
+    "reels":        { "type": "fkv3-reels",             "settings": { "section_bg": "#FFF9EE" } },
+    "box":          { "type": "fkv3-box",               "settings": { "section_bg": "#FFFFFF" } },
+    "airlock":      { "type": "fkv3-airlock-spotlight", "settings": { "section_bg": "#FFF9EE" } },
+    "reviews":      { "type": "fkv3-reviews",           "settings": { "section_bg": "#FFFFFF" } },
+    "timeline":     { "type": "fkv3-timeline",          "settings": { "section_bg": "#FFF9EE" } },
+    "itk":          { "type": "fkv3-itk",               "settings": { "section_bg": "#FFFFFF" } },
+    "zoe":          { "type": "fkv3-zoe-science",       "settings": { "section_bg": "#FFF9EE" } },
+    "eat":          { "type": "fkv3-eat",               "settings": { "section_bg": "#FFFFFF" } },
+    "recipes":      { "type": "fkv3-recipes",           "settings": { "section_bg": "#FFF9EE" } },
+    "faq":          { "type": "fkv3-faq",               "settings": { "section_bg": "#FFFFFF" } },
+    "cross-sell":   { "type": "fkv3-cross-sell",        "settings": { "section_bg": "#FFF9EE" } },
+    "judgeme":      { "type": "fkv3-judgeme",           "settings": { "section_bg": "#FFFFFF" } }
   },
   "order": [
     "kit-switcher", "hero", "trust-row", "how-make", "myth",

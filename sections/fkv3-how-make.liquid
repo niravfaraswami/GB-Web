@@ -9,9 +9,9 @@
   assign how_video = mf_how_video | default: section.settings.how_video
 -%}
 {%- if mf_steps != blank or step_blocks.size > 0 -%}
-  <div data-kit="fermentation" class="ferment-pdp fkv3-how-make-wrap">
+  <div data-kit="fermentation" class="ferment-pdp fkv3-how-make-wrap" {%- render 'fkv3-section-attrs' -%}>
     {%- render 'fkv3-color-cascade' -%}
-    <section class="how-make-section section-accent fkv3-how-make-section" style="background:{{ section.settings.section_bg }}">
+    <section class="how-make-section section-accent fkv3-how-make-section">
       <div class="container">
         <div class="section-header centered">
           <div class="eyebrow">{{ section.settings.how_eyebrow }}</div>
@@ -81,7 +81,25 @@
     { "type": "image_picker", "id": "how_poster", "label": "Poster image fallback" },
     { "type": "text", "id": "how_pill", "label": "Pill text", "default": "▶ WATCH · 60 SEC" },
     { "type": "textarea", "id": "help_note_text", "label": "Help note (bottom)" }
-  ],
+  ,
+    { "type": "header", "content": "Spacing — desktop" },
+    { "type": "range", "id": "pad_top_d", "label": "Padding top (px)", "min": 0, "max": 200, "step": 4, "default": 0 },
+    { "type": "range", "id": "pad_bot_d", "label": "Padding bottom (px)", "min": 0, "max": 200, "step": 4, "default": 0 },
+    { "type": "range", "id": "mar_top_d", "label": "Margin top (px)", "min": 0, "max": 100, "step": 4, "default": 0 },
+    { "type": "range", "id": "mar_bot_d", "label": "Margin bottom (px)", "min": 0, "max": 100, "step": 4, "default": 0 },
+    { "type": "header", "content": "Spacing — mobile" },
+    { "type": "range", "id": "pad_top_m", "label": "Padding top (px)", "min": 0, "max": 120, "step": 4, "default": 0 },
+    { "type": "range", "id": "pad_bot_m", "label": "Padding bottom (px)", "min": 0, "max": 120, "step": 4, "default": 0 },
+    { "type": "range", "id": "mar_top_m", "label": "Margin top (px)", "min": 0, "max": 80, "step": 4, "default": 0 },
+    { "type": "range", "id": "mar_bot_m", "label": "Margin bottom (px)", "min": 0, "max": 80, "step": 4, "default": 0 },
+    { "type": "header", "content": "Typography — desktop" },
+    { "type": "range", "id": "eyebrow_size_d", "label": "Eyebrow size (px)", "min": 0, "max": 28, "step": 1, "default": 0 },
+    { "type": "range", "id": "heading_size_d", "label": "Heading size (px)", "min": 0, "max": 80, "step": 2, "default": 0 },
+    { "type": "range", "id": "sub_size_d", "label": "Sub-heading / body size (px)", "min": 0, "max": 28, "step": 1, "default": 0 },
+    { "type": "header", "content": "Typography — mobile" },
+    { "type": "range", "id": "eyebrow_size_m", "label": "Eyebrow size (px)", "min": 0, "max": 22, "step": 1, "default": 0 },
+    { "type": "range", "id": "heading_size_m", "label": "Heading size (px)", "min": 0, "max": 60, "step": 2, "default": 0 },
+    { "type": "range", "id": "sub_size_m", "label": "Sub-heading / body size (px)", "min": 0, "max": 22, "step": 1, "default": 0 }],
   "blocks": [
     { "type": "step", "name": "How-to step", "limit": 8, "settings": [
       { "type": "image_picker", "id": "icon_image", "label": "Icon image" },
