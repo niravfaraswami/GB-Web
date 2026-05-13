@@ -180,36 +180,84 @@
   text-align: center;
 }
 
+
 /* ============================================================
- * Tweak 4 — per-section typography controls (Theme Editor)
- * Variables are always emitted by the snippet with sensible
- * defaults baked in, so sliders directly drive font-size.
- * Specificity raised with two classes + !important on the
- * critical h2 rule to beat the base [data-kit="fermentation"] h2
- * declaration in the original stylesheet.
+ * Tweak 4 — per-section spacing + typography controls
+ * Mirror of fermentation-kit-leo.css lines 8-71. The fkv3 snippet
+ * emits data-template="fkv3" + CSS vars on each <section> element.
+ * Compound selectors win over the base padding rules in
+ * fermentation-kit.css. Fallbacks in var() match the baseline so
+ * unset sections look identical to before.
  * ============================================================ */
-.ferment-pdp[class*="fkv3-"][class*="-wrap"] .eyebrow {
-  font-size: var(--fkv3-eyebrow-size-d, 11px) !important;
+[data-template="fkv3"] .eyebrow,
+[data-template="fkv3"] .first30-eyebrow {
+  font-size: var(--eyebrow-size-d, 22px);
+  letter-spacing: 0.10em;
 }
-.ferment-pdp[class*="fkv3-"][class*="-wrap"] h2 {
-  font-size: var(--fkv3-heading-size-d, 44px) !important;
+[data-template="fkv3"] .section-header h2,
+[data-template="fkv3"] .myth-header h2,
+[data-template="fkv3"] .reels-header h2,
+[data-template="fkv3"] .first30-h {
+  font-size: var(--heading-size-d, 44px);
 }
-.ferment-pdp[class*="fkv3-"][class*="-wrap"] .section-header p,
-.ferment-pdp[class*="fkv3-"][class*="-wrap"] .ht-sub,
-.ferment-pdp[class*="fkv3-"][class*="-wrap"] .myth-header p {
-  font-size: var(--fkv3-sub-size-d, 16px) !important;
+@media (max-width: 768px) {
+  [data-template="fkv3"] .eyebrow,
+  [data-template="fkv3"] .first30-eyebrow { font-size: var(--eyebrow-size-m, 14px); }
+  [data-template="fkv3"] .section-header h2,
+  [data-template="fkv3"] .myth-header h2,
+  [data-template="fkv3"] .reels-header h2,
+  [data-template="fkv3"] .first30-h { font-size: var(--heading-size-m, 30px); }
 }
-@media (max-width: 767px) {
-  .ferment-pdp[class*="fkv3-"][class*="-wrap"] .eyebrow {
-    font-size: var(--fkv3-eyebrow-size-m, 11px) !important;
-  }
-  .ferment-pdp[class*="fkv3-"][class*="-wrap"] h2 {
-    font-size: var(--fkv3-heading-size-m, 28px) !important;
-  }
-  .ferment-pdp[class*="fkv3-"][class*="-wrap"] .section-header p,
-  .ferment-pdp[class*="fkv3-"][class*="-wrap"] .ht-sub,
-  .ferment-pdp[class*="fkv3-"][class*="-wrap"] .myth-header p {
-    font-size: var(--fkv3-sub-size-m, 14px) !important;
+
+/* Per-section padding + margin driven by CSS vars set on each
+   <section> element via fkv3-section-attrs. Each rule's fallback
+   matches the existing pre-customisation baseline. */
+[data-template="fkv3"].pdp-hero,
+[data-template="fkv3"].fkv3-kit-switcher-section,
+[data-template="fkv3"].trust-row-section,
+[data-template="fkv3"].how-make-section,
+[data-template="fkv3"].myth-section,
+[data-template="fkv3"].outcomes-section,
+[data-template="fkv3"].reels-section,
+[data-template="fkv3"].box-section,
+[data-template="fkv3"].fkv3-airlock-section,
+[data-template="fkv3"].reviews-section,
+[data-template="fkv3"].health-timeline-section,
+[data-template="fkv3"].itk-section,
+[data-template="fkv3"].zoe-section,
+[data-template="fkv3"].eat-section,
+[data-template="fkv3"].recipes-section,
+[data-template="fkv3"].faq-section,
+[data-template="fkv3"].cross-section,
+[data-template="fkv3"].judgeme-section {
+  padding-top: var(--pad-top-d, 80px);
+  padding-bottom: var(--pad-bot-d, 80px);
+  margin-top: var(--mar-top-d, 0);
+  margin-bottom: var(--mar-bot-d, 0);
+}
+@media (max-width: 768px) {
+  [data-template="fkv3"].pdp-hero,
+  [data-template="fkv3"].fkv3-kit-switcher-section,
+  [data-template="fkv3"].trust-row-section,
+  [data-template="fkv3"].how-make-section,
+  [data-template="fkv3"].myth-section,
+  [data-template="fkv3"].outcomes-section,
+  [data-template="fkv3"].reels-section,
+  [data-template="fkv3"].box-section,
+  [data-template="fkv3"].fkv3-airlock-section,
+  [data-template="fkv3"].reviews-section,
+  [data-template="fkv3"].health-timeline-section,
+  [data-template="fkv3"].itk-section,
+  [data-template="fkv3"].zoe-section,
+  [data-template="fkv3"].eat-section,
+  [data-template="fkv3"].recipes-section,
+  [data-template="fkv3"].faq-section,
+  [data-template="fkv3"].cross-section,
+  [data-template="fkv3"].judgeme-section {
+    padding-top: var(--pad-top-m, 56px);
+    padding-bottom: var(--pad-bot-m, 56px);
+    margin-top: var(--mar-top-m, 0);
+    margin-bottom: var(--mar-bot-m, 0);
   }
 }
 
