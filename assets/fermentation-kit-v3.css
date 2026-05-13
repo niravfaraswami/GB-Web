@@ -183,10 +183,10 @@
 /* ============================================================
  * Tweak 3 — per-section spacing controls (Theme Editor)
  * Each fkv3-*-wrap div carries CSS custom properties emitted by
- * snippets/fkv3-section-attrs.liquid. Defaults of 0 mean "no
- * extra spacing" — existing in-section padding is preserved.
+ * snippets/fkv3-section-attrs.liquid. The wrapper takes over
+ * vertical padding/margin entirely so sliders are the source of
+ * truth — inner section padding-top/bottom is zeroed.
  * ============================================================ */
-.ferment-pdp[class*="fkv3-"][class*="-wrap"],
 .ferment-pdp.fkv3-hero-wrap,
 .ferment-pdp.fkv3-kit-switcher-wrap,
 .ferment-pdp.fkv3-trust-row-wrap,
@@ -205,13 +205,37 @@
 .ferment-pdp.fkv3-faq-wrap,
 .ferment-pdp.fkv3-cross-wrap,
 .ferment-pdp.fkv3-judgeme-wrap {
-  padding-top: var(--fkv3-pad-top-d, 0px);
-  padding-bottom: var(--fkv3-pad-bot-d, 0px);
+  padding-top: var(--fkv3-pad-top-d, 80px);
+  padding-bottom: var(--fkv3-pad-bot-d, 80px);
   margin-top: var(--fkv3-mar-top-d, 0px);
   margin-bottom: var(--fkv3-mar-bot-d, 0px);
 }
+/* Strip the inner <section>'s existing padding-top/bottom so the
+   wrapper's controls are the visible spacing — applies to every
+   FK section class the original stylesheet styles. */
+.ferment-pdp.fkv3-hero-wrap > .pdp-hero,
+.ferment-pdp.fkv3-trust-row-wrap > .trust-row-section,
+.ferment-pdp.fkv3-how-make-wrap > .how-make-section,
+.ferment-pdp.fkv3-myth-wrap > .myth-section,
+.ferment-pdp.fkv3-outcomes-wrap > .outcomes-section,
+.ferment-pdp.fkv3-reels-wrap > .reels-section,
+.ferment-pdp.fkv3-box-wrap > .box-section,
+.ferment-pdp.fkv3-airlock-wrap > .science-section,
+.ferment-pdp.fkv3-airlock-wrap > .airlock-spotlight-section,
+.ferment-pdp.fkv3-airlock-wrap > .fkv3-airlock-section,
+.ferment-pdp.fkv3-reviews-wrap > .reviews-section,
+.ferment-pdp.fkv3-timeline-wrap > .health-timeline-section,
+.ferment-pdp.fkv3-itk-wrap > .itk-section,
+.ferment-pdp.fkv3-zoe-wrap > .zoe-section,
+.ferment-pdp.fkv3-eat-wrap > .eat-section,
+.ferment-pdp.fkv3-recipes-wrap > .recipes-section,
+.ferment-pdp.fkv3-faq-wrap > .faq-section,
+.ferment-pdp.fkv3-cross-wrap > .cross-section,
+.ferment-pdp.fkv3-judgeme-wrap > .judgeme-section {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
 @media (max-width: 767px) {
-  .ferment-pdp[class*="fkv3-"][class*="-wrap"],
   .ferment-pdp.fkv3-hero-wrap,
   .ferment-pdp.fkv3-kit-switcher-wrap,
   .ferment-pdp.fkv3-trust-row-wrap,
@@ -230,8 +254,8 @@
   .ferment-pdp.fkv3-faq-wrap,
   .ferment-pdp.fkv3-cross-wrap,
   .ferment-pdp.fkv3-judgeme-wrap {
-    padding-top: var(--fkv3-pad-top-m, 0px);
-    padding-bottom: var(--fkv3-pad-bot-m, 0px);
+    padding-top: var(--fkv3-pad-top-m, 56px);
+    padding-bottom: var(--fkv3-pad-bot-m, 56px);
     margin-top: var(--fkv3-mar-top-m, 0px);
     margin-bottom: var(--fkv3-mar-bot-m, 0px);
   }
@@ -239,35 +263,34 @@
 
 /* ============================================================
  * Tweak 4 — per-section typography controls (Theme Editor)
- * Override only when the CSS var is set (snippet emits the var
- * only when > 0). Targets the standard section-header structure
- * plus body copy.
+ * Variables are always emitted by the snippet with sensible
+ * defaults baked in, so sliders directly drive font-size.
+ * Specificity raised with two classes + !important on the
+ * critical h2 rule to beat the base [data-kit="fermentation"] h2
+ * declaration in the original stylesheet.
  * ============================================================ */
-.ferment-pdp [class^="fkv3-"][class$="-wrap"] .eyebrow,
-.ferment-pdp [class*="fkv3-"][class*="-wrap"] .eyebrow {
-  font-size: var(--fkv3-eyebrow-size-d, inherit);
+.ferment-pdp[class*="fkv3-"][class*="-wrap"] .eyebrow {
+  font-size: var(--fkv3-eyebrow-size-d, 11px) !important;
 }
-.ferment-pdp [class*="fkv3-"][class*="-wrap"] .section-header h2,
-.ferment-pdp [class*="fkv3-"][class*="-wrap"] h2 {
-  font-size: var(--fkv3-heading-size-d, inherit);
+.ferment-pdp[class*="fkv3-"][class*="-wrap"] h2 {
+  font-size: var(--fkv3-heading-size-d, 44px) !important;
 }
-.ferment-pdp [class*="fkv3-"][class*="-wrap"] .section-header p,
-.ferment-pdp [class*="fkv3-"][class*="-wrap"] .ht-sub,
-.ferment-pdp [class*="fkv3-"][class*="-wrap"] .myth-header p {
-  font-size: var(--fkv3-sub-size-d, inherit);
+.ferment-pdp[class*="fkv3-"][class*="-wrap"] .section-header p,
+.ferment-pdp[class*="fkv3-"][class*="-wrap"] .ht-sub,
+.ferment-pdp[class*="fkv3-"][class*="-wrap"] .myth-header p {
+  font-size: var(--fkv3-sub-size-d, 16px) !important;
 }
 @media (max-width: 767px) {
-  .ferment-pdp [class*="fkv3-"][class*="-wrap"] .eyebrow {
-    font-size: var(--fkv3-eyebrow-size-m, inherit);
+  .ferment-pdp[class*="fkv3-"][class*="-wrap"] .eyebrow {
+    font-size: var(--fkv3-eyebrow-size-m, 11px) !important;
   }
-  .ferment-pdp [class*="fkv3-"][class*="-wrap"] .section-header h2,
-  .ferment-pdp [class*="fkv3-"][class*="-wrap"] h2 {
-    font-size: var(--fkv3-heading-size-m, inherit);
+  .ferment-pdp[class*="fkv3-"][class*="-wrap"] h2 {
+    font-size: var(--fkv3-heading-size-m, 28px) !important;
   }
-  .ferment-pdp [class*="fkv3-"][class*="-wrap"] .section-header p,
-  .ferment-pdp [class*="fkv3-"][class*="-wrap"] .ht-sub,
-  .ferment-pdp [class*="fkv3-"][class*="-wrap"] .myth-header p {
-    font-size: var(--fkv3-sub-size-m, inherit);
+  .ferment-pdp[class*="fkv3-"][class*="-wrap"] .section-header p,
+  .ferment-pdp[class*="fkv3-"][class*="-wrap"] .ht-sub,
+  .ferment-pdp[class*="fkv3-"][class*="-wrap"] .myth-header p {
+    font-size: var(--fkv3-sub-size-m, 14px) !important;
   }
 }
 

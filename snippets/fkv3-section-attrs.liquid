@@ -1,30 +1,29 @@
 {%- comment -%}
   fkv3-section-attrs — emits a style="" attribute carrying:
-    • the section background color
-    • CSS custom properties for typography (eyebrow / heading / sub) and
-      spacing (padding / margin top + bottom) — separate desktop + mobile
+    • section background color
+    • CSS custom properties for typography (eyebrow / heading / sub)
+      and spacing (padding / margin top + bottom) — separate desktop +
+      mobile, ALWAYS emitted so sliders are the source of truth.
   Render INSIDE the opening tag of every fkv3 section's outer wrapper:
     <div data-kit="fermentation" class="..." {%- render 'fkv3-section-attrs' -%}>
-  CSS in fermentation-kit-v3.css consumes the variables. Unset values
-  fall through to in-stylesheet defaults so existing visuals are
-  preserved when a merchant hasn't touched the controls.
+  CSS in fermentation-kit-v3.css consumes the variables.
 {%- endcomment -%}
 {%- liquid
   assign s = section.settings
   assign bg = s.section_bg | default: '#ffffff'
-  assign pad_top_d = s.pad_top_d | default: 0
-  assign pad_bot_d = s.pad_bot_d | default: 0
-  assign pad_top_m = s.pad_top_m | default: 0
-  assign pad_bot_m = s.pad_bot_m | default: 0
+  assign pad_top_d = s.pad_top_d | default: 80
+  assign pad_bot_d = s.pad_bot_d | default: 80
+  assign pad_top_m = s.pad_top_m | default: 56
+  assign pad_bot_m = s.pad_bot_m | default: 56
   assign mar_top_d = s.mar_top_d | default: 0
   assign mar_bot_d = s.mar_bot_d | default: 0
   assign mar_top_m = s.mar_top_m | default: 0
   assign mar_bot_m = s.mar_bot_m | default: 0
-  assign eyebrow_d = s.eyebrow_size_d | default: 0
-  assign eyebrow_m = s.eyebrow_size_m | default: 0
-  assign heading_d = s.heading_size_d | default: 0
-  assign heading_m = s.heading_size_m | default: 0
-  assign sub_d = s.sub_size_d | default: 0
-  assign sub_m = s.sub_size_m | default: 0
+  assign eyebrow_d = s.eyebrow_size_d | default: 11
+  assign eyebrow_m = s.eyebrow_size_m | default: 11
+  assign heading_d = s.heading_size_d | default: 44
+  assign heading_m = s.heading_size_m | default: 28
+  assign sub_d = s.sub_size_d | default: 16
+  assign sub_m = s.sub_size_m | default: 14
 -%}
- style="background: {{ bg }}; --fkv3-pad-top-d: {{ pad_top_d }}px; --fkv3-pad-bot-d: {{ pad_bot_d }}px; --fkv3-pad-top-m: {{ pad_top_m }}px; --fkv3-pad-bot-m: {{ pad_bot_m }}px; --fkv3-mar-top-d: {{ mar_top_d }}px; --fkv3-mar-bot-d: {{ mar_bot_d }}px; --fkv3-mar-top-m: {{ mar_top_m }}px; --fkv3-mar-bot-m: {{ mar_bot_m }}px;{% if eyebrow_d > 0 %} --fkv3-eyebrow-size-d: {{ eyebrow_d }}px;{% endif %}{% if eyebrow_m > 0 %} --fkv3-eyebrow-size-m: {{ eyebrow_m }}px;{% endif %}{% if heading_d > 0 %} --fkv3-heading-size-d: {{ heading_d }}px;{% endif %}{% if heading_m > 0 %} --fkv3-heading-size-m: {{ heading_m }}px;{% endif %}{% if sub_d > 0 %} --fkv3-sub-size-d: {{ sub_d }}px;{% endif %}{% if sub_m > 0 %} --fkv3-sub-size-m: {{ sub_m }}px;{% endif %}"
+ style="background: {{ bg }}; --fkv3-pad-top-d: {{ pad_top_d }}px; --fkv3-pad-bot-d: {{ pad_bot_d }}px; --fkv3-pad-top-m: {{ pad_top_m }}px; --fkv3-pad-bot-m: {{ pad_bot_m }}px; --fkv3-mar-top-d: {{ mar_top_d }}px; --fkv3-mar-bot-d: {{ mar_bot_d }}px; --fkv3-mar-top-m: {{ mar_top_m }}px; --fkv3-mar-bot-m: {{ mar_bot_m }}px; --fkv3-eyebrow-size-d: {{ eyebrow_d }}px; --fkv3-eyebrow-size-m: {{ eyebrow_m }}px; --fkv3-heading-size-d: {{ heading_d }}px; --fkv3-heading-size-m: {{ heading_m }}px; --fkv3-sub-size-d: {{ sub_d }}px; --fkv3-sub-size-m: {{ sub_m }}px;"
