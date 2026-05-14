@@ -295,3 +295,20 @@
  * in; override here for consistency.
  * ============================================================ */
 [data-template="fkv3"] .reels-header { text-align: left; }
+
+/* ============================================================
+ * Tweak 7 — Zoe section: keep 2×2 grid on mobile
+ * Base stylesheet collapses .zoe-grid to single-column at ≤768px;
+ * override for fkv3 so the four stat cards stay in a 2-row × 2-col
+ * layout on mobile.
+ * ============================================================ */
+@media (max-width: 768px) {
+  [data-template="fkv3"].zoe-section .zoe-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  [data-template="fkv3"].zoe-section .zoe-card {
+    padding: 16px 14px;
+    gap: 12px;
+  }
+}
