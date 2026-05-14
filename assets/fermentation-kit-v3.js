@@ -181,7 +181,32 @@
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function () { init(); });
-  } else { init(); }
-  document.addEventListener('shopify:section:load', function (e) { init(e.target); });
+    document.addEventListener('DOMContentLoaded', function () { init(); alternateBackgrounds(); });
+  } else { init(); alternateBackgrounds(); }
+  document.addEventListener('shopify:section:load', function (e) { init(e.target); alternateBackgrounds(); });
+  document.addEventListener('shopify:section:unload', function () { alternateBackgrounds(); });
+
+  // Walk rendered fkv3 sections in DOM order and apply alternating
+  // white/cream backgrounds. Empty sections (whose Liquid produced
+  // no .ferment-pdp child) are naturally skipped because the
+  // querySelectorAll only matches present .ferment-pdp wrappers.
+  // This overrides the per-section section_bg inline style from
+  // snippets/fkv3-section-attrs.liquid (kept as a fallback for
+  // when JS is disabled or while the script hasn't run yet).
+  function alternateBackgrounds() {
+    var pdps = document.querySelectorAll('.ferment-pdp');
+    if (!pdps.length) return;
+    var COLORS = ['#ffffff', '#fff9ee'];
+    Array.prototype.forEach.call(pdps, function (pdp, i) {
+      var bg = COLORS[i % 2];
+      var inner = pdp.firstElementChild;
+      if (inner && inner.tagName === 'SECTION') {
+        inner.style.background = bg;
+      }
+      var outer = pdp.parentElement;
+      if (outer && outer.classList && outer.classList.contains('shopify-section')) {
+        outer.style.background = bg;
+      }
+    });
+  }
 })();
