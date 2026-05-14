@@ -490,3 +490,23 @@
     padding: 6px 12px;
   }
 }
+
+/* ============================================================
+ * Tweak 12 — Timeline carousel: align first card with heading
+ * Base mobile rule (fermentation-kit.css line 524) gives
+ * .ht-timeline `margin: 16px -18px 0; padding: 4px 18px 20px`,
+ * which makes the carousel bleed past the container — first
+ * card ends up flush to the viewport-left edge. For fkv3 we
+ * want the first card aligned with the section heading
+ * (i.e. flush with the container's content edge), while still
+ * letting the carousel extend off the right edge for natural
+ * horizontal scroll.
+ * ============================================================ */
+@media (max-width: 768px) {
+  [data-template="fkv3"].health-timeline-section .ht-timeline {
+    margin-left: 0;
+    margin-right: -24px;
+    padding-left: 0;
+    padding-right: 24px;
+  }
+}
