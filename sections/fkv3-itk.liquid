@@ -27,7 +27,7 @@
                 <div class="itk-img">{%- if c.image != blank -%}<img src="{{ c.image | image_url: width: 800 }}" alt="{{ c.heading | escape }}" loading="lazy" width="800" height="600">{%- endif -%}</div>
                 <div class="itk-body">
                   <div class="itk-h">{{ c.heading }}</div>
-                  <div class="itk-sub">{{ c.sub }}</div>
+                  <div class="itk-sub">{{ c.sub_heading }}</div>
                   {%- if c.ingredients.size > 0 -%}
                     <ul class="itk-list itk-list-{{ c.category | default: 'spice' }}">
                       {%- for ing in c.ingredients -%}<li>{{ ing }}</li>{%- endfor -%}
