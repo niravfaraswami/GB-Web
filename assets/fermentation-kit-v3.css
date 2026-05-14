@@ -268,7 +268,6 @@
  * ============================================================ */
 @media (max-width: 767px) {
   .ferment-pdp .reels-grid,
-  .ferment-pdp .eat-grid,
   .ferment-pdp .ht-timeline,
   .ferment-pdp .qb-grid,
   .ferment-pdp .reviews-grid,
@@ -281,7 +280,6 @@
   }
   /* When a grid scrolls horizontally, ensure cards don't get clipped */
   .ferment-pdp .reels-grid,
-  .ferment-pdp .eat-grid,
   .ferment-pdp .qb-grid,
   .ferment-pdp .recipe-tags {
     scroll-padding-left: 24px;
@@ -434,5 +432,28 @@
   }
   [data-template="fkv3"].itk-section .itk-list li {
     font-size: 12.5px;
+  }
+}
+
+/* ============================================================
+ * Tweak 10 — Eat (How To Enjoy) cards: 4:3 image aspect ratio
+ * + remove mobile inset
+ * Base CSS uses fixed height: 130px on .eat-img which produces
+ * different aspect ratios at different card widths. Switch to
+ * aspect-ratio: 4/3 so desktop and mobile both render the same
+ * 4:3 image proportions.
+ *
+ * Also explicitly zero any leftover padding on .eat-grid so cards
+ * sit flush with the section heading (left-aligned with the
+ * container) on mobile.
+ * ============================================================ */
+[data-template="fkv3"].eat-section .eat-img {
+  height: auto;
+  aspect-ratio: 4 / 3;
+}
+@media (max-width: 768px) {
+  [data-template="fkv3"].eat-section .eat-grid {
+    padding-left: 0;
+    padding-right: 0;
   }
 }
