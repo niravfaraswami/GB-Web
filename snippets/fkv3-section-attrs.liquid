@@ -6,11 +6,9 @@
   Usage:
     <section class="..." {%- render 'fkv3-section-attrs' -%}>
 
-  Emits:
-    data-kit="fermentation" data-template="fkv3" style="--kit-color, --pad-*, --mar-*, --eyebrow-size-*, --heading-size-*"
-
-  Defaults match the existing pre-customisation baseline so unset
-  sections look identical to before.
+  Defaults match leo verbatim. Saved Theme Editor values of 0 from
+  earlier schema versions (when default was 0) are coerced to the
+  visible leo default so text and spacing never collapse to zero.
 {% endcomment -%}
 {%- liquid
   assign p = product
@@ -18,17 +16,48 @@
   assign accent_dark = p.metafields.custom.theme_accent_dark | default: '#8E2E1A'
   assign accent_soft = p.metafields.custom.theme_accent_soft | default: '#FCE5DE'
 
-  assign pad_top_d = section.settings.pad_top_d | default: 80
-  assign pad_bot_d = section.settings.pad_bot_d | default: 80
-  assign pad_top_m = section.settings.pad_top_m | default: 56
-  assign pad_bot_m = section.settings.pad_bot_m | default: 56
+  comment
+    All spacing + typography: coerce blank / 0 → leo default so
+    earlier-saved 0 values don't render as invisible text or
+    collapsed sections. Margins stay 0 default per leo.
+  endcomment
+  assign pad_top_d = section.settings.pad_top_d
+  if pad_top_d == blank or pad_top_d == 0
+    assign pad_top_d = 80
+  endif
+  assign pad_bot_d = section.settings.pad_bot_d
+  if pad_bot_d == blank or pad_bot_d == 0
+    assign pad_bot_d = 80
+  endif
+  assign pad_top_m = section.settings.pad_top_m
+  if pad_top_m == blank or pad_top_m == 0
+    assign pad_top_m = 56
+  endif
+  assign pad_bot_m = section.settings.pad_bot_m
+  if pad_bot_m == blank or pad_bot_m == 0
+    assign pad_bot_m = 56
+  endif
+
   assign mar_top_d = section.settings.mar_top_d | default: 0
   assign mar_bot_d = section.settings.mar_bot_d | default: 0
   assign mar_top_m = section.settings.mar_top_m | default: 0
   assign mar_bot_m = section.settings.mar_bot_m | default: 0
-  assign eyebrow_d = section.settings.eyebrow_size_d | default: 22
-  assign eyebrow_m = section.settings.eyebrow_size_m | default: 14
-  assign heading_d = section.settings.heading_size_d | default: 44
-  assign heading_m = section.settings.heading_size_m | default: 30
+
+  assign eyebrow_d = section.settings.eyebrow_size_d
+  if eyebrow_d == blank or eyebrow_d == 0
+    assign eyebrow_d = 22
+  endif
+  assign eyebrow_m = section.settings.eyebrow_size_m
+  if eyebrow_m == blank or eyebrow_m == 0
+    assign eyebrow_m = 14
+  endif
+  assign heading_d = section.settings.heading_size_d
+  if heading_d == blank or heading_d == 0
+    assign heading_d = 44
+  endif
+  assign heading_m = section.settings.heading_size_m
+  if heading_m == blank or heading_m == 0
+    assign heading_m = 30
+  endif
 -%}
  data-kit="fermentation" data-template="fkv3" style="--kit-color: {{ accent }}; --kit-color-dark: {{ accent_dark }}; --kit-color-soft: {{ accent_soft }}; --pad-top-d: {{ pad_top_d }}px; --pad-bot-d: {{ pad_bot_d }}px; --pad-top-m: {{ pad_top_m }}px; --pad-bot-m: {{ pad_bot_m }}px; --mar-top-d: {{ mar_top_d }}px; --mar-bot-d: {{ mar_bot_d }}px; --mar-top-m: {{ mar_top_m }}px; --mar-bot-m: {{ mar_bot_m }}px; --eyebrow-size-d: {{ eyebrow_d }}px; --eyebrow-size-m: {{ eyebrow_m }}px; --heading-size-d: {{ heading_d }}px; --heading-size-m: {{ heading_m }}px;"
