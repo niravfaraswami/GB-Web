@@ -510,3 +510,15 @@
     padding-right: 24px;
   }
 }
+
+/* ============================================================
+ * Tweak 13 — FAQ list: left-align with section heading on desktop
+ * Base CSS centers .faq-list (max-width: 800px; margin: 32px auto 0).
+ * For fkv3 we want the FAQ cards to align with the heading + span
+ * the same width as content in surrounding sections.
+ * ============================================================ */
+[data-template="fkv3"].faq-section .faq-list {
+  max-width: none;
+  margin-left: 0;
+  margin-right: 0;
+}
