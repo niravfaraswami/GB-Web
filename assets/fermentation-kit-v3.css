@@ -271,16 +271,14 @@
   .ferment-pdp .ht-timeline,
   .ferment-pdp .qb-grid,
   .ferment-pdp .reviews-grid,
-  .ferment-pdp .cross-grid,
-  .ferment-pdp .recipe-tags {
+  .ferment-pdp .cross-grid {
     padding-left: 24px;
     padding-right: 24px;
     box-sizing: border-box;
   }
   /* When a grid scrolls horizontally, ensure cards don't get clipped */
   .ferment-pdp .reels-grid,
-  .ferment-pdp .qb-grid,
-  .ferment-pdp .recipe-tags {
+  .ferment-pdp .qb-grid {
     scroll-padding-left: 24px;
   }
 }
@@ -572,5 +570,30 @@
   }
   [data-template="fkv3"].zoe-section .zoe-card .zoe-stat {
     font-size: 22px;
+  }
+}
+
+/* ============================================================
+ * Tweak 15 — Recipe tags: compact mobile pills (2–3 per row)
+ * Base CSS uses font-size: 12px; padding: 6px 14px which on mobile
+ * pushes each pill onto its own row. Drop the type, tighten padding
+ * and gap so pills wrap 2–3 per row, and remove the extra left
+ * inset previously added by Tweak 5 (recipe-tags is a wrap row,
+ * not a carousel) so pills align flush with the section heading.
+ * ============================================================ */
+@media (max-width: 767px) {
+  [data-template="fkv3"].recipes-section .recipe-tags {
+    gap: 6px;
+    padding-left: 0;
+    padding-right: 0;
+  }
+  [data-template="fkv3"].recipes-section .recipe-tag {
+    font-size: 11px;
+    padding: 5px 10px;
+    gap: 5px;
+  }
+  [data-template="fkv3"].recipes-section .recipe-tag .dot {
+    width: 6px;
+    height: 6px;
   }
 }
