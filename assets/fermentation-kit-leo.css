@@ -839,7 +839,7 @@
 .gb-card-grid-section[data-cols="2"] .gb-card-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
 .gb-card-grid-section[data-cols="3"] .gb-card-grid { grid-template-columns: repeat(3, 1fr); gap: 18px; }
 .gb-card-grid-item {
-  background: var(--gb-cream); border: 1px solid var(--gb-border-soft);
+  background: var(--gb-white); border: 1px solid var(--gb-border-soft);
   border-radius: 14px; padding: 22px 20px;
   display: flex; flex-direction: column; gap: 10px;
   transition: border-color 0.15s, transform 0.15s;
@@ -976,7 +976,7 @@
 }
 .gb-week-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 28px; }
 .gb-week-card {
-  background: var(--gb-cream); border: 1px solid var(--gb-border-soft);
+  background: var(--gb-white); border: 1px solid var(--gb-border-soft);
   border-radius: 14px; padding: 22px 20px;
 }
 .gb-week-day {
