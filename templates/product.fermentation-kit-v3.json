@@ -1,54 +1,388 @@
 {
   "sections": {
-    "kit-switcher": { "type": "fkv3-kit-switcher", "settings": { "section_bg": "#FFF9EE" } },
-    "hero":         { "type": "fkv3-hero",         "settings": { "section_bg": "#FFFFFF" } },
-    "trust-row":    {
-      "type": "fkv3-trust-row",
-      "settings": { "section_bg": "#FFF9EE" },
-      "blocks": {
-        "tc-1": { "type": "trust_card", "settings": {
-          "icon": "👥",
-          "heading": "50K+ CUSTOMERS SERVED",
-          "description": "Trusted by Indian homes since 2020."
-        }},
-        "tc-2": { "type": "trust_card", "settings": {
-          "icon": "💬",
-          "heading": "FERMENTATION EXPERT HELP",
-          "description": "WhatsApp us a photo if your batch looks confusing."
-        }},
-        "tc-3": { "type": "trust_card", "settings": {
-          "icon": "🤝",
-          "heading": "DAMAGE SUPPORT INCLUDED",
-          "description": "We help quickly if anything arrives damaged."
-        }},
-        "tc-4": { "type": "trust_card", "settings": {
-          "icon": "🌿",
-          "heading": "HAND-PACKED",
-          "description": "Small-batch spice mix, made by people who drink kanji daily."
-        }}
-      },
-      "block_order": ["tc-1", "tc-2", "tc-3", "tc-4"]
+    "kit-switcher": {
+      "type": "fkv3-kit-switcher",
+      "settings": {
+        "section_bg": "#FFF9EE",
+        "pad_top_d": 80,
+        "pad_bot_d": 80,
+        "pad_top_m": 56,
+        "pad_bot_m": 56,
+        "mar_top_d": 0,
+        "mar_bot_d": 0,
+        "mar_top_m": 0,
+        "mar_bot_m": 0,
+        "eyebrow_size_d": 22,
+        "eyebrow_size_m": 14,
+        "heading_size_d": 44,
+        "heading_size_m": 30
+      }
     },
-    "how-make":     { "type": "fkv3-how-make",          "settings": { "section_bg": "#FFFFFF" } },
-    "myth":         { "type": "fkv3-myth",              "settings": { "section_bg": "#FFF9EE" } },
-    "outcomes":     { "type": "fkv3-outcomes",          "settings": { "section_bg": "#FFFFFF" } },
-    "reels":        { "type": "fkv3-reels",             "settings": { "section_bg": "#FFF9EE" } },
-    "box":          { "type": "fkv3-box",               "settings": { "section_bg": "#FFFFFF" } },
-    "airlock":      { "type": "fkv3-airlock-spotlight", "settings": { "section_bg": "#FFF9EE" } },
-    "reviews":      { "type": "fkv3-reviews",           "settings": { "section_bg": "#FFFFFF" } },
-    "timeline":     { "type": "fkv3-timeline",          "settings": { "section_bg": "#FFF9EE" } },
-    "itk":          { "type": "fkv3-itk",               "settings": { "section_bg": "#FFFFFF" } },
-    "zoe":          { "type": "fkv3-zoe-science",       "settings": { "section_bg": "#FFF9EE" } },
-    "eat":          { "type": "fkv3-eat",               "settings": { "section_bg": "#FFFFFF" } },
-    "recipes":      { "type": "fkv3-recipes",           "settings": { "section_bg": "#FFF9EE" } },
-    "faq":          { "type": "fkv3-faq",               "settings": { "section_bg": "#FFFFFF" } },
-    "cross-sell":   { "type": "fkv3-cross-sell",        "settings": { "section_bg": "#FFF9EE" } },
-    "judgeme":      { "type": "fkv3-judgeme",           "settings": { "section_bg": "#FFFFFF" } }
+    "hero": {
+      "type": "fkv3-hero",
+      "settings": {
+        "section_bg": "#FFFFFF",
+        "pad_top_d": 80,
+        "pad_bot_d": 80,
+        "pad_top_m": 56,
+        "pad_bot_m": 56,
+        "mar_top_d": 0,
+        "mar_bot_d": 0,
+        "mar_top_m": 0,
+        "mar_bot_m": 0,
+        "eyebrow_size_d": 22,
+        "eyebrow_size_m": 14,
+        "heading_size_d": 44,
+        "heading_size_m": 30
+      }
+    },
+    "trust-row": {
+      "type": "fkv3-trust-row",
+      "settings": {
+        "section_bg": "#FFF9EE",
+        "pad_top_d": 80,
+        "pad_bot_d": 80,
+        "pad_top_m": 56,
+        "pad_bot_m": 56,
+        "mar_top_d": 0,
+        "mar_bot_d": 0,
+        "mar_top_m": 0,
+        "mar_bot_m": 0,
+        "eyebrow_size_d": 22,
+        "eyebrow_size_m": 14,
+        "heading_size_d": 44,
+        "heading_size_m": 30
+      },
+      "blocks": {
+        "tc-1": {
+          "type": "trust_card",
+          "settings": {
+            "icon": "👥",
+            "heading": "50K+ CUSTOMERS SERVED",
+            "description": "Trusted by Indian homes since 2020."
+          }
+        },
+        "tc-2": {
+          "type": "trust_card",
+          "settings": {
+            "icon": "💬",
+            "heading": "FERMENTATION EXPERT HELP",
+            "description": "WhatsApp us a photo if your batch looks confusing."
+          }
+        },
+        "tc-3": {
+          "type": "trust_card",
+          "settings": {
+            "icon": "🤝",
+            "heading": "DAMAGE SUPPORT INCLUDED",
+            "description": "We help quickly if anything arrives damaged."
+          }
+        },
+        "tc-4": {
+          "type": "trust_card",
+          "settings": {
+            "icon": "🌿",
+            "heading": "HAND-PACKED",
+            "description": "Small-batch spice mix, made by people who drink kanji daily."
+          }
+        }
+      },
+      "block_order": [
+        "tc-1",
+        "tc-2",
+        "tc-3",
+        "tc-4"
+      ]
+    },
+    "how-make": {
+      "type": "fkv3-how-make",
+      "settings": {
+        "section_bg": "#FFFFFF",
+        "pad_top_d": 80,
+        "pad_bot_d": 80,
+        "pad_top_m": 56,
+        "pad_bot_m": 56,
+        "mar_top_d": 0,
+        "mar_bot_d": 0,
+        "mar_top_m": 0,
+        "mar_bot_m": 0,
+        "eyebrow_size_d": 22,
+        "eyebrow_size_m": 14,
+        "heading_size_d": 44,
+        "heading_size_m": 30
+      }
+    },
+    "myth": {
+      "type": "fkv3-myth",
+      "settings": {
+        "section_bg": "#FFF9EE",
+        "pad_top_d": 80,
+        "pad_bot_d": 80,
+        "pad_top_m": 56,
+        "pad_bot_m": 56,
+        "mar_top_d": 0,
+        "mar_bot_d": 0,
+        "mar_top_m": 0,
+        "mar_bot_m": 0,
+        "eyebrow_size_d": 22,
+        "eyebrow_size_m": 14,
+        "heading_size_d": 44,
+        "heading_size_m": 30
+      }
+    },
+    "outcomes": {
+      "type": "fkv3-outcomes",
+      "settings": {
+        "section_bg": "#FFFFFF",
+        "pad_top_d": 80,
+        "pad_bot_d": 80,
+        "pad_top_m": 56,
+        "pad_bot_m": 56,
+        "mar_top_d": 0,
+        "mar_bot_d": 0,
+        "mar_top_m": 0,
+        "mar_bot_m": 0,
+        "eyebrow_size_d": 22,
+        "eyebrow_size_m": 14,
+        "heading_size_d": 44,
+        "heading_size_m": 30
+      }
+    },
+    "reels": {
+      "type": "fkv3-reels",
+      "settings": {
+        "section_bg": "#FFF9EE",
+        "pad_top_d": 80,
+        "pad_bot_d": 80,
+        "pad_top_m": 56,
+        "pad_bot_m": 56,
+        "mar_top_d": 0,
+        "mar_bot_d": 0,
+        "mar_top_m": 0,
+        "mar_bot_m": 0,
+        "eyebrow_size_d": 22,
+        "eyebrow_size_m": 14,
+        "heading_size_d": 44,
+        "heading_size_m": 30
+      }
+    },
+    "box": {
+      "type": "fkv3-box",
+      "settings": {
+        "section_bg": "#FFFFFF",
+        "pad_top_d": 80,
+        "pad_bot_d": 80,
+        "pad_top_m": 56,
+        "pad_bot_m": 56,
+        "mar_top_d": 0,
+        "mar_bot_d": 0,
+        "mar_top_m": 0,
+        "mar_bot_m": 0,
+        "eyebrow_size_d": 22,
+        "eyebrow_size_m": 14,
+        "heading_size_d": 44,
+        "heading_size_m": 30
+      }
+    },
+    "airlock": {
+      "type": "fkv3-airlock-spotlight",
+      "settings": {
+        "section_bg": "#FFF9EE",
+        "pad_top_d": 80,
+        "pad_bot_d": 80,
+        "pad_top_m": 56,
+        "pad_bot_m": 56,
+        "mar_top_d": 0,
+        "mar_bot_d": 0,
+        "mar_top_m": 0,
+        "mar_bot_m": 0,
+        "eyebrow_size_d": 22,
+        "eyebrow_size_m": 14,
+        "heading_size_d": 44,
+        "heading_size_m": 30
+      }
+    },
+    "reviews": {
+      "type": "fkv3-reviews",
+      "settings": {
+        "section_bg": "#FFFFFF",
+        "pad_top_d": 80,
+        "pad_bot_d": 80,
+        "pad_top_m": 56,
+        "pad_bot_m": 56,
+        "mar_top_d": 0,
+        "mar_bot_d": 0,
+        "mar_top_m": 0,
+        "mar_bot_m": 0,
+        "eyebrow_size_d": 22,
+        "eyebrow_size_m": 14,
+        "heading_size_d": 44,
+        "heading_size_m": 30
+      }
+    },
+    "timeline": {
+      "type": "fkv3-timeline",
+      "settings": {
+        "section_bg": "#FFF9EE",
+        "pad_top_d": 80,
+        "pad_bot_d": 80,
+        "pad_top_m": 56,
+        "pad_bot_m": 56,
+        "mar_top_d": 0,
+        "mar_bot_d": 0,
+        "mar_top_m": 0,
+        "mar_bot_m": 0,
+        "eyebrow_size_d": 22,
+        "eyebrow_size_m": 14,
+        "heading_size_d": 44,
+        "heading_size_m": 30
+      }
+    },
+    "itk": {
+      "type": "fkv3-itk",
+      "settings": {
+        "section_bg": "#FFFFFF",
+        "pad_top_d": 80,
+        "pad_bot_d": 80,
+        "pad_top_m": 56,
+        "pad_bot_m": 56,
+        "mar_top_d": 0,
+        "mar_bot_d": 0,
+        "mar_top_m": 0,
+        "mar_bot_m": 0,
+        "eyebrow_size_d": 22,
+        "eyebrow_size_m": 14,
+        "heading_size_d": 44,
+        "heading_size_m": 30
+      }
+    },
+    "zoe": {
+      "type": "fkv3-zoe-science",
+      "settings": {
+        "section_bg": "#FFF9EE",
+        "pad_top_d": 80,
+        "pad_bot_d": 80,
+        "pad_top_m": 56,
+        "pad_bot_m": 56,
+        "mar_top_d": 0,
+        "mar_bot_d": 0,
+        "mar_top_m": 0,
+        "mar_bot_m": 0,
+        "eyebrow_size_d": 22,
+        "eyebrow_size_m": 14,
+        "heading_size_d": 44,
+        "heading_size_m": 30
+      }
+    },
+    "eat": {
+      "type": "fkv3-eat",
+      "settings": {
+        "section_bg": "#FFFFFF",
+        "pad_top_d": 80,
+        "pad_bot_d": 80,
+        "pad_top_m": 56,
+        "pad_bot_m": 56,
+        "mar_top_d": 0,
+        "mar_bot_d": 0,
+        "mar_top_m": 0,
+        "mar_bot_m": 0,
+        "eyebrow_size_d": 22,
+        "eyebrow_size_m": 14,
+        "heading_size_d": 44,
+        "heading_size_m": 30
+      }
+    },
+    "recipes": {
+      "type": "fkv3-recipes",
+      "settings": {
+        "section_bg": "#FFF9EE",
+        "pad_top_d": 80,
+        "pad_bot_d": 80,
+        "pad_top_m": 56,
+        "pad_bot_m": 56,
+        "mar_top_d": 0,
+        "mar_bot_d": 0,
+        "mar_top_m": 0,
+        "mar_bot_m": 0,
+        "eyebrow_size_d": 22,
+        "eyebrow_size_m": 14,
+        "heading_size_d": 44,
+        "heading_size_m": 30
+      }
+    },
+    "faq": {
+      "type": "fkv3-faq",
+      "settings": {
+        "section_bg": "#FFFFFF",
+        "pad_top_d": 80,
+        "pad_bot_d": 80,
+        "pad_top_m": 56,
+        "pad_bot_m": 56,
+        "mar_top_d": 0,
+        "mar_bot_d": 0,
+        "mar_top_m": 0,
+        "mar_bot_m": 0,
+        "eyebrow_size_d": 22,
+        "eyebrow_size_m": 14,
+        "heading_size_d": 44,
+        "heading_size_m": 30
+      }
+    },
+    "cross-sell": {
+      "type": "fkv3-cross-sell",
+      "settings": {
+        "section_bg": "#FFF9EE",
+        "pad_top_d": 80,
+        "pad_bot_d": 80,
+        "pad_top_m": 56,
+        "pad_bot_m": 56,
+        "mar_top_d": 0,
+        "mar_bot_d": 0,
+        "mar_top_m": 0,
+        "mar_bot_m": 0,
+        "eyebrow_size_d": 22,
+        "eyebrow_size_m": 14,
+        "heading_size_d": 44,
+        "heading_size_m": 30
+      }
+    },
+    "judgeme": {
+      "type": "fkv3-judgeme",
+      "settings": {
+        "section_bg": "#FFFFFF",
+        "pad_top_d": 80,
+        "pad_bot_d": 80,
+        "pad_top_m": 56,
+        "pad_bot_m": 56,
+        "mar_top_d": 0,
+        "mar_bot_d": 0,
+        "mar_top_m": 0,
+        "mar_bot_m": 0,
+        "eyebrow_size_d": 22,
+        "eyebrow_size_m": 14,
+        "heading_size_d": 44,
+        "heading_size_m": 30
+      }
+    }
   },
   "order": [
-    "kit-switcher", "hero", "trust-row", "how-make", "myth",
-    "outcomes", "reels", "box", "airlock", "reviews",
-    "timeline", "itk", "zoe", "eat", "recipes",
-    "faq", "cross-sell", "judgeme"
+    "kit-switcher",
+    "hero",
+    "trust-row",
+    "how-make",
+    "myth",
+    "outcomes",
+    "reels",
+    "box",
+    "airlock",
+    "reviews",
+    "timeline",
+    "itk",
+    "zoe",
+    "eat",
+    "recipes",
+    "faq",
+    "cross-sell",
+    "judgeme"
   ]
 }
