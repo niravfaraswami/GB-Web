@@ -525,3 +525,39 @@
   else init();
   document.addEventListener('shopify:section:load', init);
 })();
+
+/* ============================================================
+ * Alternating section backgrounds (white / cream)
+ * Walks rendered `.ferment-pdp-leo` sections in DOM order and
+ * paints them white / cream alternately. Empty sections never
+ * emit `.ferment-pdp-leo`, so the pattern stays correct across
+ * gating-metafield gaps. Sticky ATC lacks the marker class and
+ * is naturally skipped. Mirrors the fkv3 shim, scoped via the
+ * leo marker so it applies to every leo-based product template
+ * (spice-refill-v2, prebiotic-v2, baking-v2, etc.).
+ * ============================================================ */
+(function () {
+  'use strict';
+  var COLORS = ['#ffffff', '#fff9ee'];
+
+  function alternateBackgrounds() {
+    var nodes = document.querySelectorAll('.ferment-pdp-leo');
+    if (!nodes.length) return;
+    Array.prototype.forEach.call(nodes, function (el, i) {
+      var bg = COLORS[i % 2];
+      el.style.background = bg;
+      var outer = el.parentElement;
+      if (outer && outer.classList && outer.classList.contains('shopify-section')) {
+        outer.style.background = bg;
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', alternateBackgrounds);
+  } else {
+    alternateBackgrounds();
+  }
+  document.addEventListener('shopify:section:load', alternateBackgrounds);
+  document.addEventListener('shopify:section:unload', alternateBackgrounds);
+})();
