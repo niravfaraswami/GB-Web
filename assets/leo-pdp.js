@@ -528,13 +528,13 @@
 
 /* ============================================================
  * Alternating section backgrounds (white / cream)
- * Walks rendered `.ferment-pdp-leo` sections in DOM order and
- * paints them white / cream alternately. Empty sections never
+ * Walks rendered `.ferment-pdp-leo` sections in DOM order, anchors
+ * the alternation on `.pdp-hero` so the hero is always white, then
+ * paints white / cream alternately from there. Empty sections never
  * emit `.ferment-pdp-leo`, so the pattern stays correct across
- * gating-metafield gaps. Sticky ATC lacks the marker class and
- * is naturally skipped. Mirrors the fkv3 shim, scoped via the
- * leo marker so it applies to every leo-based product template
- * (spice-refill-v2, prebiotic-v2, baking-v2, etc.).
+ * gating-metafield gaps. Sections rendered before the hero (e.g.
+ * `gb-refill-flag-v2` notice strip) and `leo-sticky-atc` (which
+ * lacks the marker class) are left untouched.
  * ============================================================ */
 (function () {
   'use strict';
@@ -543,14 +543,19 @@
   function alternateBackgrounds() {
     var nodes = document.querySelectorAll('.ferment-pdp-leo');
     if (!nodes.length) return;
-    Array.prototype.forEach.call(nodes, function (el, i) {
-      var bg = COLORS[i % 2];
-      el.style.background = bg;
-      var outer = el.parentElement;
+    var startIdx = -1;
+    for (var j = 0; j < nodes.length; j++) {
+      if (nodes[j].classList.contains('pdp-hero')) { startIdx = j; break; }
+    }
+    if (startIdx < 0) startIdx = 0;
+    for (var i = startIdx; i < nodes.length; i++) {
+      var bg = COLORS[(i - startIdx) % 2];
+      nodes[i].style.background = bg;
+      var outer = nodes[i].parentElement;
       if (outer && outer.classList && outer.classList.contains('shopify-section')) {
         outer.style.background = bg;
       }
-    });
+    }
   }
 
   if (document.readyState === 'loading') {
