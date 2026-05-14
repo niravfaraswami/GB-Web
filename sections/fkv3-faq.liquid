@@ -9,7 +9,7 @@
   <div data-kit="fermentation" class="ferment-pdp fkv3-faq-wrap">
     <section class="faq-section" {%- render 'fkv3-section-attrs' -%}>
       <div class="container">
-        <div class="section-header centered">
+        <div class="section-header">
           <div class="eyebrow">{{ mf_faq_eyebrow | default: section.settings.faq_eyebrow }}</div>
           {%- if mf_faq_h != blank -%}<h2>{{ mf_faq_h }}</h2>
           {%- else -%}<h2>{{ section.settings.faq_heading }} <em>{{ section.settings.faq_heading_em }}</em></h2>{%- endif -%}
