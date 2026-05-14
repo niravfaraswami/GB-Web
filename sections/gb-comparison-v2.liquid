@@ -20,7 +20,9 @@
 
 {%- if has_mf or cmp_blocks.size > 0 or cmp_heading != blank -%}
   {%- assign col_count = section.settings.col_count | default: 3 -%}
-  <section class="gb-comparison-section ferment-pdp-leo" data-cols="{{ col_count }}" {%- render 'leo_kit_attrs' -%}>
+  {%- assign cmp_style = section.settings.style | default: 'default' -%}
+  {%- assign kit_pos = section.settings.kit_position | default: 'left' -%}
+  <section class="gb-comparison-section ferment-pdp-leo" data-cols="{{ col_count }}" data-style="{{ cmp_style }}" data-kit-pos="{{ kit_pos }}" {%- render 'leo_kit_attrs' -%}>
     <div class="container">
       <div class="section-header centered">
         {%- if cmp_eyebrow != blank -%}<div class="eyebrow">{{ cmp_eyebrow }}</div>{%- endif -%}
@@ -32,10 +34,18 @@
         <div class="gb-cmp-table">
           <div class="gb-cmp-head">
             <div class="gb-cmp-h-cell gb-cmp-h-label">&nbsp;</div>
-            <div class="gb-cmp-h-cell gb-cmp-h-kit">{{ mf_compare_left | default: section.settings.col_kit_label | default: 'GutBasket' }}</div>
-            <div class="gb-cmp-h-cell">{{ mf_compare_right | default: section.settings.col_2_label | default: 'Alternative A' }}</div>
-            {%- if col_count == 3 or col_count == '3' -%}
-              <div class="gb-cmp-h-cell">{{ section.settings.col_3_label | default: 'Alternative B' }}</div>
+            {%- if kit_pos == 'right' -%}
+              <div class="gb-cmp-h-cell">{{ mf_compare_right | default: section.settings.col_2_label | default: 'Alternative A' }}</div>
+              {%- if col_count == 3 or col_count == '3' -%}
+                <div class="gb-cmp-h-cell">{{ section.settings.col_3_label | default: 'Alternative B' }}</div>
+              {%- endif -%}
+              <div class="gb-cmp-h-cell gb-cmp-h-kit">{{ mf_compare_left | default: section.settings.col_kit_label | default: 'GutBasket' }}</div>
+            {%- else -%}
+              <div class="gb-cmp-h-cell gb-cmp-h-kit">{{ mf_compare_left | default: section.settings.col_kit_label | default: 'GutBasket' }}</div>
+              <div class="gb-cmp-h-cell">{{ mf_compare_right | default: section.settings.col_2_label | default: 'Alternative A' }}</div>
+              {%- if col_count == 3 or col_count == '3' -%}
+                <div class="gb-cmp-h-cell">{{ section.settings.col_3_label | default: 'Alternative B' }}</div>
+              {%- endif -%}
             {%- endif -%}
           </div>
 
@@ -47,22 +57,42 @@
               {%- assign r_col3_text = r.col3_text_2 | default: r.col4_text -%}
               <div class="gb-cmp-row">
                 <div class="gb-cmp-cell gb-cmp-cell-label">{{ r.label }}</div>
-                <div class="gb-cmp-cell gb-cmp-cell-kit">
-                  {%- if r.kit_mark == 'yes' -%}<span class="gb-cmp-mark gb-cmp-mark-yes"></span>
-                  {%- elsif r.kit_mark == 'no' -%}<span class="gb-cmp-mark gb-cmp-mark-no"></span>{%- endif -%}
-                  {{ r.kit_text }}
-                </div>
-                <div class="gb-cmp-cell gb-cmp-cell-other">
-                  {%- if r_col2_mark == 'yes' -%}<span class="gb-cmp-mark gb-cmp-mark-yes"></span>
-                  {%- elsif r_col2_mark == 'no' -%}<span class="gb-cmp-mark gb-cmp-mark-no"></span>{%- endif -%}
-                  {{ r_col2_text }}
-                </div>
-                {%- if col_count == 3 or col_count == '3' -%}
+                {%- if kit_pos == 'right' -%}
                   <div class="gb-cmp-cell gb-cmp-cell-other">
-                    {%- if r_col3_mark == 'yes' -%}<span class="gb-cmp-mark gb-cmp-mark-yes"></span>
-                    {%- elsif r_col3_mark == 'no' -%}<span class="gb-cmp-mark gb-cmp-mark-no"></span>{%- endif -%}
-                    {{ r_col3_text }}
+                    {%- if r_col2_mark == 'yes' -%}<span class="gb-cmp-mark gb-cmp-mark-yes"></span>
+                    {%- elsif r_col2_mark == 'no' -%}<span class="gb-cmp-mark gb-cmp-mark-no"></span>{%- endif -%}
+                    {{ r_col2_text }}
                   </div>
+                  {%- if col_count == 3 or col_count == '3' -%}
+                    <div class="gb-cmp-cell gb-cmp-cell-other">
+                      {%- if r_col3_mark == 'yes' -%}<span class="gb-cmp-mark gb-cmp-mark-yes"></span>
+                      {%- elsif r_col3_mark == 'no' -%}<span class="gb-cmp-mark gb-cmp-mark-no"></span>{%- endif -%}
+                      {{ r_col3_text }}
+                    </div>
+                  {%- endif -%}
+                  <div class="gb-cmp-cell gb-cmp-cell-kit">
+                    {%- if r.kit_mark == 'yes' -%}<span class="gb-cmp-mark gb-cmp-mark-yes"></span>
+                    {%- elsif r.kit_mark == 'no' -%}<span class="gb-cmp-mark gb-cmp-mark-no"></span>{%- endif -%}
+                    {{ r.kit_text }}
+                  </div>
+                {%- else -%}
+                  <div class="gb-cmp-cell gb-cmp-cell-kit">
+                    {%- if r.kit_mark == 'yes' -%}<span class="gb-cmp-mark gb-cmp-mark-yes"></span>
+                    {%- elsif r.kit_mark == 'no' -%}<span class="gb-cmp-mark gb-cmp-mark-no"></span>{%- endif -%}
+                    {{ r.kit_text }}
+                  </div>
+                  <div class="gb-cmp-cell gb-cmp-cell-other">
+                    {%- if r_col2_mark == 'yes' -%}<span class="gb-cmp-mark gb-cmp-mark-yes"></span>
+                    {%- elsif r_col2_mark == 'no' -%}<span class="gb-cmp-mark gb-cmp-mark-no"></span>{%- endif -%}
+                    {{ r_col2_text }}
+                  </div>
+                  {%- if col_count == 3 or col_count == '3' -%}
+                    <div class="gb-cmp-cell gb-cmp-cell-other">
+                      {%- if r_col3_mark == 'yes' -%}<span class="gb-cmp-mark gb-cmp-mark-yes"></span>
+                      {%- elsif r_col3_mark == 'no' -%}<span class="gb-cmp-mark gb-cmp-mark-no"></span>{%- endif -%}
+                      {{ r_col3_text }}
+                    </div>
+                  {%- endif -%}
                 {%- endif -%}
               </div>
             {%- endfor -%}
@@ -70,27 +100,60 @@
             {%- for block in cmp_blocks -%}
               <div class="gb-cmp-row" {{ block.shopify_attributes }}>
                 <div class="gb-cmp-cell gb-cmp-cell-label">{{ block.settings.label }}</div>
-                <div class="gb-cmp-cell gb-cmp-cell-kit">
-                  {%- if block.settings.kit_mark == 'yes' -%}<span class="gb-cmp-mark gb-cmp-mark-yes"></span>
-                  {%- elsif block.settings.kit_mark == 'no' -%}<span class="gb-cmp-mark gb-cmp-mark-no"></span>{%- endif -%}
-                  {{ block.settings.kit_text }}
-                </div>
-                <div class="gb-cmp-cell gb-cmp-cell-other">
-                  {%- if block.settings.col2_mark == 'yes' -%}<span class="gb-cmp-mark gb-cmp-mark-yes"></span>
-                  {%- elsif block.settings.col2_mark == 'no' -%}<span class="gb-cmp-mark gb-cmp-mark-no"></span>{%- endif -%}
-                  {{ block.settings.col2_text }}
-                </div>
-                {%- if col_count == 3 or col_count == '3' -%}
+                {%- if kit_pos == 'right' -%}
                   <div class="gb-cmp-cell gb-cmp-cell-other">
-                    {%- if block.settings.col3_mark == 'yes' -%}<span class="gb-cmp-mark gb-cmp-mark-yes"></span>
-                    {%- elsif block.settings.col3_mark == 'no' -%}<span class="gb-cmp-mark gb-cmp-mark-no"></span>{%- endif -%}
-                    {{ block.settings.col3_text }}
+                    {%- if block.settings.col2_mark == 'yes' -%}<span class="gb-cmp-mark gb-cmp-mark-yes"></span>
+                    {%- elsif block.settings.col2_mark == 'no' -%}<span class="gb-cmp-mark gb-cmp-mark-no"></span>{%- endif -%}
+                    {{ block.settings.col2_text }}
                   </div>
+                  {%- if col_count == 3 or col_count == '3' -%}
+                    <div class="gb-cmp-cell gb-cmp-cell-other">
+                      {%- if block.settings.col3_mark == 'yes' -%}<span class="gb-cmp-mark gb-cmp-mark-yes"></span>
+                      {%- elsif block.settings.col3_mark == 'no' -%}<span class="gb-cmp-mark gb-cmp-mark-no"></span>{%- endif -%}
+                      {{ block.settings.col3_text }}
+                    </div>
+                  {%- endif -%}
+                  <div class="gb-cmp-cell gb-cmp-cell-kit">
+                    {%- if block.settings.kit_mark == 'yes' -%}<span class="gb-cmp-mark gb-cmp-mark-yes"></span>
+                    {%- elsif block.settings.kit_mark == 'no' -%}<span class="gb-cmp-mark gb-cmp-mark-no"></span>{%- endif -%}
+                    {{ block.settings.kit_text }}
+                  </div>
+                {%- else -%}
+                  <div class="gb-cmp-cell gb-cmp-cell-kit">
+                    {%- if block.settings.kit_mark == 'yes' -%}<span class="gb-cmp-mark gb-cmp-mark-yes"></span>
+                    {%- elsif block.settings.kit_mark == 'no' -%}<span class="gb-cmp-mark gb-cmp-mark-no"></span>{%- endif -%}
+                    {{ block.settings.kit_text }}
+                  </div>
+                  <div class="gb-cmp-cell gb-cmp-cell-other">
+                    {%- if block.settings.col2_mark == 'yes' -%}<span class="gb-cmp-mark gb-cmp-mark-yes"></span>
+                    {%- elsif block.settings.col2_mark == 'no' -%}<span class="gb-cmp-mark gb-cmp-mark-no"></span>{%- endif -%}
+                    {{ block.settings.col2_text }}
+                  </div>
+                  {%- if col_count == 3 or col_count == '3' -%}
+                    <div class="gb-cmp-cell gb-cmp-cell-other">
+                      {%- if block.settings.col3_mark == 'yes' -%}<span class="gb-cmp-mark gb-cmp-mark-yes"></span>
+                      {%- elsif block.settings.col3_mark == 'no' -%}<span class="gb-cmp-mark gb-cmp-mark-no"></span>{%- endif -%}
+                      {{ block.settings.col3_text }}
+                    </div>
+                  {%- endif -%}
                 {%- endif -%}
               </div>
             {%- endfor -%}
           {%- endif -%}
         </div>
+
+        {%- if section.settings.footer_text != blank or section.settings.footer_cta_label != blank -%}
+          <div class="gb-cmp-footnote">
+            {%- if section.settings.footer_text != blank -%}<div class="gb-cmp-footnote-text">{{ section.settings.footer_text }}</div>{%- endif -%}
+            {%- if section.settings.footer_cta_label != blank -%}
+              {%- if section.settings.footer_cta_url != blank -%}
+                <a class="gb-cmp-footnote-cta" href="{{ section.settings.footer_cta_url }}">{{ section.settings.footer_cta_label }}</a>
+              {%- else -%}
+                <span class="gb-cmp-footnote-cta">{{ section.settings.footer_cta_label }}</span>
+              {%- endif -%}
+            {%- endif -%}
+          </div>
+        {%- endif -%}
       </div>
     </div>
   </section>
@@ -124,6 +187,45 @@
       "type": "textarea",
       "id": "intro",
       "label": "Intro"
+    },
+    {
+      "type": "select",
+      "id": "style",
+      "label": "Visual style",
+      "options": [
+        { "value": "default", "label": "Default (dark header)" },
+        { "value": "minimal", "label": "Minimal (mint vs cream)" }
+      ],
+      "default": "default"
+    },
+    {
+      "type": "select",
+      "id": "kit_position",
+      "label": "Kit column position",
+      "options": [
+        { "value": "left",  "label": "Left (after label)" },
+        { "value": "right", "label": "Right (last column)" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "header",
+      "content": "Footer note (optional)"
+    },
+    {
+      "type": "text",
+      "id": "footer_text",
+      "label": "Footer note text"
+    },
+    {
+      "type": "text",
+      "id": "footer_cta_label",
+      "label": "Footer CTA label"
+    },
+    {
+      "type": "url",
+      "id": "footer_cta_url",
+      "label": "Footer CTA URL"
     },
     {
       "type": "select",

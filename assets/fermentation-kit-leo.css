@@ -2961,3 +2961,104 @@
   [data-template="leo"].pdp-hero .variant-illustration { aspect-ratio: 5 / 2; }
   [data-template="leo"].pdp-hero .variant-price { font-size: 16px; }
 }
+
+/* ============================================================
+ * gb-comparison-v2 — "minimal" style (mint vs cream columns)
+ * Used on prebiotic-v2 and similar 2-column comparisons.
+ * Drops the dark header bar, paints columns with subtle bg
+ * tints, and hides check/cross marks (text-only comparison).
+ * Activates only when data-style="minimal" is on the section.
+ * ============================================================ */
+.gb-comparison-section[data-style="minimal"] {
+  background: var(--gb-cream);
+}
+.gb-comparison-section[data-style="minimal"] .section-header h2 em {
+  display: block; /* second-line heading like the reference */
+}
+.gb-comparison-section[data-style="minimal"] .gb-cmp-table {
+  border: 1px solid #E6DAC4;
+  box-shadow: 0 6px 24px rgba(43, 31, 26, 0.05);
+}
+.gb-comparison-section[data-style="minimal"] .gb-cmp-h-cell {
+  background: #F2E9D6;            /* light cream for "bad" header */
+  color: var(--gb-text);
+  font-family: 'DM Mono', monospace;
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  padding: 18px 22px;
+}
+.gb-comparison-section[data-style="minimal"] .gb-cmp-h-cell.gb-cmp-h-label {
+  background: var(--gb-white);
+}
+.gb-comparison-section[data-style="minimal"] .gb-cmp-h-cell.gb-cmp-h-kit {
+  background: #BFE3D2;            /* mint header for "good" col */
+  color: #1E6D4B;
+}
+.gb-comparison-section[data-style="minimal"] .gb-cmp-cell {
+  background: var(--gb-white);
+  color: var(--gb-text);
+  border-top: 1px solid #F0E7D2;
+  padding: 18px 22px;
+  font-size: 14px;
+}
+.gb-comparison-section[data-style="minimal"] .gb-cmp-cell.gb-cmp-cell-label {
+  background: var(--gb-white);
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  border-right: 1px solid #F0E7D2;
+}
+.gb-comparison-section[data-style="minimal"] .gb-cmp-cell.gb-cmp-cell-other {
+  background: #F8F1E1;            /* very light cream for "bad" body */
+  color: var(--gb-text-muted);
+  border-right: 1px solid #F0E7D2;
+}
+.gb-comparison-section[data-style="minimal"] .gb-cmp-cell.gb-cmp-cell-kit {
+  background: #DDF0E5;            /* very light mint for "good" body */
+  color: #1E6D4B;
+  font-weight: 600;
+  border-right: none;
+}
+.gb-comparison-section[data-style="minimal"] .gb-cmp-cell.gb-cmp-cell-other:last-child,
+.gb-comparison-section[data-style="minimal"] .gb-cmp-cell.gb-cmp-cell-kit:last-child {
+  border-right: none;
+}
+.gb-comparison-section[data-style="minimal"] .gb-cmp-mark {
+  display: none;                  /* minimal style is text-only */
+}
+
+/* Footer note (works in any style; visual is dashed cream box) */
+.gb-cmp-footnote {
+  margin-top: 24px;
+  padding: 22px 28px;
+  border: 1.5px dashed #C9B991;
+  border-radius: 18px;
+  background: transparent;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.gb-cmp-footnote-text {
+  font-size: 14px;
+  color: var(--gb-text-muted);
+}
+.gb-cmp-footnote-cta {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  color: #1E6D4B;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.gb-cmp-footnote-cta:hover { color: #14533A; }
+
+@media (max-width: 768px) {
+  .gb-comparison-section[data-style="minimal"] .gb-cmp-h-cell { padding: 12px 10px; font-size: 10.5px; }
+  .gb-comparison-section[data-style="minimal"] .gb-cmp-cell { padding: 12px 10px; font-size: 12px; }
+  .gb-cmp-footnote { padding: 16px 18px; }
+  .gb-cmp-footnote-text { font-size: 13px; }
+  .gb-cmp-footnote-cta { font-size: 14px; }
+}
