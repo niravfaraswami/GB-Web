@@ -312,3 +312,99 @@
     gap: 12px;
   }
 }
+
+/* ============================================================
+ * Tweak 8 — UGC review card (fkv3, ported from leo-ugc)
+ * Portrait cards with full-bleed photo as background, cream
+ * gradient overlay at top, quote + name + meta sitting on top.
+ * Mobile: horizontal scroll-snap carousel (one card per swipe).
+ * Mirror of fermentation-kit-leo.css lines 645-685, scoped to
+ * [data-template="fkv3"].reviews-section instead of [data-leo].
+ * ============================================================ */
+[data-template="fkv3"].reviews-section .ugc-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 32px;
+}
+[data-template="fkv3"].reviews-section .ugc-card {
+  background: #DDD3C2;
+  border-radius: 18px;
+  overflow: hidden;
+  position: relative;
+  aspect-ratio: 3/4;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+[data-template="fkv3"].reviews-section .ugc-card-photo {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+[data-template="fkv3"].reviews-section .ugc-card-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center bottom;
+  display: block;
+}
+[data-template="fkv3"].reviews-section .ugc-card-photo::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(to bottom, rgba(221, 211, 194, 0.95) 0%, rgba(221, 211, 194, 0.78) 28%, rgba(221, 211, 194, 0) 50%);
+}
+[data-template="fkv3"].reviews-section .ugc-card-text {
+  position: relative;
+  z-index: 2;
+  padding: 26px 26px 0;
+}
+[data-template="fkv3"].reviews-section .ugc-card-quote {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 16.5px;
+  line-height: 1.4;
+  color: var(--gb-text, #1F1F1D);
+  letter-spacing: -0.005em;
+  margin-bottom: 20px;
+}
+[data-template="fkv3"].reviews-section .ugc-card-name {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--gb-text, #1F1F1D);
+  margin-bottom: 1px;
+}
+[data-template="fkv3"].reviews-section .ugc-card-age {
+  font-size: 12.5px;
+  color: var(--gb-text-muted, #5C4D3F);
+  margin-bottom: 18px;
+}
+[data-template="fkv3"].reviews-section .ugc-card-spacer {
+  flex: 1;
+  min-height: 60px;
+  z-index: 2;
+  position: relative;
+}
+@media (max-width: 768px) {
+  [data-template="fkv3"].reviews-section .ugc-grid {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 12px;
+    margin-right: -24px;
+    padding-right: 24px;
+  }
+  [data-template="fkv3"].reviews-section .ugc-grid::-webkit-scrollbar { display: none; }
+  [data-template="fkv3"].reviews-section .ugc-grid > .ugc-card {
+    flex: 0 0 84%;
+    scroll-snap-align: start;
+    aspect-ratio: 4/5;
+  }
+  [data-template="fkv3"].reviews-section .ugc-card-quote { font-size: 14.5px; }
+  [data-template="fkv3"].reviews-section .ugc-card-text { padding: 22px 22px 0; }
+}

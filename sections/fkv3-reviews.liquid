@@ -13,19 +13,33 @@
           {%- if mf_reviews_h != blank -%}<h2>{{ mf_reviews_h }}</h2>
           {%- else -%}<h2>{{ section.settings.reviews_heading }} <em>{{ section.settings.reviews_heading_em }}</em></h2>{%- endif -%}
         </div>
-        <div class="reviews-grid">
+        <div class="ugc-grid">
           {%- if mf_reviews != blank -%}
             {%- for r in mf_reviews -%}
-              <div class="review-card">
-                <div class="rev-content"><h3 class="rev-title">"{{ r.quote }}"</h3><div class="rev-foot"><div class="rev-stars">★★★★★</div><div class="rev-name">{{ r.name }}</div><div class="rev-meta">{{ r.meta }}</div></div></div>
-                <div class="rev-photo">{%- if r.photo != blank -%}<img src="{{ r.photo | image_url: width: 800 }}" alt="{{ r.name | escape }}" loading="lazy" width="800" height="800">{%- else -%}<span class="photo-placeholder">📷</span>{%- endif -%}</div>
+              <div class="ugc-card">
+                <div class="ugc-card-photo">
+                  {%- if r.photo != blank -%}<img src="{{ r.photo | image_url: width: 800 }}" alt="{{ r.name | escape }}" loading="lazy" width="600" height="800">{%- endif -%}
+                </div>
+                <div class="ugc-card-text">
+                  <div class="ugc-card-quote">{{ r.quote }}</div>
+                  <div class="ugc-card-name">{{ r.name }}</div>
+                  {%- if r.meta != blank -%}<div class="ugc-card-age">{{ r.meta }}</div>{%- endif -%}
+                </div>
+                <div class="ugc-card-spacer"></div>
               </div>
             {%- endfor -%}
           {%- else -%}
             {%- for block in review_blocks -%}
-              <div class="review-card" {{ block.shopify_attributes }}>
-                <div class="rev-content"><h3 class="rev-title">"{{ block.settings.quote }}"</h3><div class="rev-foot"><div class="rev-stars">★★★★★</div><div class="rev-name">{{ block.settings.name }}</div><div class="rev-meta">{{ block.settings.meta }}</div></div></div>
-                <div class="rev-photo">{%- if block.settings.photo != blank -%}<img src="{{ block.settings.photo | image_url: width: 800 }}" alt="{{ block.settings.name | escape }}" loading="lazy" width="800" height="800">{%- else -%}<span class="photo-placeholder">📷</span>{%- endif -%}</div>
+              <div class="ugc-card" {{ block.shopify_attributes }}>
+                <div class="ugc-card-photo">
+                  {%- if block.settings.photo != blank -%}<img src="{{ block.settings.photo | image_url: width: 800 }}" alt="{{ block.settings.name | escape }}" loading="lazy" width="600" height="800">{%- endif -%}
+                </div>
+                <div class="ugc-card-text">
+                  <div class="ugc-card-quote">{{ block.settings.quote }}</div>
+                  <div class="ugc-card-name">{{ block.settings.name }}</div>
+                  {%- if block.settings.meta != blank -%}<div class="ugc-card-age">{{ block.settings.meta }}</div>{%- endif -%}
+                </div>
+                <div class="ugc-card-spacer"></div>
               </div>
             {%- endfor -%}
           {%- endif -%}
