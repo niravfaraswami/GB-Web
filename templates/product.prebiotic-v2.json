@@ -56,7 +56,10 @@
         "yes_bullets": "Have everyday digestion issues — bloating, irregularity, post-meal heaviness\nDon't eat 25–30g of fiber/day from food (most people don't)\nWant a tasteless prebiotic, no flavor masking required\nFollow a low-FODMAP diet (acacia is FODMAP-friendly)\nTake daily probiotics and want them to do more work",
         "no_label": "MAYBE NOT FOR",
         "no_heading": "Skip this if you…",
-        "no_bullets": "Are in an acute IBS / IBD flare — wait until it settles\nAre allergic to acacia (rare but real)\nExpect overnight relief — gut shifts take 1–4 weeks\nPrefer a multi-fiber blend with sweeteners and flavors\nWant something for cooking, not for daily supplementation"
+        "no_bullets": "Are in an acute IBS / IBD flare — wait until it settles\nAre allergic to acacia (rare but real)\nExpect overnight relief — gut shifts take 1–4 weeks\nPrefer a multi-fiber blend with sweeteners and flavors\nWant something for cooking, not for daily supplementation",
+        "footer_text": "Not sure which fiber is right for you?",
+        "footer_cta_label": "Compare all fibers →",
+        "footer_cta_url": ""
       }
     },
     "diff": {

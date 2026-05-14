@@ -65,6 +65,19 @@
           {%- endif -%}
         </div>
       </div>
+
+      {%- if section.settings.footer_text != blank or section.settings.footer_cta_label != blank -%}
+        <div class="gb-who-footnote">
+          {%- if section.settings.footer_text != blank -%}<div class="gb-who-footnote-text">{{ section.settings.footer_text }}</div>{%- endif -%}
+          {%- if section.settings.footer_cta_label != blank -%}
+            {%- if section.settings.footer_cta_url != blank -%}
+              <a class="gb-who-footnote-cta" href="{{ section.settings.footer_cta_url }}">{{ section.settings.footer_cta_label }}</a>
+            {%- else -%}
+              <span class="gb-who-footnote-cta">{{ section.settings.footer_cta_label }}</span>
+            {%- endif -%}
+          {%- endif -%}
+        </div>
+      {%- endif -%}
     </div>
   </section>
 {%- endif -%}
@@ -139,6 +152,25 @@
       "type": "textarea",
       "id": "no_bullets",
       "label": "No — bullets (one per line)"
+    },
+    {
+      "type": "header",
+      "content": "Footer note (optional)"
+    },
+    {
+      "type": "text",
+      "id": "footer_text",
+      "label": "Footer note text"
+    },
+    {
+      "type": "text",
+      "id": "footer_cta_label",
+      "label": "Footer CTA label"
+    },
+    {
+      "type": "url",
+      "id": "footer_cta_url",
+      "label": "Footer CTA URL"
     },
     {
       "type": "header",
