@@ -408,3 +408,31 @@
   [data-template="fkv3"].reviews-section .ugc-card-quote { font-size: 14.5px; }
   [data-template="fkv3"].reviews-section .ugc-card-text { padding: 22px 22px 0; }
 }
+
+/* ============================================================
+ * Tweak 9 — ITK section: keep 2 columns on mobile
+ * Base stylesheet collapses .itk-grid to 1fr at ≤768px;
+ * override for fkv3 so Spice Mix + Ferment Boost stay side-by-side
+ * on mobile (a 2-card section reads better as two columns).
+ * ============================================================ */
+@media (max-width: 768px) {
+  [data-template="fkv3"].itk-section .itk-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  [data-template="fkv3"].itk-section .itk-card {
+    border-radius: 14px;
+  }
+  [data-template="fkv3"].itk-section .itk-body {
+    padding: 18px 16px;
+  }
+  [data-template="fkv3"].itk-section .itk-h {
+    font-size: 15px;
+  }
+  [data-template="fkv3"].itk-section .itk-sub {
+    font-size: 13px;
+  }
+  [data-template="fkv3"].itk-section .itk-list li {
+    font-size: 12.5px;
+  }
+}
