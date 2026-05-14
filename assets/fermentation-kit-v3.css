@@ -287,3 +287,11 @@
     scroll-padding-left: 24px;
   }
 }
+
+/* ============================================================
+ * Tweak 6 — Left-align all section headers in fkv3
+ * Default .section-header (without `.centered`) is left-aligned by
+ * the base stylesheet. .reels-header has text-align: center baked
+ * in; override here for consistency.
+ * ============================================================ */
+[data-template="fkv3"] .reels-header { text-align: left; }
