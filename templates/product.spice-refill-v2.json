@@ -302,19 +302,9 @@
         "up_threshold": 30,
         "show_delay": 750
       }
-    },
-    "refill-flag": {
-      "type": "gb-refill-flag-v2",
-      "settings": {
-        "pad_top_d": 16,
-        "pad_bot_d": 16,
-        "pad_top_m": 12,
-        "pad_bot_m": 12
-      }
     }
   },
   "order": [
-    "refill-flag",
     "hero",
     "box",
     "how-to-make",
