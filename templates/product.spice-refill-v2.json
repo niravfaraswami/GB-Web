@@ -46,6 +46,7 @@
           "settings": {
             "label": "Description",
             "body": "<p>Re-orderable refill packs for the GutBasket Kanji Making Kit. Each batch ferments 2L of authentic kanji in your existing 2L jar with airlock — same spice mix and ferment boost we ship in the full kit.</p><p>Pick the pack size that fits your rhythm: 3 batches for monthly drinkers, 5 for households, 10 for families and gift bundles.</p><p><strong>You'll need</strong> to already own the GutBasket Kanji jar + airlock. New customer? <a href=\"/products/kanji-making-kit\">Start with the full kit →</a></p>",
+            "metafield_key": "hero_accordion_description",
             "default_open": true
           }
         },
@@ -54,6 +55,7 @@
           "settings": {
             "label": "What's Inside",
             "body": "<p>Per pack:</p><ul><li><strong>5 Kanji Spice Mix sachets</strong> — 45g each, pre-measured for one 2L batch</li><li><strong>5 Ferment Boost sachets</strong> — prebiotic blend, cuts ferment time to 3–5 days</li><li><strong>1 fresh Recipe Card</strong> — current season's flavour variations</li><li><strong>Vacuum-sealed pouch</strong> — keeps spices airtight and fresh for 12 months</li></ul><p>Multiply quantities by pack size: pack of 3 = 3 batches, pack of 10 = 10 batches, etc.</p>",
+            "metafield_key": "hero_accordion_whats_inside",
             "default_open": false
           }
         },
@@ -62,6 +64,7 @@
           "settings": {
             "label": "How To Use",
             "body": "<ol><li>Wash and dry your existing 2L Kanji jar</li><li>Chop fresh black carrots + beetroot, fill 20% of the jar</li><li>Pour 1 spice mix sachet + 1 ferment boost sachet</li><li>Top up with filtered water, seal with airlock</li><li>Wait 3–5 days. Refrigerate. Repeat for next batch.</li></ol>",
+            "metafield_key": "hero_accordion_how_to_use",
             "default_open": false
           }
         }
