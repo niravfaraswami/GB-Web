@@ -1,0 +1,322 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ * Re-sync trigger 2026-05-13 after schema hotfix (PRs #74 + #75).
+ */
+{
+  "sections": {
+    "hero": {
+      "type": "leo-hero",
+      "blocks": {
+        "hb-1": {
+          "type": "hero_benefit",
+          "settings": {
+            "icon_emoji": "📦",
+            "label": "3 / 5 / 10 batch packs"
+          }
+        },
+        "hb-2": {
+          "type": "hero_benefit",
+          "settings": {
+            "icon_emoji": "✅",
+            "label": "Same Kanji formula"
+          }
+        },
+        "hb-3": {
+          "type": "hero_benefit",
+          "settings": {
+            "icon_emoji": "💸",
+            "label": "Up to 35% off vs full kit"
+          }
+        },
+        "hb-4": {
+          "type": "hero_benefit",
+          "settings": {
+            "icon_emoji": "🌿",
+            "label": "Made fresh, small batch"
+          }
+        },
+        "ha-1": {
+          "type": "hero_accordion_tab",
+          "settings": {
+            "label": "Description",
+            "body": "<p>Re-orderable refill packs for the GutBasket Kanji Making Kit. Each batch ferments 2L of authentic kanji in your existing 2L jar with airlock — same spice mix and ferment boost we ship in the full kit.</p><p>Pick the pack size that fits your rhythm: 3 batches for monthly drinkers, 5 for households, 10 for families and gift bundles.</p><p><strong>You'll need</strong> to already own the GutBasket Kanji jar + airlock. New customer? <a href=\"/products/kanji-making-kit\">Start with the full kit →</a></p>",
+            "default_open": true
+          }
+        },
+        "ha-2": {
+          "type": "hero_accordion_tab",
+          "settings": {
+            "label": "What's Inside",
+            "body": "<p>Per pack:</p><ul><li><strong>5 Kanji Spice Mix sachets</strong> — 45g each, pre-measured for one 2L batch</li><li><strong>5 Ferment Boost sachets</strong> — prebiotic blend, cuts ferment time to 3–5 days</li><li><strong>1 fresh Recipe Card</strong> — current season's flavour variations</li><li><strong>Vacuum-sealed pouch</strong> — keeps spices airtight and fresh for 12 months</li></ul><p>Multiply quantities by pack size: pack of 3 = 3 batches, pack of 10 = 10 batches, etc.</p>",
+            "default_open": false
+          }
+        },
+        "ha-3": {
+          "type": "hero_accordion_tab",
+          "settings": {
+            "label": "How To Use",
+            "body": "<ol><li>Wash and dry your existing 2L Kanji jar</li><li>Chop fresh black carrots + beetroot, fill 20% of the jar</li><li>Pour 1 spice mix sachet + 1 ferment boost sachet</li><li>Top up with filtered water, seal with airlock</li><li>Wait 3–5 days. Refrigerate. Repeat for next batch.</li></ol>",
+            "default_open": false
+          }
+        }
+      },
+      "block_order": [
+        "hb-1",
+        "hb-2",
+        "hb-3",
+        "hb-4",
+        "ha-1",
+        "ha-2",
+        "ha-3"
+      ],
+      "settings": {
+        "show_breadcrumb": true,
+        "trust_1_text": "Same formula",
+        "trust_2_text": "Vacuum-sealed",
+        "trust_3_text": "FSSAI certified",
+        "pad_top_d": 48,
+        "pad_bot_d": 80,
+        "pad_top_m": 32,
+        "pad_bot_m": 56,
+        "mar_top_d": 0,
+        "mar_bot_d": 0,
+        "mar_top_m": 0,
+        "mar_bot_m": 0,
+        "eyebrow_size_d": 22,
+        "eyebrow_size_m": 14,
+        "heading_size_d": 44,
+        "heading_size_m": 30
+      }
+    },
+    "box": {
+      "type": "leo-itk-cards",
+      "blocks": {
+        "c-1": {
+          "type": "consumable",
+          "settings": {
+            "icon_emoji": "🌶️",
+            "heading": "Kanji Spice Mix",
+            "sub": "5 × 45g sachets per pack",
+            "ingredients": "Pre-measured for one 2L batch\nSame calibrated formula as the full kit\nNo preservatives, no fillers",
+            "category": "spice"
+          }
+        },
+        "c-2": {
+          "type": "consumable",
+          "settings": {
+            "icon_emoji": "🌱",
+            "heading": "Ferment Boost",
+            "sub": "5 × prebiotic sachets per pack",
+            "ingredients": "Prebiotic blend (inulin + plant fibres)\nCuts ferment time to 3–5 days\nDairy-free, plant-based",
+            "category": "boost"
+          }
+        }
+      },
+      "block_order": [
+        "c-1",
+        "c-2"
+      ],
+      "settings": {
+        "itk_eyebrow": "INSIDE THE PACK",
+        "itk_heading": "SPICE MIX +",
+        "itk_heading_em": "FERMENT BOOST.",
+        "itk_intro": "One card per ingredient. Quantities scale with pack size — pack of 5 = 5 of each sachet.",
+        "pad_top_d": 80,
+        "pad_bot_d": 80,
+        "pad_top_m": 56,
+        "pad_bot_m": 56,
+        "mar_top_d": 0,
+        "mar_bot_d": 0,
+        "mar_top_m": 0,
+        "mar_bot_m": 0,
+        "eyebrow_size_d": 22,
+        "eyebrow_size_m": 14,
+        "heading_size_d": 44,
+        "heading_size_m": 30
+      }
+    },
+    "how-to-make": {
+      "type": "leo-how-to-make",
+      "blocks": {
+        "step-1": {
+          "type": "step",
+          "settings": {
+            "title": "CHOP + ADD",
+            "description": "Fresh black carrots + beetroot. Fill 20% of your existing 2L jar."
+          }
+        },
+        "step-2": {
+          "type": "step",
+          "settings": {
+            "title": "SPICE + BOOST + WATER",
+            "description": "Pour 1 spice mix sachet + 1 ferment boost sachet. Top with filtered water."
+          }
+        },
+        "step-3": {
+          "type": "step",
+          "settings": {
+            "title": "SEAL WITH AIRLOCK",
+            "description": "Wait 3–5 days. Watch the airlock bubbles tell you it's working."
+          }
+        },
+        "step-4": {
+          "type": "step",
+          "settings": {
+            "title": "STRAIN + ENJOY",
+            "description": "Swap to storage lid, refrigerate. Daily 50ml serving for up to 2 weeks."
+          }
+        }
+      },
+      "block_order": [
+        "step-1",
+        "step-2",
+        "step-3",
+        "step-4"
+      ],
+      "settings": {
+        "how_eyebrow": "HOW TO USE",
+        "how_heading": "DROP IN,",
+        "how_heading_em": "FERMENT, ENJOY.",
+        "pad_top_d": 80,
+        "pad_bot_d": 80,
+        "pad_top_m": 56,
+        "pad_bot_m": 56,
+        "mar_top_d": 0,
+        "mar_bot_d": 0,
+        "mar_top_m": 0,
+        "mar_bot_m": 0,
+        "eyebrow_size_d": 22,
+        "eyebrow_size_m": 14,
+        "heading_size_d": 44,
+        "heading_size_m": 30
+      }
+    },
+    "reviews": {
+      "type": "leo-ugc",
+      "blocks": {
+        "ugc-1": {
+          "type": "ugc_review",
+          "settings": {
+            "quote": "Bought my first kit 4 months ago. The refill packs are way more convenient — same flavour, less storage clutter, lower cost.",
+            "name": "Aditi Rao",
+            "meta": "Refilled 3× · Bengaluru"
+          }
+        },
+        "ugc-2": {
+          "type": "ugc_review",
+          "settings": {
+            "quote": "Pack of 10 is a no-brainer for our family. We do a batch every Sunday. Auto-reorder every 10 weeks now.",
+            "name": "Suresh Nair",
+            "meta": "Family of 4 · Kochi"
+          }
+        },
+        "ugc-3": {
+          "type": "ugc_review",
+          "settings": {
+            "quote": "Kept worrying I'd waste an old refill if I missed a batch. The 12-month vacuum-sealed shelf life put me at ease — they're still fresh in month 6.",
+            "name": "Tanvi Khanna",
+            "meta": "Bought 5-pack · Mumbai"
+          }
+        }
+      },
+      "block_order": [
+        "ugc-1",
+        "ugc-2",
+        "ugc-3"
+      ],
+      "settings": {
+        "eyebrow": "REPEAT BUYERS",
+        "heading": "WHY OUR CUSTOMERS",
+        "heading_em": "KEEP REORDERING.",
+        "pad_top_d": 80,
+        "pad_bot_d": 80,
+        "pad_top_m": 56,
+        "pad_bot_m": 56,
+        "mar_top_d": 0,
+        "mar_bot_d": 0,
+        "mar_top_m": 0,
+        "mar_bot_m": 0,
+        "eyebrow_size_d": 22,
+        "eyebrow_size_m": 14,
+        "heading_size_d": 44,
+        "heading_size_m": 30
+      }
+    },
+    "cross": {
+      "type": "leo-cross",
+      "settings": {
+        "cross_eyebrow": "PAIR IT WITH",
+        "cross_heading": "OTHER REFILLS & UPGRADES",
+        "cross_collection": "frontpage",
+        "pad_top_d": 80,
+        "pad_bot_d": 80,
+        "pad_top_m": 56,
+        "pad_bot_m": 56,
+        "mar_top_d": 0,
+        "mar_bot_d": 0,
+        "mar_top_m": 0,
+        "mar_bot_m": 0,
+        "eyebrow_size_d": 22,
+        "eyebrow_size_m": 14,
+        "heading_size_d": 44,
+        "heading_size_m": 30
+      }
+    },
+    "judgeme": {
+      "type": "leo-judgeme",
+      "settings": {
+        "judgeme_eyebrow": "ALL REVIEWS",
+        "judgeme_heading": "VERIFIED",
+        "judgeme_heading_em": "REVIEWS",
+        "judgeme_embed": "",
+        "pad_top_d": 48,
+        "pad_bot_d": 80,
+        "pad_top_m": 32,
+        "pad_bot_m": 56,
+        "mar_top_d": 0,
+        "mar_bot_d": 0,
+        "mar_top_m": 0,
+        "mar_bot_m": 0,
+        "eyebrow_size_d": 22,
+        "eyebrow_size_m": 14,
+        "heading_size_d": 44,
+        "heading_size_m": 30
+      }
+    },
+    "sticky-atc": {
+      "type": "leo-sticky-atc",
+      "settings": {
+        "sticky_show": true,
+        "cta_label": "Add to cart",
+        "name_truncate": 21,
+        "up_threshold": 30,
+        "show_delay": 750
+      }
+    },
+    "refill-flag": {
+      "type": "gb-refill-flag-v2",
+      "settings": {
+        "pad_top_d": 16,
+        "pad_bot_d": 16,
+        "pad_top_m": 12,
+        "pad_bot_m": 12
+      }
+    }
+  },
+  "order": [
+    "refill-flag",
+    "hero",
+    "box",
+    "how-to-make",
+    "reviews",
+    "cross",
+    "judgeme",
+    "sticky-atc"
+  ]
+}
