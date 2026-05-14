@@ -51,12 +51,23 @@
 
           {%- if has_mf -%}
             {%- for r in mf_rows -%}
+              {%-
+                comment
+                  Field-name resolution for kit_comparison_row metaobjects.
+                  Prebiotic-v2 metaobjects use: row_label, left_subtext (→ kit / right visual col),
+                  right_subtext (→ alternative / cream visual col). The data is intentionally
+                  swapped — preserve this mapping. Falls back to the legacy block-style names
+                  (label / kit_text / col2_text / col3_text) so anything older still renders.
+                endcomment
+              -%}
+              {%- assign r_label = r.row_label | default: r.label | default: r.left_heading -%}
+              {%- assign r_kit_text = r.left_subtext | default: r.kit_text -%}
               {%- assign r_col2_mark = r.col2_mark | default: r.col3_mark -%}
-              {%- assign r_col2_text = r.col2_text | default: r.col3_text -%}
+              {%- assign r_col2_text = r.right_subtext | default: r.col2_text | default: r.col3_text -%}
               {%- assign r_col3_mark = r.col3_mark_2 | default: r.col4_mark -%}
               {%- assign r_col3_text = r.col3_text_2 | default: r.col4_text -%}
               <div class="gb-cmp-row">
-                <div class="gb-cmp-cell gb-cmp-cell-label">{{ r.label }}</div>
+                <div class="gb-cmp-cell gb-cmp-cell-label">{{ r_label }}</div>
                 {%- if kit_pos == 'right' -%}
                   <div class="gb-cmp-cell gb-cmp-cell-other">
                     {%- if r_col2_mark == 'yes' -%}<span class="gb-cmp-mark gb-cmp-mark-yes"></span>
@@ -73,13 +84,13 @@
                   <div class="gb-cmp-cell gb-cmp-cell-kit">
                     {%- if r.kit_mark == 'yes' -%}<span class="gb-cmp-mark gb-cmp-mark-yes"></span>
                     {%- elsif r.kit_mark == 'no' -%}<span class="gb-cmp-mark gb-cmp-mark-no"></span>{%- endif -%}
-                    {{ r.kit_text }}
+                    {{ r_kit_text }}
                   </div>
                 {%- else -%}
                   <div class="gb-cmp-cell gb-cmp-cell-kit">
                     {%- if r.kit_mark == 'yes' -%}<span class="gb-cmp-mark gb-cmp-mark-yes"></span>
                     {%- elsif r.kit_mark == 'no' -%}<span class="gb-cmp-mark gb-cmp-mark-no"></span>{%- endif -%}
-                    {{ r.kit_text }}
+                    {{ r_kit_text }}
                   </div>
                   <div class="gb-cmp-cell gb-cmp-cell-other">
                     {%- if r_col2_mark == 'yes' -%}<span class="gb-cmp-mark gb-cmp-mark-yes"></span>
