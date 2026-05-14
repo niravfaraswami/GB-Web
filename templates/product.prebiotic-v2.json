@@ -62,24 +62,27 @@
     "diff": {
       "type": "gb-comparison-v2",
       "settings": {
-        "eyebrow": "VS THE OTHERS",
-        "heading": "WHY PURE PREBIOTIC FIBER",
-        "heading_em": "WINS.",
-        "intro": "Most fiber supplements bulk up with fillers and sweeteners. Read the label — purity matters more than ingredient count.",
-        "col_count": "3",
-        "col_kit_label": "Pure Prebiotic Fiber",
-        "col_2_label": "Cheap Fiber Mix",
-        "col_3_label": "Generic Powder"
+        "eyebrow": "VS THE ALTERNATIVE",
+        "heading": "PURE INULIN",
+        "heading_em": "VS GENERIC FIBER MIXES.",
+        "intro": "",
+        "style": "minimal",
+        "kit_position": "right",
+        "col_count": "2",
+        "col_kit_label": "GUTBASKET INULIN",
+        "col_2_label": "CHEAP FIBER MIX",
+        "footer_text": "Comparing across all our fibers?",
+        "footer_cta_label": "See the full fiber journey →",
+        "footer_cta_url": ""
       },
       "blocks": {
-        "cr-1": { "type": "cmp_row", "settings": { "label": "Source", "kit_mark": "yes", "kit_text": "Single-origin acacia, Senegal", "col2_text": "Multiple bulk suppliers", "col3_text": "Unspecified blend" } },
-        "cr-2": { "type": "cmp_row", "settings": { "label": "Filler %", "kit_mark": "yes", "kit_text": "0% (just acacia)", "col2_mark": "no", "col2_text": "30–60% maltodextrin", "col3_mark": "no", "col3_text": "Often 50%+ fillers" } },
-        "cr-3": { "type": "cmp_row", "settings": { "label": "Soluble fiber per scoop", "kit_mark": "yes", "kit_text": "5g (real, lab-verified)", "col2_text": "1.5–3g effective", "col3_text": "Rarely disclosed" } },
-        "cr-4": { "type": "cmp_row", "settings": { "label": "Mixing time", "kit_mark": "yes", "kit_text": "10 sec, dissolves clear", "col2_text": "30+ sec, often clumpy", "col3_text": "Settles to bottom" } },
-        "cr-5": { "type": "cmp_row", "settings": { "label": "Lab-tested for purity", "kit_mark": "yes", "kit_text": "Every batch", "col2_mark": "no", "col2_text": "No verification", "col3_mark": "no", "col3_text": "No verification" } },
-        "cr-6": { "type": "cmp_row", "settings": { "label": "Cost per serving", "kit_mark": "yes", "kit_text": "~₹14 / 5g effective fiber", "col2_text": "~₹10 / 2g effective fiber", "col3_text": "~₹6 / unknown effective" } }
+        "cr-1": { "type": "cmp_row", "settings": { "label": "Source",              "kit_mark": "none", "kit_text": "Belgian chicory root",       "col2_mark": "none", "col2_text": "Synthetic / unspecified" } },
+        "cr-2": { "type": "cmp_row", "settings": { "label": "Fillers / excipients", "kit_mark": "none", "kit_text": "Zero. Just the fiber.",      "col2_mark": "none", "col2_text": "Sweeteners, flow agents, anti-caking" } },
+        "cr-3": { "type": "cmp_row", "settings": { "label": "Lab-tested",           "kit_mark": "none", "kit_text": "Third-party COA per batch",  "col2_mark": "none", "col2_text": "Manufacturer claim only" } },
+        "cr-4": { "type": "cmp_row", "settings": { "label": "Bloating risk",        "kit_mark": "none", "kit_text": "Predictable, single-source", "col2_mark": "none", "col2_text": "Often (mixed-source)" } },
+        "cr-5": { "type": "cmp_row", "settings": { "label": "Cost per serving",     "kit_mark": "none", "kit_text": "~₹15/serving · pure dose", "col2_mark": "none", "col2_text": "Cheap up front, fillers reduce real fiber" } }
       },
-      "block_order": ["cr-1","cr-2","cr-3","cr-4","cr-5","cr-6"]
+      "block_order": ["cr-1","cr-2","cr-3","cr-4","cr-5"]
     },
     "consume": {
       "type": "gb-step-cards-v2",
