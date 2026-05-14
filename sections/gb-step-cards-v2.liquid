@@ -20,7 +20,8 @@
 -%}
 
 {%- if has_mf or step_blocks.size > 0 or sc_heading != blank -%}
-  <section class="gb-step-cards-section ferment-pdp-leo" {%- render 'leo_kit_attrs' -%}>
+  {%- assign sc_style = section.settings.style | default: 'default' -%}
+  <section class="gb-step-cards-section ferment-pdp-leo" data-style="{{ sc_style }}" {%- render 'leo_kit_attrs' -%}>
     <div class="container">
       <div class="section-header centered">
         {%- if sc_eyebrow != blank -%}<div class="eyebrow">{{ sc_eyebrow }}</div>{%- endif -%}
@@ -118,6 +119,16 @@
       "type": "textarea",
       "id": "intro",
       "label": "Intro"
+    },
+    {
+      "type": "select",
+      "id": "style",
+      "label": "Visual style",
+      "options": [
+        { "value": "default", "label": "Default (white cards, numbered)" },
+        { "value": "minimal", "label": "Minimal (sand cards, no numbers, teal tips strip)" }
+      ],
+      "default": "default"
     },
     {
       "type": "header",

@@ -3062,3 +3062,112 @@
   .gb-cmp-footnote-text { font-size: 13px; }
   .gb-cmp-footnote-cta { font-size: 14px; }
 }
+
+/* ============================================================
+ * gb-step-cards-v2 — "minimal" style
+ * White section bg, sand-coloured cards with a big inner cream
+ * icon square, no numbered badge. Tips strip flips to a white
+ * box with a teal left-accent, 💡 prefix on the heading, and a
+ * 2-column bullet list with teal arrows. Used on prebiotic-v2.
+ * Activates only when data-style="minimal" is on the section.
+ * ============================================================ */
+.gb-step-cards-section[data-style="minimal"] {
+  background: var(--gb-white);
+}
+.gb-step-cards-section[data-style="minimal"] .section-header h2 em {
+  display: block; /* "EVERY MORNING." stacks below "SIMPLE." */
+}
+.gb-step-cards-section[data-style="minimal"] .gb-step-cards-grid {
+  gap: 20px;
+}
+.gb-step-cards-section[data-style="minimal"] .gb-step-card {
+  background: #FBF1E2;            /* warm sand card bg */
+  border: 1px solid transparent;
+  border-radius: 22px;
+  padding: 22px 22px 26px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+.gb-step-cards-section[data-style="minimal"] .gb-step-card-num {
+  display: none;                  /* no numbered badge */
+}
+.gb-step-cards-section[data-style="minimal"] .gb-step-card-icon {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  height: auto;
+  margin: 0 0 22px;
+  background: #F4E6CC;            /* lighter cream square */
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 64px;                /* large centred emoji */
+}
+.gb-step-cards-section[data-style="minimal"] .gb-step-card-icon img {
+  width: 50%;
+  height: 50%;
+  object-fit: contain;
+}
+.gb-step-cards-section[data-style="minimal"] .gb-step-card-h {
+  font-size: 17px;
+  letter-spacing: 0.04em;
+  margin-bottom: 10px;
+}
+.gb-step-cards-section[data-style="minimal"] .gb-step-card-d {
+  font-size: 13.5px;
+  color: var(--gb-text-muted);
+  line-height: 1.5;
+}
+
+/* Tips strip — left teal accent, 💡 prefix, 2-col bullets with → */
+.gb-step-cards-section[data-style="minimal"] .gb-step-cards-tips {
+  margin-top: 24px;
+  padding: 22px 28px 22px 24px;
+  background: var(--gb-white);
+  border: 1px solid #E5E0D6;
+  border-left: 4px solid #2BAE8A; /* teal accent */
+  border-radius: 14px;
+}
+.gb-step-cards-section[data-style="minimal"] .gb-step-cards-tips-h {
+  font-family: 'DM Mono', monospace;
+  font-weight: 700;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #1E6D4B;
+  margin-bottom: 14px;
+}
+.gb-step-cards-section[data-style="minimal"] .gb-step-cards-tips-h::before {
+  content: '💡';
+  margin-right: 8px;
+  font-size: 14px;
+}
+.gb-step-cards-section[data-style="minimal"] .gb-step-cards-tips-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 36px;
+  font-size: 14px;
+  color: var(--gb-text);
+}
+.gb-step-cards-section[data-style="minimal"] .gb-step-cards-tips-list li {
+  padding: 4px 0 4px 22px;
+  position: relative;
+  line-height: 1.45;
+}
+.gb-step-cards-section[data-style="minimal"] .gb-step-cards-tips-list li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  top: 4px;
+  color: #2BAE8A;
+  font-weight: 800;
+}
+
+@media (max-width: 768px) {
+  .gb-step-cards-section[data-style="minimal"] .gb-step-card { padding: 18px 18px 22px; border-radius: 18px; }
+  .gb-step-cards-section[data-style="minimal"] .gb-step-card-icon { margin-bottom: 16px; border-radius: 14px; font-size: 56px; }
+  .gb-step-cards-section[data-style="minimal"] .gb-step-cards-tips { padding: 18px 20px 18px 18px; }
+  .gb-step-cards-section[data-style="minimal"] .gb-step-cards-tips-list { grid-template-columns: 1fr; gap: 6px; }
+}

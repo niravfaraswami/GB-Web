@@ -88,15 +88,16 @@
       "type": "gb-step-cards-v2",
       "settings": {
         "eyebrow": "HOW TO CONSUME",
-        "heading": "AS EASY AS",
-        "heading_em": "1, 2, 3.",
-        "tips_heading": "Quick tips",
-        "tips_bullets": "Start with 1/2 scoop · build up over 7 days\nWater works best — milk dilutes the prebiotic effect\nPick one time of day and stick with it (morning is most common)\nMissed a day? Just resume the next day — no need to double up\nIncrease water intake by 250ml when you start, especially the first 2 weeks"
+        "heading": "SIMPLE.",
+        "heading_em": "EVERY MORNING.",
+        "style": "minimal",
+        "tips_heading": "TIPS",
+        "tips_bullets": "Start with half a scoop for the first 3 days, then move to full scoop\nHeat-stable up to 140°C; safe in hot drinks (not boiled)\nMix into coffee, chai, smoothies, oats, soup — or just water\nSome users build to 2 scoops daily for max prebiotic effect"
       },
       "blocks": {
-        "sc-1": { "type": "step_card", "settings": { "icon_emoji": "🥄", "heading": "Scoop", "description": "1 level scoop (5g). The scoop is included in the bag." } },
-        "sc-2": { "type": "step_card", "settings": { "icon_emoji": "🥤", "heading": "Stir", "description": "Into 200ml water, coffee, or smoothie. Stir 10 seconds — it dissolves clear." } },
-        "sc-3": { "type": "step_card", "settings": { "icon_emoji": "✨", "heading": "Drink", "description": "Once a day. Most prefer morning. No flavor, no texture change to your drink." } }
+        "sc-1": { "type": "step_card", "settings": { "icon_emoji": "🥄", "heading": "Scoop", "description": "One scoop (5g) into any liquid. Cold or warm both work." } },
+        "sc-2": { "type": "step_card", "settings": { "icon_emoji": "🌀", "heading": "Stir", "description": "Stir 10 seconds. Inulin dissolves clean — no clumps, no grit." } },
+        "sc-3": { "type": "step_card", "settings": { "icon_emoji": "🥤", "heading": "Drink", "description": "Drink with breakfast. Once a day is the standard dose." } }
       },
       "block_order": ["sc-1","sc-2","sc-3"]
     },
