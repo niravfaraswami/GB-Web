@@ -51,15 +51,13 @@
 
           {%- if has_mf -%}
             {%- for r in mf_rows -%}
-              {%-
-                comment
-                  Field-name resolution for kit_comparison_row metaobjects.
-                  Prebiotic-v2 metaobjects use: row_label, left_subtext (→ kit / right visual col),
-                  right_subtext (→ alternative / cream visual col). The data is intentionally
-                  swapped — preserve this mapping. Falls back to the legacy block-style names
-                  (label / kit_text / col2_text / col3_text) so anything older still renders.
-                endcomment
-              -%}
+              {%- comment -%}
+                Field-name resolution for kit_comparison_row metaobjects.
+                Prebiotic-v2 metaobjects use: row_label, left_subtext (→ kit / right visual col),
+                right_subtext (→ alternative / cream visual col). The data is intentionally
+                swapped — preserve this mapping. Falls back to the legacy block-style names
+                (label / kit_text / col2_text / col3_text) so anything older still renders.
+              {%- endcomment -%}
               {%- assign r_label = r.row_label | default: r.label | default: r.left_heading -%}
               {%- assign r_kit_text = r.left_subtext | default: r.kit_text -%}
               {%- assign r_col2_mark = r.col2_mark | default: r.col3_mark -%}
