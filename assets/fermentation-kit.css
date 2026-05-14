@@ -553,3 +553,24 @@
 
   .judgeme-section { padding: 56px 0; }
 }
+
+/* ============================================================
+ * Defensive — PDP section roots must NEVER create their own
+ * vertical scroll context. Targets the outermost element of
+ * every leo / fkv3 section (carries data-template + the
+ * .ferment-pdp(-leo) marker), so accidental max-height or
+ * overflow rules on those wrappers can't trap a scrollbar in
+ * the middle of a product page. The page itself stays the
+ * only Y-scroll surface.
+ *
+ * Modals (size chart), drawers (cart, header, mobile filter)
+ * and the sticky ATC don't carry these markers, so their
+ * intentional internal scroll is untouched.
+ * ============================================================ */
+.ferment-pdp,
+.ferment-pdp-leo,
+[data-template="leo"],
+[data-template="fkv3"] {
+  overflow-y: visible !important;
+  max-height: none !important;
+}
