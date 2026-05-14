@@ -2897,3 +2897,67 @@
   font-size: 72px;
   line-height: 1;
 }
+
+/* ============================================================
+ * Variant picker — leo overrides
+ * Fixes for the leo PDP hero variant grid:
+ *  - cards stretch to equal height in their row
+ *  - long titles wrap instead of overflowing (white-space: nowrap is removed)
+ *  - price block pins to the bottom of each card via flex
+ *  - illustration uses aspect-ratio so images stay proportional
+ *  - radio dot has enough breathing room from the title
+ *  - 2-up grid collapses to 1 column on narrow phones
+ * ============================================================ */
+[data-template="leo"] .pdp-hero .variant-grid { align-items: stretch; }
+[data-template="leo"] .pdp-hero .variant {
+  display: flex;
+  flex-direction: column;
+  padding: 16px 14px 14px;
+  padding-right: 34px; /* reserve space for the radio dot */
+  text-align: left;
+  height: 100%;
+}
+[data-template="leo"] .pdp-hero .variant-radio {
+  top: 12px;
+  right: 12px;
+  width: 18px;
+  height: 18px;
+}
+[data-template="leo"] .pdp-hero .variant-pack {
+  white-space: normal;
+  text-wrap: balance;
+  font-size: 15px;
+  line-height: 1.2;
+  margin-bottom: 10px;
+}
+[data-template="leo"] .pdp-hero .variant-illustration {
+  height: auto;
+  aspect-ratio: 16 / 10;
+  margin-bottom: 12px;
+  background: var(--gb-cream);
+}
+[data-template="leo"] .pdp-hero .variant-illustration img {
+  object-fit: contain;
+  padding: 6px;
+}
+[data-template="leo"] .pdp-hero .variant-rationale { margin: 4px 0 10px; }
+[data-template="leo"] .pdp-hero .variant-price {
+  margin-top: auto; /* push to bottom of the card */
+  font-size: 17px;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+[data-template="leo"] .pdp-hero .variant-price > span:first-child { display: inline; }
+[data-template="leo"] .pdp-hero .variant-compare { margin-left: 0; }
+[data-template="leo"] .pdp-hero .variant-save { margin-top: 4px; font-size: 11px; }
+
+/* Mobile: a 2-up grid is too tight for long titles; stack instead. 3+ stays multi-col. */
+@media (max-width: 540px) {
+  [data-template="leo"] .pdp-hero .variant-grid--2 { grid-template-columns: 1fr; }
+  [data-template="leo"] .pdp-hero .variant { padding: 14px 12px 12px; padding-right: 30px; }
+  [data-template="leo"] .pdp-hero .variant-pack { font-size: 14px; margin-bottom: 8px; }
+  [data-template="leo"] .pdp-hero .variant-illustration { aspect-ratio: 5 / 2; }
+  [data-template="leo"] .pdp-hero .variant-price { font-size: 16px; }
+}
