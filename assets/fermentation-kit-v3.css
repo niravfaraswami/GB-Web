@@ -272,8 +272,7 @@
   .ferment-pdp .qb-grid,
   .ferment-pdp .reviews-grid,
   .ferment-pdp .cross-grid,
-  .ferment-pdp .recipe-tags,
-  .ferment-pdp .ag-grid {
+  .ferment-pdp .recipe-tags {
     padding-left: 24px;
     padding-right: 24px;
     box-sizing: border-box;
@@ -455,5 +454,39 @@
   [data-template="fkv3"].eat-section .eat-grid {
     padding-left: 0;
     padding-right: 0;
+  }
+}
+
+/* ============================================================
+ * Tweak 11 — Airlock spotlight: mobile cards left-aligned
+ * .ag-grid was previously in Tweak 5's carousel-padding list,
+ * which added 24px L+R padding on mobile. Combined with the
+ * container's 24px padding the cards were inset 48px per side
+ * and looked floating. Tweak 5 no longer applies to .ag-grid;
+ * this rule explicitly zeros any leftover padding for fkv3 and
+ * tightens typography slightly so the two cards fit cleanly.
+ * ============================================================ */
+@media (max-width: 768px) {
+  [data-template="fkv3"].fkv3-airlock-section .ag-grid {
+    padding-left: 0;
+    padding-right: 0;
+    gap: 12px;
+  }
+  [data-template="fkv3"].fkv3-airlock-section .ag-name {
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+  [data-template="fkv3"].fkv3-airlock-section .ag-label {
+    font-size: 10px;
+    margin-bottom: 4px;
+  }
+  [data-template="fkv3"].fkv3-airlock-section .ag-text {
+    font-size: 12.5px;
+    line-height: 1.45;
+    margin-bottom: 10px;
+  }
+  [data-template="fkv3"].fkv3-airlock-section .ag-chip {
+    font-size: 11.5px;
+    padding: 6px 12px;
   }
 }
