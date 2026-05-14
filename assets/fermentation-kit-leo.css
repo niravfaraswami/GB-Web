@@ -2848,3 +2848,52 @@
 .gb-image-pill-icon:has(.kit-icon-svg svg) .kit-icon-img,
 .gb-step-card-icon:has(.kit-icon-svg svg) .kit-icon-img { display: none; }
 
+
+/* ============================================================
+ * How-To-Make — desktop column-height parity (mirrors fkv3 fix)
+ * Video and steps share a row; force equal heights so steps
+ * distribute to fill the video's column. Mobile stays untouched.
+ * ============================================================ */
+@media (min-width: 768px) {
+  [data-template="leo"].how-make-section .how-make-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    align-items: stretch;
+  }
+  [data-template="leo"].how-make-section .hm-video-hero {
+    height: 100%;
+    align-self: stretch;
+  }
+  [data-template="leo"].how-make-section .hm-video-hero video,
+  [data-template="leo"].how-make-section .hm-video-hero img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+  }
+  [data-template="leo"].how-make-section .hm-steps {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 16px;
+    height: 100%;
+    align-self: stretch;
+  }
+  [data-template="leo"].how-make-section .hm-step {
+    flex: 1;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+  }
+}
+
+/* ============================================================
+ * leo-itk-cards — emoji fallback when no image is set
+ * ============================================================ */
+.itk-img--emoji {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 72px;
+  line-height: 1;
+}

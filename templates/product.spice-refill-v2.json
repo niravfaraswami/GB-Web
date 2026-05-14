@@ -94,80 +94,39 @@
         "heading_size_m": 30
       }
     },
-    "why": {
-      "type": "gb-image-text-v2",
-      "settings": {
-        "eyebrow": "WHY THE REFILL",
-        "heading": "SAME FORMULA.",
-        "heading_em": "LESS WASTE.",
-        "body": "<p>The full Kanji Making Kit is great for first-timers — it includes the borosilicate jar, airlock lid, recipe book, and storage lid. Once you own those, you only need spice mix + ferment boost to keep going.</p><p>This refill skips everything you already have. Same exact formula, ~35% lower cost per batch, way less packaging.</p>",
-        "bullets": "Spice Mix + Ferment Boost only — no jar, no airlock, no book\nSame calibrated formula as the full kit\nPre-measured sachets — no scooping or weighing\nVacuum-sealed — 12-month shelf life unopened\nReuse your existing 2L jar — much lower per-batch cost",
-        "cta_label": "",
-        "cta_url": "",
-        "image_position": "left",
-        "pad_top_d": 80,
-        "pad_bot_d": 80,
-        "pad_top_m": 56,
-        "pad_bot_m": 56,
-        "mar_top_d": 0,
-        "mar_bot_d": 0,
-        "mar_top_m": 0,
-        "mar_bot_m": 0,
-        "eyebrow_size_d": 22,
-        "eyebrow_size_m": 14,
-        "heading_size_d": 44,
-        "heading_size_m": 30
-      }
-    },
     "box": {
-      "type": "gb-image-pills-v2",
+      "type": "leo-itk-cards",
       "blocks": {
-        "p-1": {
-          "type": "pill",
+        "c-1": {
+          "type": "consumable",
           "settings": {
             "icon_emoji": "🌶️",
             "heading": "Kanji Spice Mix",
-            "sub": "5 × 45g sachets"
+            "sub": "5 × 45g sachets per pack",
+            "ingredients": "Pre-measured for one 2L batch\nSame calibrated formula as the full kit\nNo preservatives, no fillers",
+            "category": "spice"
           }
         },
-        "p-2": {
-          "type": "pill",
+        "c-2": {
+          "type": "consumable",
           "settings": {
             "icon_emoji": "🌱",
             "heading": "Ferment Boost",
-            "sub": "5 × prebiotic sachets"
-          }
-        },
-        "p-3": {
-          "type": "pill",
-          "settings": {
-            "icon_emoji": "📖",
-            "heading": "Recipe Card",
-            "sub": "Seasonal variations refresh"
-          }
-        },
-        "p-4": {
-          "type": "pill",
-          "settings": {
-            "icon_emoji": "🛡",
-            "heading": "Vacuum-sealed",
-            "sub": "Foil pouch, light-blocking"
+            "sub": "5 × prebiotic sachets per pack",
+            "ingredients": "Prebiotic blend (inulin + plant fibres)\nCuts ferment time to 3–5 days\nDairy-free, plant-based",
+            "category": "boost"
           }
         }
       },
       "block_order": [
-        "p-1",
-        "p-2",
-        "p-3",
-        "p-4"
+        "c-1",
+        "c-2"
       ],
       "settings": {
-        "eyebrow": "WHAT'S IN THE PACK",
-        "heading": "EVERYTHING YOU NEED",
-        "heading_em": "(MINUS THE JAR).",
-        "image_position": "left",
-        "body_heading": "Inside this refill",
-        "body_note": "Quantities scale with pack size. Pack of 5 = 5 of each sachet, etc.",
+        "itk_eyebrow": "INSIDE THE PACK",
+        "itk_heading": "SPICE MIX +",
+        "itk_heading_em": "FERMENT BOOST.",
+        "itk_intro": "One card per ingredient. Quantities scale with pack size — pack of 5 = 5 of each sachet.",
         "pad_top_d": 80,
         "pad_bot_d": 80,
         "pad_top_m": 56,
@@ -348,25 +307,11 @@
         "pad_top_m": 12,
         "pad_bot_m": 12
       }
-    },
-    "subscribe-offer": {
-      "type": "gb-subscribe-offer-v2",
-      "settings": {
-        "icon_emoji": "♻️",
-        "title": "Subscribe & save 15%",
-        "description": "Auto-ship every 4 weeks. Cancel any time.",
-        "pad_top_d": 32,
-        "pad_bot_d": 32,
-        "pad_top_m": 20,
-        "pad_bot_m": 20
-      }
     }
   },
   "order": [
     "refill-flag",
     "hero",
-    "subscribe-offer",
-    "why",
     "box",
     "how-to-make",
     "reviews",
