@@ -325,7 +325,26 @@
     #gb-jt-{{ section.id }} .feature-grid,
     #gb-jt-{{ section.id }} .uses-grid,
     #gb-jt-{{ section.id }} .crosssell-grid { grid-template-columns: repeat(2, 1fr); }
-    #gb-jt-{{ section.id }} .reviews-grid { grid-template-columns: 1fr; }
+    /* Reviews become a horizontal scroll-carousel on mobile so the
+       cards don't stack into a long vertical list. Each card sits at
+       ~82% width with a scroll-snap so swipes land cleanly. */
+    #gb-jt-{{ section.id }} .reviews-grid {
+      display: flex;
+      grid-template-columns: none;
+      gap: 14px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding: 0 18px;
+      margin: 0 -18px;
+    }
+    #gb-jt-{{ section.id }} .reviews-grid::-webkit-scrollbar { display: none; }
+    #gb-jt-{{ section.id }} .reviews-grid .review-card {
+      flex: 0 0 82%;
+      max-width: 320px;
+      scroll-snap-align: start;
+    }
     #gb-jt-{{ section.id }} .single-price-block { padding: 18px 18px; }
     #gb-jt-{{ section.id }} .single-price-amount { font-size: 26px; }
     #gb-jt-{{ section.id }} .specs-row { grid-template-columns: 1fr; }
@@ -405,7 +424,8 @@
             </span>
           </div>
 
-          {%- form 'product', p, id: 'jt-product-form-' | append: section.id, class: 'jt-atc-form' -%}
+          {%- assign jt_form_id = 'jt-product-form-' | append: section.id -%}
+          {%- form 'product', p, id: jt_form_id, class: 'jt-atc-form' -%}
             <input type="hidden" name="id" value="{{ p.selected_or_first_available_variant.id }}">
             <button type="submit" name="add" class="atc-btn" data-atc
                     data-variant-id="{{ p.selected_or_first_available_variant.id }}"
