@@ -649,3 +649,40 @@ body.gb-cart-drawer-active cart-drawer-component dialog[open] { display: none !i
   clip: rect(0, 0, 0, 0);
   white-space: nowrap; border: 0;
 }
+
+/* ============================================================
+ * Line-item enter / exit animations
+ * Without these the cart drawer pops items in and out in a single
+ * frame, which reads as a glitch — especially during the optimistic
+ * → real-cart swap after /cart/add. Items fade + slide in on create
+ * and fade + slide out before the DOM removes them.
+ * Skipped under prefers-reduced-motion (see existing media query).
+ * ============================================================ */
+@keyframes gbcd-item-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes gbcd-item-out {
+  from { opacity: 1; transform: translateX(0); max-height: 200px; padding-top: 18px; padding-bottom: 18px; }
+  to   { opacity: 0; transform: translateX(20px); max-height: 0; padding-top: 0; padding-bottom: 0; border-bottom-width: 0; }
+}
+#gb-cart-drawer .gbcd-item {
+  animation: gbcd-item-in 0.22s ease both;
+  overflow: hidden;
+}
+#gb-cart-drawer .gbcd-item.is-removing {
+  animation: gbcd-item-out 0.22s ease forwards;
+  pointer-events: none;
+}
+/* Optimistic placeholder — subtle visual hint that the line is being
+   reconciled with the server. The 'data-pending' attr is cleared by
+   updateLineNode the moment the real cart data arrives. */
+#gb-cart-drawer .gbcd-item[data-pending="1"] .gbcd-item-price,
+#gb-cart-drawer .gbcd-item[data-pending="1"] .gbcd-qty-val {
+  opacity: 0.72;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #gb-cart-drawer .gbcd-item,
+  #gb-cart-drawer .gbcd-item.is-removing { animation: none !important; }
+}

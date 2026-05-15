@@ -87,7 +87,20 @@
   }
 
   // ---------- Render ----------
-  function render() {
+  // Coalesce back-to-back render() calls into a single paint via rAF.
+  // Optimistic add → render, then a few ms later cart:update → render,
+  // then maybeManageFreeGift may trigger another. Without batching the
+  // user sees the drawer repaint two or three times in quick succession.
+  var renderRAF = null;
+  function scheduleRender() {
+    if (renderRAF) return;
+    renderRAF = requestAnimationFrame(function() {
+      renderRAF = null;
+      renderNow();
+    });
+  }
+  function render() { scheduleRender(); }
+  function renderNow() {
     var cart = state.cart;
     if (!cart) return;
     document.documentElement.style.setProperty('--gb-cart-count', cart.item_count);
@@ -159,29 +172,54 @@
     node.className = 'gbcd-item';
     node.setAttribute('data-line-id', lineItemId(it));
     node.setAttribute('data-line-key', it.key);
+    if (it._pending) node.setAttribute('data-pending', '1');
     node.innerHTML = lineItemHtml(it);
     return node;
   }
 
   // Update mutable fields in place — preserves the <img> element so the
   // browser doesn't recreate it (and re-decode the image) on every render.
+  // Every assignment is guarded by an equality check so identical values
+  // don't trigger any DOM mutation, which kept causing visible reflows
+  // (optimistic→real swap normally has the same price/qty/name etc.).
   function updateLineNode(node, it) {
     var isGift = it.properties && (it.properties._gift === 'true' || it.properties._gift === true);
-    node.setAttribute('data-line-key', it.key);
+    if (node.getAttribute('data-line-key') !== (it.key || '')) {
+      node.setAttribute('data-line-key', it.key);
+    }
+    // Pending flag is cleared once the server-side line key replaces the
+    // 'pending-…' placeholder. CSS uses [data-pending] for a subtle hint.
+    if (it._pending) {
+      if (node.getAttribute('data-pending') !== '1') node.setAttribute('data-pending', '1');
+    } else if (node.hasAttribute('data-pending')) {
+      node.removeAttribute('data-pending');
+    }
 
     var qtyVal = node.querySelector('.gbcd-qty-val');
-    if (qtyVal) qtyVal.textContent = it.quantity;
+    if (qtyVal && qtyVal.textContent !== String(it.quantity)) qtyVal.textContent = it.quantity;
 
     var qtyBtns = node.querySelectorAll('[data-gbcd-qty]');
     if (qtyBtns[0]) {
-      qtyBtns[0].setAttribute('data-gbcd-qty', String(it.quantity - 1));
-      if (isGift || it.quantity <= 1) qtyBtns[0].setAttribute('disabled', 'disabled');
-      else qtyBtns[0].removeAttribute('disabled');
+      var minusTarget = String(it.quantity - 1);
+      if (qtyBtns[0].getAttribute('data-gbcd-qty') !== minusTarget) {
+        qtyBtns[0].setAttribute('data-gbcd-qty', minusTarget);
+      }
+      var minusDisabled = (isGift || it.quantity <= 1);
+      if (minusDisabled !== qtyBtns[0].hasAttribute('disabled')) {
+        if (minusDisabled) qtyBtns[0].setAttribute('disabled', 'disabled');
+        else qtyBtns[0].removeAttribute('disabled');
+      }
     }
     if (qtyBtns[1]) {
-      qtyBtns[1].setAttribute('data-gbcd-qty', String(it.quantity + 1));
-      if (isGift) qtyBtns[1].setAttribute('disabled', 'disabled');
-      else qtyBtns[1].removeAttribute('disabled');
+      var plusTarget = String(it.quantity + 1);
+      if (qtyBtns[1].getAttribute('data-gbcd-qty') !== plusTarget) {
+        qtyBtns[1].setAttribute('data-gbcd-qty', plusTarget);
+      }
+      var plusDisabled = !!isGift;
+      if (plusDisabled !== qtyBtns[1].hasAttribute('disabled')) {
+        if (plusDisabled) qtyBtns[1].setAttribute('disabled', 'disabled');
+        else qtyBtns[1].removeAttribute('disabled');
+      }
     }
 
     var priceEl = node.querySelector('.gbcd-item-price');
@@ -190,12 +228,15 @@
       if (it.original_price > it.final_price) {
         compare = '<span class="gbcd-item-compare">' + money(it.original_price) + '</span>';
       }
-      priceEl.innerHTML = money(it.final_line_price) + compare;
+      var nextPriceHtml = money(it.final_line_price) + compare;
+      if (priceEl.innerHTML !== nextPriceHtml) priceEl.innerHTML = nextPriceHtml;
     }
 
     var nameEl = node.querySelector('.gbcd-item-name');
     if (nameEl && nameEl.textContent !== it.product_title) {
       nameEl.textContent = it.product_title;
+    }
+    if (nameEl && nameEl.getAttribute('href') !== (it.url || '#')) {
       nameEl.setAttribute('href', it.url || '#');
     }
 
@@ -241,8 +282,26 @@
       }
       return node;
     });
-    Object.keys(existing).forEach(function(k) { existing[k].remove(); });
+    // Animate departures (CSS plays gbcd-item-out keyframe), then yank
+    // the node from the DOM after the animation completes. If something
+    // re-adds the same line before the timer fires, clear the removing
+    // state so the node reverts to the regular layout.
+    Object.keys(existing).forEach(function(k) {
+      var el = existing[k];
+      if (el.dataset.removing === '1') return;
+      el.dataset.removing = '1';
+      el.classList.add('is-removing');
+      setTimeout(function() {
+        if (el.parentNode && el.dataset.removing === '1') el.remove();
+      }, 220);
+    });
     newNodes.forEach(function(node, idx) {
+      // A node may be re-added mid-departure (e.g. qty bumped to 0 then
+      // back to 1 from another tab). Cancel the pending removal.
+      if (node.dataset.removing === '1') {
+        node.dataset.removing = '';
+        node.classList.remove('is-removing');
+      }
       if (host.children[idx] !== node) {
         host.insertBefore(node, host.children[idx] || null);
       }
