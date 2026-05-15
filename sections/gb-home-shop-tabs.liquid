@@ -318,7 +318,14 @@
   /* When arriving via #shop fragment (collection-page tab nav), leave a
      bit of room above so the tabs don't sit flush against the top edge. */
   scroll-margin-top: 16px;
+  /* Some mobile browsers paint a focus/target outline on the element
+     whose id matches the URL fragment. The row isn't interactive — kill
+     the outline so it doesn't look like a stray border. */
+  outline: none;
 }
+.gb-shop-tabs-row:focus,
+.gb-shop-tabs-row:focus-visible,
+.gb-shop-tabs-row:target { outline: none; }
 .gb-shop-tabs-row::-webkit-scrollbar { display: none; }
 .gb-shop-tab {
   position: relative;
@@ -614,6 +621,19 @@
   tabs.forEach(function(t) {
     t.addEventListener('click', function() { activate(t.dataset.tab); });
   });
+
+  // Center the active tab in the horizontal scroll on load. On mobile
+  // the tab row overflows to the right, so without this the active tab
+  // can be off-screen (e.g. landing on /collections/cultures and seeing
+  // 'Fermentation Kits | Sprouts | Prebiotic' with the actual active
+  // tab two screens to the right).
+  var row = section.querySelector('.gb-shop-tabs-row');
+  var activeTab = section.querySelector('.gb-shop-tab.is-active');
+  if (row && activeTab && row.scrollWidth > row.clientWidth) {
+    var target = activeTab.offsetLeft + activeTab.offsetWidth / 2 - row.clientWidth / 2;
+    target = Math.max(0, Math.min(target, row.scrollWidth - row.clientWidth));
+    row.scrollLeft = target;
+  }
 
   // Prefetch the target collection page on hover/touch so navigation
   // feels near-instant. Only fires once per tab per page-view. Uses
