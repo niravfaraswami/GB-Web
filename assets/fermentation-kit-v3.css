@@ -97,6 +97,40 @@
 .ferment-pdp .myth-pill--myth { background: rgba(31, 31, 29, 0.85); color: #FFF6F2; }
 .ferment-pdp .myth-pill--fact { background: var(--kit-color, #FF7300); color: #fff; }
 
+/* Mobile: lift the myth/fact pill out of the image overlay and stack
+   it above the image at smaller font so the image isn't blanketed by
+   text. The pill is the 2nd child of .compare-image in DOM order;
+   `order: -1` flips it above the <img>. */
+@media (max-width: 768px) {
+  [data-template="fkv3"] .compare-image {
+    aspect-ratio: auto;
+    background: transparent;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 8px;
+    overflow: visible;
+    border-radius: 0;
+  }
+  [data-template="fkv3"] .compare-image img {
+    aspect-ratio: 4/3;
+    height: auto;
+    border-radius: 12px;
+  }
+  [data-template="fkv3"] .myth-pill {
+    position: static;
+    order: -1;
+    align-self: stretch;
+    text-align: center;
+    font-size: 9.5px;
+    padding: 6px 10px;
+    line-height: 1.35;
+    white-space: normal;
+    word-break: break-word;
+    border-radius: 999px;
+  }
+}
+
 /* Refill note bullets */
 .ferment-pdp .irn-bullets {
   list-style: none;
