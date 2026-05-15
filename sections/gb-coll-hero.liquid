@@ -3,6 +3,11 @@
 {%- liquid
   assign subtitle = collection.description | strip_html | strip | default: collection.metafields.custom.subtitle | default: section.settings.fallback_subtitle
   assign hero_emoji = collection.metafields.custom.hero_emoji | default: section.settings.fallback_emoji
+  # Banner image source ladder:
+  #   1. collection.metafields.custom.hero_image  (banner-specific override)
+  #   2. collection.image                          (the Shopify-admin collection image)
+  #   3. emoji fallback
+  assign hero_image = collection.metafields.custom.hero_image | default: collection.image
 -%}
 
 <section class="coll-hero" {%- render 'leo_kit_attrs' -%}>
@@ -12,8 +17,8 @@
       {%- if subtitle != blank -%}<p class="coll-hero-sub">{{ subtitle }}</p>{%- endif -%}
     </div>
     <div class="coll-hero-image">
-      {%- if collection.image -%}
-        <img src="{{ collection.image | image_url: width: 1200 }}" alt="{{ collection.title | escape }}" loading="eager" width="900" height="675">
+      {%- if hero_image != blank -%}
+        <img src="{{ hero_image | image_url: width: 1200 }}" alt="{{ collection.title | escape }}" loading="eager" width="900" height="506">
       {%- elsif hero_emoji != blank -%}
         {{ hero_emoji }}
       {%- endif -%}
