@@ -280,7 +280,32 @@
           </div>
         {%- endif -%}
 
-        {%- if accordion_blocks.size > 0 -%}
+        {%- liquid
+          assign mf_hero_accordions = p.metafields.custom.hero_accordions.value
+          assign has_mf_accordions = false
+          if mf_hero_accordions and mf_hero_accordions.size > 0
+            assign has_mf_accordions = true
+          endif
+        -%}
+        {%- if has_mf_accordions -%}
+          <div class="hero-accordion">
+            {%- for acc in mf_hero_accordions -%}
+              {%- liquid
+                assign is_open = false
+                if acc.is_default_open == true or acc.is_default_open == 'true'
+                  assign is_open = true
+                endif
+              -%}
+              <div class="hero-accordion-item{% if is_open %} is-open{% endif %}" data-accordion>
+                <button class="hero-accordion-trigger" type="button" aria-expanded="{% if is_open %}true{% else %}false{% endif %}">
+                  <span class="hero-accordion-label">{{ acc.title }}</span>
+                  <span class="hero-accordion-toggle" aria-hidden="true"></span>
+                </button>
+                <div class="hero-accordion-panel">{{ acc.body | newline_to_br }}</div>
+              </div>
+            {%- endfor -%}
+          </div>
+        {%- elsif accordion_blocks.size > 0 -%}
           <div class="hero-accordion">
             {%- for block in accordion_blocks -%}
               {%- liquid
