@@ -257,7 +257,7 @@
             "show_all_products": false,
             "collection": "fermentation-kits",
             "products_limit": 6,
-            "cat_band": "Probiotic Drink",
+            "cat_band": "",
             "view_all_label": "View all fermentation kits",
             "theme": "kanji"
           }
