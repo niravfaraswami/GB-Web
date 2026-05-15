@@ -430,6 +430,27 @@
   [data-template="fkv3"].itk-section .itk-list li {
     font-size: 12.5px;
   }
+  /* 3-card layout fix. The 2-col mobile grid leaves a 3rd card stranded
+     in column 1 with empty space to its right. When the section renders
+     exactly 3 cards, span the 3rd across both columns and flip its
+     internal layout to horizontal (image left, text right) so it reads
+     as a balanced summary tile instead of a half-filled row.
+
+     `:nth-child(3):nth-last-child(1)` matches the 3rd child ONLY when
+     it is also the last — i.e. total card count = 3. Sections with 2
+     or 4+ cards are untouched. */
+  [data-template="fkv3"].itk-section .itk-card:nth-child(3):nth-last-child(1) {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    align-items: stretch;
+  }
+  [data-template="fkv3"].itk-section .itk-card:nth-child(3):nth-last-child(1) .itk-img {
+    flex: 0 0 40%;
+    aspect-ratio: auto;
+  }
+  [data-template="fkv3"].itk-section .itk-card:nth-child(3):nth-last-child(1) .itk-body {
+    flex: 1;
+  }
 }
 
 /* ============================================================
