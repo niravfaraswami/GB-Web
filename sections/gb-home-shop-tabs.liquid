@@ -16,6 +16,27 @@
   assign show_now   = section.settings.show_card_now
   assign show_was   = section.settings.show_card_was
   assign show_cta   = section.settings.show_card_cta
+
+  # Active tab. On a collection page we try to match a tab's linked
+  # collection.handle to the current collection. Falls back to the
+  # first non-disabled tab block, preserving the home-page default.
+  assign active_tab_id = ''
+  if collection != blank and collection.handle != blank
+    for block in section.blocks
+      if block.type == 'tab' and block.settings.collection.handle == collection.handle
+        assign active_tab_id = block.settings.tab_id
+        break
+      endif
+    endfor
+  endif
+  if active_tab_id == ''
+    for block in section.blocks
+      if block.type == 'tab'
+        assign active_tab_id = block.settings.tab_id
+        break
+      endif
+    endfor
+  endif
 -%}
 
 {%- capture card_vars -%}
@@ -64,7 +85,7 @@
     <div class="gb-shop-tabs-row" role="tablist">
       {%- for block in section.blocks -%}
         {%- if block.type == 'tab' -%}
-          <button class="gb-shop-tab {% if forloop.first %}is-active{% endif %}"
+          <button class="gb-shop-tab {% if block.settings.tab_id == active_tab_id %}is-active{% endif %}"
                   data-tab="{{ block.settings.tab_id }}"
                   role="tab"
                   {{ block.shopify_attributes }}>{{ block.settings.label }}</button>
@@ -98,7 +119,7 @@
             assign view_all_url = ''
           endif
         -%}
-        <div class="gb-shop-panel {% if forloop.first %}is-active{% endif %}"
+        <div class="gb-shop-panel {% if block.settings.tab_id == active_tab_id %}is-active{% endif %}"
              data-panel="{{ block.settings.tab_id }}"
              role="tabpanel">
           <div class="gb-shop-grid gb-shop-grid--{{ columns }}">
