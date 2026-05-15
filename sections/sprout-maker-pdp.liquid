@@ -106,7 +106,6 @@ All product custom metafields with non-empty values:
       <div class="hero-grid">
         <div class="gallery-stack">
           <div class="gallery-main">
-            {%- if save_badge != blank -%}<span class="save-badge">{{ save_badge }}</span>{%- endif -%}
             {%- if p.featured_image -%}
               <img class="gallery-main-img"
                    src="{{ p.featured_image | image_url: width: 1200 }}"
