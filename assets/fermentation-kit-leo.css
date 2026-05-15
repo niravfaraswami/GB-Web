@@ -3296,3 +3296,23 @@
   .gb-who-footnote-text { font-size: 13px; }
   .gb-who-footnote-cta { font-size: 14px; }
 }
+
+/* ============================================================
+ * Anchor CTA color overrides
+ * Base file has '[data-kit="fermentation"] a { color: inherit }'
+ * with specificity (0,1,1) — it silently beats single-class CTA
+ * rules like .gb-journey-cta and turns their text invisible on
+ * dark/coloured backgrounds. Re-specify with matching specificity.
+ * ============================================================ */
+[data-kit="fermentation"] a.gb-journey-cta,
+[data-template="leo"] .gb-journey-cta {
+  color: var(--gb-white);
+}
+[data-kit="fermentation"] a.gb-journey-cta:hover,
+[data-template="leo"] .gb-journey-cta:hover {
+  color: var(--gb-white);
+}
+[data-kit="fermentation"] a.refill-cta,
+[data-kit="fermentation"] a.irn-cta {
+  color: var(--gb-white);
+}
