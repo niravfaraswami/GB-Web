@@ -78,6 +78,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  /* Desktop: text on the left, image on the right. The visual block
+     comes first in DOM order (kept so mobile single-column stays
+     image-above-text); `order` flips them on desktop only. The mobile
+     breakpoint below resets these to 0 so DOM order takes over. */
+  order: 2;
   overflow: hidden;
 }
 .gb-why-img {
@@ -129,6 +134,7 @@
 }
 .gb-why-label--before { left: 16px; }
 .gb-why-label--after  { right: 16px; }
+.gb-why-text { order: 1; }
 .gb-why-eyebrow {
   display: inline-block;
   font-family: 'DM Mono', monospace;
@@ -190,7 +196,8 @@
 }
 @media (max-width: 968px) {
   .gb-why-grid { grid-template-columns: 1fr; gap: 36px; }
-  .gb-why-visual { max-width: 380px; margin: 0 auto; }
+  .gb-why-visual { max-width: 380px; margin: 0 auto; order: 0; }
+  .gb-why-text { order: 0; }
 }
 {% endstylesheet %}
 
