@@ -199,7 +199,13 @@
               <p class="gb-shop-empty">Pick a collection for this tab in Theme Editor.</p>
             {%- endif -%}
           </div>
-          {%- if view_all_url != '' -%}
+          {%- comment -%}
+            'View all' is a teaser link that only makes sense on the home
+            page where each tab caps at products_limit. On a collection
+            page (collection != blank) we already show the full grid via
+            the limit override above, so the link is redundant — hide it.
+          {%- endcomment -%}
+          {%- if view_all_url != '' and collection == blank -%}
             <div class="gb-shop-viewall">
               <a href="{{ view_all_url }}">{{ block.settings.view_all_label | default: 'View all' }} <span class="gb-shop-arr">→</span></a>
             </div>
