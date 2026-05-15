@@ -2953,13 +2953,15 @@
 [data-template="leo"].pdp-hero .variant-compare { margin-left: 0; }
 [data-template="leo"].pdp-hero .variant-save { margin-top: 4px; font-size: 11px; }
 
-/* Mobile: a 2-up grid is too tight for long titles; stack instead. 3+ stays multi-col. */
+/* Mobile: 2-up stays 2-up — long titles wrap (white-space: normal + text-wrap:
+   balance already set above). 3+ stays multi-col. Just tightens type + padding. */
 @media (max-width: 540px) {
-  [data-template="leo"].pdp-hero .variant-grid--2 { grid-template-columns: 1fr; }
   [data-template="leo"].pdp-hero .variant { padding: 14px 12px 12px; padding-right: 30px; }
   [data-template="leo"].pdp-hero .variant-pack { font-size: 14px; margin-bottom: 8px; }
   [data-template="leo"].pdp-hero .variant-illustration { aspect-ratio: 5 / 2; }
-  [data-template="leo"].pdp-hero .variant-price { font-size: 16px; }
+  [data-template="leo"].pdp-hero .variant-price { font-size: 15px; }
+  [data-template="leo"].pdp-hero .variant-compare { font-size: 12px; }
+  [data-template="leo"].pdp-hero .variant-save { font-size: 10.5px; }
 }
 
 /* ============================================================
