@@ -96,19 +96,54 @@
       </div>
     {%- endif -%}
 
-    <div class="gb-shop-tabs-row" role="tablist">
+    {%- comment -%}
+      Tab strip. Two modes:
+      - Home page (collection == blank): tabs are <button>s, JS swaps
+        the matching panel client-side. Stays a single-page experience.
+      - Collection page (collection != blank): tabs are <a> links to
+        each tab's linked collection URL. Clicking 'Sprouts' navigates
+        to /collections/sprouts-1 so the hero (which is server-rendered
+        from `collection.*`) stays in sync with the active tab.
+    {%- endcomment -%}
+    <div class="gb-shop-tabs-row"{% if collection == blank %} role="tablist"{% endif %}>
       {%- for block in section.blocks -%}
         {%- if block.type == 'tab' -%}
-          <button class="gb-shop-tab {% if block.settings.tab_id == active_tab_id %}is-active{% endif %}"
-                  data-tab="{{ block.settings.tab_id }}"
-                  role="tab"
-                  {{ block.shopify_attributes }}>{{ block.settings.label }}</button>
+          {%- assign is_active = false -%}
+          {%- if block.settings.tab_id == active_tab_id -%}{%- assign is_active = true -%}{%- endif -%}
+          {%- if collection != blank -%}
+            {%- assign tab_coll = block.settings.collection -%}
+            {%- if tab_coll != blank -%}
+              <a class="gb-shop-tab {% if is_active %}is-active{% endif %}"
+                 href="{{ tab_coll.url }}"
+                 data-tab="{{ block.settings.tab_id }}"
+                 {%- if is_active %} aria-current="page"{%- endif %}
+                 {{ block.shopify_attributes }}>{{ block.settings.label }}</a>
+            {%- else -%}
+              <button type="button" class="gb-shop-tab {% if is_active %}is-active{% endif %}"
+                      data-tab="{{ block.settings.tab_id }}"
+                      {{ block.shopify_attributes }}>{{ block.settings.label }}</button>
+            {%- endif -%}
+          {%- else -%}
+            <button type="button" class="gb-shop-tab {% if is_active %}is-active{% endif %}"
+                    data-tab="{{ block.settings.tab_id }}"
+                    role="tab"
+                    {{ block.shopify_attributes }}>{{ block.settings.label }}</button>
+          {%- endif -%}
         {%- endif -%}
       {%- endfor -%}
     </div>
 
     {%- for block in section.blocks -%}
       {%- if block.type == 'tab' -%}
+        {%- comment -%}
+          On collection pages, only render the active panel. Other tabs
+          are links — they navigate to their own collection URL — so
+          rendering their product grids server-side is wasted work
+          (would be ~1000 products * 9 tabs).
+        {%- endcomment -%}
+        {%- if collection != blank and block.settings.tab_id != active_tab_id -%}
+          {%- continue -%}
+        {%- endif -%}
         {%- liquid
           assign coll = block.settings.collection
           assign theme_class = block.settings.theme | default: 'kanji'
@@ -295,6 +330,10 @@
   border: none;
   transition: color 0.15s ease;
   scroll-snap-align: start;
+  /* anchor-tab reset (collection pages render <a> instead of <button>) */
+  text-decoration: none;
+  display: inline-block;
+  line-height: 1.2;
 }
 .gb-shop-tab.is-active { color: var(--c-ink); font-weight: 700; }
 .gb-shop-tab.is-active::after {
@@ -551,7 +590,9 @@
 (function() {
   var section = document.getElementById('gb-shop-{{ section.id }}');
   if (!section) return;
-  var tabs = section.querySelectorAll('.gb-shop-tab');
+  // Only attach click-to-swap to <button> tabs. On collection pages the
+  // tabs are <a> links — let the browser navigate normally.
+  var tabs = section.querySelectorAll('button.gb-shop-tab');
   var panels = section.querySelectorAll('.gb-shop-panel');
 
   function activate(tabId) {
