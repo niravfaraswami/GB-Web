@@ -411,8 +411,82 @@
 
       syncHeaderHeights();
     }
-    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function () { init(); }); else init();
-    document.addEventListener('shopify:section:load', function (e) { init(e.target); });
+
+    // ---------- Smart sticky header ----------
+    // Behavior:
+    //  - Page at top (scrollY ≤ 100): header always visible, no shadow
+    //  - Past 100px, scrolling down 30px+ accumulated: slide header up
+    //  - Scrolling up 15px+ accumulated: slide header back down immediately
+    //  - Any drawer/menu open: force-visible so users can close it
+    //  - Subtle shadow whenever scrollY > 0
+    // Direction-change resets the opposite accumulator so the gestures
+    // measure intent within a single scroll direction, not lifetime delta.
+    function initSmartSticky() {
+      var header = document.querySelector('.gb-site-header');
+      if (!header || header.dataset.smartStickyBound) return;
+      header.dataset.smartStickyBound = '1';
+
+      var DOWN_THRESHOLD = 30;
+      var UP_THRESHOLD = 15;
+      var ENGAGE_AFTER = 100;
+
+      var lastY = window.scrollY || window.pageYOffset || 0;
+      var accumDown = 0;
+      var accumUp = 0;
+      var ticking = false;
+
+      function anyDrawerOpen() {
+        return !!(
+          document.querySelector('.mega-menu.open') ||
+          document.querySelector('#mobile-drawer.open') ||
+          document.querySelector('cart-drawer-component[open]') ||
+          document.querySelector('cart-drawer-component.is-open') ||
+          document.querySelector('.cart-drawer.is-open') ||
+          document.body.classList.contains('cart-drawer-open') ||
+          document.body.classList.contains('drawer-open')
+        );
+      }
+
+      function update() {
+        ticking = false;
+        var y = window.scrollY || window.pageYOffset || 0;
+        var delta = y - lastY;
+
+        if (y > 0) header.classList.add('is-scrolled');
+        else header.classList.remove('is-scrolled');
+
+        // Escape hatches: at top, or any drawer/menu is open.
+        if (y <= ENGAGE_AFTER || anyDrawerOpen()) {
+          header.classList.remove('is-hidden');
+          accumDown = 0;
+          accumUp = 0;
+          lastY = y;
+          return;
+        }
+
+        if (delta > 0) {
+          accumDown += delta;
+          accumUp = 0;
+          if (accumDown >= DOWN_THRESHOLD) header.classList.add('is-hidden');
+        } else if (delta < 0) {
+          accumUp += -delta;
+          accumDown = 0;
+          if (accumUp >= UP_THRESHOLD) header.classList.remove('is-hidden');
+        }
+
+        lastY = y;
+      }
+
+      window.addEventListener('scroll', function () {
+        if (!ticking) {
+          requestAnimationFrame(update);
+          ticking = true;
+        }
+      }, { passive: true });
+    }
+
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function () { init(); initSmartSticky(); }); else { init(); initSmartSticky(); }
+    document.addEventListener('shopify:section:load', function (e) { init(e.target); initSmartSticky(); });
     window.addEventListener('resize', syncHeaderHeights);
     window.addEventListener('load', syncHeaderHeights);
   })();
