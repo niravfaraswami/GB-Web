@@ -105,7 +105,7 @@
         to /collections/sprouts-1 so the hero (which is server-rendered
         from `collection.*`) stays in sync with the active tab.
     {%- endcomment -%}
-    <div class="gb-shop-tabs-row"{% if collection == blank %} role="tablist"{% endif %}>
+    <div class="gb-shop-tabs-row" id="shop"{% if collection == blank %} role="tablist"{% endif %}>
       {%- for block in section.blocks -%}
         {%- if block.type == 'tab' -%}
           {%- assign is_active = false -%}
@@ -114,7 +114,7 @@
             {%- assign tab_coll = block.settings.collection -%}
             {%- if tab_coll != blank -%}
               <a class="gb-shop-tab {% if is_active %}is-active{% endif %}"
-                 href="{{ tab_coll.url }}"
+                 href="{{ tab_coll.url }}#shop"
                  data-tab="{{ block.settings.tab_id }}"
                  {%- if is_active %} aria-current="page"{%- endif %}
                  {{ block.shopify_attributes }}>{{ block.settings.label }}</a>
@@ -315,6 +315,9 @@
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
   scroll-snap-type: x proximity;
+  /* When arriving via #shop fragment (collection-page tab nav), leave a
+     bit of room above so the tabs don't sit flush against the top edge. */
+  scroll-margin-top: 16px;
 }
 .gb-shop-tabs-row::-webkit-scrollbar { display: none; }
 .gb-shop-tab {
@@ -610,6 +613,24 @@
 
   tabs.forEach(function(t) {
     t.addEventListener('click', function() { activate(t.dataset.tab); });
+  });
+
+  // Prefetch the target collection page on hover/touch so navigation
+  // feels near-instant. Only fires once per tab per page-view. Uses
+  // <link rel="prefetch"> which the browser fetches at idle priority.
+  section.querySelectorAll('a.gb-shop-tab').forEach(function(a) {
+    var done = false;
+    function prefetch() {
+      if (done || !a.href) return;
+      done = true;
+      var l = document.createElement('link');
+      l.rel = 'prefetch';
+      l.href = a.href;
+      document.head.appendChild(l);
+    }
+    a.addEventListener('mouseenter', prefetch, { passive: true });
+    a.addEventListener('touchstart', prefetch, { passive: true });
+    a.addEventListener('focus', prefetch, { passive: true });
   });
 
   document.addEventListener('gb:select-tab', function(e) {
