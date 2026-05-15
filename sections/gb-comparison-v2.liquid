@@ -3,19 +3,17 @@
 {%- liquid
   assign p = product
   assign mf_rows = p.metafields.custom.featured_comparison_rows.value
-  assign mf_diff_eyebrow = p.metafields.custom.diff_eyebrow
-  assign mf_diff_heading = p.metafields.custom.diff_heading
+  assign mf_compare_eyebrow = p.metafields.custom.compare_eyebrow
+  assign mf_compare_heading = p.metafields.custom.compare_heading
   assign mf_compare_left = p.metafields.custom.compare_left_label
   assign mf_compare_right = p.metafields.custom.compare_right_label
-  assign mf_comparison_intro = p.metafields.custom.comparison_intro
   assign cmp_blocks = section.blocks | where: 'type', 'cmp_row'
   assign has_mf = false
   if mf_rows and mf_rows.size > 0
     assign has_mf = true
   endif
-  assign cmp_eyebrow = mf_diff_eyebrow | default: section.settings.eyebrow
-  assign cmp_heading = mf_diff_heading | default: section.settings.heading
-  assign cmp_intro = mf_comparison_intro | default: section.settings.intro
+  assign cmp_eyebrow = mf_compare_eyebrow | default: section.settings.eyebrow
+  assign cmp_heading = mf_compare_heading | default: section.settings.heading
 -%}
 
 {%- if has_mf or cmp_blocks.size > 0 or cmp_heading != blank -%}
@@ -26,8 +24,23 @@
     <div class="container">
       <div class="section-header centered">
         {%- if cmp_eyebrow != blank -%}<div class="eyebrow">{{ cmp_eyebrow }}</div>{%- endif -%}
-        {%- if cmp_heading != blank -%}<h2>{{ cmp_heading }} <em>{{ section.settings.heading_em }}</em></h2>{%- endif -%}
-        {%- if cmp_intro != blank -%}<p>{{ cmp_intro }}</p>{%- endif -%}
+        {%- if cmp_heading != blank -%}
+          {%- assign heading_lines = cmp_heading | newline_to_br | split: '<br />' -%}
+          {%- assign non_empty_line_count = 0 -%}
+          {%- for l in heading_lines -%}
+            {%- assign tl_count = l | strip -%}
+            {%- if tl_count != blank -%}{%- assign non_empty_line_count = non_empty_line_count | plus: 1 -%}{%- endif -%}
+          {%- endfor -%}
+          <h2>
+            {%- for line in heading_lines -%}
+              {%- assign tl = line | strip -%}
+              {%- if tl != blank -%}
+                {%- if forloop.first -%}{{ tl }}{%- else -%} <em>{{ tl }}</em>{%- endif -%}
+              {%- endif -%}
+            {%- endfor -%}
+            {%- if non_empty_line_count <= 1 and section.settings.heading_em != blank -%} <em>{{ section.settings.heading_em }}</em>{%- endif -%}
+          </h2>
+        {%- endif -%}
       </div>
 
       <div class="gb-cmp-table-wrap">
@@ -191,11 +204,6 @@
       "id": "heading_em",
       "label": "Heading (highlighted)",
       "default": "STANDS OUT."
-    },
-    {
-      "type": "textarea",
-      "id": "intro",
-      "label": "Intro"
     },
     {
       "type": "select",
