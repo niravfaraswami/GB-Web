@@ -20,12 +20,26 @@
   # Active tab. On a collection page we try to match a tab's linked
   # collection.handle to the current collection. Falls back to the
   # first non-disabled tab block, preserving the home-page default.
+  # NOTE: assigning the collection drop to a local var first — chained
+  # access like `block.settings.collection.handle` inside an `if` has
+  # bitten us before (it silently evaluates to nil and the comparison
+  # never matches).
   assign active_tab_id = ''
-  if collection != blank and collection.handle != blank
+  assign current_handle = ''
+  if collection != blank
+    assign current_handle = collection.handle
+  endif
+  if current_handle != ''
     for block in section.blocks
-      if block.type == 'tab' and block.settings.collection.handle == collection.handle
-        assign active_tab_id = block.settings.tab_id
-        break
+      if block.type == 'tab'
+        assign block_coll = block.settings.collection
+        if block_coll != blank
+          assign block_handle = block_coll.handle
+          if block_handle == current_handle
+            assign active_tab_id = block.settings.tab_id
+            break
+          endif
+        endif
       endif
     endfor
   endif
