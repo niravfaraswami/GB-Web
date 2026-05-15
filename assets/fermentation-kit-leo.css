@@ -3596,51 +3596,60 @@ body.gb-fcm-open { overflow: hidden; }
 .compare-mobile { display: none; }
 
 @media (max-width: 767px) {
-  .gb-fcm { padding: 16px 12px; }
-  .gb-fcm-dialog { padding: 28px 18px 20px; border-radius: 18px; }
+  .gb-fcm { padding: 16px 10px; }
+  .gb-fcm-dialog { padding: 24px 14px 18px; border-radius: 18px; }
   .gb-fcm-title { font-size: 24px; }
   .gb-fcm-sub { font-size: 13px; }
   .compare-desktop { display: none; }
   .compare-mobile { display: block; }
 
-  /* Compact mobile table — short labels, single-line cells where copy permits */
+  /* Compact mobile table — short labels, single-line cells where copy permits.
+     min-width: 0 on every cell lets the grid columns shrink below their
+     content's intrinsic min-content so the table never overflows the dialog. */
   .gb-fcm-table--mobile {
-    grid-template-columns: 78px repeat(3, 1fr);
+    grid-template-columns: 70px repeat(3, 1fr);
     border-radius: 14px;
+    width: 100%;
+    min-width: 0;
   }
   .gb-fcm-table--mobile .gb-fcm-cell {
-    padding: 11px 8px;
+    min-width: 0;
+    padding: 11px 7px;
     font-size: 12px;
     line-height: 1.4;
+    word-break: break-word;
   }
   .gb-fcm-table--mobile .gb-fcm-cell--label {
     font-size: 11px;
     padding: 11px 8px;
   }
   .gb-fcm-table--mobile .gb-fcm-cell--col-head {
-    padding: 14px 6px 12px;
+    padding: 12px 4px 10px;
     gap: 6px;
   }
-  .gb-fcm-table--mobile .gb-fcm-img { width: 64px; border-radius: 8px; }
+  .gb-fcm-table--mobile .gb-fcm-img { width: 56px; border-radius: 8px; }
   .gb-fcm-table--mobile .gb-fcm-img img { padding: 3px; }
   .gb-fcm-table--mobile .gb-fcm-name {
-    font-size: 11px;
+    font-size: 10.5px;
     letter-spacing: 0.01em;
     line-height: 1.2;
   }
   .gb-fcm-table--mobile .gb-fcm-tier {
-    font-size: 8.5px;
-    letter-spacing: 0.1em;
-    padding: 2px 6px;
+    font-size: 8px;
+    letter-spacing: 0.08em;
+    padding: 2px 5px;
   }
-  .gb-fcm-table--mobile .gb-fcm-row--cta .gb-fcm-cell { padding: 12px 6px; }
+  .gb-fcm-table--mobile .gb-fcm-row--cta .gb-fcm-cell { padding: 10px 4px; }
   .gb-fcm-table--mobile .gb-fcm-cta,
   .gb-fcm-table--mobile .gb-fcm-here {
-    padding: 8px 10px;
-    font-size: 9.5px;
-    letter-spacing: 0.06em;
+    padding: 7px 6px;
+    font-size: 9px;
+    letter-spacing: 0.04em;
     width: 100%;
     text-align: center;
+    white-space: normal;
+    word-break: break-word;
+    line-height: 1.2;
   }
   .gb-fcm-foot { margin-top: 18px; font-size: 12px; }
 }
