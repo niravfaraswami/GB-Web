@@ -452,16 +452,42 @@
     "starter-box": {
       "type": "gb-home-starter-box",
       "blocks": {
-        "c1": { "type": "chip", "settings": { "letter": "K", "label": "Kanji Kit",       "color": "kanji"  } },
-        "c2": { "type": "chip", "settings": { "letter": "S", "label": "Sprout Maker",    "color": "sprout" } },
-        "c3": { "type": "chip", "settings": { "letter": "P", "label": "Prebiotic Fibre", "color": "inulin" } }
+        "c1": {
+          "type": "chip",
+          "settings": {
+            "letter": "K",
+            "label": "Kanji Kit",
+            "color": "kanji"
+          }
+        },
+        "c2": {
+          "type": "chip",
+          "settings": {
+            "letter": "S",
+            "label": "Sprout Maker",
+            "color": "sprout"
+          }
+        },
+        "c3": {
+          "type": "chip",
+          "settings": {
+            "letter": "P",
+            "label": "Prebiotic Fibre",
+            "color": "inulin"
+          }
+        }
       },
-      "block_order": ["c1", "c2", "c3"],
+      "block_order": [
+        "c1",
+        "c2",
+        "c3"
+      ],
       "settings": {
         "eyebrow": "Start here · Best for first-timers",
         "heading": "The Gut Starter Box.",
         "heading_em": "Three products. Three daily habits.",
         "lead": "Make a probiotic drink. Grow sprouts on your counter. Stir prebiotic fibre into water. The simplest way to start with gut health.",
+        "product": "",
         "placeholder_price_now": "₹1,299",
         "placeholder_price_was": "₹1,797",
         "placeholder_save": "Save 28%",
@@ -474,18 +500,41 @@
     "byok": {
       "type": "gb-home-byok",
       "blocks": {
-        "b1": { "type": "bullet", "settings": { "heading": "Pick your jar + capacity", "description": "1L, 2L, or 4L — choose the size that fits your household and batch." } },
-        "b2": { "type": "bullet", "settings": { "heading": "Pick your spice mix",      "description": "Kanji, achaar, kimchi, sauerkraut, aam panna, and more — pick what you want to ferment." } },
-        "b3": { "type": "bullet", "settings": { "heading": "Add tools + recipe books", "description": "Fermentation weights, airlock lids, printed recipe books — all optional." } }
+        "b1": {
+          "type": "bullet",
+          "settings": {
+            "heading": "Pick your jar + capacity",
+            "description": "1L, 2L, or 4L — choose the size that fits your household and batch."
+          }
+        },
+        "b2": {
+          "type": "bullet",
+          "settings": {
+            "heading": "Pick your spice mix",
+            "description": "Kanji, achaar, kimchi, sauerkraut, aam panna, and more — pick what you want to ferment."
+          }
+        },
+        "b3": {
+          "type": "bullet",
+          "settings": {
+            "heading": "Add tools + recipe books",
+            "description": "Fermentation weights, airlock lids, printed recipe books — all optional."
+          }
+        }
       },
-      "block_order": ["b1", "b2", "b3"],
+      "block_order": [
+        "b1",
+        "b2",
+        "b3"
+      ],
       "settings": {
         "eyebrow": "Or build your own",
         "heading": "Build your own",
         "heading_em": "fermentation kit.",
         "lead": "Pick the jar that fits your kitchen, the spice mix for what you want to make, and any extras to go with it. Built exactly the way you want it.",
+        "image": "shopify://shop_images/Probiotic_Drink_Lifestlye_1_6e3f23d7-de44-47a1-8736-d70532c1f414.webp",
         "cta_label": "Build my kit →",
-        "cta_url": "/pages/build-your-kit"
+        "cta_url": "https://ferment-jar.myshopify.com/pages/build-your-own-kit"
       }
     },
     "postbiotic": {
