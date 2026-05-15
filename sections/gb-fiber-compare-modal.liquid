@@ -66,125 +66,144 @@
       <p class="gb-fcm-sub">Three GutBasket fibers, three different fits. Pick by what slots into your routine — and what your stomach prefers.</p>
     </header>
 
-    {%- comment -%} ===== DESKTOP TABLE (≥769px) ===== {%- endcomment -%}
-    <div class="gb-fcm-table" role="table" aria-label="Fiber comparison">
-      <div class="gb-fcm-row gb-fcm-row--head">
-        <div class="gb-fcm-cell gb-fcm-cell--label" aria-hidden="true"></div>
-        <div class="gb-fcm-cell gb-fcm-cell--col-head{% if fb_is_current %} is-current{% endif %}">
-          <div class="gb-fcm-tier">BEGINNER</div>
-          <div class="gb-fcm-img">{%- if fb.featured_image -%}<img src="{{ fb.featured_image | image_url: width: 400 }}" alt="{{ fb.title | escape }}" loading="lazy" width="240" height="240">{%- endif -%}</div>
-          <div class="gb-fcm-name">{{ fb_name }}</div>
+    {%- comment -%} ===== DESKTOP TABLE (≥768px) ===== {%- endcomment -%}
+    <div class="compare-desktop">
+      <div class="gb-fcm-table" role="table" aria-label="Fiber comparison">
+        <div class="gb-fcm-row gb-fcm-row--head">
+          <div class="gb-fcm-cell gb-fcm-cell--label" aria-hidden="true"></div>
+          <div class="gb-fcm-cell gb-fcm-cell--col-head{% if fb_is_current %} is-current{% endif %}">
+            <div class="gb-fcm-tier">BEGINNER</div>
+            <div class="gb-fcm-img">{%- if fb.featured_image -%}<img src="{{ fb.featured_image | image_url: width: 400 }}" alt="{{ fb.title | escape }}" loading="lazy" width="240" height="240">{%- endif -%}</div>
+            <div class="gb-fcm-name">{{ fb_name }}</div>
+          </div>
+          <div class="gb-fcm-cell gb-fcm-cell--col-head{% if inu_is_current %} is-current{% endif %}">
+            <div class="gb-fcm-tier">REGULAR</div>
+            <div class="gb-fcm-img">{%- if inu.featured_image -%}<img src="{{ inu.featured_image | image_url: width: 400 }}" alt="{{ inu.title | escape }}" loading="lazy" width="240" height="240">{%- endif -%}</div>
+            <div class="gb-fcm-name">{{ inu_name }}</div>
+          </div>
+          <div class="gb-fcm-cell gb-fcm-cell--col-head{% if aca_is_current %} is-current{% endif %}">
+            <div class="gb-fcm-tier">ADVANCED</div>
+            <div class="gb-fcm-img">{%- if aca.featured_image -%}<img src="{{ aca.featured_image | image_url: width: 400 }}" alt="{{ aca.title | escape }}" loading="lazy" width="240" height="240">{%- endif -%}</div>
+            <div class="gb-fcm-name">{{ aca_name }}</div>
+          </div>
         </div>
-        <div class="gb-fcm-cell gb-fcm-cell--col-head{% if inu_is_current %} is-current{% endif %}">
-          <div class="gb-fcm-tier">REGULAR</div>
-          <div class="gb-fcm-img">{%- if inu.featured_image -%}<img src="{{ inu.featured_image | image_url: width: 400 }}" alt="{{ inu.title | escape }}" loading="lazy" width="240" height="240">{%- endif -%}</div>
-          <div class="gb-fcm-name">{{ inu_name }}</div>
-        </div>
-        <div class="gb-fcm-cell gb-fcm-cell--col-head{% if aca_is_current %} is-current{% endif %}">
-          <div class="gb-fcm-tier">ADVANCED</div>
-          <div class="gb-fcm-img">{%- if aca.featured_image -%}<img src="{{ aca.featured_image | image_url: width: 400 }}" alt="{{ aca.title | escape }}" loading="lazy" width="240" height="240">{%- endif -%}</div>
-          <div class="gb-fcm-name">{{ aca_name }}</div>
-        </div>
-      </div>
 
-      <div class="gb-fcm-row">
-        <div class="gb-fcm-cell gb-fcm-cell--label">Ingredient</div>
-        <div class="gb-fcm-cell">3-fiber blend — Inulin + FOS + Resistant Dextrin</div>
-        <div class="gb-fcm-cell">Single ingredient — inulin from chicory</div>
-        <div class="gb-fcm-cell">Single ingredient — acacia tree gum</div>
-      </div>
-      <div class="gb-fcm-row">
-        <div class="gb-fcm-cell gb-fcm-cell--label">Mixing experience</div>
-        <div class="gb-fcm-cell">Easy. Mildly sweet, dissolves clean in water or chaas.</div>
-        <div class="gb-fcm-cell">Easy. Mildly sweet, dissolves clean.</div>
-        <div class="gb-fcm-cell">Trickier — naturally sticky. Stir quickly into liquid and drink within a minute or two.</div>
-      </div>
-      <div class="gb-fcm-row">
-        <div class="gb-fcm-cell gb-fcm-cell--label">Strength on the gut</div>
-        <div class="gb-fcm-cell">Medium — Resistant Dextrin balances the fast-fermenting parts.</div>
-        <div class="gb-fcm-cell">Strong — concentrated, fast-fermenting single fiber.</div>
-        <div class="gb-fcm-cell">Gentle — slow-fermenting, lowest gas profile.</div>
-      </div>
-      <div class="gb-fcm-row">
-        <div class="gb-fcm-cell gb-fcm-cell--label">Best when…</div>
-        <div class="gb-fcm-cell">You want broad daily fiber and prebiotic support without picking sides.</div>
-        <div class="gb-fcm-cell">You want focused gut-bacteria support and tolerate fermentation well.</div>
-        <div class="gb-fcm-cell">You're sensitive to fast-fermenting fibers, or in / after an IBS flare.</div>
-      </div>
-      <div class="gb-fcm-row">
-        <div class="gb-fcm-cell gb-fcm-cell--label">Daily dose</div>
-        <div class="gb-fcm-cell">½ to 1 serving daily</div>
-        <div class="gb-fcm-cell">½ to 1 scoop daily</div>
-        <div class="gb-fcm-cell">½ to 1 scoop daily</div>
-      </div>
+        <div class="gb-fcm-row">
+          <div class="gb-fcm-cell gb-fcm-cell--label">Ingredient</div>
+          <div class="gb-fcm-cell">3-fiber blend — Inulin + FOS + Resistant Dextrin</div>
+          <div class="gb-fcm-cell">Single ingredient — inulin from chicory</div>
+          <div class="gb-fcm-cell">Single ingredient — acacia tree gum</div>
+        </div>
+        <div class="gb-fcm-row">
+          <div class="gb-fcm-cell gb-fcm-cell--label">Mixing experience</div>
+          <div class="gb-fcm-cell">Easy. Mildly sweet, dissolves clean in water or chaas.</div>
+          <div class="gb-fcm-cell">Easy. Mildly sweet, dissolves clean.</div>
+          <div class="gb-fcm-cell">Trickier — naturally sticky. Stir quickly into liquid and drink within a minute or two.</div>
+        </div>
+        <div class="gb-fcm-row">
+          <div class="gb-fcm-cell gb-fcm-cell--label">Strength on the gut</div>
+          <div class="gb-fcm-cell">Medium — Resistant Dextrin balances the fast-fermenting parts.</div>
+          <div class="gb-fcm-cell">Strong — concentrated, fast-fermenting single fiber.</div>
+          <div class="gb-fcm-cell">Gentle — slow-fermenting, lowest gas profile.</div>
+        </div>
+        <div class="gb-fcm-row">
+          <div class="gb-fcm-cell gb-fcm-cell--label">Best when…</div>
+          <div class="gb-fcm-cell">You want broad daily fiber and prebiotic support without picking sides.</div>
+          <div class="gb-fcm-cell">You want focused gut-bacteria support and tolerate fermentation well.</div>
+          <div class="gb-fcm-cell">You're sensitive to fast-fermenting fibers, or in / after an IBS flare.</div>
+        </div>
+        <div class="gb-fcm-row">
+          <div class="gb-fcm-cell gb-fcm-cell--label">Daily dose</div>
+          <div class="gb-fcm-cell">½ to 1 serving daily</div>
+          <div class="gb-fcm-cell">½ to 1 scoop daily</div>
+          <div class="gb-fcm-cell">½ to 1 scoop daily</div>
+        </div>
 
-      <div class="gb-fcm-row gb-fcm-row--cta">
-        <div class="gb-fcm-cell gb-fcm-cell--label" aria-hidden="true"></div>
-        <div class="gb-fcm-cell gb-fcm-cell--cta">
-          {%- if fb_is_current -%}<span class="gb-fcm-here">YOU'RE HERE</span>
-          {%- else -%}<a class="gb-fcm-cta" href="{{ fb.url }}">View Product</a>{%- endif -%}
-        </div>
-        <div class="gb-fcm-cell gb-fcm-cell--cta">
-          {%- if inu_is_current -%}<span class="gb-fcm-here">YOU'RE HERE</span>
-          {%- else -%}<a class="gb-fcm-cta" href="{{ inu.url }}">View Product</a>{%- endif -%}
-        </div>
-        <div class="gb-fcm-cell gb-fcm-cell--cta">
-          {%- if aca_is_current -%}<span class="gb-fcm-here">YOU'RE HERE</span>
-          {%- else -%}<a class="gb-fcm-cta" href="{{ aca.url }}">View Product</a>{%- endif -%}
+        <div class="gb-fcm-row gb-fcm-row--cta">
+          <div class="gb-fcm-cell gb-fcm-cell--label" aria-hidden="true"></div>
+          <div class="gb-fcm-cell gb-fcm-cell--cta">
+            {%- if fb_is_current -%}<span class="gb-fcm-here">YOU'RE HERE</span>
+            {%- else -%}<a class="gb-fcm-cta" href="{{ fb.url }}">View Product</a>{%- endif -%}
+          </div>
+          <div class="gb-fcm-cell gb-fcm-cell--cta">
+            {%- if inu_is_current -%}<span class="gb-fcm-here">YOU'RE HERE</span>
+            {%- else -%}<a class="gb-fcm-cta" href="{{ inu.url }}">View Product</a>{%- endif -%}
+          </div>
+          <div class="gb-fcm-cell gb-fcm-cell--cta">
+            {%- if aca_is_current -%}<span class="gb-fcm-here">YOU'RE HERE</span>
+            {%- else -%}<a class="gb-fcm-cta" href="{{ aca.url }}">View Product</a>{%- endif -%}
+          </div>
         </div>
       </div>
     </div>
 
-    {%- comment -%} ===== MOBILE STACK (≤768px) ===== {%- endcomment -%}
-    <div class="gb-fcm-cards">
-      <div class="gb-fcm-card{% if fb_is_current %} is-current{% endif %}">
-        <div class="gb-fcm-card-head">
-          <div class="gb-fcm-tier">BEGINNER</div>
-          <div class="gb-fcm-img">{%- if fb.featured_image -%}<img src="{{ fb.featured_image | image_url: width: 400 }}" alt="{{ fb.title | escape }}" loading="lazy" width="200" height="200">{%- endif -%}</div>
-          <div class="gb-fcm-name">{{ fb_name }}</div>
+    {%- comment -%} ===== MOBILE TABLE (≤767px) — short labels + condensed copy ===== {%- endcomment -%}
+    <div class="compare-mobile">
+      <div class="gb-fcm-table gb-fcm-table--mobile" role="table" aria-label="Fiber comparison">
+        <div class="gb-fcm-row gb-fcm-row--head">
+          <div class="gb-fcm-cell gb-fcm-cell--label" aria-hidden="true"></div>
+          <div class="gb-fcm-cell gb-fcm-cell--col-head{% if fb_is_current %} is-current{% endif %}">
+            <div class="gb-fcm-tier">BEGINNER</div>
+            <div class="gb-fcm-img">{%- if fb.featured_image -%}<img src="{{ fb.featured_image | image_url: width: 280 }}" alt="{{ fb.title | escape }}" loading="lazy" width="180" height="180">{%- endif -%}</div>
+            <div class="gb-fcm-name">{{ fb_name }}</div>
+          </div>
+          <div class="gb-fcm-cell gb-fcm-cell--col-head{% if inu_is_current %} is-current{% endif %}">
+            <div class="gb-fcm-tier">REGULAR</div>
+            <div class="gb-fcm-img">{%- if inu.featured_image -%}<img src="{{ inu.featured_image | image_url: width: 280 }}" alt="{{ inu.title | escape }}" loading="lazy" width="180" height="180">{%- endif -%}</div>
+            <div class="gb-fcm-name">{{ inu_name }}</div>
+          </div>
+          <div class="gb-fcm-cell gb-fcm-cell--col-head{% if aca_is_current %} is-current{% endif %}">
+            <div class="gb-fcm-tier">ADVANCED</div>
+            <div class="gb-fcm-img">{%- if aca.featured_image -%}<img src="{{ aca.featured_image | image_url: width: 280 }}" alt="{{ aca.title | escape }}" loading="lazy" width="180" height="180">{%- endif -%}</div>
+            <div class="gb-fcm-name">{{ aca_name }}</div>
+          </div>
         </div>
-        <div class="gb-fcm-mrow"><div class="gb-fcm-mlabel">Ingredient</div><div class="gb-fcm-mval">3-fiber blend — Inulin + FOS + Resistant Dextrin</div></div>
-        <div class="gb-fcm-mrow"><div class="gb-fcm-mlabel">Mixing experience</div><div class="gb-fcm-mval">Easy. Mildly sweet, dissolves clean in water or chaas.</div></div>
-        <div class="gb-fcm-mrow"><div class="gb-fcm-mlabel">Strength on the gut</div><div class="gb-fcm-mval">Medium — Resistant Dextrin balances the fast-fermenting parts.</div></div>
-        <div class="gb-fcm-mrow"><div class="gb-fcm-mlabel">Best when…</div><div class="gb-fcm-mval">You want broad daily fiber and prebiotic support without picking sides.</div></div>
-        <div class="gb-fcm-mrow"><div class="gb-fcm-mlabel">Daily dose</div><div class="gb-fcm-mval">½ to 1 serving daily</div></div>
-        <div class="gb-fcm-card-cta">
-          {%- if fb_is_current -%}<span class="gb-fcm-here">YOU'RE HERE</span>
-          {%- else -%}<a class="gb-fcm-cta" href="{{ fb.url }}">View Product</a>{%- endif -%}
-        </div>
-      </div>
 
-      <div class="gb-fcm-card{% if inu_is_current %} is-current{% endif %}">
-        <div class="gb-fcm-card-head">
-          <div class="gb-fcm-tier">REGULAR</div>
-          <div class="gb-fcm-img">{%- if inu.featured_image -%}<img src="{{ inu.featured_image | image_url: width: 400 }}" alt="{{ inu.title | escape }}" loading="lazy" width="200" height="200">{%- endif -%}</div>
-          <div class="gb-fcm-name">{{ inu_name }}</div>
+        <div class="gb-fcm-row">
+          <div class="gb-fcm-cell gb-fcm-cell--label">Type</div>
+          <div class="gb-fcm-cell">3-fiber blend</div>
+          <div class="gb-fcm-cell">Inulin (chicory)</div>
+          <div class="gb-fcm-cell">Acacia gum</div>
         </div>
-        <div class="gb-fcm-mrow"><div class="gb-fcm-mlabel">Ingredient</div><div class="gb-fcm-mval">Single ingredient — inulin from chicory</div></div>
-        <div class="gb-fcm-mrow"><div class="gb-fcm-mlabel">Mixing experience</div><div class="gb-fcm-mval">Easy. Mildly sweet, dissolves clean.</div></div>
-        <div class="gb-fcm-mrow"><div class="gb-fcm-mlabel">Strength on the gut</div><div class="gb-fcm-mval">Strong — concentrated, fast-fermenting single fiber.</div></div>
-        <div class="gb-fcm-mrow"><div class="gb-fcm-mlabel">Best when…</div><div class="gb-fcm-mval">You want focused gut-bacteria support and tolerate fermentation well.</div></div>
-        <div class="gb-fcm-mrow"><div class="gb-fcm-mlabel">Daily dose</div><div class="gb-fcm-mval">½ to 1 scoop daily</div></div>
-        <div class="gb-fcm-card-cta">
-          {%- if inu_is_current -%}<span class="gb-fcm-here">YOU'RE HERE</span>
-          {%- else -%}<a class="gb-fcm-cta" href="{{ inu.url }}">View Product</a>{%- endif -%}
+        <div class="gb-fcm-row">
+          <div class="gb-fcm-cell gb-fcm-cell--label">Mixing</div>
+          <div class="gb-fcm-cell">Easy</div>
+          <div class="gb-fcm-cell">Easy</div>
+          <div class="gb-fcm-cell">Sticky — stir fast</div>
         </div>
-      </div>
+        <div class="gb-fcm-row">
+          <div class="gb-fcm-cell gb-fcm-cell--label">Strength</div>
+          <div class="gb-fcm-cell">Medium</div>
+          <div class="gb-fcm-cell">Strong</div>
+          <div class="gb-fcm-cell">Gentle</div>
+        </div>
+        <div class="gb-fcm-row">
+          <div class="gb-fcm-cell gb-fcm-cell--label">Best for</div>
+          <div class="gb-fcm-cell">Broad daily support</div>
+          <div class="gb-fcm-cell">Focused gut bacteria</div>
+          <div class="gb-fcm-cell">Sensitive stomachs</div>
+        </div>
+        <div class="gb-fcm-row">
+          <div class="gb-fcm-cell gb-fcm-cell--label">Dose</div>
+          <div class="gb-fcm-cell">½–1 serving</div>
+          <div class="gb-fcm-cell">½–1 scoop</div>
+          <div class="gb-fcm-cell">½–1 scoop</div>
+        </div>
 
-      <div class="gb-fcm-card{% if aca_is_current %} is-current{% endif %}">
-        <div class="gb-fcm-card-head">
-          <div class="gb-fcm-tier">ADVANCED</div>
-          <div class="gb-fcm-img">{%- if aca.featured_image -%}<img src="{{ aca.featured_image | image_url: width: 400 }}" alt="{{ aca.title | escape }}" loading="lazy" width="200" height="200">{%- endif -%}</div>
-          <div class="gb-fcm-name">{{ aca_name }}</div>
-        </div>
-        <div class="gb-fcm-mrow"><div class="gb-fcm-mlabel">Ingredient</div><div class="gb-fcm-mval">Single ingredient — acacia tree gum</div></div>
-        <div class="gb-fcm-mrow"><div class="gb-fcm-mlabel">Mixing experience</div><div class="gb-fcm-mval">Trickier — naturally sticky. Stir quickly into liquid and drink within a minute or two.</div></div>
-        <div class="gb-fcm-mrow"><div class="gb-fcm-mlabel">Strength on the gut</div><div class="gb-fcm-mval">Gentle — slow-fermenting, lowest gas profile.</div></div>
-        <div class="gb-fcm-mrow"><div class="gb-fcm-mlabel">Best when…</div><div class="gb-fcm-mval">You're sensitive to fast-fermenting fibers, or in / after an IBS flare.</div></div>
-        <div class="gb-fcm-mrow"><div class="gb-fcm-mlabel">Daily dose</div><div class="gb-fcm-mval">½ to 1 scoop daily</div></div>
-        <div class="gb-fcm-card-cta">
-          {%- if aca_is_current -%}<span class="gb-fcm-here">YOU'RE HERE</span>
-          {%- else -%}<a class="gb-fcm-cta" href="{{ aca.url }}">View Product</a>{%- endif -%}
+        <div class="gb-fcm-row gb-fcm-row--cta">
+          <div class="gb-fcm-cell gb-fcm-cell--label" aria-hidden="true"></div>
+          <div class="gb-fcm-cell gb-fcm-cell--cta">
+            {%- if fb_is_current -%}<span class="gb-fcm-here">YOU'RE HERE</span>
+            {%- else -%}<a class="gb-fcm-cta" href="{{ fb.url }}">View Product</a>{%- endif -%}
+          </div>
+          <div class="gb-fcm-cell gb-fcm-cell--cta">
+            {%- if inu_is_current -%}<span class="gb-fcm-here">YOU'RE HERE</span>
+            {%- else -%}<a class="gb-fcm-cta" href="{{ inu.url }}">View Product</a>{%- endif -%}
+          </div>
+          <div class="gb-fcm-cell gb-fcm-cell--cta">
+            {%- if aca_is_current -%}<span class="gb-fcm-here">YOU'RE HERE</span>
+            {%- else -%}<a class="gb-fcm-cta" href="{{ aca.url }}">View Product</a>{%- endif -%}
+          </div>
         </div>
       </div>
     </div>
