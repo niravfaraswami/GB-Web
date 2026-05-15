@@ -3382,3 +3382,59 @@
 @media (max-width: 768px) {
   .cross-card .cross-atc-btn { padding: 10px 14px; font-size: 11px; }
 }
+
+/* ============================================================
+ * Journey cards (metafield path) — stretched link + ATC button
+ *  - Whole card surface navigates to the PDP via .gb-journey-card-link.
+ *  - .gb-journey-atc-form sits above the cover link via z-index so the
+ *    button captures its own click. The /cart/add submit is auto-
+ *    intercepted by gb-cart-drawer.js, which opens the drawer and
+ *    injects an optimistic preview row.
+ * ============================================================ */
+.gb-journey-card { position: relative; }
+.gb-journey-card .gb-journey-card-link {
+  position: absolute; inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+}
+/* Beat '[data-kit="fermentation"] a { color: inherit }' so the empty
+   cover link doesn't render any inherited text decoration. */
+[data-kit="fermentation"] a.gb-journey-card-link { color: transparent; }
+.gb-journey-card .gb-journey-card-link:focus-visible {
+  outline: 2px solid var(--kit-color);
+  outline-offset: -2px;
+  border-radius: 18px;
+}
+.gb-journey-card .gb-journey-img,
+.gb-journey-card .gb-journey-product,
+.gb-journey-card .gb-journey-tag,
+.gb-journey-card .gb-journey-points,
+.gb-journey-card .gb-journey-price,
+.gb-journey-card .gb-journey-stage { position: relative; z-index: 0; }
+.gb-journey-card .gb-journey-product,
+.gb-journey-card .gb-journey-tag,
+.gb-journey-card .gb-journey-price { user-select: text; }
+
+.gb-journey-card .gb-journey-atc-form {
+  position: relative;
+  z-index: 2;
+  margin-top: auto;
+}
+.gb-journey-card .gb-journey-atc-btn {
+  display: block;
+  width: 100%;
+  padding: 12px 22px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--gb-ink);
+  color: var(--gb-white);
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.gb-journey-card .gb-journey-atc-btn:hover { background: #000; }
+.gb-journey-card .gb-journey-atc-btn[disabled] { opacity: 0.7; cursor: wait; }
