@@ -28,16 +28,23 @@
       <div class="gb-journey-grid">
         {%- if has_mf_cross -%}
           {%- for cs in mf_cross_sell -%}
-            <div class="gb-journey-card">
-              {%- if cs.featured_image != blank -%}
-                <div class="gb-journey-img"><img src="{{ cs.featured_image | image_url: width: 600 }}" alt="{{ cs.title | escape }}" loading="lazy" width="400" height="400"></div>
-              {%- endif -%}
-              <div class="gb-journey-product">{{ cs.title }}</div>
-              {%- assign cs_tag = cs.metafields.custom.hero_tagline -%}
-              {%- if cs_tag != blank -%}<div class="gb-journey-tag">{{ cs_tag }}</div>{%- endif -%}
-              <div class="gb-journey-price">{{ cs.price | money }}</div>
-              <a class="gb-journey-cta" href="{{ cs.url }}">Shop →</a>
-            </div>
+            {%- assign cs_v = cs.selected_or_first_available_variant -%}
+            {%- if cs_v and cs_v.available -%}
+              <div class="gb-journey-card">
+                <a href="{{ cs.url }}" class="gb-journey-card-link" aria-label="View {{ cs.title | escape }}"></a>
+                {%- if cs.featured_image != blank -%}
+                  <div class="gb-journey-img"><img src="{{ cs.featured_image | image_url: width: 600 }}" alt="{{ cs.title | escape }}" loading="lazy" width="400" height="400"></div>
+                {%- endif -%}
+                <div class="gb-journey-product">{{ cs.title }}</div>
+                {%- assign cs_tag = cs.metafields.custom.hero_tagline -%}
+                {%- if cs_tag != blank -%}<div class="gb-journey-tag">{{ cs_tag }}</div>{%- endif -%}
+                <div class="gb-journey-price">{{ cs_v.price | money }}</div>
+                <form action="/cart/add" method="post" class="gb-journey-atc-form" data-product-id="{{ cs.id }}" data-product-handle="{{ cs.handle }}" data-product-title="{{ cs.title | escape }}" data-product-image="{{ cs.featured_image | image_url: width: 400 }}" data-product-url="{{ cs.url }}" data-product-price="{{ cs_v.price }}">
+                  <input type="hidden" name="id" value="{{ cs_v.id }}">
+                  <button type="submit" class="gb-journey-atc-btn" data-product-id="{{ cs.id }}" data-product-handle="{{ cs.handle }}" data-product-title="{{ cs.title | escape }}" data-product-image="{{ cs.featured_image | image_url: width: 400 }}" data-product-url="{{ cs.url }}" data-product-price="{{ cs_v.price }}">Add to cart</button>
+                </form>
+              </div>
+            {%- endif -%}
           {%- endfor -%}
         {%- else -%}
           {%- for block in stage_blocks -%}
