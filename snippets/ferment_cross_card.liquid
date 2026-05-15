@@ -1,16 +1,35 @@
 {%- comment -%}
   Renders one cross-sell card for fermentation kits.
   Params: p (Product, required), attrs (shopify_attributes string, optional)
+
+  UX:
+   - Whole card is a stretched link → product PDP.
+   - "Add to cart" form sits above the stretched link via z-index, so the
+     button captures its own click separately from the card navigation.
+   - Variant resolution uses selected_or_first_available_variant — the
+     position-1 (smallest pack) on multi-variant products.
+   - If no variant is available for sale, the card is omitted entirely.
+   - Submitting the form is auto-intercepted by gb-cart-drawer.js (any
+     /cart/add form) which opens the drawer + injects an optimistic row.
 {%- endcomment -%}
-<div class="cross-card" {{ attrs }}>
-  <a href="{{ p.url }}" class="cross-img">
-    {%- if p.featured_media -%}
-      <img src="{{ p.featured_media | image_url: width: 800 }}" alt="{{ p.title }}" loading="lazy" width="600" height="600">
-    {%- else -%}🫙{%- endif -%}
-  </a>
-  <div class="cross-body">
-    <a href="{{ p.url }}" class="cross-h">{{ p.title }}</a>
-    <div class="cross-tagline">{{ p.metafields.custom.short_name | default: p.type }}</div>
-    <div class="cross-price">{{ p.price | money }}</div>
+{%- assign v = p.selected_or_first_available_variant -%}
+{%- if v and v.available -%}
+  <div class="cross-card" {{ attrs }}>
+    <a href="{{ p.url }}" class="cross-card-link" aria-label="View {{ p.title | escape }}"></a>
+    <div class="cross-img">
+      {%- if p.featured_media -%}
+        <img src="{{ p.featured_media | image_url: width: 800 }}" alt="{{ p.title }}" loading="lazy" width="600" height="600">
+      {%- else -%}🫙{%- endif -%}
+    </div>
+    <div class="cross-body">
+      <span class="cross-h">{{ p.title }}</span>
+      {%- assign tagline = p.metafields.custom.short_name | default: p.type -%}
+      {%- if tagline != blank -%}<div class="cross-tagline">{{ tagline }}</div>{%- endif -%}
+      <div class="cross-price">{{ v.price | money }}</div>
+      <form action="/cart/add" method="post" class="cross-atc-form" data-product-id="{{ p.id }}" data-product-handle="{{ p.handle }}" data-product-title="{{ p.title | escape }}" data-product-image="{{ p.featured_media | image_url: width: 400 }}" data-product-url="{{ p.url }}" data-product-price="{{ v.price }}">
+        <input type="hidden" name="id" value="{{ v.id }}">
+        <button type="submit" class="cross-atc-btn" data-product-id="{{ p.id }}" data-product-handle="{{ p.handle }}" data-product-title="{{ p.title | escape }}" data-product-image="{{ p.featured_media | image_url: width: 400 }}" data-product-url="{{ p.url }}" data-product-price="{{ v.price }}">Add to cart</button>
+      </form>
+    </div>
   </div>
-</div>
+{%- endif -%}
