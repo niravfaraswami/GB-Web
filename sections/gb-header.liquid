@@ -423,7 +423,11 @@
     // measure intent within a single scroll direction, not lifetime delta.
     function initSmartSticky() {
       var header = document.querySelector('.gb-site-header');
-      if (!header || header.dataset.smartStickyBound) return;
+      if (!header) {
+        console.warn('[gb-header smart-sticky] init skipped — .gb-site-header not found');
+        return;
+      }
+      if (header.dataset.smartStickyBound) return;
       header.dataset.smartStickyBound = '1';
 
       var DOWN_THRESHOLD = 30;
@@ -434,6 +438,16 @@
       var accumDown = 0;
       var accumUp = 0;
       var ticking = false;
+      var wasHidden = false;
+      var wasScrolled = false;
+
+      console.log('[gb-header smart-sticky] init', {
+        startY: lastY,
+        DOWN_THRESHOLD: DOWN_THRESHOLD,
+        UP_THRESHOLD: UP_THRESHOLD,
+        ENGAGE_AFTER: ENGAGE_AFTER,
+        headerEl: header
+      });
 
       function anyDrawerOpen() {
         return !!(
@@ -447,19 +461,35 @@
         );
       }
 
+      function setHidden(hidden, reason) {
+        if (hidden === wasHidden) return;
+        wasHidden = hidden;
+        header.classList.toggle('is-hidden', hidden);
+        console.log('[gb-header smart-sticky] ' + (hidden ? 'HIDE' : 'SHOW'),
+                    { reason: reason, y: window.scrollY, accumDown: accumDown, accumUp: accumUp });
+      }
+      function setScrolled(scrolled) {
+        if (scrolled === wasScrolled) return;
+        wasScrolled = scrolled;
+        header.classList.toggle('is-scrolled', scrolled);
+      }
+
       function update() {
         ticking = false;
         var y = window.scrollY || window.pageYOffset || 0;
         var delta = y - lastY;
 
-        if (y > 0) header.classList.add('is-scrolled');
-        else header.classList.remove('is-scrolled');
+        setScrolled(y > 0);
 
-        // Escape hatches: at top, or any drawer/menu is open.
-        if (y <= ENGAGE_AFTER || anyDrawerOpen()) {
-          header.classList.remove('is-hidden');
-          accumDown = 0;
-          accumUp = 0;
+        if (y <= ENGAGE_AFTER) {
+          setHidden(false, 'within top ' + ENGAGE_AFTER + 'px');
+          accumDown = 0; accumUp = 0;
+          lastY = y;
+          return;
+        }
+        if (anyDrawerOpen()) {
+          setHidden(false, 'drawer/menu open');
+          accumDown = 0; accumUp = 0;
           lastY = y;
           return;
         }
@@ -467,11 +497,11 @@
         if (delta > 0) {
           accumDown += delta;
           accumUp = 0;
-          if (accumDown >= DOWN_THRESHOLD) header.classList.add('is-hidden');
+          if (accumDown >= DOWN_THRESHOLD) setHidden(true, 'down ≥' + DOWN_THRESHOLD + 'px');
         } else if (delta < 0) {
           accumUp += -delta;
           accumDown = 0;
-          if (accumUp >= UP_THRESHOLD) header.classList.remove('is-hidden');
+          if (accumUp >= UP_THRESHOLD) setHidden(false, 'up ≥' + UP_THRESHOLD + 'px');
         }
 
         lastY = y;
