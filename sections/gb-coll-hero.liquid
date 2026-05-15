@@ -1,7 +1,6 @@
 {%- render 'leo_kit_chrome' -%}
 
 {%- liquid
-  assign cat_label = collection.metafields.custom.track_label | default: section.settings.fallback_category
   assign subtitle = collection.description | strip_html | strip | default: collection.metafields.custom.subtitle | default: section.settings.fallback_subtitle
   assign hero_emoji = collection.metafields.custom.hero_emoji | default: section.settings.fallback_emoji
 -%}
@@ -9,11 +8,6 @@
 <section class="coll-hero" {%- render 'leo_kit_attrs' -%}>
   <div class="container">
     <div>
-      {%- if cat_label != blank -%}
-        <div class="cat-pill">
-          <span class="dot"></span><span>{{ cat_label }}</span>
-        </div>
-      {%- endif -%}
       <h1>{{ collection.title | default: section.settings.fallback_title }}</h1>
       {%- if subtitle != blank -%}<p class="coll-hero-sub">{{ subtitle }}</p>{%- endif -%}
     </div>
@@ -35,7 +29,6 @@
   "settings": [
     { "type": "text", "id": "fallback_title", "label": "Fallback title", "default": "Collection title" },
     { "type": "textarea", "id": "fallback_subtitle", "label": "Fallback subtitle" },
-    { "type": "text", "id": "fallback_category", "label": "Fallback category label", "default": "TRACK A · PANTRY" },
     { "type": "text", "id": "fallback_emoji", "label": "Fallback hero emoji", "default": "🫙" },
     { "type": "header", "content": "Spacing & Typography" },
     { "type": "range", "id": "pad_top_d", "label": "Padding top — desktop (px)", "min": 0, "max": 200, "step": 4, "default": 72 },
