@@ -1,7 +1,6 @@
 {%- render 'leo_kit_chrome' -%}
 
 {%- liquid
-  assign subtitle = collection.description | strip_html | strip | default: collection.metafields.custom.subtitle | default: section.settings.fallback_subtitle
   assign hero_emoji = collection.metafields.custom.hero_emoji | default: section.settings.fallback_emoji
   # Banner image source ladder:
   #   1. collection.metafields.custom.hero_image  (banner-specific override)
@@ -14,7 +13,6 @@
   <div class="container">
     <div>
       <h1>{{ collection.title | default: section.settings.fallback_title }}</h1>
-      {%- if subtitle != blank -%}<p class="coll-hero-sub">{{ subtitle }}</p>{%- endif -%}
     </div>
     <div class="coll-hero-image">
       {%- if hero_image != blank -%}

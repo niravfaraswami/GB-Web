@@ -2652,7 +2652,17 @@
   .coll-hero .container { grid-template-columns: 1fr; gap: 18px; }
   .coll-hero h1 { font-size: var(--heading-size-m, 30px); margin-bottom: 6px; }
   .coll-hero-sub { font-size: 14.5px; }
-  .coll-hero-image { font-size: 64px; aspect-ratio: 16 / 9; max-height: 160px; }
+  /* Break image out of the container's 24px horizontal padding so it
+     spans the full viewport on mobile. Drop the corner rounding + the
+     max-height cap so the natural 16:9 aspect ratio gets full room. */
+  .coll-hero-image {
+    font-size: 64px;
+    aspect-ratio: 16 / 9;
+    max-height: none;
+    margin-left: -24px;
+    margin-right: -24px;
+    border-radius: 0;
+  }
   .intro-grid { grid-template-columns: 1fr; gap: 14px; }
   .intro-feature { padding: 22px 20px; }
   .testimonial-card { grid-template-columns: 1fr; padding: 28px 24px; gap: 20px; }
