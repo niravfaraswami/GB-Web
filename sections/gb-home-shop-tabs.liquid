@@ -101,6 +101,13 @@
           assign cat_band = block.settings.cat_band
           assign limit = block.settings.products_limit | default: products_per_tab
 
+          # On a collection page, drop the per-tab product cap so the
+          # full collection renders. Home page keeps the cap so the
+          # 'Complete care for your gut' grid stays a teaser.
+          if collection != blank and collection.handle != blank
+            assign limit = 1000
+          endif
+
           assign use_all = false
           if block.settings.show_all_products
             assign use_all = true
