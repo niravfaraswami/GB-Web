@@ -1,12 +1,23 @@
 {%- render 'leo_kit_chrome' -%}
 
 {%- liquid
-  assign target = section.settings.target_collection
-  assign eyebrow = section.settings.eyebrow | default: collection.metafields.custom.cross_cta_eyebrow
-  assign title = section.settings.title | default: collection.metafields.custom.cross_cta_title
-  assign desc = section.settings.desc | default: collection.metafields.custom.cross_cta_desc
-  assign cta_url = target.url | default: section.settings.cta_url | default: '#'
-  assign cta_label = section.settings.cta_label | default: target.title
+  # Per-collection metafields take precedence so each collection can
+  # carry its own follow-on callout. Section settings act as a generic
+  # fallback for any collection that hasn't authored the metafields.
+  assign mf_target  = collection.metafields.custom.cross_cta_target_collection
+  assign mf_url     = collection.metafields.custom.cross_cta_url
+  assign mf_label   = collection.metafields.custom.cross_cta_label
+  assign mf_eyebrow = collection.metafields.custom.cross_cta_eyebrow
+  assign mf_title   = collection.metafields.custom.cross_cta_title
+  assign mf_desc    = collection.metafields.custom.cross_cta_desc
+
+  assign eyebrow = mf_eyebrow | default: section.settings.eyebrow
+  assign title   = mf_title   | default: section.settings.title
+  assign desc    = mf_desc    | default: section.settings.desc
+
+  assign target = mf_target | default: section.settings.target_collection
+  assign cta_url   = mf_url   | default: target.url | default: section.settings.cta_url | default: '#'
+  assign cta_label = mf_label | default: section.settings.cta_label | default: target.title
 -%}
 
 {%- if title != blank -%}

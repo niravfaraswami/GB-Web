@@ -15,12 +15,12 @@
         "fallback_title": "Collection title",
         "fallback_subtitle": "",
         "fallback_emoji": "🫙",
-        "pad_top_d": 72,
-        "pad_bot_d": 56,
-        "pad_top_m": 48,
-        "pad_bot_m": 40,
-        "heading_size_d": 56,
-        "heading_size_m": 36
+        "pad_top_d": 40,
+        "pad_bot_d": 32,
+        "pad_top_m": 28,
+        "pad_bot_m": 24,
+        "heading_size_d": 44,
+        "heading_size_m": 30
       }
     },
     "intro": {
@@ -258,8 +258,8 @@
     "cross-cta": {
       "type": "gb-coll-cross-cta",
       "settings": {
-        "eyebrow": "EXPLORE MORE",
-        "title": "Once you've nailed fermentation, level up to prebiotic powders.",
+        "eyebrow": "",
+        "title": "",
         "desc": "",
         "target_collection": "",
         "cta_url": "",

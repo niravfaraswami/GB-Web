@@ -2284,29 +2284,30 @@
    ============================================================== */
 .coll-hero {
   background: linear-gradient(135deg, var(--kit-color-soft) 0%, var(--gb-white) 100%);
-  padding-top: var(--pad-top-d, 72px);
-  padding-bottom: var(--pad-bot-d, 56px);
+  padding-top: var(--pad-top-d, 40px);
+  padding-bottom: var(--pad-bot-d, 32px);
   border-bottom: 1px solid var(--gb-border-soft);
 }
 .coll-hero .container {
   max-width: 1180px; margin: 0 auto; padding: 0 24px;
-  display: grid; grid-template-columns: 1.4fr 1fr;
-  gap: 56px; align-items: center;
+  display: grid; grid-template-columns: 1.6fr 1fr;
+  gap: 40px; align-items: center;
 }
 .coll-hero h1 {
   font-family: 'Montserrat', sans-serif;
-  font-weight: 800; font-size: var(--heading-size-d, 56px);
+  font-weight: 800; font-size: var(--heading-size-d, 44px);
   letter-spacing: -0.025em; line-height: 1.05;
-  color: var(--gb-text); margin-bottom: 18px;
+  color: var(--gb-text); margin-bottom: 10px;
   text-transform: none; max-width: 640px;
 }
-.coll-hero-sub { font-size: 18px; color: var(--gb-text-muted); line-height: 1.55; max-width: 580px; }
+.coll-hero-sub { font-size: 16px; color: var(--gb-text-muted); line-height: 1.5; max-width: 580px; }
 .coll-hero-image {
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 16 / 9;
+  max-height: 220px;
   background: var(--kit-color);
-  border-radius: 18px;
+  border-radius: 16px;
   display: flex; align-items: center; justify-content: center;
-  font-size: 160px; color: var(--gb-cream);
+  font-size: 96px; color: var(--gb-cream);
   overflow: hidden;
 }
 .coll-hero-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -2645,13 +2646,13 @@
 }
 @media (max-width: 768px) {
   .coll-hero {
-    padding-top: var(--pad-top-m, 48px);
-    padding-bottom: var(--pad-bot-m, 40px);
+    padding-top: var(--pad-top-m, 28px);
+    padding-bottom: var(--pad-bot-m, 24px);
   }
-  .coll-hero .container { grid-template-columns: 1fr; gap: 32px; }
-  .coll-hero h1 { font-size: var(--heading-size-m, 36px); }
-  .coll-hero-sub { font-size: 16px; }
-  .coll-hero-image { font-size: 100px; aspect-ratio: 16 / 9; }
+  .coll-hero .container { grid-template-columns: 1fr; gap: 18px; }
+  .coll-hero h1 { font-size: var(--heading-size-m, 30px); margin-bottom: 6px; }
+  .coll-hero-sub { font-size: 14.5px; }
+  .coll-hero-image { font-size: 64px; aspect-ratio: 16 / 9; max-height: 160px; }
   .intro-grid { grid-template-columns: 1fr; gap: 14px; }
   .intro-feature { padding: 22px 20px; }
   .testimonial-card { grid-template-columns: 1fr; padding: 28px 24px; gap: 20px; }
