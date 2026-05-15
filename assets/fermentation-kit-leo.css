@@ -2926,9 +2926,11 @@
 [data-template="leo"].pdp-hero .variant-pack {
   white-space: normal;
   text-wrap: balance;
+  text-align: left;
   font-size: 15px;
   line-height: 1.2;
   margin-bottom: 10px;
+  align-self: stretch;
 }
 [data-template="leo"].pdp-hero .variant-illustration {
   height: auto;
@@ -2946,11 +2948,14 @@
   font-size: 17px;
   display: flex;
   align-items: baseline;
+  justify-content: flex-start;
   gap: 8px;
   flex-wrap: wrap;
+  text-align: left;
 }
 [data-template="leo"].pdp-hero .variant-price > span:first-child { display: inline; }
 [data-template="leo"].pdp-hero .variant-compare { margin-left: 0; }
+[data-template="leo"].pdp-hero .variant-save { text-align: left; align-self: stretch; }
 [data-template="leo"].pdp-hero .variant-save { margin-top: 4px; font-size: 11px; }
 
 /* Mobile: 2-up stays 2-up — long titles wrap (white-space: normal + text-wrap:
