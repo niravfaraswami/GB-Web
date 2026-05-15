@@ -654,12 +654,17 @@
         "up_threshold": 30,
         "show_delay": 750
       }
+    },
+    "fiber-compare-modal": {
+      "type": "gb-fiber-compare-modal",
+      "settings": {}
     }
   },
   "order": [
     "hero",
     "why-add",
     "who",
+    "fiber-compare-modal",
     "diff",
     "consume",
     "timeline",

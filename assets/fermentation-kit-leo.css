@@ -3438,3 +3438,194 @@
 }
 .gb-journey-card .gb-journey-atc-btn:hover { background: #000; }
 .gb-journey-card .gb-journey-atc-btn[disabled] { opacity: 0.7; cursor: wait; }
+
+/* ============================================================
+ * Find Your Fiber — comparison modal
+ * Triggered from the gb-who-yes-no-v2 footer "Compare all fibers"
+ * link on Fiber Boost / Inulin / Acacia PDPs.
+ *  - Desktop (≥769px): 4-col grid table (label + 3 product cols)
+ *  - Mobile  (≤768px): 3 stacked cards, row labels per card
+ *  - Current product's column gets a teal highlight + "YOU'RE HERE"
+ * ============================================================ */
+.gb-fcm[hidden] { display: none !important; }
+body.gb-fcm-open { overflow: hidden; }
+
+.gb-fcm {
+  position: fixed; inset: 0;
+  z-index: 9000;
+  display: flex; align-items: flex-start; justify-content: center;
+  padding: 32px 16px; overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.gb-fcm-overlay {
+  position: fixed; inset: 0;
+  background: rgba(43, 31, 26, 0.55);
+  backdrop-filter: blur(2px);
+}
+.gb-fcm-dialog {
+  position: relative;
+  background: var(--gb-white);
+  border-radius: 22px;
+  max-width: 1100px; width: 100%;
+  padding: 36px 36px 28px;
+  box-shadow: 0 28px 80px rgba(43, 31, 26, 0.25);
+  margin: auto;
+}
+.gb-fcm-close {
+  position: absolute; top: 14px; right: 14px;
+  width: 36px; height: 36px;
+  border: 0; border-radius: 50%;
+  background: var(--gb-cream);
+  font-size: 22px; line-height: 1;
+  cursor: pointer;
+  color: var(--gb-text);
+}
+.gb-fcm-close:hover { background: #ECE3D0; }
+.gb-fcm-head { text-align: center; margin-bottom: 24px; }
+.gb-fcm-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800; font-size: 30px;
+  letter-spacing: -0.01em; margin: 0 0 8px;
+  color: var(--gb-text);
+}
+.gb-fcm-sub {
+  font-size: 14px; color: var(--gb-text-muted);
+  max-width: 640px; margin: 0 auto; line-height: 1.55;
+}
+
+/* === Desktop table === */
+.gb-fcm-table {
+  display: grid;
+  grid-template-columns: 150px repeat(3, 1fr);
+  gap: 0;
+  margin-top: 20px;
+  border: 1px solid var(--gb-border-soft);
+  border-radius: 16px;
+  overflow: hidden;
+}
+.gb-fcm-row { display: contents; }
+.gb-fcm-cell {
+  padding: 18px 18px;
+  border-top: 1px solid var(--gb-border-soft);
+  border-right: 1px solid var(--gb-border-soft);
+  background: var(--gb-white);
+  font-size: 13.5px; line-height: 1.5;
+  color: var(--gb-text);
+  display: flex; align-items: flex-start;
+}
+.gb-fcm-cell:last-child { border-right: none; }
+.gb-fcm-row--head .gb-fcm-cell,
+.gb-fcm-row--head .gb-fcm-cell--label {
+  border-top: none;
+}
+.gb-fcm-cell--label {
+  background: #FBF5E6;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 12.5px;
+}
+.gb-fcm-cell--col-head {
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 22px 14px 18px;
+  gap: 10px;
+}
+.gb-fcm-cell--col-head.is-current {
+  background: #E5F3EC;
+}
+.gb-fcm-tier {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px; letter-spacing: 0.16em;
+  font-weight: 700; text-transform: uppercase;
+  color: var(--gb-text-muted);
+  padding: 3px 9px; border-radius: 999px;
+  background: var(--gb-cream);
+}
+.gb-fcm-cell--col-head.is-current .gb-fcm-tier {
+  background: #BFE3D2; color: #1E6D4B;
+}
+.gb-fcm-img {
+  width: 110px; aspect-ratio: 1;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--gb-cream);
+  border-radius: 12px; overflow: hidden;
+}
+.gb-fcm-img img { width: 100%; height: 100%; object-fit: contain; padding: 6px; }
+.gb-fcm-name {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800; font-size: 15px;
+  text-transform: uppercase; letter-spacing: 0.01em;
+  color: var(--gb-text);
+}
+.gb-fcm-row--cta .gb-fcm-cell { padding: 18px; justify-content: center; }
+.gb-fcm-cta {
+  display: inline-block;
+  padding: 11px 22px;
+  border-radius: 999px;
+  background: var(--gb-ink);
+  color: var(--gb-white);
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700; font-size: 12px;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  text-decoration: none;
+  transition: background 0.15s;
+}
+.gb-fcm-cta:hover { background: #000; }
+[data-kit="fermentation"] a.gb-fcm-cta { color: var(--gb-white); }
+.gb-fcm-here {
+  display: inline-block;
+  padding: 11px 22px;
+  border-radius: 999px;
+  background: #BFE3D2; color: #1E6D4B;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800; font-size: 12px;
+  letter-spacing: 0.08em; text-transform: uppercase;
+}
+.gb-fcm-foot {
+  margin: 22px 0 0;
+  font-size: 12.5px; line-height: 1.55;
+  color: var(--gb-text-muted);
+  text-align: center;
+}
+
+/* Mobile-only stack hidden on desktop; desktop table hidden on mobile */
+.gb-fcm-cards { display: none; }
+
+@media (max-width: 768px) {
+  .gb-fcm { padding: 16px 12px; }
+  .gb-fcm-dialog { padding: 28px 18px 20px; border-radius: 18px; }
+  .gb-fcm-title { font-size: 24px; }
+  .gb-fcm-sub { font-size: 13px; }
+  .gb-fcm-table { display: none; }
+  .gb-fcm-cards { display: flex; flex-direction: column; gap: 14px; margin-top: 18px; }
+  .gb-fcm-card {
+    border: 1px solid var(--gb-border-soft);
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--gb-white);
+  }
+  .gb-fcm-card.is-current { border-color: #1E6D4B; box-shadow: 0 0 0 1px #1E6D4B; }
+  .gb-fcm-card-head {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 8px; padding: 18px 16px;
+    background: var(--gb-cream);
+  }
+  .gb-fcm-card.is-current .gb-fcm-card-head { background: #E5F3EC; }
+  .gb-fcm-card .gb-fcm-img { width: 90px; }
+  .gb-fcm-card .gb-fcm-name { font-size: 14px; }
+  .gb-fcm-mrow {
+    display: flex; flex-direction: column;
+    gap: 4px; padding: 12px 16px;
+    border-top: 1px solid var(--gb-border-soft);
+  }
+  .gb-fcm-mlabel {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; letter-spacing: 0.14em;
+    font-weight: 700; text-transform: uppercase;
+    color: var(--gb-text-muted);
+  }
+  .gb-fcm-mval { font-size: 13px; line-height: 1.5; color: var(--gb-text); }
+  .gb-fcm-card-cta { padding: 14px 16px 18px; text-align: center; border-top: 1px solid var(--gb-border-soft); }
+  .gb-fcm-foot { margin-top: 18px; font-size: 12px; }
+}
