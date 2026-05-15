@@ -1,0 +1,282 @@
+{%- comment -%}
+  Section S5 · Gut Starter Box
+  Source ref: s5-s6-preview.html
+  Visible-section 5 on the home page (replaces the old "How It Works").
+  - Two-column layout: square image on the left, copy + chips + price + CTAs on the right
+  - Pricing pulls from a section-attached product (variant.price + variant.compare_at_price)
+  - When no product is attached, falls back to the three placeholder text settings
+{%- endcomment -%}
+
+{%- liquid
+  assign sb_product = section.settings.product
+  assign sb_variant = nil
+  if sb_product != blank
+    assign sb_variant = sb_product.selected_or_first_available_variant
+  endif
+
+  assign price_now_text = section.settings.placeholder_price_now
+  assign price_was_text = ''
+  assign save_text = section.settings.placeholder_save
+
+  if sb_variant
+    assign price_now_text = sb_variant.price | money
+    if sb_variant.compare_at_price > sb_variant.price
+      assign price_was_text = sb_variant.compare_at_price | money
+      assign diff = sb_variant.compare_at_price | minus: sb_variant.price
+      assign save_pct = diff | times: 100.0 | divided_by: sb_variant.compare_at_price | round
+      assign save_text = 'Save ' | append: save_pct | append: '%'
+    else
+      assign save_text = ''
+    endif
+  else
+    assign price_was_text = section.settings.placeholder_price_was
+  endif
+
+  assign primary_url = section.settings.primary_cta_url
+  if primary_url == blank
+    if sb_product != blank
+      assign primary_url = sb_product.url
+    else
+      assign primary_url = '/products/gut-starter-box'
+    endif
+  endif
+  assign secondary_url = section.settings.secondary_cta_url
+  if secondary_url == blank
+    assign secondary_url = primary_url
+  endif
+
+  assign chip_blocks = section.blocks | where: 'type', 'chip'
+-%}
+
+<section class="gb-starter-box">
+  <div class="gb-sb-container">
+    <div class="gb-sb-grid">
+
+      <div class="gb-sb-image">
+        {%- if section.settings.image -%}
+          <img
+            src="{{ section.settings.image | image_url: width: 900 }}"
+            alt="{{ section.settings.image.alt | default: section.settings.heading | default: 'Gut Starter Box' | escape }}"
+            loading="lazy" width="900" height="900">
+        {%- endif -%}
+      </div>
+
+      <div class="gb-sb-copy">
+        {%- if section.settings.eyebrow != blank -%}
+          <span class="gb-sb-eyebrow">{{ section.settings.eyebrow }}</span>
+        {%- endif -%}
+
+        {%- if section.settings.heading != blank or section.settings.heading_em != blank -%}
+          <h2 class="gb-sb-h2">
+            {{ section.settings.heading }}
+            {%- if section.settings.heading_em != blank -%} <em>{{ section.settings.heading_em }}</em>{%- endif -%}
+          </h2>
+        {%- endif -%}
+
+        {%- if section.settings.lead != blank -%}
+          <p class="gb-sb-lead">{{ section.settings.lead }}</p>
+        {%- endif -%}
+
+        {%- if chip_blocks.size > 0 -%}
+          <div class="gb-sb-chips" aria-label="What's inside">
+            {%- for block in chip_blocks -%}
+              <span class="gb-sb-chip" {{ block.shopify_attributes }}>
+                <span class="gb-sb-chip-dot gb-sb-chip-dot--{{ block.settings.color | default: 'kanji' }}">{{ block.settings.letter }}</span>
+                {{ block.settings.label }}
+              </span>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+
+        {%- if price_now_text != blank -%}
+          <div class="gb-sb-price">
+            <span class="gb-sb-price-now">{{ price_now_text }}</span>
+            {%- if price_was_text != blank -%}
+              <span class="gb-sb-price-was">{{ price_was_text }}</span>
+            {%- endif -%}
+            {%- if save_text != blank -%}
+              <span class="gb-sb-price-save">{{ save_text }}</span>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+
+        <div class="gb-sb-ctas">
+          {%- if section.settings.primary_cta_label != blank -%}
+            <a class="gb-sb-btn" href="{{ primary_url }}">{{ section.settings.primary_cta_label }}</a>
+          {%- endif -%}
+          {%- if section.settings.secondary_cta_label != blank -%}
+            <a class="gb-sb-btn-ghost" href="{{ secondary_url }}">{{ section.settings.secondary_cta_label }}</a>
+          {%- endif -%}
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<style>
+  .gb-starter-box { background: #FFFFFF; padding: 64px 0; }
+  .gb-sb-container { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+  .gb-sb-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center; }
+
+  .gb-sb-image {
+    aspect-ratio: 1/1; border-radius: 24px; overflow: hidden;
+    background: #F5EDD8;
+    box-shadow: 0 1px 3px rgba(43,31,26,0.04), 0 4px 16px rgba(43,31,26,0.04);
+  }
+  .gb-sb-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  .gb-sb-eyebrow {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; font-weight: 500;
+    text-transform: uppercase; letter-spacing: 0.16em;
+    color: #8B1F40;
+    margin-bottom: 10px;
+  }
+  .gb-sb-h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800; letter-spacing: -0.02em; line-height: 1.05;
+    color: #1F1F1D;
+    font-size: clamp(30px, 3.6vw, 42px);
+    margin: 0 0 14px;
+  }
+  .gb-sb-h2 em { font-style: italic; font-weight: 700; color: #8B1F40; }
+  .gb-sb-lead {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16.5px; line-height: 1.55;
+    color: #5C4D3F;
+    margin: 0 0 28px;
+    max-width: 480px;
+  }
+
+  .gb-sb-chips { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 26px; }
+  .gb-sb-chip {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 8px 14px 8px 8px;
+    background: #FFF9EE;
+    border: 1px solid #F0EBDD;
+    border-radius: 999px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px; font-weight: 600;
+    color: #1F1F1D;
+  }
+  .gb-sb-chip-dot {
+    width: 18px; height: 18px; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-family: 'Montserrat', sans-serif; font-weight: 800;
+    font-size: 9px; color: #FFF9EE;
+  }
+  .gb-sb-chip-dot--kanji  { background: #8B1F40; }
+  .gb-sb-chip-dot--sprout { background: #3F7754; }
+  .gb-sb-chip-dot--inulin { background: #15BA97; }
+  .gb-sb-chip-dot--achaar { background: #C8552A; }
+  .gb-sb-chip-dot--aam    { background: #DDA738; }
+  .gb-sb-chip-dot--kefir  { background: #6FA095; }
+
+  .gb-sb-price {
+    display: flex; align-items: baseline; gap: 14px;
+    padding: 18px 0;
+    border-top: 1px solid #E8E3D5;
+    border-bottom: 1px solid #E8E3D5;
+    margin-bottom: 24px;
+  }
+  .gb-sb-price-now {
+    font-family: 'Montserrat', sans-serif; font-weight: 800;
+    font-size: 30px; color: #1F1F1D;
+  }
+  .gb-sb-price-was {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px; color: #888780; text-decoration: line-through;
+  }
+  .gb-sb-price-save {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: #3F7754;
+    margin-left: auto;
+  }
+
+  .gb-sb-ctas { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+  .gb-sb-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 14px 28px;
+    background: #FF7300; color: #FFFFFF;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600; font-size: 15px;
+    border-radius: 999px;
+    text-decoration: none;
+    transition: background 0.15s ease, transform 0.15s ease;
+  }
+  .gb-sb-btn:hover { background: #E66800; transform: translateY(-1px); }
+  .gb-sb-btn-ghost {
+    background: transparent; color: #1F1F1D;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600; font-size: 15px;
+    padding: 14px 0;
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+  .gb-sb-btn-ghost:hover { color: #FF7300; }
+
+  @media (max-width: 768px) {
+    .gb-starter-box { padding: 48px 0; }
+    .gb-sb-container { padding: 0 20px; }
+    .gb-sb-grid { grid-template-columns: 1fr; gap: 32px; }
+    .gb-sb-price-now { font-size: 26px; }
+    .gb-sb-ctas { gap: 12px; }
+    .gb-sb-btn { padding: 12px 22px; font-size: 14px; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "GB · Home · Starter Box (S5)",
+  "tag": "section",
+  "class": "gb-home-starter-box-wrap",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Start here · Best for first-timers" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "The Gut Starter Box." },
+    { "type": "text", "id": "heading_em", "label": "Heading (italic emphasis)", "default": "Three products. Three daily habits." },
+    { "type": "textarea", "id": "lead", "label": "Lead paragraph", "default": "Make a probiotic drink. Grow sprouts on your counter. Stir prebiotic fibre into water. The simplest way to start with gut health." },
+    { "type": "image_picker", "id": "image", "label": "Image (1:1)" },
+    { "type": "header", "content": "Pricing source" },
+    { "type": "product", "id": "product", "label": "Linked product", "info": "When set, price + compare-at price + save % are pulled from this product. Leave empty to use the placeholder text fields below." },
+    { "type": "text", "id": "placeholder_price_now", "label": "Placeholder · Price now", "default": "₹1,299" },
+    { "type": "text", "id": "placeholder_price_was", "label": "Placeholder · Compare-at price", "default": "₹1,797" },
+    { "type": "text", "id": "placeholder_save", "label": "Placeholder · Save badge", "default": "Save 28%" },
+    { "type": "header", "content": "CTAs" },
+    { "type": "text", "id": "primary_cta_label", "label": "Primary CTA label", "default": "Add Starter Box to cart" },
+    { "type": "url", "id": "primary_cta_url", "label": "Primary CTA URL", "info": "Leave empty to auto-link to the linked product, or to /products/gut-starter-box as a final fallback." },
+    { "type": "text", "id": "secondary_cta_label", "label": "Secondary CTA label", "default": "See what's inside →" },
+    { "type": "url", "id": "secondary_cta_url", "label": "Secondary CTA URL", "info": "Leave empty to mirror the primary CTA URL." }
+  ],
+  "blocks": [
+    {
+      "type": "chip", "name": "Component chip", "limit": 6, "settings": [
+        { "type": "text", "id": "letter", "label": "Dot letter", "default": "K" },
+        { "type": "text", "id": "label", "label": "Chip label", "default": "Kanji Kit" },
+        { "type": "select", "id": "color", "label": "Dot colour", "default": "kanji", "options": [
+          { "value": "kanji",  "label": "Kanji (maroon)" },
+          { "value": "sprout", "label": "Sprout (forest)" },
+          { "value": "inulin", "label": "Inulin (mint)" },
+          { "value": "achaar", "label": "Achaar (rust)" },
+          { "value": "aam",    "label": "Aam Panna (gold)" },
+          { "value": "kefir",  "label": "Kefir (sage)" }
+        ]}
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "GB · Home · Starter Box (S5)",
+      "blocks": [
+        { "type": "chip", "settings": { "letter": "K", "label": "Kanji Kit",       "color": "kanji"  } },
+        { "type": "chip", "settings": { "letter": "S", "label": "Sprout Maker",    "color": "sprout" } },
+        { "type": "chip", "settings": { "letter": "P", "label": "Prebiotic Fibre", "color": "inulin" } }
+      ]
+    }
+  ],
+  "enabled_on": { "templates": ["index"] }
+}
+{% endschema %}

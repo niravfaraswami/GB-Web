@@ -1,0 +1,193 @@
+{%- comment -%}
+  Section S6 · Build Your Own Fermentation Kit
+  Source ref: s5-s6-preview.html
+  Visible-section 6 on the home page (replaces the old "Refills band").
+  - Forest-green background, brand-orange accents (H2 em + bullet numbers)
+  - Two-column layout: copy left, square image right
+  - 3 numbered bullets (blocks) describing the BYOK steps
+  - Single CTA pointing to /pages/build-your-kit (overridable)
+{%- endcomment -%}
+
+{%- assign bullet_blocks = section.blocks | where: 'type', 'bullet' -%}
+{%- assign byok_cta_url = section.settings.cta_url | default: '/pages/build-your-kit' -%}
+
+<section class="gb-byok">
+  <div class="gb-byok-container">
+    <div class="gb-byok-grid">
+
+      <div class="gb-byok-copy">
+        {%- if section.settings.eyebrow != blank -%}
+          <span class="gb-byok-eyebrow">{{ section.settings.eyebrow }}</span>
+        {%- endif -%}
+
+        {%- if section.settings.heading != blank or section.settings.heading_em != blank -%}
+          <h2 class="gb-byok-h2">
+            {{ section.settings.heading }}
+            {%- if section.settings.heading_em != blank -%} <em>{{ section.settings.heading_em }}</em>{%- endif -%}
+          </h2>
+        {%- endif -%}
+
+        {%- if section.settings.lead != blank -%}
+          <p class="gb-byok-lead">{{ section.settings.lead }}</p>
+        {%- endif -%}
+
+        {%- if bullet_blocks.size > 0 -%}
+          <ul class="gb-byok-benefits">
+            {%- for block in bullet_blocks -%}
+              <li {{ block.shopify_attributes }}>
+                <span class="gb-byok-bullet">{{ forloop.index }}</span>
+                <div>
+                  {%- if block.settings.heading != blank -%}
+                    <strong>{{ block.settings.heading }}</strong>
+                  {%- endif -%}
+                  {%- if block.settings.description != blank -%}
+                    <span>{{ block.settings.description }}</span>
+                  {%- endif -%}
+                </div>
+              </li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+
+        {%- if section.settings.cta_label != blank -%}
+          <a class="gb-byok-btn" href="{{ byok_cta_url }}">{{ section.settings.cta_label }}</a>
+        {%- endif -%}
+      </div>
+
+      <div class="gb-byok-image">
+        {%- if section.settings.image -%}
+          <img
+            src="{{ section.settings.image | image_url: width: 900 }}"
+            alt="{{ section.settings.image.alt | default: section.settings.heading | default: 'Build your own fermentation kit' | escape }}"
+            loading="lazy" width="900" height="900">
+        {%- endif -%}
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<style>
+  .gb-byok { background: #4F7C57; color: #FFF9EE; padding: 64px 0; }
+  .gb-byok-container { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+  .gb-byok-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+
+  .gb-byok-eyebrow {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; font-weight: 500;
+    text-transform: uppercase; letter-spacing: 0.16em;
+    color: rgba(255, 249, 238, 0.62);
+    margin-bottom: 10px;
+  }
+  .gb-byok-h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800; letter-spacing: -0.02em; line-height: 1.05;
+    color: #FFF9EE;
+    font-size: clamp(30px, 3.8vw, 44px);
+    margin: 0 0 16px;
+  }
+  .gb-byok-h2 em { font-style: italic; font-weight: 700; color: #FF7300; }
+  .gb-byok-lead {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 17px; line-height: 1.55;
+    color: rgba(255, 249, 238, 0.82);
+    margin: 0 0 28px;
+    max-width: 480px;
+  }
+
+  .gb-byok-benefits { list-style: none; margin: 0 0 32px; padding: 0; }
+  .gb-byok-benefits li {
+    display: flex; align-items: flex-start; gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(255, 249, 238, 0.14);
+  }
+  .gb-byok-benefits li:last-child { border-bottom: none; }
+  .gb-byok-bullet {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: rgba(255, 249, 238, 0.14);
+    color: #FF7300;
+    display: inline-flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800; font-size: 12px;
+    margin-top: 1px;
+  }
+  .gb-byok-benefits strong {
+    display: block;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700; font-size: 15.5px;
+    color: #FFF9EE;
+    margin-bottom: 2px;
+    letter-spacing: -0.005em;
+  }
+  .gb-byok-benefits span {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13.5px;
+    color: rgba(255, 249, 238, 0.7);
+    line-height: 1.5;
+  }
+
+  .gb-byok-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 14px 28px;
+    background: #FF7300; color: #FFFFFF;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600; font-size: 15px;
+    border-radius: 999px;
+    text-decoration: none;
+    transition: background 0.15s ease, transform 0.15s ease;
+  }
+  .gb-byok-btn:hover { background: #E66800; transform: translateY(-1px); }
+
+  .gb-byok-image {
+    aspect-ratio: 1/1;
+    border-radius: 20px;
+    overflow: hidden;
+    background: rgba(255, 249, 238, 0.06);
+  }
+  .gb-byok-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  @media (max-width: 768px) {
+    .gb-byok { padding: 48px 0; }
+    .gb-byok-container { padding: 0 20px; }
+    .gb-byok-grid { grid-template-columns: 1fr; gap: 36px; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "GB · Home · Build Your Own Kit (S6)",
+  "tag": "section",
+  "class": "gb-home-byok-wrap",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Or build your own" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Build your own" },
+    { "type": "text", "id": "heading_em", "label": "Heading (italic emphasis)", "default": "fermentation kit." },
+    { "type": "textarea", "id": "lead", "label": "Lead paragraph", "default": "Pick the jar that fits your kitchen, the spice mix for what you want to make, and any extras to go with it. Built exactly the way you want it." },
+    { "type": "image_picker", "id": "image", "label": "Image (1:1)" },
+    { "type": "header", "content": "CTA" },
+    { "type": "text", "id": "cta_label", "label": "CTA label", "default": "Build my kit →" },
+    { "type": "url", "id": "cta_url", "label": "CTA URL", "default": "/pages/build-your-kit" }
+  ],
+  "blocks": [
+    {
+      "type": "bullet", "name": "Bullet", "limit": 5, "settings": [
+        { "type": "text", "id": "heading", "label": "Heading" },
+        { "type": "textarea", "id": "description", "label": "Description" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "GB · Home · Build Your Own Kit (S6)",
+      "blocks": [
+        { "type": "bullet", "settings": { "heading": "Pick your jar + capacity", "description": "1L, 2L, or 4L — choose the size that fits your household and batch." } },
+        { "type": "bullet", "settings": { "heading": "Pick your spice mix",      "description": "Kanji, achaar, kimchi, sauerkraut, aam panna, and more — pick what you want to ferment." } },
+        { "type": "bullet", "settings": { "heading": "Add tools + recipe books", "description": "Fermentation weights, airlock lids, printed recipe books — all optional." } }
+      ]
+    }
+  ],
+  "enabled_on": { "templates": ["index"] }
+}
+{% endschema %}

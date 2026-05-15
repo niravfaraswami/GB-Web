@@ -449,113 +449,43 @@
         "jar_label": "FERMENT"
       }
     },
-    "how": {
-      "type": "gb-home-how",
+    "starter-box": {
+      "type": "gb-home-starter-box",
       "blocks": {
-        "h1": {
-          "type": "step",
-          "settings": {
-            "title": "Add ingredients",
-            "description": "Open the kit, follow the recipe card, drop the spice mix into your fermentation jar."
-          }
-        },
-        "h2": {
-          "type": "step",
-          "settings": {
-            "title": "Let it ferment",
-            "description": "Seal with the airlock lid. Mold-free, set-and-forget. Cultures do the work for 3–5 days."
-          }
-        },
-        "h3": {
-          "type": "step",
-          "settings": {
-            "title": "Enjoy",
-            "description": "Refrigerate, pour, eat. One jar gives you 7–10 servings of live probiotic ferment."
-          }
-        }
+        "c1": { "type": "chip", "settings": { "letter": "K", "label": "Kanji Kit",       "color": "kanji"  } },
+        "c2": { "type": "chip", "settings": { "letter": "S", "label": "Sprout Maker",    "color": "sprout" } },
+        "c3": { "type": "chip", "settings": { "letter": "P", "label": "Prebiotic Fibre", "color": "inulin" } }
       },
-      "block_order": [
-        "h1",
-        "h2",
-        "h3"
-      ],
+      "block_order": ["c1", "c2", "c3"],
       "settings": {
-        "eyebrow": "Make probiotics at home",
-        "heading": "Three steps. <em>Five days.</em> One jar."
+        "eyebrow": "Start here · Best for first-timers",
+        "heading": "The Gut Starter Box.",
+        "heading_em": "Three products. Three daily habits.",
+        "lead": "Make a probiotic drink. Grow sprouts on your counter. Stir prebiotic fibre into water. The simplest way to start with gut health.",
+        "placeholder_price_now": "₹1,299",
+        "placeholder_price_was": "₹1,797",
+        "placeholder_save": "Save 28%",
+        "primary_cta_label": "Add Starter Box to cart",
+        "primary_cta_url": "",
+        "secondary_cta_label": "See what's inside →",
+        "secondary_cta_url": ""
       }
     },
-    "refills": {
-      "type": "gb-home-refills",
+    "byok": {
+      "type": "gb-home-byok",
       "blocks": {
-        "r1": {
-          "type": "refill",
-          "settings": {
-            "mini_label": "KANJI\nKIT",
-            "theme": "kanji",
-            "title": "Kanji refill packs",
-            "description": "Spice mix + ferment boost",
-            "from_price": "From ₹249 · 3 batches",
-            "link": "/products/kanji-refill"
-          }
-        },
-        "r2": {
-          "type": "refill",
-          "settings": {
-            "mini_label": "ACHAAR\nKIT",
-            "theme": "achaar",
-            "title": "Achaar 6-batch refill",
-            "description": "Spice mix + ferment boost",
-            "from_price": "From ₹499 · 6 batches",
-            "link": "/products/achaar-refill"
-          }
-        },
-        "r3": {
-          "type": "refill",
-          "settings": {
-            "mini_label": "PANNA\nKIT",
-            "theme": "panna",
-            "title": "Aam panna spice mix",
-            "description": "Pack of 5 sachets",
-            "from_price": "From ₹399 · 5 batches",
-            "link": "/products/aam-panna-refill"
-          }
-        },
-        "r4": {
-          "type": "refill",
-          "settings": {
-            "mini_label": "VEG\nKIT",
-            "theme": "veg",
-            "title": "Sea salt & ferment boost",
-            "description": "Sauerkraut, kimchi, all veg",
-            "from_price": "From ₹300",
-            "link": "/products/veg-refill"
-          }
-        },
-        "r5": {
-          "type": "refill",
-          "settings": {
-            "mini_label": "KIMCHI\nKIT",
-            "theme": "kimchi",
-            "title": "Kimchi making paste",
-            "description": "Authentic gochujang base",
-            "from_price": "From ₹399",
-            "link": "/products/kimchi-refill"
-          }
-        }
+        "b1": { "type": "bullet", "settings": { "heading": "Pick your jar + capacity", "description": "1L, 2L, or 4L — choose the size that fits your household and batch." } },
+        "b2": { "type": "bullet", "settings": { "heading": "Pick your spice mix",      "description": "Kanji, achaar, kimchi, sauerkraut, aam panna, and more — pick what you want to ferment." } },
+        "b3": { "type": "bullet", "settings": { "heading": "Add tools + recipe books", "description": "Fermentation weights, airlock lids, printed recipe books — all optional." } }
       },
-      "block_order": [
-        "r1",
-        "r2",
-        "r3",
-        "r4",
-        "r5"
-      ],
+      "block_order": ["b1", "b2", "b3"],
       "settings": {
-        "eyebrow": "Already have a kit?",
-        "heading": "Just <em>grab a refill.</em>",
-        "lead": "<p>Your jar, lid, and weights last forever. Next batch only needs spice mix and ferment boost.</p>",
-        "view_all_label": "View all refills",
-        "view_all_link": "/collections/refills"
+        "eyebrow": "Or build your own",
+        "heading": "Build your own",
+        "heading_em": "fermentation kit.",
+        "lead": "Pick the jar that fits your kitchen, the spice mix for what you want to make, and any extras to go with it. Built exactly the way you want it.",
+        "cta_label": "Build my kit →",
+        "cta_url": "/pages/build-your-kit"
       }
     },
     "postbiotic": {
@@ -710,8 +640,8 @@
     "collections",
     "shop_tabs",
     "why",
-    "how",
-    "refills",
+    "starter-box",
+    "byok",
     "postbiotic",
     "reviews",
     "learn",
