@@ -597,3 +597,81 @@
     height: 6px;
   }
 }
+
+/* ============================================================
+ * Cross-sell cards (fkv3) — clickable card + home-page-style ATC
+ *
+ * Two visible problems were fixed here:
+ *  - Card surface wasn't clickable. Now .cross-card-link is absolutely
+ *    positioned over the whole card, so clicking anywhere navigates
+ *    to the PDP. .cross-atc-form is lifted above it via z-index so
+ *    the ATC button still captures its own click.
+ *  - The "Add to cart" used the theme's default link styling. Now it
+ *    matches the home page (.gb-card-cta--outlined): transparent
+ *    background, ink border, pill shape, hover orange.
+ *
+ * The same stretched-link CSS exists in fermentation-kit-leo.css for
+ * the leo PDP — fkv3 doesn't load that file, hence the duplication.
+ * ============================================================ */
+[data-template="fkv3"].cross-section .cross-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+[data-template="fkv3"].cross-section .cross-card-link {
+  position: absolute; inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  text-decoration: none;
+}
+[data-template="fkv3"].cross-section .cross-card-link:focus-visible {
+  outline: 2px solid var(--kit-color);
+  outline-offset: 2px;
+}
+[data-template="fkv3"].cross-section .cross-card > .cross-img,
+[data-template="fkv3"].cross-section .cross-card > .cross-body { position: relative; z-index: 0; }
+[data-template="fkv3"].cross-section .cross-card .cross-body {
+  display: flex; flex-direction: column;
+  flex: 1;
+  gap: 4px;
+}
+[data-template="fkv3"].cross-section .cross-card .cross-h,
+[data-template="fkv3"].cross-section .cross-card .cross-tagline,
+[data-template="fkv3"].cross-section .cross-card .cross-price { user-select: text; }
+[data-template="fkv3"].cross-section .cross-card .cross-price { margin-bottom: 14px; }
+[data-template="fkv3"].cross-section .cross-card .cross-atc-form {
+  position: relative;
+  z-index: 2;
+  margin-top: auto;
+}
+[data-template="fkv3"].cross-section .cross-card .cross-atc-btn {
+  display: block;
+  width: 100%;
+  padding: 11px 16px;
+  border-radius: 999px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  background: transparent;
+  border: 1.5px solid var(--gb-ink, #1F1F1D);
+  color: var(--gb-ink, #1F1F1D);
+  text-align: center;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+[data-template="fkv3"].cross-section .cross-card .cross-atc-btn:hover {
+  background: var(--gb-action, #FF7300);
+  border-color: var(--gb-action, #FF7300);
+  color: #FFFFFF;
+}
+[data-template="fkv3"].cross-section .cross-card .cross-atc-btn[disabled] { opacity: 0.7; cursor: wait; }
+
+/* Beat '[data-kit="fermentation"] a { color: inherit }' — keep the
+   stretched link visually invisible while still clickable. */
+[data-template="fkv3"] a.cross-card-link { color: transparent; }
+
+@media (max-width: 768px) {
+  [data-template="fkv3"].cross-section .cross-card .cross-atc-btn { padding: 10px 14px; font-size: 11px; }
+}
