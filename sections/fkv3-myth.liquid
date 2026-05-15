@@ -30,13 +30,18 @@
         {%- assign cmp_left = mf_compare_left | default: section.settings.compare_left_image -%}
         {%- assign cmp_right = mf_compare_right | default: section.settings.compare_right_image -%}
         <div class="compare-block">
+          {%- comment -%}
+            Image positions are swapped vs. metafield naming: the LEFT
+            column renders the "right" image (cmp_right) and vice-versa.
+            Pill content, labels, and table rows are unchanged.
+          {%- endcomment -%}
           <div class="compare-images">
             <div class="compare-image">
-              {%- if cmp_left != blank -%}<img src="{{ cmp_left | image_url: width: 800 }}" alt="{{ mf_compare_left_label | default: section.settings.compare_left_label }}" loading="lazy" width="800" height="600">{%- else -%}{{ section.settings.compare_left_emoji }}{%- endif -%}
+              {%- if cmp_right != blank -%}<img src="{{ cmp_right | image_url: width: 800 }}" alt="{{ mf_compare_right_label | default: section.settings.compare_right_label }}" loading="lazy" width="800" height="600">{%- else -%}{{ section.settings.compare_right_emoji }}{%- endif -%}
               {%- if mf_myth_pill != blank -%}<span class="myth-pill myth-pill--myth">{{ mf_myth_pill }}</span>{%- endif -%}
             </div>
             <div class="compare-image">
-              {%- if cmp_right != blank -%}<img src="{{ cmp_right | image_url: width: 800 }}" alt="{{ mf_compare_right_label | default: section.settings.compare_right_label }}" loading="lazy" width="800" height="600">{%- else -%}{{ section.settings.compare_right_emoji }}{%- endif -%}
+              {%- if cmp_left != blank -%}<img src="{{ cmp_left | image_url: width: 800 }}" alt="{{ mf_compare_left_label | default: section.settings.compare_left_label }}" loading="lazy" width="800" height="600">{%- else -%}{{ section.settings.compare_left_emoji }}{%- endif -%}
               {%- if mf_fact_pill != blank -%}<span class="myth-pill myth-pill--fact">{{ mf_fact_pill }}</span>{%- endif -%}
             </div>
           </div>
