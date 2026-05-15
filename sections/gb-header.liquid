@@ -423,11 +423,7 @@
     // measure intent within a single scroll direction, not lifetime delta.
     function initSmartSticky() {
       var header = document.querySelector('.gb-site-header');
-      if (!header) {
-        console.warn('[gb-header smart-sticky] init skipped — .gb-site-header not found');
-        return;
-      }
-      if (header.dataset.smartStickyBound) return;
+      if (!header || header.dataset.smartStickyBound) return;
       header.dataset.smartStickyBound = '1';
 
       var DOWN_THRESHOLD = 30;
@@ -441,14 +437,6 @@
       var wasHidden = false;
       var wasScrolled = false;
 
-      console.log('[gb-header smart-sticky] init', {
-        startY: lastY,
-        DOWN_THRESHOLD: DOWN_THRESHOLD,
-        UP_THRESHOLD: UP_THRESHOLD,
-        ENGAGE_AFTER: ENGAGE_AFTER,
-        headerEl: header
-      });
-
       function anyDrawerOpen() {
         return !!(
           document.querySelector('.mega-menu.open') ||
@@ -461,12 +449,10 @@
         );
       }
 
-      function setHidden(hidden, reason) {
+      function setHidden(hidden) {
         if (hidden === wasHidden) return;
         wasHidden = hidden;
         header.classList.toggle('is-hidden', hidden);
-        console.log('[gb-header smart-sticky] ' + (hidden ? 'HIDE' : 'SHOW'),
-                    { reason: reason, y: window.scrollY, accumDown: accumDown, accumUp: accumUp });
       }
       function setScrolled(scrolled) {
         if (scrolled === wasScrolled) return;
@@ -481,14 +467,8 @@
 
         setScrolled(y > 0);
 
-        if (y <= ENGAGE_AFTER) {
-          setHidden(false, 'within top ' + ENGAGE_AFTER + 'px');
-          accumDown = 0; accumUp = 0;
-          lastY = y;
-          return;
-        }
-        if (anyDrawerOpen()) {
-          setHidden(false, 'drawer/menu open');
+        if (y <= ENGAGE_AFTER || anyDrawerOpen()) {
+          setHidden(false);
           accumDown = 0; accumUp = 0;
           lastY = y;
           return;
@@ -497,11 +477,11 @@
         if (delta > 0) {
           accumDown += delta;
           accumUp = 0;
-          if (accumDown >= DOWN_THRESHOLD) setHidden(true, 'down ≥' + DOWN_THRESHOLD + 'px');
+          if (accumDown >= DOWN_THRESHOLD) setHidden(true);
         } else if (delta < 0) {
           accumUp += -delta;
           accumDown = 0;
-          if (accumUp >= UP_THRESHOLD) setHidden(false, 'up ≥' + UP_THRESHOLD + 'px');
+          if (accumUp >= UP_THRESHOLD) setHidden(false);
         }
 
         lastY = y;
