@@ -282,29 +282,60 @@
       }
       return node;
     });
-    // Animate departures (CSS plays gbcd-item-out keyframe), then yank
-    // the node from the DOM after the animation completes. If something
-    // re-adds the same line before the timer fires, clear the removing
-    // state so the node reverts to the regular layout.
+    // Phase 1: mark departing items. The is-removing CSS animation
+    // collapses max-height + padding so neighbors reflow into the gap.
+    // Remove the node from the DOM on `animationend` (precise timing)
+    // with a 300ms setTimeout fallback for reduced-motion + background-
+    // tab throttling. Don't re-trigger on a node that's already mid-out.
     Object.keys(existing).forEach(function(k) {
       var el = existing[k];
       if (el.dataset.removing === '1') return;
       el.dataset.removing = '1';
       el.classList.add('is-removing');
-      setTimeout(function() {
+      var removed = false;
+      function doRemove() {
+        if (removed) return;
+        removed = true;
+        el.removeEventListener('animationend', onAnimEnd);
         if (el.parentNode && el.dataset.removing === '1') el.remove();
-      }, 220);
+      }
+      // Only act on the *out* animation. animationend fires for any
+      // animation on this element, so a stale gbcd-item-in (rare, but
+      // possible when a freshly-added optimistic node is immediately
+      // removed) would otherwise yank the node too early.
+      function onAnimEnd(e) {
+        if (e.animationName === 'gbcd-item-out') doRemove();
+      }
+      el.addEventListener('animationend', onAnimEnd);
+      // Fallback for prefers-reduced-motion (animation: none) and
+      // background-tab timer throttling.
+      setTimeout(doRemove, 300);
     });
-    newNodes.forEach(function(node, idx) {
-      // A node may be re-added mid-departure (e.g. qty bumped to 0 then
-      // back to 1 from another tab). Cancel the pending removal.
+    // Phase 2: cancel removal for any node that came back (qty bounced
+    // 1 → 0 → 1 in another tab; server resurrected a line, etc.).
+    newNodes.forEach(function(node) {
       if (node.dataset.removing === '1') {
         node.dataset.removing = '';
         node.classList.remove('is-removing');
       }
-      if (host.children[idx] !== node) {
-        host.insertBefore(node, host.children[idx] || null);
-      }
+    });
+    // Phase 3: reorder newNodes WITHOUT shuffling is-removing siblings.
+    // Build a "logical" sibling list that excludes departing rows, then
+    // insertBefore against that list. The previous implementation used
+    // host.children[idx] directly — but host.children still contained
+    // the is-removing nodes, so insertBefore around them shoved the
+    // departing row to the END of the list. The visible symptom was the
+    // removed row "jumping" before animating out (felt like it stuck).
+    var liveChildren = [];
+    for (var i = 0; i < host.children.length; i++) {
+      if (host.children[i].dataset.removing !== '1') liveChildren.push(host.children[i]);
+    }
+    newNodes.forEach(function(node, idx) {
+      if (liveChildren[idx] === node) return;
+      host.insertBefore(node, liveChildren[idx] || null);
+      var oldIdx = liveChildren.indexOf(node);
+      if (oldIdx >= 0) liveChildren.splice(oldIdx, 1);
+      liveChildren.splice(idx, 0, node);
     });
   }
 
@@ -593,9 +624,17 @@
       var newQty = parseInt(qtyBtn.getAttribute('data-gbcd-qty'), 10);
       var key = line.getAttribute('data-line-key');
       optimisticChangeQty(key, Math.max(0, newQty));
+      // Snapshot the version so an interleaved second click (which
+      // bumps state.cartVersion via its own optimistic mutation) wins
+      // — we discard our stale response rather than overwriting the
+      // newer optimistic state.
+      var v = state.cartVersion;
       changeLine(key, Math.max(0, newQty))
-        .then(function(c) { setCart(c); render(); })
-        .catch(function() { refresh(); });
+        .then(function(c) {
+          if (v !== state.cartVersion) return;
+          setCart(c); render();
+        })
+        .catch(function() { if (v === state.cartVersion) refresh(); });
       return;
     }
     var removeBtn = ev.target.closest('[data-gbcd-remove]');
@@ -603,9 +642,13 @@
       var line2 = removeBtn.closest('.gbcd-item');
       var key2 = line2.getAttribute('data-line-key');
       optimisticChangeQty(key2, 0);
+      var v2 = state.cartVersion;
       changeLine(key2, 0)
-        .then(function(c) { setCart(c); render(); })
-        .catch(function() { refresh(); });
+        .then(function(c) {
+          if (v2 !== state.cartVersion) return;
+          setCart(c); render();
+        })
+        .catch(function() { if (v2 === state.cartVersion) refresh(); });
       return;
     }
     var addonBtn = ev.target.closest('[data-gbcd-addon]');
