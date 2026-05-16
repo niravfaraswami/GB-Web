@@ -21,6 +21,24 @@
     'default':      [10, 20]
   };
 
+  // ---- Floor (minimum count near midnight IST) -------------------
+  // Starting from 0 looks dead to a visitor refreshing at 12:01 AM.
+  // Each category has a floor that the count never drops below; the
+  // hourly curve interpolates from FLOOR → TARGET across the day.
+  //
+  // A two-element array means "pick a value in [low, high] for this
+  // {product, day}" so two products in the same category don't show
+  // the same floor.
+  var FLOORS = {
+    'best':         12,        // double-digit
+    'kit':          12,        // double-digit
+    'kanji-refill': 10,        // double-digit
+    'refill-other': [3, 7],    // 3–7 range
+    'culture':      3,         // start at 3
+    'jars-tools':   3,         // not specified by merchant; mirrors culture
+    'default':      5
+  };
+
   // ---- Hourly weights, IST. Sums to 1.0. -------------------------
   // Models a typical Indian D2C traffic pattern: dead overnight,
   // gentle morning ramp, mid-day plateau, evening peak (6–10 PM),
@@ -90,8 +108,22 @@
     // for the day via a second draw from the seeded PRNG.
     var jitter = Math.floor(rand() * 3) - 1; // -1, 0, or 1
 
-    var count = Math.max(0, Math.floor(target * cum) + jitter);
-    return count;
+    // Floor: minimum count even at midnight, so the page doesn't open
+    // showing "0 people bought this today" (looks dead). Array entries
+    // mean "draw deterministically from [low, high]" so two products
+    // in the same category land on different floors.
+    var floorSpec = FLOORS[category] || FLOORS['default'];
+    var floor;
+    if (Array.isArray(floorSpec)) {
+      floor = Math.floor(floorSpec[0] + rand() * (floorSpec[1] - floorSpec[0] + 1));
+    } else {
+      floor = floorSpec;
+    }
+
+    // Interpolate FLOOR → TARGET along the hourly curve. cum=0 (mid-
+    // night) gives ≈floor; cum=1 (end of day) gives ≈target.
+    var raw = floor + (target - floor) * cum + jitter;
+    return Math.max(floor, Math.floor(raw));
   }
 
   function paint() {
