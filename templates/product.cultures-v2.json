@@ -79,6 +79,53 @@
         "ha-3"
       ]
     },
+    "trust-row": {
+      "type": "fk-trust-row",
+      "settings": {
+        "show_section": true
+      }
+    },
+    "how": {
+      "type": "gb-step-cards-v2",
+      "settings": {
+        "eyebrow": "HOW TO START",
+        "heading": "FROM POUCH TO",
+        "heading_em": "FERMENT.",
+        "tips_heading": "First-batch tips",
+        "tips_bullets": "Use plastic, glass, or wood — never metal\nFull-fat whole milk works best (UHT is fine)\nKitchen-counter warm (24–28°C) is ideal\nFirst batch may taste mild — full strength by batch 3\nGrains keep growing — share or freeze the surplus"
+      },
+      "blocks": {
+        "sc-1": {
+          "type": "step_card",
+          "settings": {
+            "icon_emoji": "🥛",
+            "heading": "Wake the grains",
+            "description": "Tip the pouch into 250ml whole milk in a glass jar. Cover with breathable cloth. Sit 24 hours at room temp."
+          }
+        },
+        "sc-2": {
+          "type": "step_card",
+          "settings": {
+            "icon_emoji": "⏳",
+            "heading": "Strain & store",
+            "description": "Pour through a plastic sieve. The drinkable kefir is the liquid. Keep the grains for the next batch."
+          }
+        },
+        "sc-3": {
+          "type": "step_card",
+          "settings": {
+            "icon_emoji": "🔄",
+            "heading": "First real batch",
+            "description": "Drop grains into 1L fresh whole milk. Ferment 18–24 hours. Strain, drink, repeat — the grains do the work."
+          }
+        }
+      },
+      "block_order": [
+        "sc-1",
+        "sc-2",
+        "sc-3"
+      ]
+    },
     "why": {
       "type": "gb-card-grid-v2",
       "settings": {
@@ -200,253 +247,6 @@
         "cr-5"
       ]
     },
-    "how": {
-      "type": "gb-step-cards-v2",
-      "settings": {
-        "eyebrow": "HOW TO START",
-        "heading": "FROM POUCH TO",
-        "heading_em": "FERMENT.",
-        "tips_heading": "First-batch tips",
-        "tips_bullets": "Use plastic, glass, or wood — never metal\nFull-fat whole milk works best (UHT is fine)\nKitchen-counter warm (24–28°C) is ideal\nFirst batch may taste mild — full strength by batch 3\nGrains keep growing — share or freeze the surplus"
-      },
-      "blocks": {
-        "sc-1": {
-          "type": "step_card",
-          "settings": {
-            "icon_emoji": "🥛",
-            "heading": "Wake the grains",
-            "description": "Tip the pouch into 250ml whole milk in a glass jar. Cover with breathable cloth. Sit 24 hours at room temp."
-          }
-        },
-        "sc-2": {
-          "type": "step_card",
-          "settings": {
-            "icon_emoji": "⏳",
-            "heading": "Strain & store",
-            "description": "Pour through a plastic sieve. The drinkable kefir is the liquid. Keep the grains for the next batch."
-          }
-        },
-        "sc-3": {
-          "type": "step_card",
-          "settings": {
-            "icon_emoji": "🔄",
-            "heading": "First real batch",
-            "description": "Drop grains into 1L fresh whole milk. Ferment 18–24 hours. Strain, drink, repeat — the grains do the work."
-          }
-        }
-      },
-      "block_order": [
-        "sc-1",
-        "sc-2",
-        "sc-3"
-      ]
-    },
-    "expect": {
-      "type": "gb-card-grid-v2",
-      "settings": {
-        "eyebrow": "WHAT TO EXPECT",
-        "heading": "FIRST",
-        "heading_em": "BATCH, BREATHE.",
-        "intro": "It's a living thing — first batches feel weird. Here's what's normal so you don't panic.",
-        "columns": "3"
-      },
-      "blocks": {
-        "ec-1": {
-          "type": "card",
-          "settings": {
-            "icon_emoji": "👃",
-            "label": "TASTE",
-            "heading": "Tangy, slightly fizzy",
-            "description": "Like a sour buttermilk with light effervescence. Stronger by batch 3 as the culture wakes up. If overly sour, ferment shorter."
-          }
-        },
-        "ec-2": {
-          "type": "card",
-          "settings": {
-            "icon_emoji": "🥄",
-            "label": "TEXTURE",
-            "heading": "Lumpy is normal",
-            "description": "Grains look like cottage cheese curds. The strained liquid may be slightly thicker than milk and have small clumps — totally fine."
-          }
-        },
-        "ec-3": {
-          "type": "card",
-          "settings": {
-            "icon_emoji": "⏱",
-            "label": "TIMING",
-            "heading": "18–24 hours, no shortcuts",
-            "description": "Cooler kitchens (under 22°C) need 24–28h. Warmer ones (28°C+) need 16–20h. Trust the culture, not the clock."
-          }
-        }
-      },
-      "block_order": [
-        "ec-1",
-        "ec-2",
-        "ec-3"
-      ]
-    },
-    "benefits": {
-      "type": "gb-card-grid-v2",
-      "settings": {
-        "eyebrow": "BENEFITS",
-        "heading": "WHAT THIS CULTURE",
-        "heading_em": "GIVES YOU.",
-        "columns": "3"
-      },
-      "blocks": {
-        "bc-1": {
-          "type": "card",
-          "settings": {
-            "icon_emoji": "🦠",
-            "label": "PROBIOTIC",
-            "heading": "10⁹+ CFU per glass",
-            "description": "Live, viable cultures by the billion in every 250ml glass — far higher than any pasteurised store-bought kefir."
-          }
-        },
-        "bc-2": {
-          "type": "card",
-          "settings": {
-            "icon_emoji": "💸",
-            "label": "AFFORDABLE",
-            "heading": "₹40/L after first batch",
-            "description": "After your one-time grain cost, ongoing kefir cost is just the milk. Most home fermenters pay back the grains within 2 months."
-          }
-        },
-        "bc-3": {
-          "type": "card",
-          "settings": {
-            "icon_emoji": "🎓",
-            "label": "EDUCATION",
-            "heading": "Learn fermentation craft",
-            "description": "Kefir is the gateway to lactic-acid fermentation. Learn to read your culture, control flavour, and build intuition."
-          }
-        }
-      },
-      "block_order": [
-        "bc-1",
-        "bc-2",
-        "bc-3"
-      ]
-    },
-    "who": {
-      "type": "gb-who-yes-no-v2",
-      "settings": {
-        "eyebrow": "WHO IS THIS FOR",
-        "heading": "IS THIS",
-        "heading_em": "RIGHT FOR YOU?",
-        "yes_label": "PERFECT FOR",
-        "yes_heading": "Great fit if you…",
-        "yes_bullets": "Want consistent, high-strain kefir at home\nLove DIY and reading what your culture is doing\nAre comfortable with a 5-min daily routine\nWant to lower your probiotic supplement spend\nEnjoy gifting / sharing extra grains as they multiply",
-        "no_label": "MAYBE NOT FOR",
-        "no_heading": "Skip this if you…",
-        "no_bullets": "Can't drink dairy (try our water-kefir grains instead)\nWant grab-and-go probiotics with no daily commitment\nTravel for 4+ weeks without a kefir-sitter\nAren't comfortable handling living cultures\nWant a sweet, smooth drink (kefir is tangy and slightly fizzy)"
-      }
-    },
-    "care": {
-      "type": "gb-card-grid-v2",
-      "settings": {
-        "eyebrow": "CARE & MAINTENANCE",
-        "heading": "KEEP IT",
-        "heading_em": "ALIVE.",
-        "columns": "4"
-      },
-      "blocks": {
-        "cc-1": {
-          "type": "card",
-          "settings": {
-            "icon_emoji": "🥶",
-            "label": "PAUSE",
-            "heading": "Fridge break: 14 days",
-            "description": "Need to skip a few days? Cover grains in fresh milk and refrigerate. They go dormant. Resume normal batches when ready."
-          }
-        },
-        "cc-2": {
-          "type": "card",
-          "settings": {
-            "icon_emoji": "🚫",
-            "label": "NO METAL",
-            "heading": "Plastic, glass, wood only",
-            "description": "Metal utensils and containers damage the grains over time. Always use plastic strainers and glass jars."
-          }
-        },
-        "cc-3": {
-          "type": "card",
-          "settings": {
-            "icon_emoji": "💧",
-            "label": "WATER",
-            "heading": "Filtered, never chlorinated",
-            "description": "If you ever need to rinse the grains (rare), use filtered water. Tap water chlorine kills the culture."
-          }
-        },
-        "cc-4": {
-          "type": "card",
-          "settings": {
-            "icon_emoji": "🌬️",
-            "label": "BREATHE",
-            "heading": "Cloth cover, not airtight",
-            "description": "Kefir grains need oxygen. Cover the jar with breathable cloth + rubber band. Airtight lids cause off-flavours."
-          }
-        }
-      },
-      "block_order": [
-        "cc-1",
-        "cc-2",
-        "cc-3",
-        "cc-4"
-      ]
-    },
-    "troubleshooting": {
-      "type": "leo-faq",
-      "settings": {
-        "faq_eyebrow": "TROUBLESHOOTING",
-        "faq_heading": "WHEN THINGS",
-        "faq_heading_em": "GO SIDEWAYS."
-      },
-      "blocks": {
-        "tb-1": {
-          "type": "faq",
-          "settings": {
-            "question": "It smells off — should I throw it out?",
-            "answer": "<p>Healthy kefir smells tangy, yeasty, slightly cheesy. Bad smells are: vomit-like, rotten egg, or strong alcohol. If those, dump that batch and try once more with fresh milk and a thoroughly cleaned jar. If still bad after batch 2, contact us for a replacement.</p>"
-          }
-        },
-        "tb-2": {
-          "type": "faq",
-          "settings": {
-            "question": "The kefir separated into curds and whey",
-            "answer": "<p>You over-fermented (too long or too warm). Stir it back together; it's still safe to drink. Next batch, ferment 4–6 hours less or move the jar somewhere cooler.</p>"
-          }
-        },
-        "tb-3": {
-          "type": "faq",
-          "settings": {
-            "question": "Fermentation is taking too long (>30 hours)",
-            "answer": "<p>Two common causes: (1) your kitchen is too cold (under 20°C) — move grains to a warmer spot; (2) the grain-to-milk ratio is too low — use less milk per spoon of grains.</p>"
-          }
-        },
-        "tb-4": {
-          "type": "faq",
-          "settings": {
-            "question": "I see fuzzy mold on the surface",
-            "answer": "<p>Discard the batch and the grains. Mold (any color other than the natural cream/white of the grains themselves) means contamination. Contact us for a replacement starter — we ship within 2 working days.</p>"
-          }
-        },
-        "tb-5": {
-          "type": "faq",
-          "settings": {
-            "question": "I'm going on vacation. What do I do with my grains?",
-            "answer": "<p>Up to 14 days: cover grains in fresh milk and refrigerate. Up to 6 months: freeze grains in milk in an airtight container. To revive frozen grains, thaw in fridge for 24h, then run 2–3 normal batches at room temperature.</p>"
-          }
-        }
-      },
-      "block_order": [
-        "tb-1",
-        "tb-2",
-        "tb-3",
-        "tb-4",
-        "tb-5"
-      ]
-    },
     "ugc": {
       "type": "leo-ugc",
       "settings": {
@@ -485,13 +285,6 @@
         "ugc-2",
         "ugc-3"
       ]
-    },
-    "cross": {
-      "type": "leo-cross",
-      "settings": {
-        "cross_eyebrow": "TOOLS & COMPANIONS",
-        "cross_heading": "ROUND OUT YOUR FERMENT KIT"
-      }
     },
     "faq": {
       "type": "leo-faq",
@@ -552,106 +345,16 @@
         "judgeme_heading": "VERIFIED",
         "judgeme_heading_em": "REVIEWS"
       }
-    },
-    "sticky-atc": {
-      "type": "leo-sticky-atc",
-      "settings": {
-        "sticky_show": true
-      }
-    },
-    "outcomes": {
-      "type": "leo-first-30",
-      "settings": {
-        "f30_eyebrow": "EXPECT THIS",
-        "f30_h": "Your yield,",
-        "f30_h_em": "measured.",
-        "f30_h_tail": "",
-        "f30_intro": "How much culture you get, what to expect from each batch — populated from product metafields when set.",
-        "f30_stats_line": "",
-        "f30_disclaimer": ""
-      }
-    },
-    "science": {
-      "type": "leo-science",
-      "settings": {
-        "sci_eyebrow": "THE SCIENCE",
-        "sci_h": "What live cultures",
-        "sci_h_em": "actually do.",
-        "sci_stat_eyebrow": "OBSERVED",
-        "sci_stat1_num": "",
-        "sci_stat1_unit": "",
-        "sci_stat1_h": "",
-        "sci_stat1_d": "",
-        "sci_stat2_num": "",
-        "sci_stat2_unit": "",
-        "sci_stat2_h": "",
-        "sci_stat2_d": "",
-        "sci_stat3_num": "",
-        "sci_stat3_unit": "",
-        "sci_stat3_h": "",
-        "sci_stat3_d": "",
-        "sci_stat4_num": "",
-        "sci_stat4_unit": "",
-        "sci_stat4_h": "",
-        "sci_stat4_d": "",
-        "sci_caption": "",
-        "sci_disclaimer": ""
-      }
-    },
-    "timeline": {
-      "type": "leo-stag",
-      "settings": {
-        "stag_eyebrow": "WEEK BY WEEK",
-        "stag_heading": "YOUR CULTURE,",
-        "stag_heading_em": "OVER 30 DAYS.",
-        "stag_note": "",
-        "refill_show": true,
-        "refill_h": "",
-        "refill_bullets": "",
-        "refill_cta_label": "",
-        "refill_cta_url": ""
-      }
-    },
-    "use-cases": {
-      "type": "leo-enjoy",
-      "settings": {
-        "enjoy_eyebrow": "HOW TO USE",
-        "enjoy_h": "Every way to",
-        "enjoy_h_em": "use",
-        "enjoy_h_tail": " your culture.",
-        "spoons_num": "",
-        "spoons_label": "",
-        "spoons_cap": ""
-      }
-    },
-    "reels": {
-      "type": "leo-reels",
-      "settings": {
-        "eyebrow": "REAL FERMENTERS",
-        "heading": "Watch the",
-        "heading_em": "culture come alive."
-      }
     }
   },
   "order": [
     "hero",
+    "trust-row",
+    "how",
     "why",
     "comparison",
-    "how",
-    "outcomes",
-    "science",
-    "expect",
-    "benefits",
-    "timeline",
-    "use-cases",
-    "who",
-    "care",
-    "reels",
-    "troubleshooting",
     "ugc",
-    "cross",
     "faq",
-    "judgeme",
-    "sticky-atc"
+    "judgeme"
   ]
 }
