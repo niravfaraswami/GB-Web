@@ -192,6 +192,7 @@
   padding: 18px 0;
   border-bottom: 1px solid var(--gbcd-border-soft);
   position: relative;
+  align-items: start;
 }
 #gb-cart-drawer .gbcd-item:last-child { border-bottom: none; }
 #gb-cart-drawer .gbcd-item-img {
@@ -258,12 +259,18 @@
 }
 #gb-cart-drawer .gbcd-item-compare { color: var(--gbcd-text-soft); text-decoration: line-through; font-size: 12px; margin-left: 6px; font-weight: 400; }
 #gb-cart-drawer .gbcd-item-remove {
-  position: absolute;
-  top: 16px; right: 0;
+  /* Sits in the row's 3rd grid column (auto width). Was previously
+     position: absolute; top: 16px; right: 0 — that overlapped the
+     title in column 2 because the absolute element wasn't reserving
+     any layout space. Now the title's column (1fr) shrinks to leave
+     room for Remove, and long titles wrap to a second line cleanly. */
+  align-self: start;
+  margin-top: 2px;
   font-size: 11px;
   letter-spacing: 0.04em;
   color: var(--gbcd-text-soft);
   padding: 4px;
+  white-space: nowrap;
 }
 #gb-cart-drawer .gbcd-item-remove:hover { color: #B33A2A; }
 #gb-cart-drawer .gbcd-item-gift {
