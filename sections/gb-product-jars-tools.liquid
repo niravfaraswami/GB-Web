@@ -10,7 +10,6 @@
   # No more parallel gutbasket.tools.* duplicates.
   assign category_label = cm.category_label | default: section.settings.default_category_label | default: 'TOOL'
   assign tagline        = cm.hero_tagline   | default: section.settings.default_tagline | default: p.description | strip_html | truncatewords: 28
-  assign bought_today   = cm.bought_today   | default: section.settings.default_bought_today
 
   assign features_h1    = cm.features_h1    | default: section.settings.features_h1    | default: 'Built for fermentation.'
   assign features_intro = cm.features_intro | default: section.settings.features_intro | default: 'Most kitchen jars weren’t designed for fermentation. This one is.'
@@ -336,9 +335,7 @@
           {%- endif -%}
 
           <div class="activity-row">
-            {%- if bought_today != blank -%}
-              <div class="item"><span class="dot"></span><span><strong>{{ bought_today }}</strong> people bought this today</span></div>
-            {%- endif -%}
+            {%- render 'gb-bought-today' -%}
             {%- for blk in section.blocks -%}
               {%- if blk.type == 'activity' -%}
                 <div class="item" {{ blk.shopify_attributes }}><span>{{ blk.settings.icon }}</span><span>{{ blk.settings.text }}</span></div>

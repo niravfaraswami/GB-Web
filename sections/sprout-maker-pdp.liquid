@@ -33,7 +33,6 @@
   assign activity = p.metafields.custom.activity_items.value
   assign benefits = p.metafields.custom.benefits_items.value
   assign cross_sell_products = p.metafields.custom.cross_sell_products.value
-  assign bought_today = p.metafields.custom.bought_today
   assign days_subtitle = p.metafields.custom.days_subtitle
   assign days_to_ferment = p.metafields.custom.days_to_ferment
 
@@ -147,22 +146,18 @@ All product custom metafields with non-empty values:
             </div>
           {%- endif -%}
 
-          {%- if bought_today != blank or days_to_ferment != blank or activity != blank -%}
-            <div class="activity-row">
-              {%- if bought_today != blank and bought_today > 0 -%}
-                <div class="item"><span class="dot"></span><span><strong>{{ bought_today }}</strong> people bought this today</span></div>
-              {%- endif -%}
-              {%- if days_to_ferment != blank -%}
-                <div class="item"><span>⚡</span><span>{{ days_subtitle | default: 'Sprouts ready in' }} <strong>{{ days_to_ferment }} days</strong></span></div>
-              {%- endif -%}
-              {%- if activity != blank -%}
-                {%- for item in activity -%}
-                  {%- assign parts = item | split: '|' -%}
-                  <div class="item"><span>{{ parts[0] }}</span><span>{{ parts[1] }}</span></div>
-                {%- endfor -%}
-              {%- endif -%}
-            </div>
-          {%- endif -%}
+          <div class="activity-row">
+            {%- render 'gb-bought-today' -%}
+            {%- if days_to_ferment != blank -%}
+              <div class="item"><span>⚡</span><span>{{ days_subtitle | default: 'Sprouts ready in' }} <strong>{{ days_to_ferment }} days</strong></span></div>
+            {%- endif -%}
+            {%- if activity != blank -%}
+              {%- for item in activity -%}
+                {%- assign parts = item | split: '|' -%}
+                <div class="item"><span>{{ parts[0] }}</span><span>{{ parts[1] }}</span></div>
+              {%- endfor -%}
+            {%- endif -%}
+          </div>
 
           {%- if benefits != blank -%}
             <div class="benefits-block">
