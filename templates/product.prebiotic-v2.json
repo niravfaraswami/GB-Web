@@ -79,8 +79,11 @@
       ],
       "settings": {
         "show_breadcrumb": true,
+        "trust_1_icon": "shopify://shop_images/icon-sparkle.svg",
         "trust_1_text": "Lab-tested purity",
+        "trust_2_icon": "shopify://shop_images/prohibit.svg",
         "trust_2_text": "No fillers",
+        "trust_3_icon": "shopify://shop_images/gift.svg",
         "trust_3_text": "Free shipping over ₹499",
         "pad_top_d": 48,
         "pad_bot_d": 80,
