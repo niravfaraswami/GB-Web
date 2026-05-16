@@ -240,6 +240,26 @@
       nameEl.setAttribute('href', it.url || '#');
     }
 
+    // Variant title (e.g., "2 Kg", "Spicy"). Insert/update/remove as the
+    // optimistic preview reconciles with the server. Anchored after the
+    // product name so the DOM ordering matches buildLineNode output.
+    var variantEl = node.querySelector('.gbcd-item-variant');
+    var wantVariant = it.variant_title && it.variant_title !== 'Default Title';
+    if (wantVariant) {
+      if (!variantEl) {
+        if (nameEl && nameEl.parentNode) {
+          variantEl = document.createElement('div');
+          variantEl.className = 'gbcd-item-variant';
+          variantEl.textContent = it.variant_title;
+          nameEl.parentNode.insertBefore(variantEl, nameEl.nextSibling);
+        }
+      } else if (variantEl.textContent !== it.variant_title) {
+        variantEl.textContent = it.variant_title;
+      }
+    } else if (variantEl) {
+      variantEl.remove();
+    }
+
     // Image: handle three transitions
     //   - no img → has img    (optimistic preview missed image, real cart has one) → inject <img>
     //   - has img → has img   (URL changed) → swap src
@@ -784,7 +804,15 @@
     if (btn) { btn.setAttribute('disabled', 'disabled'); }
 
     // Open the drawer immediately and inject an optimistic preview row.
-    var variantInput = form.querySelector('[name="id"]');
+    // Read the SELECTED variant — :checked first, then hidden input.
+    // Otherwise form.querySelector('[name="id"]') returns the first
+    // radio in DOM order (typically the default variant) instead of the
+    // one the user actually chose. The form submission itself sends the
+    // right variant via FormData, but the preview ends up showing the
+    // wrong row that then gets replaced when the server response lands.
+    var variantInput = form.querySelector('input[type="radio"][name="id"]:checked') ||
+                       form.querySelector('input[type="hidden"][name="id"]') ||
+                       form.querySelector('[name="id"]');
     var variantId = variantInput ? parseInt(variantInput.value, 10) : null;
     if (variantId) {
       open();
@@ -809,6 +837,28 @@
       if (!preview.image) {
         var imgEl = document.querySelector('.gallery-main-img, .gallery-main img, .product__media img, .product-media img, .product-gallery img, [data-product-featured-image]');
         if (imgEl && imgEl.getAttribute('src')) preview.image = imgEl.getAttribute('src');
+      }
+      // Override product-level defaults with VARIANT-specific data
+      // (label / image / price) read from the selected variant's
+      // <label class="variant"> in the picker. Without this, the row
+      // briefly shows the default variant's image+price before being
+      // overwritten by the server response — visible flicker.
+      var variantEl = form.querySelector('label.variant[data-variant-id="' + variantId + '"]') ||
+                      form.querySelector('[data-variant-id="' + variantId + '"]') ||
+                      (variantInput && variantInput.closest && variantInput.closest('label.variant'));
+      if (variantEl) {
+        var packEl = variantEl.querySelector('.variant-pack');
+        if (packEl) preview.variant_title = (packEl.textContent || '').trim();
+        var illImg = variantEl.querySelector('.variant-illustration img') ||
+                     variantEl.querySelector('img');
+        if (illImg && illImg.getAttribute('src')) preview.image = illImg.getAttribute('src');
+        // data-variant-price is the formatted string ("₹1,499.00").
+        // Strip non-numeric, parse to paise to match cart line items.
+        var priceStr = variantEl.getAttribute('data-variant-price');
+        if (priceStr) {
+          var n = parseFloat(priceStr.replace(/[^0-9.]/g, ''));
+          if (!isNaN(n)) preview.price = Math.round(n * 100);
+        }
       }
       if (window.GBCartDrawer && typeof window.GBCartDrawer.previewAdd === 'function') {
         window.GBCartDrawer.previewAdd(preview);
