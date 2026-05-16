@@ -5,7 +5,6 @@
   assign tagline       = p.metafields.custom.hero_tagline | default: 'Make authentic, gut-loving ferments at home.'
   assign rating        = p.metafields.custom.rating | default: 4.8
   assign review_count  = p.metafields.custom.review_count | default: 0
-  assign bought_today  = p.metafields.custom.bought_today
   assign capacity_label = p.metafields.custom.jar_capacity | default: p.metafields.custom.capacity
   assign size_chart    = p.metafields.custom.jar_size_chart_image | default: p.metafields.custom.size_chart_image
   assign companion     = p.metafields.custom.companion_size_product.value
@@ -78,11 +77,9 @@
           </div>
         {%- endif -%}
 
-        {%- if bought_today != blank and bought_today > 0 -%}
-          <div class="activity-row">
-            <div class="item"><span class="dot"></span><span><strong>{{ bought_today }}</strong> people bought this today</span></div>
-          </div>
-        {%- endif -%}
+        <div class="activity-row">
+          {%- render 'gb-bought-today' -%}
+        </div>
 
         {%- comment -%}
           Benefits — read from two parallel metafields per the spec:
