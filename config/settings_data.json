@@ -113,14 +113,14 @@
           "tier_3_code": "",
           "addons_title": "Frequently added",
           "universal_addons_collection": "",
-          "upsell_product": "",
+          "upsell_product": "kanji-supplies-value-pack",
           "upsell_eyebrow": "COMPLETE THE SET",
           "upsell_headline": "Bundle savings unlocked",
           "empty_emoji": "🛒",
           "empty_heading": "Your cart is empty",
           "empty_subtitle": "Start with one of our bestsellers — small kits, big change.",
           "empty_eyebrow": "Top sellers",
-          "empty_collection": "",
+          "empty_collection": "fermentation-kits",
           "subtotal_label": "Subtotal",
           "checkout_label": "Checkout · Secure"
         }

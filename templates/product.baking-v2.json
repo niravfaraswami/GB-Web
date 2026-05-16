@@ -6,21 +6,11 @@
  * or related systems. Please exercise caution as any changes
  * made to this file may be overwritten.
  * ------------------------------------------------------------
- * Re-sync trigger 2026-05-13 after schema hotfix (PRs #74 + #75).
  */
 {
   "sections": {
     "hero": {
       "type": "leo-hero",
-      "settings": {
-        "show_breadcrumb": true,
-        "trust_1_icon": "shopify://shop_images/package.svg",
-        "trust_1_text": "Vacuum-sealed",
-        "trust_2_icon": "shopify://shop_images/icon-sparkle.svg",
-        "trust_2_text": "Lab-tested",
-        "trust_3_icon": "shopify://shop_images/gift.svg",
-        "trust_3_text": "Free shipping over ₹499"
-      },
       "blocks": {
         "hb-1": {
           "type": "hero_benefit",
@@ -54,8 +44,8 @@
           "type": "hero_accordion_tab",
           "settings": {
             "label": "Description",
-            "default_open": true,
-            "body": "<p>Active dry baker's yeast, sourced direct from Salutaguse, Estonia — one of the world's most consistent yeast producers. 120g vacuum-sealed pouch keeps the live cultures dormant until you bloom them. One pack rises about 30 standard loaves.</p><p>Pure Saccharomyces cerevisiae. Nothing else. No emulsifiers, no anti-caking agents, no improvers.</p>"
+            "body": "<p>Active dry baker's yeast, sourced direct from Salutaguse, Estonia — one of the world's most consistent yeast producers. 120g vacuum-sealed pouch keeps the live cultures dormant until you bloom them. One pack rises about 30 standard loaves.</p><p>Pure Saccharomyces cerevisiae. Nothing else. No emulsifiers, no anti-caking agents, no improvers.</p>",
+            "default_open": true
           }
         },
         "ha-2": {
@@ -81,16 +71,19 @@
         "ha-1",
         "ha-2",
         "ha-3"
-      ]
+      ],
+      "settings": {
+        "show_breadcrumb": true,
+        "trust_1_icon": "shopify://shop_images/package.svg",
+        "trust_1_text": "Vacuum-sealed",
+        "trust_2_icon": "shopify://shop_images/icon-sparkle.svg",
+        "trust_2_text": "Lab-tested",
+        "trust_3_icon": "shopify://shop_images/gift.svg",
+        "trust_3_text": "Free shipping over ₹499"
+      }
     },
     "features": {
       "type": "gb-card-grid-v2",
-      "settings": {
-        "eyebrow": "WHY THIS YEAST",
-        "heading": "BUILT FOR",
-        "heading_em": "PROFESSIONAL BAKES.",
-        "columns": "4"
-      },
       "blocks": {
         "fc-1": {
           "type": "card",
@@ -134,19 +127,16 @@
         "fc-2",
         "fc-3",
         "fc-4"
-      ]
+      ],
+      "settings": {
+        "eyebrow": "WHY THIS YEAST",
+        "heading": "BUILT FOR",
+        "heading_em": "PROFESSIONAL BAKES.",
+        "columns": "4"
+      }
     },
     "comparison": {
       "type": "gb-comparison-v2",
-      "settings": {
-        "eyebrow": "VS GROCERY YEAST",
-        "heading": "WHY DIRECT-SOURCED",
-        "heading_em": "WINS.",
-        "intro": "Most grocery yeast travels through 3–5 distributors before reaching the shelf. We ship one stop from the producer.",
-        "col_count": "2",
-        "col_kit_label": "GutBasket",
-        "col_2_label": "Repacked Yeast"
-      },
       "blocks": {
         "cr-1": {
           "type": "cmp_row",
@@ -211,15 +201,18 @@
         "cr-4",
         "cr-5",
         "cr-6"
-      ]
+      ],
+      "settings": {
+        "eyebrow": "VS GROCERY YEAST",
+        "heading": "WHY DIRECT-SOURCED",
+        "heading_em": "WINS.",
+        "col_count": "2",
+        "col_kit_label": "GutBasket",
+        "col_2_label": "Repacked Yeast"
+      }
     },
     "how-to-make": {
       "type": "leo-how-to-make",
-      "settings": {
-        "how_eyebrow": "HOW TO USE",
-        "how_heading": "4 STEPS TO",
-        "how_heading_em": "FRESH BREAD."
-      },
       "blocks": {
         "step-1": {
           "type": "step",
@@ -255,7 +248,12 @@
         "step-2",
         "step-3",
         "step-4"
-      ]
+      ],
+      "settings": {
+        "how_eyebrow": "HOW TO USE",
+        "how_heading": "4 STEPS TO",
+        "how_heading_em": "FRESH BREAD."
+      }
     },
     "includes": {
       "type": "gb-includes-v2",
@@ -275,11 +273,6 @@
     },
     "ugc": {
       "type": "leo-ugc",
-      "settings": {
-        "eyebrow": "REAL BAKERS",
-        "heading": "BAKERS WHO",
-        "heading_em": "TRUST THIS YEAST."
-      },
       "blocks": {
         "ugc-1": {
           "type": "ugc_review",
@@ -310,15 +303,15 @@
         "ugc-1",
         "ugc-2",
         "ugc-3"
-      ]
+      ],
+      "settings": {
+        "eyebrow": "REAL BAKERS",
+        "heading": "BAKERS WHO",
+        "heading_em": "TRUST THIS YEAST."
+      }
     },
     "faq": {
       "type": "leo-faq",
-      "settings": {
-        "faq_eyebrow": "QUESTIONS?",
-        "faq_heading": "COMMON",
-        "faq_heading_em": "QUESTIONS"
-      },
       "blocks": {
         "faq-1": {
           "type": "faq",
@@ -370,7 +363,12 @@
         "faq-4",
         "faq-5",
         "faq-6"
-      ]
+      ],
+      "settings": {
+        "faq_eyebrow": "QUESTIONS?",
+        "faq_heading": "COMMON",
+        "faq_heading_em": "QUESTIONS"
+      }
     },
     "cross": {
       "type": "leo-cross",
