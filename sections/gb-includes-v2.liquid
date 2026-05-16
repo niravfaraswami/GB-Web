@@ -2,13 +2,32 @@
 
 {%- liquid
   assign p = product
-  assign mf_help_note = p.metafields.custom.help_note
-  assign mf_box_note = p.metafields.custom.box_note
-  assign left_note = mf_box_note | default: section.settings.left_note
-  assign right_note = mf_help_note | default: section.settings.right_note
+
+  # Per-product metafield overrides win over section settings.
+  # Mirrors the box_note / help_note pattern already wired below.
+  # Bullets metafields are multi_line_text_field — the existing
+  # newline_to_br | split: '<br />' loop further down handles them
+  # identically to the section setting.
+  assign mf_box_pill     = p.metafields.custom.box_pill
+  assign mf_box_heading  = p.metafields.custom.box_heading
+  assign mf_box_bullets  = p.metafields.custom.box_bullets
+  assign mf_box_note     = p.metafields.custom.box_note
+  assign mf_help_pill    = p.metafields.custom.help_pill
+  assign mf_help_heading = p.metafields.custom.help_heading
+  assign mf_help_bullets = p.metafields.custom.help_bullets
+  assign mf_help_note    = p.metafields.custom.help_note
+
+  assign left_pill     = mf_box_pill     | default: section.settings.left_pill
+  assign left_heading  = mf_box_heading  | default: section.settings.left_heading
+  assign left_bullets  = mf_box_bullets  | default: section.settings.left_bullets
+  assign left_note     = mf_box_note     | default: section.settings.left_note
+  assign right_pill    = mf_help_pill    | default: section.settings.right_pill
+  assign right_heading = mf_help_heading | default: section.settings.right_heading
+  assign right_bullets = mf_help_bullets | default: section.settings.right_bullets
+  assign right_note    = mf_help_note    | default: section.settings.right_note
 -%}
 
-{%- if section.settings.left_heading != blank or section.settings.right_heading != blank or left_note != blank or right_note != blank -%}
+{%- if left_heading != blank or right_heading != blank or left_note != blank or right_note != blank or left_bullets != blank or right_bullets != blank -%}
   <section class="gb-includes-section ferment-pdp-leo" {%- render 'leo_kit_attrs' -%}>
     <div class="container">
       <div class="section-header centered">
@@ -18,22 +37,22 @@
 
       <div class="gb-includes-grid">
         <div class="gb-includes-block gb-includes-yes">
-          {%- if section.settings.left_pill != blank -%}<div class="gb-includes-pill">{{ section.settings.left_pill }}</div>{%- endif -%}
-          {%- if section.settings.left_heading != blank -%}<div class="gb-includes-h">{{ section.settings.left_heading }}</div>{%- endif -%}
-          {%- if section.settings.left_bullets != blank -%}
+          {%- if left_pill != blank -%}<div class="gb-includes-pill">{{ left_pill }}</div>{%- endif -%}
+          {%- if left_heading != blank -%}<div class="gb-includes-h">{{ left_heading }}</div>{%- endif -%}
+          {%- if left_bullets != blank -%}
             <ul class="gb-includes-list">
-              {%- assign lines = section.settings.left_bullets | newline_to_br | split: '<br />' -%}
+              {%- assign lines = left_bullets | newline_to_br | split: '<br />' -%}
               {%- for line in lines -%}{%- assign t = line | strip -%}{%- if t != blank -%}<li>{{ t }}</li>{%- endif -%}{%- endfor -%}
             </ul>
           {%- endif -%}
           {%- if left_note != blank -%}<div class="gb-includes-note">{{ left_note }}</div>{%- endif -%}
         </div>
         <div class="gb-includes-block gb-includes-need">
-          {%- if section.settings.right_pill != blank -%}<div class="gb-includes-pill">{{ section.settings.right_pill }}</div>{%- endif -%}
-          {%- if section.settings.right_heading != blank -%}<div class="gb-includes-h">{{ section.settings.right_heading }}</div>{%- endif -%}
-          {%- if section.settings.right_bullets != blank -%}
+          {%- if right_pill != blank -%}<div class="gb-includes-pill">{{ right_pill }}</div>{%- endif -%}
+          {%- if right_heading != blank -%}<div class="gb-includes-h">{{ right_heading }}</div>{%- endif -%}
+          {%- if right_bullets != blank -%}
             <ul class="gb-includes-list">
-              {%- assign lines = section.settings.right_bullets | newline_to_br | split: '<br />' -%}
+              {%- assign lines = right_bullets | newline_to_br | split: '<br />' -%}
               {%- for line in lines -%}{%- assign t = line | strip -%}{%- if t != blank -%}<li>{{ t }}</li>{%- endif -%}{%- endfor -%}
             </ul>
           {%- endif -%}
