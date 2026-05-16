@@ -643,6 +643,18 @@
   .gb-cp-features-grid { grid-template-columns: 1fr; }
   .gb-cp-certs-grid { grid-template-columns: repeat(2, 1fr); }
   .gb-cp-cta-card { grid-template-columns: 1fr; padding: 28px; gap: 18px; }
+  /* Long button labels were overflowing the card on narrow viewports
+     because .gb-cp-cta-btn was display:inline-block + white-space:
+     nowrap. Cap the button to the card's content width and allow text
+     to wrap so it stays inside the rounded card no matter the label. */
+  .gb-cp-cta-btn {
+    display: block;
+    max-width: 100%;
+    white-space: normal;
+    text-align: center;
+    line-height: 1.3;
+    padding: 14px 20px;
+  }
   .gb-cp-contact-card { grid-template-columns: 1fr; text-align: center; padding: 22px; }
   .gb-cp-contact-icon { margin: 0 auto; }
   .gb-cp-text--left .gb-cp-text-inner,

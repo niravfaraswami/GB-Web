@@ -70,6 +70,17 @@
   }
 }
 
+/* Trim the top of the hero so the breadcrumb sits close to the
+   fixed header instead of leaving 80px of empty space above it.
+   Wins over the shared template padding rule above via specificity
+   (same selector, declared later in the source) and an !important
+   to beat any per-product --pad-top-d override that may be set
+   higher in the leo_kit_attrs inline style. */
+[data-template="leo"].pdp-hero { padding-top: 16px !important; }
+@media (max-width: 768px) {
+  [data-template="leo"].pdp-hero { padding-top: 8px !important; }
+}
+
 /* ============== STICKY ATC BAR ============== */
 .sticky-atc {
   position: fixed; left: 50%; bottom: 18px;
@@ -2964,8 +2975,8 @@
   flex-wrap: wrap;
   text-align: left;
 }
-[data-template="leo"].pdp-hero .variant-price > span:first-child { display: inline; }
-[data-template="leo"].pdp-hero .variant-compare { margin-left: 0; }
+[data-template="leo"].pdp-hero .variant-price > span:first-child { display: inline; white-space: nowrap; }
+[data-template="leo"].pdp-hero .variant-compare { margin-left: 0; white-space: nowrap; }
 [data-template="leo"].pdp-hero .variant-save { text-align: left; align-self: stretch; }
 [data-template="leo"].pdp-hero .variant-save { margin-top: 4px; font-size: 11px; }
 

@@ -49,7 +49,7 @@
 [data-kit="fermentation"] .section-header p { font-size: 16px; color: var(--gb-text-muted); margin-top: 16px; line-height: 1.6; }
 
 /* ============== HERO ============== */
-.pdp-hero { background: var(--gb-white); padding: 48px 0 80px; }
+.pdp-hero { background: var(--gb-white); padding: 16px 0 80px; }
 .pdp-hero .breadcrumb { padding: 16px 0; font-size: 13px; color: var(--gb-text-muted); border-bottom: 1px solid var(--gb-border-soft); }
 .pdp-hero .breadcrumb a:hover { color: var(--kit-color); }
 
@@ -196,8 +196,8 @@
 .pdp-hero .vr-label { font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 700; letter-spacing: 0.12em; color: var(--kit-color); text-transform: uppercase; }
 .pdp-hero .vr-text { font-size: 12px; color: var(--gb-text); line-height: 1.3; }
 .pdp-hero .variant-price { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 16px; color: var(--kit-color); }
-.pdp-hero .variant-price > span:first-child { display: block; }
-.pdp-hero .variant-compare { font-size: 12px; color: var(--gb-text-soft); text-decoration: line-through; margin-left: 0; display: inline-block; font-weight: 400; }
+.pdp-hero .variant-price > span:first-child { display: block; white-space: nowrap; }
+.pdp-hero .variant-compare { font-size: 12px; color: var(--gb-text-soft); text-decoration: line-through; margin-left: 0; display: inline-block; font-weight: 400; white-space: nowrap; }
 .pdp-hero .variant-save { display: block; font-size: 11px; color: var(--gb-ink); font-weight: 600; margin-top: 4px; }
 .pdp-hero .variant-help-note { margin: 14px 0 0; padding: 12px 16px; background: var(--gb-cream); border-radius: 10px; font-size: 12.5px; color: var(--gb-text-muted); line-height: 1.45; display: flex; align-items: center; justify-content: space-between; gap: 14px; }
 .pdp-hero .variant-help-note strong { color: var(--kit-color-dark); font-weight: 700; }
@@ -457,7 +457,7 @@
   [data-kit="fermentation"] h2 { font-size: 28px; }
   [data-kit="fermentation"] .container { padding: 0 18px; }
 
-  .pdp-hero { padding: 24px 0 56px; }
+  .pdp-hero { padding: 8px 0 56px; }
   .pdp-hero .product-name { font-size: 28px; }
   .pdp-hero .product-tagline { font-size: 14px; }
   .pdp-hero .hero-grid { grid-template-columns: 1fr; gap: 28px; }
@@ -471,8 +471,8 @@
   .pdp-hero .variant-radio { width: 13px; height: 13px; top: 7px; right: 7px; }
   .pdp-hero .vr-text { font-size: 11px; line-height: 1.3; }
   .pdp-hero .variant-illustration { height: 50px; }
-  .pdp-hero .variant-price { font-size: 14px; }
-  .pdp-hero .variant-compare { font-size: 11px; }
+  .pdp-hero .variant-price { font-size: 13px; }
+  .pdp-hero .variant-compare { font-size: 10.5px; }
 
   .trust-row-section { padding: 24px 0; }
   .tr-card { padding: 0 6px; }
