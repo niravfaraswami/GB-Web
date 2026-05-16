@@ -1,6 +1,10 @@
 /* ============================================================
-   GUTBASKET CART DRAWER · v1
+   GUTBASKET CART DRAWER · v2
    Vanilla JS · AJAX Cart API · scoped under window.GBCartDrawer
+   - Static brand colors throughout (no per-product kit cascade)
+   - Optimistic UI + version-guarded reconciliation preserved
+   - Animation-driven row removal preserved
+   - Form intercept (with variant-flicker fix) preserved
    ============================================================ */
 (function() {
   'use strict';
@@ -12,12 +16,27 @@
   var cfg = {};
   try { cfg = cfgEl ? JSON.parse(cfgEl.textContent) : {}; } catch (e) { cfg = {}; }
 
+  // Section-rendered Liquid defaults — read off the wrapper so JS renderers
+  // can produce strings without losing admin-driven copy. The wrapper
+  // never re-renders, so these are static for the lifetime of the page.
+  var staticCopy = {
+    addonsTitle: 'Frequently added',
+    emptyEmoji: '🧺',
+    emptyHeading: 'Your basket is empty.',
+    emptySubtitle: 'Start with what most first-timers pick — the kits below are our bestsellers.',
+    emptyEyebrow: 'Bestsellers',
+    subtotalLabel: 'Subtotal',
+    checkoutLabel: 'Checkout securely'
+  };
+
   var state = {
     cart: null,
     isOpen: false,
     lastUnlockedCount: 0,
     moneyFormat: cfg.money_format || '₹{{amount}}',
-    cartVersion: 0  // bumped on every local mutation or authoritative cart write; stale fetches check against this and bail.
+    cartVersion: 0,  // bumped on every local mutation or authoritative cart write; stale fetches check against this and bail.
+    discountCode: null,
+    discountOpen: false
   };
 
   function bumpVersion() { state.cartVersion++; }
@@ -88,9 +107,6 @@
 
   // ---------- Render ----------
   // Coalesce back-to-back render() calls into a single paint via rAF.
-  // Optimistic add → render, then a few ms later cart:update → render,
-  // then maybeManageFreeGift may trigger another. Without batching the
-  // user sees the drawer repaint two or three times in quick succession.
   var renderRAF = null;
   function scheduleRender() {
     if (renderRAF) return;
@@ -100,36 +116,45 @@
     });
   }
   function render() { scheduleRender(); }
+
   function renderNow() {
     var cart = state.cart;
     if (!cart) return;
     document.documentElement.style.setProperty('--gb-cart-count', cart.item_count);
 
-    root.querySelector('[data-gbcd-count]').textContent = cart.item_count;
-    root.querySelector('[data-gbcd-subtotal]').textContent = money(cart.total_price);
+    // Header count chip
+    var countLabel = root.querySelector('[data-gbcd-count-label]');
+    if (countLabel) {
+      countLabel.textContent = cart.item_count ?
+        '· ' + cart.item_count + ' item' + (cart.item_count > 1 ? 's' : '') : '';
+    }
 
-    var savings = 0;
-    cart.items.forEach(function(it) {
-      if (it.original_line_price > it.final_line_price) {
-        savings += (it.original_line_price - it.final_line_price);
-      }
-    });
-    var savedEl = root.querySelector('[data-gbcd-saved]');
-    if (savings > 0) { savedEl.style.display = ''; savedEl.textContent = 'You save ' + money(savings); }
-    else { savedEl.style.display = 'none'; }
+    var body = root.querySelector('[data-gbcd-body]');
+    var foot = root.querySelector('[data-gbcd-foot]');
+    if (!body || !foot) return;
+
+    if (cart.item_count === 0) {
+      body.innerHTML = renderEmpty();
+      foot.innerHTML = renderEmptyFoot();
+      return;
+    }
+
+    // Build the body sections. Items use keyed-diff so we have to
+    // build the section shell first, then patch line items in place.
+    body.innerHTML =
+      (cfg.show_progress ? renderProgress(cart) : '') +
+      '<div class="line-items" data-gbcd-items></div>' +
+      (cfg.show_upsell ? renderUpsell(cart) : '') +
+      (cfg.show_addons ? renderAddons(cart) : '') +
+      (cfg.show_discount ? renderDiscount() : '') +
+      renderDelivery() +
+      (cfg.show_trust ? renderTrustStrip() : '');
 
     renderItems(cart);
-    if (cfg.show_progress) renderProgress(cart);
-    if (cfg.show_addons) renderAddons(cart);
-    if (cfg.show_upsell) renderUpsell(cart);
-    applyKitColor(cart);
-
-    var isEmpty = cart.item_count === 0;
-    root.querySelector('[data-gbcd-content]').style.display = isEmpty ? 'none' : '';
-    root.querySelector('[data-gbcd-empty]').style.display = isEmpty ? '' : 'none';
-    root.querySelector('[data-gbcd-foot]').style.display = isEmpty ? 'none' : '';
+    foot.innerHTML = renderFooter(cart);
   }
 
+  // ---------- Items: keyed diff renderer (preserved) ----------
   function lineItemId(it) {
     var isGift = it.properties && (it.properties._gift === 'true' || it.properties._gift === true);
     return (isGift ? 'gift-' : 'var-') + it.variant_id;
@@ -137,39 +162,51 @@
 
   function lineItemHtml(it) {
     var compare = '';
-    if (it.original_price > it.final_price) {
-      compare = '<span class="gbcd-item-compare">' + money(it.original_price) + '</span>';
+    if (it.original_line_price > it.final_line_price) {
+      compare = '<span class="old">' + money(it.original_line_price) + '</span>';
     }
     var isGift = it.properties && (it.properties._gift === 'true' || it.properties._gift === true);
-    var giftBadge = isGift ? '<span class="gbcd-item-gift">🎁 Free Gift</span>' : '';
+    var giftBadge = isGift ? '<span class="line-item-gift">🎁 Free Gift</span>' : '';
     var variantLine = (it.variant_title && it.variant_title !== 'Default Title') ?
-      '<div class="gbcd-item-variant">' + escapeHtml(it.variant_title) + '</div>' : '';
+      '<div class="variant"><span>' + escapeHtml(it.variant_title) + '</span></div>' : '';
     var disableMinus = isGift || it.quantity <= 1;
     var disableAll = isGift;
+
+    var imgInner = it.image ?
+      '<img loading="lazy" src="' + escapeHtml(img(it.image, 200)) + '" alt="">' :
+      '🫙';
+
+    var eyebrow = it.product_type ?
+      '<div class="eyebrow">' + escapeHtml(it.product_type) + '</div>' : '';
+
     return '' +
-      '<div class="gbcd-item-img">' +
-        (it.image ? '<img loading="lazy" src="' + escapeHtml(img(it.image, 200)) + '" alt="">' : '🫙') +
-      '</div>' +
-      '<div class="gbcd-item-info">' +
-        (it.product_type ? '<div class="gbcd-item-eyebrow">' + escapeHtml(it.product_type) + '</div>' : '') +
-        '<a class="gbcd-item-name" href="' + escapeHtml(it.url) + '">' + escapeHtml(it.product_title) + '</a>' +
+      '<div class="line-item-img">' + imgInner + '</div>' +
+      '<div class="line-item-meta">' +
+        eyebrow +
+        '<a class="name" href="' + escapeHtml(it.url || '#') + '">' + escapeHtml(it.product_title) + '</a>' +
         variantLine +
         giftBadge +
-        '<div class="gbcd-item-row">' +
-          '<div class="gbcd-qty">' +
-            '<button type="button" data-gbcd-qty="' + (it.quantity - 1) + '" ' + (disableAll || disableMinus ? 'disabled' : '') + '>−</button>' +
-            '<span class="gbcd-qty-val">' + it.quantity + '</span>' +
-            '<button type="button" data-gbcd-qty="' + (it.quantity + 1) + '" ' + (disableAll ? 'disabled' : '') + '>+</button>' +
+        '<div class="line-item-row">' +
+          '<div class="qty-stepper">' +
+            '<button type="button" data-gbcd-qty="' + (it.quantity - 1) + '" aria-label="Decrease" ' + (disableAll || disableMinus ? 'disabled' : '') + '>−</button>' +
+            '<span class="qty">' + it.quantity + '</span>' +
+            '<button type="button" data-gbcd-qty="' + (it.quantity + 1) + '" aria-label="Increase" ' + (disableAll ? 'disabled' : '') + '>+</button>' +
           '</div>' +
-          '<div class="gbcd-item-price">' + money(it.final_line_price) + compare + '</div>' +
+          '<div class="line-item-price">' +
+            '<span class="now">' + money(it.final_line_price) + '</span>' +
+            compare +
+          '</div>' +
         '</div>' +
-      '</div>' +
-      (disableAll ? '' : '<button type="button" class="gbcd-item-remove" data-gbcd-remove>Remove</button>');
+        (disableAll ? '' :
+          '<div class="line-item-actions">' +
+            '<button type="button" class="remove-btn" data-gbcd-remove>✕ Remove</button>' +
+          '</div>') +
+      '</div>';
   }
 
   function buildLineNode(it) {
     var node = document.createElement('div');
-    node.className = 'gbcd-item';
+    node.className = 'line-item';
     node.setAttribute('data-line-id', lineItemId(it));
     node.setAttribute('data-line-key', it.key);
     if (it._pending) node.setAttribute('data-pending', '1');
@@ -178,24 +215,20 @@
   }
 
   // Update mutable fields in place — preserves the <img> element so the
-  // browser doesn't recreate it (and re-decode the image) on every render.
-  // Every assignment is guarded by an equality check so identical values
-  // don't trigger any DOM mutation, which kept causing visible reflows
-  // (optimistic→real swap normally has the same price/qty/name etc.).
+  // browser doesn't recreate it on every render. Every assignment is
+  // guarded so identical values don't trigger DOM mutations.
   function updateLineNode(node, it) {
     var isGift = it.properties && (it.properties._gift === 'true' || it.properties._gift === true);
     if (node.getAttribute('data-line-key') !== (it.key || '')) {
       node.setAttribute('data-line-key', it.key);
     }
-    // Pending flag is cleared once the server-side line key replaces the
-    // 'pending-…' placeholder. CSS uses [data-pending] for a subtle hint.
     if (it._pending) {
       if (node.getAttribute('data-pending') !== '1') node.setAttribute('data-pending', '1');
     } else if (node.hasAttribute('data-pending')) {
       node.removeAttribute('data-pending');
     }
 
-    var qtyVal = node.querySelector('.gbcd-qty-val');
+    var qtyVal = node.querySelector('.qty-stepper .qty');
     if (qtyVal && qtyVal.textContent !== String(it.quantity)) qtyVal.textContent = it.quantity;
 
     var qtyBtns = node.querySelectorAll('[data-gbcd-qty]');
@@ -222,17 +255,28 @@
       }
     }
 
-    var priceEl = node.querySelector('.gbcd-item-price');
-    if (priceEl) {
-      var compare = '';
-      if (it.original_price > it.final_price) {
-        compare = '<span class="gbcd-item-compare">' + money(it.original_price) + '</span>';
+    var priceWrap = node.querySelector('.line-item-price');
+    if (priceWrap) {
+      var nowEl = priceWrap.querySelector('.now');
+      var oldEl = priceWrap.querySelector('.old');
+      var nowText = money(it.final_line_price);
+      if (nowEl && nowEl.textContent !== nowText) nowEl.textContent = nowText;
+      if (it.original_line_price > it.final_line_price) {
+        var oldText = money(it.original_line_price);
+        if (!oldEl) {
+          var span = document.createElement('span');
+          span.className = 'old';
+          span.textContent = oldText;
+          priceWrap.appendChild(span);
+        } else if (oldEl.textContent !== oldText) {
+          oldEl.textContent = oldText;
+        }
+      } else if (oldEl) {
+        oldEl.remove();
       }
-      var nextPriceHtml = money(it.final_line_price) + compare;
-      if (priceEl.innerHTML !== nextPriceHtml) priceEl.innerHTML = nextPriceHtml;
     }
 
-    var nameEl = node.querySelector('.gbcd-item-name');
+    var nameEl = node.querySelector('.line-item-meta .name');
     if (nameEl && nameEl.textContent !== it.product_title) {
       nameEl.textContent = it.product_title;
     }
@@ -241,30 +285,27 @@
     }
 
     // Variant title (e.g., "2 Kg", "Spicy"). Insert/update/remove as the
-    // optimistic preview reconciles with the server. Anchored after the
-    // product name so the DOM ordering matches buildLineNode output.
-    var variantEl = node.querySelector('.gbcd-item-variant');
+    // optimistic preview reconciles with the server.
+    var variantEl = node.querySelector('.line-item-meta .variant');
     var wantVariant = it.variant_title && it.variant_title !== 'Default Title';
     if (wantVariant) {
       if (!variantEl) {
         if (nameEl && nameEl.parentNode) {
           variantEl = document.createElement('div');
-          variantEl.className = 'gbcd-item-variant';
-          variantEl.textContent = it.variant_title;
+          variantEl.className = 'variant';
+          variantEl.innerHTML = '<span>' + escapeHtml(it.variant_title) + '</span>';
           nameEl.parentNode.insertBefore(variantEl, nameEl.nextSibling);
         }
-      } else if (variantEl.textContent !== it.variant_title) {
-        variantEl.textContent = it.variant_title;
+      } else {
+        var inner = variantEl.querySelector('span');
+        if (inner && inner.textContent !== it.variant_title) inner.textContent = it.variant_title;
       }
     } else if (variantEl) {
       variantEl.remove();
     }
 
-    // Image: handle three transitions
-    //   - no img → has img    (optimistic preview missed image, real cart has one) → inject <img>
-    //   - has img → has img   (URL changed) → swap src
-    //   - has img → no img    (rare; e.g. removed) → replace with emoji fallback
-    var imgWrap = node.querySelector('.gbcd-item-img');
+    // Image transitions
+    var imgWrap = node.querySelector('.line-item-img');
     if (imgWrap) {
       var imgEl = imgWrap.querySelector('img');
       var newSrc = it.image ? img(it.image, 200) : '';
@@ -280,9 +321,6 @@
     }
   }
 
-  // Keyed diff render: match items by variant_id, reuse existing DOM
-  // nodes for kept items. Only the text fields (key/qty/price/name)
-  // change; the <img> element survives the optimistic→real swap.
   function renderItems(cart) {
     var host = root.querySelector('[data-gbcd-items]');
     if (!host) return;
@@ -302,11 +340,8 @@
       }
       return node;
     });
-    // Phase 1: mark departing items. The is-removing CSS animation
-    // collapses max-height + padding so neighbors reflow into the gap.
-    // Remove the node from the DOM on `animationend` (precise timing)
-    // with a 300ms setTimeout fallback for reduced-motion + background-
-    // tab throttling. Don't re-trigger on a node that's already mid-out.
+    // Phase 1: mark departing items. animationend fires schedule the
+    // actual DOM removal; setTimeout fallback for reduced-motion.
     Object.keys(existing).forEach(function(k) {
       var el = existing[k];
       if (el.dataset.removing === '1') return;
@@ -319,33 +354,20 @@
         el.removeEventListener('animationend', onAnimEnd);
         if (el.parentNode && el.dataset.removing === '1') el.remove();
       }
-      // Only act on the *out* animation. animationend fires for any
-      // animation on this element, so a stale gbcd-item-in (rare, but
-      // possible when a freshly-added optimistic node is immediately
-      // removed) would otherwise yank the node too early.
       function onAnimEnd(e) {
         if (e.animationName === 'gbcd-item-out') doRemove();
       }
       el.addEventListener('animationend', onAnimEnd);
-      // Fallback for prefers-reduced-motion (animation: none) and
-      // background-tab timer throttling.
       setTimeout(doRemove, 300);
     });
-    // Phase 2: cancel removal for any node that came back (qty bounced
-    // 1 → 0 → 1 in another tab; server resurrected a line, etc.).
+    // Phase 2: cancel removal for any node that came back.
     newNodes.forEach(function(node) {
       if (node.dataset.removing === '1') {
         node.dataset.removing = '';
         node.classList.remove('is-removing');
       }
     });
-    // Phase 3: reorder newNodes WITHOUT shuffling is-removing siblings.
-    // Build a "logical" sibling list that excludes departing rows, then
-    // insertBefore against that list. The previous implementation used
-    // host.children[idx] directly — but host.children still contained
-    // the is-removing nodes, so insertBefore around them shoved the
-    // departing row to the END of the list. The visible symptom was the
-    // removed row "jumping" before animating out (felt like it stuck).
+    // Phase 3: reorder live siblings only, skipping is-removing rows.
     var liveChildren = [];
     for (var i = 0; i < host.children.length; i++) {
       if (host.children[i].dataset.removing !== '1') liveChildren.push(host.children[i]);
@@ -359,47 +381,63 @@
     });
   }
 
+  // ---------- Progress ----------
   function renderProgress(cart) {
     var tiers = (cfg.tiers || []).slice().sort(function(a, b) { return a.threshold - b.threshold; });
-    if (tiers.length === 0) {
-      root.querySelector('[data-gbcd-progress]').style.display = 'none';
-      return;
-    }
-    root.querySelector('[data-gbcd-progress]').style.display = '';
+    if (tiers.length === 0) return '';
 
-    var totalCents = cart.total_price;
+    var totalCents = cart.total_price || 0;
     var subtotalInr = totalCents / 100;
     var maxThreshold = tiers[tiers.length - 1].threshold;
-    var pct = Math.min(100, (subtotalInr / maxThreshold) * 100);
-    root.querySelector('[data-gbcd-progress-fill]').style.width = pct + '%';
+    var fillPct = Math.min(100, (subtotalInr / maxThreshold) * 100);
 
     var unlockedCount = 0;
     var nextTier = null;
+    tiers.forEach(function(t) {
+      if (subtotalInr >= t.threshold) unlockedCount++;
+      else if (!nextTier) nextTier = t;
+    });
+
+    var headline = '';
+    if (!nextTier) {
+      headline = '<span class="all-done">🎉 All rewards unlocked!</span> Your basket is fully optimised.';
+    } else {
+      var remaining = Math.max(0, Math.ceil(nextTier.threshold - subtotalInr));
+      var lbl = escapeHtml(nextTier.label || 'next reward');
+      if (unlockedCount === 0) {
+        headline = 'Add <strong>₹' + remaining.toLocaleString('en-IN') + '</strong> more to unlock <strong>' + lbl + '</strong>';
+      } else {
+        headline = '🎉 Just <strong>₹' + remaining.toLocaleString('en-IN') + '</strong> more to unlock <strong>' + lbl + '</strong>';
+      }
+    }
+
     var pinsHtml = tiers.map(function(t, idx) {
+      var pct = (t.threshold / maxThreshold) * 100;
       var unlocked = subtotalInr >= t.threshold;
-      if (unlocked) unlockedCount++;
-      if (!unlocked && !nextTier) nextTier = t;
-      var justClass = '';
-      if (unlocked && idx >= state.lastUnlockedCount) justClass = ' just-unlocked';
-      return '<div class="gbcd-pin' + (unlocked ? ' unlocked' : '') + justClass + '">' +
-        '<span class="gbcd-pin-icon">' + escapeHtml(t.icon || '🎁') + '</span>' +
-        escapeHtml(t.label || ('₹' + t.threshold)) +
+      var justClass = (unlocked && idx >= state.lastUnlockedCount) ? ' just-unlocked' : '';
+      var icon = escapeHtml(t.icon || '🎁');
+      return '<div class="progress-tier' + (unlocked ? ' unlocked' : '') + justClass + '" style="left: ' + pct + '%;">' +
+        '<div class="tier-label">₹' + t.threshold +
+          '<span class="reward">' + icon + '</span>' +
+        '</div>' +
       '</div>';
     }).join('');
-    root.querySelector('[data-gbcd-progress-pins]').innerHTML = pinsHtml;
 
-    var msgEl = root.querySelector('[data-gbcd-progress-message]');
-    if (nextTier) {
-      var remain = Math.max(0, Math.ceil(nextTier.threshold - subtotalInr));
-      msgEl.innerHTML = 'Add <strong>₹' + remain.toLocaleString('en-IN') + '</strong> more for ' + escapeHtml(nextTier.label || 'next reward');
-    } else if (unlockedCount > 0) {
-      msgEl.innerHTML = '<strong>All rewards unlocked!</strong> 🎉';
-    } else {
-      msgEl.innerHTML = '';
-    }
     state.lastUnlockedCount = unlockedCount;
 
-    if (cfg.free_gift_enabled) maybeManageFreeGift(cart, tiers, subtotalInr);
+    if (cfg.free_gift_enabled) {
+      // Fire-and-forget; result lands via cart:update / setCart.
+      maybeManageFreeGift(cart, tiers, subtotalInr);
+    }
+
+    return '' +
+      '<section class="progress-section">' +
+        '<div class="progress-headline">' + headline + '</div>' +
+        '<div class="progress-track">' +
+          '<div class="progress-fill" style="width: ' + fillPct + '%;"></div>' +
+          pinsHtml +
+        '</div>' +
+      '</section>';
   }
 
   function maybeManageFreeGift(cart, tiers, subtotalInr) {
@@ -423,70 +461,248 @@
     });
   }
 
+  // ---------- Add-ons ----------
   function renderAddons(cart) {
-    var host = root.querySelector('[data-gbcd-addons]');
-    if (!host) return;
-    if (cart.item_count === 0) { host.style.display = 'none'; return; }
-
+    if (cart.item_count === 0) return '';
     var candidates = (cfg.addon_candidates || []).slice();
     var inCartIds = {};
     cart.items.forEach(function(it) { inCartIds[it.product_id] = true; });
     var filtered = candidates.filter(function(p) { return !inCartIds[p.id]; }).slice(0, 6);
+    if (filtered.length === 0) return '';
 
-    if (filtered.length === 0) { host.style.display = 'none'; return; }
-    host.style.display = '';
-    root.querySelector('[data-gbcd-addons-list]').innerHTML = filtered.map(function(p) {
+    var cards = filtered.map(function(p) {
+      var imgInner = p.image ?
+        '<img loading="lazy" src="' + escapeHtml(img(p.image, 300)) + '" alt="">' :
+        '🫙';
       return '' +
-        '<div class="gbcd-addon-card">' +
-          '<div class="gbcd-addon-img">' + (p.image ? '<img loading="lazy" src="' + escapeHtml(img(p.image, 300)) + '" alt="">' : '🫙') + '</div>' +
-          '<div class="gbcd-addon-name">' + escapeHtml(p.title) + '</div>' +
-          '<div class="gbcd-addon-price">' + money(p.price) + '</div>' +
-          '<button type="button" class="gbcd-addon-add" data-gbcd-addon="' + p.variant_id + '">Add</button>' +
+        '<div class="addon-card">' +
+          '<div class="addon-img">' + imgInner + '</div>' +
+          '<div class="addon-name">' + escapeHtml(p.title) + '</div>' +
+          '<div class="addon-price-row">' +
+            '<div class="addon-price">' + money(p.price) + '</div>' +
+            '<button type="button" class="addon-btn" data-gbcd-addon="' + p.variant_id + '" aria-label="Add ' + escapeHtml(p.title) + '">+</button>' +
+          '</div>' +
         '</div>';
     }).join('');
+
+    return '' +
+      '<section class="section-block bg-cream">' +
+        '<div class="section-heading">' +
+          '<span class="eyebrow">+ ' + escapeHtml(staticCopy.addonsTitle) + '</span>' +
+          '<span class="hint">scroll →</span>' +
+        '</div>' +
+        '<div class="addon-scroll">' + cards + '</div>' +
+      '</section>';
   }
 
+  // ---------- Upsell ----------
   function renderUpsell(cart) {
-    var host = root.querySelector('[data-gbcd-upsell]');
-    if (!host) return;
     var u = cfg.upsell;
-    if (!u || !u.variant_id || cart.item_count === 0) { host.style.display = 'none'; return; }
+    if (!u || !u.variant_id || cart.item_count === 0) return '';
     var inCart = cart.items.some(function(it) { return it.variant_id === u.variant_id; });
-    if (inCart) { host.style.display = 'none'; return; }
-    host.style.display = '';
-    host.innerHTML = '' +
-      '<div class="gbcd-upsell-img">' + (u.image ? '<img loading="lazy" src="' + escapeHtml(img(u.image, 200)) + '" alt="">' : '🎁') + '</div>' +
-      '<div>' +
-        '<div class="gbcd-upsell-eyebrow">' + escapeHtml(u.eyebrow || 'COMPLETE THE SET') + '</div>' +
-        '<div class="gbcd-upsell-h">' + escapeHtml(u.headline || u.title) + '</div>' +
-        '<button type="button" class="gbcd-upsell-cta" data-gbcd-upsell="' + u.variant_id + '">Add for ' + money(u.price) + '</button>' +
+    if (inCart) return '';
+
+    var savePart = '';
+    if (u.compare_at_price && u.compare_at_price > u.price) {
+      savePart = '<span class="save">vs ' + money(u.compare_at_price) + ' sep</span>';
+    }
+
+    var thumb = u.image ?
+      '<img loading="lazy" src="' + escapeHtml(img(u.image, 200)) + '" alt="">' :
+      '🎁';
+
+    return '' +
+      '<section class="upsell-card">' +
+        '<div class="upsell-thumb">' + thumb + '</div>' +
+        '<div class="upsell-meta">' +
+          '<div class="eyebrow">' + escapeHtml(u.eyebrow || 'COMPLETE THE SET') + '</div>' +
+          '<div class="name">' + escapeHtml(u.headline || u.title || '') + '</div>' +
+          '<div class="upsell-bottom">' +
+            '<div class="upsell-price">' + money(u.price) + savePart + '</div>' +
+            '<button type="button" class="upsell-add" data-gbcd-upsell="' + u.variant_id + '">Add →</button>' +
+          '</div>' +
+        '</div>' +
+      '</section>';
+  }
+
+  // ---------- Discount ----------
+  function renderDiscount() {
+    if (state.discountCode) {
+      return '' +
+        '<div class="discount-row">' +
+          '<div class="applied-discount">' +
+            '✓ ' + escapeHtml(state.discountCode) + ' QUEUED FOR CHECKOUT' +
+            '<span class="remove" data-gbcd-discount-clear title="Remove">✕</span>' +
+          '</div>' +
+        '</div>';
+    }
+    var openClass = state.discountOpen ? ' open' : '';
+    return '' +
+      '<div class="discount-row' + openClass + '" data-gbcd-discount-row>' +
+        '<button type="button" class="discount-toggle" data-gbcd-discount-toggle>' +
+          '<span>🎟 Have a discount code?</span>' +
+          '<span class="chev">▾</span>' +
+        '</button>' +
+        '<div class="discount-input-wrap">' +
+          '<input type="text" data-gbcd-discount-input placeholder="Enter code" aria-label="Discount code" />' +
+          '<button type="button" data-gbcd-discount-submit>Apply</button>' +
+        '</div>' +
+        '<div class="discount-msg" data-gbcd-discount-msg></div>' +
       '</div>';
   }
 
-  function applyKitColor(cart) {
-    if (!cart.items.length) return;
-    var last = cart.items[cart.items.length - 1];
-    var kc = last.properties && last.properties._kit_color;
-    // Try to find a kit color from the candidate list (server included it for products in cart)
-    if (!kc && cfg.kit_colors) {
-      var found = cfg.kit_colors[last.product_id];
-      if (found) kc = found;
+  // ---------- Delivery (static for v1) ----------
+  function renderDelivery() {
+    return '' +
+      '<div class="delivery-row">' +
+        '<div class="left">' +
+          '<span class="truck">🚚</span>' +
+          '<div class="text">' +
+            '<strong>Ships next working day</strong>' +
+            '<span class="sub">COD available · Free shipping over ₹999</span>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+  }
+
+  // ---------- Trust strip ----------
+  // Read trust strip blocks from a hidden seed in the section markup if
+  // present; otherwise default to the three brand defaults.
+  var trustItemsCache = null;
+  function getTrustItems() {
+    if (trustItemsCache) return trustItemsCache;
+    // The section renders blocks as visible markup in the old layout; the
+    // new layout dropped that. Look for a data hint, otherwise default.
+    var hint = root.querySelector('[data-gbcd-trust-items]');
+    var items = null;
+    if (hint) {
+      try { items = JSON.parse(hint.textContent); } catch (e) { items = null; }
     }
-    if (kc && /^#[0-9A-Fa-f]{3,8}$/.test(kc)) {
-      root.style.setProperty('--kit-color', kc);
-    } else {
-      root.style.removeProperty('--kit-color');
+    if (!items || !items.length) {
+      items = ['FSSAI Licensed', 'Secure Pay', 'Easy Returns'];
     }
+    trustItemsCache = items;
+    return items;
+  }
+  function renderTrustStrip() {
+    var items = getTrustItems();
+    var html = items.map(function(t) {
+      return '<span class="trust-item"><span class="check">✓</span> ' + escapeHtml(t) + '</span>';
+    }).join('');
+    return '<div class="trust-strip">' + html + '</div>';
+  }
+
+  // ---------- Footer ----------
+  function renderFooter(cart) {
+    var sub = cart.total_price || 0;
+
+    // Savings: per-line discount + line-item compare_at delta
+    var savings = 0;
+    cart.items.forEach(function(it) {
+      if (it.original_line_price > it.final_line_price) {
+        savings += (it.original_line_price - it.final_line_price);
+      }
+    });
+
+    // Shipping free signal — use first tier threshold (₹) if defined
+    var freeShipCents = null;
+    if (cfg.tiers && cfg.tiers.length) {
+      var firstShipTier = cfg.tiers.find(function(t) { return t.type === 'free_shipping'; }) || cfg.tiers[0];
+      if (firstShipTier && firstShipTier.threshold) freeShipCents = firstShipTier.threshold * 100;
+    }
+    var freeShip = freeShipCents != null && sub >= freeShipCents;
+    var shippingRight = freeShip ?
+      '<span class="free-tag">FREE</span>' :
+      '<span>Calculated at checkout</span>';
+
+    var savedRow = savings > 0 ?
+      '<div class="foot-savings">💰 You saved ' + money(savings) + ' today</div>' : '';
+
+    var expressRow = '';
+    if (cfg.show_express) {
+      var chips = getExpressChips();
+      if (chips.length) {
+        var chipsHtml = chips.map(function(c) {
+          var codClass = /cod/i.test(c) ? ' cod' : '';
+          return '<a class="express-chip' + codClass + '" data-gbcd-express href="/checkout">' + escapeHtml(c) + '</a>';
+        }).join('');
+        expressRow = '' +
+          '<div class="express-row">' +
+            '<span class="label">Express:</span>' +
+            '<div class="express-chips">' + chipsHtml + '</div>' +
+          '</div>';
+      }
+    }
+
+    return '' +
+      '<div class="foot-totals">' +
+        '<span class="label">' + escapeHtml(staticCopy.subtotalLabel) + '</span>' +
+        '<span class="amount">' + money(sub) + '</span>' +
+      '</div>' +
+      '<div class="foot-shipping">' +
+        '<span>Shipping</span>' + shippingRight +
+      '</div>' +
+      savedRow +
+      '<button type="button" class="checkout-btn" data-gbcd-checkout>' +
+        '<span>' + escapeHtml(staticCopy.checkoutLabel) + '</span>' +
+        '<span class="arrow">→</span>' +
+      '</button>' +
+      expressRow +
+      '<button type="button" class="continue-link" data-gbcd-close>← Continue shopping</button>';
+  }
+
+  var expressChipsCache = null;
+  function getExpressChips() {
+    if (expressChipsCache) return expressChipsCache;
+    var hint = root.querySelector('[data-gbcd-express-chips]');
+    var items = null;
+    if (hint) {
+      try { items = JSON.parse(hint.textContent); } catch (e) { items = null; }
+    }
+    if (!items || !items.length) items = ['UPI', 'GPay', 'PhonePe', 'COD'];
+    expressChipsCache = items;
+    return items;
+  }
+
+  // ---------- Empty ----------
+  function renderEmpty() {
+    var bestsellers = (cfg.empty_products || []).slice(0, 3);
+    var cardsHtml = bestsellers.map(function(p) {
+      var imgInner = p.image ?
+        '<img loading="lazy" src="' + escapeHtml(img(p.image, 200)) + '" alt="">' :
+        '🫙';
+      return '' +
+        '<button type="button" class="empty-card" data-gbcd-empty-add="' + p.variant_id + '">' +
+          '<div class="img">' + imgInner + '</div>' +
+          '<div class="info">' +
+            '<div class="n">' + escapeHtml(p.title) + '</div>' +
+            '<div class="p">' + money(p.price) + '</div>' +
+          '</div>' +
+          '<div class="add">+</div>' +
+        '</button>';
+    }).join('');
+
+    var byo = cfg.byo_url ?
+      '<a href="' + escapeHtml(cfg.byo_url) + '" class="byo-link">Build your own kit →</a>' : '';
+
+    return '' +
+      '<div class="empty-state">' +
+        '<div class="empty-icon">' + escapeHtml(staticCopy.emptyEmoji) + '</div>' +
+        '<h3>' + escapeHtml(staticCopy.emptyHeading) + '</h3>' +
+        '<p>' + escapeHtml(staticCopy.emptySubtitle) + '</p>' +
+        (cardsHtml ? '<div class="eyebrow">— ' + escapeHtml(staticCopy.emptyEyebrow) + '</div>' : '') +
+        (cardsHtml ? '<div class="empty-cards">' + cardsHtml + '</div>' : '') +
+        byo +
+      '</div>';
+  }
+  function renderEmptyFoot() {
+    var items = getTrustItems();
+    return '<div class="empty-foot">' + escapeHtml(items.join(' · ')) + '</div>';
   }
 
   // ---------- State updates ----------
 
   // Preserve drawer item ordering across cart replacements.
-  // Items the drawer already showed keep their relative position;
-  // anything new (added by another tab, by the optimistic flow, etc.)
-  // floats to the top. Stops the "added item appears at bottom then
-  // jumps to top" glitch when the server's cart order disagrees with
-  // our optimistic order.
   function preserveItemOrder(newCart, prevItems) {
     if (!newCart || !newCart.items || newCart.items.length < 2) return newCart;
     if (!prevItems || prevItems.length === 0) return newCart;
@@ -500,16 +716,13 @@
       var bId = (b.properties && (b.properties._gift === 'true' || b.properties._gift === true) ? 'gift-' : 'var-') + b.variant_id;
       var ap = oldPos[aId], bp = oldPos[bId];
       if (ap === undefined && bp === undefined) return 0;
-      if (ap === undefined) return -1;   // genuinely new → top
+      if (ap === undefined) return -1;
       if (bp === undefined) return 1;
-      return ap - bp;                    // both seen before → keep relative order
+      return ap - bp;
     });
     return newCart;
   }
 
-  // Set state.cart in one place so we always apply preserveItemOrder
-  // + bumpVersion together. Don't write to state.cart directly anywhere
-  // except via this helper or the optimistic helpers below.
   function setCart(c) {
     var prev = (state.cart && state.cart.items) ? state.cart.items : null;
     state.cart = c;
@@ -528,7 +741,6 @@
   }
 
   // Optimistic helpers — mutate state.cart in place and re-render.
-  // The server response replaces state.cart when it lands.
   function optimisticChangeQty(key, newQty) {
     if (!state.cart) return;
     var idx = -1;
@@ -571,8 +783,6 @@
     var qty = line.quantity || 1;
     var unitPrice = line.price || 0;
     var unitOrig  = line.compare_at_price || line.price || 0;
-    // Prepend (newest at top) so the optimistic position matches what
-    // most users expect and what the server typically returns.
     state.cart.items.unshift({
       key: 'pending-' + line.variant_id + '-' + Date.now(),
       _pending: true,
@@ -598,21 +808,18 @@
     render();
   }
 
+  // ---------- Open / close ----------
   function open() {
     state.isOpen = true;
     root.classList.add('is-open');
+    root.setAttribute('aria-hidden', 'false');
     document.body.classList.add('gb-cart-drawer-active');
     document.body.style.overflow = 'hidden';
     state.lastFocus = document.activeElement;
     var closeBtn = root.querySelector('[data-gbcd-close]');
     if (closeBtn) setTimeout(function() { closeBtn.focus(); }, 320);
-    // If we already have a cart in memory, render it immediately —
-    // no network round-trip blocks the open animation. Refresh lazily
-    // in the background so any stale data converges.
     if (state.cart) {
       render();
-      // Background refresh — but discard if any optimistic mutation
-      // bumps the version while it's in flight.
       var v = state.cartVersion;
       fetchCart().then(function(c) {
         if (v !== state.cartVersion) return;
@@ -627,6 +834,7 @@
   function close() {
     state.isOpen = false;
     root.classList.remove('is-open');
+    root.setAttribute('aria-hidden', 'true');
     document.body.classList.remove('gb-cart-drawer-active');
     document.body.style.overflow = '';
     if (state.lastFocus && state.lastFocus.focus) state.lastFocus.focus();
@@ -634,20 +842,18 @@
 
   // ---------- Events ----------
   root.addEventListener('click', function(ev) {
-    if (ev.target.closest('[data-gbcd-close]') || ev.target.classList.contains('gbcd-overlay')) {
+    if (ev.target.closest('[data-gbcd-close]') || ev.target.classList.contains('cart-overlay')) {
       close();
       return;
     }
     var qtyBtn = ev.target.closest('[data-gbcd-qty]');
     if (qtyBtn) {
-      var line = qtyBtn.closest('.gbcd-item');
+      if (qtyBtn.hasAttribute('disabled')) return;
+      var line = qtyBtn.closest('.line-item');
+      if (!line) return;
       var newQty = parseInt(qtyBtn.getAttribute('data-gbcd-qty'), 10);
       var key = line.getAttribute('data-line-key');
       optimisticChangeQty(key, Math.max(0, newQty));
-      // Snapshot the version so an interleaved second click (which
-      // bumps state.cartVersion via its own optimistic mutation) wins
-      // — we discard our stale response rather than overwriting the
-      // newer optimistic state.
       var v = state.cartVersion;
       changeLine(key, Math.max(0, newQty))
         .then(function(c) {
@@ -659,7 +865,8 @@
     }
     var removeBtn = ev.target.closest('[data-gbcd-remove]');
     if (removeBtn) {
-      var line2 = removeBtn.closest('.gbcd-item');
+      var line2 = removeBtn.closest('.line-item');
+      if (!line2) return;
       var key2 = line2.getAttribute('data-line-key');
       optimisticChangeQty(key2, 0);
       var v2 = state.cartVersion;
@@ -675,9 +882,6 @@
     if (addonBtn) {
       var vid = parseInt(addonBtn.getAttribute('data-gbcd-addon'), 10);
       addonBtn.setAttribute('disabled', 'disabled');
-      addonBtn.textContent = 'Adding…';
-      // optimistic add — pull title/image/price from the addon card
-      var card = addonBtn.closest('.gbcd-addon-card');
       var addonCandidate = (cfg.addon_candidates || []).find(function(p) { return p.variant_id === vid; });
       if (addonCandidate) {
         optimisticAdd({
@@ -690,7 +894,6 @@
         });
       }
       addLine(vid, 1).then(function() { return fetchCart(); }).then(function(c) { setCart(c); render(); }).catch(function() {
-        addonBtn.removeAttribute('disabled'); addonBtn.textContent = 'Add';
         refresh();
       });
       return;
@@ -723,23 +926,39 @@
       window.location.href = '/checkout';
       return;
     }
+    var discountToggle = ev.target.closest('[data-gbcd-discount-toggle]');
+    if (discountToggle) {
+      var row = discountToggle.closest('[data-gbcd-discount-row]');
+      if (row) {
+        row.classList.toggle('open');
+        state.discountOpen = row.classList.contains('open');
+      }
+      return;
+    }
+    var discountClear = ev.target.closest('[data-gbcd-discount-clear]');
+    if (discountClear) {
+      state.discountCode = null;
+      render();
+      return;
+    }
     var discountSubmit = ev.target.closest('[data-gbcd-discount-submit]');
     if (discountSubmit) {
       var input = root.querySelector('[data-gbcd-discount-input]');
-      var code = (input.value || '').trim();
+      var code = (input && input.value || '').trim();
       var msgEl = root.querySelector('[data-gbcd-discount-msg]');
       if (!code) return;
-      msgEl.textContent = 'Applying…';
-      msgEl.className = 'gbcd-discount-msg';
+      if (msgEl) { msgEl.textContent = 'Applying…'; msgEl.className = 'discount-msg'; }
       applyDiscount(code).then(function() {
         return fetchCart();
       }).then(function(c) {
-        setCart(c); render();
-        msgEl.textContent = 'Code ' + code + ' will apply at checkout';
-        msgEl.className = 'gbcd-discount-msg success';
+        setCart(c);
+        state.discountCode = code.toUpperCase();
+        render();
       }).catch(function() {
-        msgEl.textContent = 'Could not apply that code';
-        msgEl.className = 'gbcd-discount-msg error';
+        if (msgEl) {
+          msgEl.textContent = 'Could not apply that code';
+          msgEl.className = 'discount-msg error';
+        }
       });
       return;
     }
@@ -750,14 +969,6 @@
   });
 
   // Listen for cart:update from anywhere (PDP ATC, BYOK, shop tabs).
-  // The cart is attached on detail.resource — render directly without
-  // an extra /cart.js round-trip. We do NOT auto-open here; the ATC
-  // caller opens the drawer optimistically before the network call.
-  // Sources we should NOT open the drawer for. Cart-page line-item
-  // changes (qty -/+, remove) dispatch cart:update from the
-  // cart-items-component and should stay silent; the user is already
-  // on the cart page. Our own internal mutations don't dispatch
-  // cart:update at all so they never reach here.
   var SILENT_SOURCES = { 'cart-items-component': true, 'gbcd-internal': true };
 
   document.addEventListener('cart:update', function(ev) {
@@ -769,17 +980,12 @@
     } else if (state.isOpen) {
       refresh();
     }
-    // Auto-open the drawer on any external add. SILENT_SOURCES bypass.
     if (data.didError) return;
     if (data.source && SILENT_SOURCES[data.source]) return;
     if (!state.isOpen) open();
   });
 
   // ----- Global form intercept -----
-  // Any <form action="/cart/add"> on the page (raw Shopify product
-  // forms, third-party widgets, collection card quick-add forms etc.)
-  // submits to /cart/add and navigates the page. Intercept all such
-  // submits, do an AJAX add, then open our drawer.
   function isCartAddForm(form) {
     if (!form || form.tagName !== 'FORM') return false;
     var action = form.getAttribute('action') || '';
@@ -790,11 +996,7 @@
     var form = ev.target;
     if (!isCartAddForm(form)) return;
     if (form.dataset.gbcdSkip === '1') return;
-    // Theme's <product-form-component> wrapper does its own AJAX add +
-    // dispatches cart:update — that flow already opens our drawer via
-    // the cart:update listener. Don't double-handle it.
     if (form.closest('product-form-component')) return;
-    // Same for any element that wants to opt out.
     if (form.closest('[data-gbcd-skip-intercept]')) return;
     ev.preventDefault();
     ev.stopPropagation();
@@ -803,13 +1005,8 @@
     var origLabel = btn ? btn.textContent : null;
     if (btn) { btn.setAttribute('disabled', 'disabled'); }
 
-    // Open the drawer immediately and inject an optimistic preview row.
     // Read the SELECTED variant — :checked first, then hidden input.
-    // Otherwise form.querySelector('[name="id"]') returns the first
-    // radio in DOM order (typically the default variant) instead of the
-    // one the user actually chose. The form submission itself sends the
-    // right variant via FormData, but the preview ends up showing the
-    // wrong row that then gets replaced when the server response lands.
+    // (Variant-flicker fix — PR #164/#165.)
     var variantInput = form.querySelector('input[type="radio"][name="id"]:checked') ||
                        form.querySelector('input[type="hidden"][name="id"]') ||
                        form.querySelector('[name="id"]');
@@ -817,10 +1014,6 @@
     if (variantId) {
       open();
       var preview = { variant_id: variantId, quantity: 1 };
-      // Read product context from (in order of preference):
-      //   1. the submit button's data-product-* attrs
-      //   2. a closest ancestor with data-product-id / data-product-handle
-      //   3. scraping the page's <h1> + featured image
       var src = (btn && btn.dataset && btn.dataset.productImage) ? btn :
                 form.closest('[data-product-id], [data-product-handle]');
       if (src && src.dataset) {
@@ -838,11 +1031,6 @@
         var imgEl = document.querySelector('.gallery-main-img, .gallery-main img, .product__media img, .product-media img, .product-gallery img, [data-product-featured-image]');
         if (imgEl && imgEl.getAttribute('src')) preview.image = imgEl.getAttribute('src');
       }
-      // Override product-level defaults with VARIANT-specific data
-      // (label / image / price) read from the selected variant's
-      // <label class="variant"> in the picker. Without this, the row
-      // briefly shows the default variant's image+price before being
-      // overwritten by the server response — visible flicker.
       var variantEl = form.querySelector('label.variant[data-variant-id="' + variantId + '"]') ||
                       form.querySelector('[data-variant-id="' + variantId + '"]') ||
                       (variantInput && variantInput.closest && variantInput.closest('label.variant'));
@@ -852,12 +1040,6 @@
         var illImg = variantEl.querySelector('.variant-illustration img') ||
                      variantEl.querySelector('img');
         if (illImg && illImg.getAttribute('src')) preview.image = illImg.getAttribute('src');
-        // data-variant-price-cents is the raw integer (paise/cents) —
-        // preferred. Fallback to parsing data-variant-price (formatted
-        // money string) for legacy markup, but parsing strings like
-        // "Rs. 1,249.00" is fiddly: the dot in "Rs." would survive a
-        // naive non-digit-strip and parseFloat would misread it as
-        // "0.1249". Guard against that.
         var cents = variantEl.getAttribute('data-variant-price-cents');
         if (cents) {
           var nCents = parseInt(cents, 10);
@@ -865,9 +1047,6 @@
         } else {
           var priceStr = variantEl.getAttribute('data-variant-price');
           if (priceStr) {
-            // Take only digits and the rightmost decimal separator
-            // followed by 1-2 digits. Everything else (currency symbol,
-            // 'Rs.' prefix dot, thousands separators) is discarded.
             var m = String(priceStr).replace(/[^\d.,]/g, '').match(/^(.*?)(?:[.,](\d{1,2}))?$/);
             if (m) {
               var intPart = (m[1] || '').replace(/[.,]/g, '');
@@ -921,11 +1100,11 @@
     });
   }
   bindHeaderCartIcon();
-  // Rebind after dynamic re-renders
   var mo = new MutationObserver(function() { bindHeaderCartIcon(); });
   mo.observe(document.body, { childList: true, subtree: true });
 
-  // Public API
+  // Public API — UNCHANGED SIGNATURE.
+  // open(), close(), refresh(), previewAdd(line), state
   window.GBCartDrawer = {
     open: open,
     close: close,
