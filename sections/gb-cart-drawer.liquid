@@ -94,15 +94,45 @@
     assign upsell_json = '{"variant_id":' | append: up_vid | append: ',"price":' | append: up.price | append: ',"title":' | append: up.title | json | append: ',"headline":' | append: section.settings.upsell_headline | json | append: ',"eyebrow":' | append: section.settings.upsell_eyebrow | json | append: ',"image":' | append: up_img | json | append: '}'
   endif
 
-  assign kc_json = ''
-  for item in cart.items
-    assign kc = item.product.metafields.custom.theme_accent
-    if kc != blank
-      assign kc_entry = '"' | append: item.product_id | append: '":' | append: kc | json
-      if kc_json == ''
-        assign kc_json = kc_entry
+  assign empty_json = ''
+  if section.settings.empty_collection != blank
+    assign ecoll2 = collections[section.settings.empty_collection]
+    if ecoll2 != blank
+      for ep in ecoll2.products limit: 3
+        if ep.available
+          assign ep_vid2 = ep.selected_or_first_available_variant.id | default: ep.variants.first.id
+          assign ep_img2 = ep.featured_image | image_url: width: 300
+          assign e_json = '{"id":' | append: ep.id | append: ',"variant_id":' | append: ep_vid2 | append: ',"title":' | append: ep.title | json | append: ',"price":' | append: ep.price | append: ',"image":' | append: ep_img2 | json | append: '}'
+          if empty_json == ''
+            assign empty_json = e_json
+          else
+            assign empty_json = empty_json | append: ',' | append: e_json
+          endif
+        endif
+      endfor
+    endif
+  endif
+
+  assign trust_arr = ''
+  for blk in section.blocks
+    if blk.type == 'trust' and blk.settings.text != blank
+      assign t_entry = blk.settings.text | json
+      if trust_arr == ''
+        assign trust_arr = t_entry
       else
-        assign kc_json = kc_json | append: ',' | append: kc_entry
+        assign trust_arr = trust_arr | append: ',' | append: t_entry
+      endif
+    endif
+  endfor
+
+  assign express_arr = ''
+  for blk in section.blocks
+    if blk.type == 'express' and blk.settings.label != blank
+      assign x_entry = blk.settings.label | json
+      if express_arr == ''
+        assign express_arr = x_entry
+      else
+        assign express_arr = express_arr | append: ',' | append: x_entry
       endif
     endif
   endfor
@@ -121,126 +151,54 @@
   "tiers": [{{ tiers_arr }}],
   "addon_candidates": [{{ addon_json }}],
   "upsell": {% if upsell_json != '' %}{{ upsell_json }}{% else %}null{% endif %},
-  "kit_colors": { {{ kc_json }} }
+  "empty_products": [{{ empty_json }}]
 }
 </script>
 
-<div id="gb-cart-drawer" role="dialog" aria-modal="true" aria-labelledby="gbcd-title" aria-hidden="true">
-  <div class="gbcd-overlay"></div>
-  <aside class="gbcd-panel">
+<div id="gb-cart-drawer" class="cart-drawer" aria-hidden="true">
+  <div class="cart-overlay" data-gbcd-close></div>
+  <aside class="cart-panel" role="dialog" aria-modal="true" aria-labelledby="gbcd-title" aria-label="Shopping cart">
 
-    <header class="gbcd-head">
+    <header class="cart-head">
       <h2 id="gbcd-title">
-        {{ section.settings.header_title | default: 'Your Cart' }}
-        <span class="gbcd-count">(<span data-gbcd-count>0</span>)</span>
+        {{ section.settings.header_title | default: 'Your Basket' }}
+        <span class="count" data-gbcd-count-label></span>
       </h2>
-      <button type="button" class="gbcd-close" data-gbcd-close aria-label="Close cart">×</button>
+      <button type="button" class="cart-close" data-gbcd-close aria-label="Close cart">
+        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <path d="M1 1 L13 13 M13 1 L1 13"/>
+        </svg>
+      </button>
     </header>
 
-    <div class="gbcd-body">
+    {%- comment -%} Body is fully populated by JS renderers. {%- endcomment -%}
+    <div class="cart-body" data-gbcd-body></div>
 
-      <div data-gbcd-content>
+    {%- comment -%} Foot is also populated by JS — keeps subtotal / checkout flow centralized. {%- endcomment -%}
+    <footer class="cart-foot" data-gbcd-foot></footer>
 
-        {%- if section.settings.show_progress -%}
-        <div class="gbcd-progress" data-gbcd-progress>
-          <div class="gbcd-progress-message" data-gbcd-progress-message></div>
-          <div class="gbcd-progress-track"><div class="gbcd-progress-fill" data-gbcd-progress-fill></div></div>
-          <div class="gbcd-progress-pins" data-gbcd-progress-pins></div>
-        </div>
-        {%- endif -%}
-
-        <div class="gbcd-items" data-gbcd-items></div>
-
-        {%- if section.settings.show_upsell -%}
-          <div class="gbcd-upsell" data-gbcd-upsell style="display:none;"></div>
-        {%- endif -%}
-
-        {%- if section.settings.show_addons -%}
-        <div class="gbcd-addons" data-gbcd-addons style="display:none;">
-          <div class="gbcd-addons-head">
-            <span class="gbcd-addons-title">{{ section.settings.addons_title | default: 'Frequently added' }}</span>
-          </div>
-          <div class="gbcd-addons-scroll" data-gbcd-addons-list></div>
-        </div>
-        {%- endif -%}
-
-        {%- if section.settings.show_discount -%}
-        <div class="gbcd-discount">
-          <input type="text" placeholder="Promo code" data-gbcd-discount-input aria-label="Discount code">
-          <button type="button" data-gbcd-discount-submit>Apply</button>
-        </div>
-        <div class="gbcd-discount-msg" data-gbcd-discount-msg></div>
-        {%- endif -%}
-
-        {%- if section.settings.show_trust -%}
-        <div class="gbcd-trust">
-          {%- for blk in section.blocks -%}
-            {%- if blk.type == 'trust' -%}
-              <div class="item" {{ blk.shopify_attributes }}><span class="check">✓</span>{{ blk.settings.text }}</div>
-            {%- endif -%}
-          {%- endfor -%}
-        </div>
-        {%- endif -%}
-
-      </div>
-
-      {%- comment -%} ===== EMPTY STATE ===== {%- endcomment -%}
-      <div data-gbcd-empty style="display:none;">
-        <div class="gbcd-empty">
-          <div class="gbcd-empty-emoji">{{ section.settings.empty_emoji | default: '🛒' }}</div>
-          <div class="gbcd-empty-h">{{ section.settings.empty_heading | default: 'Your cart is empty' }}</div>
-          <div class="gbcd-empty-p">{{ section.settings.empty_subtitle | default: 'Start with one of our bestsellers — small kits, big change.' }}</div>
-
-          {%- if section.settings.empty_collection != blank -%}
-            {%- assign ecoll = collections[section.settings.empty_collection] -%}
-            {%- if ecoll != blank -%}
-              <div class="gbcd-empty-eyebrow">{{ section.settings.empty_eyebrow | default: 'Top sellers' }}</div>
-              <div class="gbcd-empty-grid">
-                {%- for ep in ecoll.products limit: 4 -%}
-                  {%- if ep.available -%}
-                    <div class="gbcd-empty-card">
-                      <a href="{{ ep.url }}" class="gbcd-empty-card-img">
-                        {%- if ep.featured_image -%}
-                          <img loading="lazy" src="{{ ep.featured_image | image_url: width: 400 }}" alt="{{ ep.title | escape }}">
-                        {%- endif -%}
-                      </a>
-                      <div class="gbcd-empty-card-name">{{ ep.title }}</div>
-                      <div class="gbcd-empty-card-price">{{ ep.price | money_without_trailing_zeros }}</div>
-                      {%- assign ep_vid = ep.selected_or_first_available_variant.id | default: ep.variants.first.id -%}
-                      <button type="button" class="gbcd-empty-card-add" data-gbcd-empty-add="{{ ep_vid }}">Add</button>
-                    </div>
-                  {%- endif -%}
-                {%- endfor -%}
-              </div>
-            {%- endif -%}
-          {%- endif -%}
-        </div>
-      </div>
-
-    </div>
-
-    <footer class="gbcd-foot" data-gbcd-foot>
-      <div class="gbcd-subtotal-row">
-        <span class="gbcd-subtotal-label">{{ section.settings.subtotal_label | default: 'Subtotal' }}</span>
-        <span class="gbcd-subtotal-val" data-gbcd-subtotal>—</span>
-      </div>
-      <div class="gbcd-saved" data-gbcd-saved style="display:none;"></div>
-      <button type="button" class="gbcd-checkout-btn" data-gbcd-checkout>
-        {{ section.settings.checkout_label | default: 'Checkout' }}
-      </button>
-      {%- if section.settings.show_express -%}
-        <div class="gbcd-express">
-          {%- for blk in section.blocks -%}
-            {%- if blk.type == 'express' -%}
-              <button type="button" class="gbcd-express-chip" {{ blk.shopify_attributes }}>{{ blk.settings.label }}</button>
-            {%- endif -%}
-          {%- endfor -%}
-        </div>
-      {%- endif -%}
-    </footer>
+    {%- comment -%}
+      Admin-driven trust + express copy fed to JS renderers via JSON hints.
+      Kept inside the panel so they're scoped to the drawer.
+    {%- endcomment -%}
+    {%- if trust_arr != '' -%}
+      <script type="application/json" data-gbcd-trust-items>[{{ trust_arr }}]</script>
+    {%- endif -%}
+    {%- if express_arr != '' -%}
+      <script type="application/json" data-gbcd-express-chips>[{{ express_arr }}]</script>
+    {%- endif -%}
 
     <div class="gbcd-sr" aria-live="polite" data-gbcd-sr></div>
   </aside>
+</div>
+
+{%- comment -%}
+  Toast lives outside the drawer so it's always visible and not clipped by overflow.
+  v1: placeholder element only — undo-remove not wired (see PR notes).
+{%- endcomment -%}
+<div class="gbcd-toast" data-gbcd-toast>
+  <span data-gbcd-toast-text></span>
+  <button type="button" class="undo" data-gbcd-toast-undo>Undo</button>
 </div>
 
 <script src="{{ 'gb-cart-drawer.js' | asset_url }}" defer></script>
