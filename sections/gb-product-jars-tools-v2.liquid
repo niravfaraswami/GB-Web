@@ -51,6 +51,8 @@
   assign mf_cart_addons    = cm.cart_addon_ids.value
   assign mf_seo_title      = cm.seo_title_override
   assign mf_seo_desc       = cm.seo_description_override
+  assign mf_uses_h         = cm.uses_h
+  assign mf_hero_bullets   = cm.hero_bullets
   assign has_mf_faqs = false
   if mf_faqs and mf_faqs.size > 0
     assign has_mf_faqs = true
@@ -400,11 +402,17 @@
             {%- if bought_today != blank -%}
               <div class="item"><span class="dot"></span><span><strong>{{ bought_today }}</strong> people bought this today</span></div>
             {%- endif -%}
-            {%- for blk in section.blocks -%}
-              {%- if blk.type == 'activity' -%}
-                <div class="item" {{ blk.shopify_attributes }}><span>{{ blk.settings.icon }}</span><span>{{ blk.settings.text }}</span></div>
-              {%- endif -%}
-            {%- endfor -%}
+            {%- if mf_hero_bullets != blank -%}
+              {%- for b in mf_hero_bullets -%}
+                <div class="item"><span>{{ b }}</span></div>
+              {%- endfor -%}
+            {%- else -%}
+              {%- for blk in section.blocks -%}
+                {%- if blk.type == 'activity' -%}
+                  <div class="item" {{ blk.shopify_attributes }}><span>{{ blk.settings.icon }}</span><span>{{ blk.settings.text }}</span></div>
+                {%- endif -%}
+              {%- endfor -%}
+            {%- endif -%}
           </div>
 
           <div class="single-price-block">
@@ -538,7 +546,11 @@
     <div class="jt-container">
       <div class="section-header">
         <div class="eyebrow">FOUR USES</div>
-        <h2>{{ section.settings.uses_heading | default: 'Not just for <em>one thing</em>.' }}</h2>
+        {%- if mf_uses_h != blank -%}
+          <h2>{{ mf_uses_h }}</h2>
+        {%- else -%}
+          <h2>{{ section.settings.uses_heading | default: 'Not just for <em>one thing</em>.' }}</h2>
+        {%- endif -%}
       </div>
       <div class="uses-grid">
         {%- if use_cases_data != blank -%}
