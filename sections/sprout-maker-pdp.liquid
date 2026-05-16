@@ -213,7 +213,9 @@ All product custom metafields with non-empty values:
                   {%- if variant == p.selected_or_first_available_variant -%}{%- assign is_selected = true -%}{%- endif -%}
                   <label class="variant{% if is_selected %} active{% endif %}{% unless variant.available %} sold-out{% endunless %}"
                          data-variant-id="{{ variant.id }}"
-                         data-variant-price="{{ variant.price | money }}">
+                         data-variant-price="{{ variant.price | money }}"
+                         data-variant-price-cents="{{ variant.price }}"
+                         data-variant-compare-cents="{{ variant.compare_at_price }}">
                     <input type="radio" name="id" value="{{ variant.id }}" class="variant-input"
                            {% if is_selected %}checked{% endif %}
                            {% unless variant.available %}disabled{% endunless %}>
