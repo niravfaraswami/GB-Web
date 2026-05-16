@@ -84,10 +84,22 @@
                 assign ftitle = block.settings[t_key]
                 assign fdesc  = block.settings[d_key]
                 assign ficon  = block.settings[ic_key]
+                # The "icon" field was originally designed for a short
+                # symbol (emoji / digit / 1-2 letter). Merchants are now
+                # putting longer text here too ("L. plantarum", "Dec 2020"),
+                # which overflows the fixed 52×52 square. Detect length
+                # and switch to a pill variant that auto-sizes — keeps
+                # the icon look for short content, becomes a label for
+                # longer copy.
+                assign ficon_len = ficon | strip | size
+                assign icon_class = 'gb-cp-feature-icon'
+                if ficon_len > 3
+                  assign icon_class = 'gb-cp-feature-icon gb-cp-feature-icon--text'
+                endif
               -%}
               {%- if ftitle != blank or fdesc != blank -%}
                 <div class="gb-cp-feature">
-                  {%- if ficon != blank -%}<div class="gb-cp-feature-icon">{{ ficon }}</div>{%- endif -%}
+                  {%- if ficon != blank -%}<div class="{{ icon_class }}">{{ ficon }}</div>{%- endif -%}
                   {%- if ftitle != blank -%}<div class="gb-cp-feature-title">{{ ftitle }}</div>{%- endif -%}
                   {%- if fdesc != blank -%}<div class="gb-cp-feature-desc">{{ fdesc }}</div>{%- endif -%}
                 </div>
@@ -354,6 +366,26 @@
   display: flex; align-items: center; justify-content: center;
   font-size: 24px;
   margin-bottom: 16px;
+}
+/* Text variant — auto-grows for labels longer than ~3 chars
+   ("L. plantarum", "Dec 2020"). 52×52 stays as the minimum so
+   single-char / emoji icons keep their square footprint. */
+.gb-cp-feature-icon.gb-cp-feature-icon--text {
+  width: auto;
+  height: auto;
+  min-width: 52px;
+  min-height: 36px;
+  padding: 6px 14px;
+  font-family: 'DM Mono', 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+  text-align: center;
+  border-radius: 10px;
+  white-space: normal;
+  text-wrap: balance;
+  align-self: flex-start;
 }
 .gb-cp-feature-title {
   font-family: 'Montserrat', sans-serif;
