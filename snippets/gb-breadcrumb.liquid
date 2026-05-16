@@ -21,24 +21,36 @@
 {%- liquid
   assign crumb = collection
   if crumb == blank or crumb.handle == 'frontpage' or crumb.handle == 'all'
-    assign fallback = nil
+    # Two-pass fallback. BYOK helper collections (byok-books / -jars /
+    # -spice-mix-copy / etc.) are merchant-internal — used by the
+    # kit-builder, not customer-facing browsing. They're only a
+    # legitimate crumb when the product has NO real category
+    # collection. Pass 1 finds a real category; pass 2 accepts BYOK
+    # only if pass 1 came up empty.
+    assign primary = nil
+    assign byok_fallback = nil
     for c in product.collections
-      # Skip Shopify's auto-generated catch-all collections.
       if c.handle == 'frontpage' or c.handle == 'all'
         continue
       endif
-      # Skip merchant-internal BYOK helper collections (`byok-books`,
-      # `byok-jars`, `byok-spice-mix-copy`, etc.) — they're used by
-      # the kit-builder, not customer-facing browsing categories.
       assign handle_prefix = c.handle | slice: 0, 5
       if handle_prefix == 'byok-'
-        continue
+        if byok_fallback == nil
+          assign byok_fallback = c
+        endif
+      else
+        if primary == nil
+          assign primary = c
+          break
+        endif
       endif
-      assign fallback = c
-      break
     endfor
     if crumb == blank
-      assign crumb = fallback
+      if primary
+        assign crumb = primary
+      else
+        assign crumb = byok_fallback
+      endif
     endif
   endif
 -%}
