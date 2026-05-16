@@ -14,8 +14,11 @@
       "type": "leo-hero",
       "settings": {
         "show_breadcrumb": true,
+        "trust_1_icon": "shopify://shop_images/package.svg",
         "trust_1_text": "Vacuum-sealed",
+        "trust_2_icon": "shopify://shop_images/icon-sparkle.svg",
         "trust_2_text": "Lab-tested",
+        "trust_3_icon": "shopify://shop_images/gift.svg",
         "trust_3_text": "Free shipping over ₹499"
       },
       "blocks": {
