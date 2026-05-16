@@ -85,7 +85,7 @@
 }
 
 /* ============== HERO ============== */
-.pdp-hero { background: var(--gb-white); padding: 48px 0 80px; }
+.pdp-hero { background: var(--gb-white); padding: 16px 0 80px; }
 .pdp-hero .breadcrumb {
   padding: 16px 0; font-size: 13px; color: var(--gb-text-muted);
   border-bottom: 1px solid var(--gb-border-soft);
@@ -264,8 +264,8 @@
 .pdp-hero .vr-row { grid-template-columns: 1fr; gap: 2px; }
 .pdp-hero .vr-text { font-size: 12px; line-height: 1.3; }
 .pdp-hero .variant-price { font-size: 16px; }
-.pdp-hero .variant-price > span:first-child { display: block; }
-.pdp-hero .variant-compare { font-size: 12px; margin-left: 0; display: inline-block; }
+.pdp-hero .variant-price > span:first-child { display: block; white-space: nowrap; }
+.pdp-hero .variant-compare { font-size: 12px; margin-left: 0; display: inline-block; white-space: nowrap; }
 .pdp-hero .variant:hover { border-color: var(--kit-color); }
 .pdp-hero .variant.active {
   border-color: var(--kit-color);
@@ -849,7 +849,7 @@
   [data-kit="sprouts"] .container { padding: 0 18px; }
 
   /* Hero */
-  .pdp-hero { padding: 24px 0 56px; }
+  .pdp-hero { padding: 8px 0 56px; }
   .pdp-hero .product-name { font-size: 28px; }
   .pdp-hero .product-tagline { font-size: 14px; }
   .pdp-hero .hero-grid { grid-template-columns: 1fr; gap: 28px; }
@@ -867,8 +867,8 @@
   .pdp-hero .vr-label { font-size: 8px; }
   .pdp-hero .vr-text { font-size: 11px; line-height: 1.3; }
   .pdp-hero .variant-price { font-size: 14px; }
-  .pdp-hero .variant-price > span:first-child { display: block; }
-  .pdp-hero .variant-compare { font-size: 11px; margin-left: 0; display: inline-block; }
+  .pdp-hero .variant-price > span:first-child { display: block; white-space: nowrap; }
+  .pdp-hero .variant-compare { font-size: 11px; margin-left: 0; display: inline-block; white-space: nowrap; }
   .pdp-hero .variant-save { font-size: 10px; }
 
   /* Trust row */
