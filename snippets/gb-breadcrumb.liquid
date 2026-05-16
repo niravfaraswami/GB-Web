@@ -23,7 +23,15 @@
   if crumb == blank or crumb.handle == 'frontpage' or crumb.handle == 'all'
     assign fallback = nil
     for c in product.collections
+      # Skip Shopify's auto-generated catch-all collections.
       if c.handle == 'frontpage' or c.handle == 'all'
+        continue
+      endif
+      # Skip merchant-internal BYOK helper collections (`byok-books`,
+      # `byok-jars`, `byok-spice-mix-copy`, etc.) — they're used by
+      # the kit-builder, not customer-facing browsing categories.
+      assign handle_prefix = c.handle | slice: 0, 5
+      if handle_prefix == 'byok-'
         continue
       endif
       assign fallback = c
