@@ -359,11 +359,7 @@
   {%- comment -%} ============== 1. HERO ============== {%- endcomment -%}
   <section class="pdp-hero">
     <div class="jt-container">
-      <div class="breadcrumb">
-        <a href="{{ routes.root_url }}">Home</a> /
-        {%- if collection -%}<a href="{{ collection.url }}">{{ collection.title }}</a> /{%- endif -%}
-        <span>{{ p.title }}</span>
-      </div>
+      {%- render 'gb-breadcrumb' -%}
 
       <div class="hero-grid">
         <div class="gallery-stack">

@@ -251,11 +251,7 @@ recipe_tag[0]:       {{ p.metafields.custom.featured_recipe_tags.value.first.emo
   <section class="pdp-hero">
     <div class="container">
       {%- if section.settings.show_breadcrumb -%}
-        <div class="breadcrumb">
-          <a href="{{ routes.root_url }}">Home</a> /
-          {%- if collection -%}<a href="{{ collection.url }}">{{ collection.title }}</a> /{%- endif -%}
-          <span>{{ p.title }}</span>
-        </div>
+        {%- render 'gb-breadcrumb' -%}
       {%- endif -%}
 
       <div class="hero-title-block">
