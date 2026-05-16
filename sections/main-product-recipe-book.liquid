@@ -1,0 +1,426 @@
+{%- comment -%}
+  main-product-recipe-book.liquid
+  PDP template section for GutBasket printed Recipe Books.
+
+  Routing: this section is rendered via templates/product.recipe-book.json,
+  which Shopify auto-picks for any product whose template_suffix is
+  set to "recipe-book". No metafield router required.
+
+  Companion files:
+    - assets/recipe-book-v1.css
+    - assets/recipe-book-v1.js
+    - snippets/recipe-book-specs-strip.liquid
+    - snippets/recipe-book-supply-card.liquid
+    - snippets/recipe-book-faq-item.liquid
+    - snippets/recipe-book-kit-card.liquid
+
+  Global theme components (promo bar, site header, footer, cart drawer)
+  are NOT rendered here — they live in their own sections.
+{%- endcomment -%}
+
+{{ 'recipe-book-v1.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'recipe-book-v1.js' | asset_url }}" defer></script>
+
+{%- liquid
+  # ---------- Kit-color cascade resolution (§7) ----------
+  assign is_bundle = product.metafields.custom.is_bundle | default: false
+  assign companion_kit = product.metafields.custom.companion_kit.value
+
+  if is_bundle
+    assign accent      = product.metafields.custom.theme_accent
+    assign accent_dark = product.metafields.custom.theme_accent_dark
+    assign accent_soft = product.metafields.custom.theme_accent_soft
+  else
+    if companion_kit
+      assign accent      = companion_kit.metafields.custom.theme_accent
+      assign accent_dark = companion_kit.metafields.custom.theme_accent_dark
+      assign accent_soft = companion_kit.metafields.custom.theme_accent_soft
+    endif
+  endif
+
+  # ---------- Pricing math ----------
+  assign current_variant = product.selected_or_first_available_variant
+  assign current_price = current_variant.price
+  assign compare_price = current_variant.compare_at_price
+  assign save_amount = 0
+  if compare_price and compare_price > current_price
+    assign save_amount = compare_price | minus: current_price
+  endif
+
+  # ---------- Specs (with bundle aggregation) ----------
+  assign spec_pages    = product.metafields.custom.spec_pages
+  assign spec_recipes  = product.metafields.custom.spec_recipes
+  assign spec_language = product.metafields.custom.spec_language
+  assign spec_binding  = product.metafields.custom.spec_binding
+
+  if is_bundle
+    assign bundle_books = product.metafields.custom.bundle_books.value
+    if bundle_books
+      assign agg_pages = 0
+      assign agg_recipes = 0
+      assign first_lang = blank
+      assign first_binding = blank
+      assign lang_mixed = false
+      assign binding_mixed = false
+
+      for bb in bundle_books
+        assign bb_pages = bb.metafields.custom.spec_pages | default: 0
+        assign agg_pages = agg_pages | plus: bb_pages
+        assign bb_recipes = bb.metafields.custom.spec_recipes | default: 0
+        assign agg_recipes = agg_recipes | plus: bb_recipes
+
+        assign bb_lang = bb.metafields.custom.spec_language
+        if forloop.first
+          assign first_lang = bb_lang
+          assign first_binding = bb.metafields.custom.spec_binding
+        else
+          unless bb_lang == first_lang
+            assign lang_mixed = true
+          endunless
+          unless bb.metafields.custom.spec_binding == first_binding
+            assign binding_mixed = true
+          endunless
+        endif
+      endfor
+
+      assign spec_pages = agg_pages
+      assign spec_recipes = agg_recipes
+      if lang_mixed
+        assign spec_language = 'Mixed'
+      else
+        assign spec_language = first_lang
+      endif
+      if binding_mixed
+        assign spec_binding = 'Mixed'
+      else
+        assign spec_binding = first_binding
+      endif
+    endif
+  endif
+
+  # ---------- FAQs ----------
+  assign faqs = product.metafields.custom.faqs.value
+
+  # ---------- Kit supplies ----------
+  assign kit_supplies = product.metafields.custom.kit_supplies.value
+
+  # ---------- Sticky ATC label ----------
+  assign sticky_label = product.metafields.custom.short_name | default: product.title | truncate: 28
+
+  # ---------- LCP image ----------
+  assign first_media = product.media[0]
+-%}
+
+{%- comment -%} Scoped kit-color cascade (§7) — inline to avoid FOUC {%- endcomment -%}
+<style>
+  #shopify-section-{{ section.id }} .recipe-book-pdp {
+    --kit-color: {{ accent | default: '#FF7300' }};
+    --kit-color-dark: {{ accent_dark | default: '#E66800' }};
+    --kit-color-soft: {{ accent_soft | default: '#FFE4D1' }};
+  }
+</style>
+
+{%- if companion_kit == nil and is_bundle == false -%}
+  {%- comment -%}
+    Edge case (§13): companion_kit null & not a bundle. Page still renders;
+    kit card + kit-dep line will be hidden by their own conditionals.
+    A console warning is emitted client-side via the JS file if desired;
+    we surface it here as an HTML comment for theme reviewers.
+  {%- endcomment -%}
+  <!-- [recipe-book-v1] companion_kit missing on product '{{ product.handle }}' — kit card and kit dependency line hidden. -->
+{%- endif -%}
+
+<div
+  class="recipe-book-pdp"
+  data-book="{{ product.handle }}"
+  data-product-id="{{ product.id }}"
+  data-product-title="{{ product.title | escape }}"
+  data-is-bundle="{% if is_bundle %}true{% else %}false{% endif %}"
+>
+
+  {%- comment -%} ============== HERO ============== {%- endcomment -%}
+  <section class="pdp-hero">
+    <div class="rb-container">
+      <div class="breadcrumb">
+        <a href="/">Home</a> / <a href="/collections/recipe-books">Recipe Books</a> / <span>{{ product.title }}</span>
+      </div>
+
+      <div class="hero-grid">
+        {%- comment -%} Gallery {%- endcomment -%}
+        <div class="gallery-stack">
+          <div class="gallery-main">
+            {%- if save_amount > 0 -%}
+              <span class="save-badge">-{{ save_amount | money_without_trailing_zeros }}</span>
+            {%- endif -%}
+            {%- if first_media -%}
+              <img
+                class="gallery-main-img"
+                src="{{ first_media | image_url: width: 1200 }}"
+                alt="{{ first_media.alt | default: product.title | escape }}"
+                loading="eager"
+                fetchpriority="high"
+                width="800" height="800"
+              >
+            {%- endif -%}
+          </div>
+
+          {%- if product.media.size > 0 -%}
+            <div class="gallery-thumbs" role="group" aria-label="Product images">
+              {%- for media in product.media limit: 5 -%}
+                {%- assign thumb_label = media.alt | default: product.title -%}
+                <button
+                  type="button"
+                  class="gallery-thumb{% if forloop.first %} active{% endif %}"
+                  aria-pressed="{% if forloop.first %}true{% else %}false{% endif %}"
+                  aria-label="Show image {{ forloop.index }}: {{ thumb_label | escape }}"
+                  data-thumb-index="{{ forloop.index0 }}"
+                  data-thumb-label="{{ thumb_label | escape }}"
+                  data-full-src="{{ media | image_url: width: 1200 }}"
+                  data-full-alt="{{ thumb_label | escape }}"
+                  onclick="window.RecipeBookV1 && window.RecipeBookV1.swapThumb(this)"
+                >
+                  <img
+                    src="{{ media | image_url: width: 200 }}"
+                    alt=""
+                    loading="lazy"
+                    width="90" height="90"
+                    aria-hidden="true"
+                  >
+                </button>
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+        </div>
+
+        {%- comment -%} Info {%- endcomment -%}
+        <div class="product-info">
+          {%- if product.metafields.custom.eyebrow != blank -%}
+            <div class="eyebrow-meta">{{ product.metafields.custom.eyebrow }}</div>
+          {%- endif -%}
+
+          <h1 class="product-name">{{ product.title }}</h1>
+
+          {%- if product.metafields.custom.hero_tagline != blank -%}
+            <p class="product-tagline">{{ product.metafields.custom.hero_tagline }}</p>
+          {%- endif -%}
+
+          {%- comment -%} Rating row — Judge.me Liquid tokens with cached fallback {%- endcomment -%}
+          <div class="rating-row">
+            <span class="stars" aria-hidden="true">★★★★★</span>
+            <span class="rating-link">
+              {{ product.metafields.judgeme.badge | default: '' }}
+              {%- if product.metafields.reviews.rating_count -%}
+                ({{ product.metafields.reviews.rating_count }} reviews)
+              {%- endif -%}
+            </span>
+          </div>
+
+          {%- comment -%} Specs strip (aggregated when bundle) {%- endcomment -%}
+          {%- render 'recipe-book-specs-strip',
+              pages: spec_pages,
+              recipes: spec_recipes,
+              language: spec_language,
+              binding: spec_binding -%}
+
+          {%- comment -%} Price {%- endcomment -%}
+          <div class="price-row">
+            <span class="price-now">{{ current_price | money_without_trailing_zeros }}</span>
+            {%- if save_amount > 0 -%}
+              <span class="price-compare">{{ compare_price | money_without_trailing_zeros }}</span>
+              <span class="price-save-pill">Save {{ save_amount | money_without_trailing_zeros }}</span>
+            {%- endif -%}
+          </div>
+          <div class="price-tax-note">Inclusive of all taxes · Ships in 2–3 days</div>
+
+          {%- comment -%} ATC (hero) {%- endcomment -%}
+          {%- if current_variant.available -%}
+            <button
+              type="button"
+              class="atc-btn"
+              data-source="hero"
+              data-variant-id="{{ current_variant.id }}"
+              data-product-id="{{ product.id }}"
+              data-product-title="{{ product.title | escape }}"
+              data-product-image="{% if product.featured_image %}{{ product.featured_image | image_url: width: 200 }}{% endif %}"
+              data-product-price="{{ current_price }}"
+              data-product-url="{{ product.url }}"
+              aria-label="Add to cart, {{ current_price | money_without_trailing_zeros }}"
+              onclick="window.RecipeBookV1 && window.RecipeBookV1.atc(this)"
+            >
+              <span>Add to Cart · </span><span>{{ current_price | money_without_trailing_zeros }}</span>
+            </button>
+          {%- else -%}
+            {%- comment -%} Out-of-stock state per §13 — placeholder. TODO: wire to back-in-stock app. {%- endcomment -%}
+            <button type="button" class="atc-btn" disabled aria-label="Notify me when back in stock">
+              <span>Notify Me</span>
+            </button>
+          {%- endif -%}
+          <div class="atc-error" role="alert" aria-live="polite"></div>
+
+          {%- comment -%} Kit dependency line — hidden if bundle OR companion_kit null {%- endcomment -%}
+          {%- unless is_bundle -%}
+            {%- if companion_kit -%}
+              <div class="kit-dep">
+                <span class="ico" aria-hidden="true">i</span>
+                <span>
+                  Designed as a companion to the <a href="{{ companion_kit.url }}">{{ companion_kit.title }}</a>.
+                  {%- if product.metafields.custom.kit_dep_standalone != blank -%}
+                    {{ product.metafields.custom.kit_dep_standalone }}
+                  {%- endif -%}
+                </span>
+              </div>
+            {%- endif -%}
+          {%- endunless -%}
+
+          {%- comment -%} Trust strip — fixed per §5.6 {%- endcomment -%}
+          <div class="trust-strip">
+            <div class="item"><span class="check" aria-hidden="true">✓</span>Free shipping over ₹999</div>
+            <div class="item"><span class="check" aria-hidden="true">✓</span>Printed in India</div>
+            <div class="item"><span class="check" aria-hidden="true">✓</span>5-day replacement</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} ============== COMPANION KIT / BUNDLE BOOKS ============== {%- endcomment -%}
+  {%- if is_bundle -%}
+    {%- assign bb_list = product.metafields.custom.bundle_books.value -%}
+    {%- if bb_list and bb_list.size > 0 -%}
+      <section class="kit-section" id="kit">
+        <div class="rb-container">
+          <div class="section-head">
+            <div class="section-eyebrow">WHAT'S IN THE BUNDLE</div>
+            <h2 class="section-h">FIVE BOOKS · <em>one shelf.</em></h2>
+          </div>
+          <div class="supplies-rail bundle-books">
+            {%- for book in bb_list limit: 5 -%}
+              {%- render 'recipe-book-supply-card', supply: book -%}
+            {%- endfor -%}
+          </div>
+        </div>
+      </section>
+    {%- endif -%}
+  {%- else -%}
+    {%- if companion_kit or kit_supplies.size > 0 -%}
+      <section class="kit-section" id="kit">
+        <div class="rb-container">
+          <div class="section-head">
+            <div class="section-eyebrow">PAIR IT WITH</div>
+            <h2 class="section-h">THE KIT THIS BOOK <em>was built for.</em></h2>
+          </div>
+
+          {%- if companion_kit -%}
+            {%- render 'recipe-book-kit-card', kit: companion_kit -%}
+          {%- endif -%}
+
+          {%- if kit_supplies and kit_supplies.size > 0 -%}
+            <div class="supplies-rail-header">
+              <span class="label">Kit Refills & Add-ons</span>
+              {%- if companion_kit -%}
+                <a href="{{ companion_kit.url }}" class="seeall">See all →</a>
+              {%- endif -%}
+            </div>
+            <div class="supplies-rail">
+              {%- for supply in kit_supplies limit: 4 -%}
+                {%- render 'recipe-book-supply-card', supply: supply -%}
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+        </div>
+      </section>
+    {%- endif -%}
+  {%- endif -%}
+
+  {%- comment -%} ============== FAQ ============== {%- endcomment -%}
+  {%- if faqs and faqs.size > 0 -%}
+    <section class="faq-section">
+      <div class="rb-container">
+        <div class="section-head">
+          <div class="section-eyebrow">QUICK ANSWERS</div>
+          <h2 class="section-h">BEFORE YOU <em>add to cart.</em></h2>
+        </div>
+        <div class="faq-list">
+          {%- for faq in faqs -%}
+            {%- assign faq_q = faq.question | default: faq[0] -%}
+            {%- assign faq_a = faq.answer_html | default: faq.answer | default: faq[1] -%}
+            {%- render 'recipe-book-faq-item',
+                q: faq_q,
+                a: faq_a,
+                is_open: forloop.first,
+                index: forloop.index0 -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment -%} ============== REVIEWS ============== {%- endcomment -%}
+  <section class="reviews-section">
+    <div class="rb-container">
+      <div class="section-head">
+        <div class="section-eyebrow">VERIFIED REVIEWS</div>
+        <h2 class="section-h">WHAT READERS <em>say.</em></h2>
+      </div>
+
+      {%- comment -%}
+        Judge.me summary strip. Uses Judge.me's standard Liquid tokens
+        with cached metafield fallback per §13 (widget can fail to load,
+        strip still renders).
+      {%- endcomment -%}
+      <div class="judgeme-strip">
+        <span class="big-rating">
+          {{- product.metafields.reviews.rating | default: '' -}}
+        </span>
+        <span class="stars" aria-hidden="true">★★★★★</span>
+        <span>
+          <strong>{{ product.metafields.reviews.rating_count | default: '' }}</strong>
+          verified reviews
+        </span>
+      </div>
+
+      {%- comment -%} Judge.me widget embed per build guidance {%- endcomment -%}
+      <div class="jdgm-widget jdgm-review-widget" data-id="{{ product.id }}"></div>
+    </div>
+  </section>
+
+  {%- comment -%} ============== STICKY MOBILE ATC ============== {%- endcomment -%}
+  {%- if current_variant.available -%}
+    <div class="sticky-atc" aria-hidden="true">
+      <div class="info-block">
+        <div class="sa-name">{{ sticky_label }}</div>
+        <div>
+          <span class="sa-price">{{ current_price | money_without_trailing_zeros }}</span>
+          {%- if save_amount > 0 -%}
+            <span class="sa-compare">{{ compare_price | money_without_trailing_zeros }}</span>
+          {%- endif -%}
+        </div>
+      </div>
+      <button
+        type="button"
+        class="atc-mobile"
+        data-source="sticky"
+        data-variant-id="{{ current_variant.id }}"
+        data-product-id="{{ product.id }}"
+        data-product-title="{{ product.title | escape }}"
+        data-product-image="{% if product.featured_image %}{{ product.featured_image | image_url: width: 200 }}{% endif %}"
+        data-product-price="{{ current_price }}"
+        data-product-url="{{ product.url }}"
+        aria-label="Add to cart, {{ current_price | money_without_trailing_zeros }}"
+        onclick="window.RecipeBookV1 && window.RecipeBookV1.atc(this)"
+      >Add to Cart</button>
+    </div>
+  {%- endif -%}
+
+</div>
+
+{% schema %}
+{
+  "name": "Recipe Book v1 PDP",
+  "tag": "section",
+  "settings": [],
+  "enabled_on": {
+    "templates": ["product"]
+  }
+}
+{% endschema %}
