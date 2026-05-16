@@ -182,9 +182,20 @@
             {%- if tab_products.size > 0 -%}
               {%- for product in tab_products limit: limit -%}
                 {%- liquid
+                  # Show the merchant's chosen default variant on the
+                  # card — its price + image + ID — instead of the
+                  # product-level minimum. Keeps the card consistent
+                  # with what actually lands in the cart on quick-add.
+                  assign default_variant = product.selected_or_first_available_variant
+                  if default_variant == blank
+                    assign default_variant = product.variants.first
+                  endif
+                  assign card_price = default_variant.price | default: product.price
+                  assign card_compare = default_variant.compare_at_price | default: product.compare_at_price
+                  assign card_image = default_variant.image | default: product.featured_image
                   assign saved = 0
-                  if product.compare_at_price and product.compare_at_price > product.price
-                    assign saved = product.compare_at_price | minus: product.price
+                  if card_compare and card_compare > card_price
+                    assign saved = card_compare | minus: card_price
                   endif
                 -%}
                 {%- liquid
@@ -204,7 +215,7 @@
                   {%- endif -%}
                   <a href="{{ product.url }}" class="gb-card-link" aria-label="{{ product.title | escape }}">
                     <div class="gb-card-photo"
-                         {%- if product.featured_image %} style="background-image: url('{{ product.featured_image | image_url: width: 600 }}');"{%- endif %}>
+                         {%- if card_image %} style="background-image: url('{{ card_image | image_url: width: 600 }}');"{%- endif %}>
                       {%- if show_badge and saved > 0 -%}
                         <span class="gb-card-badge">Save {{ saved | money_without_trailing_zeros }}</span>
                       {%- endif -%}
@@ -220,10 +231,10 @@
                       {%- if show_now or show_was -%}
                         <div class="gb-card-price">
                           {%- if show_now -%}
-                            <span class="gb-card-now">{{ product.price | money_without_trailing_zeros }}</span>
+                            <span class="gb-card-now">{{ card_price | money_without_trailing_zeros }}</span>
                           {%- endif -%}
                           {%- if show_was and saved > 0 -%}
-                            <span class="gb-card-was">{{ product.compare_at_price | money_without_trailing_zeros }}</span>
+                            <span class="gb-card-was">{{ card_compare | money_without_trailing_zeros }}</span>
                           {%- endif -%}
                         </div>
                       {%- endif -%}
@@ -233,11 +244,11 @@
                     <div class="gb-card-cta-wrap">
                       <button type="button" class="gb-card-cta gb-card-cta--{{ cta_style_class }}"
                               data-product-handle="{{ product.handle }}"
-                              data-variant-id="{{ product.selected_or_first_available_variant.id | default: product.variants.first.id }}"
+                              data-variant-id="{{ default_variant.id }}"
                               data-product-id="{{ product.id }}"
                               data-product-title="{{ product.title | escape }}"
-                              data-product-image="{{ product.featured_image | image_url: width: 200 }}"
-                              data-product-price="{{ product.price }}"
+                              data-product-image="{{ card_image | image_url: width: 200 }}"
+                              data-product-price="{{ card_price }}"
                               data-product-url="{{ product.url }}"
                               {% unless product.available %}disabled{% endunless %}>Add to cart</button>
                     </div>
