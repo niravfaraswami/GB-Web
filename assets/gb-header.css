@@ -212,8 +212,6 @@ body { padding-top: var(--header-height, 80px); }
 
 .mm-cta {
   margin-top: 20px;
-  padding-top: 16px;
-  border-top: 1px solid var(--gb-border-soft);
 }
 .mm-cta a {
   color: var(--gb-brand);
