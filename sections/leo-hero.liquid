@@ -243,7 +243,30 @@
           {%- assign t2_text = section.settings.trust_2_text -%}
           {%- assign t3_icon = section.settings.trust_3_icon -%}
           {%- assign t3_text = section.settings.trust_3_text -%}
-          {%- if t1_text != blank or t2_text != blank or t3_text != blank -%}
+          {%- comment -%}
+            Precedence: per-product metafield (hero_trust_strip) wins over
+            section settings. Section settings live on the template, so
+            without this flip every product on the same template would
+            render an identical strip — defeating the point of having a
+            per-product metafield.
+
+            Icons stay template-level (trust_1_icon / trust_2_icon /
+            trust_3_icon on section settings) and are index-aligned to
+            the metafield items. One icon set per template, text per
+            product. Items beyond the 3 icons fall back to the check
+            glyph.
+          {%- endcomment -%}
+          {%- if hero_trust != blank -%}
+            {%- for t in hero_trust limit: 3 -%}
+              {%- assign idx = forloop.index -%}
+              {%- assign icon_key = 'trust_' | append: idx | append: '_icon' -%}
+              {%- assign ti = section.settings[icon_key] -%}
+              <div class="item">
+                {%- if ti != blank -%}{%- render 'kit_icon', icon: ti, size: 14, extra: 'trust-strip-icon' -%}{%- else -%}<span class="check">✓</span>{%- endif -%}
+                <span>{{ t }}</span>
+              </div>
+            {%- endfor -%}
+          {%- elsif t1_text != blank or t2_text != blank or t3_text != blank -%}
             {%- if t1_text != blank -%}
               <div class="item">
                 {%- if t1_icon != blank -%}{%- render 'kit_icon', icon: t1_icon, size: 14, extra: 'trust-strip-icon' -%}{%- else -%}<span class="check">✓</span>{%- endif -%}
@@ -262,8 +285,6 @@
                 <span>{{ t3_text }}</span>
               </div>
             {%- endif -%}
-          {%- elsif hero_trust != blank -%}
-            {%- for t in hero_trust -%}<div class="item"><span class="check">✓</span> {{ t }}</div>{%- endfor -%}
           {%- else -%}
             <div class="item"><span class="check">✓</span> Secure Payment</div>
             <div class="item"><span class="check">✓</span> Free Shipping</div>
