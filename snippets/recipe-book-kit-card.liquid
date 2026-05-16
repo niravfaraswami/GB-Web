@@ -1,0 +1,46 @@
+{%- comment -%}
+  recipe-book-kit-card
+  Dark companion-kit card displayed in the .kit-section.
+
+  Params:
+    kit — product reference (required). If null, snippet is a no-op.
+
+  Pulls:
+    featured_image, title, price, compare_at_price, url
+    metafields.custom.short_description (fallback: description | strip_html | truncate: 280)
+{%- endcomment -%}
+{%- if kit -%}
+  {%- assign kit_desc = kit.metafields.custom.short_description -%}
+  {%- if kit_desc == blank -%}
+    {%- assign kit_desc = kit.description | strip_html | truncate: 280 -%}
+  {%- endif -%}
+  <div class="kit-card">
+    <div class="kit-thumb">
+      {%- if kit.featured_image -%}
+        <img
+          src="{{ kit.featured_image | image_url: width: 480 }}"
+          alt="{{ kit.featured_image.alt | default: kit.title | escape }}"
+          loading="lazy"
+          width="240" height="240"
+        >
+      {%- endif -%}
+    </div>
+    <div class="kit-meta">
+      <div class="kit-eyebrow">FERMENTATION KIT</div>
+      <div class="kit-title">{{ kit.title }}</div>
+      <p class="kit-desc">{{ kit_desc }}</p>
+      <div class="kit-price">
+        <span class="now">{{ kit.price | money_without_trailing_zeros }}</span>
+        {%- if kit.compare_at_price and kit.compare_at_price > kit.price -%}
+          <span class="compare">{{ kit.compare_at_price | money_without_trailing_zeros }}</span>
+        {%- endif -%}
+      </div>
+    </div>
+    <a
+      href="{{ kit.url }}"
+      class="kit-cta"
+      data-kit-product-id="{{ kit.id }}"
+      aria-label="Shop the {{ kit.title | escape }}"
+    >Shop the Kit</a>
+  </div>
+{%- endif -%}

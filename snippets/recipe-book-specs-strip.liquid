@@ -1,0 +1,26 @@
+{%- comment -%}
+  recipe-book-specs-strip
+  Renders the four-cell specs strip in the hero info column.
+
+  Params:
+    pages    — integer (e.g. 28)
+    recipes  — integer (e.g. 12)
+    language — string (e.g. "English")
+    binding  — string (e.g. "Spiral")
+
+  Any cell whose value is blank is hidden.
+{%- endcomment -%}
+<div class="specs-strip" role="list">
+  {%- if pages != blank -%}
+    <div class="spec" role="listitem"><strong>Pages</strong><span>{{ pages }}</span></div>
+  {%- endif -%}
+  {%- if recipes != blank -%}
+    <div class="spec" role="listitem"><strong>Recipes</strong><span>{{ recipes }}</span></div>
+  {%- endif -%}
+  {%- if language != blank -%}
+    <div class="spec" role="listitem"><strong>Language</strong><span>{{ language }}</span></div>
+  {%- endif -%}
+  {%- if binding != blank -%}
+    <div class="spec" role="listitem"><strong>Binding</strong><span>{{ binding }}</span></div>
+  {%- endif -%}
+</div>
