@@ -1,3 +1,13 @@
+{%- comment -%}
+  Per-product kill-switch. Mirrors the hero_accordions pattern in
+  leo-hero.liquid — a custom.* metafield on the product takes
+  precedence over template defaults. When set to true the entire
+  section is skipped (chrome + markup), so products that don't have
+  a "box" / kit-pack story (e.g. sprout seeds) can opt out without
+  editing the template.
+{%- endcomment -%}
+{%- assign mf_hide_box = product.metafields.custom.hide_box_section -%}
+{%- unless mf_hide_box -%}
 {%- render 'leo_kit_chrome' -%}
 
 {%- liquid
@@ -112,6 +122,7 @@
     </div>
   </section>
 {%- endif -%}
+{%- endunless -%}
 
 {% schema %}
 {
