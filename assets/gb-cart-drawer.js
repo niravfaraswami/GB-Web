@@ -852,12 +852,31 @@
         var illImg = variantEl.querySelector('.variant-illustration img') ||
                      variantEl.querySelector('img');
         if (illImg && illImg.getAttribute('src')) preview.image = illImg.getAttribute('src');
-        // data-variant-price is the formatted string ("₹1,499.00").
-        // Strip non-numeric, parse to paise to match cart line items.
-        var priceStr = variantEl.getAttribute('data-variant-price');
-        if (priceStr) {
-          var n = parseFloat(priceStr.replace(/[^0-9.]/g, ''));
-          if (!isNaN(n)) preview.price = Math.round(n * 100);
+        // data-variant-price-cents is the raw integer (paise/cents) —
+        // preferred. Fallback to parsing data-variant-price (formatted
+        // money string) for legacy markup, but parsing strings like
+        // "Rs. 1,249.00" is fiddly: the dot in "Rs." would survive a
+        // naive non-digit-strip and parseFloat would misread it as
+        // "0.1249". Guard against that.
+        var cents = variantEl.getAttribute('data-variant-price-cents');
+        if (cents) {
+          var nCents = parseInt(cents, 10);
+          if (!isNaN(nCents)) preview.price = nCents;
+        } else {
+          var priceStr = variantEl.getAttribute('data-variant-price');
+          if (priceStr) {
+            // Take only digits and the rightmost decimal separator
+            // followed by 1-2 digits. Everything else (currency symbol,
+            // 'Rs.' prefix dot, thousands separators) is discarded.
+            var m = String(priceStr).replace(/[^\d.,]/g, '').match(/^(.*?)(?:[.,](\d{1,2}))?$/);
+            if (m) {
+              var intPart = (m[1] || '').replace(/[.,]/g, '');
+              var decPart = m[2] || '';
+              decPart = (decPart + '00').slice(0, 2);
+              var n2 = (parseInt(intPart || '0', 10) * 100) + parseInt(decPart, 10);
+              if (!isNaN(n2)) preview.price = n2;
+            }
+          }
         }
       }
       if (window.GBCartDrawer && typeof window.GBCartDrawer.previewAdd === 'function') {

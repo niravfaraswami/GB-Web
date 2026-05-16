@@ -206,6 +206,78 @@
 
     // ATC click — open the GB cart drawer and add via the same flow
     var btn = bar.querySelector('[data-gb-sticky-atc-trigger]');
+
+    // Sync sticky bar to PDP variant picker. The bar renders once at
+    // page-load with p.selected_or_first_available_variant data — when
+    // the user clicks a different variant radio, update the bar's
+    // displayed price + compare and the button's data-variant-id /
+    // data-product-price so the actual ATC adds the right variant.
+    function moneyDisplay(cents) {
+      if (cents == null || isNaN(cents)) return '';
+      var n = parseInt(cents, 10);
+      var rupees = Math.floor(n / 100);
+      var paise = n % 100;
+      // Indian grouping: last 3 digits, then groups of 2
+      var s = String(rupees);
+      var last3 = s.slice(-3);
+      var rest = s.slice(0, -3);
+      if (rest) last3 = ',' + last3;
+      rest = rest.replace(/\B(?=(\d{2})+(?!\d))/g, ',');
+      var intStr = rest + last3;
+      return '₹' + intStr + (paise ? '.' + String(paise).padStart(2, '0') : '');
+    }
+    function syncToVariant(label) {
+      if (!label || !btn) return;
+      var vid = parseInt(label.getAttribute('data-variant-id') || '0', 10);
+      if (!vid) return;
+      var priceCents = parseInt(label.getAttribute('data-variant-price-cents') || '0', 10);
+      var compareCents = parseInt(label.getAttribute('data-variant-compare-cents') || '0', 10);
+      btn.setAttribute('data-variant-id', vid);
+      if (priceCents) btn.setAttribute('data-product-price', priceCents);
+      // Try to also pick up the variant's illustration image if the
+      // picker exposes one — fall back to whatever's already set.
+      var illImg = label.querySelector('.variant-illustration img');
+      if (illImg && illImg.getAttribute('src')) {
+        btn.setAttribute('data-product-image', illImg.getAttribute('src'));
+        var stickyImg = bar.querySelector('img.gb-sticky-atc-img');
+        if (stickyImg) stickyImg.setAttribute('src', illImg.getAttribute('src'));
+      }
+      var priceEl = bar.querySelector('[data-gb-sticky-price]');
+      if (priceEl) {
+        // Prefer the formatted string from the variant label (matches
+        // theme money format exactly). Fallback to building our own.
+        var fmt = label.getAttribute('data-variant-price');
+        priceEl.textContent = fmt || moneyDisplay(priceCents);
+      }
+      var compareWrap = bar.querySelector('.gb-sticky-atc-compare');
+      var showCompare = compareCents > priceCents;
+      if (showCompare) {
+        if (!compareWrap) {
+          compareWrap = document.createElement('span');
+          compareWrap.className = 'gb-sticky-atc-compare';
+          var priceBlock = bar.querySelector('.gb-sticky-atc-price');
+          if (priceBlock) priceBlock.appendChild(compareWrap);
+        }
+        compareWrap.textContent = moneyDisplay(compareCents);
+      } else if (compareWrap) {
+        compareWrap.remove();
+      }
+    }
+    // Initial sync — in case the page rendered with a different variant
+    // pre-selected than `selected_or_first_available_variant` (e.g. URL
+    // ?variant= param). Safe no-op when nothing matches.
+    var initialChecked = document.querySelector('input[type="radio"][name="id"]:checked');
+    if (initialChecked) {
+      var initialLabel = initialChecked.closest('label.variant');
+      if (initialLabel) syncToVariant(initialLabel);
+    }
+    document.addEventListener('change', function(e) {
+      var input = e.target;
+      if (!input || !input.matches || !input.matches('input[type="radio"][name="id"]')) return;
+      var label = input.closest('label.variant');
+      if (label) syncToVariant(label);
+    });
+
     if (btn) {
       btn.addEventListener('click', function(ev) {
         ev.preventDefault();
