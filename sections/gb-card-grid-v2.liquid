@@ -2,14 +2,14 @@
 
 {%- liquid
   assign p = product
-  assign mf_trust_cards = p.metafields.custom.featured_trust_cards.value
   assign mf_why_eyebrow = p.metafields.custom.why_eyebrow
   assign mf_why_heading = p.metafields.custom.why_heading
   assign mf_why_intro = p.metafields.custom.why_intro
-  assign mf_items = mf_trust_cards
-  if mf_items == blank or mf_items.size == 0
-    assign mf_items = p.metafields.custom.featured_quick_benefits.value
-  endif
+  # Primary: the "why" cards. Legacy: featured_components (older
+  # products still on the kit_consumable shape). The
+  # featured_trust_cards metafield is now exclusively owned by
+  # fk-trust-row — don't read it here.
+  assign mf_items = p.metafields.custom.featured_quick_benefits.value
   if mf_items == blank or mf_items.size == 0
     assign mf_items = p.metafields.custom.featured_components.value
   endif
