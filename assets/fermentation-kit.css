@@ -198,7 +198,7 @@
 .pdp-hero .variant-price { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 16px; color: var(--kit-color); }
 .pdp-hero .variant-price > span:first-child { display: block; white-space: nowrap; }
 .pdp-hero .variant-compare { font-size: 12px; color: var(--gb-text-soft); text-decoration: line-through; margin-left: 0; display: inline-block; font-weight: 400; white-space: nowrap; }
-.pdp-hero .variant-save { display: block; font-size: 11px; color: var(--gb-ink); font-weight: 600; margin-top: 4px; }
+.pdp-hero .variant-save { display: none; }
 .pdp-hero .variant-help-note { margin: 14px 0 0; padding: 12px 16px; background: var(--gb-cream); border-radius: 10px; font-size: 12.5px; color: var(--gb-text-muted); line-height: 1.45; display: flex; align-items: center; justify-content: space-between; gap: 14px; }
 .pdp-hero .variant-help-note strong { color: var(--kit-color-dark); font-weight: 700; }
 .pdp-hero .vhn-text { flex: 1; }
@@ -471,8 +471,8 @@
   .pdp-hero .variant-radio { width: 13px; height: 13px; top: 7px; right: 7px; }
   .pdp-hero .vr-text { font-size: 11px; line-height: 1.3; }
   .pdp-hero .variant-illustration { height: 50px; }
-  .pdp-hero .variant-price { font-size: 13px; }
-  .pdp-hero .variant-compare { font-size: 10.5px; }
+  .pdp-hero .variant-price { font-size: 11.5px; }
+  .pdp-hero .variant-compare { font-size: 10px; }
 
   .trust-row-section { padding: 24px 0; }
   .tr-card { padding: 0 6px; }

@@ -2977,8 +2977,7 @@
 }
 [data-template="leo"].pdp-hero .variant-price > span:first-child { display: inline; white-space: nowrap; }
 [data-template="leo"].pdp-hero .variant-compare { margin-left: 0; white-space: nowrap; }
-[data-template="leo"].pdp-hero .variant-save { text-align: left; align-self: stretch; }
-[data-template="leo"].pdp-hero .variant-save { margin-top: 4px; font-size: 11px; }
+[data-template="leo"].pdp-hero .variant-save { display: none; }
 
 /* Mobile: 2-up stays 2-up — long titles wrap (white-space: normal + text-wrap:
    balance already set above). 3+ stays multi-col. Just tightens type + padding. */
@@ -2986,9 +2985,8 @@
   [data-template="leo"].pdp-hero .variant { padding: 14px 12px 12px; padding-right: 30px; }
   [data-template="leo"].pdp-hero .variant-pack { font-size: 14px; margin-bottom: 8px; }
   [data-template="leo"].pdp-hero .variant-illustration { aspect-ratio: 5 / 2; }
-  [data-template="leo"].pdp-hero .variant-price { font-size: 15px; }
-  [data-template="leo"].pdp-hero .variant-compare { font-size: 12px; }
-  [data-template="leo"].pdp-hero .variant-save { font-size: 10.5px; }
+  [data-template="leo"].pdp-hero .variant-price { font-size: 12px; }
+  [data-template="leo"].pdp-hero .variant-compare { font-size: 10.5px; }
 }
 
 /* ============================================================
