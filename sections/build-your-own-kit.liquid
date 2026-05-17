@@ -17,19 +17,23 @@
 
   PRODUCT HANDLES referenced (catalog drift check during QA):
     Jars   : a-fermentation-jars, fermentation-jar-wide-mouth-2-litre,
-             fermentation-jar-wide-mouth-4-litre, kombucha-jar,
-             fermentation-jar-narrow-mouth-hdpe-8-litre, glass-carboy-4-litre
+             fermentation-jar-wide-mouth-4-litre
     Ferment chips :
              kanji-supplies-starter-pack, kanji-supplies-value-pack,
              kanji-supplies-mega-pack,
              aam-panna-supplies-value-pack-includes-aam-panna-spice-mix-pack-of-5-ferment-boost-pack-of-5,
              achaar-making-supplies-6-batch-refill-pack,
              kimchi-making-paste
-    Tools  : a-glass-weight, grommet-washer-for-fermentation-lid-set-of-3,
+    Tools (primary) : a-glass-weight,
+             grommet-washer-for-fermentation-lid-set-of-3,
              a-ph-strip, stick-on-thermometer-strip-1
-    Books  : kanji-recipe-book, probiotic-achaar-recipe-book,
-             kimchi-recipe-book, vegetable-fermentation-recipe-book,
-             kombucha-recipe-book
+    Tools (more)    : a-airlock, a-funnel, pipette-1,
+             a-mesh-strainer, a-hydrometer
+    Books (primary) : kanji-recipe-book, probiotic-achaar-recipe-book,
+             kimchi-recipe-book, vegetable-fermentation-recipe-book
+    Books (more)    : kombucha-recipe-book,
+             probiotic-drinks-recipe-book,
+             all-fermentation-recipe-book
 
   If a product is nil (drift), the for-loop skips the tile (per spec §14.2
   — never emit a broken tile).
@@ -40,11 +44,11 @@
 
 {%- liquid
   # ============== TILE DATA (handle~title~bg~emoji~badge~eager) ==============
-  assign jars_primary_data  = 'a-fermentation-jars~1 Litre~#FBF4E2~🫙~1 L~1|fermentation-jar-wide-mouth-2-litre~2 Litre~#F4E9C8~🫙~2 L~0|fermentation-jar-wide-mouth-4-litre~4 Litre~#EDDDA9~🫙~4 L~0'
-  assign jars_more_data     = 'kombucha-jar~Kombucha Jar~#E8E4D7~🫙~4 L · Kombucha~0|fermentation-jar-narrow-mouth-hdpe-8-litre~Plastic Carboy~#E2E0D6~🛢️~8 L · HDPE~0|glass-carboy-4-litre~Amber Carboy~#D8C9A8~🍯~4 L · Glass~0'
-  assign tools_data         = 'a-glass-weight~Glass Weight~#F5EDD8~⚪~~0|grommet-washer-for-fermentation-lid-set-of-3~Grommet · 3~#EBE7D4~⭕~~0|a-ph-strip~pH Strip~#E8E4D7~📏~~0|stick-on-thermometer-strip-1~Temp Strip~#F0E8CD~🌡️~~0'
+  assign jars_data          = 'a-fermentation-jars~1 Litre~#FBF4E2~🫙~1 L~1|fermentation-jar-wide-mouth-2-litre~2 Litre~#F4E9C8~🫙~2 L~0|fermentation-jar-wide-mouth-4-litre~4 Litre~#EDDDA9~🫙~4 L~0'
+  assign tools_primary_data = 'a-glass-weight~Glass Weight~#F5EDD8~⚪~~0|grommet-washer-for-fermentation-lid-set-of-3~Grommet · 3~#EBE7D4~⭕~~0|a-ph-strip~pH Strip~#E8E4D7~📏~~0|stick-on-thermometer-strip-1~Temp Strip~#F0E8CD~🌡️~~0'
+  assign tools_more_data    = 'a-airlock~Airlock~#ECE8D6~🌫️~~0|a-funnel~Funnel~#E8E4D7~🔻~~0|pipette-1~Pipette · 5~#EDE6CE~💧~~0|a-mesh-strainer~Strainer~#E5E0CD~🥅~~0|a-hydrometer~Hydrometer~#ECE4C9~📊~~0'
   assign books_primary_data = 'kanji-recipe-book~Kanji Book~#F4D8E1~📕~~0|probiotic-achaar-recipe-book~Achaar Book~#FFE4D1~📙~~0|kimchi-recipe-book~Kimchi Book~#FBDED6~📕~~0|vegetable-fermentation-recipe-book~Veg Ferment~#E2EEDC~📗~~0'
-  assign books_more_data    = 'kombucha-recipe-book~Kombucha Book~#E8E4D7~📘~~0'
+  assign books_more_data    = 'kombucha-recipe-book~Kombucha Book~#E8E4D7~📘~~0|probiotic-drinks-recipe-book~Drinks Book~#E5EFE0~📔~~0|all-fermentation-recipe-book~All Ferments~#EBE3D2~📚~~0'
 
   # ============== FERMENT SUB-OPTIONS (batch chips) ==============
   assign p_kanji_3   = all_products['kanji-supplies-starter-pack']
@@ -55,9 +59,9 @@
   assign p_kimchi_1  = all_products['kimchi-making-paste']
 
   # Pre-split tile data — Shopify Liquid disallows filters inside `for ... in EXPR`.
-  assign jars_primary_rows  = jars_primary_data  | split: '|'
-  assign jars_more_rows     = jars_more_data     | split: '|'
-  assign tools_rows         = tools_data         | split: '|'
+  assign jars_rows          = jars_data          | split: '|'
+  assign tools_primary_rows = tools_primary_data | split: '|'
+  assign tools_more_rows    = tools_more_data    | split: '|'
   assign books_primary_rows = books_primary_data | split: '|'
   assign books_more_rows    = books_more_data    | split: '|'
 -%}
@@ -85,8 +89,8 @@
             </div>
           </div>
 
-          <div class="tiles cols-3" data-group="jar">
-            {%- for raw in jars_primary_rows -%}
+          <div class="tiles cols-4" data-group="jar">
+            {%- for raw in jars_rows -%}
               {%- assign f = raw | split: '~' -%}
               {%- assign p = all_products[f[0]] -%}
               {%- if p != blank -%}
@@ -102,7 +106,7 @@
                 <button type="button" class="tile" data-id="tile-jar-{{ p.handle }}" data-handle="{{ p.handle }}" data-variant-id="{{ v.id }}" data-price="{{ v.price }}" data-was="{% if v.compare_at_price and v.compare_at_price > v.price %}{{ v.compare_at_price }}{% endif %}" data-label="{{ f[1] | escape }}" data-section="jar" aria-pressed="false">
                   <div class="tile-img" style="background:{{ f[2] }};">
                     {%- if img -%}
-                      <img src="{{ img | image_url: width: 300 }}" srcset="{{ img | image_url: width: 200 }} 200w, {{ img | image_url: width: 300 }} 300w, {{ img | image_url: width: 400 }} 400w" sizes="(max-width: 600px) 33vw, 150px" loading="{{ loading_attr }}" decoding="async" alt="{{ f[1] | escape }}" width="300" height="300">
+                      <img src="{{ img | image_url: width: 300 }}" srcset="{{ img | image_url: width: 200 }} 200w, {{ img | image_url: width: 300 }} 300w, {{ img | image_url: width: 400 }} 400w" sizes="(max-width: 600px) 25vw, 150px" loading="{{ loading_attr }}" decoding="async" alt="{{ f[1] | escape }}" width="300" height="300">
                     {%- else -%}
                       {{ f[3] }}
                     {%- endif -%}
@@ -119,43 +123,6 @@
                 </button>
               {%- endif -%}
             {%- endfor -%}
-          </div>
-
-          <button type="button" class="more-toggle" data-more="jar" aria-expanded="false">+ Brewing vessels (Kombucha jar, Carboy)</button>
-          <div class="more-content" data-more-content="jar">
-            <div class="tiles cols-3" data-group="jar">
-              {%- for raw in jars_more_rows -%}
-                {%- assign f = raw | split: '~' -%}
-                {%- assign p = all_products[f[0]] -%}
-                {%- if p != blank -%}
-                  {%- assign v = p.selected_or_first_available_variant -%}
-                  {%- assign img = p.featured_image -%}
-                  {%- assign price_money = v.price | money_without_trailing_zeros -%}
-                  {%- assign was_money = '' -%}
-                  {%- if v.compare_at_price and v.compare_at_price > v.price -%}
-                    {%- assign was_money = v.compare_at_price | money_without_trailing_zeros -%}
-                  {%- endif -%}
-                  <button type="button" class="tile" data-id="tile-jar-{{ p.handle }}" data-handle="{{ p.handle }}" data-variant-id="{{ v.id }}" data-price="{{ v.price }}" data-was="{% if v.compare_at_price and v.compare_at_price > v.price %}{{ v.compare_at_price }}{% endif %}" data-label="{{ f[1] | escape }}" data-section="jar" aria-pressed="false">
-                    <div class="tile-img" style="background:{{ f[2] }};">
-                      {%- if img -%}
-                        <img src="{{ img | image_url: width: 300 }}" srcset="{{ img | image_url: width: 200 }} 200w, {{ img | image_url: width: 300 }} 300w, {{ img | image_url: width: 400 }} 400w" sizes="(max-width: 600px) 33vw, 150px" loading="lazy" decoding="async" alt="{{ f[1] | escape }}" width="300" height="300">
-                      {%- else -%}
-                        {{ f[3] }}
-                      {%- endif -%}
-                      {%- if f[4] != '' -%}<span class="img-badge">{{ f[4] }}</span>{%- endif -%}
-                    </div>
-                    <div class="tile-body">
-                      <div class="tile-title">{{ f[1] }}</div>
-                      <div class="tile-price">
-                        {%- if was_money != '' -%}<span class="tile-was">{{ was_money }}</span>{%- endif -%}
-                        {{ price_money }}
-                      </div>
-                    </div>
-                    <span class="tile-check" aria-hidden="true">✓</span>
-                  </button>
-                {%- endif -%}
-              {%- endfor -%}
-            </div>
           </div>
         </section>
 
@@ -218,7 +185,7 @@
           </div>
 
           <div class="tiles cols-4" data-group="tools">
-            {%- for raw in tools_rows -%}
+            {%- for raw in tools_primary_rows -%}
               {%- assign f = raw | split: '~' -%}
               {%- assign p = all_products[f[0]] -%}
               {%- if p != blank -%}
@@ -249,6 +216,43 @@
                 </button>
               {%- endif -%}
             {%- endfor -%}
+          </div>
+
+          <button type="button" class="more-toggle" data-more="tools" aria-expanded="false">+ More tools (Airlock, Funnel, Pipette, Strainer, Hydrometer)</button>
+          <div class="more-content" data-more-content="tools">
+            <div class="tiles cols-4" data-group="tools">
+              {%- for raw in tools_more_rows -%}
+                {%- assign f = raw | split: '~' -%}
+                {%- assign p = all_products[f[0]] -%}
+                {%- if p != blank -%}
+                  {%- assign v = p.selected_or_first_available_variant -%}
+                  {%- assign img = p.featured_image -%}
+                  {%- assign price_money = v.price | money_without_trailing_zeros -%}
+                  {%- assign was_money = '' -%}
+                  {%- if v.compare_at_price and v.compare_at_price > v.price -%}
+                    {%- assign was_money = v.compare_at_price | money_without_trailing_zeros -%}
+                  {%- endif -%}
+                  <button type="button" class="tile" data-id="tile-tools-{{ p.handle }}" data-handle="{{ p.handle }}" data-variant-id="{{ v.id }}" data-price="{{ v.price }}" data-was="{% if v.compare_at_price and v.compare_at_price > v.price %}{{ v.compare_at_price }}{% endif %}" data-label="{{ f[1] | escape }}" data-section="tools" aria-pressed="false">
+                    <div class="tile-img" style="background:{{ f[2] }};">
+                      {%- if img -%}
+                        <img src="{{ img | image_url: width: 300 }}" srcset="{{ img | image_url: width: 200 }} 200w, {{ img | image_url: width: 300 }} 300w, {{ img | image_url: width: 400 }} 400w" sizes="(max-width: 600px) 25vw, 150px" loading="lazy" decoding="async" alt="{{ f[1] | escape }}" width="300" height="300">
+                      {%- else -%}
+                        {{ f[3] }}
+                      {%- endif -%}
+                      {%- if f[4] != '' -%}<span class="img-badge">{{ f[4] }}</span>{%- endif -%}
+                    </div>
+                    <div class="tile-body">
+                      <div class="tile-title">{{ f[1] }}</div>
+                      <div class="tile-price">
+                        {%- if was_money != '' -%}<span class="tile-was">{{ was_money }}</span>{%- endif -%}
+                        {{ price_money }}
+                      </div>
+                    </div>
+                    <span class="tile-check" aria-hidden="true">✓</span>
+                  </button>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
           </div>
 
           <div class="context-hint" id="hint-veg">
@@ -300,7 +304,7 @@
             {%- endfor -%}
           </div>
 
-          <button type="button" class="more-toggle" data-more="books" aria-expanded="false">+ More books (Kombucha)</button>
+          <button type="button" class="more-toggle" data-more="books" aria-expanded="false">+ More books (Kombucha, Drinks, All Fermentation)</button>
           <div class="more-content" data-more-content="books">
             <div class="tiles cols-4" data-group="books">
               {%- for raw in books_more_rows -%}
