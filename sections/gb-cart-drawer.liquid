@@ -28,14 +28,25 @@
         assign vid = vobj.selected_or_first_available_variant.id | default: vobj.variants.first.id
       endif
       assign code  = section.settings[code_key]
-      assign t_json = '{"threshold":' | append: thr | append: ',"label":' | append: lbl | json | append: ',"icon":' | append: icn | json | append: ',"type":' | append: typ | json
-      if vid != ''
-        assign t_json = t_json | append: ',"variant_id":' | append: vid
-      endif
-      if code != blank
-        assign t_json = t_json | append: ',"code":' | append: code | json
-      endif
-      assign t_json = t_json | append: '}'
+      capture t_json
+        echo '{"threshold":'
+        echo thr
+        echo ',"label":'
+        echo lbl | json
+        echo ',"icon":'
+        echo icn | json
+        echo ',"type":'
+        echo typ | json
+        if vid != ''
+          echo ',"variant_id":'
+          echo vid
+        endif
+        if code != blank
+          echo ',"code":'
+          echo code | json
+        endif
+        echo '}'
+      endcapture
       if tiers_arr == ''
         assign tiers_arr = t_json
       else
@@ -55,7 +66,19 @@
           assign seen_ids = seen_ids | append: rid_str
           assign vid_a = rp.selected_or_first_available_variant.id | default: rp.variants.first.id
           assign img_a = rp.featured_image | image_url: width: 300
-          assign a_json = '{"id":' | append: rp.id | append: ',"variant_id":' | append: vid_a | append: ',"title":' | append: rp.title | json | append: ',"price":' | append: rp.price | append: ',"image":' | append: img_a | json | append: '}'
+          capture a_json
+            echo '{"id":'
+            echo rp.id
+            echo ',"variant_id":'
+            echo vid_a
+            echo ',"title":'
+            echo rp.title | json
+            echo ',"price":'
+            echo rp.price
+            echo ',"image":'
+            echo img_a | json
+            echo '}'
+          endcapture
           if addon_json == ''
             assign addon_json = a_json
           else
@@ -75,7 +98,19 @@
           assign seen_ids = seen_ids | append: rid_str2
           assign vid_u = rp.selected_or_first_available_variant.id | default: rp.variants.first.id
           assign img_u = rp.featured_image | image_url: width: 300
-          assign u_json = '{"id":' | append: rp.id | append: ',"variant_id":' | append: vid_u | append: ',"title":' | append: rp.title | json | append: ',"price":' | append: rp.price | append: ',"image":' | append: img_u | json | append: '}'
+          capture u_json
+            echo '{"id":'
+            echo rp.id
+            echo ',"variant_id":'
+            echo vid_u
+            echo ',"title":'
+            echo rp.title | json
+            echo ',"price":'
+            echo rp.price
+            echo ',"image":'
+            echo img_u | json
+            echo '}'
+          endcapture
           if addon_json == ''
             assign addon_json = u_json
           else
@@ -91,7 +126,21 @@
     assign up = section.settings.upsell_product
     assign up_vid = up.selected_or_first_available_variant.id | default: up.variants.first.id
     assign up_img = up.featured_image | image_url: width: 300
-    assign upsell_json = '{"variant_id":' | append: up_vid | append: ',"price":' | append: up.price | append: ',"title":' | append: up.title | json | append: ',"headline":' | append: section.settings.upsell_headline | json | append: ',"eyebrow":' | append: section.settings.upsell_eyebrow | json | append: ',"image":' | append: up_img | json | append: '}'
+    capture upsell_json
+      echo '{"variant_id":'
+      echo up_vid
+      echo ',"price":'
+      echo up.price
+      echo ',"title":'
+      echo up.title | json
+      echo ',"headline":'
+      echo section.settings.upsell_headline | json
+      echo ',"eyebrow":'
+      echo section.settings.upsell_eyebrow | json
+      echo ',"image":'
+      echo up_img | json
+      echo '}'
+    endcapture
   endif
 
   assign empty_json = ''
@@ -102,7 +151,19 @@
         if ep.available
           assign ep_vid2 = ep.selected_or_first_available_variant.id | default: ep.variants.first.id
           assign ep_img2 = ep.featured_image | image_url: width: 300
-          assign e_json = '{"id":' | append: ep.id | append: ',"variant_id":' | append: ep_vid2 | append: ',"title":' | append: ep.title | json | append: ',"price":' | append: ep.price | append: ',"image":' | append: ep_img2 | json | append: '}'
+          capture e_json
+            echo '{"id":'
+            echo ep.id
+            echo ',"variant_id":'
+            echo ep_vid2
+            echo ',"title":'
+            echo ep.title | json
+            echo ',"price":'
+            echo ep.price
+            echo ',"image":'
+            echo ep_img2 | json
+            echo '}'
+          endcapture
           if empty_json == ''
             assign empty_json = e_json
           else
@@ -141,13 +202,13 @@
 <script type="application/json" id="gb-cart-drawer-config">
 {
   "money_format": {{ shop.money_format | json }},
-  "show_progress":  {{ section.settings.show_progress }},
-  "show_addons":    {{ section.settings.show_addons }},
-  "show_upsell":    {{ section.settings.show_upsell }},
-  "show_discount":  {{ section.settings.show_discount }},
-  "show_trust":     {{ section.settings.show_trust }},
-  "show_express":   {{ section.settings.show_express }},
-  "free_gift_enabled": {{ section.settings.free_gift_enabled }},
+  "show_progress":  {{ section.settings.show_progress  | json }},
+  "show_addons":    {{ section.settings.show_addons    | json }},
+  "show_upsell":    {{ section.settings.show_upsell    | json }},
+  "show_discount":  {{ section.settings.show_discount  | json }},
+  "show_trust":     {{ section.settings.show_trust     | json }},
+  "show_express":   {{ section.settings.show_express   | json }},
+  "free_gift_enabled": {{ section.settings.free_gift_enabled | json }},
   "tiers": [{{ tiers_arr }}],
   "addon_candidates": [{{ addon_json }}],
   "upsell": {% if upsell_json != '' %}{{ upsell_json }}{% else %}null{% endif %},
