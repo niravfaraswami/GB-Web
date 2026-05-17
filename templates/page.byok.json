@@ -28,7 +28,7 @@
             "section_key": "jars",
             "short_label": "Jar",
             "hint": "Pick one or more — different sizes for different ferments.",
-            "collection": "fermentation-kits",
+            "collection": "byok-spice-mix-copy",
             "visible_count": 6
           }
         },
@@ -50,7 +50,7 @@
             "section_key": "tools",
             "short_label": "Tools & Accessories",
             "hint": "Add the bits that make fermentation foolproof.",
-            "collection": "",
+            "collection": "byok-jars-copy",
             "visible_count": 6
           }
         },
@@ -61,7 +61,7 @@
             "section_key": "books",
             "short_label": "Recipe Books",
             "hint": "Print copies of our most popular guides.",
-            "collection": "",
+            "collection": "byok-tools-copy",
             "visible_count": 6
           }
         }
