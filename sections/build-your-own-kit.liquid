@@ -53,6 +53,13 @@
   assign p_aam_5     = all_products['aam-panna-supplies-value-pack-includes-aam-panna-spice-mix-pack-of-5-ferment-boost-pack-of-5']
   assign p_achaar_6  = all_products['achaar-making-supplies-6-batch-refill-pack']
   assign p_kimchi_1  = all_products['kimchi-making-paste']
+
+  # Pre-split tile data — Shopify Liquid disallows filters inside `for ... in EXPR`.
+  assign jars_primary_rows  = jars_primary_data  | split: '|'
+  assign jars_more_rows     = jars_more_data     | split: '|'
+  assign tools_rows         = tools_data         | split: '|'
+  assign books_primary_rows = books_primary_data | split: '|'
+  assign books_more_rows    = books_more_data    | split: '|'
 -%}
 
 <div id="byok-page" class="byok">
@@ -79,7 +86,7 @@
           </div>
 
           <div class="tiles cols-3" data-group="jar">
-            {%- for raw in jars_primary_data | split: '|' -%}
+            {%- for raw in jars_primary_rows -%}
               {%- assign f = raw | split: '~' -%}
               {%- assign p = all_products[f[0]] -%}
               {%- if p != blank -%}
@@ -117,7 +124,7 @@
           <button type="button" class="more-toggle" data-more="jar" aria-expanded="false">+ Brewing vessels (Kombucha jar, Carboy)</button>
           <div class="more-content" data-more-content="jar">
             <div class="tiles cols-3" data-group="jar">
-              {%- for raw in jars_more_data | split: '|' -%}
+              {%- for raw in jars_more_rows -%}
                 {%- assign f = raw | split: '~' -%}
                 {%- assign p = all_products[f[0]] -%}
                 {%- if p != blank -%}
@@ -211,7 +218,7 @@
           </div>
 
           <div class="tiles cols-4" data-group="tools">
-            {%- for raw in tools_data | split: '|' -%}
+            {%- for raw in tools_rows -%}
               {%- assign f = raw | split: '~' -%}
               {%- assign p = all_products[f[0]] -%}
               {%- if p != blank -%}
@@ -260,7 +267,7 @@
           </div>
 
           <div class="tiles cols-4" data-group="books">
-            {%- for raw in books_primary_data | split: '|' -%}
+            {%- for raw in books_primary_rows -%}
               {%- assign f = raw | split: '~' -%}
               {%- assign p = all_products[f[0]] -%}
               {%- if p != blank -%}
@@ -296,7 +303,7 @@
           <button type="button" class="more-toggle" data-more="books" aria-expanded="false">+ More books (Kombucha)</button>
           <div class="more-content" data-more-content="books">
             <div class="tiles cols-4" data-group="books">
-              {%- for raw in books_more_data | split: '|' -%}
+              {%- for raw in books_more_rows -%}
                 {%- assign f = raw | split: '~' -%}
                 {%- assign p = all_products[f[0]] -%}
                 {%- if p != blank -%}
