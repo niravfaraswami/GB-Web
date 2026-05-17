@@ -95,7 +95,9 @@
               {%- assign p = all_products[f[0]] -%}
               {%- if p != blank -%}
                 {%- assign v = p.selected_or_first_available_variant -%}
-                {%- assign img = p.featured_image -%}
+                {%- assign t = p.metafields.custom.byok_title | default: f[1] -%}
+                {%- assign byok_img = p.metafields.custom.byok_image.value -%}
+                {%- if byok_img != blank -%}{%- assign img = byok_img -%}{%- else -%}{%- assign img = p.featured_image -%}{%- endif -%}
                 {%- assign price_money = v.price | money_without_trailing_zeros -%}
                 {%- assign was_money = '' -%}
                 {%- if v.compare_at_price and v.compare_at_price > v.price -%}
@@ -103,17 +105,17 @@
                 {%- endif -%}
                 {%- assign loading_attr = 'lazy' -%}
                 {%- if f[5] == '1' -%}{%- assign loading_attr = 'eager' -%}{%- endif -%}
-                <button type="button" class="tile" data-id="tile-jar-{{ p.handle }}" data-handle="{{ p.handle }}" data-variant-id="{{ v.id }}" data-price="{{ v.price }}" data-was="{% if v.compare_at_price and v.compare_at_price > v.price %}{{ v.compare_at_price }}{% endif %}" data-label="{{ f[1] | escape }}" data-section="jar" aria-pressed="false">
+                <button type="button" class="tile" data-id="tile-jar-{{ p.handle }}" data-handle="{{ p.handle }}" data-variant-id="{{ v.id }}" data-price="{{ v.price }}" data-was="{% if v.compare_at_price and v.compare_at_price > v.price %}{{ v.compare_at_price }}{% endif %}" data-label="{{ t | escape }}" data-section="jar" aria-pressed="false">
                   <div class="tile-img" style="background:{{ f[2] }};">
                     {%- if img -%}
-                      <img src="{{ img | image_url: width: 300 }}" srcset="{{ img | image_url: width: 200 }} 200w, {{ img | image_url: width: 300 }} 300w, {{ img | image_url: width: 400 }} 400w" sizes="(max-width: 600px) 25vw, 150px" loading="{{ loading_attr }}" decoding="async" alt="{{ f[1] | escape }}" width="300" height="300">
+                      <img src="{{ img | image_url: width: 300 }}" srcset="{{ img | image_url: width: 200 }} 200w, {{ img | image_url: width: 300 }} 300w, {{ img | image_url: width: 400 }} 400w" sizes="(max-width: 600px) 25vw, 150px" loading="{{ loading_attr }}" decoding="async" alt="{{ t | escape }}" width="300" height="300">
                     {%- else -%}
                       {{ f[3] }}
                     {%- endif -%}
                     {%- if f[4] != '' -%}<span class="img-badge">{{ f[4] }}</span>{%- endif -%}
                   </div>
                   <div class="tile-body">
-                    <div class="tile-title">{{ f[1] }}</div>
+                    <div class="tile-title">{{ t }}</div>
                     <div class="tile-price">
                       {%- if was_money != '' -%}<span class="tile-was">{{ was_money }}</span>{%- endif -%}
                       {{ price_money }}
@@ -190,23 +192,25 @@
               {%- assign p = all_products[f[0]] -%}
               {%- if p != blank -%}
                 {%- assign v = p.selected_or_first_available_variant -%}
-                {%- assign img = p.featured_image -%}
+                {%- assign t = p.metafields.custom.byok_title | default: f[1] -%}
+                {%- assign byok_img = p.metafields.custom.byok_image.value -%}
+                {%- if byok_img != blank -%}{%- assign img = byok_img -%}{%- else -%}{%- assign img = p.featured_image -%}{%- endif -%}
                 {%- assign price_money = v.price | money_without_trailing_zeros -%}
                 {%- assign was_money = '' -%}
                 {%- if v.compare_at_price and v.compare_at_price > v.price -%}
                   {%- assign was_money = v.compare_at_price | money_without_trailing_zeros -%}
                 {%- endif -%}
-                <button type="button" class="tile" data-id="tile-tools-{{ p.handle }}" data-handle="{{ p.handle }}" data-variant-id="{{ v.id }}" data-price="{{ v.price }}" data-was="{% if v.compare_at_price and v.compare_at_price > v.price %}{{ v.compare_at_price }}{% endif %}" data-label="{{ f[1] | escape }}" data-section="tools" aria-pressed="false">
+                <button type="button" class="tile" data-id="tile-tools-{{ p.handle }}" data-handle="{{ p.handle }}" data-variant-id="{{ v.id }}" data-price="{{ v.price }}" data-was="{% if v.compare_at_price and v.compare_at_price > v.price %}{{ v.compare_at_price }}{% endif %}" data-label="{{ t | escape }}" data-section="tools" aria-pressed="false">
                   <div class="tile-img" style="background:{{ f[2] }};">
                     {%- if img -%}
-                      <img src="{{ img | image_url: width: 300 }}" srcset="{{ img | image_url: width: 200 }} 200w, {{ img | image_url: width: 300 }} 300w, {{ img | image_url: width: 400 }} 400w" sizes="(max-width: 600px) 25vw, 150px" loading="lazy" decoding="async" alt="{{ f[1] | escape }}" width="300" height="300">
+                      <img src="{{ img | image_url: width: 300 }}" srcset="{{ img | image_url: width: 200 }} 200w, {{ img | image_url: width: 300 }} 300w, {{ img | image_url: width: 400 }} 400w" sizes="(max-width: 600px) 25vw, 150px" loading="lazy" decoding="async" alt="{{ t | escape }}" width="300" height="300">
                     {%- else -%}
                       {{ f[3] }}
                     {%- endif -%}
                     {%- if f[4] != '' -%}<span class="img-badge">{{ f[4] }}</span>{%- endif -%}
                   </div>
                   <div class="tile-body">
-                    <div class="tile-title">{{ f[1] }}</div>
+                    <div class="tile-title">{{ t }}</div>
                     <div class="tile-price">
                       {%- if was_money != '' -%}<span class="tile-was">{{ was_money }}</span>{%- endif -%}
                       {{ price_money }}
@@ -226,23 +230,25 @@
                 {%- assign p = all_products[f[0]] -%}
                 {%- if p != blank -%}
                   {%- assign v = p.selected_or_first_available_variant -%}
-                  {%- assign img = p.featured_image -%}
+                  {%- assign t = p.metafields.custom.byok_title | default: f[1] -%}
+                  {%- assign byok_img = p.metafields.custom.byok_image.value -%}
+                  {%- if byok_img != blank -%}{%- assign img = byok_img -%}{%- else -%}{%- assign img = p.featured_image -%}{%- endif -%}
                   {%- assign price_money = v.price | money_without_trailing_zeros -%}
                   {%- assign was_money = '' -%}
                   {%- if v.compare_at_price and v.compare_at_price > v.price -%}
                     {%- assign was_money = v.compare_at_price | money_without_trailing_zeros -%}
                   {%- endif -%}
-                  <button type="button" class="tile" data-id="tile-tools-{{ p.handle }}" data-handle="{{ p.handle }}" data-variant-id="{{ v.id }}" data-price="{{ v.price }}" data-was="{% if v.compare_at_price and v.compare_at_price > v.price %}{{ v.compare_at_price }}{% endif %}" data-label="{{ f[1] | escape }}" data-section="tools" aria-pressed="false">
+                  <button type="button" class="tile" data-id="tile-tools-{{ p.handle }}" data-handle="{{ p.handle }}" data-variant-id="{{ v.id }}" data-price="{{ v.price }}" data-was="{% if v.compare_at_price and v.compare_at_price > v.price %}{{ v.compare_at_price }}{% endif %}" data-label="{{ t | escape }}" data-section="tools" aria-pressed="false">
                     <div class="tile-img" style="background:{{ f[2] }};">
                       {%- if img -%}
-                        <img src="{{ img | image_url: width: 300 }}" srcset="{{ img | image_url: width: 200 }} 200w, {{ img | image_url: width: 300 }} 300w, {{ img | image_url: width: 400 }} 400w" sizes="(max-width: 600px) 25vw, 150px" loading="lazy" decoding="async" alt="{{ f[1] | escape }}" width="300" height="300">
+                        <img src="{{ img | image_url: width: 300 }}" srcset="{{ img | image_url: width: 200 }} 200w, {{ img | image_url: width: 300 }} 300w, {{ img | image_url: width: 400 }} 400w" sizes="(max-width: 600px) 25vw, 150px" loading="lazy" decoding="async" alt="{{ t | escape }}" width="300" height="300">
                       {%- else -%}
                         {{ f[3] }}
                       {%- endif -%}
                       {%- if f[4] != '' -%}<span class="img-badge">{{ f[4] }}</span>{%- endif -%}
                     </div>
                     <div class="tile-body">
-                      <div class="tile-title">{{ f[1] }}</div>
+                      <div class="tile-title">{{ t }}</div>
                       <div class="tile-price">
                         {%- if was_money != '' -%}<span class="tile-was">{{ was_money }}</span>{%- endif -%}
                         {{ price_money }}
@@ -276,23 +282,25 @@
               {%- assign p = all_products[f[0]] -%}
               {%- if p != blank -%}
                 {%- assign v = p.selected_or_first_available_variant -%}
-                {%- assign img = p.featured_image -%}
+                {%- assign t = p.metafields.custom.byok_title | default: f[1] -%}
+                {%- assign byok_img = p.metafields.custom.byok_image.value -%}
+                {%- if byok_img != blank -%}{%- assign img = byok_img -%}{%- else -%}{%- assign img = p.featured_image -%}{%- endif -%}
                 {%- assign price_money = v.price | money_without_trailing_zeros -%}
                 {%- assign was_money = '' -%}
                 {%- if v.compare_at_price and v.compare_at_price > v.price -%}
                   {%- assign was_money = v.compare_at_price | money_without_trailing_zeros -%}
                 {%- endif -%}
-                <button type="button" class="tile" data-id="tile-books-{{ p.handle }}" data-handle="{{ p.handle }}" data-variant-id="{{ v.id }}" data-price="{{ v.price }}" data-was="{% if v.compare_at_price and v.compare_at_price > v.price %}{{ v.compare_at_price }}{% endif %}" data-label="{{ f[1] | escape }}" data-section="books" aria-pressed="false">
+                <button type="button" class="tile" data-id="tile-books-{{ p.handle }}" data-handle="{{ p.handle }}" data-variant-id="{{ v.id }}" data-price="{{ v.price }}" data-was="{% if v.compare_at_price and v.compare_at_price > v.price %}{{ v.compare_at_price }}{% endif %}" data-label="{{ t | escape }}" data-section="books" aria-pressed="false">
                   <div class="tile-img" style="background:{{ f[2] }};">
                     {%- if img -%}
-                      <img src="{{ img | image_url: width: 300 }}" srcset="{{ img | image_url: width: 200 }} 200w, {{ img | image_url: width: 300 }} 300w, {{ img | image_url: width: 400 }} 400w" sizes="(max-width: 600px) 25vw, 150px" loading="lazy" decoding="async" alt="{{ f[1] | escape }}" width="300" height="300">
+                      <img src="{{ img | image_url: width: 300 }}" srcset="{{ img | image_url: width: 200 }} 200w, {{ img | image_url: width: 300 }} 300w, {{ img | image_url: width: 400 }} 400w" sizes="(max-width: 600px) 25vw, 150px" loading="lazy" decoding="async" alt="{{ t | escape }}" width="300" height="300">
                     {%- else -%}
                       {{ f[3] }}
                     {%- endif -%}
                     {%- if f[4] != '' -%}<span class="img-badge">{{ f[4] }}</span>{%- endif -%}
                   </div>
                   <div class="tile-body">
-                    <div class="tile-title">{{ f[1] }}</div>
+                    <div class="tile-title">{{ t }}</div>
                     <div class="tile-price">
                       {%- if was_money != '' -%}<span class="tile-was">{{ was_money }}</span>{%- endif -%}
                       {{ price_money }}
@@ -312,23 +320,25 @@
                 {%- assign p = all_products[f[0]] -%}
                 {%- if p != blank -%}
                   {%- assign v = p.selected_or_first_available_variant -%}
-                  {%- assign img = p.featured_image -%}
+                  {%- assign t = p.metafields.custom.byok_title | default: f[1] -%}
+                  {%- assign byok_img = p.metafields.custom.byok_image.value -%}
+                  {%- if byok_img != blank -%}{%- assign img = byok_img -%}{%- else -%}{%- assign img = p.featured_image -%}{%- endif -%}
                   {%- assign price_money = v.price | money_without_trailing_zeros -%}
                   {%- assign was_money = '' -%}
                   {%- if v.compare_at_price and v.compare_at_price > v.price -%}
                     {%- assign was_money = v.compare_at_price | money_without_trailing_zeros -%}
                   {%- endif -%}
-                  <button type="button" class="tile" data-id="tile-books-{{ p.handle }}" data-handle="{{ p.handle }}" data-variant-id="{{ v.id }}" data-price="{{ v.price }}" data-was="{% if v.compare_at_price and v.compare_at_price > v.price %}{{ v.compare_at_price }}{% endif %}" data-label="{{ f[1] | escape }}" data-section="books" aria-pressed="false">
+                  <button type="button" class="tile" data-id="tile-books-{{ p.handle }}" data-handle="{{ p.handle }}" data-variant-id="{{ v.id }}" data-price="{{ v.price }}" data-was="{% if v.compare_at_price and v.compare_at_price > v.price %}{{ v.compare_at_price }}{% endif %}" data-label="{{ t | escape }}" data-section="books" aria-pressed="false">
                     <div class="tile-img" style="background:{{ f[2] }};">
                       {%- if img -%}
-                        <img src="{{ img | image_url: width: 300 }}" srcset="{{ img | image_url: width: 200 }} 200w, {{ img | image_url: width: 300 }} 300w, {{ img | image_url: width: 400 }} 400w" sizes="(max-width: 600px) 25vw, 150px" loading="lazy" decoding="async" alt="{{ f[1] | escape }}" width="300" height="300">
+                        <img src="{{ img | image_url: width: 300 }}" srcset="{{ img | image_url: width: 200 }} 200w, {{ img | image_url: width: 300 }} 300w, {{ img | image_url: width: 400 }} 400w" sizes="(max-width: 600px) 25vw, 150px" loading="lazy" decoding="async" alt="{{ t | escape }}" width="300" height="300">
                       {%- else -%}
                         {{ f[3] }}
                       {%- endif -%}
                       {%- if f[4] != '' -%}<span class="img-badge">{{ f[4] }}</span>{%- endif -%}
                     </div>
                     <div class="tile-body">
-                      <div class="tile-title">{{ f[1] }}</div>
+                      <div class="tile-title">{{ t }}</div>
                       <div class="tile-price">
                         {%- if was_money != '' -%}<span class="tile-was">{{ was_money }}</span>{%- endif -%}
                         {{ price_money }}
