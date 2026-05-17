@@ -1,0 +1,14 @@
+{%- comment -%}
+  byok-mobile-bar.liquid — Sticky bottom bar shown below 900px.
+  JS populates #mb-count / #mb-total and the CTA enabled state.
+{%- endcomment -%}
+<div class="mobile-bar is-visible" id="mobile-bar">
+  <div class="mb-info">
+    <div class="mb-eyebrow">YOUR BUNDLE</div>
+    <div class="mb-summary">
+      <span class="mb-count" id="mb-count">No items yet</span>
+      <span class="mb-total" id="mb-total"></span>
+    </div>
+  </div>
+  <button type="button" class="mb-cta" id="mb-cta" disabled>Add to cart</button>
+</div>

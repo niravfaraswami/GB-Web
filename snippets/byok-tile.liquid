@@ -1,0 +1,93 @@
+{%- comment -%}
+  byok-tile.liquid — Single tile inside the BYOK builder grid.
+
+  Parameters:
+    product        (required)  — the Shopify product object (via all_products[handle])
+    section_id     (required)  — 'jar' | 'ferment' | 'tools' | 'books'
+    display_title  (optional)  — override for the tile title
+    display_sub    (optional)  — override for the sub-line under the title (ferments)
+    kit_color      (optional)  — 'kanji' | 'aam-panna' | 'achaar' | 'kimchi'  (ferment tiles only)
+    tile_bg        (optional)  — inline background colour for the .tile-img area
+    emoji          (optional)  — emoji fallback rendered in .tile-img when no image
+    badge          (optional)  — short text rendered as a corner badge over the image
+    show_price     (optional)  — boolean, default true; ferment tiles pass false
+    eager          (optional)  — boolean, first jar tile uses loading="eager" (perf §16)
+
+  Future v2 migration:
+    Replace this snippet's parameters with a `tile` metaobject reference and
+    apply the resolver waterfall from §5.1 / §6.1 against tile.* fields.
+{%- endcomment -%}
+
+{%- if product != blank and product != nil -%}
+  {%- liquid
+    assign p = product
+    assign v = p.selected_or_first_available_variant
+    assign t = display_title
+            | default: p.metafields.custom.short_name
+            | default: p.title
+    assign s = display_sub
+            | default: p.metafields.custom.hero_tagline
+    assign img = p.featured_image
+    if show_price == nil
+      assign show_price = true
+    endif
+    assign price = v.price
+    assign was = v.compare_at_price
+    assign price_money = price | money_without_trailing_zeros
+    assign was_money = ''
+    if was and was > price
+      assign was_money = was | money_without_trailing_zeros
+    endif
+    assign loading_attr = 'lazy'
+    if eager
+      assign loading_attr = 'eager'
+    endif
+  -%}
+
+  <button
+    type="button"
+    class="tile"
+    data-id="tile-{{ section_id }}-{{ p.handle }}"
+    data-handle="{{ p.handle }}"
+    data-variant-id="{{ v.id }}"
+    data-price="{{ price }}"
+    data-was="{% if was and was > price %}{{ was }}{% endif %}"
+    data-label="{{ t | escape }}"
+    data-section="{{ section_id }}"
+    {% if kit_color != blank %}data-color="{{ kit_color }}"{% endif %}
+    aria-pressed="false"
+  >
+    <div class="tile-img"{% if tile_bg != blank %} style="background:{{ tile_bg }};"{% endif %}>
+      {%- if img -%}
+        <img
+          src="{{ img | image_url: width: 300 }}"
+          srcset="{{ img | image_url: width: 200 }} 200w, {{ img | image_url: width: 300 }} 300w, {{ img | image_url: width: 400 }} 400w"
+          sizes="(max-width: 600px) 33vw, 150px"
+          loading="{{ loading_attr }}"
+          decoding="async"
+          alt="{{ t | escape }}"
+          width="300" height="300">
+      {%- elsif emoji != blank -%}
+        {{ emoji }}
+      {%- else -%}
+        📦
+      {%- endif -%}
+      {%- if badge != blank -%}
+        <span class="img-badge">{{ badge }}</span>
+      {%- endif -%}
+    </div>
+    <div class="tile-body">
+      <div class="tile-title">{{ t }}</div>
+      {%- if s != blank -%}
+        <div class="tile-sub">{{ s }}</div>
+      {%- endif -%}
+      {%- if show_price -%}
+        <div class="tile-price">
+          {%- if was_money != '' -%}<span class="tile-was">{{ was_money }}</span>{%- endif -%}
+          {{ price_money }}
+        </div>
+      {%- endif -%}
+    </div>
+    <span class="tile-check" aria-hidden="true">✓</span>
+  </button>
+{%- endif -%}

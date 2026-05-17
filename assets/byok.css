@@ -1,0 +1,486 @@
+/* =========================================================
+   GutBasket — Build Your Own Kit (v2)
+   Template: page.byok / section: build-your-own-kit
+   ---------------------------------------------------------
+   All rules scoped under #byok-page so brand tokens and the
+   kit-color cascade do NOT leak into the cart drawer or
+   other PDPs. The :root tokens from the prototype have been
+   moved onto #byok-page for the same reason.
+   ========================================================= */
+
+#byok-page {
+  --white: #FFFFFF;
+  --cream: #FFF9EE;
+  --cream-deeper: #F5EDD8;
+  --cream-soft: #FAF6EC;
+  --border: #E8E3D5;
+  --border-soft: #F0EBDD;
+
+  --ink: #1F1F1D;
+  --action: #FF7300;
+  --action-dark: #E66800;
+  --action-soft: #FFE4D1;
+
+  --text: #1F1F1D;
+  --text-muted: #5C4D3F;
+  --text-soft: #888780;
+
+  --kanji: #8B1F40;
+  --aam-panna: #DDA738;
+  --achaar: #FF7300;
+  --kimchi: #E85C41;
+
+  --kit-color: #FF7300;
+  --kit-color-dark: #E66800;
+  --kit-color-soft: #FFE4D1;
+
+  --f-mono: 'DM Mono', ui-monospace, monospace;
+  --f-sans: 'DM Sans', system-ui, sans-serif;
+  --f-display: 'Montserrat', system-ui, sans-serif;
+
+  font-family: var(--f-sans);
+  color: var(--text);
+  background: var(--cream);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.45;
+}
+
+#byok-page button { font-family: inherit; cursor: pointer; }
+#byok-page img,
+#byok-page svg { display: block; max-width: 100%; }
+
+/* PAGE */
+#byok-page .page-wrap { max-width: 1180px; margin: 0 auto; padding: 60px 24px 140px; }
+
+#byok-page .page-head { margin-bottom: 28px; }
+#byok-page .page-eyebrow {
+  font-family: var(--f-mono); font-size: 11px;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--text-muted); font-weight: 500;
+  margin-bottom: 12px;
+}
+#byok-page .page-h1 {
+  font-family: var(--f-display); font-weight: 800;
+  font-size: clamp(28px, 4vw, 44px);
+  line-height: 1.1; letter-spacing: -0.01em;
+  margin: 0 0 10px;
+  color: var(--text);
+}
+#byok-page .page-h1 em {
+  font-style: normal;
+  color: var(--kanji);
+  transition: color 0.3s ease;
+}
+#byok-page .page-sub {
+  font-size: 15px; color: var(--text-muted);
+  max-width: 580px; margin: 0;
+}
+
+#byok-page .builder-grid {
+  display: grid; grid-template-columns: 1fr 320px;
+  gap: 32px; align-items: start;
+}
+@media (max-width: 900px) {
+  #byok-page .builder-grid { grid-template-columns: 1fr; gap: 20px; }
+  #byok-page .page-wrap { padding: 48px 16px 140px; }
+}
+
+/* SECTION CARDS */
+#byok-page .builder-stack { display: flex; flex-direction: column; gap: 16px; }
+
+#byok-page .bs {
+  background: var(--white);
+  border: 1px solid var(--border-soft);
+  border-radius: 16px;
+  padding: 22px 22px 20px;
+}
+@media (max-width: 600px) {
+  #byok-page .bs { padding: 18px 16px; border-radius: 14px; }
+}
+
+#byok-page .bs-head {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+#byok-page .bs-num {
+  width: 26px; height: 26px;
+  background: var(--kit-color-soft);
+  color: var(--kit-color-dark);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--f-display); font-weight: 700; font-size: 13px;
+  transition: background 0.3s, color 0.3s;
+}
+#byok-page .bs.is-done .bs-num { background: var(--kit-color); color: var(--white); }
+#byok-page .bs-title-block { min-width: 0; }
+#byok-page .bs-title {
+  font-family: var(--f-sans); font-weight: 700; font-size: 17px;
+  line-height: 1.2; margin: 0; color: var(--text);
+}
+#byok-page .bs-desc {
+  font-size: 13px; color: var(--text-soft);
+  margin: 2px 0 0;
+}
+#byok-page .bs-desc strong {
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+/* TILES */
+#byok-page .tiles { display: grid; gap: 10px; }
+#byok-page .tiles.cols-3 { grid-template-columns: repeat(3, 1fr); }
+#byok-page .tiles.cols-4 { grid-template-columns: repeat(4, 1fr); }
+
+@media (max-width: 600px) {
+  #byok-page .tiles { gap: 8px; }
+  #byok-page .tiles.cols-3 { grid-template-columns: repeat(3, 1fr); }
+  #byok-page .tiles.cols-4 { grid-template-columns: repeat(2, 1fr); }
+}
+
+#byok-page .tile {
+  position: relative;
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 0; text-align: left; overflow: hidden;
+  transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+  display: flex; flex-direction: column;
+}
+#byok-page .tile:hover {
+  border-color: var(--text-soft);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(31,31,29,0.06);
+}
+#byok-page .tile:focus-visible {
+  outline: 3px solid var(--action);
+  outline-offset: 2px;
+}
+#byok-page .tile.is-selected {
+  border-color: var(--action);
+  border-width: 2px;
+  box-shadow: 0 0 0 3px var(--action-soft);
+}
+
+#byok-page .tile-img {
+  width: 100%; aspect-ratio: 1 / 1;
+  background: var(--cream-soft);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 40px; position: relative;
+  overflow: hidden;
+}
+#byok-page .tile-img img {
+  width: 100%; height: 100%; object-fit: cover;
+}
+@media (max-width: 600px) { #byok-page .tile-img { font-size: 32px; } }
+#byok-page .tile-img .img-badge {
+  position: absolute; bottom: 6px; left: 6px;
+  font-family: var(--f-mono); font-size: 9px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  background: rgba(31,31,29,0.78); color: var(--cream);
+  padding: 3px 7px; border-radius: 4px;
+  font-weight: 500;
+}
+
+#byok-page .tile-body {
+  padding: 10px 10px 12px;
+  display: flex; flex-direction: column; gap: 3px;
+  min-height: 60px;
+}
+@media (max-width: 600px) { #byok-page .tile-body { padding: 8px 8px 10px; } }
+#byok-page .tile-title {
+  font-size: 13px; font-weight: 600;
+  line-height: 1.25; color: var(--text);
+}
+@media (max-width: 600px) { #byok-page .tile-title { font-size: 12px; } }
+#byok-page .tile-sub {
+  font-size: 11px; color: var(--text-soft);
+  font-weight: 500; line-height: 1.3;
+}
+#byok-page .tile-price {
+  display: flex; align-items: baseline; gap: 6px;
+  font-family: var(--f-display); font-weight: 700;
+  font-size: 14px; color: var(--text);
+  margin-top: 2px;
+}
+#byok-page .tile-was {
+  font-family: var(--f-sans); font-weight: 400;
+  font-size: 11px; color: var(--text-soft);
+  text-decoration: line-through;
+}
+@media (max-width: 600px) {
+  #byok-page .tile-price { font-size: 13px; }
+  #byok-page .tile-was { font-size: 10px; }
+}
+
+#byok-page .tile-check {
+  position: absolute; top: 7px; right: 7px;
+  width: 22px; height: 22px;
+  background: var(--action); color: var(--white);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700;
+  opacity: 0; transform: scale(0.6);
+  transition: opacity 0.15s, transform 0.15s;
+  z-index: 2;
+}
+#byok-page .tile.is-selected .tile-check { opacity: 1; transform: scale(1); }
+
+/* SELECTED FERMENTS STACK (per-ferment batch picker) */
+#byok-page .selected-ferments {
+  margin-top: 14px;
+  display: none;
+  flex-direction: column;
+  gap: 10px;
+}
+#byok-page .selected-ferments.is-shown { display: flex; }
+
+#byok-page .sf-row {
+  background: var(--cream-soft);
+  border-radius: 12px;
+  padding: 14px 16px;
+  animation: byok-slideDown 0.25s ease;
+}
+@keyframes byok-slideDown {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+#byok-page .sf-head {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 10px;
+}
+#byok-page .sf-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  flex-shrink: 0;
+}
+#byok-page .sf-name {
+  font-family: var(--f-sans); font-weight: 700; font-size: 14px;
+  color: var(--text);
+}
+#byok-page .sf-price {
+  margin-left: auto;
+  font-family: var(--f-display); font-weight: 700;
+  font-size: 14px; color: var(--text);
+}
+#byok-page .sf-row .batch-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+
+#byok-page .batch-chip {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: 999px;
+  padding: 7px 13px;
+  font-size: 12.5px; font-weight: 600;
+  color: var(--text);
+  display: inline-flex; align-items: baseline; gap: 8px;
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+}
+#byok-page .batch-chip .chip-price {
+  font-family: var(--f-display); font-weight: 700;
+  font-size: 11.5px; color: var(--text-muted);
+}
+#byok-page .batch-chip:hover { border-color: var(--text-soft); }
+#byok-page .batch-chip.is-selected {
+  border-color: var(--action);
+  background: var(--action);
+  color: var(--white);
+}
+#byok-page .batch-chip.is-selected .chip-price { color: rgba(255,255,255,0.85); }
+
+/* CONTEXT HINT */
+#byok-page .context-hint {
+  margin-top: 12px;
+  padding: 10px 12px;
+  background: var(--kit-color-soft);
+  border-radius: 10px;
+  font-size: 12.5px; color: var(--text);
+  align-items: center; gap: 8px;
+  display: none;
+}
+#byok-page .context-hint.is-shown { display: flex; animation: byok-slideDown 0.25s ease; }
+#byok-page .context-hint::before {
+  content: '↗'; font-weight: 700; color: var(--kit-color-dark);
+}
+
+/* MORE TOGGLE */
+#byok-page .more-toggle {
+  margin-top: 12px;
+  background: transparent; border: 0; padding: 6px 0;
+  font-family: var(--f-mono); font-size: 11px;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--kit-color-dark); font-weight: 500;
+}
+#byok-page .more-toggle:hover { color: var(--action); }
+#byok-page .more-content { display: none; margin-top: 12px; }
+#byok-page .more-content.is-shown { display: block; }
+
+/* SIDEBAR */
+#byok-page .bundle-side {
+  background: var(--white);
+  border: 1px solid var(--border-soft);
+  border-radius: 16px;
+  padding: 22px 20px;
+  position: sticky; top: 24px;
+}
+#byok-page .bs-eyebrow {
+  font-family: var(--f-mono); font-size: 10px;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--text-muted); font-weight: 500;
+  margin-bottom: 14px;
+}
+
+#byok-page .bundle-list {
+  list-style: none; padding: 0; margin: 0 0 14px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+#byok-page .bundle-item {
+  display: grid;
+  grid-template-columns: 22px 1fr auto;
+  align-items: start; gap: 10px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-soft);
+}
+#byok-page .bundle-item:last-child { border-bottom: 0; padding-bottom: 0; }
+
+#byok-page .bi-num {
+  width: 20px; height: 20px;
+  border: 1.5px solid var(--border);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--f-mono); font-size: 10px;
+  color: var(--text-soft); font-weight: 500;
+  margin-top: 1px;
+}
+#byok-page .bundle-item.is-filled .bi-num {
+  background: var(--kit-color);
+  border-color: var(--kit-color);
+  color: var(--white);
+}
+#byok-page .bundle-item.is-filled .bi-num::after { content: '✓'; }
+#byok-page .bundle-item.is-filled .bi-num-label { display: none; }
+
+#byok-page .bi-body { min-width: 0; }
+#byok-page .bi-label {
+  font-family: var(--f-mono); font-size: 10px;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--text-muted); font-weight: 500;
+  margin-bottom: 2px;
+}
+#byok-page .bi-val {
+  font-size: 13px; color: var(--text-soft);
+  font-weight: 500;
+}
+#byok-page .bundle-item.is-filled .bi-val { color: var(--text); font-weight: 600; }
+#byok-page .bi-val-multi {
+  font-size: 11.5px; color: var(--text-muted);
+  margin-top: 3px; line-height: 1.45;
+  display: block; font-weight: 400;
+}
+#byok-page .bi-price {
+  font-family: var(--f-display); font-weight: 700;
+  font-size: 13px; color: var(--text);
+  white-space: nowrap;
+}
+#byok-page .bundle-item:not(.is-filled) .bi-price { color: var(--text-soft); font-weight: 500; }
+
+#byok-page .bundle-total {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 14px 0;
+  border-top: 1px solid var(--border);
+  margin-bottom: 14px;
+}
+#byok-page .bt-label {
+  font-family: var(--f-mono); font-size: 11px;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--text-muted); font-weight: 500;
+}
+#byok-page .bt-amount {
+  font-family: var(--f-display); font-weight: 800;
+  font-size: 22px; color: var(--text);
+}
+#byok-page .bt-savings {
+  display: block;
+  font-family: var(--f-sans); font-weight: 600;
+  font-size: 11px; color: #2F7A2A;
+  margin-top: 2px; text-align: right;
+}
+
+#byok-page .bundle-cta {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%;
+  background: var(--action); color: var(--white);
+  border: 0; padding: 14px 18px;
+  border-radius: 999px;
+  font-family: var(--f-display); font-weight: 700;
+  font-size: 14px; letter-spacing: 0.02em;
+  transition: background 0.15s, transform 0.15s;
+}
+#byok-page .bundle-cta:hover:not(:disabled) {
+  background: var(--action-dark);
+  transform: translateY(-1px);
+}
+#byok-page .bundle-cta:disabled {
+  background: var(--cream-deeper);
+  color: var(--text-soft);
+  cursor: not-allowed;
+}
+
+#byok-page .bundle-fineprint {
+  margin: 12px 0 0;
+  font-size: 11px; color: var(--text-soft);
+  text-align: center; line-height: 1.4;
+}
+#byok-page .bundle-fineprint strong { color: #2F7A2A; font-weight: 600; }
+#byok-page .bundle-fineprint.is-error { color: #B23A23; }
+
+/* MOBILE BAR */
+#byok-page .mobile-bar {
+  display: none;
+  position: fixed; left: 0; right: 0; bottom: 0;
+  background: var(--white);
+  border-top: 1px solid var(--border);
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+  z-index: 50;
+  box-shadow: 0 -6px 24px rgba(31,31,29,0.08);
+  align-items: center; justify-content: space-between; gap: 12px;
+}
+#byok-page .mobile-bar.is-visible { display: flex; }
+#byok-page .mb-info { min-width: 0; flex: 1; }
+#byok-page .mb-eyebrow {
+  font-family: var(--f-mono); font-size: 9px;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--text-muted); font-weight: 500;
+}
+#byok-page .mb-summary {
+  font-family: var(--f-display); font-weight: 700;
+  font-size: 15px; color: var(--text);
+  margin-top: 2px;
+}
+#byok-page .mb-summary .mb-count { color: var(--text-soft); font-weight: 500; font-size: 12px; }
+#byok-page .mb-cta {
+  background: var(--action); color: var(--white);
+  border: 0; padding: 12px 18px;
+  border-radius: 999px;
+  font-family: var(--f-display); font-weight: 700;
+  font-size: 13px; white-space: nowrap;
+}
+#byok-page .mb-cta:disabled {
+  background: var(--cream-deeper);
+  color: var(--text-soft);
+}
+@media (max-width: 900px) {
+  #byok-page .bundle-side { display: none; }
+  #byok-page .mobile-bar { display: flex; }
+  #byok-page .page-wrap { padding-bottom: 100px; }
+}
+
+#byok-page .reset-row { display: flex; justify-content: flex-end; margin-top: 4px; }
+#byok-page .reset-btn {
+  background: transparent; border: 0;
+  font-family: var(--f-mono); font-size: 10px;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--text-soft); font-weight: 500;
+  padding: 4px 0;
+}
+#byok-page .reset-btn:hover { color: var(--action-dark); }

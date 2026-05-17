@@ -1,0 +1,357 @@
+{%- comment -%}
+  build-your-own-kit.liquid
+  =========================================================================
+  GutBasket · Build Your Own Kit (v2) — page section
+  Template: page.byok.json → routes here.
+
+  V1 CONTENT STRATEGY (NO METAOBJECTS):
+  -----------------------------------------------------------------
+  Per the user's decision, this v1 hardcodes all section/tile/sub-option
+  data inline using `all_products[handle]` lookups. The data shape mirrors
+  the metaobject schema from the implementation spec §4 so a v2 migration
+  becomes a search-replace job:
+
+    HARDCODED v1 (this file)       →   v2 METAOBJECT FIELDS
+    -----------------------------       --------------------------------
+    section_id + tile loops         →   build_your_own_kit.sections[]
+    {% render 'byok-tile' %} args   →   byok_section.tiles[] (byok_tile)
+    FERMENT_DATA JSON block (below) →   byok_tile.sub_options (byok_sub_option)
+    display_title / display_sub     →   byok_tile.display_title / display_subtitle
+    kit_color (kanji etc.)          →   byok_tile.kit_color_token
+
+  When porting to v2:
+    1. Read the singleton `build_your_own_kit` metaobject.
+    2. Iterate metaobject.sections; for each, render the section card.
+    3. Iterate section.tiles; render `byok-tile` with metaobject fields.
+    4. For ferment tiles, emit FERMENT_DATA from sub_options.
+
+  PRODUCT HANDLES referenced (catalog drift check during QA):
+    Jars   : a-fermentation-jars, fermentation-jar-wide-mouth-2-litre,
+             fermentation-jar-wide-mouth-4-litre, kombucha-jar,
+             fermentation-jar-narrow-mouth-hdpe-8-litre, glass-carboy-4-litre
+    Ferment chips :
+             kanji-supplies-starter-pack, kanji-supplies-value-pack,
+             kanji-supplies-mega-pack,
+             aam-panna-supplies-value-pack-includes-aam-panna-spice-mix-pack-of-5-ferment-boost-pack-of-5,
+             achaar-making-supplies-6-batch-refill-pack,
+             kimchi-making-paste
+    Tools  : a-glass-weight, grommet-washer-for-fermentation-lid-set-of-3,
+             a-ph-strip, stick-on-thermometer-strip-1
+    Books  : kanji-recipe-book, probiotic-achaar-recipe-book,
+             kimchi-recipe-book, vegetable-fermentation-recipe-book,
+             kombucha-recipe-book
+
+  If a product is nil (drift), `byok-tile.liquid` skips rendering the tile
+  (per spec §14.2 — never emit a broken tile).
+{%- endcomment -%}
+
+{{ 'byok.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'byok.js' | asset_url }}" defer></script>
+
+{%- liquid
+  # ============== JAR PRODUCTS ==============
+  assign p_jar_1l       = all_products['a-fermentation-jars']
+  assign p_jar_2l       = all_products['fermentation-jar-wide-mouth-2-litre']
+  assign p_jar_4l       = all_products['fermentation-jar-wide-mouth-4-litre']
+  assign p_jar_kom_4l   = all_products['kombucha-jar']
+  assign p_jar_carb_8l  = all_products['fermentation-jar-narrow-mouth-hdpe-8-litre']
+  assign p_jar_glass_4l = all_products['glass-carboy-4-litre']
+
+  # ============== FERMENT TILES (logical groupings — no direct product) ==============
+  # Tiles are rendered without a product reference; sub-option products provide the cart variant.
+
+  # ============== FERMENT SUB-OPTIONS (batch chips) ==============
+  assign p_kanji_3   = all_products['kanji-supplies-starter-pack']
+  assign p_kanji_5   = all_products['kanji-supplies-value-pack']
+  assign p_kanji_10  = all_products['kanji-supplies-mega-pack']
+  assign p_aam_5     = all_products['aam-panna-supplies-value-pack-includes-aam-panna-spice-mix-pack-of-5-ferment-boost-pack-of-5']
+  assign p_achaar_6  = all_products['achaar-making-supplies-6-batch-refill-pack']
+  assign p_kimchi_1  = all_products['kimchi-making-paste']
+
+  # ============== TOOL PRODUCTS ==============
+  assign p_glass_wt = all_products['a-glass-weight']
+  assign p_grommet  = all_products['grommet-washer-for-fermentation-lid-set-of-3']
+  assign p_ph       = all_products['a-ph-strip']
+  assign p_temp     = all_products['stick-on-thermometer-strip-1']
+
+  # ============== BOOK PRODUCTS ==============
+  assign p_b_kanji  = all_products['kanji-recipe-book']
+  assign p_b_achaar = all_products['probiotic-achaar-recipe-book']
+  assign p_b_kimchi = all_products['kimchi-recipe-book']
+  assign p_b_veg    = all_products['vegetable-fermentation-recipe-book']
+  assign p_b_kom    = all_products['kombucha-recipe-book']
+-%}
+
+<div id="byok-page" class="byok">
+  <div class="page-wrap">
+
+    <header class="page-head">
+      <div class="page-eyebrow">CRAFT YOUR FERMENTATION SETUP</div>
+      <h1 class="page-h1">Build your own <em>fermentation kit</em></h1>
+      <p class="page-sub">Mix and match across categories. Pick one item from a section, or several — your kit, your way.</p>
+    </header>
+
+    <div class="builder-grid">
+
+      <div class="builder-stack">
+
+        {%- comment -%} ============ STEP 1 · JARS ============ {%- endcomment -%}
+        <section class="bs" id="bs-jar">
+          <div class="bs-head">
+            <span class="bs-num" aria-hidden="true">1</span>
+            <div class="bs-title-block">
+              <h2 class="bs-title">Choose jars</h2>
+              <p class="bs-desc"><strong>Pick one or more sizes</strong> — different jars for different ferments.</p>
+            </div>
+          </div>
+
+          <div class="tiles cols-3" data-group="jar">
+            {% render 'byok-tile', product: p_jar_1l, section_id: 'jar', display_title: '1 Litre', tile_bg: '#FBF4E2', emoji: '🫙', badge: '1 L', eager: true %}
+            {% render 'byok-tile', product: p_jar_2l, section_id: 'jar', display_title: '2 Litre', tile_bg: '#F4E9C8', emoji: '🫙', badge: '2 L' %}
+            {% render 'byok-tile', product: p_jar_4l, section_id: 'jar', display_title: '4 Litre', tile_bg: '#EDDDA9', emoji: '🫙', badge: '4 L' %}
+          </div>
+
+          <button type="button" class="more-toggle" data-more="jar" aria-expanded="false">+ Brewing vessels (Kombucha jar, Carboy)</button>
+          <div class="more-content" data-more-content="jar">
+            <div class="tiles cols-3" data-group="jar">
+              {% render 'byok-tile', product: p_jar_kom_4l, section_id: 'jar', display_title: 'Kombucha Jar', tile_bg: '#E8E4D7', emoji: '🫙', badge: '4 L · Kombucha' %}
+              {% render 'byok-tile', product: p_jar_carb_8l, section_id: 'jar', display_title: 'Plastic Carboy', tile_bg: '#E2E0D6', emoji: '🛢️', badge: '8 L · HDPE' %}
+              {% render 'byok-tile', product: p_jar_glass_4l, section_id: 'jar', display_title: 'Amber Carboy', tile_bg: '#D8C9A8', emoji: '🍯', badge: '4 L · Glass' %}
+            </div>
+          </div>
+        </section>
+
+        {%- comment -%} ============ STEP 2 · FERMENTS ============ {%- endcomment -%}
+        <section class="bs" id="bs-ferment">
+          <div class="bs-head">
+            <span class="bs-num" aria-hidden="true">2</span>
+            <div class="bs-title-block">
+              <h2 class="bs-title">Pick your ferments</h2>
+              <p class="bs-desc"><strong>Pick one or more</strong> — each comes pre-spiced and sized to your batches.</p>
+            </div>
+          </div>
+
+          <div class="tiles cols-4" data-group="ferment">
+            {%- comment -%}
+              Ferment tiles render WITHOUT a top-level product; they are logical groupings.
+              The cart line items come from the selected batch chip's product.
+              We render the tile shell inline (not via byok-tile.liquid) since that snippet
+              gates on product presence.
+            {%- endcomment -%}
+            <button type="button" class="tile" data-id="tile-ferment-kanji" data-ferment="kanji" data-label="Kanji" data-section="ferment" data-color="kanji" aria-pressed="false">
+              <div class="tile-img" style="background:#F4D8E1; color:#8B1F40;">🥕</div>
+              <div class="tile-body">
+                <div class="tile-title">Kanji</div>
+                <div class="tile-sub">Probiotic drink</div>
+              </div>
+              <span class="tile-check" aria-hidden="true">✓</span>
+            </button>
+            <button type="button" class="tile" data-id="tile-ferment-aampanna" data-ferment="aampanna" data-label="Aam Panna" data-section="ferment" data-color="aam-panna" aria-pressed="false">
+              <div class="tile-img" style="background:#FAEFCB; color:#8C6916;">🥭</div>
+              <div class="tile-body">
+                <div class="tile-title">Aam Panna</div>
+                <div class="tile-sub">Summer drink</div>
+              </div>
+              <span class="tile-check" aria-hidden="true">✓</span>
+            </button>
+            <button type="button" class="tile" data-id="tile-ferment-achaar" data-ferment="achaar" data-label="Achaar" data-section="ferment" data-color="achaar" aria-pressed="false">
+              <div class="tile-img" style="background:#FFE4D1; color:#C84A24;">🥒</div>
+              <div class="tile-body">
+                <div class="tile-title">Achaar</div>
+                <div class="tile-sub">Indian pickle</div>
+              </div>
+              <span class="tile-check" aria-hidden="true">✓</span>
+            </button>
+            <button type="button" class="tile" data-id="tile-ferment-kimchi" data-ferment="kimchi" data-label="Kimchi" data-section="ferment" data-color="kimchi" aria-pressed="false">
+              <div class="tile-img" style="background:#FBDED6; color:#B23A23;">🥬</div>
+              <div class="tile-body">
+                <div class="tile-title">Kimchi</div>
+                <div class="tile-sub">Korean staple</div>
+              </div>
+              <span class="tile-check" aria-hidden="true">✓</span>
+            </button>
+          </div>
+
+          {%- comment -%} per-ferment batch picker stack — JS-populated {%- endcomment -%}
+          <div class="selected-ferments" id="selected-ferments"></div>
+        </section>
+
+        {%- comment -%} ============ STEP 3 · TOOLS ============ {%- endcomment -%}
+        <section class="bs" id="bs-tools">
+          <div class="bs-head">
+            <span class="bs-num" aria-hidden="true">3</span>
+            <div class="bs-title-block">
+              <h2 class="bs-title">Add tools</h2>
+              <p class="bs-desc"><strong>Add any that help</strong> — small pieces that make fermentation foolproof.</p>
+            </div>
+          </div>
+
+          <div class="tiles cols-4" data-group="tools">
+            {% render 'byok-tile', product: p_glass_wt, section_id: 'tools', display_title: 'Glass Weight', tile_bg: '#F5EDD8', emoji: '⚪' %}
+            {% render 'byok-tile', product: p_grommet,  section_id: 'tools', display_title: 'Grommet · 3', tile_bg: '#EBE7D4', emoji: '⭕' %}
+            {% render 'byok-tile', product: p_ph,       section_id: 'tools', display_title: 'pH Strip', tile_bg: '#E8E4D7', emoji: '📏' %}
+            {% render 'byok-tile', product: p_temp,     section_id: 'tools', display_title: 'Temp Strip', tile_bg: '#F0E8CD', emoji: '🌡️' %}
+          </div>
+
+          <div class="context-hint" id="hint-veg">
+            Glass weight added — your kit can now ferment vegetables too (sauerkraut, kimchi, achaar).
+          </div>
+        </section>
+
+        {%- comment -%} ============ STEP 4 · BOOKS ============ {%- endcomment -%}
+        <section class="bs" id="bs-book">
+          <div class="bs-head">
+            <span class="bs-num" aria-hidden="true">4</span>
+            <div class="bs-title-block">
+              <h2 class="bs-title">Add recipe books</h2>
+              <p class="bs-desc"><strong>Add any</strong> — print companions for your shelf.</p>
+            </div>
+          </div>
+
+          <div class="tiles cols-4" data-group="books">
+            {% render 'byok-tile', product: p_b_kanji,  section_id: 'books', display_title: 'Kanji Book',   tile_bg: '#F4D8E1', emoji: '📕' %}
+            {% render 'byok-tile', product: p_b_achaar, section_id: 'books', display_title: 'Achaar Book',  tile_bg: '#FFE4D1', emoji: '📙' %}
+            {% render 'byok-tile', product: p_b_kimchi, section_id: 'books', display_title: 'Kimchi Book',  tile_bg: '#FBDED6', emoji: '📕' %}
+            {% render 'byok-tile', product: p_b_veg,    section_id: 'books', display_title: 'Veg Ferment',  tile_bg: '#E2EEDC', emoji: '📗' %}
+          </div>
+
+          <button type="button" class="more-toggle" data-more="books" aria-expanded="false">+ More books (Kombucha)</button>
+          <div class="more-content" data-more-content="books">
+            <div class="tiles cols-4" data-group="books">
+              {% render 'byok-tile', product: p_b_kom, section_id: 'books', display_title: 'Kombucha Book', tile_bg: '#E8E4D7', emoji: '📘' %}
+            </div>
+          </div>
+        </section>
+
+        <div class="reset-row">
+          <button type="button" class="reset-btn" id="reset-btn">↻ Start over</button>
+        </div>
+
+      </div>{%- comment -%} /builder-stack {%- endcomment -%}
+
+      {% render 'byok-bundle-sidebar' %}
+
+    </div>{%- comment -%} /builder-grid {%- endcomment -%}
+  </div>{%- comment -%} /page-wrap {%- endcomment -%}
+
+  {% render 'byok-mobile-bar' %}
+
+  {%- comment -%}
+    Ferment sub-option data — emitted server-side so JS knows variant IDs,
+    labels, prices, and compare-at prices for each chip. This is the v1
+    equivalent of reading byok_tile.sub_options from the metaobject.
+
+    Shape:
+      { fermentId: { name, color, chips: [{ id, label, variantId, price, was }] } }
+    Prices are in paise (Shopify's smallest unit) → JS divides by 100 for display.
+    A chip is only included if its product exists (catalog drift safety).
+  {%- endcomment -%}
+  <script type="application/json" id="byok-data">
+    {
+      "ferments": {
+        "kanji": {
+          "name": "Kanji",
+          "color": "kanji",
+          "chips": [
+            {%- if p_kanji_3 != blank -%}
+              {
+                "id": "kanji-3",
+                "label": "Pack of 3",
+                "handle": "{{ p_kanji_3.handle }}",
+                "variantId": {{ p_kanji_3.selected_or_first_available_variant.id }},
+                "price": {{ p_kanji_3.selected_or_first_available_variant.price }},
+                "was": {% if p_kanji_3.selected_or_first_available_variant.compare_at_price %}{{ p_kanji_3.selected_or_first_available_variant.compare_at_price }}{% else %}null{% endif %}
+              }{% if p_kanji_5 != blank or p_kanji_10 != blank %},{% endif %}
+            {%- endif -%}
+            {%- if p_kanji_5 != blank -%}
+              {
+                "id": "kanji-5",
+                "label": "Pack of 5",
+                "handle": "{{ p_kanji_5.handle }}",
+                "variantId": {{ p_kanji_5.selected_or_first_available_variant.id }},
+                "price": {{ p_kanji_5.selected_or_first_available_variant.price }},
+                "was": {% if p_kanji_5.selected_or_first_available_variant.compare_at_price %}{{ p_kanji_5.selected_or_first_available_variant.compare_at_price }}{% else %}null{% endif %}
+              }{% if p_kanji_10 != blank %},{% endif %}
+            {%- endif -%}
+            {%- if p_kanji_10 != blank -%}
+              {
+                "id": "kanji-10",
+                "label": "Pack of 10",
+                "handle": "{{ p_kanji_10.handle }}",
+                "variantId": {{ p_kanji_10.selected_or_first_available_variant.id }},
+                "price": {{ p_kanji_10.selected_or_first_available_variant.price }},
+                "was": {% if p_kanji_10.selected_or_first_available_variant.compare_at_price %}{{ p_kanji_10.selected_or_first_available_variant.compare_at_price }}{% else %}null{% endif %}
+              }
+            {%- endif -%}
+          ]
+        },
+        "aampanna": {
+          "name": "Aam Panna",
+          "color": "aam-panna",
+          "chips": [
+            {%- if p_aam_5 != blank -%}
+              {
+                "id": "aampanna-5",
+                "label": "Pack of 5",
+                "handle": "{{ p_aam_5.handle }}",
+                "variantId": {{ p_aam_5.selected_or_first_available_variant.id }},
+                "price": {{ p_aam_5.selected_or_first_available_variant.price }},
+                "was": {% if p_aam_5.selected_or_first_available_variant.compare_at_price %}{{ p_aam_5.selected_or_first_available_variant.compare_at_price }}{% else %}null{% endif %}
+              }
+            {%- endif -%}
+          ]
+        },
+        "achaar": {
+          "name": "Achaar",
+          "color": "achaar",
+          "chips": [
+            {%- if p_achaar_6 != blank -%}
+              {
+                "id": "achaar-6",
+                "label": "6-Batch Refill",
+                "handle": "{{ p_achaar_6.handle }}",
+                "variantId": {{ p_achaar_6.selected_or_first_available_variant.id }},
+                "price": {{ p_achaar_6.selected_or_first_available_variant.price }},
+                "was": {% if p_achaar_6.selected_or_first_available_variant.compare_at_price %}{{ p_achaar_6.selected_or_first_available_variant.compare_at_price }}{% else %}null{% endif %}
+              }
+            {%- endif -%}
+          ]
+        },
+        "kimchi": {
+          "name": "Kimchi",
+          "color": "kimchi",
+          "chips": [
+            {%- if p_kimchi_1 != blank -%}
+              {
+                "id": "kimchi-1",
+                "label": "Kimchi Paste",
+                "handle": "{{ p_kimchi_1.handle }}",
+                "variantId": {{ p_kimchi_1.selected_or_first_available_variant.id }},
+                "price": {{ p_kimchi_1.selected_or_first_available_variant.price }},
+                "was": {% if p_kimchi_1.selected_or_first_available_variant.compare_at_price %}{{ p_kimchi_1.selected_or_first_available_variant.compare_at_price }}{% else %}null{% endif %}
+              }
+            {%- endif -%}
+          ]
+        }
+      },
+      "currency": "{{ shop.currency }}",
+      "moneyFormat": {{ shop.money_format | json }},
+      "freeShippingThreshold": 30000
+    }
+  </script>
+
+  <noscript>
+    <p style="padding:24px;color:#5C4D3F;font-family:system-ui,sans-serif;">
+      This page needs JavaScript to build a kit. Browse individual products via our collections instead.
+    </p>
+  </noscript>
+</div>
+
+{% schema %}
+{
+  "name": "Build Your Own Kit (v2)",
+  "tag": "section",
+  "settings": [],
+  "enabled_on": { "templates": ["page"] }
+}
+{% endschema %}
