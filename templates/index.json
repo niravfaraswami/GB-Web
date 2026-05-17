@@ -147,6 +147,7 @@
         "c1": {
           "type": "tile",
           "settings": {
+            "image": "shopify://shop_images/ChatGPT_Image_May_17_2026_01_02_21_AM_1.png",
             "label": "Fermentation Kits",
             "link": "",
             "tab_id": "fermentation",
@@ -156,6 +157,7 @@
         "c2": {
           "type": "tile",
           "settings": {
+            "image": "shopify://shop_images/Top-down_macro_photograph_of_a_202605171524.jpg",
             "label": "Sprouts Kit",
             "link": "",
             "tab_id": "sprouts",
@@ -165,6 +167,7 @@
         "c3": {
           "type": "tile",
           "settings": {
+            "image": "shopify://shop_images/ChatGPT_Image_May_17_2026_01_02_21_AM_3.png",
             "label": "Prebiotic Powders",
             "link": "",
             "tab_id": "prebiotic",
@@ -174,7 +177,8 @@
         "c4": {
           "type": "tile",
           "settings": {
-            "label": "Dairy Cultures",
+            "image": "shopify://shop_images/ChatGPT_Image_May_17_2026_01_02_21_AM_4.png",
+            "label": "Cultures",
             "link": "",
             "tab_id": "dairy",
             "theme": "dairy"
@@ -183,6 +187,7 @@
         "c5": {
           "type": "tile",
           "settings": {
+            "image": "shopify://shop_images/ChatGPT_Image_May_17_2026_01_02_21_AM_5.png",
             "label": "Spice Refills",
             "link": "",
             "tab_id": "refills",
@@ -192,6 +197,7 @@
         "c6": {
           "type": "tile",
           "settings": {
+            "image": "shopify://shop_images/ChatGPT_Image_May_17_2026_01_02_21_AM_6.png",
             "label": "Baking",
             "link": "",
             "tab_id": "baking",
@@ -201,6 +207,7 @@
         "c7": {
           "type": "tile",
           "settings": {
+            "image": "shopify://shop_images/ChatGPT_Image_May_17_2026_01_02_21_AM_7.png",
             "label": "Jars & Tools",
             "link": "",
             "tab_id": "jars",
@@ -210,6 +217,7 @@
         "c8": {
           "type": "tile",
           "settings": {
+            "image": "shopify://shop_images/ChatGPT_Image_May_17_2026_01_02_21_AM_8.png",
             "label": "Recipe Books",
             "link": "",
             "tab_id": "books",
