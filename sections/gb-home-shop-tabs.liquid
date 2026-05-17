@@ -175,9 +175,48 @@
             assign view_all_url = ''
           endif
         -%}
+        {%- comment -%}
+          Secondary product-type filter row. Only renders on
+          collection pages and only for the two collections where
+          the catalog is deep enough that a single grid is hard to
+          scan (jars-and-tools, spice-mix-supplies). Each unique
+          product.type from the products in the active collection
+          becomes a pill; clicking filters the grid client-side
+          (no extra HTTP). 'All' is the default.
+
+          Add another handle to TYPE_FILTER_HANDLES below if a
+          third collection ever needs the same treatment.
+        {%- endcomment -%}
+        {%- assign type_filter_handles = 'jars-and-tools,spice-mix-supplies' | split: ',' -%}
+        {%- assign show_type_filter = false -%}
+        {%- if collection != blank and type_filter_handles contains collection.handle -%}
+          {%- assign show_type_filter = true -%}
+        {%- endif -%}
+        {%- if show_type_filter -%}
+          {%- assign type_marker = '|' -%}
+          {%- for product in tab_products limit: limit -%}
+            {%- if product.type != blank -%}
+              {%- assign t_seg = product.type | append: '|' -%}
+              {%- unless type_marker contains t_seg -%}
+                {%- assign type_marker = type_marker | append: t_seg -%}
+              {%- endunless -%}
+            {%- endif -%}
+          {%- endfor -%}
+          {%- assign unique_types = type_marker | split: '|' -%}
+        {%- endif -%}
         <div class="gb-shop-panel {% if block.settings.tab_id == active_tab_id %}is-active{% endif %}"
              data-panel="{{ block.settings.tab_id }}"
              role="tabpanel">
+          {%- if show_type_filter and unique_types.size > 1 -%}
+            <div class="gb-type-filter-row" role="tablist" aria-label="Filter by product type">
+              <button type="button" class="gb-type-pill is-active" data-type-filter="*">All</button>
+              {%- for t in unique_types -%}
+                {%- if t != '' -%}
+                  <button type="button" class="gb-type-pill" data-type-filter="{{ t | escape }}">{{ t }}</button>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
           <div class="gb-shop-grid gb-shop-grid--{{ columns }}">
             {%- if tab_products.size > 0 -%}
               {%- for product in tab_products limit: limit -%}
@@ -205,7 +244,7 @@
                     assign card_title = product.title
                   endif
                 -%}
-                <div class="gb-card gb-card--{{ theme_class }}">
+                <div class="gb-card gb-card--{{ theme_class }}" data-product-type="{{ product.type | escape }}">
                   {%- if show_band -%}
                     {%- if cat_band != blank -%}
                       <div class="gb-card-band">{{ cat_band }}</div>
@@ -374,6 +413,47 @@
   from { opacity: 0; transform: translateY(4px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+/* Secondary product-type filter pills (collection pages only,
+   whitelisted handles). Style is intentionally lighter than the
+   top category tabs — it's a sub-filter, not a primary nav. */
+.gb-type-filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 24px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--c-border);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.gb-type-filter-row::-webkit-scrollbar { display: none; }
+.gb-type-pill {
+  background: var(--c-cream);
+  border: 1px solid var(--c-border-soft);
+  border-radius: 999px;
+  padding: 7px 14px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--c-text-soft);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+.gb-type-pill:hover {
+  border-color: var(--c-ink);
+  color: var(--c-ink);
+}
+.gb-type-pill.is-active {
+  background: var(--c-ink);
+  border-color: var(--c-ink);
+  color: var(--c-cream);
+}
+@media (max-width: 768px) {
+  .gb-type-filter-row { flex-wrap: nowrap; margin-bottom: 18px; padding-bottom: 14px; }
+  .gb-type-pill { font-size: 12.5px; padding: 6px 12px; }
+}
+
 .gb-shop-grid { display: grid; gap: 16px; }
 .gb-shop-grid--3 { grid-template-columns: repeat(3, 1fr); }
 .gb-shop-grid--4 { grid-template-columns: repeat(4, 1fr); }
@@ -662,6 +742,26 @@
     a.addEventListener('mouseenter', prefetch, { passive: true });
     a.addEventListener('touchstart', prefetch, { passive: true });
     a.addEventListener('focus', prefetch, { passive: true });
+  });
+
+  // Secondary product-type filter pills (rendered on jars-and-tools
+   // and spice-mix-supplies collection pages). Click a pill → hide
+   // every card whose data-product-type doesn't match. 'All' (pill
+   // with data-type-filter='*') restores everything. Delegated so
+   // it handles the active panel's pills without per-pill binding.
+  section.addEventListener('click', function(e) {
+    var pill = e.target.closest('.gb-type-pill');
+    if (!pill) return;
+    var panel = pill.closest('.gb-shop-panel');
+    if (!panel) return;
+    var filter = pill.getAttribute('data-type-filter') || '*';
+    panel.querySelectorAll('.gb-type-pill').forEach(function(p) {
+      p.classList.toggle('is-active', p === pill);
+    });
+    panel.querySelectorAll('.gb-card').forEach(function(card) {
+      var t = card.getAttribute('data-product-type') || '';
+      card.style.display = (filter === '*' || t === filter) ? '' : 'none';
+    });
   });
 
   document.addEventListener('gb:select-tab', function(e) {
