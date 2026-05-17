@@ -60,7 +60,7 @@
       {%- endif -%}
       <h1 class="page-h1">{{ byok.page_title }}</h1>
       {%- if byok.page_subtitle != blank -%}
-        <div class="page-sub">{{ byok.page_subtitle }}</div>
+        <div class="page-sub">{{ byok.page_subtitle | metafield_tag }}</div>
       {%- endif -%}
     </header>
 
