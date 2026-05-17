@@ -1,0 +1,54 @@
+{%- comment -%}
+  byok-bundle-sidebar.liquid — Desktop sticky bundle summary.
+  Static markup; JS in assets/byok.js populates .bi-val and .bi-price per
+  bundle item, the total, savings line, CTA state, and fineprint.
+{%- endcomment -%}
+<aside class="bundle-side" id="bundle-side">
+  <div class="bs-eyebrow">YOUR BUNDLE</div>
+
+  <ul class="bundle-list" id="bundle-list">
+    <li class="bundle-item" data-slot="jar">
+      <span class="bi-num" aria-hidden="true"><span class="bi-num-label">1</span></span>
+      <div class="bi-body">
+        <div class="bi-label">Jars</div>
+        <div class="bi-val">No selection yet</div>
+      </div>
+      <div class="bi-price">—</div>
+    </li>
+    <li class="bundle-item" data-slot="ferment">
+      <span class="bi-num" aria-hidden="true"><span class="bi-num-label">2</span></span>
+      <div class="bi-body">
+        <div class="bi-label">Ferments</div>
+        <div class="bi-val">No selection yet</div>
+      </div>
+      <div class="bi-price">—</div>
+    </li>
+    <li class="bundle-item" data-slot="tools">
+      <span class="bi-num" aria-hidden="true"><span class="bi-num-label">3</span></span>
+      <div class="bi-body">
+        <div class="bi-label">Tools</div>
+        <div class="bi-val">No selection yet</div>
+      </div>
+      <div class="bi-price">—</div>
+    </li>
+    <li class="bundle-item" data-slot="books">
+      <span class="bi-num" aria-hidden="true"><span class="bi-num-label">4</span></span>
+      <div class="bi-body">
+        <div class="bi-label">Books</div>
+        <div class="bi-val">No selection yet</div>
+      </div>
+      <div class="bi-price">—</div>
+    </li>
+  </ul>
+
+  <div class="bundle-total">
+    <span class="bt-label">Total</span>
+    <div style="text-align:right;">
+      <span class="bt-amount" id="bt-amount">₹0</span>
+      <span class="bt-savings" id="bt-savings" hidden></span>
+    </div>
+  </div>
+
+  <button type="button" class="bundle-cta" id="bundle-cta" disabled>Add bundle to cart →</button>
+  <p class="bundle-fineprint" id="bundle-fineprint">Add at least one item to continue.</p>
+</aside>
