@@ -1,0 +1,40 @@
+{%- comment -%}
+  Renders the admin-controlled menu badge for a product link in the
+  header mega menu. The merchant picks the badge per product via
+  Shopify Admin → Products → {product} → Metafields → Menu badge
+  (dropdown: new / hot / bestseller / custom). Leave blank for no
+  badge.
+
+  Usage:
+    {% render 'gb-menu-badge', handle: 'kanji-making-kit' %}
+
+  Output:
+    <span class="badge new">NEW</span>      ← when metafield = "new"
+    <span class="badge hot">HOT</span>      ← when "hot"
+    <span class="badge">BEST VALUE</span>   ← when "bestseller" (uses
+                                              default badge styling)
+    <span class="badge custom">CUSTOM</span> ← when "custom"
+    (nothing)                                 ← when blank
+{%- endcomment -%}
+{%- liquid
+  assign p = all_products[handle]
+  assign b = p.metafields.custom.menu_badge | downcase | strip
+
+  assign label = ''
+  assign css   = ''
+  case b
+    when 'new'
+      assign label = 'NEW'
+      assign css   = 'badge new'
+    when 'hot'
+      assign label = 'HOT'
+      assign css   = 'badge hot'
+    when 'bestseller'
+      assign label = 'BEST VALUE'
+      assign css   = 'badge'
+    when 'custom'
+      assign label = 'CUSTOM'
+      assign css   = 'badge custom'
+  endcase
+-%}
+{%- if label != '' -%}<span class="{{ css }}">{{ label }}</span>{%- endif -%}
