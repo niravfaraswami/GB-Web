@@ -206,9 +206,10 @@ body { padding-top: var(--header-height, 80px); }
   background: var(--gb-cream-deeper);
   color: var(--gb-text-muted);
 }
-.mega-menu .badge.new  { background: #FF7300; color: white; }
-.mega-menu .badge.hot  { background: #8B1F40; color: white; }
-.mega-menu .badge.soon { background: var(--gb-ink); color: var(--gb-cream); }
+.mega-menu .badge.new    { background: #FF7300; color: white; }
+.mega-menu .badge.hot    { background: #8B1F40; color: white; }
+.mega-menu .badge.soon   { background: var(--gb-ink); color: var(--gb-cream); }
+.mega-menu .badge.custom { background: #3F7754; color: white; } /* sage — matches the BYOK / Sprout brand family */
 
 .mm-cta {
   margin-top: 20px;
