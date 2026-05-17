@@ -78,15 +78,20 @@
             assign step_num  = forloop.index
           -%}
 
-          {%- if primary_n != blank and primary_n != nil -%}
-            {%- assign primary_n_int = primary_n | plus: 0 -%}
-            {%- assign primary_tiles = all_tiles | slice: 0, primary_n_int -%}
-            {%- assign extra_count = all_tiles.size | minus: primary_n_int -%}
-            {%- assign extra_tiles = all_tiles | slice: primary_n_int, extra_count -%}
-          {%- else -%}
-            {%- assign primary_tiles = all_tiles -%}
-            {%- assign extra_tiles = '' | split: ',' -%}
-          {%- endif -%}
+          {%- liquid
+            assign primary_n_int = 0
+            assign extra_count = 0
+            assign has_expand = false
+            if primary_n != blank and primary_n != nil
+              assign primary_n_int = primary_n | plus: 0
+              assign extra_count = all_tiles.size | minus: primary_n_int
+              if extra_count > 0
+                assign has_expand = true
+              endif
+            else
+              assign primary_n_int = all_tiles.size
+            endif
+          -%}
 
           <section class="bs" id="bs-{{ sid }}">
             <div class="bs-head">
@@ -100,7 +105,7 @@
             </div>
 
             <div class="tiles" style="--cols-d:{{ cols_d }};--cols-m:{{ cols_m }};" data-group="{%- if has_subs -%}ferment{%- else -%}{{ sid }}{%- endif -%}">
-              {%- for tile in primary_tiles -%}
+              {%- for tile in all_tiles limit: primary_n_int -%}
                 {%- liquid
                   assign p = tile.product.value
                   assign v = p.selected_or_first_available_variant
@@ -157,11 +162,11 @@
               {%- endfor -%}
             </div>
 
-            {%- if extra_tiles.size > 0 -%}
+            {%- if has_expand -%}
               <button type="button" class="more-toggle" data-more="{{ sid }}" aria-expanded="false">+ View all</button>
               <div class="more-content" data-more-content="{{ sid }}">
                 <div class="tiles" style="--cols-d:{{ cols_d }};--cols-m:{{ cols_m }};" data-group="{{ sid }}">
-                  {%- for tile in extra_tiles -%}
+                  {%- for tile in all_tiles offset: primary_n_int -%}
                     {%- liquid
                       assign p = tile.product.value
                       assign v = p.selected_or_first_available_variant
