@@ -553,21 +553,54 @@
   .gb-byok-layout { grid-template-columns: 1fr; }
   .gb-byok-bundle { display: none; }
   .gb-byok-section { padding: 20px; }
+  /* 3-up compact grid on tablet + mobile. The horizontal scroll
+     pattern (78vw cards) was making the kit-builder feel like a
+     one-product-at-a-time browse — bad for picking, since you can't
+     compare. Switch to a true 3-column grid that scales down to
+     ~100px-per-card at narrow viewports. The card internals
+     (description, "view more") collapse so the essentials (image,
+     name, price, select control) still fit. */
   .gb-byok-grid {
-    grid-template-columns: none;
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    gap: 12px;
-    padding-bottom: 8px;
-    margin: 0 -20px;
-    padding-left: 20px;
-    padding-right: 20px;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
   }
-  .gb-byok-grid::-webkit-scrollbar { display: none; }
-  .gb-byok-card { flex: 0 0 78vw; max-width: 280px; scroll-snap-align: start; }
+  .gb-byok-card {
+    flex: none;
+    max-width: none;
+    min-width: 0; /* allow children to shrink past content min-content */
+  }
+  .gb-byok-card-body { padding: 8px 8px 10px; }
+  .gb-byok-card-name {
+    font-size: 12px;
+    line-height: 1.25;
+    margin-bottom: 4px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    word-break: break-word;
+    min-height: 2.5em;
+  }
+  /* No room for the marketing description at this size — hide. */
+  .gb-byok-card-desc { display: none; }
+  /* Prices stack vertically so the strikethrough sits on its own
+     line instead of clipping the live price. */
+  .gb-byok-card-prices {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+  }
+  .gb-byok-card-now { font-size: 13px; line-height: 1.15; }
+  .gb-byok-card-was { font-size: 10.5px; line-height: 1.15; }
+  /* "View more" link at the bottom of each card is redundant when
+     the card itself is the click target — drop it on mobile. */
+  .gb-byok-viewmore { display: none; }
+  .gb-byok-card-badge {
+    font-size: 8px;
+    padding: 2px 5px;
+    letter-spacing: 0.06em;
+  }
   .gb-byok-main { padding-bottom: 140px; }
 
   /* Mobile sheet */
