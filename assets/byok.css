@@ -136,12 +136,19 @@
 }
 
 /* TILES */
-#byok-page .tiles { display: grid; gap: 10px; }
+#byok-page .tiles {
+  display: grid; gap: 10px;
+  grid-template-columns: repeat(var(--cols-d, 4), 1fr);
+}
+/* Legacy cols-3 / cols-4 classes kept for any cached markup; both render 4-up. */
 #byok-page .tiles.cols-3 { grid-template-columns: repeat(4, 1fr); }
 #byok-page .tiles.cols-4 { grid-template-columns: repeat(4, 1fr); }
 
 @media (max-width: 600px) {
-  #byok-page .tiles { gap: 6px; }
+  #byok-page .tiles {
+    gap: 6px;
+    grid-template-columns: repeat(var(--cols-m, 4), 1fr);
+  }
   #byok-page .tiles.cols-3 { grid-template-columns: repeat(4, 1fr); }
   #byok-page .tiles.cols-4 { grid-template-columns: repeat(4, 1fr); }
 }
