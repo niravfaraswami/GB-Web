@@ -163,7 +163,7 @@
                 {%- for variant in p.variants -%}
                   {%- assign v_tag = variant.metafields.custom.tag -%}
                   {%- assign v_best = variant.metafields.custom.best_for -%}
-                  {%- assign v_img = variant.metafields.custom.variant_illustration | default: variant.image -%}
+                  {%- assign v_img = variant.metafields.custom.variant_illustration | default: variant.image | default: p.featured_image -%}
                   {%- assign is_selected = false -%}
                   {%- if variant == p.selected_or_first_available_variant -%}{%- assign is_selected = true -%}{%- endif -%}
                   <label class="variant{% if is_selected %} active{% endif %}{% unless variant.available %} sold-out{% endunless %}"

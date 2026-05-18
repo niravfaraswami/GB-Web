@@ -3850,49 +3850,61 @@ body.gb-fcm-open { overflow: hidden; }
 [data-template="leo"] .pdp-hero .variant .variant-tag,
 [data-template="leo"] .pdp-hero .variant .variant-rationale { display: none; }
 
-/* Top Seller (or any variant.metafields.custom.tag) — centred pill */
+/* Allow badges to extend above the card edge without being clipped
+   by the grid container. (Defensive — base CSS doesn't clip, but
+   any future stacking-context tweak would.) */
+[data-template="leo"] .pdp-hero .variant-grid { overflow: visible; }
+
+/* Top Seller / Best Value / any variant.metafields.custom.tag —
+   centred pill that half-overlaps the top edge of the card. */
 [data-template="leo"] .pdp-hero .variant-badge {
   position: absolute;
-  top: -10px;
+  top: -11px;
   left: 50%;
   transform: translateX(-50%);
   background: var(--kit-color-dark);
   color: var(--gb-cream);
   font-family: 'DM Mono', monospace;
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  padding: 4px 10px;
+  padding: 4px 12px;
   border-radius: 999px;
   white-space: nowrap;
-  z-index: 2;
+  z-index: 3;
+  box-shadow: 0 1px 4px rgba(31, 31, 29, 0.08);
 }
 
-/* Selection check — top-right corner, fills on active */
+/* Selection check — top-right corner, fills on active.
+   Sized + bordered so it reads as a control at a glance, not a
+   stray dot. Border picks up the muted text colour so it's visible
+   against any kit background. */
 [data-template="leo"] .pdp-hero .variant-check {
   position: absolute;
-  top: 9px;
-  right: 9px;
-  width: 17px;
-  height: 17px;
+  top: 10px;
+  right: 10px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
-  border: 1.5px solid var(--gb-border);
+  border: 2px solid var(--gb-text-soft);
   background: var(--gb-white);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1;
   transition: background 0.15s, border-color 0.15s;
+  pointer-events: none;
 }
 [data-template="leo"] .pdp-hero .variant.active .variant-check {
   background: var(--kit-color-dark);
   border-color: var(--kit-color-dark);
 }
 [data-template="leo"] .pdp-hero .variant-check svg {
-  width: 9px;
-  height: 9px;
-  color: var(--gb-cream);
+  width: 12px;
+  height: 12px;
+  stroke: var(--gb-cream);
+  fill: none;
   opacity: 0;
   transition: opacity 0.15s;
 }
@@ -3952,14 +3964,18 @@ body.gb-fcm-open { overflow: hidden; }
   color: var(--gb-text);
 }
 [data-template="leo"] .pdp-hero .variant-compare {
-  display: block;
+  display: inline-block;
   font-family: 'DM Sans', sans-serif;
   font-size: 12px;
   color: var(--gb-text-soft);
   text-decoration: line-through;
   text-decoration-color: var(--gb-text-soft);
-  margin: 2px 0 0;
+  margin: 0 0 0 6px;
   font-weight: 400;
+  vertical-align: baseline;
+}
+[data-template="leo"] .pdp-hero .variant-price > span:first-child {
+  display: inline-block;
 }
 
 /* Savings strip — full-width bottom edge, fills on active */
@@ -3988,12 +4004,13 @@ body.gb-fcm-open { overflow: hidden; }
 @media (min-width: 480px) {
   [data-template="leo"] .pdp-hero .variant { padding-top: 24px; }
   [data-template="leo"] .pdp-hero .variant.active { padding-top: 23.5px; }
-  [data-template="leo"] .pdp-hero .variant-check { width: 18px; height: 18px; top: 10px; right: 10px; }
+  [data-template="leo"] .pdp-hero .variant-check { width: 24px; height: 24px; top: 12px; right: 12px; }
+  [data-template="leo"] .pdp-hero .variant-check svg { width: 13px; height: 13px; }
   [data-template="leo"] .pdp-hero .variant-pack { font-size: 20px; }
   [data-template="leo"] .pdp-hero .variant-descriptor { font-size: 13px; margin-bottom: 16px; }
   [data-template="leo"] .pdp-hero .variant-illustration { height: 108px; margin-bottom: 16px; }
   [data-template="leo"] .pdp-hero .variant-price { font-size: 19px; }
-  [data-template="leo"] .pdp-hero .variant-compare { font-size: 13px; }
+  [data-template="leo"] .pdp-hero .variant-compare { font-size: 13px; margin-left: 8px; }
   [data-template="leo"] .pdp-hero .variant-save { font-size: 10.5px; padding: 11px 6px; letter-spacing: 0.12em; }
 }
 
