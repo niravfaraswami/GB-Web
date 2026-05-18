@@ -377,6 +377,13 @@
 .irn-h { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 16px; color: var(--gb-text); margin-bottom: 4px; }
 .irn-d { font-size: 13.5px; color: var(--gb-text-muted); line-height: 1.5; }
 .irn-cta { background: var(--kit-color); color: var(--gb-white); padding: 10px 20px; border-radius: 999px; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 13px; }
+/* Higher-specificity selector so the white text colour wins against
+   the base `[data-kit="fermentation"] a { color: inherit }` rule
+   above, which would otherwise drag the CTA text down to the parent's
+   dark ink colour on every fermentation template (v2, v3, refactor,
+   leo, sprout). One rule covers them all. */
+[data-kit="fermentation"] a.irn-cta { color: var(--gb-white); }
+[data-kit="fermentation"] a.irn-cta:hover { color: var(--gb-white); }
 
 /* ============== ZOE / SCIENCE STATS ============== */
 .zoe-section { background: var(--gb-white); padding: 80px 0; }
