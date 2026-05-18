@@ -3,15 +3,15 @@
 {%- liquid
   assign p = product
   assign mf_recipe_tags = p.metafields.custom.featured_recipe_tags.value
-  assign mf_banner = p.metafields.custom.recipe_banner_image
+  # `.value` extracts the referenced MediaImage. Without it we end up
+  # passing the metafield wrapper object through `image_url`, which
+  # doesn't coerce reliably — that's why per-product banner uploads
+  # weren't reflecting on the live page.
+  assign mf_banner = p.metafields.custom.recipe_banner_image.value
   assign mf_count = p.metafields.custom.recipe_count
   assign mf_h_label = p.metafields.custom.recipe_h_label
   assign mf_h_text = p.metafields.custom.recipe_h_text
   assign recipe_pill_blocks = section.blocks | where: 'type', 'recipe_pill'
-  # Resolver: per-product metafield wins, then per-section theme-editor setting.
-  # `default:` was unreliable when the metafield definition exists but the value
-  # is empty (returns a non-blank wrapper object). Explicit `== blank` check
-  # forces the section.settings fallback through cleanly.
   if mf_banner != blank
     assign recipe_banner = mf_banner
   else
