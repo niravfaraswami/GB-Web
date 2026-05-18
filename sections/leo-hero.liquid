@@ -192,13 +192,13 @@
                         </div>
                       {%- endif -%}
                       <div class="variant-price">
-                        <span>{{ variant.price | money }}</span>
+                        <span>{{ variant.price | money_without_trailing_zeros | replace: 'Rs. ', '₹' | replace: 'Rs.', '₹' }}</span>
                         {%- if variant.compare_at_price > variant.price -%}
-                          <span class="variant-compare">{{ variant.compare_at_price | money }}</span>
+                          <span class="variant-compare">{{ variant.compare_at_price | money_without_trailing_zeros | replace: 'Rs. ', '₹' | replace: 'Rs.', '₹' }}</span>
                         {%- endif -%}
                       </div>
                       {%- if variant.compare_at_price > variant.price -%}
-                        <div class="variant-save">You Save {{ variant.compare_at_price | minus: variant.price | money }}</div>
+                        <div class="variant-save">SAVE {{ variant.compare_at_price | minus: variant.price | money_without_trailing_zeros | replace: 'Rs. ', '₹' | replace: 'Rs.', '₹' }}/-</div>
                       {%- endif -%}
                     </label>
                   </div>
