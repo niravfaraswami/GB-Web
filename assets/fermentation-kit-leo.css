@@ -3791,7 +3791,12 @@ body.gb-fcm-open { overflow: hidden; }
   width: 100%;
   background: var(--gb-white);
   border: none;
-  box-shadow: inset 0 0 0 1px var(--gb-border);
+  /* Outer (not inset) shadow paints the visual outline outside the
+     element, leaving the entire interior available for children to
+     fill edge-to-edge. Combined with overflow:hidden + border-radius
+     below, the save strip can paint to the absolute rounded corner
+     of the card with no shadow line visible alongside it. */
+  box-shadow: 0 0 0 1px var(--gb-border);
   border-radius: 10px;
   padding: 14px 0 0;
   text-align: center;
@@ -3802,10 +3807,10 @@ body.gb-fcm-open { overflow: hidden; }
   cursor: pointer;
 }
 [data-template="leo"].pdp-hero .variant:hover:not(.active) {
-  box-shadow: inset 0 0 0 1.5px var(--kit-color);
+  box-shadow: 0 0 0 1.5px var(--kit-color);
 }
 [data-template="leo"].pdp-hero .variant.active {
-  box-shadow: inset 0 0 0 2.5px var(--kit-color);
+  box-shadow: 0 0 0 2.5px var(--kit-color);
   background: var(--gb-white);
 }
 [data-template="leo"].pdp-hero .variant:focus-visible {
@@ -3884,7 +3889,7 @@ body.gb-fcm-open { overflow: hidden; }
   color: var(--gb-text);
   text-align: center;
   margin: 0 0 1px;
-  padding: 0 8px;
+  padding: 0 4px;
   white-space: normal;
 }
 [data-template="leo"].pdp-hero .variant.active .variant-pack {
@@ -3899,7 +3904,7 @@ body.gb-fcm-open { overflow: hidden; }
   color: var(--gb-text-muted);
   text-align: center;
   margin: 0 0 6px;
-  padding: 0 8px;
+  padding: 0 4px;
   line-height: 1.3;
   min-height: 14px;
 }
@@ -3911,7 +3916,7 @@ body.gb-fcm-open { overflow: hidden; }
   justify-content: center;
   height: 64px;
   margin: 0 auto 8px;
-  padding: 0 8px;
+  padding: 0 4px;
   overflow: hidden;
   background: transparent;
   aspect-ratio: auto;
@@ -3936,8 +3941,8 @@ body.gb-fcm-open { overflow: hidden; }
   border-top: 1px solid var(--kit-color);
   font-family: 'Montserrat', sans-serif;
   font-weight: 800;
-  font-size: 12px;
-  letter-spacing: -0.015em;
+  font-size: 15px;
+  letter-spacing: -0.02em;
   color: var(--gb-text);
   line-height: 1.2;
 }
@@ -3949,7 +3954,7 @@ body.gb-fcm-open { overflow: hidden; }
 [data-template="leo"].pdp-hero .variant-compare {
   display: inline-block;
   font-family: 'DM Sans', sans-serif;
-  font-size: 10px;
+  font-size: 11.5px;
   font-weight: 400;
   color: var(--gb-text-soft);
   text-decoration: line-through;
@@ -3991,8 +3996,8 @@ body.gb-fcm-open { overflow: hidden; }
   [data-template="leo"].pdp-hero .variant-pack { font-size: 16px; }
   [data-template="leo"].pdp-hero .variant-descriptor { font-size: 12px; margin-bottom: 8px; min-height: 16px; }
   [data-template="leo"].pdp-hero .variant-illustration { height: 76px; margin-bottom: 10px; }
-  [data-template="leo"].pdp-hero .variant-price { font-size: 14px; padding-top: 7px; margin-bottom: 10px; }
-  [data-template="leo"].pdp-hero .variant-compare { font-size: 11.5px; margin-left: 5px; }
+  [data-template="leo"].pdp-hero .variant-price { font-size: 17px; padding-top: 7px; margin-bottom: 10px; }
+  [data-template="leo"].pdp-hero .variant-compare { font-size: 13px; margin-left: 6px; }
   [data-template="leo"].pdp-hero .variant-save { font-size: 12px; padding: 8px 8px; }
 }
 
