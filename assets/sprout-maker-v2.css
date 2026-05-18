@@ -1,0 +1,57 @@
+/* =====================================================================
+   sprout-maker-v2.css
+   Overrides + additions on top of sprout-maker.css for the v2 PDP
+   template (product.sprout-maker-v2.json). Loaded alongside the base
+   sprout-maker.css so anything not overridden here inherits as-is.
+
+   Scoping: every v2 section root carries the `sprout-pdp-v2` class
+   alongside its base section class (e.g. <section class="myth-section
+   sprout-pdp-v2">). That guarantees these rules apply ONLY on the v2
+   template and never on the existing v1 PDP.
+   ===================================================================== */
+
+/* ----- White-overlay fix on PDP images ------------------------------ */
+/* The base CSS sets `opacity: 0.6/0.7` on the image *containers*
+   (.compare-image, .box-image, .reels-tile) so the emoji placeholder
+   appears faded when there's no image. Trouble: CSS opacity cascades
+   to children, so uploaded <img> tags also rendered semi-transparent
+   and the cream container background bled through as a white veil.
+   Strip the parent opacity entirely on v2; uploaded images render at
+   full opacity. */
+
+.sprout-pdp-v2 .compare-image,
+.sprout-pdp-v2 .box-image,
+.sprout-pdp-v2 .reels-tile {
+  opacity: 1;
+}
+
+/* When the container holds no image (admin hasn't uploaded one yet),
+   the emoji placeholder shows. Fade just that, not the whole frame. */
+.sprout-pdp-v2 .compare-image:not(:has(> img)),
+.sprout-pdp-v2 .box-image:not(:has(> img)),
+.sprout-pdp-v2 .reels-tile:not(:has(> img)):not(:has(> video)) {
+  color: var(--kit-color);
+  opacity: 0.7;
+}
+
+/* ----- Container consistency ---------------------------------------- */
+/* Multiple Shopify sections share the same .container selector but the
+   base CSS doesn't define a single source-of-truth for max-width and
+   horizontal padding — it relies on the parent .sprout-pdp wrapper
+   inherited from the v1 single-section template. v2 has no shared
+   parent, so pin these explicitly on every v2 section to keep left
+   and right margins identical across sections. */
+.sprout-pdp-v2 .container {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 24px;
+  padding-right: 24px;
+  box-sizing: border-box;
+}
+@media (max-width: 768px) {
+  .sprout-pdp-v2 .container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}

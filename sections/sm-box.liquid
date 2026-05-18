@@ -1,0 +1,94 @@
+{{ 'sprout-maker.css' | asset_url | stylesheet_tag }}
+{{ 'sprout-maker-v2.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign p = product
+  assign mf_components = p.metafields.custom.featured_components.value
+  assign mf_box_image  = p.metafields.custom.box_image
+  assign mf_box_note   = p.metafields.custom.box_note
+  assign component_blocks = section.blocks | where: 'type', 'box_component'
+-%}
+
+{%- if mf_components != blank or component_blocks.size > 0 -%}
+  <section class="box-section sprout-pdp-v2">
+    <div class="container">
+      <div class="section-header">
+        <div class="eyebrow">{{ section.settings.box_eyebrow }}</div>
+        <h2>{{ section.settings.box_heading }}<br><em>{{ section.settings.box_heading_em }}</em></h2>
+      </div>
+      {%- assign box_img  = mf_box_image | default: section.settings.box_image -%}
+      {%- assign box_note = mf_box_note  | default: section.settings.box_note -%}
+      <div class="box-grid">
+        <div class="box-image">
+          {%- if box_img != blank -%}
+            <img src="{{ box_img | image_url: width: 1200 }}" alt="What is in the box" loading="lazy" width="1200" height="750">
+          {%- else -%}🫙{%- endif -%}
+        </div>
+        <div>
+          <div class="box-pills">
+            {%- if mf_components != blank -%}
+              {%- for c in mf_components -%}
+                <div class="box-pill">
+                  <span class="bp-icon">
+                    {%- if c.icon != blank -%}
+                      <img src="{{ c.icon | image_url: width: 56 }}" alt="{{ c.name | escape }}" loading="lazy" width="28" height="28" class="bp-icon-img">
+                    {%- else -%}
+                      {{ forloop.index }}
+                    {%- endif -%}
+                  </span>
+                  <span class="bp-name">{{ c.name }}</span>
+                  <span class="bp-sub">{{ c.description }}</span>
+                </div>
+              {%- endfor -%}
+            {%- else -%}
+              {%- for block in component_blocks -%}
+                <div class="box-pill" {{ block.shopify_attributes }}>
+                  <span class="bp-icon">
+                    {%- if block.settings.icon_image != blank -%}
+                      <img src="{{ block.settings.icon_image | image_url: width: 56 }}" alt="{{ block.settings.name | escape }}" loading="lazy" width="28" height="28" class="bp-icon-img">
+                    {%- else -%}
+                      {{ forloop.index }}
+                    {%- endif -%}
+                  </span>
+                  <span class="bp-name">{{ block.settings.name }}</span>
+                  <span class="bp-sub">{{ block.settings.description }}</span>
+                </div>
+              {%- endfor -%}
+            {%- endif -%}
+          </div>
+          {%- if box_note != blank -%}
+            <p class="box-note">{{ box_note }}</p>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "SM v2 · What's in the Box",
+  "tag": "section",
+  "class": "section--sm-v2-box",
+  "max_blocks": 12,
+  "settings": [
+    { "type": "text", "id": "box_eyebrow", "label": "Eyebrow", "default": "WHAT'S IN THE BOX" },
+    { "type": "text", "id": "box_heading", "label": "Heading", "default": "3 PARTS." },
+    { "type": "text", "id": "box_heading_em", "label": "Heading (highlighted)", "default": "ONE KIT." },
+    { "type": "image_picker", "id": "box_image", "label": "Box / kit image" },
+    { "type": "textarea", "id": "box_note", "label": "Note", "default": "Just add water and a kitchen counter. The kit handles the rest." }
+  ],
+  "blocks": [
+    {
+      "type": "box_component",
+      "name": "Box component",
+      "settings": [
+        { "type": "image_picker", "id": "icon_image", "label": "Component icon", "info": "Optional. Replaces the number badge." },
+        { "type": "text", "id": "name", "label": "Name" },
+        { "type": "textarea", "id": "description", "label": "Description" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "SM v2 · What's in the Box" }]
+}
+{% endschema %}
