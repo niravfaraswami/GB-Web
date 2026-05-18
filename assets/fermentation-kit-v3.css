@@ -811,3 +811,78 @@
 @media (max-width: 768px) {
   [data-template="fkv3"].cross-section .cross-card .cross-atc-btn { padding: 10px 14px; font-size: 11px; }
 }
+
+/* =====================================================================
+   What's-in-the-box · split layout (desktop, > 6 components)
+   ----------------------------------------------------------------
+   When the parent product lists more than 6 components in
+   `featured_components`, the box section markup adds
+   `.box-grid--split` to the grid and inserts a third child
+   `.box-pills-bottom`. Layout:
+
+     ┌──────────────┬──────────────┐
+     │              │  1   |   2   │
+     │              ├──────┼───────┤
+     │    image     │  3   |   4   │
+     │              │      │       │
+     ├──────┬───────┴───┬──┴───────┤
+     │  5   │   6      │   7   |  8│
+     └──────┴──────────┴──────────┘
+
+   The top row stretches so the 2×2 right-side grid lines up with
+   the image height — recovers the big chunk of vertical negative
+   space that appeared next to the image when listing 7+ items.
+   Bottom row spans full width, item count driven by the
+   `--bottom-cols` custom prop set inline on the element.
+
+   Mobile (≤ 768 px) collapses to a single 2-column flow, no
+   horizontal split.
+   ===================================================================== */
+.box-grid--split {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
+  align-items: stretch;
+  gap: 24px 40px;
+}
+.box-grid--split .box-image {
+  grid-column: 1;
+  grid-row: 1;
+}
+.box-grid--split .box-pills {
+  grid-column: 2;
+  grid-row: 1;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+}
+.box-grid--split .box-pills-bottom {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  display: grid;
+  grid-template-columns: repeat(var(--bottom-cols, 4), minmax(0, 1fr));
+  gap: 10px;
+}
+.box-grid--split .box-pills .box-pill,
+.box-grid--split .box-pills-bottom .box-pill {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+@media (max-width: 768px) {
+  /* On phones / small tablets the split layout collapses back to
+     a single column of 2-up pills — same as the default box-grid
+     mobile rule in fermentation-kit.css. */
+  .box-grid--split {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 20px;
+  }
+  .box-grid--split .box-image { grid-column: 1; grid-row: 1; }
+  .box-grid--split .box-pills { grid-column: 1; grid-row: 2; grid-template-rows: auto; }
+  .box-grid--split .box-pills-bottom {
+    grid-column: 1;
+    grid-row: 3;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+}
