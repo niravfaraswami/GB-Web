@@ -391,8 +391,9 @@
           "settings": {
             "variant": "image_only",
             "span_row_2": true,
-            "span_col_2": false,
-            "image": "shopify://shop_images/kanji_s03_flat_lay.png",
+            "span_col_2": true,
+            "image": "shopify://shop_images/Kanji_Kit_Includes.png",
+            "image_mobile": "shopify://shop_images/kanji_s03_flat_lay.png",
             "numeral": "",
             "eyebrow": "",
             "heading": "Kanji Making Kit — flat lay",
@@ -405,7 +406,7 @@
           "settings": {
             "variant": "dark_photo",
             "span_row_2": false,
-            "span_col_2": false,
+            "span_col_2": true,
             "image": "shopify://shop_images/kanji_airlock_dark.png",
             "numeral": "",
             "eyebrow": "FEATURE · AIRLOCK",
@@ -432,7 +433,7 @@
           "type": "stag_card",
           "settings": {
             "variant": "detail",
-            "span_row_2": false,
+            "span_row_2": true,
             "span_col_2": false,
             "image": "shopify://shop_images/kanji_s07_component_spice.png",
             "numeral": "",
