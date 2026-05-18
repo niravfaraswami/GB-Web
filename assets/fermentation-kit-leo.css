@@ -2921,73 +2921,12 @@
 }
 
 /* ============================================================
- * Variant picker — leo overrides
- * Fixes for the leo PDP hero variant grid:
- *  - cards stretch to equal height in their row
- *  - long titles wrap instead of overflowing (white-space: nowrap is removed)
- *  - price block pins to the bottom of each card via flex
- *  - illustration uses aspect-ratio so images stay proportional
- *  - radio dot has enough breathing room from the title
- *  - 2-up grid collapses to 1 column on narrow phones
+ * Variant picker — leo overrides removed in favour of the v2 picker
+ * block at the bottom of this file. See the "Variant picker · v2"
+ * section there for the live styles. The earlier block applied
+ * left-aligned layout + `display: flex` on `.variant-price` with
+ * wrap, which fought the v2 inline price + centred-card layout.
  * ============================================================ */
-[data-template="leo"].pdp-hero .variant-grid { align-items: stretch; }
-[data-template="leo"].pdp-hero .variant {
-  display: flex;
-  flex-direction: column;
-  padding: 16px 14px 14px;
-  padding-right: 34px; /* reserve space for the radio dot */
-  text-align: left;
-  height: 100%;
-}
-[data-template="leo"].pdp-hero .variant-radio {
-  top: 12px;
-  right: 12px;
-  width: 18px;
-  height: 18px;
-}
-[data-template="leo"].pdp-hero .variant-pack {
-  white-space: normal;
-  text-wrap: balance;
-  text-align: left;
-  font-size: 15px;
-  line-height: 1.2;
-  margin-bottom: 10px;
-  align-self: stretch;
-}
-[data-template="leo"].pdp-hero .variant-illustration {
-  height: auto;
-  aspect-ratio: 16 / 10;
-  margin-bottom: 12px;
-  background: var(--gb-cream);
-}
-[data-template="leo"].pdp-hero .variant-illustration img {
-  object-fit: contain;
-  padding: 6px;
-}
-[data-template="leo"].pdp-hero .variant-rationale { margin: 4px 0 10px; }
-[data-template="leo"].pdp-hero .variant-price {
-  margin-top: auto; /* push to bottom of the card */
-  font-size: 17px;
-  display: flex;
-  align-items: baseline;
-  justify-content: flex-start;
-  gap: 8px;
-  flex-wrap: wrap;
-  text-align: left;
-}
-[data-template="leo"].pdp-hero .variant-price > span:first-child { display: inline; white-space: nowrap; }
-[data-template="leo"].pdp-hero .variant-compare { margin-left: 0; white-space: nowrap; }
-[data-template="leo"].pdp-hero .variant-save { display: none; }
-
-/* Mobile: 2-up stays 2-up — long titles wrap (white-space: normal + text-wrap:
-   balance already set above). 3+ stays multi-col. Just tightens type + padding. */
-@media (max-width: 540px) {
-  [data-template="leo"].pdp-hero .variant { padding: 14px 12px 12px; padding-right: 30px; }
-  [data-template="leo"].pdp-hero .variant-pack { font-size: 14px; margin-bottom: 8px; }
-  [data-template="leo"].pdp-hero .variant-illustration { aspect-ratio: 5 / 2; }
-  [data-template="leo"].pdp-hero .variant-price { font-size: 12px; }
-  [data-template="leo"].pdp-hero .variant-compare { font-size: 10.5px; }
-}
 
 /* ============================================================
  * gb-comparison-v2 — "minimal" style (mint vs cream columns)
@@ -3809,27 +3748,40 @@ body.gb-fcm-open { overflow: hidden; }
 }
 
 /* =====================================================================
-   Variant picker · v2 (Brand Guide v1.2)
-   Scoped to leo PDPs only — overrides the base `.variant-*` styles to
-   match `gutbasket-variant-picker-v2.html`:
-   - Top Seller badge → centred pill in --kit-color-dark over the top
-   - Empty radio → filled --kit-color-dark check circle top-right
-   - BEST FOR eyebrow row → single `.variant-descriptor` line
-   - Inline savings → full-width bottom strip with fill swap on active
+   Variant picker · v2 — comprehensive (leo PDPs only)
+   ----------------------------------------------------------------
+   Layout (top → bottom, matching the user-supplied reference):
+     • Centred pill badge half-overlapping the top edge
+     • Variant size (large, kit-color-dark on active, ink elsewhere)
+     • Descriptor below ("For Families", "For Beginners", …)
+     • Product image (small, contained, transparent bg)
+     • Price row — actual price + strike-through compare on ONE line
+     • Thin separator line
+     • Solid kit-color-dark "You Save ₹X" strip flush to bottom edges
+
+   Specific overrides written here as a single block so the cascade
+   is predictable (older v1 leo-variant-picker rules at lines ~2920
+   were deleted in the same change).
    ===================================================================== */
 
-/* Card resets — no overflow:hidden, top padding so the badge can sit
-   half-over the top edge, vertical flex so the savings strip can sit
-   flush at the bottom via margin-top:auto. */
+[data-template="leo"].pdp-hero .variant-grid {
+  align-items: stretch;
+  overflow: visible;
+}
+
 [data-template="leo"].pdp-hero .variant {
-  border: 1.5px solid var(--gb-border);
-  border-radius: 14px;
-  padding: 22px 0 0;
   display: flex;
   flex-direction: column;
   background: var(--gb-white);
+  border: 1.5px solid var(--gb-border);
+  border-radius: 12px;
+  padding: 18px 0 0;
+  text-align: center;
+  height: 100%;
+  position: relative;
   overflow: visible;
   transition: border-color 0.18s, background 0.18s;
+  cursor: pointer;
 }
 [data-template="leo"].pdp-hero .variant:hover:not(.active) {
   border-color: var(--kit-color);
@@ -3837,57 +3789,47 @@ body.gb-fcm-open { overflow: hidden; }
 [data-template="leo"].pdp-hero .variant.active {
   border: 2px solid var(--kit-color);
   background: var(--kit-color-soft);
-  padding-top: 21.5px;
+  padding-top: 17.5px;
 }
 [data-template="leo"].pdp-hero .variant:focus-visible {
   outline: 2px solid var(--kit-color-dark);
   outline-offset: 2px;
 }
 
-/* The old absolutely-positioned radio and tag get hidden on v2; the
-   new .variant-check and .variant-badge replace them. */
+/* Hide legacy elements — replaced by .variant-check / .variant-badge */
 [data-template="leo"].pdp-hero .variant .variant-radio,
 [data-template="leo"].pdp-hero .variant .variant-tag,
 [data-template="leo"].pdp-hero .variant .variant-rationale { display: none; }
 
-/* Allow badges to extend above the card edge without being clipped
-   by the grid container. (Defensive — base CSS doesn't clip, but
-   any future stacking-context tweak would.) */
-[data-template="leo"].pdp-hero .variant-grid { overflow: visible; }
-
-/* Top Seller / Best Value / any variant.metafields.custom.tag —
-   centred pill that half-overlaps the top edge of the card. */
+/* Top Seller / Best Value pill — half-overlapping the top border */
 [data-template="leo"].pdp-hero .variant-badge {
   position: absolute;
-  top: -11px;
+  top: -10px;
   left: 50%;
   transform: translateX(-50%);
   background: var(--kit-color-dark);
   color: var(--gb-cream);
   font-family: 'DM Mono', monospace;
-  font-size: 10px;
+  font-size: 9.5px;
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  padding: 4px 12px;
+  padding: 4px 11px;
   border-radius: 999px;
   white-space: nowrap;
   z-index: 3;
   box-shadow: 0 1px 4px rgba(31, 31, 29, 0.08);
 }
 
-/* Selection check — top-right corner, fills on active.
-   Sized + bordered so it reads as a control at a glance, not a
-   stray dot. Border picks up the muted text colour so it's visible
-   against any kit background. */
+/* Selection check — top-right corner; fills on active */
 [data-template="leo"].pdp-hero .variant-check {
   position: absolute;
   top: 10px;
   right: 10px;
-  width: 22px;
-  height: 22px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
-  border: 2px solid var(--gb-text-soft);
+  border: 2px solid var(--gb-border);
   background: var(--gb-white);
   display: flex;
   align-items: center;
@@ -3901,8 +3843,8 @@ body.gb-fcm-open { overflow: hidden; }
   border-color: var(--kit-color-dark);
 }
 [data-template="leo"].pdp-hero .variant-check svg {
-  width: 12px;
-  height: 12px;
+  width: 11px;
+  height: 11px;
   stroke: var(--gb-cream);
   fill: none;
   opacity: 0;
@@ -3910,108 +3852,124 @@ body.gb-fcm-open { overflow: hidden; }
 }
 [data-template="leo"].pdp-hero .variant.active .variant-check svg { opacity: 1; }
 
-/* Size label */
+/* Variant size label */
 [data-template="leo"].pdp-hero .variant-pack {
   font-family: 'Montserrat', sans-serif;
   font-weight: 800;
-  font-size: 17px;
+  font-size: 18px;
   letter-spacing: -0.02em;
   line-height: 1.1;
   color: var(--gb-text);
   text-align: center;
-  margin: 0 0 3px;
-  padding: 0 6px;
+  margin: 0 0 2px;
+  padding: 0 8px;
   white-space: normal;
 }
+[data-template="leo"].pdp-hero .variant.active .variant-pack {
+  color: var(--kit-color-dark);
+}
 
-/* Descriptor — replaces the old .variant-rationale row */
+/* Descriptor */
 [data-template="leo"].pdp-hero .variant-descriptor {
   font-family: 'DM Sans', sans-serif;
   font-weight: 500;
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--gb-text-muted);
   text-align: center;
-  margin-bottom: 14px;
-  padding: 0 6px;
+  margin: 0 0 10px;
+  padding: 0 8px;
   line-height: 1.3;
-  min-height: 30px;
+  min-height: 16px;
 }
 
-/* Product image */
+/* Product image — small, contained, no background */
 [data-template="leo"].pdp-hero .variant-illustration {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: center;
-  height: 92px;
-  margin-bottom: 14px;
-  padding: 0 4px;
+  height: 88px;
+  margin: 0 auto 12px;
+  padding: 0 6px;
   overflow: hidden;
   background: transparent;
+  aspect-ratio: auto;
 }
 [data-template="leo"].pdp-hero .variant-illustration img {
-  width: 100%; height: 100%; object-fit: cover; display: block;
+  width: auto;
+  max-width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  padding: 0;
 }
 
-/* Price — ink, stable across states */
+/* Price row — actual + compare on ONE line, centred.
+   Explicit display:block (not flex) so the inline-block children
+   sit next to each other instead of wrapping onto separate rows. */
 [data-template="leo"].pdp-hero .variant-price {
+  display: block;
   text-align: center;
-  padding: 0 6px;
-  margin-bottom: 12px;
+  margin: 0 0 10px;
+  padding: 0 8px;
   font-family: 'Montserrat', sans-serif;
   font-weight: 800;
   font-size: 17px;
   letter-spacing: -0.01em;
   color: var(--gb-text);
 }
+[data-template="leo"].pdp-hero .variant-price > span:first-child {
+  display: inline-block;
+  white-space: nowrap;
+  vertical-align: baseline;
+}
 [data-template="leo"].pdp-hero .variant-compare {
   display: inline-block;
   font-family: 'DM Sans', sans-serif;
-  font-size: 12px;
+  font-size: 13px;
+  font-weight: 400;
   color: var(--gb-text-soft);
   text-decoration: line-through;
   text-decoration-color: var(--gb-text-soft);
   margin: 0 0 0 6px;
-  font-weight: 400;
   vertical-align: baseline;
-}
-[data-template="leo"].pdp-hero .variant-price > span:first-child {
-  display: inline-block;
-}
-
-/* Savings strip — full-width bottom edge, fills on active */
-[data-template="leo"].pdp-hero .variant-save {
-  display: block;
-  font-family: 'DM Mono', monospace;
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.10em;
-  text-transform: uppercase;
-  text-align: center;
-  padding: 10px 4px;
-  background: var(--gb-cream-deeper);
-  color: var(--kit-color-dark);
-  margin: auto 0 0;
-  border-radius: 0 0 12.5px 12.5px;
-  transition: background 0.18s, color 0.18s;
   white-space: nowrap;
 }
-[data-template="leo"].pdp-hero .variant.active .variant-save {
+
+/* Save strip — solid kit-color-dark, runs edge-to-edge, sits flush
+   at the bottom of the card with a thin separator line above. */
+[data-template="leo"].pdp-hero .variant-save {
+  display: block;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-transform: none;
+  text-align: center;
+  padding: 9px 6px;
+  margin: auto 0 0;
   background: var(--kit-color-dark);
   color: var(--gb-cream);
-  border-radius: 0 0 12px 12px;
+  border-top: 1px solid var(--gb-border);
+  border-radius: 0 0 10px 10px;
+  white-space: nowrap;
+  transition: background 0.18s, color 0.18s;
+}
+[data-template="leo"].pdp-hero .variant.active .variant-save {
+  border-top-color: var(--kit-color-dark);
+  border-radius: 0 0 9.5px 9.5px;
 }
 
 @media (min-width: 480px) {
-  [data-template="leo"].pdp-hero .variant { padding-top: 24px; }
-  [data-template="leo"].pdp-hero .variant.active { padding-top: 23.5px; }
-  [data-template="leo"].pdp-hero .variant-check { width: 24px; height: 24px; top: 12px; right: 12px; }
-  [data-template="leo"].pdp-hero .variant-check svg { width: 13px; height: 13px; }
+  [data-template="leo"].pdp-hero .variant { padding-top: 20px; }
+  [data-template="leo"].pdp-hero .variant.active { padding-top: 19.5px; }
+  [data-template="leo"].pdp-hero .variant-check { width: 22px; height: 22px; top: 12px; right: 12px; }
+  [data-template="leo"].pdp-hero .variant-check svg { width: 12px; height: 12px; }
   [data-template="leo"].pdp-hero .variant-pack { font-size: 20px; }
-  [data-template="leo"].pdp-hero .variant-descriptor { font-size: 13px; margin-bottom: 16px; }
-  [data-template="leo"].pdp-hero .variant-illustration { height: 108px; margin-bottom: 16px; }
-  [data-template="leo"].pdp-hero .variant-price { font-size: 19px; }
-  [data-template="leo"].pdp-hero .variant-compare { font-size: 13px; margin-left: 8px; }
-  [data-template="leo"].pdp-hero .variant-save { font-size: 10.5px; padding: 11px 6px; letter-spacing: 0.12em; }
+  [data-template="leo"].pdp-hero .variant-descriptor { font-size: 13px; margin-bottom: 12px; }
+  [data-template="leo"].pdp-hero .variant-illustration { height: 104px; margin-bottom: 14px; }
+  [data-template="leo"].pdp-hero .variant-price { font-size: 18px; margin-bottom: 12px; }
+  [data-template="leo"].pdp-hero .variant-compare { font-size: 14px; margin-left: 8px; }
+  [data-template="leo"].pdp-hero .variant-save { font-size: 13px; padding: 10px 8px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
