@@ -3790,14 +3790,13 @@ body.gb-fcm-open { overflow: hidden; }
   flex-direction: column;
   width: 100%;
   background: var(--gb-white);
-  /* Real border on top + left + right only. The save strip below
-     uses negative margins to extend over the bottom-left, bottom-
-     right, and bottom-edge areas, becoming the bottom of the card
-     itself — so the strip's bg literally runs to the absolute
-     outer edge of the card, no visible border line alongside. */
   border: 1px solid var(--gb-border);
   border-radius: 18px;
-  padding: 14px 0 0;
+  /* `padding-bottom: 38px` reserves space at the bottom of the
+     card for the absolutely-positioned save strip (≈ 30 px tall
+     + 1 px overshoot). The strip itself sits anchored to the
+     card's outer L / R / B edges below. */
+  padding: 14px 0 38px;
   text-align: center;
   position: relative;
   overflow: visible;
@@ -3811,6 +3810,9 @@ body.gb-fcm-open { overflow: hidden; }
 [data-template="leo"].pdp-hero .variant.active {
   border: 2.5px solid var(--kit-color);
   background: var(--gb-white);
+  /* match padding-bottom against the slightly thicker border so the
+     interior content keeps the same baseline relative to the strip. */
+  padding: 14px 0 38px;
 }
 [data-template="leo"].pdp-hero .variant:focus-visible {
   outline: 2px solid var(--kit-color-dark);
@@ -3963,36 +3965,40 @@ body.gb-fcm-open { overflow: hidden; }
   white-space: nowrap;
 }
 
-/* Save strip — solid kit-color-dark, edge-to-edge of the card.
-   The negative margins push the strip 1 px (or 2.5 px on active)
-   past the card's L / R / bottom borders, so the strip's bg
-   covers those borders' bottom portion and the strip BECOMES the
-   bottom of the card. Its own border-radius matches the card's
-   outer radius so the rounded bottom corners align perfectly. */
+/* Save strip — absolutely positioned to the card's outer L / R /
+   bottom edges. Bypasses every flex / shrink / cross-axis quirk
+   that was leaving a gap on either side of the strip. The strip
+   extends 1 px (or 2.5 px on active) past each of those three
+   edges so its kit-color-dark bg fully covers the card's L / R /
+   bottom border underneath, becoming the card's bottom edge. */
 [data-template="leo"].pdp-hero .variant-save {
   display: block;
+  position: absolute;
+  left: -1px;
+  right: -1px;
+  bottom: -1px;
+  margin: 0;
+  width: auto;
   font-family: 'DM Sans', sans-serif;
   font-size: 10.5px;
   font-weight: 700;
   letter-spacing: 0.02em;
   text-transform: uppercase;
   text-align: center;
-  padding: 7px 6px;
-  margin: auto -1px -1px;
-  width: calc(100% + 2px);
+  padding: 9px 6px;
   background: var(--kit-color-dark);
   color: #FFFFFF;
   border: 0;
   border-radius: 0 0 18px 18px;
   white-space: nowrap;
-  transition: background 0.18s;
-  position: relative;
   z-index: 2;
   box-sizing: border-box;
+  transition: background 0.18s;
 }
 [data-template="leo"].pdp-hero .variant.active .variant-save {
-  margin: auto -2.5px -2.5px;
-  width: calc(100% + 5px);
+  left: -2.5px;
+  right: -2.5px;
+  bottom: -2.5px;
 }
 
 @media (min-width: 480px) {
