@@ -3821,7 +3821,7 @@ body.gb-fcm-open { overflow: hidden; }
 /* Card resets — no overflow:hidden, top padding so the badge can sit
    half-over the top edge, vertical flex so the savings strip can sit
    flush at the bottom via margin-top:auto. */
-[data-template="leo"] .pdp-hero .variant {
+[data-template="leo"].pdp-hero .variant {
   border: 1.5px solid var(--gb-border);
   border-radius: 14px;
   padding: 22px 0 0;
@@ -3831,33 +3831,33 @@ body.gb-fcm-open { overflow: hidden; }
   overflow: visible;
   transition: border-color 0.18s, background 0.18s;
 }
-[data-template="leo"] .pdp-hero .variant:hover:not(.active) {
+[data-template="leo"].pdp-hero .variant:hover:not(.active) {
   border-color: var(--kit-color);
 }
-[data-template="leo"] .pdp-hero .variant.active {
+[data-template="leo"].pdp-hero .variant.active {
   border: 2px solid var(--kit-color);
   background: var(--kit-color-soft);
   padding-top: 21.5px;
 }
-[data-template="leo"] .pdp-hero .variant:focus-visible {
+[data-template="leo"].pdp-hero .variant:focus-visible {
   outline: 2px solid var(--kit-color-dark);
   outline-offset: 2px;
 }
 
 /* The old absolutely-positioned radio and tag get hidden on v2; the
    new .variant-check and .variant-badge replace them. */
-[data-template="leo"] .pdp-hero .variant .variant-radio,
-[data-template="leo"] .pdp-hero .variant .variant-tag,
-[data-template="leo"] .pdp-hero .variant .variant-rationale { display: none; }
+[data-template="leo"].pdp-hero .variant .variant-radio,
+[data-template="leo"].pdp-hero .variant .variant-tag,
+[data-template="leo"].pdp-hero .variant .variant-rationale { display: none; }
 
 /* Allow badges to extend above the card edge without being clipped
    by the grid container. (Defensive — base CSS doesn't clip, but
    any future stacking-context tweak would.) */
-[data-template="leo"] .pdp-hero .variant-grid { overflow: visible; }
+[data-template="leo"].pdp-hero .variant-grid { overflow: visible; }
 
 /* Top Seller / Best Value / any variant.metafields.custom.tag —
    centred pill that half-overlaps the top edge of the card. */
-[data-template="leo"] .pdp-hero .variant-badge {
+[data-template="leo"].pdp-hero .variant-badge {
   position: absolute;
   top: -11px;
   left: 50%;
@@ -3880,7 +3880,7 @@ body.gb-fcm-open { overflow: hidden; }
    Sized + bordered so it reads as a control at a glance, not a
    stray dot. Border picks up the muted text colour so it's visible
    against any kit background. */
-[data-template="leo"] .pdp-hero .variant-check {
+[data-template="leo"].pdp-hero .variant-check {
   position: absolute;
   top: 10px;
   right: 10px;
@@ -3896,11 +3896,11 @@ body.gb-fcm-open { overflow: hidden; }
   transition: background 0.15s, border-color 0.15s;
   pointer-events: none;
 }
-[data-template="leo"] .pdp-hero .variant.active .variant-check {
+[data-template="leo"].pdp-hero .variant.active .variant-check {
   background: var(--kit-color-dark);
   border-color: var(--kit-color-dark);
 }
-[data-template="leo"] .pdp-hero .variant-check svg {
+[data-template="leo"].pdp-hero .variant-check svg {
   width: 12px;
   height: 12px;
   stroke: var(--gb-cream);
@@ -3908,10 +3908,10 @@ body.gb-fcm-open { overflow: hidden; }
   opacity: 0;
   transition: opacity 0.15s;
 }
-[data-template="leo"] .pdp-hero .variant.active .variant-check svg { opacity: 1; }
+[data-template="leo"].pdp-hero .variant.active .variant-check svg { opacity: 1; }
 
 /* Size label */
-[data-template="leo"] .pdp-hero .variant-pack {
+[data-template="leo"].pdp-hero .variant-pack {
   font-family: 'Montserrat', sans-serif;
   font-weight: 800;
   font-size: 17px;
@@ -3925,7 +3925,7 @@ body.gb-fcm-open { overflow: hidden; }
 }
 
 /* Descriptor — replaces the old .variant-rationale row */
-[data-template="leo"] .pdp-hero .variant-descriptor {
+[data-template="leo"].pdp-hero .variant-descriptor {
   font-family: 'DM Sans', sans-serif;
   font-weight: 500;
   font-size: 11.5px;
@@ -3938,7 +3938,7 @@ body.gb-fcm-open { overflow: hidden; }
 }
 
 /* Product image */
-[data-template="leo"] .pdp-hero .variant-illustration {
+[data-template="leo"].pdp-hero .variant-illustration {
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -3948,12 +3948,12 @@ body.gb-fcm-open { overflow: hidden; }
   overflow: hidden;
   background: transparent;
 }
-[data-template="leo"] .pdp-hero .variant-illustration img {
+[data-template="leo"].pdp-hero .variant-illustration img {
   width: 100%; height: 100%; object-fit: cover; display: block;
 }
 
 /* Price — ink, stable across states */
-[data-template="leo"] .pdp-hero .variant-price {
+[data-template="leo"].pdp-hero .variant-price {
   text-align: center;
   padding: 0 6px;
   margin-bottom: 12px;
@@ -3963,7 +3963,7 @@ body.gb-fcm-open { overflow: hidden; }
   letter-spacing: -0.01em;
   color: var(--gb-text);
 }
-[data-template="leo"] .pdp-hero .variant-compare {
+[data-template="leo"].pdp-hero .variant-compare {
   display: inline-block;
   font-family: 'DM Sans', sans-serif;
   font-size: 12px;
@@ -3974,12 +3974,12 @@ body.gb-fcm-open { overflow: hidden; }
   font-weight: 400;
   vertical-align: baseline;
 }
-[data-template="leo"] .pdp-hero .variant-price > span:first-child {
+[data-template="leo"].pdp-hero .variant-price > span:first-child {
   display: inline-block;
 }
 
 /* Savings strip — full-width bottom edge, fills on active */
-[data-template="leo"] .pdp-hero .variant-save {
+[data-template="leo"].pdp-hero .variant-save {
   display: block;
   font-family: 'DM Mono', monospace;
   font-size: 10px;
@@ -3995,28 +3995,28 @@ body.gb-fcm-open { overflow: hidden; }
   transition: background 0.18s, color 0.18s;
   white-space: nowrap;
 }
-[data-template="leo"] .pdp-hero .variant.active .variant-save {
+[data-template="leo"].pdp-hero .variant.active .variant-save {
   background: var(--kit-color-dark);
   color: var(--gb-cream);
   border-radius: 0 0 12px 12px;
 }
 
 @media (min-width: 480px) {
-  [data-template="leo"] .pdp-hero .variant { padding-top: 24px; }
-  [data-template="leo"] .pdp-hero .variant.active { padding-top: 23.5px; }
-  [data-template="leo"] .pdp-hero .variant-check { width: 24px; height: 24px; top: 12px; right: 12px; }
-  [data-template="leo"] .pdp-hero .variant-check svg { width: 13px; height: 13px; }
-  [data-template="leo"] .pdp-hero .variant-pack { font-size: 20px; }
-  [data-template="leo"] .pdp-hero .variant-descriptor { font-size: 13px; margin-bottom: 16px; }
-  [data-template="leo"] .pdp-hero .variant-illustration { height: 108px; margin-bottom: 16px; }
-  [data-template="leo"] .pdp-hero .variant-price { font-size: 19px; }
-  [data-template="leo"] .pdp-hero .variant-compare { font-size: 13px; margin-left: 8px; }
-  [data-template="leo"] .pdp-hero .variant-save { font-size: 10.5px; padding: 11px 6px; letter-spacing: 0.12em; }
+  [data-template="leo"].pdp-hero .variant { padding-top: 24px; }
+  [data-template="leo"].pdp-hero .variant.active { padding-top: 23.5px; }
+  [data-template="leo"].pdp-hero .variant-check { width: 24px; height: 24px; top: 12px; right: 12px; }
+  [data-template="leo"].pdp-hero .variant-check svg { width: 13px; height: 13px; }
+  [data-template="leo"].pdp-hero .variant-pack { font-size: 20px; }
+  [data-template="leo"].pdp-hero .variant-descriptor { font-size: 13px; margin-bottom: 16px; }
+  [data-template="leo"].pdp-hero .variant-illustration { height: 108px; margin-bottom: 16px; }
+  [data-template="leo"].pdp-hero .variant-price { font-size: 19px; }
+  [data-template="leo"].pdp-hero .variant-compare { font-size: 13px; margin-left: 8px; }
+  [data-template="leo"].pdp-hero .variant-save { font-size: 10.5px; padding: 11px 6px; letter-spacing: 0.12em; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  [data-template="leo"] .pdp-hero .variant,
-  [data-template="leo"] .pdp-hero .variant-check,
-  [data-template="leo"] .pdp-hero .variant-check svg,
-  [data-template="leo"] .pdp-hero .variant-save { transition: none; }
+  [data-template="leo"].pdp-hero .variant,
+  [data-template="leo"].pdp-hero .variant-check,
+  [data-template="leo"].pdp-hero .variant-check svg,
+  [data-template="leo"].pdp-hero .variant-save { transition: none; }
 }
