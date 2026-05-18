@@ -85,15 +85,13 @@
 
         <div class="addon-name">{{ label | escape }}</div>
 
-        <div class="addon-price-col">
+        <div class="addon-right">
           <span class="addon-price">{{ discounted | money_without_trailing_zeros | replace: 'Rs. ', '₹' | replace: 'Rs.', '₹' }}</span>
-          <span class="addon-price-was">{{ full_price | money_without_trailing_zeros | replace: 'Rs. ', '₹' | replace: 'Rs.', '₹' }}</span>
+          <span class="addon-badge" aria-label="{{ pct }} percent off">
+            <span class="addon-badge-pct">{{ pct }}%</span>
+            <span class="addon-badge-off">OFF</span>
+          </span>
         </div>
-
-        <span class="addon-badge" aria-label="{{ pct }} percent off">
-          <span class="addon-badge-pct">{{ pct }}%</span>
-          <span class="addon-badge-off">OFF</span>
-        </span>
       </label>
     {%- endfor -%}
   </div>
