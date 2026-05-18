@@ -1,0 +1,176 @@
+/* =====================================================================
+   PDP Add-On Block · v3
+   Lives below the main ATC on the PDP. Scoped under `.addon-block` so
+   nothing leaks into the rest of the page. Consumes the page's
+   `--kit-color*` cascade variables directly — no new tokens.
+   ===================================================================== */
+.addon-block {
+  margin-top: 12px;
+  background: var(--white, #FFFFFF);
+  border: 1px solid var(--border-soft, #F0EBDD);
+  border-radius: 12px;
+  padding: 12px 14px 12px;
+}
+
+.addon-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  padding: 0 2px;
+}
+.addon-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--kit-color-dark, #1F1F1D);
+}
+.addon-head .rule {
+  flex: 1;
+  height: 1px;
+  background: var(--border-soft, #F0EBDD);
+}
+
+.addon-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.addon-row {
+  display: grid;
+  grid-template-columns: 44px 1fr auto auto;
+  align-items: center;
+  gap: 12px;
+  padding: 8px;
+  border: 1px solid var(--border, #E8E3D5);
+  border-radius: 10px;
+  background: var(--cream, #FFF9EE);
+  transition: background 0.18s ease, border-color 0.18s ease;
+}
+.addon-row.selected {
+  background: var(--kit-color-soft, #FDE8EF);
+  border-color: var(--kit-color, #B83265);
+}
+
+.addon-thumb {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  background: var(--kit-color-soft, #FDE8EF);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  overflow: hidden;
+  border: 1px solid rgba(31, 31, 29, 0.04);
+}
+.addon-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.addon-row.selected .addon-thumb { background: var(--white, #FFFFFF); }
+
+.addon-name {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 13.5px;
+  letter-spacing: -0.005em;
+  color: var(--text, #1F1F1D);
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+/* Price column — price stacked over chip */
+.addon-price-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+  white-space: nowrap;
+}
+.addon-price {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 14px;
+  color: var(--text, #1F1F1D);
+  letter-spacing: -0.005em;
+  line-height: 1;
+}
+.addon-discount {
+  display: inline-block;
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--kit-color-dark, #921F4E);
+  background: var(--kit-color-soft, #FDE8EF);
+  padding: 2px 5px;
+  border-radius: 4px;
+  line-height: 1.1;
+}
+.addon-row.selected .addon-discount {
+  background: var(--white, #FFFFFF);
+  color: var(--kit-color-dark, #921F4E);
+}
+
+/* Add button */
+.addon-add {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-width: 64px;
+  padding: 8px 12px;
+  border: 1.5px solid var(--ink, #1F1F1D);
+  background: transparent;
+  color: var(--ink, #1F1F1D);
+  border-radius: 999px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.addon-add:hover {
+  background: var(--ink, #1F1F1D);
+  color: var(--cream, #FFF9EE);
+}
+.addon-add .plus { font-size: 13px; line-height: 1; font-weight: 800; }
+.addon-add .check { display: none; align-items: center; }
+
+.addon-row.selected .addon-add {
+  background: var(--kit-color, #B83265);
+  border-color: var(--kit-color, #B83265);
+  color: var(--white, #FFFFFF);
+}
+.addon-row.selected .addon-add:hover {
+  background: var(--kit-color-dark, #921F4E);
+  border-color: var(--kit-color-dark, #921F4E);
+}
+.addon-row.selected .addon-add .plus { display: none; }
+.addon-row.selected .addon-add .check { display: inline-flex; }
+
+/* Edge states */
+.addon-row.disabled { opacity: 0.5; pointer-events: none; }
+.addon-row.in-cart .addon-add {
+  background: var(--cream-deeper, #F5EDD8);
+  border-color: var(--border, #E8E3D5);
+  color: var(--text-muted, #5C4D3F);
+  pointer-events: none;
+}
+
+@media (max-width: 480px) {
+  .addon-block { padding: 10px 12px; border-radius: 10px; }
+  .addon-row { grid-template-columns: 40px 1fr auto auto; gap: 10px; padding: 6px; }
+  .addon-thumb { width: 40px; height: 40px; font-size: 22px; }
+  .addon-name { font-size: 12.5px; }
+  .addon-price { font-size: 13px; }
+  .addon-discount { font-size: 8.5px; padding: 1.5px 4px; }
+  .addon-add { min-width: 0; padding: 7px 10px; font-size: 10.5px; }
+}
