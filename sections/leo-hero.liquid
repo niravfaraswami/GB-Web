@@ -166,40 +166,42 @@
                   {%- assign v_img = variant.metafields.custom.variant_illustration | default: variant.image | default: p.featured_image -%}
                   {%- assign is_selected = false -%}
                   {%- if variant == p.selected_or_first_available_variant -%}{%- assign is_selected = true -%}{%- endif -%}
-                  <label class="variant{% if is_selected %} active{% endif %}{% unless variant.available %} sold-out{% endunless %}"
-                         data-variant-id="{{ variant.id }}"
-                         data-variant-price="{{ variant.price | money }}"
-                         data-variant-price-cents="{{ variant.price }}"
-                         data-variant-compare-cents="{{ variant.compare_at_price }}"
-                         role="radio"
-                         aria-checked="{% if is_selected %}true{% else %}false{% endif %}"
-                         tabindex="0">
-                    <input type="radio" name="id" value="{{ variant.id }}" class="variant-input"
-                           {% if is_selected %}checked{% endif %}
-                           {% unless variant.available %}disabled{% endunless %}>
+                  <div class="variant-wrap">
                     {%- if v_tag != blank -%}<span class="variant-badge">{{ v_tag }}</span>{%- endif -%}
-                    <span class="variant-check" aria-hidden="true">
-                      <svg viewBox="0 0 12 12" fill="none"><polyline points="2.5,6 5,8.5 9.5,3.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    </span>
-                    <div class="variant-pack">{{ variant.title }}</div>
-                    {%- if v_best != blank -%}
-                      <div class="variant-descriptor">{{ v_best }}</div>
-                    {%- endif -%}
-                    {%- if v_img != blank -%}
-                      <div class="variant-illustration">
-                        <img src="{{ v_img | image_url: width: 320 }}" alt="{{ variant.title }}" loading="lazy" width="160" height="120">
-                      </div>
-                    {%- endif -%}
-                    <div class="variant-price">
-                      <span>{{ variant.price | money }}</span>
-                      {%- if variant.compare_at_price > variant.price -%}
-                        <span class="variant-compare">{{ variant.compare_at_price | money }}</span>
+                    <label class="variant{% if is_selected %} active{% endif %}{% unless variant.available %} sold-out{% endunless %}"
+                           data-variant-id="{{ variant.id }}"
+                           data-variant-price="{{ variant.price | money }}"
+                           data-variant-price-cents="{{ variant.price }}"
+                           data-variant-compare-cents="{{ variant.compare_at_price }}"
+                           role="radio"
+                           aria-checked="{% if is_selected %}true{% else %}false{% endif %}"
+                           tabindex="0">
+                      <input type="radio" name="id" value="{{ variant.id }}" class="variant-input"
+                             {% if is_selected %}checked{% endif %}
+                             {% unless variant.available %}disabled{% endunless %}>
+                      <span class="variant-check" aria-hidden="true">
+                        <svg viewBox="0 0 12 12" fill="none"><polyline points="2.5,6 5,8.5 9.5,3.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                      </span>
+                      <div class="variant-pack">{{ variant.title }}</div>
+                      {%- if v_best != blank -%}
+                        <div class="variant-descriptor">{{ v_best }}</div>
                       {%- endif -%}
-                    </div>
-                    {%- if variant.compare_at_price > variant.price -%}
-                      <div class="variant-save">You Save {{ variant.compare_at_price | minus: variant.price | money }}</div>
-                    {%- endif -%}
-                  </label>
+                      {%- if v_img != blank -%}
+                        <div class="variant-illustration">
+                          <img src="{{ v_img | image_url: width: 320 }}" alt="{{ variant.title }}" loading="lazy" width="160" height="120">
+                        </div>
+                      {%- endif -%}
+                      <div class="variant-price">
+                        <span>{{ variant.price | money }}</span>
+                        {%- if variant.compare_at_price > variant.price -%}
+                          <span class="variant-compare">{{ variant.compare_at_price | money }}</span>
+                        {%- endif -%}
+                      </div>
+                      {%- if variant.compare_at_price > variant.price -%}
+                        <div class="variant-save">You Save {{ variant.compare_at_price | minus: variant.price | money }}</div>
+                      {%- endif -%}
+                    </label>
+                  </div>
                 {%- endfor -%}
               </div>
             {%- else -%}

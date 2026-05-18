@@ -3748,38 +3748,55 @@ body.gb-fcm-open { overflow: hidden; }
 }
 
 /* =====================================================================
-   Variant picker · v2 — comprehensive (leo PDPs only)
+   Variant picker · v2 (leo PDPs only) — tight, ATC-matched type
    ----------------------------------------------------------------
-   Layout (top → bottom, matching the user-supplied reference):
-     • Centred pill badge half-overlapping the top edge
-     • Variant size (large, kit-color-dark on active, ink elsewhere)
-     • Descriptor below ("For Families", "For Beginners", …)
-     • Product image (small, contained, transparent bg)
-     • Price row — actual price + strike-through compare on ONE line
-     • Thin separator line
-     • Solid kit-color-dark "You Save ₹X" strip flush to bottom edges
+   Markup contract (set in sections/leo-hero.liquid):
 
-   Specific overrides written here as a single block so the cascade
-   is predictable (older v1 leo-variant-picker rules at lines ~2920
-   were deleted in the same change).
+     .variant-grid
+       └─ .variant-wrap                  (position context — badge anchors here)
+            ├─ .variant-badge            (sits half over the top border)
+            └─ label.variant             (the actual card, overflow: hidden)
+                 ├─ .variant-check       (top-right radio replacement)
+                 ├─ .variant-pack        (size — matches .atc-btn 14 px)
+                 ├─ .variant-descriptor  (descriptor line)
+                 ├─ .variant-illustration (small image)
+                 ├─ .variant-price       (live + compare on ONE row,
+                 │                         border-top: kit-color separator)
+                 └─ .variant-save        (solid kit-color-dark strip;
+                                          flush edges thanks to label's
+                                          overflow:hidden clipping)
+
+   The wrapper exists *only* to anchor the badge so the badge can sit
+   above the card while the card itself uses overflow:hidden — which
+   is what makes the save strip clip cleanly to the rounded bottom
+   corners (no white slivers on the sides).
    ===================================================================== */
 
 [data-template="leo"].pdp-hero .variant-grid {
   align-items: stretch;
   overflow: visible;
+  gap: 8px;
+}
+
+[data-template="leo"].pdp-hero .variant-wrap {
+  position: relative;
+  display: flex;
+  height: 100%;
 }
 
 [data-template="leo"].pdp-hero .variant {
+  flex: 1;
   display: flex;
   flex-direction: column;
+  width: 100%;
   background: var(--gb-white);
-  border: 1.5px solid var(--gb-border);
-  border-radius: 12px;
-  padding: 18px 0 0;
+  border: 1px solid var(--gb-border);
+  border-radius: 10px;
+  padding: 14px 0 0;
   text-align: center;
-  height: 100%;
   position: relative;
-  overflow: visible;
+  overflow: hidden;
+  box-sizing: border-box;
   transition: border-color 0.18s, background 0.18s;
   cursor: pointer;
 }
@@ -3787,9 +3804,9 @@ body.gb-fcm-open { overflow: hidden; }
   border-color: var(--kit-color);
 }
 [data-template="leo"].pdp-hero .variant.active {
-  border: 2px solid var(--kit-color);
+  border: 1.5px solid var(--kit-color);
   background: var(--kit-color-soft);
-  padding-top: 17.5px;
+  padding-top: 13.5px;
 }
 [data-template="leo"].pdp-hero .variant:focus-visible {
   outline: 2px solid var(--kit-color-dark);
@@ -3801,35 +3818,37 @@ body.gb-fcm-open { overflow: hidden; }
 [data-template="leo"].pdp-hero .variant .variant-tag,
 [data-template="leo"].pdp-hero .variant .variant-rationale { display: none; }
 
-/* Top Seller / Best Value pill — half-overlapping the top border */
-[data-template="leo"].pdp-hero .variant-badge {
+/* Top Seller / Best Value pill — anchored to the wrapper, sits
+   half-overlapping the card's top border. */
+[data-template="leo"].pdp-hero .variant-wrap > .variant-badge {
   position: absolute;
-  top: -10px;
+  top: -8px;
   left: 50%;
   transform: translateX(-50%);
   background: var(--kit-color-dark);
   color: var(--gb-cream);
   font-family: 'DM Mono', monospace;
-  font-size: 9.5px;
+  font-size: 9px;
   font-weight: 700;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  padding: 4px 11px;
+  padding: 3px 10px;
   border-radius: 999px;
   white-space: nowrap;
   z-index: 3;
   box-shadow: 0 1px 4px rgba(31, 31, 29, 0.08);
+  pointer-events: none;
 }
 
 /* Selection check — top-right corner; fills on active */
 [data-template="leo"].pdp-hero .variant-check {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 20px;
-  height: 20px;
+  top: 8px;
+  right: 8px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
-  border: 2px solid var(--gb-border);
+  border: 1.5px solid var(--gb-border);
   background: var(--gb-white);
   display: flex;
   align-items: center;
@@ -3843,8 +3862,8 @@ body.gb-fcm-open { overflow: hidden; }
   border-color: var(--kit-color-dark);
 }
 [data-template="leo"].pdp-hero .variant-check svg {
-  width: 11px;
-  height: 11px;
+  width: 9px;
+  height: 9px;
   stroke: var(--gb-cream);
   fill: none;
   opacity: 0;
@@ -3852,16 +3871,16 @@ body.gb-fcm-open { overflow: hidden; }
 }
 [data-template="leo"].pdp-hero .variant.active .variant-check svg { opacity: 1; }
 
-/* Variant size label */
+/* Variant size label — matches .atc-btn font-size (14 px) */
 [data-template="leo"].pdp-hero .variant-pack {
   font-family: 'Montserrat', sans-serif;
   font-weight: 800;
-  font-size: 18px;
-  letter-spacing: -0.02em;
+  font-size: 14px;
+  letter-spacing: -0.01em;
   line-height: 1.1;
   color: var(--gb-text);
   text-align: center;
-  margin: 0 0 2px;
+  margin: 0 0 1px;
   padding: 0 8px;
   white-space: normal;
 }
@@ -3873,23 +3892,23 @@ body.gb-fcm-open { overflow: hidden; }
 [data-template="leo"].pdp-hero .variant-descriptor {
   font-family: 'DM Sans', sans-serif;
   font-weight: 500;
-  font-size: 12px;
+  font-size: 10.5px;
   color: var(--gb-text-muted);
   text-align: center;
-  margin: 0 0 10px;
+  margin: 0 0 6px;
   padding: 0 8px;
   line-height: 1.3;
-  min-height: 16px;
+  min-height: 14px;
 }
 
-/* Product image — small, contained, no background */
+/* Product image — small, contained */
 [data-template="leo"].pdp-hero .variant-illustration {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 88px;
-  margin: 0 auto 12px;
-  padding: 0 6px;
+  height: 64px;
+  margin: 0 auto 8px;
+  padding: 0 8px;
   overflow: hidden;
   background: transparent;
   aspect-ratio: auto;
@@ -3903,19 +3922,21 @@ body.gb-fcm-open { overflow: hidden; }
   padding: 0;
 }
 
-/* Price row — actual + compare on ONE line, centred.
-   Explicit display:block (not flex) so the inline-block children
-   sit next to each other instead of wrapping onto separate rows. */
+/* Price row — live + strike-through compare on ONE line, with a
+   kit-color separator line above the row. Sizes are tuned so both
+   fit on the same line even on narrow phones. */
 [data-template="leo"].pdp-hero .variant-price {
   display: block;
   text-align: center;
-  margin: 0 0 10px;
-  padding: 0 8px;
+  margin: 0 0 8px;
+  padding: 7px 6px 0;
+  border-top: 1px solid var(--kit-color);
   font-family: 'Montserrat', sans-serif;
   font-weight: 800;
-  font-size: 17px;
+  font-size: 13px;
   letter-spacing: -0.01em;
   color: var(--gb-text);
+  line-height: 1.2;
 }
 [data-template="leo"].pdp-hero .variant-price > span:first-child {
   display: inline-block;
@@ -3925,51 +3946,48 @@ body.gb-fcm-open { overflow: hidden; }
 [data-template="leo"].pdp-hero .variant-compare {
   display: inline-block;
   font-family: 'DM Sans', sans-serif;
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 400;
   color: var(--gb-text-soft);
   text-decoration: line-through;
   text-decoration-color: var(--gb-text-soft);
-  margin: 0 0 0 6px;
+  margin: 0 0 0 5px;
   vertical-align: baseline;
   white-space: nowrap;
 }
 
-/* Save strip — solid kit-color-dark, runs edge-to-edge, sits flush
-   at the bottom of the card with a thin separator line above. */
+/* Save strip — solid kit-color-dark, edge-to-edge (clipped to the
+   card's rounded corners by the label's overflow:hidden). */
 [data-template="leo"].pdp-hero .variant-save {
   display: block;
   font-family: 'DM Sans', sans-serif;
-  font-size: 12px;
+  font-size: 10.5px;
   font-weight: 700;
   letter-spacing: 0.01em;
   text-transform: none;
   text-align: center;
-  padding: 9px 6px;
+  padding: 7px 6px;
   margin: auto 0 0;
   background: var(--kit-color-dark);
   color: var(--gb-cream);
-  border-top: 1px solid var(--gb-border);
-  border-radius: 0 0 10px 10px;
+  border: 0;
+  border-radius: 0;
   white-space: nowrap;
   transition: background 0.18s, color 0.18s;
 }
-[data-template="leo"].pdp-hero .variant.active .variant-save {
-  border-top-color: var(--kit-color-dark);
-  border-radius: 0 0 9.5px 9.5px;
-}
 
 @media (min-width: 480px) {
-  [data-template="leo"].pdp-hero .variant { padding-top: 20px; }
-  [data-template="leo"].pdp-hero .variant.active { padding-top: 19.5px; }
-  [data-template="leo"].pdp-hero .variant-check { width: 22px; height: 22px; top: 12px; right: 12px; }
-  [data-template="leo"].pdp-hero .variant-check svg { width: 12px; height: 12px; }
-  [data-template="leo"].pdp-hero .variant-pack { font-size: 20px; }
-  [data-template="leo"].pdp-hero .variant-descriptor { font-size: 13px; margin-bottom: 12px; }
-  [data-template="leo"].pdp-hero .variant-illustration { height: 104px; margin-bottom: 14px; }
-  [data-template="leo"].pdp-hero .variant-price { font-size: 18px; margin-bottom: 12px; }
-  [data-template="leo"].pdp-hero .variant-compare { font-size: 14px; margin-left: 8px; }
-  [data-template="leo"].pdp-hero .variant-save { font-size: 13px; padding: 10px 8px; }
+  [data-template="leo"].pdp-hero .variant-grid { gap: 10px; }
+  [data-template="leo"].pdp-hero .variant { padding-top: 16px; }
+  [data-template="leo"].pdp-hero .variant.active { padding-top: 15.5px; }
+  [data-template="leo"].pdp-hero .variant-check { width: 18px; height: 18px; top: 10px; right: 10px; }
+  [data-template="leo"].pdp-hero .variant-check svg { width: 10px; height: 10px; }
+  [data-template="leo"].pdp-hero .variant-pack { font-size: 16px; }
+  [data-template="leo"].pdp-hero .variant-descriptor { font-size: 12px; margin-bottom: 8px; min-height: 16px; }
+  [data-template="leo"].pdp-hero .variant-illustration { height: 76px; margin-bottom: 10px; }
+  [data-template="leo"].pdp-hero .variant-price { font-size: 15px; padding-top: 8px; margin-bottom: 10px; }
+  [data-template="leo"].pdp-hero .variant-compare { font-size: 12.5px; margin-left: 6px; }
+  [data-template="leo"].pdp-hero .variant-save { font-size: 12px; padding: 8px 8px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
