@@ -597,18 +597,22 @@
         "sci_h": "WHAT FERMENTED DRINKS DO",
         "sci_h_em": "FOR YOU.",
         "sci_stat_eyebrow": "REPORTED",
+        "sci_stat1_img": "shopify://shop_images/kanji_science_mood.png",
         "sci_stat1_num": "47",
         "sci_stat1_unit": "%",
         "sci_stat1_h": "Better Mood",
         "sci_stat1_d": "After adding fermented drinks for just 14 days.",
+        "sci_stat2_img": "shopify://shop_images/kanji_science_energy.png",
         "sci_stat2_num": "56",
         "sci_stat2_unit": "%",
         "sci_stat2_h": "More Energy",
         "sci_stat2_d": "Without supplements or lifestyle changes.",
+        "sci_stat3_img": "shopify://shop_images/kanji_science_bloating.png",
         "sci_stat3_num": "42",
         "sci_stat3_unit": "%",
         "sci_stat3_h": "Less Bloating",
         "sci_stat3_d": "From everyday fermented drinks like kanji.",
+        "sci_stat4_img": "shopify://shop_images/kanji_science_hunger.png",
         "sci_stat4_num": "52",
         "sci_stat4_unit": "%",
         "sci_stat4_h": "Less Hunger",
@@ -635,6 +639,7 @@
         "enj-1": {
           "type": "enjoy_card",
           "settings": {
+            "image": "shopify://shop_images/kanji_s11_consumption_morning.png",
             "heading": "Morning Shot",
             "description": "50ml on an empty stomach."
           }
@@ -642,6 +647,7 @@
         "enj-2": {
           "type": "enjoy_card",
           "settings": {
+            "image": "shopify://shop_images/kanji_s11_consumption_premeal.png",
             "heading": "With Meals",
             "description": "A glass alongside your thali."
           }
@@ -649,6 +655,7 @@
         "enj-3": {
           "type": "enjoy_card",
           "settings": {
+            "image": "shopify://shop_images/kanji_s11_consumption_spritzer.png",
             "heading": "Kanji Spritzer",
             "description": "+ sparkling water + mint."
           }
@@ -656,6 +663,7 @@
         "enj-4": {
           "type": "enjoy_card",
           "settings": {
+            "image": "shopify://shop_images/kanji_s11_consumption_cold.png",
             "heading": "Chilled Pour",
             "description": "Straight from the fridge."
           }
