@@ -1,0 +1,81 @@
+{{ 'sprout-maker.css' | asset_url | stylesheet_tag }}
+{{ 'sprout-maker-v2.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign p = product
+  assign mf_quick_bens    = p.metafields.custom.featured_quick_benefits.value
+  assign mf_benefit_icons = p.metafields.custom.benefits_icons.value
+  assign benefit_blocks   = section.blocks | where: 'type', 'benefit'
+-%}
+
+{%- if mf_quick_bens != blank or benefit_blocks.size > 0 -%}
+  <section class="outcomes-section sprout-pdp-v2">
+    <div class="container">
+      <div class="section-header centered">
+        <div class="eyebrow">{{ section.settings.benefits_eyebrow }}</div>
+        <h2>{{ section.settings.benefits_heading }}<br><em>{{ section.settings.benefits_heading_em }}</em></h2>
+      </div>
+      <div class="qb-grid">
+        {%- if mf_quick_bens != blank -%}
+          {%- for qb in mf_quick_bens -%}
+            <div class="qb-card">
+              <div class="qb-icon">
+                {%- if qb.icon != blank -%}
+                  <img src="{{ qb.icon | image_url: width: 112 }}" alt="{{ qb.heading | escape }}" loading="lazy" width="56" height="56" class="qb-icon-img">
+                {%- endif -%}
+              </div>
+              <div class="qb-h">{{ qb.heading }}</div>
+              <div class="qb-d">{{ qb.description }}</div>
+            </div>
+          {%- endfor -%}
+        {%- else -%}
+          {%- for block in benefit_blocks -%}
+            {%- assign target_idx = forloop.index0 -%}
+            {%- assign mf_icon = nil -%}
+            {%- if mf_benefit_icons -%}{%- for ic in mf_benefit_icons -%}{%- if forloop.index0 == target_idx -%}{%- assign mf_icon = ic -%}{%- endif -%}{%- endfor -%}{%- endif -%}
+            <div class="qb-card" {{ block.shopify_attributes }}>
+              <div class="qb-icon">
+                {%- if mf_icon != blank -%}
+                  <img src="{{ mf_icon | image_url: width: 112 }}" alt="{{ block.settings.heading | escape }}" loading="lazy" width="56" height="56" class="qb-icon-img">
+                {%- elsif block.settings.icon_image != blank -%}
+                  <img src="{{ block.settings.icon_image | image_url: width: 112 }}" alt="{{ block.settings.heading | escape }}" loading="lazy" width="56" height="56" class="qb-icon-img">
+                {%- else -%}
+                  {{ block.settings.icon }}
+                {%- endif -%}
+              </div>
+              <div class="qb-h">{{ block.settings.heading }}</div>
+              <div class="qb-d">{{ block.settings.description }}</div>
+            </div>
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "SM v2 · Quick Benefits",
+  "tag": "section",
+  "class": "section--sm-v2-outcomes",
+  "max_blocks": 8,
+  "settings": [
+    { "type": "text", "id": "benefits_eyebrow", "label": "Eyebrow", "default": "QUICK BENEFITS" },
+    { "type": "text", "id": "benefits_heading", "label": "Heading", "default": "WHY SPROUTS ARE" },
+    { "type": "text", "id": "benefits_heading_em", "label": "Heading (highlighted)", "default": "NUTRITIONAL POWERHOUSES." }
+  ],
+  "blocks": [
+    {
+      "type": "benefit",
+      "name": "Quick benefit",
+      "settings": [
+        { "type": "image_picker", "id": "icon_image", "label": "Icon image", "info": "Overrides emoji if set" },
+        { "type": "text", "id": "icon", "label": "Icon (emoji fallback)", "default": "💪" },
+        { "type": "text", "id": "heading", "label": "Heading" },
+        { "type": "textarea", "id": "description", "label": "Description" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "SM v2 · Quick Benefits" }]
+}
+{% endschema %}

@@ -1,0 +1,76 @@
+{{ 'sprout-maker.css' | asset_url | stylesheet_tag }}
+{{ 'sprout-maker-v2.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign p = product
+  assign mf_reels   = p.metafields.custom.featured_reels.value
+  assign reel_blocks = section.blocks | where: 'type', 'reel'
+-%}
+
+{%- if mf_reels != blank or section.settings.quinn_embed != blank or reel_blocks.size > 0 -%}
+  <section class="reels-section sprout-pdp-v2">
+    <div class="container">
+      <div class="section-header">
+        <div class="eyebrow">{{ section.settings.reels_eyebrow }}</div>
+        <h2>{{ section.settings.reels_heading }}<br><em>{{ section.settings.reels_heading_em }}</em></h2>
+      </div>
+      {%- if mf_reels != blank -%}
+        <div class="reels-grid">
+          {%- for reel in mf_reels -%}
+            <div class="reels-tile">
+              {%- if reel.video != blank -%}
+                {{ reel.video | video_tag: image_size: '600x', controls: false, loop: true, muted: true, autoplay: true }}
+              {%- elsif reel.poster != blank -%}
+                <img src="{{ reel.poster | image_url: width: 600 }}" alt="{{ reel.caption | default: reel.author_handle | default: 'Customer reel' | escape }}" loading="lazy" width="600" height="1067">
+              {%- else -%}📷{%- endif -%}
+              {%- if reel.author_handle != blank -%}
+                <span class="reels-handle">{{ reel.author_handle }}</span>
+              {%- endif -%}
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- elsif section.settings.quinn_embed != blank -%}
+        <div class="reels-quinn">{{ section.settings.quinn_embed }}</div>
+      {%- else -%}
+        <div class="reels-grid">
+          {%- for block in reel_blocks -%}
+            <div class="reels-tile" {{ block.shopify_attributes }}>
+              {%- if block.settings.video != blank -%}
+                {{ block.settings.video | video_tag: image_size: '600x', controls: false, loop: true, muted: true, autoplay: true }}
+              {%- elsif block.settings.poster != blank -%}
+                <img src="{{ block.settings.poster | image_url: width: 600 }}" alt="{{ block.settings.caption | default: 'Customer reel' | escape }}" loading="lazy" width="600" height="1067">
+              {%- else -%}📷{%- endif -%}
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "SM v2 · Reels (UGC)",
+  "tag": "section",
+  "class": "section--sm-v2-reels",
+  "max_blocks": 8,
+  "settings": [
+    { "type": "text", "id": "reels_eyebrow", "label": "Eyebrow", "default": "REAL CUSTOMERS" },
+    { "type": "text", "id": "reels_heading", "label": "Heading", "default": "SPROUTS IN" },
+    { "type": "text", "id": "reels_heading_em", "label": "Heading (highlighted)", "default": "REAL KITCHENS." },
+    { "type": "html", "id": "quinn_embed", "label": "Quinn embed code", "info": "Paste the Quinn UGC widget snippet. If set, it replaces the manual reel blocks below." }
+  ],
+  "blocks": [
+    {
+      "type": "reel",
+      "name": "UGC reel",
+      "settings": [
+        { "type": "video", "id": "video", "label": "Vertical 9:16 video" },
+        { "type": "image_picker", "id": "poster", "label": "Poster (fallback)" },
+        { "type": "text", "id": "caption", "label": "Caption" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "SM v2 · Reels" }]
+}
+{% endschema %}
