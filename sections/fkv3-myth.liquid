@@ -9,8 +9,6 @@
   assign mf_myth_h2 = p.metafields.custom.myth_h2
   assign mf_compare_left_label = p.metafields.custom.compare_left_label
   assign mf_compare_right_label = p.metafields.custom.compare_right_label
-  assign mf_myth_pill = p.metafields.custom.myth_pill_text
-  assign mf_fact_pill = p.metafields.custom.fact_pill_text
   assign compare_blocks = section.blocks | where: 'type', 'comparison_row'
 -%}
 {%- if mf_compare_rows != blank or compare_blocks.size > 0 -%}
@@ -38,11 +36,9 @@
           <div class="compare-images">
             <div class="compare-image">
               {%- if cmp_right != blank -%}<img src="{{ cmp_right | image_url: width: 800 }}" alt="{{ mf_compare_right_label | default: section.settings.compare_right_label }}" loading="lazy" width="800" height="600">{%- else -%}{{ section.settings.compare_right_emoji }}{%- endif -%}
-              {%- if mf_myth_pill != blank -%}<span class="myth-pill myth-pill--myth">{{ mf_myth_pill }}</span>{%- endif -%}
             </div>
             <div class="compare-image">
               {%- if cmp_left != blank -%}<img src="{{ cmp_left | image_url: width: 800 }}" alt="{{ mf_compare_left_label | default: section.settings.compare_left_label }}" loading="lazy" width="800" height="600">{%- else -%}{{ section.settings.compare_left_emoji }}{%- endif -%}
-              {%- if mf_fact_pill != blank -%}<span class="myth-pill myth-pill--fact">{{ mf_fact_pill }}</span>{%- endif -%}
             </div>
           </div>
           <div class="compare-labels">
