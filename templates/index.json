@@ -157,7 +157,7 @@
         "c2": {
           "type": "tile",
           "settings": {
-            "image": "shopify://shop_images/Top-down_macro_photograph_of_a_202605171524.jpg",
+            "image": "shopify://shop_images/ChatGPT_Image_May_17_2026_01_02_21_AM_2.png",
             "label": "Sprouts Kit",
             "link": "",
             "tab_id": "sprouts",
@@ -451,7 +451,7 @@
         "eyebrow": "Why ferment",
         "heading": "Real probiotics. Live cultures. Made by you.",
         "lead": "<p>Three things happen in the jar between day 1 and day 5 — and none of them happen in store-bought \"probiotic\" drinks.</p>",
-        "visual_image": "shopify://shop_images/kanji_s11_consumption_cold.png",
+        "visual_image": "shopify://shop_images/GB_Web_Homepage_1.png",
         "before_label": "",
         "after_label": "",
         "jar_label": "FERMENT"
@@ -495,6 +495,7 @@
         "heading": "The Gut Starter Box.",
         "heading_em": "Three products. Three daily habits.",
         "lead": "Make a probiotic drink. Grow sprouts on your counter. Stir prebiotic fibre into water. The simplest way to start with gut health.",
+        "image": "shopify://shop_images/GutBasket_products_arranged_as_s__202605181533.jpg",
         "product": "",
         "placeholder_price_now": "₹1,299",
         "placeholder_price_was": "₹1,797",
