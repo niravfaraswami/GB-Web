@@ -548,10 +548,11 @@
     },
     "postbiotic": {
       "type": "gb-home-postbiotic",
+      "disabled": true,
       "settings": {
         "eyebrow": "Coming this quarter",
         "show_pulse": true,
-        "heading": "India's first shelf-stable <em>fermented</em> gut tonic.",
+        "heading": "India's first shelf-stable fermented gut tonic.",
         "lead": "<p>Kanji postbiotic tonic — ready to drink, no fermenting required. Same gut benefits, in a 200ml bottle. Be the first to know when it ships.</p>",
         "email_placeholder": "your@email.com",
         "cta_label": "Notify me",
