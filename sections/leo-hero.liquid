@@ -158,8 +158,8 @@
           <div class="variant-block">
             {%- assign opt_name = p.options.first | default: 'Pack' -%}
             {%- if p.variants.size > 1 -%}
-              <div class="variant-label">Select {{ opt_name }}</div>
-              <div class="variant-grid variant-grid--{{ p.variants.size }}" role="radiogroup" aria-label="Select {{ opt_name | downcase }}">
+              <div class="variant-label">Select Pack</div>
+              <div class="variant-grid variant-grid--{{ p.variants.size }}" role="radiogroup" aria-label="Select pack">
                 {%- for variant in p.variants -%}
                   {%- assign v_tag = variant.metafields.custom.tag -%}
                   {%- assign v_best = variant.metafields.custom.best_for -%}
