@@ -159,7 +159,7 @@
             {%- assign opt_name = p.options.first | default: 'Pack' -%}
             {%- if p.variants.size > 1 -%}
               <div class="variant-label">Select {{ opt_name }}</div>
-              <div class="variant-grid variant-grid--{{ p.variants.size }}">
+              <div class="variant-grid variant-grid--{{ p.variants.size }}" role="radiogroup" aria-label="Select {{ opt_name | downcase }}">
                 {%- for variant in p.variants -%}
                   {%- assign v_tag = variant.metafields.custom.tag -%}
                   {%- assign v_best = variant.metafields.custom.best_for -%}
@@ -170,21 +170,24 @@
                          data-variant-id="{{ variant.id }}"
                          data-variant-price="{{ variant.price | money }}"
                          data-variant-price-cents="{{ variant.price }}"
-                         data-variant-compare-cents="{{ variant.compare_at_price }}">
+                         data-variant-compare-cents="{{ variant.compare_at_price }}"
+                         role="radio"
+                         aria-checked="{% if is_selected %}true{% else %}false{% endif %}"
+                         tabindex="0">
                     <input type="radio" name="id" value="{{ variant.id }}" class="variant-input"
                            {% if is_selected %}checked{% endif %}
                            {% unless variant.available %}disabled{% endunless %}>
-                    {%- if v_tag != blank -%}<span class="variant-tag">{{ v_tag }}</span>{%- endif -%}
-                    <span class="variant-radio"></span>
-                    <div class="variant-pack">{{ variant.title | upcase }}</div>
+                    {%- if v_tag != blank -%}<span class="variant-badge">{{ v_tag }}</span>{%- endif -%}
+                    <span class="variant-check" aria-hidden="true">
+                      <svg viewBox="0 0 12 12" fill="none"><polyline points="2.5,6 5,8.5 9.5,3.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </span>
+                    <div class="variant-pack">{{ variant.title }}</div>
+                    {%- if v_best != blank -%}
+                      <div class="variant-descriptor">{{ v_best }}</div>
+                    {%- endif -%}
                     {%- if v_img != blank -%}
                       <div class="variant-illustration">
                         <img src="{{ v_img | image_url: width: 320 }}" alt="{{ variant.title }}" loading="lazy" width="160" height="120">
-                      </div>
-                    {%- endif -%}
-                    {%- if v_best != blank -%}
-                      <div class="variant-rationale">
-                        <div class="vr-row"><span class="vr-label">BEST FOR</span><span class="vr-text">{{ v_best }}</span></div>
                       </div>
                     {%- endif -%}
                     <div class="variant-price">
@@ -194,7 +197,7 @@
                       {%- endif -%}
                     </div>
                     {%- if variant.compare_at_price > variant.price -%}
-                      <span class="variant-save">You save {{ variant.compare_at_price | minus: variant.price | money }}</span>
+                      <div class="variant-save">Save {{ variant.compare_at_price | minus: variant.price | money }}</div>
                     {%- endif -%}
                   </label>
                 {%- endfor -%}
@@ -232,6 +235,8 @@
             {%- if p.available -%}ADD TO CART{%- else -%}SOLD OUT{%- endif -%}
           </button>
         {%- endform -%}
+
+        {%- render 'pdp-addon-block' -%}
 
         <div class="trust-strip trust-strip--leo">
           {%- assign t1_icon = section.settings.trust_1_icon -%}

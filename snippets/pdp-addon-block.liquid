@@ -1,0 +1,92 @@
+{%- comment -%}
+  PDP Add-On Block
+  =========================================================================
+  Renders below the main Add-to-Cart on a PDP. Two-row maximum.
+
+  Pilot scope: fermentation-kit-refactor (the leo template).
+  Spec: docs/pdp-addon-block-implementation.md, owned by Nirav.
+
+  Required parent metafield:
+    product.metafields.custom.pdp_addon_ids   (list.product_reference)
+
+  Optional per-add-on metafield (defaults to 10 when unset):
+    addon.metafields.custom.addon_discount_pct (number_integer)
+
+  Title resolver: addon.metafields.custom.short_name → addon.title
+  Hidden entirely when the parent has no add-ons configured.
+
+  Discount chip is visual — the actual price reduction must be wired
+  in Shopify Admin → Discounts (one automatic % discount per add-on
+  product, combinations enabled). See spec §8.
+{%- endcomment -%}
+
+{%- liquid
+  assign addons = product.metafields.custom.pdp_addon_ids.value
+  if addons == blank
+    assign addon_count = 0
+  else
+    assign addon_count = addons.size
+  endif
+-%}
+
+{%- if addon_count > 0 -%}
+<div class="addon-block" data-addon-block data-parent-id="{{ product.id }}">
+  <div class="addon-head">
+    <span class="addon-eyebrow">Pairs perfectly</span>
+    <span class="rule" aria-hidden="true"></span>
+  </div>
+
+  <div class="addon-list" role="list">
+    {%- for addon in addons limit: 2 -%}
+      {%- liquid
+        assign variant = addon.selected_or_first_available_variant
+        assign pct = addon.metafields.custom.addon_discount_pct | default: 10
+        assign full_price = variant.price
+        assign saved = full_price | times: pct | divided_by: 100
+        assign discounted = full_price | minus: saved
+        assign label = addon.metafields.custom.short_name | default: addon.title
+        assign in_stock = variant.available
+      -%}
+      <div class="addon-row{% unless in_stock %} disabled{% endunless %}"
+           role="listitem"
+           data-addon-id="{{ addon.id }}"
+           data-variant-id="{{ variant.id }}"
+           data-discount-pct="{{ pct }}">
+
+        <div class="addon-thumb" aria-hidden="true">
+          {%- if addon.featured_image -%}
+            <img src="{{ addon.featured_image | image_url: width: 88 }}"
+                 srcset="{{ addon.featured_image | image_url: width: 88 }} 1x, {{ addon.featured_image | image_url: width: 176 }} 2x"
+                 alt=""
+                 loading="lazy"
+                 width="44" height="44">
+          {%- else -%}
+            <span class="addon-thumb-fallback">📦</span>
+          {%- endif -%}
+        </div>
+
+        <div class="addon-name">{{ label | escape }}</div>
+
+        <div class="addon-price-col">
+          <span class="addon-price">{{ discounted | money_without_trailing_zeros }}</span>
+          <span class="addon-discount" aria-label="{{ pct }} percent off">−{{ pct }}%</span>
+        </div>
+
+        <button class="addon-add"
+                type="button"
+                data-add-button
+                aria-label="Add {{ label | escape }} to cart"
+                {% unless in_stock %}disabled aria-disabled="true"{% endunless %}>
+          <span class="plus" aria-hidden="true">+</span>
+          <span class="label-txt">{% if in_stock %}Add{% else %}Out{% endif %}</span>
+          <span class="check" aria-hidden="true">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M2 6.2L4.8 9L10 3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </button>
+      </div>
+    {%- endfor -%}
+  </div>
+</div>
+{%- endif -%}
