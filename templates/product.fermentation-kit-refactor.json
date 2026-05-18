@@ -899,17 +899,6 @@
         "heading_size_d": 44,
         "heading_size_m": 30
       }
-    },
-    "sticky-atc": {
-      "type": "leo-sticky-atc",
-      "disabled": true,
-      "settings": {
-        "sticky_show": true,
-        "cta_label": "Add to cart",
-        "name_truncate": 21,
-        "up_threshold": 20,
-        "show_delay": 350
-      }
     }
   },
   "order": [
@@ -926,7 +915,6 @@
     "recipes",
     "faq",
     "cross",
-    "judgeme",
-    "sticky-atc"
+    "judgeme"
   ]
 }
