@@ -3790,27 +3790,26 @@ body.gb-fcm-open { overflow: hidden; }
   flex-direction: column;
   width: 100%;
   background: var(--gb-white);
-  border: none;
-  /* Outer (not inset) shadow paints the visual outline outside the
-     element, leaving the entire interior available for children to
-     fill edge-to-edge. Combined with overflow:hidden + border-radius
-     below, the save strip can paint to the absolute rounded corner
-     of the card with no shadow line visible alongside it. */
-  box-shadow: 0 0 0 1px var(--gb-border);
-  border-radius: 10px;
+  /* Real border on top + left + right only. The save strip below
+     uses negative margins to extend over the bottom-left, bottom-
+     right, and bottom-edge areas, becoming the bottom of the card
+     itself — so the strip's bg literally runs to the absolute
+     outer edge of the card, no visible border line alongside. */
+  border: 1px solid var(--gb-border);
+  border-radius: 18px;
   padding: 14px 0 0;
   text-align: center;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   box-sizing: border-box;
-  transition: box-shadow 0.18s, background 0.18s;
+  transition: border-color 0.18s, border-width 0.18s, background 0.18s;
   cursor: pointer;
 }
 [data-template="leo"].pdp-hero .variant:hover:not(.active) {
-  box-shadow: 0 0 0 1.5px var(--kit-color);
+  border-color: var(--kit-color);
 }
 [data-template="leo"].pdp-hero .variant.active {
-  box-shadow: 0 0 0 2.5px var(--kit-color);
+  border: 2.5px solid var(--kit-color);
   background: var(--gb-white);
 }
 [data-template="leo"].pdp-hero .variant:focus-visible {
@@ -3964,10 +3963,12 @@ body.gb-fcm-open { overflow: hidden; }
   white-space: nowrap;
 }
 
-/* Save strip — solid kit-color-dark. Edge-to-edge: the card uses
-   an inset box-shadow (not a real border) so the strip's solid bg
-   paints over the shadow at the bottom and sides, leaving the
-   strip flush with the rounded card edge. */
+/* Save strip — solid kit-color-dark, edge-to-edge of the card.
+   The negative margins push the strip 1 px (or 2.5 px on active)
+   past the card's L / R / bottom borders, so the strip's bg
+   covers those borders' bottom portion and the strip BECOMES the
+   bottom of the card. Its own border-radius matches the card's
+   outer radius so the rounded bottom corners align perfectly. */
 [data-template="leo"].pdp-hero .variant-save {
   display: block;
   font-family: 'DM Sans', sans-serif;
@@ -3977,15 +3978,21 @@ body.gb-fcm-open { overflow: hidden; }
   text-transform: uppercase;
   text-align: center;
   padding: 7px 6px;
-  margin: auto 0 0;
+  margin: auto -1px -1px;
+  width: calc(100% + 2px);
   background: var(--kit-color-dark);
   color: #FFFFFF;
   border: 0;
-  border-radius: 0;
+  border-radius: 0 0 18px 18px;
   white-space: nowrap;
   transition: background 0.18s;
   position: relative;
   z-index: 2;
+  box-sizing: border-box;
+}
+[data-template="leo"].pdp-hero .variant.active .variant-save {
+  margin: auto -2.5px -2.5px;
+  width: calc(100% + 5px);
 }
 
 @media (min-width: 480px) {
