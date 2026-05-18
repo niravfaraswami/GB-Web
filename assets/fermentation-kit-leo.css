@@ -3784,3 +3784,26 @@ body.gb-fcm-open { overflow: hidden; }
   [data-template="leo"] .stacks-table .st-cell    { font-size: 9.5px; padding: 6px 4px; gap: 3px; }
   [data-template="leo"] .st-mark { width: 10px; height: 10px; font-size: 7px; }
 }
+
+/* =====================================================================
+   Stacks table — narrower header column, heavier data-column text.
+   - First column (row labels) shrinks so the three comparison columns
+     get more horizontal room.
+   - Kit + comparison-cell text moves from 400/600 to 700/600 so the
+     copy reads as cleanly as the label column.
+   ===================================================================== */
+[data-template="leo"] .stacks-table {
+  grid-template-columns: 0.75fr 1.15fr 1.1fr 1.1fr;
+}
+[data-template="leo"] .stacks-table .st-cell.st-cell-kit {
+  font-weight: 700;
+}
+[data-template="leo"] .stacks-table .st-cell.st-cell-other {
+  font-weight: 600;
+  color: var(--gb-text);
+}
+@media (max-width: 768px) {
+  [data-template="leo"] .stacks-table {
+    grid-template-columns: 0.85fr 1.1fr 1fr 1fr;
+  }
+}
