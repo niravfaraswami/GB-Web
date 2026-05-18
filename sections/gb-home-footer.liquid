@@ -1,0 +1,290 @@
+{%- comment -%}
+  GB site footer — Ink background, 4 columns, hardcoded link lists.
+  Source ref: gutbasket-home-page.html lines 2603-2657
+  No Shopify Navigation dependency. To rename/reorder: edit the
+  <li> rows in this file directly. See MENU_EDITING_GUIDE.md for
+  URL patterns.
+{%- endcomment -%}
+
+{%- liquid
+  assign brand_name = section.settings.brand_name | default: 'GutBasket'
+  assign brand_suffix = section.settings.brand_suffix | default: '®'
+  assign tagline = section.settings.tagline
+  assign fssai = section.settings.fssai
+  assign instagram = section.settings.instagram | default: 'https://instagram.com/gutbasketindia'
+  assign facebook = section.settings.facebook
+  assign youtube = section.settings.youtube
+  assign copyright = section.settings.copyright
+  assign tagline_short = section.settings.tagline_short
+  assign show_payment_icons = section.settings.show_payment_icons
+-%}
+
+<section class="gb-footer">
+  <div class="gb-footer-container">
+    <div class="gb-footer-grid">
+
+      {%- comment -%} ============== BRAND COLUMN ============== {%- endcomment -%}
+      <div class="gb-footer-col gb-footer-col--brand">
+        <a href="/" class="gb-footer-wordmark" aria-label="{{ brand_name }} home">
+          {%- if section.settings.logo -%}
+            <img src="{{ section.settings.logo | image_url: width: 320 }}" alt="{{ brand_name | escape }}" loading="lazy">
+          {%- else -%}
+            {{ brand_name }}{%- if brand_suffix != blank -%}<sup>{{ brand_suffix }}</sup>{%- endif -%}
+          {%- endif -%}
+        </a>
+        {%- if tagline != blank -%}
+          <div class="gb-footer-tagline">{{ tagline }}</div>
+        {%- endif -%}
+        {%- if fssai != blank -%}
+          <p class="gb-footer-fssai">{{ fssai }}</p>
+        {%- endif -%}
+        <div class="gb-footer-social">
+          {%- if instagram != blank -%}
+            <a href="{{ instagram }}" aria-label="Instagram" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 2c-2.7 0-3 .01-4.07.06-1.06.05-1.79.22-2.43.47-.66.26-1.22.6-1.77 1.16-.56.55-.9 1.11-1.16 1.77-.25.64-.42 1.37-.47 2.43C2.01 9 2 9.3 2 12s.01 3 .06 4.07c.05 1.06.22 1.79.47 2.43.26.66.6 1.22 1.16 1.77.55.56 1.11.9 1.77 1.16.64.25 1.37.42 2.43.47C9 21.99 9.3 22 12 22s3-.01 4.07-.06c1.06-.05 1.79-.22 2.43-.47.66-.26 1.22-.6 1.77-1.16.56-.55.9-1.11 1.16-1.77.25-.64.42-1.37.47-2.43.05-1.07.06-1.37.06-4.07s-.01-3-.06-4.07c-.05-1.06-.22-1.79-.47-2.43-.26-.66-.6-1.22-1.16-1.77-.55-.56-1.11-.9-1.77-1.16-.64-.25-1.37-.42-2.43-.47C15 2.01 14.7 2 12 2zm0 1.8c2.65 0 2.96.01 4.01.06.97.04 1.5.21 1.85.34.46.18.8.4 1.15.75.35.35.57.69.75 1.15.13.35.3.88.34 1.85.05 1.05.06 1.36.06 4.01s-.01 2.96-.06 4.01c-.04.97-.21 1.5-.34 1.85-.18.46-.4.8-.75 1.15-.35.35-.69.57-1.15.75-.35.13-.88.3-1.85.34-1.05.05-1.36.06-4.01.06s-2.96-.01-4.01-.06c-.97-.04-1.5-.21-1.85-.34-.46-.18-.8-.4-1.15-.75-.35-.35-.57-.69-.75-1.15-.13-.35-.3-.88-.34-1.85C3.81 14.96 3.8 14.65 3.8 12s.01-2.96.06-4.01c.04-.97.21-1.5.34-1.85.18-.46.4-.8.75-1.15.35-.35.69-.57 1.15-.75.35-.13.88-.3 1.85-.34C9.04 3.81 9.35 3.8 12 3.8zm0 3.06A5.14 5.14 0 1 0 12 17.14a5.14 5.14 0 0 0 0-10.28zm0 8.48a3.34 3.34 0 1 1 0-6.68 3.34 3.34 0 0 1 0 6.68zm5.34-8.69a1.2 1.2 0 1 1-2.4 0 1.2 1.2 0 0 1 2.4 0z"/></svg>
+            </a>
+          {%- endif -%}
+          {%- if facebook != blank -%}
+            <a href="{{ facebook }}" aria-label="Facebook" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 4.97 3.66 9.1 8.44 9.86v-6.97H7.9v-2.89h2.54V9.85c0-2.51 1.5-3.9 3.78-3.9 1.1 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.77l-.44 2.89h-2.33V22c4.78-.76 8.43-4.89 8.43-9.94z"/></svg>
+            </a>
+          {%- endif -%}
+          {%- if youtube != blank -%}
+            <a href="{{ youtube }}" aria-label="YouTube" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M21.58 7.19c-.23-.86-.91-1.54-1.77-1.77C18.25 5 12 5 12 5s-6.25 0-7.81.42c-.86.23-1.54.91-1.77 1.77C2 8.75 2 12 2 12s0 3.25.42 4.81c.23.86.91 1.54 1.77 1.77C5.75 19 12 19 12 19s6.25 0 7.81-.42c.86-.23 1.54-.91 1.77-1.77C22 15.25 22 12 22 12s0-3.25-.42-4.81zM10 15.27V8.73L15.5 12 10 15.27z"/></svg>
+            </a>
+          {%- endif -%}
+        </div>
+      </div>
+
+      {%- comment -%} ============== SHOP COLUMN ============== {%- endcomment -%}
+      <div class="gb-footer-col">
+        <h4 class="gb-footer-h4">Shop</h4>
+        <ul class="gb-footer-list">
+          <li><a href="/collections/fermentation-kits">Fermentation Kits</a></li>
+          <li><a href="/collections/sprouts-1">Sprouts Kit</a></li>
+          <li><a href="/collections/prebiotic">Prebiotic Powders</a></li>
+          <li><a href="/collections/cultures">Dairy Cultures</a></li>
+          <li><a href="/collections/baking">Baking</a></li>
+          <li><a href="/collections/spice-mix-supplies">Spice Mix Refills</a></li>
+          <li><a href="/collections/jars-and-tools">Jars &amp; Tools</a></li>
+          <li><a href="/pages/build-your-own-kit">Build your own kit</a></li>
+        </ul>
+      </div>
+
+      {%- comment -%} ============== LEARN COLUMN ============== {%- endcomment -%}
+      <div class="gb-footer-col">
+        <h4 class="gb-footer-h4">Learn</h4>
+        <ul class="gb-footer-list">
+          <li><a href="/pages/why-we-built-gutbasket">Our story</a></li>
+          <li><a href="/pages/the-science-behind-our-kits">The science</a></li>
+          <li><a href="/pages/sourcing-quality-standards">Sourcing &amp; quality</a></li>
+          <li><a href="/pages/fssai-certifications">FSSAI &amp; certifications</a></li>
+          <li><a href="/blogs/recipes">Recipes</a></li>
+          <li><a href="/pages/ferment-forum">Ferment Forum</a></li>
+          <li><a href="/pages/customer-recipes">Customer recipes</a></li>
+        </ul>
+      </div>
+
+      {%- comment -%} ============== HELP COLUMN ============== {%- endcomment -%}
+      <div class="gb-footer-col">
+        <h4 class="gb-footer-h4">Help</h4>
+        <ul class="gb-footer-list">
+          <li><a href="/pages/help-center">Help center</a></li>
+          <li><a href="/pages/whatsapp-expert-support">WhatsApp support</a></li>
+          <li><a href="/pages/shipping-policy">Shipping policy</a></li>
+          <li><a href="/pages/returns-refunds">Returns &amp; refunds</a></li>
+          <li><a href="/pages/newsletter">Newsletter</a></li>
+          <li><a href="/policies/privacy-policy">Privacy policy</a></li>
+          <li><a href="/policies/terms-of-service">Terms of service</a></li>
+        </ul>
+        {%- if section.settings.contact_block != blank -%}
+          <div class="gb-footer-contact">{{ section.settings.contact_block }}</div>
+        {%- endif -%}
+      </div>
+
+    </div>
+
+    <div class="gb-footer-bottom">
+      <span>{{ copyright | default: '© 2026 GutBasket Foods Pvt. Ltd. · Gandhinagar · Gujarat · India' }}</span>
+      {%- if tagline_short != blank -%}
+        <span>{{ tagline_short }}</span>
+      {%- endif -%}
+    </div>
+
+    {%- if show_payment_icons -%}
+      <div class="gb-footer-payments" aria-label="Payment methods">
+        {%- for type in shop.enabled_payment_types -%}
+          {{ type | payment_type_svg_tag: class: 'gb-footer-pay' }}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% stylesheet %}
+.gb-footer {
+  --gb-f-cream: #FFF9EE;
+  --gb-f-ink: #1F1F1D;
+  --gb-f-action: #FF7300;
+  background: var(--gb-f-ink) !important;
+  color: var(--gb-f-cream) !important;
+  padding: 64px 0 28px !important;
+  font-family: 'DM Sans', sans-serif;
+  display: block !important;
+  width: 100% !important;
+}
+.gb-footer .gb-footer-container { max-width: 1280px; margin: 0 auto; padding: 0 24px; width: 100%; box-sizing: border-box; }
+.gb-footer .gb-footer-grid {
+  display: grid !important;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr !important;
+  gap: 56px !important;
+  margin-bottom: 56px !important;
+  width: 100% !important;
+}
+.gb-footer .gb-footer-col { min-width: 0; }
+.gb-footer .gb-footer-h4 {
+  font-family: 'DM Mono', monospace;
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: rgba(255, 249, 238, 0.55);
+  margin: 0 0 18px;
+}
+.gb-footer-wordmark {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 24px;
+  color: var(--gb-f-cream);
+  margin-bottom: 18px;
+  display: inline-block;
+  text-decoration: none;
+  letter-spacing: -0.01em;
+}
+.gb-footer-wordmark img { display: block; max-height: 32px; width: auto; }
+.gb-footer-wordmark sup { font-size: 0.5em; vertical-align: super; opacity: 0.7; }
+.gb-footer-tagline {
+  font-size: 14px;
+  color: rgba(255, 249, 238, 0.75);
+  line-height: 1.55;
+  max-width: 320px;
+  margin: 0 0 20px;
+}
+.gb-footer-tagline p { margin: 0 0 8px; }
+.gb-footer-fssai {
+  font-family: 'DM Mono', monospace;
+  font-size: 10.5px;
+  color: rgba(255, 249, 238, 0.5);
+  letter-spacing: 0.06em;
+  margin: 0 0 16px;
+}
+.gb-footer-list { list-style: none; padding: 0; margin: 0; }
+.gb-footer-list li {
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+.gb-footer-list li a {
+  color: rgba(255, 249, 238, 0.78);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+.gb-footer-list li a:hover { color: var(--gb-f-cream); }
+.gb-footer-social {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+.gb-footer-social a {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 249, 238, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gb-f-cream);
+  text-decoration: none;
+  transition: background 0.15s ease;
+}
+.gb-footer-social a:hover { background: var(--gb-f-action); }
+.gb-footer-contact {
+  margin-top: 18px;
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  color: rgba(255, 249, 238, 0.65);
+  line-height: 1.7;
+}
+.gb-footer-contact p { margin: 0; }
+.gb-footer-contact a { color: rgba(255, 249, 238, 0.78); text-decoration: underline; }
+.gb-footer-bottom {
+  border-top: 1px solid rgba(255, 249, 238, 0.1);
+  padding-top: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  color: rgba(255, 249, 238, 0.55);
+  letter-spacing: 0.04em;
+}
+.gb-footer-payments {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 20px;
+  align-items: center;
+}
+.gb-footer-payments .gb-footer-pay {
+  height: 24px;
+  width: auto;
+  filter: brightness(0) invert(1) opacity(0.7);
+}
+@media (max-width: 968px) {
+  .gb-footer .gb-footer-grid { grid-template-columns: 1fr 1fr !important; gap: 36px 20px !important; }
+}
+@media (max-width: 580px) {
+  .gb-footer { padding: 40px 0 20px !important; }
+  .gb-footer .gb-footer-container { padding: 0 20px; }
+  .gb-footer .gb-footer-grid { grid-template-columns: 1fr 1fr !important; gap: 32px 16px !important; margin-bottom: 32px !important; }
+  .gb-footer .gb-footer-wordmark { font-size: 20px; margin-bottom: 12px; }
+  .gb-footer .gb-footer-tagline { font-size: 13px; margin-bottom: 14px; max-width: 100%; }
+  .gb-footer .gb-footer-h4 { margin-bottom: 14px; }
+  .gb-footer .gb-footer-list li { font-size: 13.5px; margin-bottom: 9px; }
+  .gb-footer .gb-footer-bottom { flex-direction: column; align-items: flex-start; gap: 8px; }
+}
+@media (max-width: 360px) {
+  .gb-footer .gb-footer-grid { gap: 24px 12px !important; }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "GB · Footer",
+  "tag": "footer",
+  "class": "gb-footer-wrap",
+  "settings": [
+    { "type": "header", "content": "Brand column" },
+    { "type": "image_picker", "id": "logo", "label": "Logo image (overrides text)" },
+    { "type": "text", "id": "brand_name", "label": "Wordmark text", "default": "GutBasket" },
+    { "type": "text", "id": "brand_suffix", "label": "Trademark suffix", "default": "®" },
+    { "type": "richtext", "id": "tagline", "label": "Tagline", "default": "<p>Live, gut-friendly ferments. Made at home, the way grandmother did — with kits that actually work.</p>" },
+    { "type": "text", "id": "fssai", "label": "FSSAI line", "default": "FSSAI · 10021021000439" },
+    { "type": "url", "id": "instagram", "label": "Instagram URL", "info": "Defaults to https://instagram.com/gutbasketindia if left empty." },
+    { "type": "url", "id": "facebook",  "label": "Facebook URL" },
+    { "type": "url", "id": "youtube",   "label": "YouTube URL" },
+
+    { "type": "header", "content": "Help column footer" },
+    { "type": "richtext", "id": "contact_block", "label": "Contact block (under Help links)", "default": "<p>support@gutbasket.com<br>+91 78619 40110</p>" },
+
+    { "type": "header", "content": "Bottom strip" },
+    { "type": "text", "id": "copyright", "label": "Copyright line", "default": "© 2026 GutBasket Foods Pvt. Ltd. · Gandhinagar · Gujarat · India" },
+    { "type": "text", "id": "tagline_short", "label": "Right-side line", "default": "The system is the brand." },
+    { "type": "checkbox", "id": "show_payment_icons", "label": "Show payment-method icons (Visa, UPI, etc.)", "default": false },
+
+    { "type": "paragraph", "content": "Link columns (Shop / Learn / Help) are hardcoded in sections/gb-home-footer.liquid. Edit the file directly to add, rename, or reorder links — see MENU_EDITING_GUIDE.md for the URL pattern reference." }
+  ],
+  "presets": [{ "name": "GB · Footer" }]
+}
+{% endschema %}

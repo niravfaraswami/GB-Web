@@ -1,0 +1,275 @@
+{%- comment -%}
+  Find Your Fiber — comparison modal triggered by the
+  "Compare all fibers" link in the gb-who-yes-no-v2 footer.
+
+  - Renders only on the 3 fiber product PDPs (Fiber Boost, Inulin,
+    Acacia). On other products on the prebiotic-v2 template
+    (Nutritional Yeast, Moringa, etc.) the modal isn't rendered AND
+    the .gb-who-footnote in the who section is hidden so the
+    "Compare all fibers" link doesn't appear at all.
+  - Always 3 columns, fixed order: Fiber Boost → Inulin → Acacia.
+  - The current product's column shows "YOU'RE HERE" instead of a
+    "View Product" CTA.
+  - Comparison copy is hardcoded here (per spec). Image, short name
+    and product URL pull live from each product.
+{%- endcomment -%}
+
+{%- liquid
+  assign fb_handle  = 'gutbasket-fiber-blend-prebiotic-rich-superfood-mix'
+  assign inu_handle = 'inulin-powder'
+  assign aca_handle = 'acacia-powder'
+
+  assign current_handle = product.handle
+  assign is_fiber_product = false
+  if current_handle == fb_handle or current_handle == inu_handle or current_handle == aca_handle
+    assign is_fiber_product = true
+  endif
+
+  assign fb  = all_products[fb_handle]
+  assign inu = all_products[inu_handle]
+  assign aca = all_products[aca_handle]
+
+  assign fb_name  = fb.metafields.custom.product_name_short  | default: fb.title
+  assign inu_name = inu.metafields.custom.product_name_short | default: inu.title
+  assign aca_name = aca.metafields.custom.product_name_short | default: aca.title
+
+  assign fb_is_current  = false
+  assign inu_is_current = false
+  assign aca_is_current = false
+  if current_handle == fb_handle
+    assign fb_is_current = true
+  endif
+  if current_handle == inu_handle
+    assign inu_is_current = true
+  endif
+  if current_handle == aca_handle
+    assign aca_is_current = true
+  endif
+-%}
+
+{%- unless is_fiber_product -%}
+  {%- comment -%}
+    Modal not rendered. Hide the who-section footer note so the
+    "Compare all fibers" link doesn't dangle on Nutritional Yeast /
+    Moringa PDPs etc.
+  {%- endcomment -%}
+  <style>.gb-who-footnote { display: none !important; }</style>
+{%- else -%}
+
+<div id="gb-fiber-compare-modal" class="gb-fcm" data-fcm hidden aria-hidden="true">
+  <div class="gb-fcm-overlay" data-fcm-close></div>
+  <div class="gb-fcm-dialog" role="dialog" aria-labelledby="gb-fcm-title" aria-modal="true">
+    <button class="gb-fcm-close" type="button" data-fcm-close aria-label="Close">×</button>
+
+    <header class="gb-fcm-head">
+      <h2 id="gb-fcm-title" class="gb-fcm-title">Find your fiber</h2>
+      <p class="gb-fcm-sub">Three GutBasket fibers, three different fits. Pick by what slots into your routine — and what your stomach prefers.</p>
+    </header>
+
+    {%- comment -%} ===== DESKTOP TABLE (≥768px) ===== {%- endcomment -%}
+    <div class="compare-desktop">
+      <div class="gb-fcm-table" role="table" aria-label="Fiber comparison">
+        <div class="gb-fcm-row gb-fcm-row--head">
+          <div class="gb-fcm-cell gb-fcm-cell--label" aria-hidden="true"></div>
+          <div class="gb-fcm-cell gb-fcm-cell--col-head{% if fb_is_current %} is-current{% endif %}">
+            <div class="gb-fcm-tier">BEGINNER</div>
+            <div class="gb-fcm-img">{%- if fb.featured_image -%}<img src="{{ fb.featured_image | image_url: width: 400 }}" alt="{{ fb.title | escape }}" loading="lazy" width="240" height="240">{%- endif -%}</div>
+            <div class="gb-fcm-name">{{ fb_name }}</div>
+          </div>
+          <div class="gb-fcm-cell gb-fcm-cell--col-head{% if inu_is_current %} is-current{% endif %}">
+            <div class="gb-fcm-tier">REGULAR</div>
+            <div class="gb-fcm-img">{%- if inu.featured_image -%}<img src="{{ inu.featured_image | image_url: width: 400 }}" alt="{{ inu.title | escape }}" loading="lazy" width="240" height="240">{%- endif -%}</div>
+            <div class="gb-fcm-name">{{ inu_name }}</div>
+          </div>
+          <div class="gb-fcm-cell gb-fcm-cell--col-head{% if aca_is_current %} is-current{% endif %}">
+            <div class="gb-fcm-tier">ADVANCED</div>
+            <div class="gb-fcm-img">{%- if aca.featured_image -%}<img src="{{ aca.featured_image | image_url: width: 400 }}" alt="{{ aca.title | escape }}" loading="lazy" width="240" height="240">{%- endif -%}</div>
+            <div class="gb-fcm-name">{{ aca_name }}</div>
+          </div>
+        </div>
+
+        <div class="gb-fcm-row">
+          <div class="gb-fcm-cell gb-fcm-cell--label">Ingredient</div>
+          <div class="gb-fcm-cell">3-fiber blend — Inulin + FOS + Resistant Dextrin</div>
+          <div class="gb-fcm-cell">Single ingredient — inulin from chicory</div>
+          <div class="gb-fcm-cell">Single ingredient — acacia tree gum</div>
+        </div>
+        <div class="gb-fcm-row">
+          <div class="gb-fcm-cell gb-fcm-cell--label">Mixing experience</div>
+          <div class="gb-fcm-cell">Easy. Mildly sweet, dissolves clean in water or chaas.</div>
+          <div class="gb-fcm-cell">Easy. Mildly sweet, dissolves clean.</div>
+          <div class="gb-fcm-cell">Trickier — naturally sticky. Stir quickly into liquid and drink within a minute or two.</div>
+        </div>
+        <div class="gb-fcm-row">
+          <div class="gb-fcm-cell gb-fcm-cell--label">Strength on the gut</div>
+          <div class="gb-fcm-cell">Medium — Resistant Dextrin balances the fast-fermenting parts.</div>
+          <div class="gb-fcm-cell">Strong — concentrated, fast-fermenting single fiber.</div>
+          <div class="gb-fcm-cell">Gentle — slow-fermenting, lowest gas profile.</div>
+        </div>
+        <div class="gb-fcm-row">
+          <div class="gb-fcm-cell gb-fcm-cell--label">Best when…</div>
+          <div class="gb-fcm-cell">You want broad daily fiber and prebiotic support without picking sides.</div>
+          <div class="gb-fcm-cell">You want focused gut-bacteria support and tolerate fermentation well.</div>
+          <div class="gb-fcm-cell">You're sensitive to fast-fermenting fibers, or in / after an IBS flare.</div>
+        </div>
+        <div class="gb-fcm-row">
+          <div class="gb-fcm-cell gb-fcm-cell--label">Daily dose</div>
+          <div class="gb-fcm-cell">½ to 1 serving daily</div>
+          <div class="gb-fcm-cell">½ to 1 scoop daily</div>
+          <div class="gb-fcm-cell">½ to 1 scoop daily</div>
+        </div>
+
+        <div class="gb-fcm-row gb-fcm-row--cta">
+          <div class="gb-fcm-cell gb-fcm-cell--label" aria-hidden="true"></div>
+          <div class="gb-fcm-cell gb-fcm-cell--cta">
+            {%- if fb_is_current -%}<span class="gb-fcm-here">YOU'RE HERE</span>
+            {%- else -%}<a class="gb-fcm-cta" href="{{ fb.url }}">View Product</a>{%- endif -%}
+          </div>
+          <div class="gb-fcm-cell gb-fcm-cell--cta">
+            {%- if inu_is_current -%}<span class="gb-fcm-here">YOU'RE HERE</span>
+            {%- else -%}<a class="gb-fcm-cta" href="{{ inu.url }}">View Product</a>{%- endif -%}
+          </div>
+          <div class="gb-fcm-cell gb-fcm-cell--cta">
+            {%- if aca_is_current -%}<span class="gb-fcm-here">YOU'RE HERE</span>
+            {%- else -%}<a class="gb-fcm-cta" href="{{ aca.url }}">View Product</a>{%- endif -%}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {%- comment -%} ===== MOBILE TABLE (≤767px) — short labels + condensed copy ===== {%- endcomment -%}
+    <div class="compare-mobile">
+      <div class="gb-fcm-table gb-fcm-table--mobile" role="table" aria-label="Fiber comparison">
+        <div class="gb-fcm-row gb-fcm-row--head">
+          <div class="gb-fcm-cell gb-fcm-cell--label" aria-hidden="true"></div>
+          <div class="gb-fcm-cell gb-fcm-cell--col-head{% if fb_is_current %} is-current{% endif %}">
+            <div class="gb-fcm-tier">BEGINNER</div>
+            <div class="gb-fcm-img">{%- if fb.featured_image -%}<img src="{{ fb.featured_image | image_url: width: 280 }}" alt="{{ fb.title | escape }}" loading="lazy" width="180" height="180">{%- endif -%}</div>
+            <div class="gb-fcm-name">{{ fb_name }}</div>
+          </div>
+          <div class="gb-fcm-cell gb-fcm-cell--col-head{% if inu_is_current %} is-current{% endif %}">
+            <div class="gb-fcm-tier">REGULAR</div>
+            <div class="gb-fcm-img">{%- if inu.featured_image -%}<img src="{{ inu.featured_image | image_url: width: 280 }}" alt="{{ inu.title | escape }}" loading="lazy" width="180" height="180">{%- endif -%}</div>
+            <div class="gb-fcm-name">{{ inu_name }}</div>
+          </div>
+          <div class="gb-fcm-cell gb-fcm-cell--col-head{% if aca_is_current %} is-current{% endif %}">
+            <div class="gb-fcm-tier">ADVANCED</div>
+            <div class="gb-fcm-img">{%- if aca.featured_image -%}<img src="{{ aca.featured_image | image_url: width: 280 }}" alt="{{ aca.title | escape }}" loading="lazy" width="180" height="180">{%- endif -%}</div>
+            <div class="gb-fcm-name">{{ aca_name }}</div>
+          </div>
+        </div>
+
+        <div class="gb-fcm-row">
+          <div class="gb-fcm-cell gb-fcm-cell--label">Type</div>
+          <div class="gb-fcm-cell">3-fiber blend</div>
+          <div class="gb-fcm-cell">Inulin (chicory)</div>
+          <div class="gb-fcm-cell">Acacia gum</div>
+        </div>
+        <div class="gb-fcm-row">
+          <div class="gb-fcm-cell gb-fcm-cell--label">Mixing</div>
+          <div class="gb-fcm-cell">Easy</div>
+          <div class="gb-fcm-cell">Easy</div>
+          <div class="gb-fcm-cell">Sticky — stir fast</div>
+        </div>
+        <div class="gb-fcm-row">
+          <div class="gb-fcm-cell gb-fcm-cell--label">Strength</div>
+          <div class="gb-fcm-cell">Medium</div>
+          <div class="gb-fcm-cell">Strong</div>
+          <div class="gb-fcm-cell">Gentle</div>
+        </div>
+        <div class="gb-fcm-row">
+          <div class="gb-fcm-cell gb-fcm-cell--label">Best for</div>
+          <div class="gb-fcm-cell">Broad daily support</div>
+          <div class="gb-fcm-cell">Focused gut bacteria</div>
+          <div class="gb-fcm-cell">Sensitive stomachs</div>
+        </div>
+        <div class="gb-fcm-row">
+          <div class="gb-fcm-cell gb-fcm-cell--label">Dose</div>
+          <div class="gb-fcm-cell">½–1 serving</div>
+          <div class="gb-fcm-cell">½–1 scoop</div>
+          <div class="gb-fcm-cell">½–1 scoop</div>
+        </div>
+
+        <div class="gb-fcm-row gb-fcm-row--cta">
+          <div class="gb-fcm-cell gb-fcm-cell--label" aria-hidden="true"></div>
+          <div class="gb-fcm-cell gb-fcm-cell--cta">
+            {%- if fb_is_current -%}<span class="gb-fcm-here">YOU'RE HERE</span>
+            {%- else -%}<a class="gb-fcm-cta" href="{{ fb.url }}">View Product</a>{%- endif -%}
+          </div>
+          <div class="gb-fcm-cell gb-fcm-cell--cta">
+            {%- if inu_is_current -%}<span class="gb-fcm-here">YOU'RE HERE</span>
+            {%- else -%}<a class="gb-fcm-cta" href="{{ inu.url }}">View Product</a>{%- endif -%}
+          </div>
+          <div class="gb-fcm-cell gb-fcm-cell--cta">
+            {%- if aca_is_current -%}<span class="gb-fcm-here">YOU'RE HERE</span>
+            {%- else -%}<a class="gb-fcm-cta" href="{{ aca.url }}">View Product</a>{%- endif -%}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="gb-fcm-foot">Most users settle in within 1–2 weeks. Drink enough water through the day, start with the smaller dose, and build up if comfortable.</p>
+  </div>
+</div>
+
+<script>
+(function () {
+  var modal = document.getElementById('gb-fiber-compare-modal');
+  if (!modal) return;
+  var lastFocus = null;
+
+  function open() {
+    lastFocus = document.activeElement;
+    modal.removeAttribute('hidden');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('gb-fcm-open');
+    var closeBtn = modal.querySelector('.gb-fcm-close');
+    if (closeBtn) closeBtn.focus();
+  }
+  function close() {
+    modal.setAttribute('hidden', '');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('gb-fcm-open');
+    if (lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus();
+  }
+
+  function bindTriggers() {
+    var triggers = document.querySelectorAll('.gb-who-footnote-cta, [data-fcm-trigger]');
+    triggers.forEach(function (el) {
+      if (el.dataset.fcmBound === '1') return;
+      el.dataset.fcmBound = '1';
+      el.addEventListener('click', function (ev) {
+        ev.preventDefault();
+        open();
+      });
+    });
+  }
+
+  modal.querySelectorAll('[data-fcm-close]').forEach(function (el) {
+    el.addEventListener('click', close);
+  });
+  document.addEventListener('keydown', function (ev) {
+    if (ev.key === 'Escape' && !modal.hasAttribute('hidden')) close();
+  });
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bindTriggers);
+  } else {
+    bindTriggers();
+  }
+  document.addEventListener('shopify:section:load', bindTriggers);
+})();
+</script>
+
+{%- endunless -%}
+
+{% schema %}
+{
+  "name": "GB · Fiber compare modal",
+  "tag": "section",
+  "class": "gb-fiber-compare-modal-wrap",
+  "settings": [],
+  "presets": [{ "name": "GB · Fiber compare modal" }],
+  "enabled_on": { "templates": ["product"] }
+}
+{% endschema %}

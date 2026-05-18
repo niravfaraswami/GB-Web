@@ -1,0 +1,920 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "hero": {
+      "type": "leo-hero",
+      "blocks": {
+        "hb-1": {
+          "type": "hero_benefit",
+          "settings": {
+            "icon_emoji": "🦠",
+            "label": "Naturally Probiotic"
+          }
+        },
+        "hb-2": {
+          "type": "hero_benefit",
+          "settings": {
+            "icon_emoji": "🌿",
+            "label": "Supports Daily Digestion"
+          }
+        },
+        "hb-3": {
+          "type": "hero_benefit",
+          "settings": {
+            "icon_emoji": "⏱",
+            "label": "3 Days, Made Indoors"
+          }
+        },
+        "hb-4": {
+          "type": "hero_benefit",
+          "settings": {
+            "icon_emoji": "✨",
+            "label": "No Preservatives, No Sugar"
+          }
+        },
+        "ha-1": {
+          "type": "hero_accordion_tab",
+          "settings": {
+            "label": "Who Is It For",
+            "body": "<p>Anyone who wants the gut-health benefits of a real, live-cultured fermented drink — without buying expensive store-bought probiotics or worrying about a homemade ferment going wrong.</p><ul><li>People with everyday digestion issues — bloating, irregularity, post-meal heaviness</li><li>Anyone curious about traditional Indian ferments but intimidated by the process</li><li>Capsule-skeptics who want their probiotics from real food, not pills</li><li>First-time fermenters who want a foolproof setup</li></ul>",
+            "metafield_key": "",
+            "default_open": true
+          }
+        },
+        "ha-2": {
+          "type": "hero_accordion_tab",
+          "settings": {
+            "label": "How To Make",
+            "body": "<ol><li><strong>Chop &amp; Add</strong> — Black carrots, beetroot. Fill 20% of the jar.</li><li><strong>Spice + Boost + Water</strong> — Pour both sachets. Top up with filtered water.</li><li><strong>Seal With Airlock</strong> — Wait 3–5 days. Watch the bubbles.</li><li><strong>Strain &amp; Enjoy</strong> — Refrigerate. Daily 50ml serving.</li></ol>",
+            "metafield_key": "",
+            "default_open": false
+          }
+        },
+        "ha-3": {
+          "type": "hero_accordion_tab",
+          "settings": {
+            "label": "What's Inside",
+            "body": "<ul><li><strong>2L Borosilicate Glass Jar</strong> — reusable, dishwasher-safe</li><li><strong>Airlock Lid</strong> — one-way valve, no daily burping</li><li><strong>Kanji Spice Mix</strong> — calibrated 45g sachet</li><li><strong>Ferment Boost</strong> — prebiotic blend that cuts ferment time</li><li><strong>Storage Lid</strong> — swap once ready, fridge for up to 2 weeks</li><li><strong>Recipe Book</strong> — 7 seasonal recipes + step-by-step guide</li></ul>",
+            "metafield_key": "",
+            "default_open": false
+          }
+        }
+      },
+      "block_order": [
+        "hb-1",
+        "hb-2",
+        "hb-3",
+        "hb-4",
+        "ha-1",
+        "ha-2",
+        "ha-3"
+      ],
+      "settings": {
+        "show_breadcrumb": true,
+        "trust_1_text": "Secure Payment",
+        "trust_2_text": "Free Shipping",
+        "trust_3_text": "FSSAI Licensed",
+        "pad_top_d": 48,
+        "pad_bot_d": 80,
+        "pad_top_m": 32,
+        "pad_bot_m": 56,
+        "mar_top_d": 0,
+        "mar_bot_d": 0,
+        "mar_top_m": 0,
+        "mar_bot_m": 0,
+        "eyebrow_size_d": 22,
+        "eyebrow_size_m": 14,
+        "heading_size_d": 44,
+        "heading_size_m": 30
+      }
+    },
+    "trust": {
+      "type": "leo-trust",
+      "settings": {
+        "trust1_h": "50K+ Customers Served",
+        "trust1_d": "Trusted by Indian homes since 2020.",
+        "trust2_h": "Fermentation Expert Help",
+        "trust2_d": "WhatsApp us a photo if your batch looks confusing.",
+        "trust3_h": "Damage Support Included",
+        "trust3_d": "We help quickly if anything arrives damaged.",
+        "trust4_h": "Hand-Packed",
+        "trust4_d": "Small-batch spice mix, made by people who drink kanji daily.",
+        "pad_top_d": 48,
+        "pad_bot_d": 48,
+        "pad_top_m": 32,
+        "pad_bot_m": 32,
+        "mar_top_d": 0,
+        "mar_bot_d": 0,
+        "mar_top_m": 0,
+        "mar_bot_m": 0,
+        "eyebrow_size_d": 22,
+        "eyebrow_size_m": 14,
+        "heading_size_d": 44,
+        "heading_size_m": 30
+      }
+    },
+    "how-to-make": {
+      "type": "leo-how-to-make",
+      "blocks": {
+        "step-1": {
+          "type": "step",
+          "settings": {
+            "title": "CHOP + ADD",
+            "description": "Black carrots and beetroot. Fill 20% of the jar."
+          }
+        },
+        "step-2": {
+          "type": "step",
+          "settings": {
+            "title": "SPICE + BOOST + WATER",
+            "description": "Pour both sachets. Top up with filtered water."
+          }
+        },
+        "step-3": {
+          "type": "step",
+          "settings": {
+            "title": "SEAL WITH AIRLOCK",
+            "description": "Wait 3–5 days. Watch the bubbles."
+          }
+        },
+        "step-4": {
+          "type": "step",
+          "settings": {
+            "title": "STRAIN + ENJOY",
+            "description": "Refrigerate. Daily 50ml serving."
+          }
+        }
+      },
+      "block_order": [
+        "step-1",
+        "step-2",
+        "step-3",
+        "step-4"
+      ],
+      "settings": {
+        "how_eyebrow": "HOW TO MAKE",
+        "how_heading": "4 STEPS.",
+        "how_heading_em": "FRESH FERMENT.",
+        "pad_top_d": 80,
+        "pad_bot_d": 80,
+        "pad_top_m": 56,
+        "pad_bot_m": 56,
+        "mar_top_d": 0,
+        "mar_bot_d": 0,
+        "mar_top_m": 0,
+        "mar_bot_m": 0,
+        "eyebrow_size_d": 22,
+        "eyebrow_size_m": 14,
+        "heading_size_d": 44,
+        "heading_size_m": 30
+      }
+    },
+    "first-30": {
+      "type": "leo-first-30",
+      "blocks": {
+        "f30r-1": {
+          "type": "f30_row",
+          "settings": {
+            "icon_emoji": "🌿",
+            "heading": "Digestion Improves (First 7 Days)",
+            "description": "Live Lactobacillus reach your gut. Digestion feels smoother, post-meal heaviness eases, and mornings get more predictable."
+          }
+        },
+        "f30r-2": {
+          "type": "f30_row",
+          "settings": {
+            "icon_emoji": "💧",
+            "heading": "Less Bloating (Week 2–3)",
+            "description": "Daily kanji reduces fermentation gas in the gut. Meals digest cleaner, the post-lunch slump fades, your stomach feels flatter."
+          }
+        },
+        "f30r-3": {
+          "type": "f30_row",
+          "settings": {
+            "icon_emoji": "⚡",
+            "heading": "Steadier Energy (Day 30+)",
+            "description": "Better gut balance = better nutrient absorption. Iron, B12, and magnesium reach you more efficiently — energy holds through the afternoon."
+          }
+        },
+        "f30s-1": {
+          "type": "f30_stat",
+          "settings": {
+            "num": "10",
+            "num_unit": "⁹",
+            "label": "CFU/ml live cultures by day 5"
+          }
+        },
+        "f30s-2": {
+          "type": "f30_stat",
+          "settings": {
+            "num": "8",
+            "num_unit": "+",
+            "label": "strains of Lactobacillus produced"
+          }
+        },
+        "f30s-3": {
+          "type": "f30_stat",
+          "settings": {
+            "num": "2",
+            "num_unit": "L",
+            "label": "fresh kanji every batch"
+          }
+        }
+      },
+      "block_order": [
+        "f30r-1",
+        "f30r-2",
+        "f30r-3",
+        "f30s-1",
+        "f30s-2",
+        "f30s-3"
+      ],
+      "settings": {
+        "f30_eyebrow": "YOUR GUT'S FIRST 30 DAYS",
+        "f30_h": "The gentle",
+        "f30_h_em": "science",
+        "f30_h_tail": "of balance.",
+        "f30_intro": "When your gut finds its rhythm, your body follows. Daily kanji rebuilds balance from the inside — and the shifts arrive on a predictable timeline.",
+        "f30_image": "shopify://shop_images/first30_desktop_45_v2_dark_2.png",
+        "f30_overlay_show": false,
+        "f30_anno_1": "Week 1:DigestionImproved",
+        "f30_anno_2": "Week 2:BloatingReduced",
+        "f30_anno_3": "Week 3:SteadyEnergy",
+        "f30_stats_line": "Daily kanji. Live cultures. Real, measurable shifts.",
+        "f30_disclaimer": "When accompanied by a balanced diet and regular routine. Individual results vary.",
+        "pad_top_d": 80,
+        "pad_bot_d": 80,
+        "pad_top_m": 56,
+        "pad_bot_m": 56,
+        "mar_top_d": 0,
+        "mar_bot_d": 0,
+        "mar_top_m": 0,
+        "mar_bot_m": 0,
+        "eyebrow_size_d": 22,
+        "eyebrow_size_m": 14,
+        "heading_size_d": 44,
+        "heading_size_m": 30
+      }
+    },
+    "stacks": {
+      "type": "leo-stacks",
+      "blocks": {
+        "sr-1": {
+          "type": "stacks_row",
+          "settings": {
+            "label": "Live cultures",
+            "kit_mark": "yes",
+            "kit_text": "8+ strains",
+            "col3_mark": "none",
+            "col3_text": "Variable",
+            "col4_mark": "none",
+            "col4_text": "1–3 freeze-dried"
+          }
+        },
+        "sr-2": {
+          "type": "stacks_row",
+          "settings": {
+            "label": "Effort required",
+            "kit_mark": "yes",
+            "kit_text": "5 min · 3 days wait",
+            "col3_mark": "none",
+            "col3_text": "Sourcing + terrace + 5 days",
+            "col4_mark": "none",
+            "col4_text": "Swallow daily"
+          }
+        },
+        "sr-3": {
+          "type": "stacks_row",
+          "settings": {
+            "label": "Taste consistency",
+            "kit_mark": "yes",
+            "kit_text": "Calibrated spice mix",
+            "col3_mark": "none",
+            "col3_text": "Batch-by-batch",
+            "col4_mark": "none",
+            "col4_text": "N/A"
+          }
+        },
+        "sr-4": {
+          "type": "stacks_row",
+          "settings": {
+            "label": "Cost per glass",
+            "kit_mark": "yes",
+            "kit_text": "~₹12 (with refill)",
+            "col3_mark": "none",
+            "col3_text": "~₹8 + your time",
+            "col4_mark": "none",
+            "col4_text": "~₹20–35 / capsule"
+          }
+        },
+        "sr-5": {
+          "type": "stacks_row",
+          "settings": {
+            "label": "Dairy-free",
+            "kit_mark": "yes",
+            "kit_text": "Yes",
+            "col3_mark": "none",
+            "col3_text": "Yes",
+            "col4_mark": "none",
+            "col4_text": "Usually"
+          }
+        },
+        "sr-6": {
+          "type": "stacks_row",
+          "settings": {
+            "label": "Diabetic-safe",
+            "kit_mark": "yes",
+            "kit_text": "Yes (no added sugar)",
+            "col3_mark": "none",
+            "col3_text": "Yes",
+            "col4_mark": "none",
+            "col4_text": "Usually"
+          }
+        },
+        "sr-7": {
+          "type": "stacks_row",
+          "settings": {
+            "label": "Recipe variety",
+            "kit_mark": "yes",
+            "kit_text": "7 variants in book",
+            "col3_mark": "none",
+            "col3_text": "Family recipe only",
+            "col4_mark": "no",
+            "col4_text": "Single format"
+          }
+        }
+      },
+      "block_order": [
+        "sr-1",
+        "sr-2",
+        "sr-3",
+        "sr-4",
+        "sr-5",
+        "sr-6",
+        "sr-7"
+      ],
+      "settings": {
+        "stacks_eyebrow": "SIDE BY SIDE",
+        "stacks_heading": "HOW THIS KIT",
+        "stacks_heading_em": "STACKS UP.",
+        "stacks_intro": "Against what you'd otherwise buy or do. No spin — every row is verifiable.",
+        "stacks_col_kit": "GutBasket Kit",
+        "stacks_col_3": "Traditional Homemade",
+        "stacks_col_4": "Probiotic Capsule",
+        "pad_top_d": 80,
+        "pad_bot_d": 80,
+        "pad_top_m": 56,
+        "pad_bot_m": 56,
+        "mar_top_d": 0,
+        "mar_bot_d": 0,
+        "mar_top_m": 0,
+        "mar_bot_m": 0,
+        "eyebrow_size_d": 22,
+        "eyebrow_size_m": 14,
+        "heading_size_d": 44,
+        "heading_size_m": 30
+      }
+    },
+    "stag": {
+      "type": "leo-stag",
+      "blocks": {
+        "stag-1": {
+          "type": "stag_card",
+          "settings": {
+            "variant": "image_only",
+            "span_row_2": true,
+            "span_col_2": true,
+            "image": "shopify://shop_images/Kanji_Kit_Includes.png",
+            "image_mobile": "shopify://shop_images/kanji_s03_flat_lay.png",
+            "numeral": "",
+            "eyebrow": "",
+            "heading": "Kanji Making Kit — flat lay",
+            "description": "",
+            "bullets": ""
+          }
+        },
+        "stag-2": {
+          "type": "stag_card",
+          "settings": {
+            "variant": "dark_photo",
+            "span_row_2": false,
+            "span_col_2": true,
+            "image": "shopify://shop_images/kanji_airlock_dark.png",
+            "numeral": "",
+            "eyebrow": "FEATURE · AIRLOCK",
+            "heading": "No daily burping",
+            "description": "One-way valve lets CO₂ escape, blocks oxygen + dust. Mould risk: zero.",
+            "bullets": ""
+          }
+        },
+        "stag-3": {
+          "type": "stag_card",
+          "settings": {
+            "variant": "light",
+            "span_row_2": false,
+            "span_col_2": false,
+            "image": "shopify://shop_images/kanji_s05_compare_right.png",
+            "numeral": "",
+            "eyebrow": "REUSABLE",
+            "heading": "2L Glass Jar",
+            "description": "Borosilicate · dishwasher-safe · lasts years.",
+            "bullets": ""
+          }
+        },
+        "stag-4": {
+          "type": "stag_card",
+          "settings": {
+            "variant": "detail",
+            "span_row_2": true,
+            "span_col_2": false,
+            "image": "shopify://shop_images/kanji_s07_component_spice.png",
+            "numeral": "",
+            "eyebrow": "CONSUMABLE · 45G",
+            "heading": "Kanji Spice Mix",
+            "description": "",
+            "bullets": "Ground mustard powder (the wild starter)\nSea salt (controls fermentation)\nChilli powder (warmth + colour)\nGinger powder (digestive support)"
+          }
+        },
+        "stag-5": {
+          "type": "stag_card",
+          "settings": {
+            "variant": "detail",
+            "span_row_2": false,
+            "span_col_2": false,
+            "image": "shopify://shop_images/kanji_s07_component_boost.png",
+            "numeral": "",
+            "eyebrow": "PREBIOTIC · BOOSTS GOOD BACTERIA",
+            "heading": "Ferment Boost",
+            "description": "",
+            "bullets": "Inulin (chicory root prebiotic fibre)\nFOS (fructo-oligosaccharides)\nResistant dextrin (slow-fermenting fuel)\nCuts ferment time to 3–5 days"
+          }
+        },
+        "stag-6": {
+          "type": "stag_card",
+          "settings": {
+            "variant": "light",
+            "span_row_2": false,
+            "span_col_2": false,
+            "image": "shopify://shop_images/kanji_s10_recipes_lifestyle.png",
+            "numeral": "",
+            "eyebrow": "7 RECIPES INSIDE",
+            "heading": "Recipe Book",
+            "description": "16 pages. Step-by-step quick-start guide included.",
+            "bullets": ""
+          }
+        },
+        "stag-7": {
+          "type": "stag_card",
+          "settings": {
+            "variant": "light",
+            "span_row_2": false,
+            "span_col_2": false,
+            "image": "shopify://shop_images/kanji_s09_step_3.png",
+            "numeral": "",
+            "eyebrow": "SWAP & STORE",
+            "heading": "Storage Lid",
+            "description": "Swap once ready · refrigerate up to 2 weeks.",
+            "bullets": ""
+          }
+        }
+      },
+      "block_order": [
+        "stag-1",
+        "stag-2",
+        "stag-3",
+        "stag-4",
+        "stag-5",
+        "stag-6",
+        "stag-7"
+      ],
+      "settings": {
+        "stag_eyebrow": "WHAT'S INSIDE THE BOX",
+        "stag_heading": "EVERYTHING YOU NEED",
+        "stag_heading_em": "TO make kanji",
+        "stag_note": "Just add fresh black carrots, beetroot, and water. The kit handles the rest.",
+        "refill_show": true,
+        "refill_image": "shopify://shop_images/kanji_refill_pack.png",
+        "refill_h": "Already Have The Jar?Just Refill The Mix.",
+        "refill_bullets": "Spice Mix + Ferment Boost only\nSame flavour, same probiotic punch\nReuse your jar — much lower cost\nBest for existing customers",
+        "refill_cta_label": "Shop Refills →",
+        "refill_cta_url": "",
+        "pad_top_d": 80,
+        "pad_bot_d": 80,
+        "pad_top_m": 56,
+        "pad_bot_m": 56,
+        "mar_top_d": 0,
+        "mar_bot_d": 0,
+        "mar_top_m": 0,
+        "mar_bot_m": 0,
+        "eyebrow_size_d": 22,
+        "eyebrow_size_m": 14,
+        "heading_size_d": 44,
+        "heading_size_m": 30
+      }
+    },
+    "reels": {
+      "type": "leo-reels",
+      "settings": {
+        "eyebrow": "REAL PEOPLE",
+        "heading": "Real People, Real Ferments,",
+        "heading_em": "Real Magic",
+        "pad_top_d": 56,
+        "pad_bot_d": 56,
+        "pad_top_m": 40,
+        "pad_bot_m": 40,
+        "mar_top_d": 0,
+        "mar_bot_d": 0,
+        "mar_top_m": 0,
+        "mar_bot_m": 0,
+        "eyebrow_size_d": 22,
+        "eyebrow_size_m": 14,
+        "heading_size_d": 44,
+        "heading_size_m": 30
+      }
+    },
+    "ugc": {
+      "type": "leo-ugc",
+      "blocks": {
+        "ugc-1": {
+          "type": "ugc_review",
+          "settings": {
+            "quote": "Balancing my gut made such a difference. My digestion feels stronger, my bloating dropped, and I'm not fighting my body anymore.",
+            "name": "Pratik Chheda",
+            "meta": "32 years"
+          }
+        },
+        "ugc-2": {
+          "type": "ugc_review",
+          "settings": {
+            "quote": "After fixing my gut, I finally started feeling lighter after meals. My energy went up, and the bloating that had been stuck for months disappeared.",
+            "name": "Deshna Shah",
+            "meta": "23 years"
+          }
+        },
+        "ugc-3": {
+          "type": "ugc_review",
+          "settings": {
+            "quote": "I'd tried everything before this. Once my gut got back on track, my bloating reduced and I started feeling like myself again.",
+            "name": "Aishwarya Pimpley",
+            "meta": "32 years"
+          }
+        }
+      },
+      "block_order": [
+        "ugc-1",
+        "ugc-2",
+        "ugc-3"
+      ],
+      "settings": {
+        "eyebrow": "REAL RESULTS",
+        "heading": "WHAT OUR",
+        "heading_em": "CUSTOMERS SAY",
+        "pad_top_d": 80,
+        "pad_bot_d": 80,
+        "pad_top_m": 56,
+        "pad_bot_m": 56,
+        "mar_top_d": 0,
+        "mar_bot_d": 0,
+        "mar_top_m": 0,
+        "mar_bot_m": 0,
+        "eyebrow_size_d": 22,
+        "eyebrow_size_m": 14,
+        "heading_size_d": 44,
+        "heading_size_m": 30
+      }
+    },
+    "science": {
+      "type": "leo-science",
+      "settings": {
+        "sci_eyebrow": "THE SCIENCE",
+        "sci_h": "WHAT FERMENTED DRINKS DO",
+        "sci_h_em": "FOR YOU.",
+        "sci_stat_eyebrow": "REPORTED",
+        "sci_stat1_img": "shopify://shop_images/kanji_science_mood.png",
+        "sci_stat1_num": "47",
+        "sci_stat1_unit": "%",
+        "sci_stat1_h": "Better Mood",
+        "sci_stat1_d": "After adding fermented drinks for just 14 days.",
+        "sci_stat2_img": "shopify://shop_images/kanji_science_energy.png",
+        "sci_stat2_num": "56",
+        "sci_stat2_unit": "%",
+        "sci_stat2_h": "More Energy",
+        "sci_stat2_d": "Without supplements or lifestyle changes.",
+        "sci_stat3_img": "shopify://shop_images/kanji_science_bloating.png",
+        "sci_stat3_num": "42",
+        "sci_stat3_unit": "%",
+        "sci_stat3_h": "Less Bloating",
+        "sci_stat3_d": "From everyday fermented drinks like kanji.",
+        "sci_stat4_img": "shopify://shop_images/kanji_science_hunger.png",
+        "sci_stat4_num": "52",
+        "sci_stat4_unit": "%",
+        "sci_stat4_h": "Less Hunger",
+        "sci_stat4_d": "Linked to improved gut health.",
+        "sci_caption": "<p>Based on a <strong>5,400+ person</strong> study on fermented drink intake.</p>",
+        "sci_disclaimer": "*Results from observational studies on fermented drink intake. Individual results vary.",
+        "pad_top_d": 80,
+        "pad_bot_d": 80,
+        "pad_top_m": 56,
+        "pad_bot_m": 56,
+        "mar_top_d": 0,
+        "mar_bot_d": 0,
+        "mar_top_m": 0,
+        "mar_bot_m": 0,
+        "eyebrow_size_d": 22,
+        "eyebrow_size_m": 14,
+        "heading_size_d": 44,
+        "heading_size_m": 30
+      }
+    },
+    "enjoy": {
+      "type": "leo-enjoy",
+      "blocks": {
+        "enj-1": {
+          "type": "enjoy_card",
+          "settings": {
+            "image": "shopify://shop_images/kanji_s11_consumption_morning.png",
+            "heading": "Morning Shot",
+            "description": "50ml on an empty stomach."
+          }
+        },
+        "enj-2": {
+          "type": "enjoy_card",
+          "settings": {
+            "image": "shopify://shop_images/kanji_s11_consumption_premeal.png",
+            "heading": "With Meals",
+            "description": "A glass alongside your thali."
+          }
+        },
+        "enj-3": {
+          "type": "enjoy_card",
+          "settings": {
+            "image": "shopify://shop_images/kanji_s11_consumption_spritzer.png",
+            "heading": "Kanji Spritzer",
+            "description": "+ sparkling water + mint."
+          }
+        },
+        "enj-4": {
+          "type": "enjoy_card",
+          "settings": {
+            "image": "shopify://shop_images/kanji_s11_consumption_cold.png",
+            "heading": "Chilled Pour",
+            "description": "Straight from the fridge."
+          }
+        }
+      },
+      "block_order": [
+        "enj-1",
+        "enj-2",
+        "enj-3",
+        "enj-4"
+      ],
+      "settings": {
+        "enjoy_eyebrow": "HOW TO",
+        "enjoy_h": "HOW TO",
+        "enjoy_h_em": "DRINK IT",
+        "enjoy_h_tail": "DAILY.",
+        "spoons_num": "50–150",
+        "spoons_label": "ml per day",
+        "spoons_cap": "Drink chilled or room temp. Don't heat.",
+        "pad_top_d": 80,
+        "pad_bot_d": 80,
+        "pad_top_m": 56,
+        "pad_bot_m": 56,
+        "mar_top_d": 0,
+        "mar_bot_d": 0,
+        "mar_top_m": 0,
+        "mar_bot_m": 0,
+        "eyebrow_size_d": 22,
+        "eyebrow_size_m": 14,
+        "heading_size_d": 44,
+        "heading_size_m": 30
+      }
+    },
+    "recipes": {
+      "type": "leo-recipes",
+      "blocks": {
+        "rp-1": {
+          "type": "recipe_pill",
+          "settings": {
+            "emoji": "🥕",
+            "name": "Classic Black Carrot Kanji",
+            "url": ""
+          }
+        },
+        "rp-2": {
+          "type": "recipe_pill",
+          "settings": {
+            "emoji": "🥥",
+            "name": "Beetroot Kanji",
+            "url": ""
+          }
+        },
+        "rp-3": {
+          "type": "recipe_pill",
+          "settings": {
+            "emoji": "🥒",
+            "name": "Kanji Spritzer",
+            "url": ""
+          }
+        },
+        "rp-4": {
+          "type": "recipe_pill",
+          "settings": {
+            "emoji": "🍲",
+            "name": "Kanji Vada",
+            "url": ""
+          }
+        },
+        "rp-5": {
+          "type": "recipe_pill",
+          "settings": {
+            "emoji": "🌶️",
+            "name": "Spicy Kanji Shot",
+            "url": ""
+          }
+        },
+        "rp-6": {
+          "type": "recipe_pill",
+          "settings": {
+            "emoji": "🌿",
+            "name": "Mint & Lime Kanji",
+            "url": ""
+          }
+        },
+        "rp-7": {
+          "type": "recipe_pill",
+          "settings": {
+            "emoji": "🥭",
+            "name": "Summer Mango Kanji",
+            "url": ""
+          }
+        }
+      },
+      "block_order": [
+        "rp-1",
+        "rp-2",
+        "rp-3",
+        "rp-4",
+        "rp-5",
+        "rp-6",
+        "rp-7"
+      ],
+      "settings": {
+        "recipes_eyebrow": "ONE KIT. ENDLESS VARIETY.",
+        "recipe_count": "7",
+        "recipe_h_label": "KANJI",
+        "recipe_h_text": "RECIPES INSIDE",
+        "recipe_banner": "shopify://shop_images/kanji_s10_recipes_lifestyle_1924b705-c33e-4b56-9086-f28abbb27039.png",
+        "pad_top_d": 48,
+        "pad_bot_d": 48,
+        "pad_top_m": 32,
+        "pad_bot_m": 32,
+        "mar_top_d": 0,
+        "mar_bot_d": 0,
+        "mar_top_m": 0,
+        "mar_bot_m": 0,
+        "eyebrow_size_d": 22,
+        "eyebrow_size_m": 14,
+        "heading_size_d": 44,
+        "heading_size_m": 30
+      }
+    },
+    "faq": {
+      "type": "leo-faq",
+      "blocks": {
+        "faq-1": {
+          "type": "faq",
+          "settings": {
+            "question": "How long does it take to ferment?",
+            "answer": "<p>3–5 days at typical Indian room temperature (25–32°C). Cooler weather may extend it to 6–7 days. The bubbles in the airlock tell you when it's active.</p>"
+          }
+        },
+        "faq-2": {
+          "type": "faq",
+          "settings": {
+            "question": "Is this really probiotic?",
+            "answer": "<p>Yes. Wild lacto-fermentation produces 8+ strains of beneficial Lactobacillus bacteria, with measurable CFU counts by day 5.</p>"
+          }
+        },
+        "faq-3": {
+          "type": "faq",
+          "settings": {
+            "question": "How long does it last?",
+            "answer": "<p>Once ready, swap to the storage lid and refrigerate. Refrigerated kanji stays good for up to 2 weeks.</p>"
+          }
+        },
+        "faq-4": {
+          "type": "faq",
+          "settings": {
+            "question": "Can I reuse the jar?",
+            "answer": "<p>The jar lasts years — borosilicate glass, dishwasher-safe. The airlock is reusable indefinitely. Just buy refills.</p>"
+          }
+        },
+        "faq-5": {
+          "type": "faq",
+          "settings": {
+            "question": "Is it safe for diabetics?",
+            "answer": "<p>Yes. There's no added sugar. The natural sugars in the vegetables get consumed by the fermentation process.</p>"
+          }
+        },
+        "faq-6": {
+          "type": "faq",
+          "settings": {
+            "question": "Will it taste like store-bought kombucha?",
+            "answer": "<p>No — kanji has its own identity. Tangy, peppery, lightly fizzy. Closer to a salty buttermilk than a sweet drink.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "faq-1",
+        "faq-2",
+        "faq-3",
+        "faq-4",
+        "faq-5",
+        "faq-6"
+      ],
+      "settings": {
+        "faq_eyebrow": "QUESTIONS?",
+        "faq_heading": "COMMON",
+        "faq_heading_em": "QUESTIONS",
+        "pad_top_d": 80,
+        "pad_bot_d": 80,
+        "pad_top_m": 56,
+        "pad_bot_m": 56,
+        "mar_top_d": 0,
+        "mar_bot_d": 0,
+        "mar_top_m": 0,
+        "mar_bot_m": 0,
+        "eyebrow_size_d": 22,
+        "eyebrow_size_m": 14,
+        "heading_size_d": 44,
+        "heading_size_m": 30
+      }
+    },
+    "cross": {
+      "type": "leo-cross",
+      "settings": {
+        "cross_eyebrow": "PAIR IT WITH",
+        "cross_heading": "CUSTOMERS ALSO BOUGHT",
+        "cross_collection": "",
+        "pad_top_d": 80,
+        "pad_bot_d": 80,
+        "pad_top_m": 56,
+        "pad_bot_m": 56,
+        "mar_top_d": 0,
+        "mar_bot_d": 0,
+        "mar_top_m": 0,
+        "mar_bot_m": 0,
+        "eyebrow_size_d": 22,
+        "eyebrow_size_m": 14,
+        "heading_size_d": 44,
+        "heading_size_m": 30
+      }
+    },
+    "judgeme": {
+      "type": "leo-judgeme",
+      "settings": {
+        "judgeme_eyebrow": "ALL REVIEWS",
+        "judgeme_heading": "VERIFIED",
+        "judgeme_heading_em": "REVIEWS",
+        "judgeme_embed": "",
+        "pad_top_d": 48,
+        "pad_bot_d": 80,
+        "pad_top_m": 32,
+        "pad_bot_m": 56,
+        "mar_top_d": 0,
+        "mar_bot_d": 0,
+        "mar_top_m": 0,
+        "mar_bot_m": 0,
+        "eyebrow_size_d": 22,
+        "eyebrow_size_m": 14,
+        "heading_size_d": 44,
+        "heading_size_m": 30
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "trust",
+    "how-to-make",
+    "first-30",
+    "stacks",
+    "stag",
+    "reels",
+    "ugc",
+    "science",
+    "enjoy",
+    "recipes",
+    "faq",
+    "cross",
+    "judgeme"
+  ]
+}

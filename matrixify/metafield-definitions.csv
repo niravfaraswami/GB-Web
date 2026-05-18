@@ -1,0 +1,7 @@
+Owner Resource,Command,Namespace,Key,Type,Name,Description,Pin,Visible to Storefront
+PRODUCT,MERGE,custom,category_label,single_line_text_field,Category chip,JAR / CARBOY / BOTTLE / TOOL / TESTER / PART chip on the Jars & Tools PDP. Reused by cart drawer line items and cross-sell cards.,true,true
+PRODUCT,MERGE,custom,features_h1,single_line_text_field,Features section heading,Heading for the 'Why this design' section on the Jars & Tools PDP.,true,true
+PRODUCT,MERGE,custom,features_intro,multi_line_text_field,Features section intro,1-2 sentence intro paragraph above the features grid.,true,true
+PRODUCT,MERGE,custom,specs,json,Specs table,"Array of [label, value] pairs for the specifications table. Used by the Jars & Tools PDP.",true,true
+PRODUCT,MERGE,custom,compatible_with,multi_line_text_field,Compatible with,Text for the 'Works with' strip under the specs table.,true,true
+PRODUCT,MERGE,custom,cart_addon_ids,list.product_reference,Cart add-on suggestions,List of related products the GB cart drawer suggests as 'Frequently added' when this product is in the cart.,true,true

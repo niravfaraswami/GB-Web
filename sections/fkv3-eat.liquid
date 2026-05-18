@@ -1,0 +1,77 @@
+{%- liquid
+  assign p = product
+  assign mf_consumption = p.metafields.custom.featured_consumption_methods.value
+  assign mf_eat_h = p.metafields.custom.eat_h
+  assign dosage_amount = p.metafields.custom.dosage_amount
+  assign dosage_label = p.metafields.custom.dosage_label
+  assign dosage_caption = p.metafields.custom.dosage_caption
+  assign consumption_blocks = section.blocks | where: 'type', 'consumption_method'
+-%}
+{%- if mf_consumption != blank or consumption_blocks.size > 0 -%}
+  <div data-kit="fermentation" class="ferment-pdp fkv3-eat-wrap">
+    <section class="eat-section" {%- render 'fkv3-section-attrs' -%}>
+      <div class="container">
+        <div class="section-header">
+          <div class="eyebrow">{{ section.settings.eat_eyebrow }}</div>
+          {%- if mf_eat_h != blank -%}<h2>{{ mf_eat_h }}</h2>
+          {%- else -%}<h2>{{ section.settings.eat_heading }} <em>{{ section.settings.eat_heading_em }}</em>{{ section.settings.eat_heading_tail }}</h2>{%- endif -%}
+        </div>
+        <div class="eat-grid">
+          {%- if mf_consumption != blank -%}
+            {%- for c in mf_consumption -%}
+              <div class="eat-card"><div class="eat-img">{%- if c.image != blank -%}<img src="{{ c.image | image_url: width: 480 }}" alt="{{ c.heading | escape }}" loading="lazy" width="480" height="300">{%- endif -%}</div><div class="eat-body"><div class="eat-h">{{ c.heading }}</div><div class="eat-d">{{ c.description }}</div></div></div>
+            {%- endfor -%}
+          {%- else -%}
+            {%- for block in consumption_blocks -%}
+              <div class="eat-card" {{ block.shopify_attributes }}><div class="eat-img">{%- if block.settings.image != blank -%}<img src="{{ block.settings.image | image_url: width: 480 }}" alt="{{ block.settings.heading | escape }}" loading="lazy" width="480" height="300">{%- endif -%}</div><div class="eat-body"><div class="eat-h">{{ block.settings.heading }}</div><div class="eat-d">{{ block.settings.description }}</div></div></div>
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+        {%- if dosage_amount != blank -%}
+          <div class="spoons-strip">
+            <div class="spoons-num">{{ dosage_amount }}</div>
+            {%- if dosage_label != blank -%}<div class="spoons-label">{{ dosage_label }}</div>{%- endif -%}
+            {%- if dosage_caption != blank -%}<div class="spoons-cap">{{ dosage_caption }}</div>{%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
+    </section>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "FK v3 — How to enjoy",
+  "tag": "section",
+  "class": "fkv3-eat-wrap",
+  "settings": [
+    { "type": "color", "id": "section_bg", "label": "Section background", "default": "#ffffff" },
+    { "type": "text", "id": "eat_eyebrow", "label": "Eyebrow", "default": "HOW TO" },
+    { "type": "text", "id": "eat_heading", "label": "Heading", "default": "HOW TO" },
+    { "type": "text", "id": "eat_heading_em", "label": "Heading (em)", "default": "ENJOY IT" },
+    { "type": "text", "id": "eat_heading_tail", "label": "Heading (tail)", "default": " DAILY" }
+  ,
+    { "type": "header", "content": "Spacing & Typography" },
+    { "type": "range", "id": "pad_top_d", "label": "Padding top — desktop (px)", "min": 0, "max": 200, "step": 4, "default": 80 },
+    { "type": "range", "id": "pad_bot_d", "label": "Padding bottom — desktop (px)", "min": 0, "max": 200, "step": 4, "default": 80 },
+    { "type": "range", "id": "pad_top_m", "label": "Padding top — mobile (px)", "min": 0, "max": 120, "step": 4, "default": 56 },
+    { "type": "range", "id": "pad_bot_m", "label": "Padding bottom — mobile (px)", "min": 0, "max": 120, "step": 4, "default": 56 },
+    { "type": "range", "id": "mar_top_d", "label": "Margin top — desktop (px)", "min": 0, "max": 100, "step": 4, "default": 0 },
+    { "type": "range", "id": "mar_bot_d", "label": "Margin bottom — desktop (px)", "min": 0, "max": 100, "step": 4, "default": 0 },
+    { "type": "range", "id": "mar_top_m", "label": "Margin top — mobile (px)", "min": 0, "max": 80, "step": 4, "default": 0 },
+    { "type": "range", "id": "mar_bot_m", "label": "Margin bottom — mobile (px)", "min": 0, "max": 80, "step": 4, "default": 0 },
+    { "type": "range", "id": "eyebrow_size_d", "label": "Eyebrow font size — desktop (px)", "min": 0, "max": 32, "step": 1, "default": 22 },
+    { "type": "range", "id": "eyebrow_size_m", "label": "Eyebrow font size — mobile (px)", "min": 0, "max": 24, "step": 1, "default": 14 },
+    { "type": "range", "id": "heading_size_d", "label": "Heading font size — desktop (px)", "min": 0, "max": 80, "step": 2, "default": 44 },
+    { "type": "range", "id": "heading_size_m", "label": "Heading font size — mobile (px)", "min": 0, "max": 60, "step": 2, "default": 30 }],
+  "blocks": [
+    { "type": "consumption_method", "name": "Consumption method", "limit": 8, "settings": [
+      { "type": "image_picker", "id": "image", "label": "Image" },
+      { "type": "text", "id": "heading", "label": "Heading" },
+      { "type": "textarea", "id": "description", "label": "Description" }
+    ]}
+  ],
+  "presets": [ { "name": "FK v3 — How to enjoy" } ],
+  "enabled_on": { "templates": ["product"] }
+}
+{% endschema %}

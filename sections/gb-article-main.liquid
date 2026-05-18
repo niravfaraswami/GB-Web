@@ -1,0 +1,609 @@
+{%- comment -%}
+  Article (blog) main section
+  Source: gutbasket-blog.html
+  Renders the entire blog post: hero, TOC sidebar, body, end CTA, related.
+  Article body is article.content; per-section TOC anchors come from
+  H2#id elements the editor adds in the Shopify article editor.
+{%- endcomment -%}
+
+{%- liquid
+  assign cm = article.metafields.custom
+
+  assign category_label = cm.category_label | default: 'FERMENTATION 101'
+  assign category_color = cm.color | default: '#FF7300'
+  assign category_color_dark = cm.color_dark | default: '#E66800'
+  assign category_color_soft = cm.color_soft | default: '#FFE4D1'
+  assign hero_emoji = cm.hero_emoji | default: '🫙'
+  assign subtitle = cm.subtitle | default: article.excerpt | strip_html | strip
+  assign author_role = cm.author_role | default: 'Brand Editorial'
+  assign read_time = cm.read_time
+  if read_time == blank
+    assign words = article.content | strip_html | split: ' ' | size
+    assign minutes = words | divided_by: 225 | at_least: 1
+    assign read_time = minutes | append: ' min read'
+  endif
+
+  assign mf_sources = cm.sources.value
+  assign mf_related = cm.related_articles.value
+-%}
+
+{%- capture vars -%}
+--gb-art-color: {{ category_color }};
+--gb-art-color-dark: {{ category_color_dark }};
+--gb-art-color-soft: {{ category_color_soft }};
+{%- endcapture -%}
+
+<div class="gb-art" style="{{ vars | strip_newlines }}">
+
+<section class="gb-art-hero">
+  <div class="gb-art-hero-container">
+    <div class="gb-art-pill"><span class="gb-art-pill-dot"></span>{{ category_label }}</div>
+    <h1 class="gb-art-h1">{{ article.title }}</h1>
+    {%- if subtitle != blank -%}
+      <p class="gb-art-subtitle">{{ subtitle }}</p>
+    {%- endif -%}
+    <div class="gb-art-meta">
+      <span class="gb-art-author">{{ article.author }}</span>
+      <span class="gb-art-dot">·</span>
+      <span>{{ author_role }}</span>
+      <span class="gb-art-dot">·</span>
+      <span>{{ article.published_at | date: '%B %d, %Y' }}</span>
+      <span class="gb-art-dot">·</span>
+      <span>{{ read_time }}</span>
+    </div>
+    <div class="gb-art-feature">
+      {%- if article.image -%}
+        <img src="{{ article.image | image_url: width: 1200 }}" alt="{{ article.image.alt | escape }}" loading="lazy">
+      {%- else -%}
+        <span class="gb-art-emoji">{{ hero_emoji }}</span>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+<section class="gb-art-body-wrap">
+  <div class="gb-art-body-container">
+    <aside class="gb-art-toc" id="gb-art-toc-{{ section.id }}">
+      <div class="gb-art-toc-h">{{ section.settings.toc_label | default: 'In This Article' }}</div>
+      <ul id="gb-art-toc-list-{{ section.id }}"></ul>
+    </aside>
+    <article class="gb-art-body" id="gb-art-body-{{ section.id }}">
+      {{ article.content }}
+
+      {%- liquid
+        assign sources_blocks = section.blocks | where: 'type', 'source'
+      -%}
+
+      {%- if mf_sources and mf_sources.size > 0 -%}
+        <div class="gb-art-sources">
+          <div class="gb-art-sources-h">{{ section.settings.sources_label | default: 'Sources & Further Reading' }}</div>
+          <ol>
+            {%- for s in mf_sources -%}<li>{{ s }}</li>{%- endfor -%}
+          </ol>
+        </div>
+      {%- elsif sources_blocks.size > 0 -%}
+        <div class="gb-art-sources">
+          <div class="gb-art-sources-h">{{ section.settings.sources_label | default: 'Sources & Further Reading' }}</div>
+          <ol>
+            {%- for block in sources_blocks -%}
+              <li {{ block.shopify_attributes }}>{{ block.settings.text }}</li>
+            {%- endfor -%}
+          </ol>
+        </div>
+      {%- endif -%}
+    </article>
+  </div>
+</section>
+
+{%- if section.settings.cta_title != blank -%}
+<section class="gb-art-end-cta">
+  <div class="gb-art-end-container">
+    <div class="gb-art-end-card">
+      <div>
+        {%- if section.settings.cta_eyebrow != blank -%}
+          <div class="gb-art-end-eyebrow">{{ section.settings.cta_eyebrow }}</div>
+        {%- endif -%}
+        <div class="gb-art-end-title">{{ section.settings.cta_title }}</div>
+        {%- if section.settings.cta_desc != blank -%}
+          <div class="gb-art-end-desc">{{ section.settings.cta_desc }}</div>
+        {%- endif -%}
+      </div>
+      <div class="gb-art-end-product">
+        {%- liquid
+          assign cta_product = section.settings.cta_product
+          assign cta_name = section.settings.cta_product_name
+          assign cta_price = section.settings.cta_price
+          assign cta_link = section.settings.cta_link
+          if cta_product
+            if cta_name == blank
+              assign cta_name = cta_product.title
+            endif
+            if cta_price == blank
+              assign cta_price = cta_product.price | money
+            endif
+            if cta_link == blank
+              assign cta_link = cta_product.url
+            endif
+          endif
+        -%}
+        {%- if cta_name != blank -%}<div class="gb-art-end-name">{{ cta_name }}</div>{%- endif -%}
+        {%- if cta_price != blank -%}<div class="gb-art-end-price">{{ cta_price }}</div>{%- endif -%}
+        <a href="{{ cta_link | default: '#' }}" class="gb-art-end-btn">{{ section.settings.cta_button | default: 'Shop Now →' }}</a>
+      </div>
+    </div>
+  </div>
+</section>
+{%- endif -%}
+
+{%- assign related_blocks = section.blocks | where: 'type', 'related' -%}
+{%- if mf_related and mf_related.size > 0 -%}
+  <section class="gb-art-related">
+    <div class="gb-art-related-container">
+      <div class="gb-art-related-eyebrow">{{ section.settings.related_eyebrow | default: 'KEEP READING' }}</div>
+      <h2 class="gb-art-related-h">{{ section.settings.related_heading | default: 'Related articles' }}</h2>
+      <div class="gb-art-related-grid">
+        {%- for r in mf_related -%}
+          {%- liquid
+            assign rcm = r.metafields.custom
+            assign dot_color = rcm.color | default: '#15BA97'
+          -%}
+          <a href="{{ r.url }}" class="gb-art-related-card">
+            <div class="gb-art-related-cat" style="background: {{ dot_color }};">●</div>
+            <div class="gb-art-related-title">{{ r.title }}</div>
+            {%- if rcm.read_time != blank -%}<div class="gb-art-related-meta">{{ rcm.read_time }}</div>{%- endif -%}
+          </a>
+        {%- endfor -%}
+      </div>
+    </div>
+  </section>
+{%- elsif related_blocks.size > 0 -%}
+  <section class="gb-art-related">
+    <div class="gb-art-related-container">
+      <div class="gb-art-related-eyebrow">{{ section.settings.related_eyebrow | default: 'KEEP READING' }}</div>
+      <h2 class="gb-art-related-h">{{ section.settings.related_heading | default: 'Related articles' }}</h2>
+      <div class="gb-art-related-grid">
+        {%- for block in related_blocks -%}
+          {%- liquid
+            assign linked = block.settings.article
+            if linked
+              assign url = linked.url
+              assign title = linked.title
+              assign meta = linked.metafields.custom.read_time
+            else
+              assign url = block.settings.url | default: '#'
+              assign title = block.settings.title
+              assign meta = block.settings.read_time
+            endif
+            assign dot_color = block.settings.color | default: '#15BA97'
+          -%}
+          <a href="{{ url }}" class="gb-art-related-card" {{ block.shopify_attributes }}>
+            <div class="gb-art-related-cat" style="background: {{ dot_color }};">●</div>
+            <div class="gb-art-related-title">{{ title }}</div>
+            {%- if meta != blank -%}<div class="gb-art-related-meta">{{ meta }}</div>{%- endif -%}
+          </a>
+        {%- endfor -%}
+      </div>
+    </div>
+  </section>
+{%- endif -%}
+
+</div>
+
+{%- comment -%} JSON-LD: schema.org/Article for SEO rich results {%- endcomment -%}
+{%- capture article_ld -%}
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": {{ article.title | json }},
+  "description": {{ subtitle | json }},
+  {%- if article.image -%}
+  "image": [{{ article.image | image_url: width: 1200 | prepend: 'https:' | json }}],
+  {%- endif -%}
+  {%- if article.author != blank -%}
+  "author": { "@type": "Person", "name": {{ article.author | json }} },
+  {%- endif -%}
+  "publisher": {
+    "@type": "Organization",
+    "name": {{ shop.name | json }},
+    "url": {{ shop.url | json }}
+  },
+  {%- if article.published_at -%}
+  "datePublished": {{ article.published_at | date: '%Y-%m-%d' | json }},
+  {%- endif -%}
+  {%- if article.updated_at -%}
+  "dateModified": {{ article.updated_at | date: '%Y-%m-%d' | json }},
+  {%- endif -%}
+  "articleSection": {{ category_label | json }},
+  "mainEntityOfPage": {{ request.origin | append: request.path | json }}
+}
+{%- endcapture -%}
+<script type="application/ld+json">{{ article_ld | strip }}</script>
+
+{% stylesheet %}
+.gb-art {
+  --gb-art-white: #FFFFFF;
+  --gb-art-cream: #FFF9EE;
+  --gb-art-allinone: #2B2218;
+  --gb-art-text: #1F1F1D;
+  --gb-art-text-muted: #5C4D3F;
+  --gb-art-text-soft: #888780;
+  --gb-art-border: #E8E3D5;
+  --gb-art-border-soft: #F0EBDD;
+  --gb-art-ink: #1F1F1D;
+}
+.gb-art-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gb-art-color);
+  margin-bottom: 16px;
+}
+.gb-art-pill-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--gb-art-color);
+}
+.gb-art-hero { background: var(--gb-art-white); padding: 56px 0 48px; border-bottom: 1px solid var(--gb-art-border-soft); }
+.gb-art-hero-container { max-width: 760px; margin: 0 auto; padding: 0 24px; }
+.gb-art-h1 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 48px;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+  color: var(--gb-art-text);
+  margin: 0 0 18px;
+}
+.gb-art-subtitle {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 19px;
+  color: var(--gb-art-text-muted);
+  line-height: 1.55;
+  margin: 0 0 28px;
+  font-style: italic;
+}
+.gb-art-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: var(--gb-art-text-muted);
+  flex-wrap: wrap;
+}
+.gb-art-meta .gb-art-dot { color: var(--gb-art-text-soft); }
+.gb-art-author { font-weight: 700; color: var(--gb-art-text); }
+.gb-art-feature {
+  margin-top: 36px;
+  aspect-ratio: 16 / 9;
+  background: var(--gb-art-color-soft);
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+.gb-art-feature img { width: 100%; height: 100%; object-fit: cover; }
+.gb-art-emoji { font-size: 120px; color: var(--gb-art-color); }
+.gb-art-body-wrap { background: var(--gb-art-cream); padding: 64px 0 96px; border-top: 1px solid var(--gb-art-border-soft); }
+.gb-art-body-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 56px;
+  align-items: start;
+}
+.gb-art-toc {
+  position: sticky;
+  top: 96px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  border-left: 2px solid var(--gb-art-border-soft);
+  padding-left: 18px;
+}
+.gb-art-toc-h {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gb-art-text-soft);
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+.gb-art-toc ul { list-style: none; padding: 0; margin: 0; }
+.gb-art-toc li { margin-bottom: 10px; line-height: 1.4; }
+.gb-art-toc a {
+  color: var(--gb-art-text-muted);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.gb-art-toc a:hover, .gb-art-toc a.is-active { color: var(--gb-art-color); }
+.gb-art-toc a.is-active { font-weight: 700; }
+.gb-art-body { max-width: 720px; }
+.gb-art-body h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 28px;
+  letter-spacing: -0.015em;
+  color: var(--gb-art-text);
+  margin: 0 0 16px;
+  line-height: 1.2;
+  scroll-margin-top: 100px;
+}
+.gb-art-body p, .gb-art-body ul, .gb-art-body ol {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--gb-art-text);
+  margin: 0 0 16px;
+}
+.gb-art-body p strong { color: var(--gb-art-ink); font-weight: 700; }
+.gb-art-body p em { font-style: italic; }
+.gb-art-body blockquote.pull-quote, .gb-art-body .pull-quote {
+  margin: 32px 0;
+  padding: 24px 28px;
+  background: var(--gb-art-white);
+  border-left: 4px solid var(--gb-art-color);
+  border-radius: 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--gb-art-text);
+  line-height: 1.4;
+  font-style: italic;
+}
+.gb-art-sources { margin-top: 48px; padding-top: 28px; border-top: 1px solid var(--gb-art-border-soft); }
+.gb-art-sources-h {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gb-art-text-soft);
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+.gb-art-sources ol { padding-left: 20px; }
+.gb-art-sources li {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: var(--gb-art-text-muted);
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+.gb-art-end-cta { background: var(--gb-art-cream); padding: 0 0 96px; }
+.gb-art-end-container { max-width: 920px; margin: 0 auto; padding: 0 24px; }
+.gb-art-end-card {
+  background: var(--gb-art-allinone);
+  color: var(--gb-art-cream);
+  border-radius: 18px;
+  padding: 48px;
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 40px;
+  align-items: center;
+}
+.gb-art-end-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gb-art-color);
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+.gb-art-end-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 32px;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: var(--gb-art-cream);
+  margin-bottom: 14px;
+}
+.gb-art-end-desc {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  line-height: 1.55;
+  color: rgba(255, 249, 238, 0.78);
+}
+.gb-art-end-product { text-align: right; }
+.gb-art-end-name {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: rgba(255, 249, 238, 0.78);
+  margin-bottom: 4px;
+}
+.gb-art-end-price {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 36px;
+  color: var(--gb-art-color);
+  letter-spacing: -0.02em;
+  margin-bottom: 16px;
+  line-height: 1;
+}
+.gb-art-end-btn {
+  display: inline-block;
+  background: var(--gb-art-color);
+  color: var(--gb-art-cream);
+  padding: 14px 28px;
+  border-radius: 999px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background 0.15s;
+}
+.gb-art-end-btn:hover { background: var(--gb-art-color-dark); }
+.gb-art-related { background: var(--gb-art-white); padding: 80px 0; border-top: 1px solid var(--gb-art-border-soft); }
+.gb-art-related-container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+.gb-art-related-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gb-art-color);
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+.gb-art-related-h {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 28px;
+  margin: 0 0 28px;
+  letter-spacing: -0.015em;
+  color: var(--gb-art-text);
+}
+.gb-art-related-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+.gb-art-related-card {
+  display: block;
+  padding: 28px;
+  background: var(--gb-art-cream);
+  border-radius: 14px;
+  border: 1px solid var(--gb-art-border-soft);
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.gb-art-related-card:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(43,31,26,0.08); }
+.gb-art-related-cat {
+  display: inline-block;
+  width: 18px;
+  font-size: 14px;
+  margin-bottom: 12px;
+  color: transparent;
+}
+.gb-art-related-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 17px;
+  margin-bottom: 8px;
+  color: var(--gb-art-text);
+  line-height: 1.3;
+}
+.gb-art-related-meta {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--gb-art-text-soft);
+}
+@media (max-width: 768px) {
+  .gb-art-h1 { font-size: 32px; }
+  .gb-art-subtitle { font-size: 16px; }
+  .gb-art-emoji { font-size: 72px; }
+  .gb-art-body-container { grid-template-columns: 1fr; gap: 32px; }
+  .gb-art-toc { position: static; border-left: none; padding-left: 0; border-top: 1px solid var(--gb-art-border-soft); border-bottom: 1px solid var(--gb-art-border-soft); padding: 16px 0; }
+  .gb-art-end-card { grid-template-columns: 1fr; padding: 32px; }
+  .gb-art-end-product { text-align: left; }
+  .gb-art-end-title { font-size: 24px; }
+  .gb-art-end-price { font-size: 28px; }
+  .gb-art-related-grid { grid-template-columns: 1fr; }
+}
+{% endstylesheet %}
+
+<script>
+(function() {
+  var body = document.getElementById('gb-art-body-{{ section.id }}');
+  var tocList = document.getElementById('gb-art-toc-list-{{ section.id }}');
+  if (!body || !tocList) return;
+
+  var headings = body.querySelectorAll('h2');
+  if (!headings.length) {
+    document.getElementById('gb-art-toc-{{ section.id }}').style.display = 'none';
+    return;
+  }
+
+  // Auto-id any h2 missing one
+  headings.forEach(function(h, i) {
+    if (!h.id) h.id = 'sec-' + i;
+    var li = document.createElement('li');
+    var a = document.createElement('a');
+    a.href = '#' + h.id;
+    a.textContent = h.textContent;
+    a.addEventListener('click', function(e) {
+      e.preventDefault();
+      h.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    li.appendChild(a);
+    tocList.appendChild(li);
+  });
+
+  // Scroll-spy: highlight active TOC item
+  var links = tocList.querySelectorAll('a');
+  function syncActive() {
+    var scrolled = window.scrollY;
+    var active = headings[0];
+    headings.forEach(function(h) {
+      if (h.offsetTop - 120 <= scrolled) active = h;
+    });
+    links.forEach(function(l) {
+      l.classList.toggle('is-active', l.getAttribute('href') === '#' + active.id);
+    });
+  }
+  window.addEventListener('scroll', syncActive, { passive: true });
+  syncActive();
+})();
+</script>
+
+{% schema %}
+{
+  "name": "GB · Article Main",
+  "tag": "section",
+  "class": "gb-art-wrap",
+  "settings": [
+    { "type": "header", "content": "TOC" },
+    { "type": "text", "id": "toc_label", "label": "TOC heading", "default": "In This Article" },
+    { "type": "text", "id": "sources_label", "label": "Sources block heading", "default": "Sources & Further Reading" },
+
+    { "type": "header", "content": "End-of-article CTA" },
+    { "type": "text", "id": "cta_eyebrow", "label": "Eyebrow", "default": "READY TO START?" },
+    { "type": "text", "id": "cta_title", "label": "Title (leave blank to hide CTA)", "default": "Try lacto-fermentation hands-on." },
+    { "type": "textarea", "id": "cta_desc", "label": "Description", "default": "Our beginner kits come with pre-measured spice mixes, the right jar, an airlock, and a glass weight. No guessing. No failed batches." },
+    { "type": "product", "id": "cta_product", "label": "Linked product (auto-fills name/price/link)" },
+    { "type": "text", "id": "cta_product_name", "label": "Product name (override)" },
+    { "type": "text", "id": "cta_price", "label": "Price (override)" },
+    { "type": "url", "id": "cta_link", "label": "Link (override)" },
+    { "type": "text", "id": "cta_button", "label": "Button label", "default": "Shop Now →" },
+
+    { "type": "header", "content": "Related articles" },
+    { "type": "text", "id": "related_eyebrow", "label": "Eyebrow", "default": "KEEP READING" },
+    { "type": "text", "id": "related_heading", "label": "Heading", "default": "Related articles" }
+  ],
+  "blocks": [
+    {
+      "type": "source",
+      "name": "Source / reading",
+      "limit": 20,
+      "settings": [
+        { "type": "richtext", "id": "text", "label": "Citation", "default": "<p>Author. <em>Title</em>. Publisher, Year.</p>" }
+      ]
+    },
+    {
+      "type": "related",
+      "name": "Related article",
+      "limit": 4,
+      "settings": [
+        { "type": "article", "id": "article", "label": "Linked article (auto-fills)" },
+        { "type": "text", "id": "title", "label": "Title (override)" },
+        { "type": "url", "id": "url", "label": "Link (override)" },
+        { "type": "text", "id": "read_time", "label": "Read time (override)", "default": "8 min" },
+        { "type": "color", "id": "color", "label": "Category dot color", "default": "#15BA97" }
+      ]
+    }
+  ],
+  "default": {
+    "settings": {}
+  }
+}
+{% endschema %}

@@ -1,0 +1,888 @@
+/* ============================================================
+ * fermentation-kit-v3.css
+ * Stacks on top of assets/fermentation-kit.css (loaded by fkv3-hero).
+ * Contains:
+ *  1. How-to-make: desktop column-height parity (video <-> steps)
+ *  2. Airlock spotlight: 1-card full-width variant
+ *  3. Small additions used by v3 (refill bullets, myth/fact pills,
+ *     coupon copy button) — not present in the original stylesheet.
+ * ============================================================ */
+
+/* ============================================================
+ * Tweak 1 — How to Make (desktop)
+ * Video and Steps columns share a row; force equal heights.
+ * Mobile stays single-column (no change).
+ * ============================================================ */
+@media (min-width: 768px) {
+  .ferment-pdp .fkv3-how-make-section .how-make-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    align-items: stretch;
+  }
+  .ferment-pdp .fkv3-how-make-section .hm-video-hero {
+    height: 100%;
+    align-self: stretch;
+  }
+  .ferment-pdp .fkv3-how-make-section .hm-video-hero video,
+  .ferment-pdp .fkv3-how-make-section .hm-video-hero img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+  }
+  .ferment-pdp .fkv3-how-make-section .hm-steps {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 16px;
+    height: 100%;
+    align-self: stretch;
+  }
+  .ferment-pdp .fkv3-how-make-section .hm-step {
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+  }
+}
+
+/* ============================================================
+ * Tweak 2 — Airlock spotlight, 1-card variant
+ * When only one science card is present, make it full-width.
+ * Default (.ag-grid) keeps the existing 2-column layout.
+ * ============================================================ */
+.ferment-pdp .fkv3-airlock-section .ag-grid--single {
+  grid-template-columns: 1fr !important;
+  max-width: 880px;
+  margin: 0;
+}
+.ferment-pdp .fkv3-airlock-section--single .ag-grid--single .ag-card {
+  width: 100%;
+}
+@media (min-width: 768px) {
+  .ferment-pdp .fkv3-airlock-section--single .ag-grid--single .ag-card {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 32px;
+    align-items: center;
+  }
+  .ferment-pdp .fkv3-airlock-section--single .ag-grid--single .ag-image {
+    height: 100%;
+  }
+  .ferment-pdp .fkv3-airlock-section--single .ag-grid--single .ag-image img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 16px;
+  }
+}
+
+/* ============================================================
+ * v3 additions — not in the original stylesheet
+ * ============================================================ */
+
+/* Myth/fact pills overlaid on compare images */
+.ferment-pdp .compare-image { position: relative; }
+.ferment-pdp .myth-pill {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.ferment-pdp .myth-pill--myth { background: rgba(31, 31, 29, 0.85); color: #FFF6F2; }
+.ferment-pdp .myth-pill--fact { background: var(--kit-color, #FF7300); color: #fff; }
+
+/* fkv3 comparison table — flip the kit-color accent from the RIGHT
+   column (store-bought) onto the LEFT column (our product), so the
+   colored tint highlights our side, not the competitor.
+
+   Overrides the rules in fermentation-kit.css lines 268-278 + the
+   pill colors above. Scoped to [data-template="fkv3"] so the leo
+   and v1 PDPs keep the original right-tinted layout. */
+[data-template="fkv3"].myth-section .compare-labels span:first-child {
+  background: var(--kit-color-soft);
+  color: var(--kit-color-dark);
+}
+[data-template="fkv3"].myth-section .compare-labels span:last-child {
+  background: var(--gb-cream-deeper);
+  color: var(--gb-text-muted);
+}
+[data-template="fkv3"].myth-section .compare-cell.left {
+  background: var(--kit-color-soft);
+}
+[data-template="fkv3"].myth-section .compare-cell.right {
+  background: var(--kit-contrast, #FFF6F2);
+}
+[data-template="fkv3"].myth-section .compare-cell.left .h {
+  color: var(--kit-color-dark);
+}
+[data-template="fkv3"].myth-section .compare-cell.right .h {
+  color: var(--gb-text);
+}
+/* Pill colors follow suit: LEFT (myth, our product caption) gets the
+   kit-color; RIGHT (fact, criticism of competitor) goes dark. */
+[data-template="fkv3"] .myth-pill--myth { background: var(--kit-color, #FF7300); color: #fff; }
+[data-template="fkv3"] .myth-pill--fact { background: rgba(31, 31, 29, 0.85); color: #FFF6F2; }
+
+/* Mobile: lift the myth/fact pill out of the image overlay and stack
+   it above the image at smaller font so the image isn't blanketed by
+   text. The pill is the 2nd child of .compare-image in DOM order;
+   `order: -1` flips it above the <img>. */
+@media (max-width: 768px) {
+  [data-template="fkv3"] .compare-image {
+    aspect-ratio: auto;
+    background: transparent;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 8px;
+    overflow: visible;
+    border-radius: 0;
+  }
+  [data-template="fkv3"] .compare-image img {
+    aspect-ratio: 4/3;
+    height: auto;
+    border-radius: 12px;
+  }
+  [data-template="fkv3"] .myth-pill {
+    position: static;
+    order: -1;
+    align-self: stretch;
+    text-align: center;
+    font-size: 9.5px;
+    padding: 6px 10px;
+    line-height: 1.35;
+    white-space: normal;
+    word-break: break-word;
+    border-radius: 999px;
+  }
+}
+
+/* Refill note bullets */
+.ferment-pdp .irn-bullets {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0;
+}
+.ferment-pdp .irn-bullets li {
+  position: relative;
+  padding-left: 20px;
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: var(--text-muted, #5C4D3F);
+}
+.ferment-pdp .irn-bullets li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--kit-color, #FF7300);
+  font-weight: 700;
+}
+.ferment-pdp .itk-refill-note--no-image .irn-icon {
+  background: var(--kit-color-soft, #FFE4D1);
+  border-radius: 999px;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+}
+.ferment-pdp .irn-icon img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+/* Coupon code copy button */
+.ferment-pdp .coupon-bar [data-coupon-code] {
+  cursor: pointer;
+  font-family: inherit;
+  border: none;
+  background: rgba(255, 255, 255, 0.2);
+  color: inherit;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  transition: background 120ms ease;
+}
+.ferment-pdp .coupon-bar [data-coupon-code]:hover { background: rgba(255, 255, 255, 0.35); }
+.ferment-pdp .coupon-bar [data-coupon-code].is-copied { background: rgba(255, 255, 255, 0.5); }
+.ferment-pdp .coupon-bar [data-coupon-code].is-copied::after { content: ' ✓'; }
+
+/* Best-for chips inside hero accordion */
+.ferment-pdp .hero-best-for {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+.ferment-pdp .hero-best-chip {
+  display: inline-block;
+  padding: 4px 10px;
+  background: var(--kit-color-soft, #FFE4D1);
+  color: var(--kit-color-dark, #E66800);
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: 999px;
+}
+
+/* How-make help note */
+.ferment-pdp .hm-help-note {
+  margin-top: 24px;
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  color: var(--text-muted, #5C4D3F);
+  text-align: center;
+}
+
+
+/* ============================================================
+ * Tweak 4 — per-section spacing + typography controls
+ * Mirror of fermentation-kit-leo.css lines 8-71. The fkv3 snippet
+ * emits data-template="fkv3" + CSS vars on each <section> element.
+ * Compound selectors win over the base padding rules in
+ * fermentation-kit.css. Fallbacks in var() match the baseline so
+ * unset sections look identical to before.
+ * ============================================================ */
+[data-template="fkv3"] .eyebrow,
+[data-template="fkv3"] .first30-eyebrow {
+  font-size: var(--eyebrow-size-d, 22px);
+  letter-spacing: 0.10em;
+}
+[data-template="fkv3"] .section-header h2,
+[data-template="fkv3"] .myth-header h2,
+[data-template="fkv3"] .reels-header h2,
+[data-template="fkv3"] .first30-h {
+  font-size: var(--heading-size-d, 44px);
+}
+@media (max-width: 768px) {
+  [data-template="fkv3"] .eyebrow,
+  [data-template="fkv3"] .first30-eyebrow { font-size: var(--eyebrow-size-m, 14px); }
+  [data-template="fkv3"] .section-header h2,
+  [data-template="fkv3"] .myth-header h2,
+  [data-template="fkv3"] .reels-header h2,
+  [data-template="fkv3"] .first30-h { font-size: var(--heading-size-m, 30px); }
+}
+
+/* Per-section padding + margin driven by CSS vars set on each
+   <section> element via fkv3-section-attrs. Each rule's fallback
+   matches the existing pre-customisation baseline. */
+[data-template="fkv3"].pdp-hero,
+[data-template="fkv3"].fkv3-kit-switcher-section,
+[data-template="fkv3"].trust-row-section,
+[data-template="fkv3"].how-make-section,
+[data-template="fkv3"].myth-section,
+[data-template="fkv3"].outcomes-section,
+[data-template="fkv3"].reels-section,
+[data-template="fkv3"].box-section,
+[data-template="fkv3"].fkv3-airlock-section,
+[data-template="fkv3"].reviews-section,
+[data-template="fkv3"].health-timeline-section,
+[data-template="fkv3"].itk-section,
+[data-template="fkv3"].zoe-section,
+[data-template="fkv3"].eat-section,
+[data-template="fkv3"].recipes-section,
+[data-template="fkv3"].faq-section,
+[data-template="fkv3"].cross-section,
+[data-template="fkv3"].judgeme-section {
+  padding-top: var(--pad-top-d, 80px);
+  padding-bottom: var(--pad-bot-d, 80px);
+  margin-top: var(--mar-top-d, 0);
+  margin-bottom: var(--mar-bot-d, 0);
+}
+@media (max-width: 768px) {
+  [data-template="fkv3"].pdp-hero,
+  [data-template="fkv3"].fkv3-kit-switcher-section,
+  [data-template="fkv3"].trust-row-section,
+  [data-template="fkv3"].how-make-section,
+  [data-template="fkv3"].myth-section,
+  [data-template="fkv3"].outcomes-section,
+  [data-template="fkv3"].reels-section,
+  [data-template="fkv3"].box-section,
+  [data-template="fkv3"].fkv3-airlock-section,
+  [data-template="fkv3"].reviews-section,
+  [data-template="fkv3"].health-timeline-section,
+  [data-template="fkv3"].itk-section,
+  [data-template="fkv3"].zoe-section,
+  [data-template="fkv3"].eat-section,
+  [data-template="fkv3"].recipes-section,
+  [data-template="fkv3"].faq-section,
+  [data-template="fkv3"].cross-section,
+  [data-template="fkv3"].judgeme-section {
+    padding-top: var(--pad-top-m, 56px);
+    padding-bottom: var(--pad-bot-m, 56px);
+    margin-top: var(--mar-top-m, 0);
+    margin-bottom: var(--mar-bot-m, 0);
+  }
+}
+
+/* ============================================================
+ * Tweak 5 — mobile carousel left padding
+ * Horizontal-scroll card lists need first-card breathing room
+ * on mobile so the first card isn't flush to the viewport edge.
+ * ============================================================ */
+@media (max-width: 767px) {
+  .ferment-pdp .reels-grid,
+  .ferment-pdp .ht-timeline,
+  .ferment-pdp .qb-grid,
+  .ferment-pdp .reviews-grid,
+  .ferment-pdp .cross-grid {
+    padding-left: 24px;
+    padding-right: 24px;
+    box-sizing: border-box;
+  }
+  /* When a grid scrolls horizontally, ensure cards don't get clipped */
+  .ferment-pdp .reels-grid,
+  .ferment-pdp .qb-grid {
+    scroll-padding-left: 24px;
+  }
+}
+
+/* ============================================================
+ * Tweak 6 — Left-align all section headers in fkv3
+ * Default .section-header (without `.centered`) is left-aligned by
+ * the base stylesheet. .reels-header has text-align: center baked
+ * in; override here for consistency.
+ * ============================================================ */
+[data-template="fkv3"] .reels-header { text-align: left; }
+
+/* ============================================================
+ * Tweak 7 — Zoe section: keep 2×2 grid on mobile
+ * Base stylesheet collapses .zoe-grid to single-column at ≤768px;
+ * override for fkv3 so the four stat cards stay in a 2-row × 2-col
+ * layout on mobile.
+ * ============================================================ */
+@media (max-width: 768px) {
+  [data-template="fkv3"].zoe-section .zoe-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  [data-template="fkv3"].zoe-section .zoe-card {
+    padding: 16px 14px;
+    gap: 12px;
+  }
+}
+
+/* ============================================================
+ * Tweak 8 — UGC review card (fkv3, ported from leo-ugc)
+ * Portrait cards with full-bleed photo as background, cream
+ * gradient overlay at top, quote + name + meta sitting on top.
+ * Mobile: horizontal scroll-snap carousel (one card per swipe).
+ * Mirror of fermentation-kit-leo.css lines 645-685, scoped to
+ * [data-template="fkv3"].reviews-section instead of [data-leo].
+ * ============================================================ */
+[data-template="fkv3"].reviews-section .ugc-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 32px;
+}
+[data-template="fkv3"].reviews-section .ugc-card {
+  background: #DDD3C2;
+  border-radius: 18px;
+  overflow: hidden;
+  position: relative;
+  aspect-ratio: 3/4;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+[data-template="fkv3"].reviews-section .ugc-card-photo {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+[data-template="fkv3"].reviews-section .ugc-card-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center bottom;
+  display: block;
+}
+[data-template="fkv3"].reviews-section .ugc-card-photo::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(to bottom, rgba(221, 211, 194, 0.95) 0%, rgba(221, 211, 194, 0.78) 28%, rgba(221, 211, 194, 0) 50%);
+}
+[data-template="fkv3"].reviews-section .ugc-card-text {
+  position: relative;
+  z-index: 2;
+  padding: 26px 26px 0;
+}
+[data-template="fkv3"].reviews-section .ugc-card-quote {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 16.5px;
+  line-height: 1.4;
+  color: var(--gb-text, #1F1F1D);
+  letter-spacing: -0.005em;
+  margin-bottom: 20px;
+}
+[data-template="fkv3"].reviews-section .ugc-card-name {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--gb-text, #1F1F1D);
+  margin-bottom: 1px;
+}
+[data-template="fkv3"].reviews-section .ugc-card-age {
+  font-size: 12.5px;
+  color: var(--gb-text-muted, #5C4D3F);
+  margin-bottom: 18px;
+}
+[data-template="fkv3"].reviews-section .ugc-card-spacer {
+  flex: 1;
+  min-height: 60px;
+  z-index: 2;
+  position: relative;
+}
+@media (max-width: 768px) {
+  [data-template="fkv3"].reviews-section .ugc-grid {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 12px;
+    margin-right: -24px;
+    padding-right: 24px;
+  }
+  [data-template="fkv3"].reviews-section .ugc-grid::-webkit-scrollbar { display: none; }
+  [data-template="fkv3"].reviews-section .ugc-grid > .ugc-card {
+    flex: 0 0 84%;
+    scroll-snap-align: start;
+    aspect-ratio: 4/5;
+  }
+  [data-template="fkv3"].reviews-section .ugc-card-quote { font-size: 14.5px; }
+  [data-template="fkv3"].reviews-section .ugc-card-text { padding: 22px 22px 0; }
+}
+
+/* ============================================================
+ * Tweak 9 — ITK section: keep 2 columns on mobile
+ * Base stylesheet collapses .itk-grid to 1fr at ≤768px;
+ * override for fkv3 so Spice Mix + Ferment Boost stay side-by-side
+ * on mobile (a 2-card section reads better as two columns).
+ * ============================================================ */
+@media (max-width: 768px) {
+  [data-template="fkv3"].itk-section .itk-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  [data-template="fkv3"].itk-section .itk-card {
+    border-radius: 14px;
+  }
+  [data-template="fkv3"].itk-section .itk-body {
+    padding: 18px 16px;
+  }
+  [data-template="fkv3"].itk-section .itk-h {
+    font-size: 15px;
+  }
+  [data-template="fkv3"].itk-section .itk-sub {
+    font-size: 13px;
+  }
+  [data-template="fkv3"].itk-section .itk-list li {
+    font-size: 12.5px;
+  }
+}
+
+/* 3-card layout fix (applies to ALL viewports). The 2-col grid leaves
+   a 3rd card stranded in column 1 with empty space to its right. When
+   the section renders exactly 3 cards, span the 3rd across both columns
+   and flip its internal layout to horizontal (image left, text right)
+   so it reads as a balanced summary tile.
+
+   `:nth-child(3):nth-last-child(1)` matches the 3rd child ONLY when it
+   is also the last — i.e. total card count = 3. Sections with 2 or 4+
+   cards are untouched. */
+[data-template="fkv3"].itk-section .itk-card:nth-child(3):nth-last-child(1) {
+  grid-column: 1 / -1;
+  flex-direction: row;
+  align-items: stretch;
+}
+[data-template="fkv3"].itk-section .itk-card:nth-child(3):nth-last-child(1) .itk-img {
+  flex: 0 0 40%;
+  aspect-ratio: auto;
+}
+[data-template="fkv3"].itk-section .itk-card:nth-child(3):nth-last-child(1) .itk-body {
+  flex: 1;
+}
+
+/* 3-card layout fix (applies to ALL viewports). The 2-col grid leaves
+   a 3rd card stranded in column 1 with empty space to its right. When
+   the section renders exactly 3 cards, span the 3rd across both columns
+   and flip its internal layout to horizontal (image left, text right)
+   so it reads as a balanced summary tile.
+
+   `:nth-child(3):nth-last-child(1)` matches the 3rd child ONLY when it
+   is also the last — i.e. total card count = 3. Sections with 2 or 4+
+   cards are untouched. */
+[data-template="fkv3"].itk-section .itk-card:nth-child(3):nth-last-child(1) {
+  grid-column: 1 / -1;
+  flex-direction: row;
+  align-items: stretch;
+}
+[data-template="fkv3"].itk-section .itk-card:nth-child(3):nth-last-child(1) .itk-img {
+  flex: 0 0 40%;
+  aspect-ratio: auto;
+}
+[data-template="fkv3"].itk-section .itk-card:nth-child(3):nth-last-child(1) .itk-body {
+  flex: 1;
+}
+
+/* 3-card layout fix (applies to ALL viewports). The 2-col grid leaves
+   a 3rd card stranded in column 1 with empty space to its right. When
+   the section renders exactly 3 cards, span the 3rd across both columns
+   and flip its internal layout to horizontal (image left, text right)
+   so it reads as a balanced summary tile.
+
+   `:nth-child(3):nth-last-child(1)` matches the 3rd child ONLY when it
+   is also the last — i.e. total card count = 3. Sections with 2 or 4+
+   cards are untouched. */
+[data-template="fkv3"].itk-section .itk-card:nth-child(3):nth-last-child(1) {
+  grid-column: 1 / -1;
+  flex-direction: row;
+  align-items: stretch;
+}
+[data-template="fkv3"].itk-section .itk-card:nth-child(3):nth-last-child(1) .itk-img {
+  flex: 0 0 40%;
+  aspect-ratio: auto;
+}
+[data-template="fkv3"].itk-section .itk-card:nth-child(3):nth-last-child(1) .itk-body {
+  flex: 1;
+}
+
+/* ============================================================
+ * Tweak 10 — Eat (How To Enjoy) cards: 4:3 image aspect ratio
+ * + remove mobile inset
+ * Base CSS uses fixed height: 130px on .eat-img which produces
+ * different aspect ratios at different card widths. Switch to
+ * aspect-ratio: 4/3 so desktop and mobile both render the same
+ * 4:3 image proportions.
+ *
+ * Also explicitly zero any leftover padding on .eat-grid so cards
+ * sit flush with the section heading (left-aligned with the
+ * container) on mobile.
+ * ============================================================ */
+[data-template="fkv3"].eat-section .eat-img {
+  height: auto;
+  aspect-ratio: 4 / 3;
+}
+@media (max-width: 768px) {
+  [data-template="fkv3"].eat-section .eat-grid {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+/* ============================================================
+ * Tweak 11 — Airlock spotlight: mobile cards left-aligned
+ * .ag-grid was previously in Tweak 5's carousel-padding list,
+ * which added 24px L+R padding on mobile. Combined with the
+ * container's 24px padding the cards were inset 48px per side
+ * and looked floating. Tweak 5 no longer applies to .ag-grid;
+ * this rule explicitly zeros any leftover padding for fkv3 and
+ * tightens typography slightly so the two cards fit cleanly.
+ * ============================================================ */
+@media (max-width: 768px) {
+  [data-template="fkv3"].fkv3-airlock-section .ag-grid {
+    padding-left: 0;
+    padding-right: 0;
+    gap: 12px;
+  }
+  [data-template="fkv3"].fkv3-airlock-section .ag-name {
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+  [data-template="fkv3"].fkv3-airlock-section .ag-label {
+    font-size: 10px;
+    margin-bottom: 4px;
+  }
+  [data-template="fkv3"].fkv3-airlock-section .ag-text {
+    font-size: 12.5px;
+    line-height: 1.45;
+    margin-bottom: 10px;
+  }
+  [data-template="fkv3"].fkv3-airlock-section .ag-chip {
+    font-size: 11.5px;
+    padding: 6px 12px;
+  }
+}
+
+/* ============================================================
+ * Tweak 12 — Timeline carousel: align first card with heading
+ * Base mobile rule (fermentation-kit.css line 524) gives
+ * .ht-timeline `margin: 16px -18px 0; padding: 4px 18px 20px`,
+ * which makes the carousel bleed past the container — first
+ * card ends up flush to the viewport-left edge. For fkv3 we
+ * want the first card aligned with the section heading
+ * (i.e. flush with the container's content edge), while still
+ * letting the carousel extend off the right edge for natural
+ * horizontal scroll.
+ * ============================================================ */
+@media (max-width: 768px) {
+  [data-template="fkv3"].health-timeline-section .ht-timeline {
+    margin-left: 0;
+    margin-right: -24px;
+    padding-left: 0;
+    padding-right: 24px;
+  }
+}
+
+/* ============================================================
+ * Tweak 13 — FAQ list: left-align with section heading on desktop
+ * Base CSS centers .faq-list (max-width: 800px; margin: 32px auto 0).
+ * For fkv3 we want the FAQ cards to align with the heading + span
+ * the same width as content in surrounding sections.
+ * ============================================================ */
+[data-template="fkv3"].faq-section .faq-list {
+  max-width: none;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+/* ============================================================
+ * Tweak 14 — Zoe stat cards: compact layout (icon + stat on one
+ * row, heading + description below at full card width). Matches
+ * the Achaar PDP reference design — cards are noticeably shorter
+ * because the heading no longer wraps to 3 lines inside a narrow
+ * right column. Markup is:
+ *   .zoe-card > .zoe-icon + <div> > .zoe-stat + .zoe-h + .zoe-d
+ * We use display:contents on the inner wrapper so its children
+ * participate in the .zoe-card grid directly.
+ * ============================================================ */
+[data-template="fkv3"].zoe-section .zoe-card {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  column-gap: 12px;
+  row-gap: 4px;
+  padding: 18px 20px;
+}
+[data-template="fkv3"].zoe-section .zoe-card > div:not([class]) {
+  display: contents;
+}
+[data-template="fkv3"].zoe-section .zoe-card .zoe-icon {
+  grid-row: 1;
+  grid-column: 1;
+}
+[data-template="fkv3"].zoe-section .zoe-card .zoe-stat {
+  grid-row: 1;
+  grid-column: 2;
+  margin-bottom: 0;
+  font-size: 26px;
+  align-self: center;
+}
+[data-template="fkv3"].zoe-section .zoe-card .zoe-h {
+  grid-row: 2;
+  grid-column: 1 / -1;
+  margin-top: 6px;
+  margin-bottom: 2px;
+}
+[data-template="fkv3"].zoe-section .zoe-card .zoe-d {
+  grid-row: 3;
+  grid-column: 1 / -1;
+}
+@media (max-width: 768px) {
+  [data-template="fkv3"].zoe-section .zoe-card {
+    padding: 14px 14px;
+    column-gap: 10px;
+  }
+  [data-template="fkv3"].zoe-section .zoe-card .zoe-stat {
+    font-size: 22px;
+  }
+}
+
+/* ============================================================
+ * Tweak 15 — Recipe tags: compact mobile pills (2–3 per row)
+ * Base CSS uses font-size: 12px; padding: 6px 14px which on mobile
+ * pushes each pill onto its own row. Drop the type, tighten padding
+ * and gap so pills wrap 2–3 per row, and remove the extra left
+ * inset previously added by Tweak 5 (recipe-tags is a wrap row,
+ * not a carousel) so pills align flush with the section heading.
+ * ============================================================ */
+@media (max-width: 767px) {
+  [data-template="fkv3"].recipes-section .recipe-tags {
+    gap: 6px;
+    padding-left: 0;
+    padding-right: 0;
+  }
+  [data-template="fkv3"].recipes-section .recipe-tag {
+    font-size: 11px;
+    padding: 5px 10px;
+    gap: 5px;
+  }
+  [data-template="fkv3"].recipes-section .recipe-tag .dot {
+    width: 6px;
+    height: 6px;
+  }
+}
+
+/* ============================================================
+ * Cross-sell cards (fkv3) — clickable card + home-page-style ATC
+ *
+ * Two visible problems were fixed here:
+ *  - Card surface wasn't clickable. Now .cross-card-link is absolutely
+ *    positioned over the whole card, so clicking anywhere navigates
+ *    to the PDP. .cross-atc-form is lifted above it via z-index so
+ *    the ATC button still captures its own click.
+ *  - The "Add to cart" used the theme's default link styling. Now it
+ *    matches the home page (.gb-card-cta--outlined): transparent
+ *    background, ink border, pill shape, hover orange.
+ *
+ * The same stretched-link CSS exists in fermentation-kit-leo.css for
+ * the leo PDP — fkv3 doesn't load that file, hence the duplication.
+ * ============================================================ */
+[data-template="fkv3"].cross-section .cross-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+[data-template="fkv3"].cross-section .cross-card-link {
+  position: absolute; inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  text-decoration: none;
+}
+[data-template="fkv3"].cross-section .cross-card-link:focus-visible {
+  outline: 2px solid var(--kit-color);
+  outline-offset: 2px;
+}
+/* position: relative only (no z-index) — we deliberately do NOT create
+   a stacking context here, otherwise the .cross-atc-form's z-index: 2
+   would be trapped inside body's z=0 context and stay below the link
+   at z=1, breaking the ATC button click. */
+[data-template="fkv3"].cross-section .cross-card > .cross-img,
+[data-template="fkv3"].cross-section .cross-card > .cross-body { position: relative; }
+[data-template="fkv3"].cross-section .cross-card .cross-body {
+  display: flex; flex-direction: column;
+  flex: 1;
+  gap: 4px;
+}
+[data-template="fkv3"].cross-section .cross-card .cross-h,
+[data-template="fkv3"].cross-section .cross-card .cross-tagline,
+[data-template="fkv3"].cross-section .cross-card .cross-price { user-select: text; }
+[data-template="fkv3"].cross-section .cross-card .cross-price { margin-bottom: 14px; }
+[data-template="fkv3"].cross-section .cross-card .cross-atc-form {
+  position: relative;
+  z-index: 2;
+  margin-top: auto;
+}
+[data-template="fkv3"].cross-section .cross-card .cross-atc-btn {
+  display: block;
+  width: 100%;
+  padding: 11px 16px;
+  border-radius: 999px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  background: transparent;
+  border: 1.5px solid var(--gb-ink, #1F1F1D);
+  color: var(--gb-ink, #1F1F1D);
+  text-align: center;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+[data-template="fkv3"].cross-section .cross-card .cross-atc-btn:hover {
+  background: var(--gb-action, #FF7300);
+  border-color: var(--gb-action, #FF7300);
+  color: #FFFFFF;
+}
+[data-template="fkv3"].cross-section .cross-card .cross-atc-btn[disabled] { opacity: 0.7; cursor: wait; }
+
+/* Beat '[data-kit="fermentation"] a { color: inherit }' — keep the
+   stretched link visually invisible while still clickable. */
+[data-template="fkv3"] a.cross-card-link { color: transparent; }
+
+@media (max-width: 768px) {
+  [data-template="fkv3"].cross-section .cross-card .cross-atc-btn { padding: 10px 14px; font-size: 11px; }
+}
+
+/* =====================================================================
+   What's-in-the-box · split layout (desktop, > 6 components)
+   ----------------------------------------------------------------
+   When the parent product lists more than 6 components in
+   `featured_components`, the box section markup adds
+   `.box-grid--split` to the grid and inserts a third child
+   `.box-pills-bottom`. Layout:
+
+     ┌──────────────┬──────────────┐
+     │              │  1   |   2   │
+     │              ├──────┼───────┤
+     │    image     │  3   |   4   │
+     │              │      │       │
+     ├──────┬───────┴───┬──┴───────┤
+     │  5   │   6      │   7   |  8│
+     └──────┴──────────┴──────────┘
+
+   The top row stretches so the 2×2 right-side grid lines up with
+   the image height — recovers the big chunk of vertical negative
+   space that appeared next to the image when listing 7+ items.
+   Bottom row spans full width, item count driven by the
+   `--bottom-cols` custom prop set inline on the element.
+
+   Mobile (≤ 768 px) collapses to a single 2-column flow, no
+   horizontal split.
+   ===================================================================== */
+.box-grid--split {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
+  align-items: stretch;
+  gap: 24px 40px;
+}
+.box-grid--split .box-image {
+  grid-column: 1;
+  grid-row: 1;
+}
+.box-grid--split .box-pills {
+  grid-column: 2;
+  grid-row: 1;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+}
+.box-grid--split .box-pills-bottom {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  display: grid;
+  grid-template-columns: repeat(var(--bottom-cols, 4), minmax(0, 1fr));
+  gap: 10px;
+}
+.box-grid--split .box-pills .box-pill,
+.box-grid--split .box-pills-bottom .box-pill {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+@media (max-width: 768px) {
+  /* On phones / small tablets the split layout collapses back to
+     a single column of 2-up pills — same as the default box-grid
+     mobile rule in fermentation-kit.css. */
+  .box-grid--split {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 20px;
+  }
+  .box-grid--split .box-image { grid-column: 1; grid-row: 1; }
+  .box-grid--split .box-pills { grid-column: 1; grid-row: 2; grid-template-rows: auto; }
+  .box-grid--split .box-pills-bottom {
+    grid-column: 1;
+    grid-row: 3;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+}

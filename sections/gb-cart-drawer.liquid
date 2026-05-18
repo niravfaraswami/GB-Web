@@ -1,0 +1,381 @@
+{%- comment -%}
+  GB Cart Drawer — site-wide.
+  Mounted from layout/theme.liquid. Toggleable features via section settings.
+{%- endcomment -%}
+
+{%- if section.settings.enabled -%}
+
+{{ 'gb-cart-drawer.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign tiers_arr = ''
+  for i in (1..3)
+    assign thr_key   = 'tier_' | append: i | append: '_threshold'
+    assign lbl_key   = 'tier_' | append: i | append: '_label'
+    assign icn_key   = 'tier_' | append: i | append: '_icon'
+    assign typ_key   = 'tier_' | append: i | append: '_type'
+    assign var_key   = 'tier_' | append: i | append: '_variant'
+    assign code_key  = 'tier_' | append: i | append: '_code'
+
+    assign thr   = section.settings[thr_key]
+    if thr != blank and thr > 0
+      assign lbl   = section.settings[lbl_key]
+      assign icn   = section.settings[icn_key] | default: '🎁'
+      assign typ   = section.settings[typ_key] | default: 'message_only'
+      assign vobj  = section.settings[var_key]
+      assign vid   = ''
+      if vobj != blank
+        assign vid = vobj.selected_or_first_available_variant.id | default: vobj.variants.first.id
+      endif
+      assign code  = section.settings[code_key]
+      capture t_json
+        echo '{"threshold":'
+        echo thr
+        echo ',"label":'
+        echo lbl | json
+        echo ',"icon":'
+        echo icn | json
+        echo ',"type":'
+        echo typ | json
+        if vid != ''
+          echo ',"variant_id":'
+          echo vid
+        endif
+        if code != blank
+          echo ',"code":'
+          echo code | json
+        endif
+        echo '}'
+      endcapture
+      if tiers_arr == ''
+        assign tiers_arr = t_json
+      else
+        assign tiers_arr = tiers_arr | append: ',' | append: t_json
+      endif
+    endif
+  endfor
+
+  assign addon_json = ''
+  assign seen_ids = ''
+  for item in cart.items
+    assign related = item.product.metafields.custom.cart_addon_ids.value
+    if related
+      for rp in related
+        assign rid_str = rp.id | append: ','
+        unless seen_ids contains rid_str
+          assign seen_ids = seen_ids | append: rid_str
+          assign vid_a = rp.selected_or_first_available_variant.id | default: rp.variants.first.id
+          assign img_a = rp.featured_image | image_url: width: 300
+          capture a_json
+            echo '{"id":'
+            echo rp.id
+            echo ',"variant_id":'
+            echo vid_a
+            echo ',"title":'
+            echo rp.title | json
+            echo ',"price":'
+            echo rp.price
+            echo ',"image":'
+            echo img_a | json
+            echo '}'
+          endcapture
+          if addon_json == ''
+            assign addon_json = a_json
+          else
+            assign addon_json = addon_json | append: ',' | append: a_json
+          endif
+        endunless
+      endfor
+    endif
+  endfor
+
+  if section.settings.universal_addons_collection != blank
+    assign uacoll = collections[section.settings.universal_addons_collection]
+    if uacoll
+      for rp in uacoll.products limit: 6
+        assign rid_str2 = rp.id | append: ','
+        unless seen_ids contains rid_str2
+          assign seen_ids = seen_ids | append: rid_str2
+          assign vid_u = rp.selected_or_first_available_variant.id | default: rp.variants.first.id
+          assign img_u = rp.featured_image | image_url: width: 300
+          capture u_json
+            echo '{"id":'
+            echo rp.id
+            echo ',"variant_id":'
+            echo vid_u
+            echo ',"title":'
+            echo rp.title | json
+            echo ',"price":'
+            echo rp.price
+            echo ',"image":'
+            echo img_u | json
+            echo '}'
+          endcapture
+          if addon_json == ''
+            assign addon_json = u_json
+          else
+            assign addon_json = addon_json | append: ',' | append: u_json
+          endif
+        endunless
+      endfor
+    endif
+  endif
+
+  assign upsell_json = ''
+  if section.settings.show_upsell and section.settings.upsell_product != blank
+    assign up = section.settings.upsell_product
+    assign up_vid = up.selected_or_first_available_variant.id | default: up.variants.first.id
+    assign up_img = up.featured_image | image_url: width: 300
+    capture upsell_json
+      echo '{"variant_id":'
+      echo up_vid
+      echo ',"price":'
+      echo up.price
+      echo ',"title":'
+      echo up.title | json
+      echo ',"headline":'
+      echo section.settings.upsell_headline | json
+      echo ',"eyebrow":'
+      echo section.settings.upsell_eyebrow | json
+      echo ',"image":'
+      echo up_img | json
+      echo '}'
+    endcapture
+  endif
+
+  assign empty_json = ''
+  if section.settings.empty_collection != blank
+    assign ecoll2 = collections[section.settings.empty_collection]
+    if ecoll2 != blank
+      for ep in ecoll2.products limit: 3
+        if ep.available
+          assign ep_vid2 = ep.selected_or_first_available_variant.id | default: ep.variants.first.id
+          assign ep_img2 = ep.featured_image | image_url: width: 300
+          capture e_json
+            echo '{"id":'
+            echo ep.id
+            echo ',"variant_id":'
+            echo ep_vid2
+            echo ',"title":'
+            echo ep.title | json
+            echo ',"price":'
+            echo ep.price
+            echo ',"image":'
+            echo ep_img2 | json
+            echo '}'
+          endcapture
+          if empty_json == ''
+            assign empty_json = e_json
+          else
+            assign empty_json = empty_json | append: ',' | append: e_json
+          endif
+        endif
+      endfor
+    endif
+  endif
+
+  assign trust_arr = ''
+  for blk in section.blocks
+    if blk.type == 'trust' and blk.settings.text != blank
+      assign t_entry = blk.settings.text | json
+      if trust_arr == ''
+        assign trust_arr = t_entry
+      else
+        assign trust_arr = trust_arr | append: ',' | append: t_entry
+      endif
+    endif
+  endfor
+
+  assign express_arr = ''
+  for blk in section.blocks
+    if blk.type == 'express' and blk.settings.label != blank
+      assign x_entry = blk.settings.label | json
+      if express_arr == ''
+        assign express_arr = x_entry
+      else
+        assign express_arr = express_arr | append: ',' | append: x_entry
+      endif
+    endif
+  endfor
+-%}
+
+<script type="application/json" id="gb-cart-drawer-config">
+{
+  "money_format": {{ shop.money_format | json }},
+  "show_progress":  {{ section.settings.show_progress  | json }},
+  "show_addons":    {{ section.settings.show_addons    | json }},
+  "show_upsell":    {{ section.settings.show_upsell    | json }},
+  "show_discount":  {{ section.settings.show_discount  | json }},
+  "show_trust":     {{ section.settings.show_trust     | json }},
+  "show_express":   {{ section.settings.show_express   | json }},
+  "free_gift_enabled": {{ section.settings.free_gift_enabled | json }},
+  "tiers": [{{ tiers_arr }}],
+  "addon_candidates": [{{ addon_json }}],
+  "upsell": {% if upsell_json != '' %}{{ upsell_json }}{% else %}null{% endif %},
+  "empty_products": [{{ empty_json }}]
+}
+</script>
+
+<div id="gb-cart-drawer" class="cart-drawer" aria-hidden="true">
+  <div class="cart-overlay" data-gbcd-close></div>
+  <aside class="cart-panel" role="dialog" aria-modal="true" aria-labelledby="gbcd-title" aria-label="Shopping cart">
+
+    <header class="cart-head">
+      <h2 id="gbcd-title">
+        {{ section.settings.header_title | default: 'Your Basket' }}
+        <span class="count" data-gbcd-count-label></span>
+      </h2>
+      <button type="button" class="cart-close" data-gbcd-close aria-label="Close cart">
+        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <path d="M1 1 L13 13 M13 1 L1 13"/>
+        </svg>
+      </button>
+    </header>
+
+    {%- comment -%} Body is fully populated by JS renderers. {%- endcomment -%}
+    <div class="cart-body" data-gbcd-body></div>
+
+    {%- comment -%} Foot is also populated by JS — keeps subtotal / checkout flow centralized. {%- endcomment -%}
+    <footer class="cart-foot" data-gbcd-foot></footer>
+
+    {%- comment -%}
+      Admin-driven trust + express copy fed to JS renderers via JSON hints.
+      Kept inside the panel so they're scoped to the drawer.
+    {%- endcomment -%}
+    {%- if trust_arr != '' -%}
+      <script type="application/json" data-gbcd-trust-items>[{{ trust_arr }}]</script>
+    {%- endif -%}
+    {%- if express_arr != '' -%}
+      <script type="application/json" data-gbcd-express-chips>[{{ express_arr }}]</script>
+    {%- endif -%}
+
+    <div class="gbcd-sr" aria-live="polite" data-gbcd-sr></div>
+  </aside>
+</div>
+
+{%- comment -%}
+  Toast lives outside the drawer so it's always visible and not clipped by overflow.
+  v1: placeholder element only — undo-remove not wired (see PR notes).
+{%- endcomment -%}
+<div class="gbcd-toast" data-gbcd-toast>
+  <span data-gbcd-toast-text></span>
+  <button type="button" class="undo" data-gbcd-toast-undo>Undo</button>
+</div>
+
+<script src="{{ 'gb-cart-drawer.js' | asset_url }}" defer></script>
+
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "GB · Cart Drawer",
+  "tag": "section",
+  "settings": [
+    { "type": "header", "content": "Master switch" },
+    { "type": "checkbox", "id": "enabled", "label": "Enable GB cart drawer site-wide", "default": true,
+      "info": "When on, this drawer replaces the theme’s native cart drawer." },
+
+    { "type": "header", "content": "Header" },
+    { "type": "text", "id": "header_title", "label": "Drawer title", "default": "Your Cart" },
+
+    { "type": "header", "content": "Feature toggles" },
+    { "type": "checkbox", "id": "show_progress", "label": "Show progress bar / tiers", "default": true },
+    { "type": "checkbox", "id": "show_addons",   "label": "Show context-aware add-ons", "default": true },
+    { "type": "checkbox", "id": "show_upsell",   "label": "Show smart upsell card",     "default": true },
+    { "type": "checkbox", "id": "show_discount", "label": "Show discount-code input",   "default": true },
+    { "type": "checkbox", "id": "show_trust",    "label": "Show delivery / trust strip","default": true },
+    { "type": "checkbox", "id": "show_express",  "label": "Show express-checkout chips","default": true },
+    { "type": "checkbox", "id": "free_gift_enabled", "label": "Auto-add free-gift tier when unlocked", "default": false,
+      "info": "Adds the linked variant at qty 1 with _gift property. Auto-removes if subtotal drops below threshold. Requires admin-side price override (cart transform / Shopify Functions) to make it free." },
+
+    { "type": "header", "content": "Progress tier 1" },
+    { "type": "number", "id": "tier_1_threshold", "label": "Threshold (₹)", "info": "Leave blank to disable this tier" },
+    { "type": "text",   "id": "tier_1_label",     "label": "Label", "default": "Free shipping" },
+    { "type": "text",   "id": "tier_1_icon",      "label": "Icon (emoji)", "default": "🚚" },
+    { "type": "select", "id": "tier_1_type",      "label": "Reward type", "default": "free_shipping",
+      "options": [
+        { "value": "free_shipping",  "label": "Free shipping (UI only)" },
+        { "value": "free_gift",      "label": "Free gift" },
+        { "value": "discount_code",  "label": "Discount code" },
+        { "value": "message_only",   "label": "Message only" }
+      ] },
+    { "type": "product","id": "tier_1_variant",   "label": "Linked product (for free gift)" },
+    { "type": "text",   "id": "tier_1_code",      "label": "Discount code (for discount_code)" },
+
+    { "type": "header", "content": "Progress tier 2" },
+    { "type": "number", "id": "tier_2_threshold", "label": "Threshold (₹)" },
+    { "type": "text",   "id": "tier_2_label",     "label": "Label", "default": "Free recipe book" },
+    { "type": "text",   "id": "tier_2_icon",      "label": "Icon (emoji)", "default": "📖" },
+    { "type": "select", "id": "tier_2_type",      "label": "Reward type", "default": "free_gift",
+      "options": [
+        { "value": "free_shipping",  "label": "Free shipping (UI only)" },
+        { "value": "free_gift",      "label": "Free gift" },
+        { "value": "discount_code",  "label": "Discount code" },
+        { "value": "message_only",   "label": "Message only" }
+      ] },
+    { "type": "product","id": "tier_2_variant",   "label": "Linked product (for free gift)" },
+    { "type": "text",   "id": "tier_2_code",      "label": "Discount code (for discount_code)" },
+
+    { "type": "header", "content": "Progress tier 3" },
+    { "type": "number", "id": "tier_3_threshold", "label": "Threshold (₹)" },
+    { "type": "text",   "id": "tier_3_label",     "label": "Label", "default": "10% off code" },
+    { "type": "text",   "id": "tier_3_icon",      "label": "Icon (emoji)", "default": "🎁" },
+    { "type": "select", "id": "tier_3_type",      "label": "Reward type", "default": "discount_code",
+      "options": [
+        { "value": "free_shipping",  "label": "Free shipping (UI only)" },
+        { "value": "free_gift",      "label": "Free gift" },
+        { "value": "discount_code",  "label": "Discount code" },
+        { "value": "message_only",   "label": "Message only" }
+      ] },
+    { "type": "product","id": "tier_3_variant",   "label": "Linked product (for free gift)" },
+    { "type": "text",   "id": "tier_3_code",      "label": "Discount code (for discount_code)" },
+
+    { "type": "header", "content": "Context add-ons" },
+    { "type": "text", "id": "addons_title", "label": "Section title", "default": "Frequently added" },
+    { "type": "collection", "id": "universal_addons_collection", "label": "Universal add-ons collection",
+      "info": "Products in this collection are offered as add-ons in addition to per-product metafield (custom.cart_addon_ids)." },
+
+    { "type": "header", "content": "Smart upsell" },
+    { "type": "product", "id": "upsell_product", "label": "Upsell product" },
+    { "type": "text", "id": "upsell_eyebrow", "label": "Eyebrow", "default": "COMPLETE THE SET" },
+    { "type": "text", "id": "upsell_headline", "label": "Headline", "default": "Bundle savings unlocked" },
+
+    { "type": "header", "content": "Empty state" },
+    { "type": "text", "id": "empty_emoji",    "label": "Emoji", "default": "🛒" },
+    { "type": "text", "id": "empty_heading",  "label": "Heading", "default": "Your cart is empty" },
+    { "type": "text", "id": "empty_subtitle", "label": "Subtitle", "default": "Start with one of our bestsellers — small kits, big change." },
+    { "type": "text", "id": "empty_eyebrow",  "label": "Bestsellers eyebrow", "default": "Top sellers" },
+    { "type": "collection", "id": "empty_collection", "label": "Empty-state collection",
+      "info": "First 4 available products show as bestseller cards." },
+
+    { "type": "header", "content": "Footer" },
+    { "type": "text", "id": "subtotal_label", "label": "Subtotal label", "default": "Subtotal" },
+    { "type": "text", "id": "checkout_label", "label": "Checkout CTA",   "default": "Checkout · Secure" }
+  ],
+  "blocks": [
+    { "type": "trust", "name": "Trust strip item", "limit": 6,
+      "settings": [ { "type": "text", "id": "text", "label": "Text", "default": "Free shipping over ₹999" } ] },
+    { "type": "express", "name": "Express chip", "limit": 6,
+      "settings": [ { "type": "text", "id": "label", "label": "Label", "default": "UPI" } ] }
+  ],
+  "presets": [
+    {
+      "name": "GB · Cart Drawer",
+      "settings": {
+        "enabled": true,
+        "tier_1_threshold": 599,
+        "tier_2_threshold": 999,
+        "tier_3_threshold": 1499
+      },
+      "blocks": [
+        { "type": "trust",   "settings": { "text": "Free shipping over ₹999" } },
+        { "type": "trust",   "settings": { "text": "FSSAI Licensed" } },
+        { "type": "trust",   "settings": { "text": "Easy returns · 7 days" } },
+        { "type": "express", "settings": { "label": "UPI" } },
+        { "type": "express", "settings": { "label": "GPay" } },
+        { "type": "express", "settings": { "label": "COD" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,109 @@
+{{ 'sprout-maker.css' | asset_url | stylesheet_tag }}
+{{ 'sprout-maker-v2.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign p = product
+  assign mf_compare_left  = p.metafields.custom.comparison_left_image
+  assign mf_compare_right = p.metafields.custom.comparison_right_image
+  assign mf_compare_intro = p.metafields.custom.comparison_intro
+  assign mf_compare_rows  = p.metafields.custom.featured_comparison_rows.value
+  assign compare_blocks   = section.blocks | where: 'type', 'comparison_row'
+-%}
+
+{%- if mf_compare_rows != blank or compare_blocks.size > 0 -%}
+  <section class="myth-section sprout-pdp-v2" data-kit="sprouts">
+    <div class="container">
+      <div class="myth-header">
+        <div class="eyebrow">{{ section.settings.compare_eyebrow }}</div>
+        <h2>{{ section.settings.compare_heading }}<br><em>{{ section.settings.compare_heading_em }}</em></h2>
+        {%- assign compare_intro = mf_compare_intro | default: section.settings.compare_intro -%}
+        {%- if compare_intro != blank -%}
+          <p style="margin-top:18px;">{{ compare_intro }}</p>
+        {%- endif -%}
+      </div>
+      {%- assign cmp_left  = mf_compare_left  | default: section.settings.compare_left_image -%}
+      {%- assign cmp_right = mf_compare_right | default: section.settings.compare_right_image -%}
+      <div class="compare-block">
+        <div class="compare-images">
+          <div class="compare-image">
+            {%- if cmp_left != blank -%}
+              <img src="{{ cmp_left | image_url: width: 800 }}" alt="{{ section.settings.compare_left_label }}" loading="lazy" width="800" height="600">
+            {%- else -%}{{ section.settings.compare_left_emoji }}{%- endif -%}
+          </div>
+          <div class="compare-image">
+            {%- if cmp_right != blank -%}
+              <img src="{{ cmp_right | image_url: width: 800 }}" alt="{{ section.settings.compare_right_label }}" loading="lazy" width="800" height="600">
+            {%- else -%}{{ section.settings.compare_right_emoji }}{%- endif -%}
+          </div>
+        </div>
+        <div class="compare-labels">
+          <span>{{ section.settings.compare_left_label }}</span>
+          <span>{{ section.settings.compare_right_label }}</span>
+        </div>
+        <div class="compare-table">
+          {%- if mf_compare_rows != blank -%}
+            {%- for row in mf_compare_rows -%}
+              <div class="compare-row">
+                <div class="compare-cell left">
+                  <div class="h">{{ row.left_heading }}</div>
+                  <div class="s">{{ row.left_subtext }}</div>
+                </div>
+                <div class="compare-cell right">
+                  <div class="h">{{ row.right_heading }}</div>
+                  <div class="s">{{ row.right_subtext }}</div>
+                </div>
+              </div>
+            {%- endfor -%}
+          {%- else -%}
+            {%- for block in compare_blocks -%}
+              <div class="compare-row" {{ block.shopify_attributes }}>
+                <div class="compare-cell left">
+                  <div class="h">{{ block.settings.left_h }}</div>
+                  <div class="s">{{ block.settings.left_s }}</div>
+                </div>
+                <div class="compare-cell right">
+                  <div class="h">{{ block.settings.right_h }}</div>
+                  <div class="s">{{ block.settings.right_s }}</div>
+                </div>
+              </div>
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "SM v2 · Comparison",
+  "tag": "section",
+  "class": "section--sm-v2-myth",
+  "max_blocks": 12,
+  "settings": [
+    { "type": "text", "id": "compare_eyebrow", "label": "Eyebrow", "default": "WHY UPGRADE" },
+    { "type": "text", "id": "compare_heading", "label": "Heading", "default": "SPROUT MAKER" },
+    { "type": "text", "id": "compare_heading_em", "label": "Heading (highlighted)", "default": "VS TRADITIONAL CLOTH." },
+    { "type": "textarea", "id": "compare_intro", "label": "Intro paragraph" },
+    { "type": "image_picker", "id": "compare_left_image", "label": "Left image (cloth method)" },
+    { "type": "image_picker", "id": "compare_right_image", "label": "Right image (sprout maker)" },
+    { "type": "text", "id": "compare_left_emoji", "label": "Left emoji fallback", "default": "🧺" },
+    { "type": "text", "id": "compare_right_emoji", "label": "Right emoji fallback", "default": "🫙" },
+    { "type": "text", "id": "compare_left_label", "label": "Left column label", "default": "CLOTH METHOD" },
+    { "type": "text", "id": "compare_right_label", "label": "Right column label", "default": "SPROUT MAKER" }
+  ],
+  "blocks": [
+    {
+      "type": "comparison_row",
+      "name": "Comparison row",
+      "settings": [
+        { "type": "text", "id": "left_h", "label": "Left heading" },
+        { "type": "textarea", "id": "left_s", "label": "Left subtext" },
+        { "type": "text", "id": "right_h", "label": "Right heading" },
+        { "type": "textarea", "id": "right_s", "label": "Right subtext" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "SM v2 · Comparison" }]
+}
+{% endschema %}

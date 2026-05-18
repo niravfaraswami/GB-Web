@@ -1,0 +1,681 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "hero": {
+      "type": "leo-hero",
+      "blocks": {
+        "hb-1": {
+          "type": "hero_benefit",
+          "settings": {
+            "icon_emoji": "🌿",
+            "label": "100% pure acacia fiber"
+          }
+        },
+        "hb-2": {
+          "type": "hero_benefit",
+          "settings": {
+            "icon_emoji": "🥄",
+            "label": "5g soluble fiber per scoop"
+          }
+        },
+        "hb-3": {
+          "type": "hero_benefit",
+          "settings": {
+            "icon_emoji": "💧",
+            "label": "Tasteless, dissolves clear"
+          }
+        },
+        "hb-4": {
+          "type": "hero_benefit",
+          "settings": {
+            "icon_emoji": "🧪",
+            "label": "Lab-tested for purity"
+          }
+        },
+        "ha-1": {
+          "type": "hero_accordion_tab",
+          "settings": {
+            "label": "What's Inside",
+            "body": "<p>250g of pure acacia gum fiber, sourced direct from Senegal — the original prebiotic fiber gut bacteria have eaten for centuries. Each scoop (5g) feeds your gut microbiome. Tasteless, mixes into water, coffee, or smoothies without changing flavor or texture.</p><p>One bag = 50 daily servings. Most customers feel a difference in week 2.</p>",
+            "metafield_key": "",
+            "default_open": true
+          }
+        },
+        "ha-2": {
+          "type": "hero_accordion_tab",
+          "settings": {
+            "label": "How To Consume",
+            "body": "<ol><li><strong>Scoop</strong> — 1 level scoop (5g) — included in the bag</li><li><strong>Stir</strong> — Into 200ml water, coffee, or smoothie. Stir 10 seconds.</li><li><strong>Drink</strong> — Once a day. Most do morning; pick a time you'll stick with.</li></ol><p><em>First-week tip:</em> start with half a scoop and build up over 7 days to give your gut time to adjust.</p>",
+            "metafield_key": "",
+            "default_open": false
+          }
+        },
+        "ha-3": {
+          "type": "hero_accordion_tab",
+          "settings": {
+            "label": "Who It's For",
+            "body": "<ul><li>Anyone with everyday digestion issues — bloating, irregularity, sluggish gut</li><li>People who don't get enough fiber from food (most of us)</li><li>Gut-health curious folks who want a lab-grade prebiotic without weird fillers</li><li>Low-FODMAP friendly diets</li></ul><p><em>Skip if</em>: you're in an acute IBS flare, allergic to acacia, or expecting instant overnight relief.</p>",
+            "metafield_key": "",
+            "default_open": false
+          }
+        }
+      },
+      "block_order": [
+        "hb-1",
+        "hb-2",
+        "hb-3",
+        "hb-4",
+        "ha-1",
+        "ha-2",
+        "ha-3"
+      ],
+      "settings": {
+        "show_breadcrumb": true,
+        "trust_1_icon": "shopify://shop_images/icon-sparkle.svg",
+        "trust_1_text": "Lab-tested purity",
+        "trust_2_icon": "shopify://shop_images/prohibit.svg",
+        "trust_2_text": "No fillers",
+        "trust_3_icon": "shopify://shop_images/gift.svg",
+        "trust_3_text": "Free shipping over ₹499",
+        "pad_top_d": 48,
+        "pad_bot_d": 80,
+        "pad_top_m": 32,
+        "pad_bot_m": 56,
+        "mar_top_d": 0,
+        "mar_bot_d": 0,
+        "mar_top_m": 0,
+        "mar_bot_m": 0,
+        "eyebrow_size_d": 22,
+        "eyebrow_size_m": 14,
+        "heading_size_d": 44,
+        "heading_size_m": 30
+      }
+    },
+    "why-add": {
+      "type": "gb-card-grid-v2",
+      "blocks": {
+        "wc-1": {
+          "type": "card",
+          "settings": {
+            "icon_emoji": "🦠",
+            "label": "FEEDS BACTERIA",
+            "heading": "Selectively feeds the good guys",
+            "description": "Acacia fiber is fermented preferentially by Bifidobacteria and Lactobacillus — the gut bacteria you want more of."
+          }
+        },
+        "wc-2": {
+          "type": "card",
+          "settings": {
+            "icon_emoji": "💧",
+            "label": "TASTELESS",
+            "heading": "Won't change your drink",
+            "description": "No grit, no sweet aftertaste, no chalky texture. Dissolves clear within 10 seconds of stirring."
+          }
+        },
+        "wc-3": {
+          "type": "card",
+          "settings": {
+            "icon_emoji": "🚫",
+            "label": "NO FILLERS",
+            "heading": "Just acacia. Nothing else.",
+            "description": "No maltodextrin, no inulin extender, no flavoring, no sweeteners. Read the label — there's only one ingredient."
+          }
+        },
+        "wc-4": {
+          "type": "card",
+          "settings": {
+            "icon_emoji": "🧪",
+            "label": "LAB-TESTED",
+            "heading": "Source-certified purity",
+            "description": "Every batch passes a 14-point purity panel before shipping. Heavy metals, microbial counts, fiber assay — all on file."
+          }
+        }
+      },
+      "block_order": [
+        "wc-1",
+        "wc-2",
+        "wc-3",
+        "wc-4"
+      ],
+      "settings": {
+        "eyebrow": "WHY THIS FIBER",
+        "heading": "WHAT MAKES IT",
+        "heading_em": "WORK.",
+        "heading_tail": "",
+        "intro": "",
+        "columns": "4",
+        "pad_top_d": 80,
+        "pad_bot_d": 80,
+        "pad_top_m": 56,
+        "pad_bot_m": 56,
+        "mar_top_d": 0,
+        "mar_bot_d": 0,
+        "mar_top_m": 0,
+        "mar_bot_m": 0,
+        "eyebrow_size_d": 22,
+        "eyebrow_size_m": 14,
+        "heading_size_d": 44,
+        "heading_size_m": 30
+      }
+    },
+    "who": {
+      "type": "gb-who-yes-no-v2",
+      "settings": {
+        "eyebrow": "WHO IS THIS FOR",
+        "heading": "IS THIS",
+        "heading_em": "RIGHT FOR YOU?",
+        "intro": "",
+        "yes_label": "PERFECT FOR",
+        "yes_heading": "Great fit if you…",
+        "yes_bullets": "Have everyday digestion issues — bloating, irregularity, post-meal heaviness\nDon't eat 25–30g of fiber/day from food (most people don't)\nWant a tasteless prebiotic, no flavor masking required\nFollow a low-FODMAP diet (acacia is FODMAP-friendly)\nTake daily probiotics and want them to do more work",
+        "no_label": "MAYBE NOT FOR",
+        "no_heading": "Skip this if you…",
+        "no_bullets": "Are in an acute IBS / IBD flare — wait until it settles\nAre allergic to acacia (rare but real)\nExpect overnight relief — gut shifts take 1–4 weeks\nPrefer a multi-fiber blend with sweeteners and flavors\nWant something for cooking, not for daily supplementation",
+        "footer_text": "Not sure which fiber is right for you?",
+        "footer_cta_label": "Compare all fibers →",
+        "footer_cta_url": "",
+        "pad_top_d": 80,
+        "pad_bot_d": 80,
+        "pad_top_m": 56,
+        "pad_bot_m": 56,
+        "mar_top_d": 0,
+        "mar_bot_d": 0,
+        "mar_top_m": 0,
+        "mar_bot_m": 0,
+        "eyebrow_size_d": 22,
+        "eyebrow_size_m": 14,
+        "heading_size_d": 44,
+        "heading_size_m": 30
+      }
+    },
+    "diff": {
+      "type": "gb-comparison-v2",
+      "blocks": {
+        "cr-1": {
+          "type": "cmp_row",
+          "settings": {
+            "label": "Source",
+            "kit_mark": "none",
+            "kit_text": "Belgian chicory root",
+            "col2_mark": "none",
+            "col2_text": "Synthetic / unspecified",
+            "col3_mark": "none",
+            "col3_text": ""
+          }
+        },
+        "cr-2": {
+          "type": "cmp_row",
+          "settings": {
+            "label": "Fillers / excipients",
+            "kit_mark": "none",
+            "kit_text": "Zero. Just the fiber.",
+            "col2_mark": "none",
+            "col2_text": "Sweeteners, flow agents, anti-caking",
+            "col3_mark": "none",
+            "col3_text": ""
+          }
+        },
+        "cr-3": {
+          "type": "cmp_row",
+          "settings": {
+            "label": "Lab-tested",
+            "kit_mark": "none",
+            "kit_text": "Third-party COA per batch",
+            "col2_mark": "none",
+            "col2_text": "Manufacturer claim only",
+            "col3_mark": "none",
+            "col3_text": ""
+          }
+        },
+        "cr-4": {
+          "type": "cmp_row",
+          "settings": {
+            "label": "Bloating risk",
+            "kit_mark": "none",
+            "kit_text": "Predictable, single-source",
+            "col2_mark": "none",
+            "col2_text": "Often (mixed-source)",
+            "col3_mark": "none",
+            "col3_text": ""
+          }
+        },
+        "cr-5": {
+          "type": "cmp_row",
+          "settings": {
+            "label": "Cost per serving",
+            "kit_mark": "none",
+            "kit_text": "~₹15/serving · pure dose",
+            "col2_mark": "none",
+            "col2_text": "Cheap up front, fillers reduce real fiber",
+            "col3_mark": "none",
+            "col3_text": ""
+          }
+        }
+      },
+      "block_order": [
+        "cr-1",
+        "cr-2",
+        "cr-3",
+        "cr-4",
+        "cr-5"
+      ],
+      "settings": {
+        "eyebrow": "VS THE ALTERNATIVE",
+        "heading": "PURE INULIN",
+        "heading_em": "VS GENERIC FIBER MIXES.",
+        "style": "minimal",
+        "kit_position": "right",
+        "footer_text": "",
+        "footer_cta_label": "",
+        "footer_cta_url": "",
+        "col_count": "2",
+        "col_kit_label": "GUTBASKET INULIN",
+        "col_2_label": "CHEAP FIBER MIX",
+        "col_3_label": "",
+        "pad_top_d": 80,
+        "pad_bot_d": 80,
+        "pad_top_m": 56,
+        "pad_bot_m": 56,
+        "mar_top_d": 0,
+        "mar_bot_d": 0,
+        "mar_top_m": 0,
+        "mar_bot_m": 0,
+        "eyebrow_size_d": 22,
+        "eyebrow_size_m": 14,
+        "heading_size_d": 44,
+        "heading_size_m": 30
+      }
+    },
+    "consume": {
+      "type": "gb-step-cards-v2",
+      "blocks": {
+        "sc-1": {
+          "type": "step_card",
+          "settings": {
+            "icon_emoji": "🥄",
+            "heading": "Scoop",
+            "description": "One scoop (5g) into any liquid. Cold or warm both work."
+          }
+        },
+        "sc-2": {
+          "type": "step_card",
+          "settings": {
+            "icon_emoji": "🌀",
+            "heading": "Stir",
+            "description": "Stir 10 seconds. Inulin dissolves clean — no clumps, no grit."
+          }
+        },
+        "sc-3": {
+          "type": "step_card",
+          "settings": {
+            "icon_emoji": "🥤",
+            "heading": "Drink",
+            "description": "Drink with breakfast. Once a day is the standard dose."
+          }
+        }
+      },
+      "block_order": [
+        "sc-1",
+        "sc-2",
+        "sc-3"
+      ],
+      "settings": {
+        "eyebrow": "HOW TO CONSUME",
+        "heading": "SIMPLE.",
+        "heading_em": "EVERY MORNING.",
+        "intro": "",
+        "style": "minimal",
+        "tips_heading": "TIPS",
+        "tips_bullets": "Start with half a scoop for the first 3 days, then move to full scoop\nHeat-stable up to 140°C; safe in hot drinks (not boiled)\nMix into coffee, chai, smoothies, oats, soup — or just water\nSome users build to 2 scoops daily for max prebiotic effect",
+        "pad_top_d": 80,
+        "pad_bot_d": 80,
+        "pad_top_m": 56,
+        "pad_bot_m": 56,
+        "mar_top_d": 0,
+        "mar_bot_d": 0,
+        "mar_top_m": 0,
+        "mar_bot_m": 0,
+        "eyebrow_size_d": 22,
+        "eyebrow_size_m": 14,
+        "heading_size_d": 44,
+        "heading_size_m": 30
+      }
+    },
+    "timeline": {
+      "type": "gb-week-timeline-v2",
+      "blocks": {
+        "wk-1": {
+          "type": "week",
+          "settings": {
+            "day_label": "WEEK 1",
+            "heading": "Adjustment",
+            "description": "Some people feel mild bloating as gut bacteria adjust. Lean into the half-scoop ramp-up. Drink extra water."
+          }
+        },
+        "wk-2": {
+          "type": "week",
+          "settings": {
+            "day_label": "WEEK 2",
+            "heading": "Less bloating",
+            "description": "Bifidobacteria population starts shifting. Most customers report flatter stomach feeling, easier post-meal digestion."
+          }
+        },
+        "wk-3": {
+          "type": "week",
+          "settings": {
+            "day_label": "WEEK 3",
+            "heading": "Steadier energy",
+            "description": "Better gut balance = better short-chain fatty acid production. Energy holds through afternoon, less post-lunch slump."
+          }
+        },
+        "wk-4": {
+          "type": "week",
+          "settings": {
+            "day_label": "WEEK 4+",
+            "heading": "New baseline",
+            "description": "Your gut is on a new microbiome baseline. Consistency matters more than dose now — keep a daily scoop and you stay there."
+          }
+        }
+      },
+      "block_order": [
+        "wk-1",
+        "wk-2",
+        "wk-3",
+        "wk-4"
+      ],
+      "settings": {
+        "eyebrow": "WHAT TO EXPECT",
+        "heading": "YOUR FIRST",
+        "heading_em": "30 DAYS.",
+        "intro": "Daily acacia fiber rebuilds your gut microbiota slowly and predictably. Most shifts arrive on a timeline.",
+        "disclaimer": "When accompanied by a balanced diet and regular routine. Individual results vary. Reference: published research on acacia gum prebiotic effect on gut microbiota.",
+        "pad_top_d": 80,
+        "pad_bot_d": 80,
+        "pad_top_m": 56,
+        "pad_bot_m": 56,
+        "mar_top_d": 0,
+        "mar_bot_d": 0,
+        "mar_top_m": 0,
+        "mar_bot_m": 0,
+        "eyebrow_size_d": 22,
+        "eyebrow_size_m": 14,
+        "heading_size_d": 44,
+        "heading_size_m": 30
+      }
+    },
+    "product-details": {
+      "type": "gb-image-text-v2",
+      "disabled": true,
+      "settings": {
+        "eyebrow": "INSIDE THE BAG",
+        "heading": "PURE",
+        "heading_em": "ACACIA FIBER.",
+        "body": "<p>One ingredient. Sourced direct from Senegal, where acacia trees have been tapped for gum for centuries. Each batch is heavy-metal tested, microbial-tested, and assayed for fiber content before it ships.</p>",
+        "bullets": "Single-origin: Senegal, West Africa\nHarvest: hand-tapped from acacia senegal trees\nProcessing: spray-dried into fine powder, no chemicals\nLab tests: heavy metals, microbial, fiber assay\nCertifications: Halal, Vegan, Non-GMO\nServing: 5g (one included scoop) per day",
+        "cta_label": "",
+        "cta_url": "",
+        "image_position": "right",
+        "pad_top_d": 80,
+        "pad_bot_d": 80,
+        "pad_top_m": 56,
+        "pad_bot_m": 56,
+        "mar_top_d": 0,
+        "mar_bot_d": 0,
+        "mar_top_m": 0,
+        "mar_bot_m": 0,
+        "eyebrow_size_d": 22,
+        "eyebrow_size_m": 14,
+        "heading_size_d": 44,
+        "heading_size_m": 30
+      }
+    },
+    "ugc": {
+      "type": "leo-ugc",
+      "blocks": {
+        "ugc-1": {
+          "type": "ugc_review",
+          "settings": {
+            "quote": "Tried 3 fiber powders before this. The others all had a weird gritty after-taste. This one is actually invisible in coffee. Two weeks in, my bloating is way down.",
+            "name": "Meera Joshi",
+            "meta": "34 · Mumbai"
+          }
+        },
+        "ugc-2": {
+          "type": "ugc_review",
+          "settings": {
+            "quote": "Started at half scoop because I'm sensitive. By day 10 I was at full scoop with zero gas issues. Energy through afternoons is noticeably better.",
+            "name": "Arjun Singh",
+            "meta": "41 · Delhi"
+          }
+        },
+        "ugc-3": {
+          "type": "ugc_review",
+          "settings": {
+            "quote": "Low-FODMAP diet means I'm picky about what I add. Acacia is on the safe list and this brand actually delivers what it claims. Nothing weird in the ingredient list.",
+            "name": "Kavya Reddy",
+            "meta": "28 · Hyderabad"
+          }
+        }
+      },
+      "block_order": [
+        "ugc-1",
+        "ugc-2",
+        "ugc-3"
+      ],
+      "settings": {
+        "eyebrow": "REAL RESULTS",
+        "heading": "WHAT OUR",
+        "heading_em": "CUSTOMERS SAY",
+        "pad_top_d": 80,
+        "pad_bot_d": 80,
+        "pad_top_m": 56,
+        "pad_bot_m": 56,
+        "mar_top_d": 0,
+        "mar_bot_d": 0,
+        "mar_top_m": 0,
+        "mar_bot_m": 0,
+        "eyebrow_size_d": 22,
+        "eyebrow_size_m": 14,
+        "heading_size_d": 44,
+        "heading_size_m": 30
+      }
+    },
+    "journey": {
+      "type": "gb-journey-v2",
+      "blocks": {
+        "st-2": {
+          "type": "stage",
+          "settings": {
+            "stage_label": "REGULAR",
+            "product_name": "Fiber Boost Plus 500g",
+            "tag": "Multi-fiber blend",
+            "bullets": "Acacia + inulin + resistant dextrin\nWider strain feeding\n100 daily servings\nFor people 8+ weeks into daily fiber",
+            "price": "₹1,199",
+            "cta_label": "Shop →",
+            "cta_url": "#",
+            "featured": true
+          }
+        },
+        "stage_7rxiDq": {
+          "type": "stage",
+          "settings": {
+            "stage_label": "BEGINNER",
+            "product_name": "",
+            "tag": "Easy on gut",
+            "bullets": "",
+            "price": "",
+            "cta_label": "Shop →",
+            "cta_url": "",
+            "featured": false
+          }
+        },
+        "st-3": {
+          "type": "stage",
+          "settings": {
+            "stage_label": "ADVANCED",
+            "product_name": "Inulin Concentrate 500g",
+            "tag": "Higher prebiotic dose",
+            "bullets": "100% inulin from chicory root\n10g per scoop\nFor experienced fiber consumers\nNot for first-timers — ramps up gas",
+            "price": "₹999",
+            "cta_label": "Shop →",
+            "cta_url": "#",
+            "featured": false
+          }
+        }
+      },
+      "block_order": [
+        "st-2",
+        "stage_7rxiDq",
+        "st-3"
+      ],
+      "settings": {
+        "eyebrow": "FIBER JOURNEY",
+        "heading": "FROM",
+        "heading_em": "BEGINNER TO ADVANCED.",
+        "intro": "Start gentle, build up. Each stage feeds and challenges your gut a little more than the last.",
+        "pad_top_d": 80,
+        "pad_bot_d": 80,
+        "pad_top_m": 56,
+        "pad_bot_m": 56,
+        "mar_top_d": 0,
+        "mar_bot_d": 0,
+        "mar_top_m": 0,
+        "mar_bot_m": 0,
+        "eyebrow_size_d": 22,
+        "eyebrow_size_m": 14,
+        "heading_size_d": 44,
+        "heading_size_m": 30
+      }
+    },
+    "faq": {
+      "type": "leo-faq",
+      "blocks": {
+        "faq-1": {
+          "type": "faq",
+          "settings": {
+            "question": "Will it cause bloating?",
+            "answer": "<p>The first week, sometimes — your gut bacteria are adjusting. Start at half a scoop and build up over 7 days; this minimises bloating. By week 2, most people feel less bloated than before.</p>"
+          }
+        },
+        "faq-2": {
+          "type": "faq",
+          "settings": {
+            "question": "Can I take more than one scoop a day?",
+            "answer": "<p>Stick to one scoop until you've been at it for 8+ weeks. After that, some people benefit from two — talk to your doctor if you're considering doubling up.</p>"
+          }
+        },
+        "faq-3": {
+          "type": "faq",
+          "settings": {
+            "question": "Can kids take it?",
+            "answer": "<p>Children 6+ can take half a scoop daily. Under 6, check with your pediatrician first. Acacia fiber has been safely used in food for centuries.</p>"
+          }
+        },
+        "faq-4": {
+          "type": "faq",
+          "settings": {
+            "question": "Does it interact with medications?",
+            "answer": "<p>Soluble fiber can slow absorption of some medications. Take Fiber Boost at least 1 hour apart from prescription medications. If on multiple meds, ask your doctor.</p>"
+          }
+        },
+        "faq-5": {
+          "type": "faq",
+          "settings": {
+            "question": "Is it safe with probiotics?",
+            "answer": "<p>Yes — and recommended. Prebiotic fiber feeds the probiotic strains you take. Most people take fiber in the morning and probiotics with dinner, but timing isn't critical.</p>"
+          }
+        },
+        "faq-6": {
+          "type": "faq",
+          "settings": {
+            "question": "How long does one bag last?",
+            "answer": "<p>50 daily servings — about 7 weeks at one scoop a day. Subscribe-and-save customers get auto-shipped every 6 weeks to never run out.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "faq-1",
+        "faq-2",
+        "faq-3",
+        "faq-4",
+        "faq-5",
+        "faq-6"
+      ],
+      "settings": {
+        "faq_eyebrow": "QUESTIONS?",
+        "faq_heading": "COMMON",
+        "faq_heading_em": "QUESTIONS",
+        "pad_top_d": 80,
+        "pad_bot_d": 80,
+        "pad_top_m": 56,
+        "pad_bot_m": 56,
+        "mar_top_d": 0,
+        "mar_bot_d": 0,
+        "mar_top_m": 0,
+        "mar_bot_m": 0,
+        "eyebrow_size_d": 22,
+        "eyebrow_size_m": 14,
+        "heading_size_d": 44,
+        "heading_size_m": 30
+      }
+    },
+    "judgeme": {
+      "type": "leo-judgeme",
+      "settings": {
+        "judgeme_eyebrow": "ALL REVIEWS",
+        "judgeme_heading": "VERIFIED",
+        "judgeme_heading_em": "REVIEWS",
+        "judgeme_embed": "",
+        "pad_top_d": 48,
+        "pad_bot_d": 80,
+        "pad_top_m": 32,
+        "pad_bot_m": 56,
+        "mar_top_d": 0,
+        "mar_bot_d": 0,
+        "mar_top_m": 0,
+        "mar_bot_m": 0,
+        "eyebrow_size_d": 22,
+        "eyebrow_size_m": 14,
+        "heading_size_d": 44,
+        "heading_size_m": 30
+      }
+    },
+    "sticky-atc": {
+      "type": "leo-sticky-atc",
+      "settings": {
+        "sticky_show": true,
+        "cta_label": "Add to cart",
+        "name_truncate": 21,
+        "up_threshold": 30,
+        "show_delay": 750
+      }
+    },
+    "fiber-compare-modal": {
+      "type": "gb-fiber-compare-modal",
+      "settings": {}
+    }
+  },
+  "order": [
+    "hero",
+    "why-add",
+    "who",
+    "fiber-compare-modal",
+    "diff",
+    "consume",
+    "timeline",
+    "product-details",
+    "ugc",
+    "journey",
+    "faq",
+    "judgeme",
+    "sticky-atc"
+  ]
+}

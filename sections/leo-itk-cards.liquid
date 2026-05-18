@@ -1,0 +1,167 @@
+{%- comment -%}
+  Per-product kill-switch. Mirrors the hero_accordions pattern in
+  leo-hero.liquid — a custom.* metafield on the product takes
+  precedence over template defaults. When set to true the entire
+  section is skipped (chrome + markup), so products that don't have
+  a "box" / kit-pack story (e.g. sprout seeds) can opt out without
+  editing the template.
+{%- endcomment -%}
+{%- assign mf_hide_box = product.metafields.custom.hide_box_section -%}
+{%- unless mf_hide_box -%}
+{%- render 'leo_kit_chrome' -%}
+
+{%- liquid
+  assign p = product
+
+  # NEW (preferred): kit_component metaobjects, listed on the product via
+  # product.metafields.custom.featured_components.value
+  assign mf_components = p.metafields.custom.featured_components.value
+  assign has_mf_components = false
+  if mf_components and mf_components.size > 0
+    assign has_mf_components = true
+  endif
+
+  # LEGACY: kit_consumable metaobjects, listed via featured_consumables.
+  # Kept so any older product still using the old shape keeps rendering.
+  assign mf_consumables = p.metafields.custom.featured_consumables.value
+  assign has_mf_consumables = false
+  if mf_consumables and mf_consumables.size > 0
+    assign has_mf_consumables = true
+  endif
+
+  # Section-blocks fallback (theme-editor authored).
+  assign consumable_blocks = section.blocks | where: 'type', 'consumable'
+
+  # Per-product heading + subhead metafields. Mirrors how_make_h / reviews_h.
+  assign mf_box_h1 = p.metafields.custom.box_h1
+  assign mf_box_h2 = p.metafields.custom.box_h2
+  assign mf_box_intro = p.metafields.custom.box_intro
+
+  assign box_h1 = mf_box_h1 | default: section.settings.itk_heading
+  assign box_h2 = mf_box_h2 | default: section.settings.itk_heading_em
+  assign box_intro = mf_box_intro | default: section.settings.itk_intro
+-%}
+
+{%- if has_mf_components or has_mf_consumables or consumable_blocks.size > 0 -%}
+  <section class="itk-section ferment-pdp-leo leo-itk-cards-section" {%- render 'leo_kit_attrs' -%}>
+    <div class="container">
+      <div class="section-header">
+        <div class="eyebrow">{{ section.settings.itk_eyebrow }}</div>
+        {%- if box_h1 != blank or box_h2 != blank -%}
+          <h2>
+            {{ box_h1 }}
+            {%- if box_h2 != blank -%}<br><em>{{ box_h2 }}</em>{%- endif -%}
+          </h2>
+        {%- endif -%}
+        {%- if box_intro != blank -%}<p>{{ box_intro }}</p>{%- endif -%}
+      </div>
+      <div class="itk-grid">
+        {%- if has_mf_components -%}
+          {%- comment -%} New kit_component metaobject shape. {%- endcomment -%}
+          {%- for c in mf_components -%}
+            {%- assign card_img = c.icon | default: c.image -%}
+            {%- assign card_chip = c.chip | default: 'spice' -%}
+            <div class="itk-card">
+              {%- if card_img != blank -%}
+                <div class="itk-img"><img src="{{ card_img | image_url: width: 800 }}" alt="{{ c.name | escape }}" loading="lazy" width="800" height="600"></div>
+              {%- endif -%}
+              <div class="itk-body">
+                <div class="itk-h">{{ c.name }}</div>
+                {%- if c.quantity_label != blank -%}
+                  <div class="itk-sub">{{ c.quantity_label }}</div>
+                {%- endif -%}
+                {%- if c.bullets.size > 0 -%}
+                  <ul class="itk-list itk-list-{{ card_chip }}">
+                    {%- for b in c.bullets -%}{%- assign t = b | strip -%}{%- if t != blank -%}<li>{{ t }}</li>{%- endif -%}{%- endfor -%}
+                  </ul>
+                {%- endif -%}
+              </div>
+            </div>
+          {%- endfor -%}
+        {%- elsif has_mf_consumables -%}
+          {%- comment -%} Legacy kit_consumable metaobject shape — backwards-compat fallback. {%- endcomment -%}
+          {%- for c in mf_consumables -%}
+            <div class="itk-card">
+              {%- if c.image != blank -%}
+                <div class="itk-img"><img src="{{ c.image | image_url: width: 800 }}" alt="{{ c.heading | escape }}" loading="lazy" width="800" height="600"></div>
+              {%- endif -%}
+              <div class="itk-body">
+                <div class="itk-h">{{ c.heading }}</div>
+                <div class="itk-sub">{{ c.sub_heading }}</div>
+                {%- if c.ingredients.size > 0 -%}
+                  <ul class="itk-list itk-list-{{ c.category | default: 'spice' }}">
+                    {%- for ing in c.ingredients -%}<li>{{ ing }}</li>{%- endfor -%}
+                  </ul>
+                {%- endif -%}
+              </div>
+            </div>
+          {%- endfor -%}
+        {%- else -%}
+          {%- comment -%} Theme-editor section blocks — last-resort fallback. {%- endcomment -%}
+          {%- for block in consumable_blocks -%}
+            <div class="itk-card" {{ block.shopify_attributes }}>
+              {%- if block.settings.image != blank -%}
+                <div class="itk-img"><img src="{{ block.settings.image | image_url: width: 800 }}" alt="{{ block.settings.heading | escape }}" loading="lazy" width="800" height="600"></div>
+              {%- elsif block.settings.icon_emoji != blank -%}
+                <div class="itk-img itk-img--emoji"><span aria-hidden="true">{{ block.settings.icon_emoji }}</span></div>
+              {%- endif -%}
+              <div class="itk-body">
+                <div class="itk-h">{{ block.settings.heading }}</div>
+                <div class="itk-sub">{{ block.settings.sub }}</div>
+                {%- assign ingredients = block.settings.ingredients | newline_to_br | split: '<br />' -%}
+                {%- if block.settings.ingredients != blank -%}
+                  <ul class="itk-list itk-list-{{ block.settings.category | default: 'spice' }}">
+                    {%- for ing in ingredients -%}{%- if ing != blank -%}<li>{{ ing | strip }}</li>{%- endif -%}{%- endfor -%}
+                  </ul>
+                {%- endif -%}
+              </div>
+            </div>
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+    </div>
+  </section>
+{%- endif -%}
+{%- endunless -%}
+
+{% schema %}
+{
+  "name": "Leo · Ingredient cards",
+  "tag": "section",
+  "class": "leo-itk-cards-wrap",
+  "settings": [
+    { "type": "text", "id": "itk_eyebrow", "label": "Eyebrow", "default": "INSIDE THE PACK" },
+    { "type": "text", "id": "itk_heading", "label": "Heading (fallback for custom.box_h1)", "default": "SPICE MIX +" },
+    { "type": "text", "id": "itk_heading_em", "label": "Heading em (fallback for custom.box_h2)", "default": "FERMENT BOOST." },
+    { "type": "textarea", "id": "itk_intro", "label": "Intro paragraph (fallback for custom.box_intro)" },
+    { "type": "header", "content": "Spacing & Typography" },
+    { "type": "range", "id": "pad_top_d", "label": "Padding top — desktop (px)", "min": 0, "max": 200, "step": 4, "default": 80 },
+    { "type": "range", "id": "pad_bot_d", "label": "Padding bottom — desktop (px)", "min": 0, "max": 200, "step": 4, "default": 80 },
+    { "type": "range", "id": "pad_top_m", "label": "Padding top — mobile (px)", "min": 0, "max": 120, "step": 4, "default": 56 },
+    { "type": "range", "id": "pad_bot_m", "label": "Padding bottom — mobile (px)", "min": 0, "max": 120, "step": 4, "default": 56 },
+    { "type": "range", "id": "mar_top_d", "label": "Margin top — desktop (px)", "min": 0, "max": 100, "step": 4, "default": 0 },
+    { "type": "range", "id": "mar_bot_d", "label": "Margin bottom — desktop (px)", "min": 0, "max": 100, "step": 4, "default": 0 },
+    { "type": "range", "id": "mar_top_m", "label": "Margin top — mobile (px)", "min": 0, "max": 80, "step": 4, "default": 0 },
+    { "type": "range", "id": "mar_bot_m", "label": "Margin bottom — mobile (px)", "min": 0, "max": 80, "step": 4, "default": 0 },
+    { "type": "range", "id": "eyebrow_size_d", "label": "Eyebrow font size — desktop (px)", "min": 9, "max": 32, "step": 1, "default": 22 },
+    { "type": "range", "id": "eyebrow_size_m", "label": "Eyebrow font size — mobile (px)", "min": 9, "max": 24, "step": 1, "default": 14 },
+    { "type": "range", "id": "heading_size_d", "label": "Heading font size — desktop (px)", "min": 18, "max": 80, "step": 2, "default": 44 },
+    { "type": "range", "id": "heading_size_m", "label": "Heading font size — mobile (px)", "min": 16, "max": 60, "step": 2, "default": 30 }
+  ],
+  "blocks": [
+    { "type": "consumable", "name": "Consumable card", "limit": 6, "settings": [
+      { "type": "image_picker", "id": "image", "label": "Image" },
+      { "type": "text", "id": "icon_emoji", "label": "Fallback emoji (when no image)" },
+      { "type": "text", "id": "heading", "label": "Heading" },
+      { "type": "textarea", "id": "sub", "label": "Sub-heading" },
+      { "type": "textarea", "id": "ingredients", "label": "Ingredients / bullets (one per line)" },
+      { "type": "select", "id": "category", "label": "Category", "options": [
+        { "value": "spice", "label": "Spice" },
+        { "value": "boost", "label": "Boost" }
+      ], "default": "spice" }
+    ]}
+  ],
+  "presets": [ { "name": "Leo · Ingredient cards" } ],
+  "enabled_on": { "templates": ["product"] }
+}
+{% endschema %}

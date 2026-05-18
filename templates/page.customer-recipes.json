@@ -1,0 +1,81 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "gb-content-page",
+      "blocks": {
+        "hero": {
+          "type": "hero",
+          "settings": {
+            "eyebrow": "COMMUNITY · 02",
+            "title": "230+ recipes. All from people who actually cook.",
+            "subtitle": "<p>Submitted by Ferment Forum members. Tested by us. Featured here.</p>"
+          }
+        },
+        "of_week": {
+          "type": "text",
+          "settings": {
+            "layout": "right",
+            "image": "",
+            "eyebrow": "RECIPE OF THE WEEK",
+            "heading": "Beetroot tikka kanji",
+            "body": "<p>Submitted by <strong>Maya R., Bengaluru</strong>. A North-Indian-meets-South spin on classic kanji: black carrots and beetroot fermented with garam masala instead of mustard. Five days, deeply red, smoky, slightly sweet.</p><p><strong>Why it works:</strong> the warming spices (cinnamon, cardamom, clove) layer over the lactic tang to create a flavour profile closer to mulled wine than to traditional kanji. Surprising. Worth trying.</p>"
+          }
+        },
+        "browse": {
+          "type": "features",
+          "settings": {
+            "heading": "Six member recipes worth trying.",
+            "item_1_icon": "🥭",
+            "item_1_title": "Raw mango achaar (no oil)",
+            "item_1_desc": "By Archana N., Ahmedabad. The traditional Punjabi version, lacto-fermented for 5 days. 1.2K saves.",
+            "item_2_icon": "🌶️",
+            "item_2_title": "Lemon mirchi achaar",
+            "item_2_desc": "By Sumit P., Indore. Small green chillies fermented with lemon and rock salt. Hot, bright, addictive. 980 saves.",
+            "item_3_icon": "🧄",
+            "item_3_title": "Garlic-ginger paste fermented",
+            "item_3_desc": "By Neha T., Hyderabad. Common kitchen staple, lacto-fermented for shelf stability + bonus probiotics. 760 saves."
+          }
+        },
+        "leaderboard": {
+          "type": "text",
+          "settings": {
+            "eyebrow": "COOKED OF THE MONTH",
+            "heading": "May 2026 leaderboard.",
+            "body": "<p><strong>1. Beetroot tikka kanji</strong> · 47 cook reports · 4.8★ avg</p><p><strong>2. Mango-mustard achaar</strong> · 39 cook reports · 4.7★ avg</p><p><strong>3. Veg kimchi (mild)</strong> · 32 cook reports · 4.6★ avg</p><p><strong>4. Garlic-ginger paste</strong> · 28 cook reports · 4.5★ avg</p><p><strong>5. Carrot-beet kvass</strong> · 19 cook reports · 4.5★ avg</p><p>The leaderboard is based on cook-reports posted in the Ferment Forum (each report = one person actually made it and shared a photo).</p>"
+          }
+        },
+        "submit": {
+          "type": "cta",
+          "settings": {
+            "theme": "dark",
+            "eyebrow": "SUBMIT A RECIPE",
+            "title": "Three fields. We'll do the rest.",
+            "desc": "Submit your recipe with a photo. We test it, edit for clarity, and credit you. Featured recipes get a free kit.",
+            "button_label": "Submit a recipe",
+            "button_link": "/pages/submit-recipe"
+          }
+        }
+      },
+      "block_order": [
+        "hero",
+        "of_week",
+        "browse",
+        "leaderboard",
+        "submit"
+      ],
+      "settings": {}
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

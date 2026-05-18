@@ -1,0 +1,303 @@
+{%- comment -%}
+  build-your-own-kit.liquid
+  =========================================================================
+  GutBasket · Build Your Own Kit (v2) — page section
+  Template: page.byok.json → routes here.
+
+  V2 CONTENT STRATEGY (METAOBJECTS):
+  ----------------------------------------------------------------
+  Reads the singleton `build_your_own_kit` metaobject (handle:
+  byok-page). Page layout, sections, tiles, and ferment sub-options
+  are all merchant-editable via Shopify Admin → Settings → Custom
+  data → Metaobjects.
+
+  Schema:
+    build_your_own_kit (singleton)
+      page_eyebrow, page_title, page_subtitle, empty_state_copy
+      sections (list → byok_section)
+
+    byok_section
+      section_id, section_title, section_subtitle
+      grid_columns_desktop, grid_columns_mobile
+      has_sub_options, primary_tile_count
+      tiles (list → byok_tile)
+
+    byok_tile
+      product (required)
+      display_title, display_subtitle, display_image
+      tile_bg_color, kit_color_token
+      sub_options (list → byok_sub_option)
+
+    byok_sub_option
+      product (required), chip_label, chip_subtitle
+
+  RESOLVERS (fallback waterfalls):
+    title  : tile.display_title    → p.metafields.custom.short_name   → p.title
+    image  : tile.display_image    → p.featured_image
+    sub    : tile.display_subtitle → p.metafields.custom.hero_tagline
+    bg     : tile.tile_bg_color    → p.metafields.custom.theme_accent_soft
+    chip   : sub.chip_label        → sub.product.metafields.custom.short_name → sub.product.title
+
+  primary_tile_count (per section) splits tiles into a primary grid
+  (first N) plus a "+ View all" expand grid (rest). Leave blank to
+  show all tiles without an expand toggle.
+{%- endcomment -%}
+
+{{ 'byok.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'byok.js' | asset_url }}" defer></script>
+
+{%- liquid
+  assign byok = shop.metaobjects.build_your_own_kit['byok-page']
+-%}
+
+{%- if byok != blank -%}
+<div id="byok-page" class="byok">
+  <div class="page-wrap">
+
+    <header class="page-head">
+      {%- if byok.page_eyebrow != blank -%}
+        <div class="page-eyebrow">{{ byok.page_eyebrow }}</div>
+      {%- endif -%}
+      <h1 class="page-h1">{{ byok.page_title }}</h1>
+      {%- if byok.page_subtitle != blank -%}
+        <div class="page-sub">{{ byok.page_subtitle | metafield_tag }}</div>
+      {%- endif -%}
+    </header>
+
+    <div class="builder-grid">
+      <div class="builder-stack">
+
+        {%- for section in byok.sections.value -%}
+          {%- liquid
+            assign sid       = section.section_id
+            assign has_subs  = section.has_sub_options
+            assign cols_d    = section.grid_columns_desktop | default: 4
+            assign cols_m    = section.grid_columns_mobile  | default: 4
+            assign primary_n = section.primary_tile_count
+            assign all_tiles = section.tiles.value
+            assign step_num  = forloop.index
+          -%}
+
+          {%- liquid
+            assign primary_n_int = 0
+            assign extra_count = 0
+            assign has_expand = false
+            if primary_n != blank and primary_n != nil
+              assign primary_n_int = primary_n | plus: 0
+              assign extra_count = all_tiles.size | minus: primary_n_int
+              if extra_count > 0
+                assign has_expand = true
+              endif
+            else
+              assign primary_n_int = all_tiles.size
+            endif
+          -%}
+
+          <section class="bs" id="bs-{{ sid }}">
+            <div class="bs-head">
+              <span class="bs-num" aria-hidden="true">{{ step_num }}</span>
+              <div class="bs-title-block">
+                <h2 class="bs-title">{{ section.section_title }}</h2>
+                {%- if section.section_subtitle != blank -%}
+                  <p class="bs-desc">{{ section.section_subtitle }}</p>
+                {%- endif -%}
+              </div>
+            </div>
+
+            <div class="tiles" style="--cols-d:{{ cols_d }};--cols-m:{{ cols_m }};" data-group="{%- if has_subs -%}ferment{%- else -%}{{ sid }}{%- endif -%}">
+              {%- for tile in all_tiles limit: primary_n_int -%}
+                {%- liquid
+                  assign p = tile.product.value
+                  assign v = p.selected_or_first_available_variant
+                  assign t = tile.display_title | default: p.metafields.custom.short_name | default: p.title
+                  assign sub = tile.display_subtitle | default: p.metafields.custom.hero_tagline
+                  assign bg = tile.tile_bg_color | default: p.metafields.custom.theme_accent_soft | default: '#F5EDD8'
+                  assign color_token = tile.kit_color_token
+                  assign img_override = tile.display_image.value
+                  if img_override != blank
+                    assign img = img_override
+                  else
+                    assign img = p.featured_image
+                  endif
+                  assign price_money = v.price | money_without_trailing_zeros
+                  assign was_money = ''
+                  if v.compare_at_price and v.compare_at_price > v.price
+                    assign was_money = v.compare_at_price | money_without_trailing_zeros
+                  endif
+                -%}
+                {%- if p != blank -%}
+                  {%- if has_subs -%}
+                    <button type="button" class="tile" data-id="tile-ferment-{{ color_token }}" data-ferment="{{ color_token }}" data-label="{{ t | escape }}" data-section="ferment" data-color="{{ color_token }}" aria-pressed="false">
+                      <div class="tile-img" style="background:{{ bg }};">
+                        {%- if img -%}
+                          <img src="{{ img | image_url: width: 300 }}" sizes="(max-width: 600px) 25vw, 150px" loading="lazy" decoding="async" alt="{{ t | escape }}" width="300" height="300">
+                        {%- endif -%}
+                      </div>
+                      <div class="tile-body">
+                        <div class="tile-title">{{ t }}</div>
+                        {%- if sub != blank -%}
+                          <div class="tile-sub">{{ sub }}</div>
+                        {%- endif -%}
+                      </div>
+                      <span class="tile-check" aria-hidden="true">✓</span>
+                    </button>
+                  {%- else -%}
+                    <button type="button" class="tile" data-id="tile-{{ sid }}-{{ p.handle }}" data-handle="{{ p.handle }}" data-variant-id="{{ v.id }}" data-price="{{ v.price }}" data-was="{% if v.compare_at_price and v.compare_at_price > v.price %}{{ v.compare_at_price }}{% endif %}" data-label="{{ t | escape }}" data-section="{{ sid }}" aria-pressed="false">
+                      <div class="tile-img" style="background:{{ bg }};">
+                        {%- if img -%}
+                          <img src="{{ img | image_url: width: 300 }}" srcset="{{ img | image_url: width: 200 }} 200w, {{ img | image_url: width: 300 }} 300w, {{ img | image_url: width: 400 }} 400w" sizes="(max-width: 600px) 25vw, 150px" loading="lazy" decoding="async" alt="{{ t | escape }}" width="300" height="300">
+                        {%- endif -%}
+                      </div>
+                      <div class="tile-body">
+                        <div class="tile-title">{{ t }}</div>
+                        <div class="tile-price">
+                          {{ price_money }}
+                        </div>
+                      </div>
+                      <span class="tile-check" aria-hidden="true">✓</span>
+                    </button>
+                  {%- endif -%}
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+
+            {%- if has_expand -%}
+              <button type="button" class="more-toggle" data-more="{{ sid }}" aria-expanded="false">+ View all</button>
+              <div class="more-content" data-more-content="{{ sid }}">
+                <div class="tiles" style="--cols-d:{{ cols_d }};--cols-m:{{ cols_m }};" data-group="{{ sid }}">
+                  {%- for tile in all_tiles offset: primary_n_int -%}
+                    {%- liquid
+                      assign p = tile.product.value
+                      assign v = p.selected_or_first_available_variant
+                      assign t = tile.display_title | default: p.metafields.custom.short_name | default: p.title
+                      assign bg = tile.tile_bg_color | default: p.metafields.custom.theme_accent_soft | default: '#F5EDD8'
+                      assign img_override = tile.display_image.value
+                      if img_override != blank
+                        assign img = img_override
+                      else
+                        assign img = p.featured_image
+                      endif
+                      assign price_money = v.price | money_without_trailing_zeros
+                      assign was_money = ''
+                      if v.compare_at_price and v.compare_at_price > v.price
+                        assign was_money = v.compare_at_price | money_without_trailing_zeros
+                      endif
+                    -%}
+                    {%- if p != blank -%}
+                      <button type="button" class="tile" data-id="tile-{{ sid }}-{{ p.handle }}" data-handle="{{ p.handle }}" data-variant-id="{{ v.id }}" data-price="{{ v.price }}" data-was="{% if v.compare_at_price and v.compare_at_price > v.price %}{{ v.compare_at_price }}{% endif %}" data-label="{{ t | escape }}" data-section="{{ sid }}" aria-pressed="false">
+                        <div class="tile-img" style="background:{{ bg }};">
+                          {%- if img -%}
+                            <img src="{{ img | image_url: width: 300 }}" srcset="{{ img | image_url: width: 200 }} 200w, {{ img | image_url: width: 300 }} 300w, {{ img | image_url: width: 400 }} 400w" sizes="(max-width: 600px) 25vw, 150px" loading="lazy" decoding="async" alt="{{ t | escape }}" width="300" height="300">
+                          {%- endif -%}
+                        </div>
+                        <div class="tile-body">
+                          <div class="tile-title">{{ t }}</div>
+                          <div class="tile-price">
+                            {{ price_money }}
+                          </div>
+                        </div>
+                        <span class="tile-check" aria-hidden="true">✓</span>
+                      </button>
+                    {%- endif -%}
+                  {%- endfor -%}
+                </div>
+              </div>
+            {%- endif -%}
+
+            {%- if has_subs -%}
+              <div class="selected-ferments" id="selected-ferments"></div>
+            {%- endif -%}
+
+            {%- if sid == 'tools' -%}
+              <div class="context-hint" id="hint-veg">
+                Glass weight added — your kit can now ferment vegetables too (sauerkraut, kimchi, achaar).
+              </div>
+            {%- endif -%}
+          </section>
+        {%- endfor -%}
+
+        <div class="reset-row">
+          <button type="button" class="reset-btn" id="reset-btn">↻ Start over</button>
+        </div>
+
+      </div>{%- comment -%} /builder-stack {%- endcomment -%}
+
+      {% render 'byok-bundle-sidebar' %}
+
+    </div>{%- comment -%} /builder-grid {%- endcomment -%}
+  </div>{%- comment -%} /page-wrap {%- endcomment -%}
+
+  {% render 'byok-mobile-bar' %}
+
+  {%- comment -%}
+    Ferment sub-option data — emitted server-side so JS knows variant IDs,
+    labels, prices, and compare-at prices for each chip. Built from the
+    ferment section's tiles → sub_options metaobject references.
+  {%- endcomment -%}
+  <script type="application/json" id="byok-data">
+    {
+      "ferments": {
+        {%- assign ferment_section = null -%}
+        {%- for s in byok.sections.value -%}
+          {%- if s.has_sub_options -%}{%- assign ferment_section = s -%}{%- endif -%}
+        {%- endfor -%}
+        {%- if ferment_section != null -%}
+          {%- assign ferment_tiles = ferment_section.tiles.value -%}
+          {%- for tile in ferment_tiles -%}
+            {%- assign fkey = tile.kit_color_token -%}
+            {%- assign fname = tile.display_title | default: tile.product.value.metafields.custom.short_name | default: tile.product.value.title -%}
+            "{{ fkey }}": {
+              "name": {{ fname | json }},
+              "color": "{{ fkey }}",
+              "chips": [
+                {%- assign chip_index = 0 -%}
+                {%- for sub in tile.sub_options.value -%}
+                  {%- assign subp = sub.product.value -%}
+                  {%- if subp != blank -%}
+                    {%- assign chip_index = chip_index | plus: 1 -%}
+                    {%- assign chip_label = sub.chip_label | default: subp.metafields.custom.short_name | default: subp.title -%}
+                    {%- assign chipv = subp.selected_or_first_available_variant -%}
+                    {%- if chip_index > 1 -%},{%- endif -%}
+                    {
+                      "id": "{{ fkey }}-{{ chip_index }}",
+                      "label": {{ chip_label | json }},
+                      "handle": {{ subp.handle | json }},
+                      "variantId": {{ chipv.id }},
+                      "price": {{ chipv.price }},
+                      "was": {% if chipv.compare_at_price %}{{ chipv.compare_at_price }}{% else %}null{% endif %}
+                    }
+                  {%- endif -%}
+                {%- endfor -%}
+              ]
+            }{%- unless forloop.last -%},{%- endunless -%}
+          {%- endfor -%}
+        {%- endif -%}
+      },
+      "currency": "{{ shop.currency }}",
+      "moneyFormat": {{ shop.money_format | json }},
+      "freeShippingThreshold": 30000,
+      "emptyStateCopy": {{ byok.empty_state_copy | default: 'Add at least one item to continue.' | json }}
+    }
+  </script>
+
+  <noscript>
+    <p style="padding:24px;color:#5C4D3F;font-family:system-ui,sans-serif;">
+      This page needs JavaScript to build a kit. Browse individual products via our collections instead.
+    </p>
+  </noscript>
+</div>
+{%- else -%}
+  <div style="padding:40px;text-align:center;font-family:system-ui,sans-serif;color:#5C4D3F;">
+    <p>The Build Your Own Kit page is being set up. Please check back soon.</p>
+    <p style="font-size:12px;color:#999;">Admin: configure the <code>build_your_own_kit</code> metaobject with handle <code>byok-page</code>.</p>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Build Your Own Kit (v2)",
+  "tag": "section",
+  "settings": [],
+  "enabled_on": { "templates": ["page"] }
+}
+{% endschema %}

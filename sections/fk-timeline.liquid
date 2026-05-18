@@ -1,0 +1,53 @@
+{%- liquid
+  assign p = product
+  assign mf_timeline = p.metafields.custom.featured_timeline_steps.value
+  assign mf_timeline_eyebrow = p.metafields.custom.timeline_eyebrow
+  assign mf_timeline_h = p.metafields.custom.timeline_h
+  assign mf_timeline_subtitle = p.metafields.custom.timeline_subtitle
+-%}
+{%- if section.settings.show_section -%}
+  {%- if mf_timeline == blank or mf_timeline.size == 0 -%}
+    {%- comment -%} No timeline — hide section {%- endcomment -%}
+  {%- else -%}
+    <section class="fk-page ferment-pdp fk-timeline-section health-timeline-section" style="background:{{ section.settings.section_bg }}">
+      {%- render 'fk-color-cascade' -%}
+      <div class="container">
+        <div class="section-header">
+          <div class="eyebrow">{{ mf_timeline_eyebrow | default: section.settings.timeline_eyebrow | default: 'WHAT TO EXPECT' }}</div>
+          {%- if mf_timeline_h != blank -%}
+            <h2>{{ mf_timeline_h }}</h2>
+          {%- else -%}
+            <h2>{{ section.settings.timeline_heading | default: "YOUR GUT'S" }}<br><em>{{ section.settings.timeline_heading_em | default: 'FIRST 30 DAYS.' }}</em></h2>
+          {%- endif -%}
+          {%- if mf_timeline_subtitle != blank -%}<p class="ht-sub">{{ mf_timeline_subtitle }}</p>{%- endif -%}
+        </div>
+        <div class="ht-timeline">
+          {%- for t in mf_timeline -%}
+            <div class="ht-card">
+              <span class="ht-day">{{ t.period_label }}</span>
+              <div class="ht-h">{{ t.heading }}</div>
+              <div class="ht-d">{{ t.description }}</div>
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "FK — Timeline",
+  "tag": "section",
+  "class": "fk-timeline-section",
+  "settings": [
+    { "type": "checkbox", "id": "show_section", "label": "Show section", "default": true },
+    { "type": "color", "id": "section_bg", "label": "Section background", "default": "#ffffff" },
+    { "type": "text", "id": "timeline_eyebrow", "label": "Eyebrow fallback", "default": "WHAT TO EXPECT" },
+    { "type": "text", "id": "timeline_heading", "label": "Heading fallback", "default": "YOUR GUT'S" },
+    { "type": "text", "id": "timeline_heading_em", "label": "Heading (em) fallback", "default": "FIRST 30 DAYS." }
+  ],
+  "presets": [ { "name": "FK — Timeline" } ],
+  "enabled_on": { "templates": ["product"] }
+}
+{% endschema %}

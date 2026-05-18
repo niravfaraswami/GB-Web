@@ -1,0 +1,523 @@
+{{ 'gb-header.css' | asset_url | stylesheet_tag }}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<header class="gb-site-header">
+  <div class="header-inner">
+    <button class="mobile-menu-toggle" aria-label="Open menu" id="mobile-menu-toggle" type="button">
+      <svg viewBox="0 0 24 24" fill="none" width="20" height="20" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+
+    <a href="{{ routes.root_url }}" class="logo" aria-label="{{ shop.name }}">
+      {%- if section.settings.logo != blank -%}
+        {{ section.settings.logo | image_url: width: 320 | image_tag: alt: shop.name, width: 160, height: 32, class: 'gb-logo-img', loading: 'eager' }}
+      {%- else -%}
+        <span class="gb-logo-text">{{ shop.name }}</span>
+      {%- endif -%}
+    </a>
+
+    <nav class="primary-nav" aria-label="Primary">
+      <div class="nav-item">
+        <button class="nav-trigger" data-trigger="shop" aria-expanded="false" aria-haspopup="true">Shop
+          <svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+      <div class="nav-item">
+        <button class="nav-trigger" data-trigger="learn" aria-expanded="false" aria-haspopup="true">Learn
+          <svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+      <div class="nav-item">
+        <button class="nav-trigger" data-trigger="recipes" aria-expanded="false" aria-haspopup="true">Recipes
+          <svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+      <div class="nav-item">
+        <button class="nav-trigger" data-trigger="about" aria-expanded="false" aria-haspopup="true">About
+          <svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </nav>
+
+    <div class="header-actions">
+      <a class="header-action" href="{{ routes.search_url }}" aria-label="Search">⌕</a>
+      <a class="header-action" href="{{ routes.account_url }}" aria-label="Account">◯</a>
+      <a class="header-action" href="{{ routes.cart_url }}" aria-label="Cart">⊟<span class="cart-count" data-cart-count>{{ cart.item_count }}</span></a>
+    </div>
+  </div>
+
+  {%- comment -%} ============== SHOP MEGA MENU ============== {%- endcomment -%}
+  <div class="mega-menu" data-menu="shop">
+    <div class="mm-inner">
+      <div class="mm-grid-shop">
+        <div class="mm-col">
+          <h4><span class="dot" style="background: #FF7300;"></span>FERMENT KITS</h4>
+          <ul>
+            <li><a href="/products/probiotic-achaar-making-kit">Probiotic Achaar Kit {% render 'gb-menu-badge', handle: 'probiotic-achaar-making-kit' %}</a></li>
+            <li><a href="/products/kanji-making-kit">Kanji Making Kit {% render 'gb-menu-badge', handle: 'kanji-making-kit' %}</a></li>
+            <li><a href="/products/probiotic-drink-making-kit">Aam Panna Kit {% render 'gb-menu-badge', handle: 'probiotic-drink-making-kit' %}</a></li>
+            <li><a href="/products/kimchi-making-kit">Kimchi Making Kit {% render 'gb-menu-badge', handle: 'kimchi-making-kit' %}</a></li>
+            <li><a href="/products/vegetable-fermentation-kit-with-glass-weights">Vegetable Fermentation Kit {% render 'gb-menu-badge', handle: 'vegetable-fermentation-kit-with-glass-weights' %}</a></li>
+            <li><a href="/products/ultimate-fermentation-kit">All-in-One Kit {% render 'gb-menu-badge', handle: 'ultimate-fermentation-kit' %}</a></li>
+            <li><a href="/pages/build-your-own-kit">Build Your Own Kit <span class="badge custom">CUSTOM</span></a></li>
+          </ul>
+          <div class="mm-cta"><a href="/collections/fermentation-kits">View all 6 kits →</a></div>
+        </div>
+
+        <div class="mm-col">
+          <h4><span class="dot" style="background: #8B1F40;"></span>REFILLS &amp; SPICE MIX</h4>
+          <ul>
+            <li><a href="/products/achaar-making-supplies-6-batch-refill-pack">Achaar Spice Mix Refill {% render 'gb-menu-badge', handle: 'achaar-making-supplies-6-batch-refill-pack' %}</a></li>
+            <li><a href="/products/kanji-spice-mix-traditional-blend-for-probiotic-drinks-pack-of-5">Kanji Spice Mix Refill {% render 'gb-menu-badge', handle: 'kanji-spice-mix-traditional-blend-for-probiotic-drinks-pack-of-5' %}</a></li>
+            <li><a href="/products/ferment-spice-mix-pack-of-5">Aam Panna Spice Refill {% render 'gb-menu-badge', handle: 'ferment-spice-mix-pack-of-5' %}</a></li>
+            <li><a href="/products/kimchi-making-paste">Kimchi Paste Refill {% render 'gb-menu-badge', handle: 'kimchi-making-paste' %}</a></li>
+          </ul>
+          <div class="mm-cta"><a href="/collections/spice-mix-supplies">All refills →</a></div>
+          <h4 style="margin-top: 20px;"><span class="dot" style="background: #3F7754;"></span>SPROUT KITS</h4>
+          <ul>
+            <li><a href="/products/sprout-making-jar">Sprout Maker — 700 ml {% render 'gb-menu-badge', handle: 'sprout-making-jar' %}</a></li>
+            <li><a href="/products/sprout-maker-1-l">Sprout Maker — 1 L {% render 'gb-menu-badge', handle: 'sprout-maker-1-l' %}</a></li>
+          </ul>
+          <div class="mm-cta"><a href="/collections/sprouts-1">All sprout kits →</a></div>
+        </div>
+
+        <div class="mm-col">
+          <h4><span class="dot" style="background: #15BA97;"></span>PREBIOTICS &amp; SUPERFOOD</h4>
+          <ul>
+            <li><a href="/products/inulin-powder">Inulin Prebiotic Fiber {% render 'gb-menu-badge', handle: 'inulin-powder' %}</a></li>
+            <li><a href="/products/ferment-boost-prebiotic-blend-to-enhance-kanji-and-other-ferments">Ferment Boost {% render 'gb-menu-badge', handle: 'ferment-boost-prebiotic-blend-to-enhance-kanji-and-other-ferments' %}</a></li>
+            <li><a href="/products/acacia-powder">Acacia Fiber {% render 'gb-menu-badge', handle: 'acacia-powder' %}</a></li>
+            <li><a href="/products/gutbasket-fiber-blend-prebiotic-rich-superfood-mix">Fiber Boost · Daily Blend {% render 'gb-menu-badge', handle: 'gutbasket-fiber-blend-prebiotic-rich-superfood-mix' %}</a></li>
+            <li><a href="/products/organic-moringa-powder-superfood-for-energy-and-immunity">Moringa Powder {% render 'gb-menu-badge', handle: 'organic-moringa-powder-superfood-for-energy-and-immunity' %}</a></li>
+            <li><a href="/products/gond-katira-tragacanth-gum-200g-natural-body-coolant-supports-digestion-gut-health-rich-in-soluble-fiber-ideal-for-summer-drinks-desserts">Katira Gond Powder {% render 'gb-menu-badge', handle: 'gond-katira-tragacanth-gum-200g-natural-body-coolant-supports-digestion-gut-health-rich-in-soluble-fiber-ideal-for-summer-drinks-desserts' %}</a></li>
+            <li><a href="/products/nutritional-yeast-flakes">Nutritional Yeast Flakes {% render 'gb-menu-badge', handle: 'nutritional-yeast-flakes' %}</a></li>
+          </ul>
+          <div class="mm-cta"><a href="/collections/prebiotic">All powders →</a></div>
+        </div>
+
+        <div class="mm-col">
+          <h4><span class="dot" style="background: #E8C966;"></span>CULTURES <span class="badge new" style="vertical-align: middle;">NEW</span></h4>
+          <ul>
+            <li><a href="/products/water-kefir-grains">Water Kefir Grains {% render 'gb-menu-badge', handle: 'water-kefir-grains' %}</a></li>
+            <li><a href="/products/a-coconut-kefir-grains">Coconut Water Kefir Grains {% render 'gb-menu-badge', handle: 'a-coconut-kefir-grains' %}</a></li>
+            <li><a href="/products/a-milk-kefir-grains-standard">Milk Kefir Grains {% render 'gb-menu-badge', handle: 'a-milk-kefir-grains-standard' %}</a></li>
+            <li><a href="/products/a-milk-kefir-grains-premium">A2 Milk Kefir Grains {% render 'gb-menu-badge', handle: 'a-milk-kefir-grains-premium' %}</a></li>
+          </ul>
+          <div class="mm-cta"><a href="/collections/cultures">All cultures →</a></div>
+          <h4 style="margin-top: 20px;"><span class="dot" style="background: #1F4332;"></span>BAKING</h4>
+          <ul>
+            <li><a href="/products/instant-dry-yeast-for-baking-120g">Instant Dry Yeast {% render 'gb-menu-badge', handle: 'instant-dry-yeast-for-baking-120g' %}</a></li>
+            <li><a href="/products/bread-improver-100g">Bread Improver {% render 'gb-menu-badge', handle: 'bread-improver-100g' %}</a></li>
+            <li><a href="/products/vital-wheat-gluten-500g">Vital Wheat Gluten {% render 'gb-menu-badge', handle: 'vital-wheat-gluten-500g' %}</a></li>
+            <li><a href="/products/baking-supplies-combo-pack-of-5">Baking Supplies Combo {% render 'gb-menu-badge', handle: 'baking-supplies-combo-pack-of-5' %}</a></li>
+          </ul>
+          <div class="mm-cta"><a href="/collections/baking">All baking →</a></div>
+        </div>
+
+        <div class="mm-col">
+          <h4><span class="dot" style="background: #4F7C57;"></span>JARS &amp; TOOLS</h4>
+          <ul>
+            <li><a href="/products/fermentation-jar-wide-mouth-2-litre">Fermenter Jar — 2L {% render 'gb-menu-badge', handle: 'fermentation-jar-wide-mouth-2-litre' %}</a></li>
+            <li><a href="/products/a-fermentation-jars">Fermenter Jar — 1L {% render 'gb-menu-badge', handle: 'a-fermentation-jars' %}</a></li>
+            <li><a href="/products/a-airlock">Airlock Set {% render 'gb-menu-badge', handle: 'a-airlock' %}</a></li>
+            <li><a href="/products/a-glass-weight">Glass Fermentation Weight {% render 'gb-menu-badge', handle: 'a-glass-weight' %}</a></li>
+          </ul>
+          <div class="mm-cta"><a href="/collections/jars-and-tools">All jars &amp; tools →</a></div>
+          <h4 style="margin-top: 20px;"><span class="dot" style="background: #FF7300;"></span>RECIPE BOOKS</h4>
+          <ul>
+            <li><a href="/products/probiotic-achaar-recipe-book">The Achaar Recipe Book {% render 'gb-menu-badge', handle: 'probiotic-achaar-recipe-book' %}</a></li>
+            <li><a href="/products/kanji-recipe-book">The Kanji Recipe Book {% render 'gb-menu-badge', handle: 'kanji-recipe-book' %}</a></li>
+            <li><a href="/products/probiotic-drinks-recipe-book">The Probiotic Drinks Book {% render 'gb-menu-badge', handle: 'probiotic-drinks-recipe-book' %}</a></li>
+          </ul>
+          <div class="mm-cta"><a href="/collections/recipe-book">All recipe books →</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%} ============== LEARN MEGA MENU ============== {%- endcomment -%}
+  <div class="mega-menu" data-menu="learn">
+    <div class="mm-inner">
+      <div class="mm-grid-3">
+        <div class="mm-col">
+          <h4><span class="dot" style="background: #FF7300;"></span>FERMENTATION 101</h4>
+          <ul>
+            <li><a href="/blogs/learn/what-is-lacto-fermentation-the-complete-beginners-guide">What is lacto-fermentation?</a></li>
+            <li><a href="/blogs/learn/probiotic-vs-preserved">Probiotic vs preserved</a></li>
+            <li><a href="/blogs/learn/the-5-fermentation-rules">The 5 fermentation rules</a></li>
+            <li><a href="/blogs/learn/salt-and-brine-ratios">Salt &amp; brine ratios</a></li>
+            <li><a href="/blogs/learn/reading-your-jar-signs-of-success">Reading your jar (signs of success)</a></li>
+          </ul>
+          <div class="mm-cta"><a href="/blogs/learn">Open the full beginner guide →</a></div>
+        </div>
+        <div class="mm-col">
+          <h4><span class="dot" style="background: #15BA97;"></span>GUT HEALTH SCIENCE</h4>
+          <ul>
+            <li><a href="/blogs/learn/the-microbiome-explained">The microbiome explained</a></li>
+            <li><a href="/blogs/learn/prebiotics-vs-probiotics">Prebiotics vs probiotics</a></li>
+            <li><a href="/blogs/learn/scfas-and-why-they-matter">SCFAs and why they matter</a></li>
+            <li><a href="/blogs/learn/fiber-gap-the-indian-problem">Fiber gap: the Indian problem</a></li>
+            <li><a href="/blogs/learn/gut-brain-axis">Gut-brain axis</a></li>
+          </ul>
+          <div class="mm-cta"><a href="/blogs/learn">21-day gut reset protocol →</a></div>
+        </div>
+        <div class="mm-col">
+          <h4><span class="dot" style="background: #C24528;"></span>TROUBLESHOOTING</h4>
+          <ul>
+            <li><a href="/blogs/learn/mould-on-my-ferment-what-now">Mould on my ferment — what now?</a></li>
+            <li><a href="/blogs/learn/not-bubbling-on-day-2">Not bubbling on day 2</a></li>
+            <li><a href="/blogs/learn/too-sour-too-soon">Too sour, too soon</a></li>
+            <li><a href="/blogs/learn/cloudy-brine-ok-or-not">Cloudy brine: ok or not?</a></li>
+            <li><a href="/blogs/learn/storage-after-fermentation">Storage after fermentation</a></li>
+          </ul>
+          <div class="mm-cta"><a href="/blogs/learn">Bad ferment recovery guide →</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%} ============== RECIPES MEGA MENU ============== {%- endcomment -%}
+  <div class="mega-menu" data-menu="recipes">
+    <div class="mm-inner">
+      <div class="mm-grid-3">
+        <div class="mm-col">
+          <h4>FERMENTS</h4>
+          <ul>
+            <li><a href="#">Raw Mango Achaar (mild)</a></li>
+            <li><a href="#">Raw Mango Achaar (spicy)</a></li>
+            <li><a href="#">Black Carrot Kanji</a></li>
+            <li><a href="#">Beetroot Kanji</a></li>
+            <li><a href="#">Aam Panna Concentrate</a></li>
+            <li><a href="#">Classic Napa Kimchi</a></li>
+            <li><a href="#">Sauerkraut</a></li>
+            <li><a href="#">Garlic Achaar</a></li>
+          </ul>
+        </div>
+        <div class="mm-col">
+          <h4>DRINKS</h4>
+          <ul>
+            <li><a href="#">Gut-Reset Morning Lassi</a></li>
+            <li><a href="#">Kanji Shot</a></li>
+            <li><a href="#">Aam Panna Cooler</a></li>
+            <li><a href="#">Water Kefir Soda</a></li>
+            <li><a href="#">Kombucha 1st &amp; 2nd Ferment</a></li>
+            <li><a href="#">Fermented Honey-Lemon</a></li>
+          </ul>
+        </div>
+        <div class="mm-col">
+          <h4>BAKING &amp; DAIRY</h4>
+          <ul>
+            <li><a href="#">Sourdough Starter (with our yeast)</a></li>
+            <li><a href="#">Pav / Burger Buns</a></li>
+            <li><a href="#">Greek Yogurt at Home</a></li>
+            <li><a href="#">Punjabi Dahi</a></li>
+            <li><a href="#">Naan Bread</a></li>
+            <li><a href="#">Vegan Seitan Tikka</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%}
+    ============== ABOUT MEGA MENU ==============
+    Hardcoded links to /pages/{handle} so we don't depend on Shopify
+    Navigation. To rename/reorder: edit the <li> rows below directly.
+    All 12 page handles match the ones in ABOUT_PAGES_SETUP.md.
+  {%- endcomment -%}
+  <div class="mega-menu" data-menu="about">
+    <div class="mm-inner">
+      <div class="mm-grid-3">
+        <div class="mm-col">
+          <h4>OUR STORY</h4>
+          <ul>
+            <li><a href="/pages/why-we-built-gutbasket">Why we built GutBasket</a></li>
+            <li><a href="/pages/the-science-behind-our-kits">The science behind our kits</a></li>
+            <li><a href="/pages/sourcing-quality-standards">Sourcing &amp; quality standards</a></li>
+            <li><a href="/pages/fssai-certifications">FSSAI &amp; certifications</a></li>
+          </ul>
+        </div>
+        <div class="mm-col">
+          <h4>SUPPORT</h4>
+          <ul>
+            <li><a href="/pages/help-center">Help center</a></li>
+            <li><a href="/pages/whatsapp-expert-support">WhatsApp expert support</a></li>
+            <li><a href="/pages/returns-refunds">Returns &amp; refunds</a></li>
+            <li><a href="/pages/shipping-policy">Shipping policy</a></li>
+          </ul>
+        </div>
+        <div class="mm-col">
+          <h4>COMMUNITY</h4>
+          <ul>
+            <li><a href="/pages/ferment-forum">Ferment Forum</a></li>
+            <li><a href="/pages/customer-recipes">Customer recipes</a></li>
+            <li><a href="/pages/instagram">Instagram</a></li>
+            <li><a href="/pages/newsletter">Newsletter</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+{%- comment -%} ============== MOBILE DRAWER ============== {%- endcomment -%}
+<div class="mobile-drawer" id="mobile-drawer" aria-hidden="true">
+  <div class="mobile-drawer-overlay" data-md-close></div>
+  <aside class="mobile-drawer-panel" role="dialog" aria-label="Main navigation">
+    <div class="mobile-drawer-head">
+      <a href="{{ routes.root_url }}" class="logo" data-md-close aria-label="{{ shop.name }}">
+        {%- if section.settings.logo != blank -%}
+          {{ section.settings.logo | image_url: width: 320 | image_tag: alt: shop.name, width: 160, height: 32, loading: 'eager' }}
+        {%- else -%}
+          <span class="gb-logo-text">{{ shop.name }}</span>
+        {%- endif -%}
+      </a>
+      <button class="mobile-drawer-close" data-md-close aria-label="Close menu" type="button">
+        <svg viewBox="0 0 24 24" fill="none" width="22" height="22" aria-hidden="true"><path d="M6 6L18 18M6 18L18 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+
+    <nav class="mobile-drawer-nav" aria-label="Mobile navigation">
+      <details class="md-section">
+        <summary class="md-section-h">SHOP <span class="md-chev">⌃</span></summary>
+        <ul class="md-list">
+          <li><a href="/collections/fermentation-kits" data-md-close><span class="md-dot" style="background: #FF7300;"></span>Ferment Kits</a></li>
+          <li><a href="/collections/spice-mix-supplies" data-md-close><span class="md-dot" style="background: #8B1F40;"></span>Spice Mix Refills</a></li>
+          <li><a href="/collections/sprouts-1" data-md-close><span class="md-dot" style="background: #3F7754;"></span>Sprout Kits</a></li>
+          <li><a href="/collections/prebiotic" data-md-close><span class="md-dot" style="background: #15BA97;"></span>Prebiotics &amp; Powders</a></li>
+          <li><a href="/collections/cultures" data-md-close><span class="md-dot" style="background: #E8C966;"></span>Dairy Cultures</a></li>
+          <li><a href="/collections/baking" data-md-close><span class="md-dot" style="background: #1F4332;"></span>Baking</a></li>
+          <li><a href="/collections/jars-and-tools" data-md-close><span class="md-dot" style="background: #4F7C57;"></span>Jars &amp; Tools</a></li>
+          <li><a href="/collections/recipe-book" data-md-close><span class="md-dot" style="background: #FF7300;"></span>Recipe Books</a></li>
+        </ul>
+      </details>
+
+      <details class="md-section">
+        <summary class="md-section-h">LEARN <span class="md-chev">⌃</span></summary>
+        <ul class="md-list md-sublist">
+          <li class="md-cat-h"><span class="md-dot" style="background: #FF7300;"></span>Fermentation 101</li>
+          <li><a href="/blogs/learn/what-is-lacto-fermentation-the-complete-beginners-guide" data-md-close>What is lacto-fermentation?</a></li>
+          <li><a href="/blogs/learn/probiotic-vs-preserved" data-md-close>Probiotic vs preserved</a></li>
+          <li><a href="/blogs/learn/the-5-fermentation-rules" data-md-close>The 5 fermentation rules</a></li>
+          <li class="md-cat-h"><span class="md-dot" style="background: #15BA97;"></span>Gut Health Science</li>
+          <li><a href="/blogs/learn/prebiotics-vs-probiotics" data-md-close>Prebiotics vs probiotics</a></li>
+          <li><a href="/blogs/learn/the-microbiome-explained" data-md-close>The microbiome explained</a></li>
+          <li class="md-cat-h"><span class="md-dot" style="background: #C24528;"></span>Troubleshooting</li>
+          <li><a href="/blogs/learn/mould-on-my-ferment-what-now" data-md-close>Mould on my ferment</a></li>
+          <li><a href="/blogs/learn/not-bubbling-on-day-2" data-md-close>Not bubbling on day 2</a></li>
+        </ul>
+      </details>
+
+      <details class="md-section">
+        <summary class="md-section-h">RECIPES <span class="md-chev">⌃</span></summary>
+        <ul class="md-list">
+          <li><a href="#" data-md-close>Raw Mango Achaar</a></li>
+          <li><a href="#" data-md-close>Black Carrot Kanji</a></li>
+          <li><a href="#" data-md-close>Napa Kimchi</a></li>
+          <li><a href="#" data-md-close>Aam Panna</a></li>
+          <li><a href="#" data-md-close>Sauerkraut</a></li>
+        </ul>
+      </details>
+
+      <details class="md-section">
+        <summary class="md-section-h">ABOUT <span class="md-chev">⌃</span></summary>
+        <ul class="md-list md-sublist">
+          <li class="md-cat-h">Our Story</li>
+          <li><a href="/pages/why-we-built-gutbasket" data-md-close>Why we built GutBasket</a></li>
+          <li><a href="/pages/the-science-behind-our-kits" data-md-close>The science behind our kits</a></li>
+          <li><a href="/pages/sourcing-quality-standards" data-md-close>Sourcing &amp; quality standards</a></li>
+          <li><a href="/pages/fssai-certifications" data-md-close>FSSAI &amp; certifications</a></li>
+          <li class="md-cat-h">Support</li>
+          <li><a href="/pages/help-center" data-md-close>Help center</a></li>
+          <li><a href="/pages/whatsapp-expert-support" data-md-close>WhatsApp expert support</a></li>
+          <li><a href="/pages/returns-refunds" data-md-close>Returns &amp; refunds</a></li>
+          <li><a href="/pages/shipping-policy" data-md-close>Shipping policy</a></li>
+          <li class="md-cat-h">Community</li>
+          <li><a href="/pages/ferment-forum" data-md-close>Ferment Forum</a></li>
+          <li><a href="/pages/customer-recipes" data-md-close>Customer recipes</a></li>
+          <li><a href="/pages/instagram" data-md-close>Instagram</a></li>
+          <li><a href="/pages/newsletter" data-md-close>Newsletter</a></li>
+        </ul>
+      </details>
+    </nav>
+
+    {%- if section.settings.foot_text != blank -%}
+      <div class="mobile-drawer-foot">{{ section.settings.foot_text }}</div>
+    {%- endif -%}
+  </aside>
+</div>
+
+<script>
+  (function () {
+    function syncHeaderHeights() {
+      var header = document.querySelector('.gb-site-header');
+      if (!header) return;
+      var h = header.offsetHeight;
+      // Match the CSS variable names Shopify Horizon uses elsewhere in the theme.
+      document.body.style.setProperty('--header-height', h + 'px');
+      document.body.style.setProperty('--header-group-height', h + 'px');
+      document.body.style.setProperty('--top-row-height', h + 'px');
+    }
+    function init(scope) {
+      var root = scope || document;
+      // ---------- Mega menu (desktop) ----------
+      var triggers = root.querySelectorAll ? root.querySelectorAll('.nav-trigger') : [];
+      var menus    = root.querySelectorAll ? root.querySelectorAll('.mega-menu') : [];
+      function closeAll() {
+        menus.forEach(function (m) { m.classList.remove('open'); });
+        triggers.forEach(function (t) { t.classList.remove('open', 'active'); t.setAttribute('aria-expanded', 'false'); });
+      }
+      triggers.forEach(function (trigger) {
+        if (trigger.dataset.bound) return;
+        trigger.dataset.bound = '1';
+        trigger.addEventListener('click', function (e) {
+          e.stopPropagation();
+          var targetId = trigger.dataset.trigger;
+          var menu = document.querySelector('.mega-menu[data-menu="' + targetId + '"]');
+          var wasOpen = trigger.classList.contains('open');
+          closeAll();
+          if (!wasOpen && menu) {
+            menu.classList.add('open');
+            trigger.classList.add('open', 'active');
+            trigger.setAttribute('aria-expanded', 'true');
+          }
+        });
+      });
+      // close on outside click + Escape
+      if (!document.body.dataset.gbHeaderBound) {
+        document.body.dataset.gbHeaderBound = '1';
+        document.addEventListener('click', function (e) {
+          if (!e.target.closest('.primary-nav') && !e.target.closest('.mega-menu')) closeAll();
+        });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape') { closeAll(); closeMobileMenu(); }
+        });
+        // close on link click in mega-menu
+        document.querySelectorAll('.mega-menu a').forEach(function (link) {
+          link.addEventListener('click', function () { closeAll(); });
+        });
+      }
+
+      // ---------- Mobile drawer ----------
+      var drawer = document.getElementById('mobile-drawer');
+      var toggle = document.getElementById('mobile-menu-toggle');
+      function openMobileMenu() { if (drawer) { drawer.classList.add('open'); drawer.setAttribute('aria-hidden', 'false'); document.body.style.overflow = 'hidden'; } }
+      function closeMobileMenu() { if (drawer) { drawer.classList.remove('open'); drawer.setAttribute('aria-hidden', 'true'); document.body.style.overflow = ''; } }
+      window.openMobileMenu = openMobileMenu;
+      window.closeMobileMenu = closeMobileMenu;
+      if (toggle && !toggle.dataset.bound) { toggle.dataset.bound = '1'; toggle.addEventListener('click', openMobileMenu); }
+      document.querySelectorAll('[data-md-close]').forEach(function (el) {
+        if (el.dataset.bound) return;
+        el.dataset.bound = '1';
+        el.addEventListener('click', closeMobileMenu);
+      });
+
+      syncHeaderHeights();
+    }
+
+    // ---------- Smart sticky header ----------
+    // Behavior:
+    //  - Page at top (scrollY ≤ 100): header always visible, no shadow
+    //  - Past 100px, scrolling down 30px+ accumulated: slide header up
+    //  - Scrolling up 15px+ accumulated: slide header back down immediately
+    //  - Any drawer/menu open: force-visible so users can close it
+    //  - Subtle shadow whenever scrollY > 0
+    // Direction-change resets the opposite accumulator so the gestures
+    // measure intent within a single scroll direction, not lifetime delta.
+    function initSmartSticky() {
+      var header = document.querySelector('.gb-site-header');
+      if (!header || header.dataset.smartStickyBound) return;
+      header.dataset.smartStickyBound = '1';
+
+      var DOWN_THRESHOLD = 30;
+      var UP_THRESHOLD = 15;
+      var ENGAGE_AFTER = 100;
+
+      var lastY = window.scrollY || window.pageYOffset || 0;
+      var accumDown = 0;
+      var accumUp = 0;
+      var ticking = false;
+      var wasHidden = false;
+      var wasScrolled = false;
+
+      function anyDrawerOpen() {
+        return !!(
+          document.querySelector('.mega-menu.open') ||
+          document.querySelector('#mobile-drawer.open') ||
+          document.querySelector('cart-drawer-component[open]') ||
+          document.querySelector('cart-drawer-component.is-open') ||
+          document.querySelector('.cart-drawer.is-open') ||
+          document.body.classList.contains('cart-drawer-open') ||
+          document.body.classList.contains('drawer-open')
+        );
+      }
+
+      function setHidden(hidden) {
+        if (hidden === wasHidden) return;
+        wasHidden = hidden;
+        header.classList.toggle('is-hidden', hidden);
+      }
+      function setScrolled(scrolled) {
+        if (scrolled === wasScrolled) return;
+        wasScrolled = scrolled;
+        header.classList.toggle('is-scrolled', scrolled);
+      }
+
+      function update() {
+        ticking = false;
+        var y = window.scrollY || window.pageYOffset || 0;
+        var delta = y - lastY;
+
+        setScrolled(y > 0);
+
+        if (y <= ENGAGE_AFTER || anyDrawerOpen()) {
+          setHidden(false);
+          accumDown = 0; accumUp = 0;
+          lastY = y;
+          return;
+        }
+
+        if (delta > 0) {
+          accumDown += delta;
+          accumUp = 0;
+          if (accumDown >= DOWN_THRESHOLD) setHidden(true);
+        } else if (delta < 0) {
+          accumUp += -delta;
+          accumDown = 0;
+          if (accumUp >= UP_THRESHOLD) setHidden(false);
+        }
+
+        lastY = y;
+      }
+
+      window.addEventListener('scroll', function () {
+        if (!ticking) {
+          requestAnimationFrame(update);
+          ticking = true;
+        }
+      }, { passive: true });
+    }
+
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function () { init(); initSmartSticky(); }); else { init(); initSmartSticky(); }
+    document.addEventListener('shopify:section:load', function (e) { init(e.target); initSmartSticky(); });
+    window.addEventListener('resize', syncHeaderHeights);
+    window.addEventListener('load', syncHeaderHeights);
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "GB Header (v1)",
+  "tag": "div",
+  "class": "gb-header-section",
+  "settings": [
+    { "type": "header", "content": "Branding" },
+    { "type": "image_picker", "id": "logo", "label": "Logo", "info": "PNG/SVG, recommended height 40px" },
+    { "type": "header", "content": "Mobile drawer" },
+    { "type": "text", "id": "foot_text", "label": "Footer text (mobile drawer)", "default": "FSSAI License: 10021021000439" }
+  ],
+  "presets": [{ "name": "GB Header (v1)" }]
+}
+{% endschema %}

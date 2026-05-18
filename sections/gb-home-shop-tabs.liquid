@@ -1,0 +1,1021 @@
+{%- comment -%}
+  Section 05 · Shop tabs (tabbed product grid)
+  Source ref: gutbasket-home-page.html lines 1772-2296
+  Each tab block binds to a Shopify collection.
+{%- endcomment -%}
+
+{%- liquid
+  assign columns = section.settings.columns | default: 3
+  assign products_per_tab = section.settings.products_per_tab | default: 6
+  assign title_max = section.settings.title_max_chars | default: 0
+
+  assign show_band  = section.settings.show_card_band
+  assign show_badge = section.settings.show_card_badge
+  assign show_title = section.settings.show_card_title
+  assign show_tag   = section.settings.show_card_tag
+  assign show_now   = section.settings.show_card_now
+  assign show_was   = section.settings.show_card_was
+  assign show_cta   = section.settings.show_card_cta
+
+  # Active tab. On a collection page we try to match a tab's linked
+  # collection.handle to the current collection. Falls back to the
+  # first non-disabled tab block, preserving the home-page default.
+  # NOTE: assigning the collection drop to a local var first — chained
+  # access like `block.settings.collection.handle` inside an `if` has
+  # bitten us before (it silently evaluates to nil and the comparison
+  # never matches).
+  assign active_tab_id = ''
+  assign current_handle = ''
+  if collection != blank
+    assign current_handle = collection.handle
+  endif
+  if current_handle != ''
+    for block in section.blocks
+      if block.type == 'tab'
+        assign block_coll = block.settings.collection
+        if block_coll != blank
+          assign block_handle = block_coll.handle
+          if block_handle == current_handle
+            assign active_tab_id = block.settings.tab_id
+            break
+          endif
+        endif
+      endif
+    endfor
+  endif
+  if active_tab_id == ''
+    for block in section.blocks
+      if block.type == 'tab'
+        assign active_tab_id = block.settings.tab_id
+        break
+      endif
+    endfor
+  endif
+-%}
+
+{%- capture card_vars -%}
+--gb-card-band-fs: {{ section.settings.band_size | default: 13 }}px;
+--gb-card-band-fw: {{ section.settings.band_weight | default: 600 }};
+--gb-card-badge-fs: {{ section.settings.badge_size | default: 9 }}px;
+--gb-card-badge-fw: {{ section.settings.badge_weight | default: 700 }};
+--gb-card-title-fs: {{ section.settings.title_size | default: 15 }}px;
+--gb-card-title-fw: {{ section.settings.title_weight | default: 700 }};
+--gb-card-tag-fs: {{ section.settings.tag_size | default: 13 }}px;
+--gb-card-tag-fw: {{ section.settings.tag_weight | default: 400 }};
+--gb-card-now-fs: {{ section.settings.now_size | default: 17 }}px;
+--gb-card-now-fw: {{ section.settings.now_weight | default: 800 }};
+--gb-card-was-fs: {{ section.settings.was_size | default: 13 }}px;
+--gb-card-was-fw: {{ section.settings.was_weight | default: 500 }};
+--gb-card-cta-fs: {{ section.settings.cta_size | default: 12 }}px;
+--gb-card-cta-fs-m: {{ section.settings.cta_size_mobile | default: section.settings.cta_size | default: 12 }}px;
+--gb-card-cta-fw: {{ section.settings.cta_weight | default: 600 }};
+--gb-card-cta-py: {{ section.settings.cta_padding_y | default: 11 }}px;
+--gb-card-cta-py-m: {{ section.settings.cta_padding_y_mobile | default: section.settings.cta_padding_y | default: 11 }}px;
+--gb-card-cta-px: {{ section.settings.cta_padding_x | default: 16 }}px;
+--gb-card-cta-px-m: {{ section.settings.cta_padding_x_mobile | default: section.settings.cta_padding_x | default: 16 }}px;
+--gb-card-cta-radius: {{ section.settings.cta_border_radius | default: 50 }}px;
+--gb-card-info-pad-x: {{ section.settings.info_padding_x | default: 18 }}px;
+--gb-card-info-pad-y: {{ section.settings.info_padding_y | default: 18 }}px;
+--gb-card-gap-title: {{ section.settings.gap_below_title | default: 4 }}px;
+--gb-card-gap-tag: {{ section.settings.gap_below_tag | default: 12 }}px;
+--gb-card-gap-price: {{ section.settings.gap_below_price | default: 14 }}px;
+{%- endcapture -%}
+
+{%- assign cta_style_class = section.settings.cta_style | default: 'outlined' -%}
+
+<section class="gb-shop" id="gb-shop-{{ section.id }}" style="{{ card_vars | strip_newlines }}">
+  <div class="gb-shop-container">
+    {%- if section.settings.heading != blank or section.settings.eyebrow != blank -%}
+      <div class="gb-shop-header">
+        {%- if section.settings.eyebrow != blank -%}
+          <span class="gb-shop-eyebrow">{{ section.settings.eyebrow }}</span>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <h2 class="gb-shop-h2">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- comment -%}
+      Tab strip. Two modes:
+      - Home page (collection == blank): tabs are <button>s, JS swaps
+        the matching panel client-side. Stays a single-page experience.
+      - Collection page (collection != blank): tabs are <a> links to
+        each tab's linked collection URL. Clicking 'Sprouts' navigates
+        to /collections/sprouts-1 so the hero (which is server-rendered
+        from `collection.*`) stays in sync with the active tab.
+    {%- endcomment -%}
+    <div class="gb-shop-tabs-row" id="shop"{% if collection == blank %} role="tablist"{% endif %}>
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'tab' -%}
+          {%- assign is_active = false -%}
+          {%- if block.settings.tab_id == active_tab_id -%}{%- assign is_active = true -%}{%- endif -%}
+          {%- if collection != blank -%}
+            {%- assign tab_coll = block.settings.collection -%}
+            {%- if tab_coll != blank -%}
+              <a class="gb-shop-tab {% if is_active %}is-active{% endif %}"
+                 href="{{ tab_coll.url }}#shop"
+                 data-tab="{{ block.settings.tab_id }}"
+                 {%- if is_active %} aria-current="page"{%- endif %}
+                 {{ block.shopify_attributes }}>{{ block.settings.label }}</a>
+            {%- else -%}
+              <button type="button" class="gb-shop-tab {% if is_active %}is-active{% endif %}"
+                      data-tab="{{ block.settings.tab_id }}"
+                      {{ block.shopify_attributes }}>{{ block.settings.label }}</button>
+            {%- endif -%}
+          {%- else -%}
+            <button type="button" class="gb-shop-tab {% if is_active %}is-active{% endif %}"
+                    data-tab="{{ block.settings.tab_id }}"
+                    role="tab"
+                    {{ block.shopify_attributes }}>{{ block.settings.label }}</button>
+          {%- endif -%}
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'tab' -%}
+        {%- comment -%}
+          On collection pages, only render the active panel. Other tabs
+          are links — they navigate to their own collection URL — so
+          rendering their product grids server-side is wasted work
+          (would be ~1000 products * 9 tabs).
+        {%- endcomment -%}
+        {%- if collection != blank and block.settings.tab_id != active_tab_id -%}
+          {%- continue -%}
+        {%- endif -%}
+        {%- liquid
+          assign coll = block.settings.collection
+          assign theme_class = block.settings.theme | default: 'kanji'
+          assign cat_band = block.settings.cat_band
+          assign limit = block.settings.products_limit | default: products_per_tab
+
+          # On a collection page, drop the per-tab product cap so the
+          # full collection renders. Home page keeps the cap so the
+          # 'Complete care for your gut' grid stays a teaser.
+          if collection != blank and collection.handle != blank
+            assign limit = 1000
+          endif
+
+          assign use_all = false
+          if block.settings.show_all_products
+            assign use_all = true
+          elsif block.settings.tab_id == 'all'
+            assign use_all = true
+          endif
+
+          if use_all
+            assign tab_products = collections.all.products
+            assign view_all_url = '/collections/all'
+          elsif coll
+            assign tab_products = coll.products
+            assign view_all_url = coll.url
+          else
+            assign tab_products = empty
+            assign view_all_url = ''
+          endif
+        -%}
+        {%- comment -%}
+          Secondary product-type filter row. Only renders on
+          collection pages and only for the two collections where
+          the catalog is deep enough that a single grid is hard to
+          scan (jars-and-tools, spice-mix-supplies). Each unique
+          product.type from the products in the active collection
+          becomes a pill; clicking filters the grid client-side
+          (no extra HTTP). 'All' is the default.
+
+          Add another handle to TYPE_FILTER_HANDLES below if a
+          third collection ever needs the same treatment.
+        {%- endcomment -%}
+        {%- assign type_filter_handles = 'jars-and-tools,spice-mix-supplies' | split: ',' -%}
+        {%- assign show_type_filter = false -%}
+        {%- if collection != blank and type_filter_handles contains collection.handle -%}
+          {%- assign show_type_filter = true -%}
+        {%- endif -%}
+        {%- if show_type_filter -%}
+          {%- assign type_marker = '|' -%}
+          {%- for product in tab_products limit: limit -%}
+            {%- if product.type != blank -%}
+              {%- assign t_seg = product.type | append: '|' -%}
+              {%- unless type_marker contains t_seg -%}
+                {%- assign type_marker = type_marker | append: t_seg -%}
+              {%- endunless -%}
+            {%- endif -%}
+          {%- endfor -%}
+          {%- assign unique_types = type_marker | split: '|' -%}
+        {%- endif -%}
+        <div class="gb-shop-panel {% if block.settings.tab_id == active_tab_id %}is-active{% endif %}"
+             data-panel="{{ block.settings.tab_id }}"
+             role="tabpanel">
+          {%- if show_type_filter and unique_types.size > 1 -%}
+            <div class="gb-type-filter-row" role="tablist" aria-label="Filter by product type">
+              <button type="button" class="gb-type-pill is-active" data-type-filter="*">All</button>
+              {%- for t in unique_types -%}
+                {%- if t != '' -%}
+                  <button type="button" class="gb-type-pill" data-type-filter="{{ t | escape }}">{{ t }}</button>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+          <div class="gb-shop-grid gb-shop-grid--{{ columns }}">
+            {%- if tab_products.size > 0 -%}
+              {%- for product in tab_products limit: limit -%}
+                {%- liquid
+                  # Show the merchant's chosen default variant on the
+                  # card — its price + image + ID — instead of the
+                  # product-level minimum. Keeps the card consistent
+                  # with what actually lands in the cart on quick-add.
+                  assign default_variant = product.selected_or_first_available_variant
+                  if default_variant == blank
+                    assign default_variant = product.variants.first
+                  endif
+                  assign card_price = default_variant.price | default: product.price
+                  assign card_compare = default_variant.compare_at_price | default: product.compare_at_price
+                  assign card_image = default_variant.image | default: product.featured_image
+                  assign saved = 0
+                  if card_compare and card_compare > card_price
+                    assign saved = card_compare | minus: card_price
+                  endif
+                -%}
+                {%- liquid
+                  if title_max > 0
+                    assign card_title = product.title | truncate: title_max
+                  else
+                    assign card_title = product.title
+                  endif
+                -%}
+                <div class="gb-card gb-card--{{ theme_class }}" data-product-type="{{ product.type | escape }}">
+                  {%- if show_band -%}
+                    {%- if cat_band != blank -%}
+                      <div class="gb-card-band">{{ cat_band }}</div>
+                    {%- elsif product.type != blank -%}
+                      <div class="gb-card-band">{{ product.type }}</div>
+                    {%- endif -%}
+                  {%- endif -%}
+                  <a href="{{ product.url }}" class="gb-card-link" aria-label="{{ product.title | escape }}">
+                    <div class="gb-card-photo"
+                         {%- if card_image %} style="background-image: url('{{ card_image | image_url: width: 600 }}');"{%- endif %}>
+                      {%- if show_badge and saved > 0 -%}
+                        <span class="gb-card-badge">Save {{ saved | money_without_trailing_zeros }}</span>
+                      {%- endif -%}
+                      <div class="gb-card-bar"></div>
+                    </div>
+                    <div class="gb-card-info">
+                      {%- if show_title -%}
+                        <h4 class="gb-card-title">{{ card_title }}</h4>
+                      {%- endif -%}
+                      {%- if show_tag -%}
+                        <div class="gb-card-tag">{{ block.settings.label }}</div>
+                      {%- endif -%}
+                      {%- if show_now or show_was -%}
+                        <div class="gb-card-price">
+                          {%- if show_now -%}
+                            <span class="gb-card-now">{{ card_price | money_without_trailing_zeros }}</span>
+                          {%- endif -%}
+                          {%- if show_was and saved > 0 -%}
+                            <span class="gb-card-was">{{ card_compare | money_without_trailing_zeros }}</span>
+                          {%- endif -%}
+                        </div>
+                      {%- endif -%}
+                    </div>
+                  </a>
+                  {%- if show_cta -%}
+                    <div class="gb-card-cta-wrap">
+                      <button type="button" class="gb-card-cta gb-card-cta--{{ cta_style_class }}"
+                              data-product-handle="{{ product.handle }}"
+                              data-variant-id="{{ default_variant.id }}"
+                              data-product-id="{{ product.id }}"
+                              data-product-title="{{ product.title | escape }}"
+                              data-product-image="{{ card_image | image_url: width: 200 }}"
+                              data-product-price="{{ card_price }}"
+                              data-product-url="{{ product.url }}"
+                              {% unless product.available %}disabled{% endunless %}>Add to cart</button>
+                    </div>
+                  {%- endif -%}
+                </div>
+              {%- endfor -%}
+            {%- else -%}
+              <p class="gb-shop-empty">Pick a collection for this tab in Theme Editor.</p>
+            {%- endif -%}
+          </div>
+          {%- comment -%}
+            'View all' is a teaser link that only makes sense on the home
+            page where each tab caps at products_limit. On a collection
+            page (collection != blank) we already show the full grid via
+            the limit override above, so the link is redundant — hide it.
+          {%- endcomment -%}
+          {%- if view_all_url != '' and collection == blank -%}
+            <div class="gb-shop-viewall">
+              <a href="{{ view_all_url }}">{{ block.settings.view_all_label | default: 'View all' }} <span class="gb-shop-arr">→</span></a>
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+</section>
+
+{% stylesheet %}
+.gb-shop {
+  --c-white: #FFFFFF;
+  --c-cream: #FFF9EE;
+  --c-border: #E8E3D5;
+  --c-border-soft: #F0EBDD;
+  --c-ink: #1F1F1D;
+  --c-text: #1F1F1D;
+  --c-text-soft: #888780;
+  --c-action: #FF7300;
+  --c-kanji: #8B1F40;       --c-kanji-soft: #F4DBE2;
+  --c-achaar: #C8552A;      --c-achaar-soft: #F8DCCB;
+  --c-sprout: #3F7754;      --c-sprout-soft: #DCEBDF;
+  --c-kefir: #6FA095;       --c-kefir-soft: #DCE7E4;
+  --c-inulin: #15BA97;      --c-inulin-soft: #C8EDE2;
+  --c-aam-panna: #DDA738;   --c-aam-panna-soft: #F8EAC2;
+  background: var(--c-white);
+  padding: 64px 0;
+}
+.gb-shop-container { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+.gb-shop-header { text-align: center; margin: 0 auto 36px; max-width: 720px; }
+.gb-shop-eyebrow {
+  display: inline-block;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: #5C4D3F;
+  margin-bottom: 10px;
+}
+.gb-shop-h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: clamp(28px, 3.4vw, 38px);
+  margin: 0 0 10px;
+  letter-spacing: -0.02em;
+  color: var(--c-text);
+}
+.gb-shop-h2 em { font-style: italic; font-weight: 700; color: var(--c-kanji); }
+
+.gb-shop-tabs-row {
+  display: flex;
+  gap: 32px;
+  border-bottom: 1px solid var(--c-border);
+  margin-bottom: 36px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity;
+  /* When arriving via #shop fragment (collection-page tab nav), leave a
+     bit of room above so the tabs don't sit flush against the top edge. */
+  scroll-margin-top: 16px;
+  /* Some mobile browsers paint a focus/target outline on the element
+     whose id matches the URL fragment. The row isn't interactive — kill
+     the outline so it doesn't look like a stray border. */
+  outline: none;
+}
+.gb-shop-tabs-row:focus,
+.gb-shop-tabs-row:focus-visible,
+.gb-shop-tabs-row:target { outline: none; }
+.gb-shop-tabs-row::-webkit-scrollbar { display: none; }
+.gb-shop-tab {
+  position: relative;
+  padding: 12px 0 16px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15.5px;
+  font-weight: 500;
+  color: var(--c-text-soft);
+  white-space: nowrap;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  transition: color 0.15s ease;
+  scroll-snap-align: start;
+  /* anchor-tab reset (collection pages render <a> instead of <button>) */
+  text-decoration: none;
+  display: inline-block;
+  line-height: 1.2;
+}
+.gb-shop-tab.is-active { color: var(--c-ink); font-weight: 700; }
+.gb-shop-tab.is-active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2.5px;
+  background: var(--c-ink);
+}
+.gb-shop-tab:hover { color: var(--c-ink); }
+
+.gb-shop-panel { display: none; }
+.gb-shop-panel.is-active { display: block; animation: gb-shop-fade 0.25s ease; }
+@keyframes gb-shop-fade {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+/* Secondary product-type filter pills (collection pages only,
+   whitelisted handles). Style is intentionally lighter than the
+   top category tabs — it's a sub-filter, not a primary nav. */
+.gb-type-filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 24px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--c-border);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.gb-type-filter-row::-webkit-scrollbar { display: none; }
+.gb-type-pill {
+  background: var(--c-cream);
+  border: 1px solid var(--c-border-soft);
+  border-radius: 999px;
+  padding: 7px 14px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--c-text-soft);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+.gb-type-pill:hover {
+  border-color: var(--c-ink);
+  color: var(--c-ink);
+}
+.gb-type-pill.is-active {
+  background: var(--c-ink);
+  border-color: var(--c-ink);
+  color: var(--c-cream);
+}
+@media (max-width: 768px) {
+  .gb-type-filter-row { flex-wrap: nowrap; margin-bottom: 18px; padding-bottom: 14px; }
+  .gb-type-pill { font-size: 12.5px; padding: 6px 12px; }
+}
+
+.gb-shop-grid { display: grid; gap: 16px; }
+.gb-shop-grid--3 { grid-template-columns: repeat(3, 1fr); }
+.gb-shop-grid--4 { grid-template-columns: repeat(4, 1fr); }
+@media (max-width: 768px) {
+  .gb-shop-grid--3, .gb-shop-grid--4 { grid-template-columns: repeat(2, 1fr); }
+}
+.gb-shop-empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: var(--c-text-soft);
+  padding: 40px 0;
+  font-family: 'DM Sans', sans-serif;
+}
+.gb-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--c-white);
+  border: 1px solid var(--c-border-soft);
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.gb-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(43, 31, 26, 0.06), 0 12px 32px rgba(43, 31, 26, 0.08);
+}
+.gb-card-band {
+  background: var(--c-ink);
+  color: var(--c-cream);
+  font-family: 'DM Sans', sans-serif;
+  font-size: var(--gb-card-band-fs, 13px);
+  font-weight: var(--gb-card-band-fw, 600);
+  text-align: center;
+  padding: 9px 12px;
+  letter-spacing: 0.01em;
+}
+.gb-card-photo {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  overflow: hidden;
+}
+.gb-card--kanji  .gb-card-photo { background-color: var(--c-kanji-soft); }
+.gb-card--achaar .gb-card-photo { background-color: var(--c-achaar-soft); }
+.gb-card--sprout .gb-card-photo { background-color: var(--c-sprout-soft); }
+.gb-card--kefir  .gb-card-photo { background-color: var(--c-kefir-soft); }
+.gb-card--inulin .gb-card-photo { background-color: var(--c-inulin-soft); }
+.gb-card--aam-panna .gb-card-photo { background-color: var(--c-aam-panna-soft); }
+.gb-card-photo::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 50%, rgba(43, 31, 26, 0.08) 100%);
+}
+.gb-card-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 2;
+  font-family: 'DM Mono', monospace;
+  font-size: var(--gb-card-badge-fs, 9.5px);
+  font-weight: var(--gb-card-badge-fw, 700);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: var(--c-cream);
+  color: var(--c-ink);
+}
+.gb-card-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0; right: 0;
+  height: 4px;
+  z-index: 2;
+}
+.gb-card--kanji  .gb-card-bar { background: var(--c-kanji); }
+.gb-card--achaar .gb-card-bar { background: var(--c-achaar); }
+.gb-card--sprout .gb-card-bar { background: var(--c-sprout); }
+.gb-card--kefir  .gb-card-bar { background: var(--c-kefir); }
+.gb-card--inulin .gb-card-bar { background: var(--c-inulin); }
+.gb-card--aam-panna .gb-card-bar { background: var(--c-aam-panna); }
+.gb-card-link {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  text-decoration: none;
+  color: inherit;
+}
+.gb-card-info {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  padding: var(--gb-card-info-pad-y, 18px) var(--gb-card-info-pad-x, 18px) 0;
+}
+.gb-card-cta-wrap {
+  padding: 0 var(--gb-card-info-pad-x, 18px) var(--gb-card-info-pad-y, 18px);
+}
+.gb-card-tag {
+  font-family: 'DM Sans', sans-serif;
+  font-size: var(--gb-card-tag-fs, 13px);
+  font-weight: var(--gb-card-tag-fw, 400);
+  color: var(--c-text-soft);
+  margin: 0 0 var(--gb-card-gap-tag, 12px);
+  order: 2;
+}
+.gb-card-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: var(--gb-card-title-fw, 700);
+  font-size: var(--gb-card-title-fs, 15.5px);
+  letter-spacing: -0.005em;
+  margin: 0 0 var(--gb-card-gap-title, 4px);
+  line-height: 1.3;
+  color: var(--c-ink);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.6em;
+  order: 1;
+}
+.gb-card-price {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 0 0 var(--gb-card-gap-price, 14px);
+  order: 3;
+}
+.gb-card-now {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: var(--gb-card-now-fw, 800);
+  font-size: var(--gb-card-now-fs, 17px);
+  color: var(--c-text);
+}
+.gb-card-was {
+  font-family: 'DM Sans', sans-serif;
+  font-size: var(--gb-card-was-fs, 13px);
+  font-weight: var(--gb-card-was-fw, 500);
+  color: var(--c-text-soft);
+  text-decoration: line-through;
+}
+.gb-card-cta {
+  display: block;
+  width: 100%;
+  padding: var(--gb-card-cta-py, 11px) var(--gb-card-cta-px, 16px);
+  border-radius: var(--gb-card-cta-radius, 999px);
+  font-family: 'DM Sans', sans-serif;
+  font-size: var(--gb-card-cta-fs, 12.5px);
+  font-weight: var(--gb-card-cta-fw, 600);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.15s ease;
+  text-align: center;
+  margin-top: auto;
+  order: 4;
+  border: none;
+  background: transparent;
+  color: var(--c-ink);
+}
+.gb-card-cta--outlined {
+  background: transparent;
+  border: 1.5px solid var(--c-ink);
+  color: var(--c-ink);
+}
+.gb-card-cta--outlined:hover {
+  background: var(--c-action);
+  border-color: var(--c-action);
+  color: var(--c-white);
+}
+.gb-card-cta--solid {
+  background: var(--c-action);
+  border: none;
+  color: var(--c-white);
+}
+.gb-card-cta--solid:hover { background: #E66800; transform: translateY(-1px); }
+.gb-card-cta--dark {
+  background: var(--c-ink);
+  border: none;
+  color: var(--c-cream);
+}
+.gb-card-cta--dark:hover { background: var(--c-action); color: var(--c-white); }
+.gb-card-cta--ghost {
+  background: transparent;
+  border: none;
+  color: var(--c-ink);
+}
+.gb-card-cta--ghost:hover { color: var(--c-action); }
+.gb-card-cta--link {
+  background: transparent;
+  border: none;
+  color: var(--c-ink);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1.5px;
+  text-transform: none;
+  letter-spacing: 0.02em;
+  padding-left: 0;
+  padding-right: 0;
+}
+.gb-card-cta--link:hover { color: var(--c-action); text-decoration-thickness: 2.5px; }
+.gb-shop-viewall { text-align: center; margin-top: 36px; }
+.gb-shop-viewall a {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--c-ink);
+  text-decoration: underline;
+  text-underline-offset: 6px;
+  text-decoration-thickness: 1.5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  letter-spacing: 0.01em;
+}
+.gb-shop-viewall a:hover { text-decoration-thickness: 2.5px; }
+.gb-shop-arr { display: inline-block; transition: transform 0.15s ease; }
+.gb-shop-viewall a:hover .gb-shop-arr { transform: translateX(3px); }
+
+/* Mobile CTA overrides — placed after .gb-card-cta base + modifiers so
+   source-order cascade ensures these win at ≤ 768px viewport. */
+@media (max-width: 768px) {
+  .gb-card-cta {
+    font-size: var(--gb-card-cta-fs-m, var(--gb-card-cta-fs, 12.5px));
+    padding: var(--gb-card-cta-py-m, var(--gb-card-cta-py, 11px)) var(--gb-card-cta-px-m, var(--gb-card-cta-px, 16px));
+  }
+}
+{% endstylesheet %}
+
+<script>
+(function() {
+  var section = document.getElementById('gb-shop-{{ section.id }}');
+  if (!section) return;
+  // Only attach click-to-swap to <button> tabs. On collection pages the
+  // tabs are <a> links — let the browser navigate normally.
+  var tabs = section.querySelectorAll('button.gb-shop-tab');
+  var panels = section.querySelectorAll('.gb-shop-panel');
+
+  function activate(tabId) {
+    var found = false;
+    tabs.forEach(function(t) {
+      var match = t.dataset.tab === tabId;
+      t.classList.toggle('is-active', match);
+      if (match) found = true;
+    });
+    panels.forEach(function(p) {
+      p.classList.toggle('is-active', p.dataset.panel === tabId);
+    });
+    return found;
+  }
+
+  tabs.forEach(function(t) {
+    t.addEventListener('click', function() { activate(t.dataset.tab); });
+  });
+
+  // Center the active tab in the horizontal scroll on load. On mobile
+  // the tab row overflows to the right, so without this the active tab
+  // can be off-screen (e.g. landing on /collections/cultures and seeing
+  // 'Fermentation Kits | Sprouts | Prebiotic' with the actual active
+  // tab two screens to the right).
+  var row = section.querySelector('.gb-shop-tabs-row');
+  var activeTab = section.querySelector('.gb-shop-tab.is-active');
+  if (row && activeTab && row.scrollWidth > row.clientWidth) {
+    var target = activeTab.offsetLeft + activeTab.offsetWidth / 2 - row.clientWidth / 2;
+    target = Math.max(0, Math.min(target, row.scrollWidth - row.clientWidth));
+    row.scrollLeft = target;
+  }
+
+  // Prefetch the target collection page on hover/touch so navigation
+  // feels near-instant. Only fires once per tab per page-view. Uses
+  // <link rel="prefetch"> which the browser fetches at idle priority.
+  section.querySelectorAll('a.gb-shop-tab').forEach(function(a) {
+    var done = false;
+    function prefetch() {
+      if (done || !a.href) return;
+      done = true;
+      var l = document.createElement('link');
+      l.rel = 'prefetch';
+      l.href = a.href;
+      document.head.appendChild(l);
+    }
+    a.addEventListener('mouseenter', prefetch, { passive: true });
+    a.addEventListener('touchstart', prefetch, { passive: true });
+    a.addEventListener('focus', prefetch, { passive: true });
+  });
+
+  // Secondary product-type filter pills (rendered on jars-and-tools
+   // and spice-mix-supplies collection pages). Click a pill → hide
+   // every card whose data-product-type doesn't match. 'All' (pill
+   // with data-type-filter='*') restores everything. Delegated so
+   // it handles the active panel's pills without per-pill binding.
+  section.addEventListener('click', function(e) {
+    var pill = e.target.closest('.gb-type-pill');
+    if (!pill) return;
+    var panel = pill.closest('.gb-shop-panel');
+    if (!panel) return;
+    var filter = pill.getAttribute('data-type-filter') || '*';
+    panel.querySelectorAll('.gb-type-pill').forEach(function(p) {
+      p.classList.toggle('is-active', p === pill);
+    });
+    panel.querySelectorAll('.gb-card').forEach(function(card) {
+      var t = card.getAttribute('data-product-type') || '';
+      card.style.display = (filter === '*' || t === filter) ? '' : 'none';
+    });
+  });
+
+  document.addEventListener('gb:select-tab', function(e) {
+    var tabId = e.detail && e.detail.tab;
+    if (!tabId) return;
+    if (activate(tabId)) {
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+
+  function openCartDrawer() {
+    if (window.GBCartDrawer && typeof window.GBCartDrawer.open === 'function') {
+      window.GBCartDrawer.open();
+      return;
+    }
+    var drawer = document.querySelector('cart-drawer-component');
+    console.log('[gb-shop-tabs] drawer element:', drawer);
+    if (!drawer) {
+      console.warn('[gb-shop-tabs] no cart-drawer-component in DOM, navigating to /cart');
+      window.location.href = '/cart';
+      return;
+    }
+    var tryOpen = function() {
+      console.log('[gb-shop-tabs] tryOpen — open type:', typeof drawer.open, 'showDialog type:', typeof drawer.showDialog);
+      if (typeof drawer.open === 'function') { drawer.open(); return true; }
+      if (typeof drawer.showDialog === 'function') { drawer.showDialog(); return true; }
+      var trigger = drawer.querySelector('[data-testid="cart-drawer-trigger"], button[on\\:click="/open"]');
+      if (trigger) { console.log('[gb-shop-tabs] clicking drawer trigger button'); trigger.click(); return true; }
+      return false;
+    };
+    if (tryOpen()) return;
+    if (window.customElements && customElements.whenDefined) {
+      customElements.whenDefined('cart-drawer-component').then(function() {
+        console.log('[gb-shop-tabs] cart-drawer-component now defined, retrying');
+        if (!tryOpen()) {
+          console.warn('[gb-shop-tabs] still cannot open after upgrade, navigating to /cart');
+          window.location.href = '/cart';
+        }
+      });
+    } else {
+      window.location.href = '/cart';
+    }
+  }
+
+  section.querySelectorAll('.gb-card-cta').forEach(function(btn) {
+    btn.addEventListener('click', function(ev) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      if (btn.hasAttribute('disabled')) return;
+      var variantId = btn.dataset.variantId;
+      if (!variantId) return;
+      var origLabel = btn.textContent;
+      btn.textContent = 'Adding…';
+      btn.setAttribute('disabled', 'disabled');
+      // Open the drawer + inject an optimistic line item so the user
+      // sees the product land in the cart instantly. Server response
+      // overwrites it ~300-500ms later with the real cart.
+      openCartDrawer();
+      if (window.GBCartDrawer && typeof window.GBCartDrawer.previewAdd === 'function') {
+        window.GBCartDrawer.previewAdd({
+          variant_id: parseInt(variantId, 10),
+          product_id: parseInt(btn.dataset.productId || '0', 10),
+          title: btn.dataset.productTitle,
+          image: btn.dataset.productImage,
+          price: parseInt(btn.dataset.productPrice || '0', 10),
+          url: btn.dataset.productUrl,
+          quantity: 1
+        });
+      }
+      fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ id: variantId, quantity: 1 })
+      })
+      .then(function(r) {
+        if (!r.ok) return r.json().then(function(e) { return Promise.reject(e); });
+        return fetch('/cart.js').then(function(r2) { return r2.json(); });
+      })
+      .then(function(cart) {
+        btn.textContent = 'Added ✓';
+        setTimeout(function() { btn.textContent = origLabel; btn.removeAttribute('disabled'); }, 1500);
+        document.dispatchEvent(new CustomEvent('cart:update', {
+          bubbles: true,
+          detail: { resource: cart, sourceId: 'gb-home-shop-tabs', data: { source: 'gb-shop-card', itemCount: cart && cart.item_count } }
+        }));
+      })
+      .catch(function() {
+        btn.textContent = 'Try again';
+        setTimeout(function() { btn.textContent = origLabel; btn.removeAttribute('disabled'); }, 1800);
+      });
+    });
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "GB · Home Shop Tabs",
+  "tag": "section",
+  "class": "gb-shop-wrap",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+    { "type": "text", "id": "heading", "label": "Heading (use <em> for emphasis)", "default": "Complete <em>care</em> for your gut." },
+    { "type": "select", "id": "columns", "label": "Columns",
+      "options": [
+        { "value": "3", "label": "3 columns" },
+        { "value": "4", "label": "4 columns" }
+      ],
+      "default": "3" },
+    { "type": "range", "id": "products_per_tab", "label": "Products per tab", "min": 3, "max": 12, "step": 1, "default": 6 },
+
+    { "type": "header", "content": "Card text — show / hide" },
+    { "type": "checkbox", "id": "show_card_band",  "label": "Category band (top of card)", "default": true },
+    { "type": "checkbox", "id": "show_card_badge", "label": "\"Save ₹X\" badge on image",  "default": true },
+    { "type": "checkbox", "id": "show_card_title", "label": "Product title",               "default": true },
+    { "type": "checkbox", "id": "show_card_tag",   "label": "Tab-name tag under title",    "default": true },
+    { "type": "checkbox", "id": "show_card_now",   "label": "Current price",               "default": true },
+    { "type": "checkbox", "id": "show_card_was",   "label": "Strikethrough compare price", "default": true },
+    { "type": "checkbox", "id": "show_card_cta",   "label": "Add-to-cart button",          "default": true },
+
+    { "type": "header", "content": "Card text — title truncation" },
+    { "type": "range", "id": "title_max_chars", "label": "Truncate title at characters (0 = no truncation)", "min": 0, "max": 80, "step": 2, "default": 0 },
+
+    { "type": "header", "content": "Card text — spacing" },
+    { "type": "range", "id": "gap_below_title", "label": "Gap below title",                "min": 0, "max": 40, "step": 1, "default": 4,  "unit": "px" },
+    { "type": "range", "id": "gap_below_tag",   "label": "Gap below tab-name tag",         "min": 0, "max": 40, "step": 1, "default": 12, "unit": "px" },
+    { "type": "range", "id": "gap_below_price", "label": "Gap below price (above CTA)",    "min": 0, "max": 60, "step": 1, "default": 14, "unit": "px" },
+    { "type": "range", "id": "info_padding_y",  "label": "Card body — vertical padding",   "min": 0, "max": 40, "step": 1, "default": 18, "unit": "px" },
+    { "type": "range", "id": "info_padding_x",  "label": "Card body — horizontal padding", "min": 0, "max": 40, "step": 1, "default": 18, "unit": "px" },
+
+    { "type": "header", "content": "Card text — typography" },
+    { "type": "paragraph", "content": "Set size in px and weight per text element. Weights: 400 normal, 500 medium, 600 semibold, 700 bold, 800 extra-bold." },
+
+    { "type": "range", "id": "band_size",   "label": "Category band — size",   "min": 6,  "max": 24, "step": 1, "default": 13, "unit": "px" },
+    { "type": "select", "id": "band_weight", "label": "Category band — weight",
+      "options": [
+        { "value": "400", "label": "400 Normal" },
+        { "value": "500", "label": "500 Medium" },
+        { "value": "600", "label": "600 Semibold" },
+        { "value": "700", "label": "700 Bold" },
+        { "value": "800", "label": "800 Extra-bold" }
+      ], "default": "600" },
+
+    { "type": "range", "id": "badge_size",  "label": "Save badge — size",      "min": 6,  "max": 18, "step": 1, "default": 9,  "unit": "px" },
+    { "type": "select", "id": "badge_weight", "label": "Save badge — weight",
+      "options": [
+        { "value": "500", "label": "500 Medium" },
+        { "value": "600", "label": "600 Semibold" },
+        { "value": "700", "label": "700 Bold" },
+        { "value": "800", "label": "800 Extra-bold" }
+      ], "default": "700" },
+
+    { "type": "range", "id": "title_size",  "label": "Product title — size",   "min": 6,  "max": 32, "step": 1, "default": 15, "unit": "px" },
+    { "type": "select", "id": "title_weight", "label": "Product title — weight",
+      "options": [
+        { "value": "500", "label": "500 Medium" },
+        { "value": "600", "label": "600 Semibold" },
+        { "value": "700", "label": "700 Bold" },
+        { "value": "800", "label": "800 Extra-bold" }
+      ], "default": "700" },
+
+    { "type": "range", "id": "tag_size",    "label": "Tab-name tag — size",    "min": 6,  "max": 24, "step": 1, "default": 13, "unit": "px" },
+    { "type": "select", "id": "tag_weight", "label": "Tab-name tag — weight",
+      "options": [
+        { "value": "400", "label": "400 Normal" },
+        { "value": "500", "label": "500 Medium" },
+        { "value": "600", "label": "600 Semibold" },
+        { "value": "700", "label": "700 Bold" }
+      ], "default": "400" },
+
+    { "type": "range", "id": "now_size",    "label": "Current price — size",   "min": 6,  "max": 36, "step": 1, "default": 17, "unit": "px" },
+    { "type": "select", "id": "now_weight", "label": "Current price — weight",
+      "options": [
+        { "value": "600", "label": "600 Semibold" },
+        { "value": "700", "label": "700 Bold" },
+        { "value": "800", "label": "800 Extra-bold" }
+      ], "default": "800" },
+
+    { "type": "range", "id": "was_size",    "label": "Compare price — size",   "min": 6,  "max": 24, "step": 1, "default": 13, "unit": "px" },
+    { "type": "select", "id": "was_weight", "label": "Compare price — weight",
+      "options": [
+        { "value": "400", "label": "400 Normal" },
+        { "value": "500", "label": "500 Medium" },
+        { "value": "600", "label": "600 Semibold" },
+        { "value": "700", "label": "700 Bold" }
+      ], "default": "500" },
+
+    { "type": "range", "id": "cta_size",        "label": "Add-to-cart button — size (desktop)",  "min": 6, "max": 22, "step": 1, "default": 12, "unit": "px" },
+    { "type": "range", "id": "cta_size_mobile", "label": "Add-to-cart button — size (mobile)",   "min": 6, "max": 22, "step": 1, "default": 12, "unit": "px" },
+    { "type": "select", "id": "cta_weight", "label": "Add-to-cart button — weight",
+      "options": [
+        { "value": "400", "label": "400 Normal" },
+        { "value": "500", "label": "500 Medium" },
+        { "value": "600", "label": "600 Semibold" },
+        { "value": "700", "label": "700 Bold" },
+        { "value": "800", "label": "800 Extra-bold" }
+      ], "default": "600" },
+    { "type": "range", "id": "cta_padding_y",        "label": "Add-to-cart button — vertical padding (desktop)",   "min": 0, "max": 30, "step": 1, "default": 11, "unit": "px" },
+    { "type": "range", "id": "cta_padding_y_mobile", "label": "Add-to-cart button — vertical padding (mobile)",    "min": 0, "max": 30, "step": 1, "default": 11, "unit": "px" },
+    { "type": "range", "id": "cta_padding_x",        "label": "Add-to-cart button — horizontal padding (desktop)", "min": 0, "max": 40, "step": 1, "default": 16, "unit": "px" },
+    { "type": "range", "id": "cta_padding_x_mobile", "label": "Add-to-cart button — horizontal padding (mobile)",  "min": 0, "max": 40, "step": 1, "default": 16, "unit": "px" },
+    { "type": "range", "id": "cta_border_radius", "label": "Add-to-cart button — corner radius",  "min": 0, "max": 50, "step": 1, "default": 50, "unit": "px",
+      "info": "50 = pill shape. 0 = sharp corners." },
+    { "type": "select", "id": "cta_style", "label": "Add-to-cart button — style",
+      "options": [
+        { "value": "outlined", "label": "Outlined (transparent + ink border, hover orange)" },
+        { "value": "solid",    "label": "Solid (filled orange, white text)" },
+        { "value": "dark",     "label": "Dark (filled ink, cream text)" },
+        { "value": "ghost",    "label": "Ghost (no border, text only)" },
+        { "value": "link",     "label": "Underlined link" }
+      ], "default": "outlined" }
+  ],
+  "blocks": [
+    {
+      "type": "tab",
+      "name": "Tab",
+      "limit": 10,
+      "settings": [
+        { "type": "text", "id": "label", "label": "Tab label", "default": "Tab" },
+        { "type": "text", "id": "tab_id", "label": "Tab ID (matches a circle's data-tab)", "info": "Lowercase, no spaces. e.g. fermentation, sprouts, prebiotic. Set to 'all' to show every published product.", "default": "tab" },
+        { "type": "checkbox", "id": "show_all_products", "label": "Show every published product", "info": "Overrides the source collection. Auto-on when Tab ID is 'all'.", "default": false },
+        { "type": "collection", "id": "collection", "label": "Source collection (used when 'Show every published product' is off)" },
+        { "type": "range", "id": "products_limit", "label": "Products in this tab (overrides section default)", "min": 0, "max": 12, "step": 1, "default": 0 },
+        { "type": "text", "id": "cat_band", "label": "Category band text (top of card)", "info": "Leave blank to use product type." },
+        { "type": "text", "id": "view_all_label", "label": "View-all link label", "default": "View all" },
+        { "type": "select", "id": "theme", "label": "Color theme",
+          "options": [
+            { "value": "kanji",     "label": "Kanji (maroon)" },
+            { "value": "achaar",    "label": "Achaar (terracotta)" },
+            { "value": "sprout",    "label": "Sprout (green)" },
+            { "value": "kefir",     "label": "Kefir (sage)" },
+            { "value": "inulin",    "label": "Inulin (teal)" },
+            { "value": "aam-panna", "label": "Aam panna (mustard)" }
+          ],
+          "default": "kanji" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "GB · Home Shop Tabs",
+      "settings": { "columns": "3", "products_per_tab": 6 },
+      "blocks": [
+        { "type": "tab", "settings": { "label": "Shop all",          "tab_id": "all",          "theme": "kanji",     "view_all_label": "View all products" } },
+        { "type": "tab", "settings": { "label": "Fermentation Kits", "tab_id": "fermentation", "theme": "kanji",     "cat_band": "Probiotic Drink",  "view_all_label": "View all fermentation kits" } },
+        { "type": "tab", "settings": { "label": "Sprouts",           "tab_id": "sprouts",      "theme": "sprout",    "cat_band": "Grows Sprouts",    "view_all_label": "View all sprouts" } },
+        { "type": "tab", "settings": { "label": "Prebiotic",         "tab_id": "prebiotic",    "theme": "inulin",    "cat_band": "Prebiotic Powder", "view_all_label": "View all prebiotic" } },
+        { "type": "tab", "settings": { "label": "Dairy Cultures",    "tab_id": "dairy",        "theme": "kefir",     "cat_band": "Dairy Culture",    "view_all_label": "View all dairy cultures" } },
+        { "type": "tab", "settings": { "label": "Refills",           "tab_id": "refills",      "theme": "achaar",    "cat_band": "Spice Refill",     "view_all_label": "View all refills" } },
+        { "type": "tab", "settings": { "label": "Baking",            "tab_id": "baking",       "theme": "aam-panna", "cat_band": "Baking",           "view_all_label": "View all baking" } },
+        { "type": "tab", "settings": { "label": "Jars & Tools",      "tab_id": "jars",         "theme": "kanji",     "cat_band": "Tools",            "view_all_label": "View all jars" } },
+        { "type": "tab", "settings": { "label": "Recipe Books",      "tab_id": "books",        "theme": "kanji",     "cat_band": "Reading",          "view_all_label": "View all books" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

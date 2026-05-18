@@ -1,0 +1,62 @@
+{%- liquid
+  assign current_handle = product.handle
+  assign kit_handles = section.settings.kit_handles | default: 'kanji-making-kit,probiotic-achaar-making-kit,kimchi-making-kit,vegetable-fermentation-kit,aam-panna-making-kit,ultimate-fermentation-kit'
+  assign kit_labels = section.settings.kit_labels | default: 'Kanji,Achaar,Kimchi,Veggie,Aam Panna,All-In-One'
+  assign handles = kit_handles | split: ','
+  assign labels = kit_labels | split: ','
+-%}
+<div data-kit="fermentation" class="ferment-pdp fkv3-kit-switcher-wrap">
+  <section class="fkv3-kit-switcher-section" {%- render 'fkv3-section-attrs' -%}>
+    <div class="container">
+      <div class="fkv3-kit-switcher" role="tablist" aria-label="Fermentation kits">
+        {%- for handle_raw in handles -%}
+          {%- assign handle = handle_raw | strip -%}
+          {%- assign label = labels[forloop.index0] | strip -%}
+          {%- assign target = all_products[handle] -%}
+          {%- if target.handle != '' -%}
+            {%- assign is_active = false -%}
+            {%- if handle == current_handle -%}{%- assign is_active = true -%}{%- endif -%}
+            <a class="fkv3-kit-pill{% if is_active %} is-active{% endif %}" href="{{ target.url }}" aria-current="{% if is_active %}page{% else %}false{% endif %}" role="tab" tabindex="0">{{ label }}</a>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </section>
+</div>
+
+<style>
+  .fkv3-kit-switcher-section { position: sticky; top: 0; z-index: 90; padding: 10px 0; background: var(--kit-color-soft, #fff); border-bottom: 1px solid rgba(0,0,0,0.06); }
+  .fkv3-kit-switcher { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding: 4px 0; }
+  .fkv3-kit-switcher::-webkit-scrollbar { display: none; }
+  .fkv3-kit-pill { flex-shrink: 0; padding: 8px 16px; border-radius: 999px; font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text, #1F1F1D); background: rgba(255,255,255,0.7); border: 1px solid rgba(0,0,0,0.08); transition: background 120ms ease, color 120ms ease, border-color 120ms ease; text-decoration: none; }
+  .fkv3-kit-pill:hover { background: var(--kit-color, #FF7300); color: #fff; border-color: var(--kit-color, #FF7300); }
+  .fkv3-kit-pill.is-active { background: var(--kit-color, #FF7300); color: #fff; border-color: var(--kit-color, #FF7300); font-weight: 700; }
+</style>
+
+{% schema %}
+{
+  "name": "FK v3 — Kit switcher",
+  "tag": "section",
+  "class": "fkv3-kit-switcher-wrap",
+  "settings": [
+    { "type": "color", "id": "section_bg", "label": "Section background", "default": "#ffffff" },
+    { "type": "textarea", "id": "kit_handles", "label": "Kit handles (comma-separated)", "default": "kanji-making-kit,probiotic-achaar-making-kit,kimchi-making-kit,vegetable-fermentation-kit,aam-panna-making-kit,ultimate-fermentation-kit" },
+    { "type": "textarea", "id": "kit_labels", "label": "Kit labels (comma-separated, same order)", "default": "Kanji,Achaar,Kimchi,Veggie,Aam Panna,All-In-One" }
+  ,
+    { "type": "header", "content": "Spacing & Typography" },
+    { "type": "range", "id": "pad_top_d", "label": "Padding top — desktop (px)", "min": 0, "max": 200, "step": 4, "default": 80 },
+    { "type": "range", "id": "pad_bot_d", "label": "Padding bottom — desktop (px)", "min": 0, "max": 200, "step": 4, "default": 80 },
+    { "type": "range", "id": "pad_top_m", "label": "Padding top — mobile (px)", "min": 0, "max": 120, "step": 4, "default": 56 },
+    { "type": "range", "id": "pad_bot_m", "label": "Padding bottom — mobile (px)", "min": 0, "max": 120, "step": 4, "default": 56 },
+    { "type": "range", "id": "mar_top_d", "label": "Margin top — desktop (px)", "min": 0, "max": 100, "step": 4, "default": 0 },
+    { "type": "range", "id": "mar_bot_d", "label": "Margin bottom — desktop (px)", "min": 0, "max": 100, "step": 4, "default": 0 },
+    { "type": "range", "id": "mar_top_m", "label": "Margin top — mobile (px)", "min": 0, "max": 80, "step": 4, "default": 0 },
+    { "type": "range", "id": "mar_bot_m", "label": "Margin bottom — mobile (px)", "min": 0, "max": 80, "step": 4, "default": 0 },
+    { "type": "range", "id": "eyebrow_size_d", "label": "Eyebrow font size — desktop (px)", "min": 0, "max": 32, "step": 1, "default": 22 },
+    { "type": "range", "id": "eyebrow_size_m", "label": "Eyebrow font size — mobile (px)", "min": 0, "max": 24, "step": 1, "default": 14 },
+    { "type": "range", "id": "heading_size_d", "label": "Heading font size — desktop (px)", "min": 0, "max": 80, "step": 2, "default": 44 },
+    { "type": "range", "id": "heading_size_m", "label": "Heading font size — mobile (px)", "min": 0, "max": 60, "step": 2, "default": 30 }],
+  "presets": [ { "name": "FK v3 — Kit switcher" } ],
+  "enabled_on": { "templates": ["product"] }
+}
+{% endschema %}

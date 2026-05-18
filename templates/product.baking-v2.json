@@ -1,0 +1,429 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "hero": {
+      "type": "leo-hero",
+      "blocks": {
+        "hb-1": {
+          "type": "hero_benefit",
+          "settings": {
+            "icon_emoji": "🧪",
+            "label": "Live, high-CFU yeast"
+          }
+        },
+        "hb-2": {
+          "type": "hero_benefit",
+          "settings": {
+            "icon_emoji": "🇪🇪",
+            "label": "Direct from Estonia"
+          }
+        },
+        "hb-3": {
+          "type": "hero_benefit",
+          "settings": {
+            "icon_emoji": "🚫",
+            "label": "No additives, no fillers"
+          }
+        },
+        "hb-4": {
+          "type": "hero_benefit",
+          "settings": {
+            "icon_emoji": "📅",
+            "label": "12-month shelf life"
+          }
+        },
+        "ha-1": {
+          "type": "hero_accordion_tab",
+          "settings": {
+            "label": "Description",
+            "body": "<p>Active dry baker's yeast, sourced direct from Salutaguse, Estonia — one of the world's most consistent yeast producers. 120g vacuum-sealed pouch keeps the live cultures dormant until you bloom them. One pack rises about 30 standard loaves.</p><p>Pure Saccharomyces cerevisiae. Nothing else. No emulsifiers, no anti-caking agents, no improvers.</p>",
+            "default_open": true
+          }
+        },
+        "ha-2": {
+          "type": "hero_accordion_tab",
+          "settings": {
+            "label": "How To Use",
+            "body": "<ol><li><strong>Bloom</strong> — Sprinkle 7g (≈2 tsp) into 100ml warm water (38–43°C) with 1 tsp sugar. Wait 8–10 min for foam.</li><li><strong>Mix</strong> — Combine bloomed yeast with flour, salt, water. Knead 8 min by hand or 6 min in mixer.</li><li><strong>Prove</strong> — Cover, rest in warm spot 60–90 min until doubled.</li><li><strong>Bake</strong> — Shape, second prove 30–45 min, bake at 220°C for 25–35 min.</li></ol>"
+          }
+        },
+        "ha-3": {
+          "type": "hero_accordion_tab",
+          "settings": {
+            "label": "What's Inside",
+            "body": "<ul><li><strong>120g vacuum-sealed pouch</strong> — air-tight, light-blocking foil</li><li><strong>Saccharomyces cerevisiae</strong> active dry yeast (single strain)</li><li><strong>Storage guide card</strong> — fridge / freezer / pantry instructions</li><li><strong>Quick-start recipe card</strong> — basic loaf, focaccia, naan</li></ul>"
+          }
+        }
+      },
+      "block_order": [
+        "hb-1",
+        "hb-2",
+        "hb-3",
+        "hb-4",
+        "ha-1",
+        "ha-2",
+        "ha-3"
+      ],
+      "settings": {
+        "show_breadcrumb": true,
+        "trust_1_icon": "shopify://shop_images/package.svg",
+        "trust_1_text": "Vacuum-sealed",
+        "trust_2_icon": "shopify://shop_images/icon-sparkle.svg",
+        "trust_2_text": "Lab-tested",
+        "trust_3_icon": "shopify://shop_images/gift.svg",
+        "trust_3_text": "Free shipping over ₹499"
+      }
+    },
+    "features": {
+      "type": "gb-card-grid-v2",
+      "blocks": {
+        "fc-1": {
+          "type": "card",
+          "settings": {
+            "icon_emoji": "🧪",
+            "label": "LIVE CFU",
+            "heading": "5× higher live count",
+            "description": "Independent lab-tested at 1.2 × 10¹⁰ CFU/g — significantly higher than typical retail yeast."
+          }
+        },
+        "fc-2": {
+          "type": "card",
+          "settings": {
+            "icon_emoji": "🇪🇪",
+            "label": "ORIGIN",
+            "heading": "Direct from Salutaguse",
+            "description": "Imported direct from Salutaguse Pärmitehas, Estonia. Same supplier as professional bakeries across Europe."
+          }
+        },
+        "fc-3": {
+          "type": "card",
+          "settings": {
+            "icon_emoji": "🚫",
+            "label": "PURE",
+            "heading": "No improvers, no fillers",
+            "description": "Just active dry yeast. No emulsifiers, no anti-caking agents, no vitamin C dough conditioners hiding in the bag."
+          }
+        },
+        "fc-4": {
+          "type": "card",
+          "settings": {
+            "icon_emoji": "📅",
+            "label": "FRESH",
+            "heading": "12-month shelf life",
+            "description": "Vacuum-sealed within 90 days of production. Each pouch carries a printed best-before date — no guessing."
+          }
+        }
+      },
+      "block_order": [
+        "fc-1",
+        "fc-2",
+        "fc-3",
+        "fc-4"
+      ],
+      "settings": {
+        "eyebrow": "WHY THIS YEAST",
+        "heading": "BUILT FOR",
+        "heading_em": "PROFESSIONAL BAKES.",
+        "columns": "4"
+      }
+    },
+    "comparison": {
+      "type": "gb-comparison-v2",
+      "blocks": {
+        "cr-1": {
+          "type": "cmp_row",
+          "settings": {
+            "label": "Origin",
+            "kit_mark": "yes",
+            "kit_text": "Salutaguse, Estonia (single source)",
+            "col2_text": "Unknown / multiple bulk re-packers"
+          }
+        },
+        "cr-2": {
+          "type": "cmp_row",
+          "settings": {
+            "label": "Live CFU count",
+            "kit_mark": "yes",
+            "kit_text": "1.2 × 10¹⁰ /g (lab-tested)",
+            "col2_text": "Typically 0.2–0.5 × 10¹⁰ /g"
+          }
+        },
+        "cr-3": {
+          "type": "cmp_row",
+          "settings": {
+            "label": "Activation time",
+            "kit_mark": "yes",
+            "kit_text": "8–10 min reliable bloom",
+            "col2_text": "Often 15–25 min, sometimes flat"
+          }
+        },
+        "cr-4": {
+          "type": "cmp_row",
+          "settings": {
+            "label": "Additives",
+            "kit_mark": "yes",
+            "kit_text": "None — just yeast",
+            "col2_mark": "no",
+            "col2_text": "Emulsifiers, dough conditioners"
+          }
+        },
+        "cr-5": {
+          "type": "cmp_row",
+          "settings": {
+            "label": "Cost per loaf",
+            "kit_mark": "yes",
+            "kit_text": "~₹4 (120g rises 30 loaves)",
+            "col2_text": "₹6–10"
+          }
+        },
+        "cr-6": {
+          "type": "cmp_row",
+          "settings": {
+            "label": "Best-before printed",
+            "kit_mark": "yes",
+            "kit_text": "Yes, on every pouch",
+            "col2_text": "Often missing or generic"
+          }
+        }
+      },
+      "block_order": [
+        "cr-1",
+        "cr-2",
+        "cr-3",
+        "cr-4",
+        "cr-5",
+        "cr-6"
+      ],
+      "settings": {
+        "eyebrow": "VS GROCERY YEAST",
+        "heading": "WHY DIRECT-SOURCED",
+        "heading_em": "WINS.",
+        "col_count": "2",
+        "col_kit_label": "GutBasket",
+        "col_2_label": "Repacked Yeast"
+      }
+    },
+    "how-to-make": {
+      "type": "leo-how-to-make",
+      "blocks": {
+        "step-1": {
+          "type": "step",
+          "settings": {
+            "title": "BLOOM",
+            "description": "7g yeast + 100ml warm water (38–43°C) + 1 tsp sugar. Wait 8–10 min for foam."
+          }
+        },
+        "step-2": {
+          "type": "step",
+          "settings": {
+            "title": "MIX & KNEAD",
+            "description": "Add bloomed yeast to 500g flour + 10g salt + ~280ml water. Knead 8 min."
+          }
+        },
+        "step-3": {
+          "type": "step",
+          "settings": {
+            "title": "FIRST PROVE",
+            "description": "Cover, rest in warm spot 60–90 min until doubled in size."
+          }
+        },
+        "step-4": {
+          "type": "step",
+          "settings": {
+            "title": "SHAPE & BAKE",
+            "description": "Shape, second prove 30–45 min, bake at 220°C for 25–35 min."
+          }
+        }
+      },
+      "block_order": [
+        "step-1",
+        "step-2",
+        "step-3",
+        "step-4"
+      ],
+      "settings": {
+        "how_eyebrow": "HOW TO USE",
+        "how_heading": "4 STEPS TO",
+        "how_heading_em": "FRESH BREAD."
+      }
+    },
+    "includes": {
+      "type": "gb-includes-v2",
+      "settings": {
+        "eyebrow": "WHAT YOU GET, WHAT YOU NEED",
+        "heading": "EVERYTHING IN",
+        "heading_em": "THE BAG.",
+        "left_pill": "INCLUDED",
+        "left_heading": "What's in the pack",
+        "left_bullets": "120g vacuum-sealed yeast pouch\nStorage guide card (fridge / freezer / pantry)\nQuick-start recipe card (loaf, focaccia, naan)\nFreshness seal (resealable after first use)",
+        "left_note": "Once opened, store airtight in the fridge for up to 4 months or freezer for 12 months.",
+        "right_pill": "YOU'LL NEED",
+        "right_heading": "What you'll need at home",
+        "right_bullets": "Bread flour or maida (500g per loaf)\nSalt (10g per loaf)\nLukewarm water (38–43°C, ~280ml)\nMixing bowl + clean dish towel\nLoaf tin or baking tray\nOven that goes to 220°C",
+        "right_note": "Optional: digital scale for precision, kneading mixer to save time."
+      }
+    },
+    "ugc": {
+      "type": "leo-ugc",
+      "blocks": {
+        "ugc-1": {
+          "type": "ugc_review",
+          "settings": {
+            "quote": "Made the switch from grocery yeast six months ago. My loaves rise consistently now — not just on lucky days. Worth every rupee.",
+            "name": "Sneha Kapoor",
+            "meta": "Home baker · Mumbai"
+          }
+        },
+        "ugc-2": {
+          "type": "ugc_review",
+          "settings": {
+            "quote": "I run a small home bakery. This yeast bloom is so reliable that I've stopped second-guessing my prove times. Game changer.",
+            "name": "Rohan Mehta",
+            "meta": "Home bakery · Pune"
+          }
+        },
+        "ugc-3": {
+          "type": "ugc_review",
+          "settings": {
+            "quote": "First time baker here. Followed the recipe card and got a perfect loaf on my first try. The foam during bloom was reassuring.",
+            "name": "Priya Sharma",
+            "meta": "First-time baker · Bengaluru"
+          }
+        }
+      },
+      "block_order": [
+        "ugc-1",
+        "ugc-2",
+        "ugc-3"
+      ],
+      "settings": {
+        "eyebrow": "REAL BAKERS",
+        "heading": "BAKERS WHO",
+        "heading_em": "TRUST THIS YEAST."
+      }
+    },
+    "faq": {
+      "type": "leo-faq",
+      "blocks": {
+        "faq-1": {
+          "type": "faq",
+          "settings": {
+            "question": "How many loaves does 120g rise?",
+            "answer": "<p>Approximately 30 standard 500g-flour loaves. One full recipe uses ~7g (≈2 tsp).</p>"
+          }
+        },
+        "faq-2": {
+          "type": "faq",
+          "settings": {
+            "question": "How should I store it once opened?",
+            "answer": "<p>Reseal the pouch and refrigerate for up to 4 months, or freeze for up to 12 months. Bring to room temperature before blooming.</p>"
+          }
+        },
+        "faq-3": {
+          "type": "faq",
+          "settings": {
+            "question": "Is it vegan and gluten-free?",
+            "answer": "<p>Vegan: yes. Gluten-free: yes — yeast itself contains no gluten. Suitable for celiac diets when paired with gluten-free flour.</p>"
+          }
+        },
+        "faq-4": {
+          "type": "faq",
+          "settings": {
+            "question": "What if my yeast doesn't bloom?",
+            "answer": "<p>Two common causes: (1) water too hot — kills the yeast above 49°C; (2) yeast not stored cold after opening. Our pouches print a best-before date; if within range and stored cold, the bloom should be reliable.</p>"
+          }
+        },
+        "faq-5": {
+          "type": "faq",
+          "settings": {
+            "question": "Can I use it for pizza, naan, focaccia?",
+            "answer": "<p>Yes — same active dry yeast works for all yeasted breads and flatbreads. Pizza usually uses 1g per 100g flour; naan and focaccia 1.5g.</p>"
+          }
+        },
+        "faq-6": {
+          "type": "faq",
+          "settings": {
+            "question": "Why is it cheaper than fresh yeast at bakery suppliers?",
+            "answer": "<p>Active dry yeast is ~70% less moisture than fresh, so 7g of dry equals ~21g of fresh. Cost per loaf works out lower, and shelf life is much longer.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "faq-1",
+        "faq-2",
+        "faq-3",
+        "faq-4",
+        "faq-5",
+        "faq-6"
+      ],
+      "settings": {
+        "faq_eyebrow": "QUESTIONS?",
+        "faq_heading": "COMMON",
+        "faq_heading_em": "QUESTIONS"
+      }
+    },
+    "cross": {
+      "type": "leo-cross",
+      "settings": {
+        "cross_eyebrow": "PAIR IT WITH",
+        "cross_heading": "ALSO IN YOUR PANTRY"
+      }
+    },
+    "judgeme": {
+      "type": "leo-judgeme",
+      "settings": {
+        "judgeme_eyebrow": "ALL REVIEWS",
+        "judgeme_heading": "VERIFIED",
+        "judgeme_heading_em": "REVIEWS"
+      }
+    },
+    "sticky-atc": {
+      "type": "leo-sticky-atc",
+      "settings": {
+        "sticky_show": true
+      }
+    },
+    "ingredients": {
+      "type": "gb-image-text-v2",
+      "settings": {
+        "eyebrow": "INGREDIENTS & SOURCING",
+        "heading": "Inside the",
+        "heading_em": "pack.",
+        "body": "",
+        "bullets": "",
+        "image_position": "left"
+      }
+    },
+    "recipes": {
+      "type": "leo-recipes",
+      "settings": {
+        "recipes_eyebrow": "RECIPE IDEAS",
+        "recipe_count": "",
+        "recipe_h_label": "",
+        "recipe_h_text": "RECIPES TO TRY"
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "features",
+    "ingredients",
+    "comparison",
+    "how-to-make",
+    "recipes",
+    "includes",
+    "ugc",
+    "faq",
+    "cross",
+    "judgeme",
+    "sticky-atc"
+  ]
+}

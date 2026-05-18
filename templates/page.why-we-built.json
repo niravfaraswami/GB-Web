@@ -1,0 +1,131 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "gb-content-page",
+      "blocks": {
+        "hero": {
+          "type": "hero",
+          "settings": {
+            "eyebrow": "OUR STORY · 01",
+            "title": "We built GutBasket because Indian gut health is broken",
+            "subtitle": "<p>And \"probiotic\" is doing all the lying. Here's what we saw, what we stand against, and what we stand for.</p>"
+          }
+        },
+        "txt_problem": {
+          "type": "text",
+          "settings": {
+            "layout": "centered",
+            "eyebrow": "THE PROBLEM",
+            "heading": "What we saw in 2020",
+            "body": "<p>Walk into any Indian supermarket and pick up a 'probiotic' yogurt. Read the label. The strains aren't named, the count isn't disclosed, and the pasteurisation step has killed every live bacterium on the way to the shelf.</p><p>Meanwhile, the dahi your grandmother set on the counter overnight, or the kanji your mother fermented in winter, was the real thing — billions of live <em>Lactobacillus</em> doing what they've done in Indian kitchens for centuries.</p><p>Somewhere in the last 30 years, we replaced that with shelf-stable factory yogurt and called it progress.</p>"
+          }
+        },
+        "txt_against": {
+          "type": "text",
+          "settings": {
+            "layout": "centered",
+            "eyebrow": "WHAT WE STAND AGAINST",
+            "heading": "Dead bacteria sold as probiotics",
+            "body": "<p>If the bacteria are dead by the time you eat it, calling it probiotic is dishonest. Most factory ferments are pasteurised after fermentation — a regulatory shortcut that kills the live cultures but lets the brand keep the marketing.</p><p>We won't do that. Every kit ships designed to keep the LAB alive in your fridge, not just on the box.</p>"
+          }
+        },
+        "beliefs": {
+          "type": "features",
+          "settings": {
+            "eyebrow": "",
+            "heading": "What we stand for.",
+            "intro": "",
+            "columns": "auto",
+            "item_1_icon": "01",
+            "item_1_title": "Live cultures only",
+            "item_1_desc": "If the bacteria are dead by the time you eat it, calling it probiotic is dishonest. Every kit is designed so the LAB are alive in your fridge, not just on the box.",
+            "item_2_icon": "02",
+            "item_2_title": "Salt brine, not vinegar",
+            "item_2_desc": "Vinegar kills the bacteria you want to grow. We use salt-water at 2–3%, which is the actual chemistry of every traditional ferment that has ever worked.",
+            "item_3_icon": "03",
+            "item_3_title": "Indian-first sourcing",
+            "item_3_desc": "Black mustard from Kheda. Carrots from Punjab. Sea salt from Tuticorin. We import only when no Indian supplier exists at the quality we need.",
+            "item_4_icon": "",
+            "item_4_title": "",
+            "item_4_desc": "",
+            "item_5_icon": "",
+            "item_5_title": "",
+            "item_5_desc": "",
+            "item_6_icon": "",
+            "item_6_title": "",
+            "item_6_desc": ""
+          }
+        },
+        "timeline": {
+          "type": "features",
+          "settings": {
+            "eyebrow": "",
+            "heading": "How we got here.",
+            "intro": "",
+            "columns": "auto",
+            "item_1_icon": "Dec 2020",
+            "item_1_title": "One jar of kanji",
+            "item_1_desc": "A failed Punjabi black-carrot kanji on a Gandhinagar windowsill. Then a working one. Then five at once.",
+            "item_2_icon": "Sep 2024",
+            "item_2_title": "First 50 customers",
+            "item_2_desc": "Friends-of-friends in Ahmedabad and Pune. Hand-delivered. Half wrote back with photos.",
+            "item_3_icon": "Dec 2024",
+            "item_3_title": "FSSAI license, real packaging",
+            "item_3_desc": "License 10021021000439. Lab-tested, retort-grade pouches, an actual recipe book.",
+            "item_4_icon": "",
+            "item_4_title": "",
+            "item_4_desc": "",
+            "item_5_icon": "",
+            "item_5_title": "",
+            "item_5_desc": "",
+            "item_6_icon": "",
+            "item_6_title": "",
+            "item_6_desc": ""
+          }
+        },
+        "team_text": {
+          "type": "text",
+          "settings": {
+            "layout": "centered",
+            "eyebrow": "THE TEAM",
+            "heading": "Eleven people. One small workshop in Gandhinagar.",
+            "body": "<p>We're not a venture-funded D2C brand chasing scale. We're a kitchen of food scientists, fermenters, and supply-chain people who got tired of the lying and decided to fix one thing.</p><p>If you order a kit, it was packed by someone whose name you can ask for on WhatsApp.</p>"
+          }
+        },
+        "cta_next": {
+          "type": "cta",
+          "settings": {
+            "theme": "dark",
+            "eyebrow": "WHERE TO NEXT",
+            "title": "Read the science.",
+            "desc": "If we've earned a few minutes of your attention, the next thing to read is the actual chemistry of what's happening in the jar.",
+            "button_label": "The science behind our kits →",
+            "button_link": "/pages/the-science-behind-our-kits"
+          }
+        }
+      },
+      "block_order": [
+        "hero",
+        "txt_problem",
+        "txt_against",
+        "beliefs",
+        "timeline",
+        "team_text",
+        "cta_next"
+      ],
+      "settings": {}
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

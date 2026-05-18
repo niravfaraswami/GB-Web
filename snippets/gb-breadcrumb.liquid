@@ -1,0 +1,63 @@
+{%- comment -%}
+  PDP breadcrumb — Home → Collection → Product.
+
+  Why a snippet: every PDP template renders this; centralizing the
+  collection-resolution logic here keeps the convention consistent
+  and means future tweaks (e.g. a `custom.primary_collection`
+  metafield override) only need one edit.
+
+  Resolution order for the middle crumb:
+    1. Shopify's `collection` global — populated when the customer
+       arrived via `/collections/{handle}/products/{handle}`.
+    2. product.collections — first match that isn't Shopify's
+       auto-generated `frontpage` (the default "Home page" group
+       that effectively every product lands in) or `all` (the
+       auto-generated catch-all).
+    3. Neither → show just "Home / {product}".
+
+  If a product belongs to no curated collection at all, the middle
+  crumb is dropped cleanly. No hardcoded fallback strings.
+{%- endcomment -%}
+{%- liquid
+  assign crumb = collection
+  if crumb == blank or crumb.handle == 'frontpage' or crumb.handle == 'all'
+    # Two-pass fallback. BYOK helper collections (byok-books / -jars /
+    # -spice-mix-copy / etc.) are merchant-internal — used by the
+    # kit-builder, not customer-facing browsing. They're only a
+    # legitimate crumb when the product has NO real category
+    # collection. Pass 1 finds a real category; pass 2 accepts BYOK
+    # only if pass 1 came up empty.
+    assign primary = nil
+    assign byok_fallback = nil
+    for c in product.collections
+      if c.handle == 'frontpage' or c.handle == 'all'
+        continue
+      endif
+      assign handle_prefix = c.handle | slice: 0, 5
+      if handle_prefix == 'byok-'
+        if byok_fallback == nil
+          assign byok_fallback = c
+        endif
+      else
+        if primary == nil
+          assign primary = c
+          break
+        endif
+      endif
+    endfor
+    if crumb == blank
+      if primary
+        assign crumb = primary
+      else
+        assign crumb = byok_fallback
+      endif
+    endif
+  endif
+-%}
+<div class="breadcrumb">
+  <a href="{{ routes.root_url }}">Home</a> /
+  {%- if crumb -%}
+    <a href="{{ crumb.url }}">{{ crumb.title }}</a> /
+  {%- endif -%}
+  <span>{{ product.title }}</span>
+</div>

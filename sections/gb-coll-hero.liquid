@@ -1,0 +1,46 @@
+{%- render 'leo_kit_chrome' -%}
+
+{%- liquid
+  assign hero_emoji = collection.metafields.custom.hero_emoji | default: section.settings.fallback_emoji
+  # Banner image source ladder:
+  #   1. collection.metafields.custom.hero_image  (banner-specific override)
+  #   2. collection.image                          (the Shopify-admin collection image)
+  #   3. emoji fallback
+  assign hero_image = collection.metafields.custom.hero_image | default: collection.image
+-%}
+
+<section class="coll-hero" {%- render 'leo_kit_attrs' -%}>
+  <div class="container">
+    <div>
+      <h1>{{ collection.title | default: section.settings.fallback_title }}</h1>
+    </div>
+    <div class="coll-hero-image">
+      {%- if hero_image != blank -%}
+        <img src="{{ hero_image | image_url: width: 1200 }}" alt="{{ collection.title | escape }}" loading="eager" width="900" height="506">
+      {%- elsif hero_emoji != blank -%}
+        {{ hero_emoji }}
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "GB · Collection Hero",
+  "tag": "section",
+  "class": "gb-coll-hero-wrap",
+  "settings": [
+    { "type": "text", "id": "fallback_title", "label": "Fallback title", "default": "Collection title" },
+    { "type": "textarea", "id": "fallback_subtitle", "label": "Fallback subtitle" },
+    { "type": "text", "id": "fallback_emoji", "label": "Fallback hero emoji", "default": "🫙" },
+    { "type": "header", "content": "Spacing & Typography" },
+    { "type": "range", "id": "pad_top_d", "label": "Padding top — desktop (px)", "min": 0, "max": 200, "step": 4, "default": 40 },
+    { "type": "range", "id": "pad_bot_d", "label": "Padding bottom — desktop (px)", "min": 0, "max": 200, "step": 4, "default": 32 },
+    { "type": "range", "id": "pad_top_m", "label": "Padding top — mobile (px)", "min": 0, "max": 120, "step": 4, "default": 28 },
+    { "type": "range", "id": "pad_bot_m", "label": "Padding bottom — mobile (px)", "min": 0, "max": 120, "step": 4, "default": 24 },
+    { "type": "range", "id": "heading_size_d", "label": "H1 size — desktop (px)", "min": 24, "max": 80, "step": 2, "default": 44 },
+    { "type": "range", "id": "heading_size_m", "label": "H1 size — mobile (px)", "min": 20, "max": 60, "step": 2, "default": 30 }
+  ],
+  "presets": [{ "name": "GB · Collection Hero" }]
+}
+{% endschema %}

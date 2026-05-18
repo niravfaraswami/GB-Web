@@ -1,0 +1,103 @@
+{{ 'sprout-maker.css' | asset_url | stylesheet_tag }}
+{{ 'sprout-maker-v2.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign p = product
+  assign mf_steps      = p.metafields.custom.featured_steps.value
+  assign mf_step_icons = p.metafields.custom.step_icons.value
+  assign mf_how_video  = p.metafields.custom.how_to_make_video
+  assign step_blocks   = section.blocks | where: 'type', 'step'
+-%}
+
+{%- if mf_steps != blank or step_blocks.size > 0 -%}
+  <section class="how-make-section sprout-pdp-v2" data-kit="sprouts">
+    <div class="container">
+      <div class="section-header centered">
+        <div class="eyebrow">{{ section.settings.how_eyebrow }}</div>
+        <h2>{{ section.settings.how_heading }}<br><em>{{ section.settings.how_heading_em }}</em></h2>
+      </div>
+      {%- assign how_video = mf_how_video | default: section.settings.how_video -%}
+      <div class="how-make-grid">
+        <div class="hm-video-hero">
+          {%- if how_video != blank -%}
+            {{ how_video | video_tag: image_size: '1100x', controls: true, loop: true, muted: true, autoplay: false }}
+          {%- elsif section.settings.how_poster != blank -%}
+            <img src="{{ section.settings.how_poster | image_url: width: 1200 }}" alt="How to make sprouts" loading="lazy" width="1200" height="1200">
+          {%- endif -%}
+          {%- if section.settings.how_pill != blank -%}
+            <span class="hm-watch-pill">{{ section.settings.how_pill }}</span>
+          {%- endif -%}
+        </div>
+        <div class="hm-steps">
+          {%- if mf_steps != blank -%}
+            {%- for step in mf_steps -%}
+              <div class="hm-step">
+                <div class="hm-num">
+                  {%- if step.icon != blank -%}
+                    <img src="{{ step.icon | image_url: width: 72 }}" alt="{{ step.title | escape }}" loading="lazy" width="36" height="36" class="hm-num-img">
+                  {%- else -%}
+                    {{ forloop.index }}
+                  {%- endif -%}
+                </div>
+                <div class="hm-step-body">
+                  <div class="hm-title">{{ step.title }}</div>
+                  <div class="hm-desc">{{ step.description }}</div>
+                </div>
+              </div>
+            {%- endfor -%}
+          {%- else -%}
+            {%- for block in step_blocks -%}
+              {%- assign target_idx = forloop.index0 -%}
+              {%- assign mf_icon = nil -%}
+              {%- if mf_step_icons -%}{%- for ic in mf_step_icons -%}{%- if forloop.index0 == target_idx -%}{%- assign mf_icon = ic -%}{%- endif -%}{%- endfor -%}{%- endif -%}
+              <div class="hm-step" {{ block.shopify_attributes }}>
+                <div class="hm-num">
+                  {%- if mf_icon != blank -%}
+                    <img src="{{ mf_icon | image_url: width: 72 }}" alt="{{ block.settings.title | escape }}" loading="lazy" width="36" height="36" class="hm-num-img">
+                  {%- elsif block.settings.icon_image != blank -%}
+                    <img src="{{ block.settings.icon_image | image_url: width: 72 }}" alt="{{ block.settings.title | escape }}" loading="lazy" width="36" height="36" class="hm-num-img">
+                  {%- else -%}
+                    {{ forloop.index }}
+                  {%- endif -%}
+                </div>
+                <div class="hm-step-body">
+                  <div class="hm-title">{{ block.settings.title }}</div>
+                  <div class="hm-desc">{{ block.settings.description }}</div>
+                </div>
+              </div>
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "SM v2 · How to Make",
+  "tag": "section",
+  "class": "section--sm-v2-how",
+  "max_blocks": 12,
+  "settings": [
+    { "type": "text", "id": "how_eyebrow", "label": "Eyebrow", "default": "HOW TO MAKE" },
+    { "type": "text", "id": "how_heading", "label": "Heading", "default": "4 STEPS." },
+    { "type": "text", "id": "how_heading_em", "label": "Heading (highlighted)", "default": "FRESH SPROUTS." },
+    { "type": "video", "id": "how_video", "label": "Demo video" },
+    { "type": "image_picker", "id": "how_poster", "label": "Poster image (fallback)" },
+    { "type": "text", "id": "how_pill", "label": "Pill text", "default": "▶ WATCH · 60 SEC" }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "How-to step",
+      "settings": [
+        { "type": "image_picker", "id": "icon_image", "label": "Step icon image", "info": "Optional. Replaces the number badge." },
+        { "type": "text", "id": "title", "label": "Step title" },
+        { "type": "textarea", "id": "description", "label": "Step description" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "SM v2 · How to Make" }]
+}
+{% endschema %}

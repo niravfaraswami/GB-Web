@@ -1,0 +1,51 @@
+{%- render 'leo_kit_chrome' -%}
+
+{%- if section.settings.quote != blank or section.settings.rating_num != blank -%}
+  <section class="coll-testimonial" {%- render 'leo_kit_attrs' -%}>
+    <div class="container">
+      <div class="testimonial-card">
+        <div>
+          {%- if section.settings.show_stars -%}<div class="testi-stars">★★★★★</div>{%- endif -%}
+          {%- if section.settings.quote != blank -%}<div class="testi-quote">{{ section.settings.quote }}</div>{%- endif -%}
+          <div class="testi-author">
+            {%- assign avatar_letter = section.settings.author_initial | default: section.settings.author_name | slice: 0 | upcase -%}
+            <div class="testi-avatar">{{ avatar_letter }}</div>
+            <div>
+              {%- if section.settings.author_name != blank -%}<div class="testi-name">{{ section.settings.author_name }}</div>{%- endif -%}
+              {%- if section.settings.author_role != blank -%}<div class="testi-role">{{ section.settings.author_role }}</div>{%- endif -%}
+            </div>
+          </div>
+        </div>
+        {%- if section.settings.rating_num != blank -%}
+          <div class="testi-side">
+            <div class="testi-rating-num">{{ section.settings.rating_num }}</div>
+            <div class="testi-rating-label">{{ section.settings.rating_label | default: 'AVG · ALL PRODUCTS' }}</div>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "GB · Coll Testimonial",
+  "tag": "section",
+  "class": "gb-coll-testimonial-wrap",
+  "settings": [
+    { "type": "checkbox", "id": "show_stars", "label": "Show 5 stars", "default": true },
+    { "type": "richtext", "id": "quote", "label": "Quote" },
+    { "type": "text", "id": "author_name", "label": "Author name" },
+    { "type": "text", "id": "author_role", "label": "Author role / location" },
+    { "type": "text", "id": "author_initial", "label": "Avatar letter (defaults to first letter of name)" },
+    { "type": "text", "id": "rating_num", "label": "Aggregate rating number", "default": "4.85" },
+    { "type": "text", "id": "rating_label", "label": "Rating label", "default": "AVG · ALL PRODUCTS" },
+    { "type": "header", "content": "Spacing & Typography" },
+    { "type": "range", "id": "pad_top_d", "label": "Padding top — desktop (px)", "min": 0, "max": 200, "step": 4, "default": 32 },
+    { "type": "range", "id": "pad_bot_d", "label": "Padding bottom — desktop (px)", "min": 0, "max": 200, "step": 4, "default": 64 },
+    { "type": "range", "id": "pad_top_m", "label": "Padding top — mobile (px)", "min": 0, "max": 120, "step": 4, "default": 24 },
+    { "type": "range", "id": "pad_bot_m", "label": "Padding bottom — mobile (px)", "min": 0, "max": 120, "step": 4, "default": 48 }
+  ],
+  "presets": [{ "name": "GB · Collection Testimonial" }]
+}
+{% endschema %}

@@ -1,0 +1,106 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "gb-content-page",
+      "blocks": {
+        "hero": {
+          "type": "hero",
+          "settings": {
+            "eyebrow": "COMMUNITY · 04",
+            "title": "One email a week. Recipes, science, no spam.",
+            "subtitle": "<p>Friday mornings. 4 sections. Always the same shape, never filler. Unsubscribe in one click anytime.</p>"
+          }
+        },
+        "subscribe": {
+          "type": "cta",
+          "settings": {
+            "theme": "dark",
+            "eyebrow": "SUBSCRIBE",
+            "title": "A real fermenter's email, every Friday.",
+            "desc": "Recipes you'll actually cook, science you'll actually find interesting. Written by a human, not a marketing automation.",
+            "button_label": "Subscribe",
+            "button_link": "/pages/newsletter#signup"
+          }
+        },
+        "what_you_get": {
+          "type": "features",
+          "settings": {
+            "heading": "One email. Four sections. Always.",
+            "item_1_icon": "🍳",
+            "item_1_title": "Recipe of the week",
+            "item_1_desc": "One member-tested recipe with photos, ingredient list with grams, and method. Always something you can make in a single weekend.",
+            "item_2_icon": "🦠",
+            "item_2_title": "One thing about microbes",
+            "item_2_desc": "300 words on a strain, a study, or a question we've been thinking about. No clickbait. Sources cited.",
+            "item_3_icon": "💬",
+            "item_3_title": "Forum highlights",
+            "item_3_desc": "Three threads from the Ferment Forum worth reading. Often: someone's failure post that turned out to be a great teaching moment."
+          }
+        },
+        "past_issues": {
+          "type": "features",
+          "settings": {
+            "heading": "Three to read first.",
+            "item_1_icon": "📨",
+            "item_1_title": "May 3, 2026 · Iss. 47",
+            "item_1_desc": "Beetroot kvass recipe + the postbiotic K2 question (why it's not in your dahi) + 3 forum threads on first-batch nerves.",
+            "item_2_icon": "📨",
+            "item_2_title": "Apr 12, 2026 · Iss. 44",
+            "item_2_desc": "No-oil mango achaar + L. brevis vs. L. plantarum (which one's making your kanji fizz) + DIY airlock builds.",
+            "item_3_icon": "📨",
+            "item_3_title": "Mar 22, 2026 · Iss. 41",
+            "item_3_desc": "Garlic-ginger paste fermented + how iodised salt actually kills LAB (chemistry walkthrough) + one customer's 30-day kefir streak."
+          }
+        },
+        "stats": {
+          "type": "text",
+          "settings": {
+            "eyebrow": "BY THE NUMBERS",
+            "heading": "It's a small list. We like it that way.",
+            "body": "<p><strong>2,847</strong> subscribers · <strong>62% open rate</strong> · <strong>14% click rate</strong></p><p>Industry average for newsletters is 22% open / 2% click. Ours is 3× higher because we don't pad, don't sell, and don't auto-fire welcome sequences.</p><p>If we lose interest, we'd rather lose subscribers than lose voice. So far, neither has happened.</p>"
+          }
+        },
+        "testimonial": {
+          "type": "quote",
+          "settings": {
+            "text": "<p>The only newsletter I read end-to-end. Most marketing emails get archived; yours actually changes how I cook on Sundays.</p>",
+            "author": "Subscriber feedback, Apr 2026"
+          }
+        },
+        "subscribe_2": {
+          "type": "cta",
+          "settings": {
+            "theme": "dark",
+            "eyebrow": "SIGN UP",
+            "title": "Subscribe — it's actually good.",
+            "desc": "Email only. Free. Unsubscribe anytime, no questions, no \"are you sure?\" pop-up.",
+            "button_label": "Subscribe to the newsletter",
+            "button_link": "/pages/newsletter#signup"
+          }
+        }
+      },
+      "block_order": [
+        "hero",
+        "subscribe",
+        "what_you_get",
+        "past_issues",
+        "stats",
+        "testimonial",
+        "subscribe_2"
+      ],
+      "settings": {}
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

@@ -1,0 +1,1038 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+{{ 'sprout-maker.css' | asset_url | stylesheet_tag }}
+
+{%- comment -%}
+  SEO overrides (custom.seo_title_override, custom.seo_description_override)
+  are intentionally NOT rendered here — sections render inside <body>, so
+  they can't influence <head>. To wire these up, add this to theme.liquid:
+
+    <title>{%- if request.page_type == 'product' and product.metafields.custom.seo_title_override != blank -%}
+      {{ product.metafields.custom.seo_title_override }}
+    {%- else -%}{{ page_title }}{%- endif -%}</title>
+
+    <meta name="description" content="{%- if request.page_type == 'product' and product.metafields.custom.seo_description_override != blank -%}
+      {{ product.metafields.custom.seo_description_override | escape }}
+    {%- else -%}{{ page_description | escape }}{%- endif -%}">
+
+  Until then, use Shopify's built-in SEO fields on each product
+  (Edit website SEO) — they end up in page_title / page_description.
+{%- endcomment -%}
+
+{%- liquid
+  assign p = product
+  assign tagline = p.metafields.custom.hero_tagline | default: 'Fresh, crunchy sprouts in 2–3 days. No smell. No mess. Just water and a jar.'
+  assign save_badge = p.metafields.custom.discount_badge
+  assign rating = p.metafields.custom.rating | default: 4.85
+  assign review_count = p.metafields.custom.review_count | default: 0
+  assign jar_capacity = p.metafields.custom.jar_capacity | default: p.metafields.custom.capacity | default: '700ml'
+  assign size_chart   = p.metafields.custom.jar_size_chart_image | default: p.metafields.custom.size_chart_image
+  assign companion = p.metafields.custom.companion_size_product.value
+  assign hero_trust = p.metafields.custom.hero_trust_strip.value
+  assign activity = p.metafields.custom.activity_items.value
+  assign benefits = p.metafields.custom.benefits_items.value
+  assign cross_sell_products = p.metafields.custom.cross_sell_products.value
+  assign days_subtitle = p.metafields.custom.days_subtitle
+  assign days_to_ferment = p.metafields.custom.days_to_ferment
+
+  assign mf_compare_left  = p.metafields.custom.comparison_left_image
+  assign mf_compare_right = p.metafields.custom.comparison_right_image
+  assign mf_compare_intro = p.metafields.custom.comparison_intro
+  assign mf_box_image     = p.metafields.custom.box_image
+  assign mf_box_note      = p.metafields.custom.box_note
+  assign mf_how_video     = p.metafields.custom.how_to_make_video
+  assign mf_hero_icons    = p.metafields.custom.hero_benefits_icons.value
+  assign mf_benefit_icons = p.metafields.custom.benefits_icons.value
+  assign mf_trust_icons   = p.metafields.custom.trust_strip_icons.value
+  assign mf_step_icons    = p.metafields.custom.step_icons.value
+  assign mf_reviews       = p.metafields.custom.featured_reviews.value
+  assign mf_faqs          = p.metafields.custom.featured_faqs.value
+  assign mf_steps         = p.metafields.custom.featured_steps.value
+  assign mf_components    = p.metafields.custom.featured_components.value
+  assign mf_trust_cards   = p.metafields.custom.featured_trust_cards.value
+  assign mf_quick_bens    = p.metafields.custom.featured_quick_benefits.value
+  assign mf_compare_rows  = p.metafields.custom.featured_comparison_rows.value
+  assign mf_reels         = p.metafields.custom.featured_reels.value
+-%}
+
+<div data-kit="sprouts" class="sprout-pdp">
+
+  <pre id="gb-debug-panel" style="display:none;position:fixed;bottom:0;left:0;right:0;max-height:50vh;overflow:auto;background:#1f1f1d;color:#e8f4dc;font:11px/1.4 monospace;padding:14px;z-index:99999;border-top:3px solid #ff7300;white-space:pre-wrap;word-break:break-all;">[GB DEBUG · ?gbdebug=1]
+featured_reviews exists?              {% if p.metafields.custom.featured_reviews %}YES{% else %}NO{% endif %}
+featured_reviews.type               = {{ p.metafields.custom.featured_reviews.type | default: 'nil' }}
+featured_reviews.value.size         = {{ p.metafields.custom.featured_reviews.value.size | default: 0 }}
+mf_reviews assigned blank?          = {% if mf_reviews == blank %}YES (won't render){% else %}NO{% endif %}
+
+featured_reviews.value (first entry):
+  type:    {{ p.metafields.custom.featured_reviews.value.first.type | default: 'nil' }}
+  handle:  {{ p.metafields.custom.featured_reviews.value.first.system.handle | default: 'nil' }}
+  quote:   {{ p.metafields.custom.featured_reviews.value.first.quote | default: '(empty)' }}
+  name:    {{ p.metafields.custom.featured_reviews.value.first.name | default: '(empty)' }}
+  meta:    {{ p.metafields.custom.featured_reviews.value.first.meta | default: '(empty)' }}
+  photo:   {% if p.metafields.custom.featured_reviews.value.first.photo %}{{ p.metafields.custom.featured_reviews.value.first.photo | image_url: width: 80 }}{% else %}(empty){% endif %}
+
+All product custom metafields with non-empty values:
+{%- for mf in p.metafields.custom -%}
+  {%- if mf[1] != blank %}
+  • custom.{{ mf[0] }} ({{ mf[1].type }}) — list size: {{ mf[1].value.size | default: '—' }}
+  {%- endif -%}
+{%- endfor %}
+</pre>
+  <script>
+    if (location.search.indexOf('gbdebug=1') !== -1) {
+      var p = document.getElementById('gb-debug-panel');
+      if (p) p.style.display = 'block';
+    }
+  </script>
+
+  {%- comment %} ============== 1. HERO ============== {% endcomment -%}
+  <section class="pdp-hero">
+    <div class="container">
+      {%- if section.settings.show_breadcrumb -%}
+        {%- render 'gb-breadcrumb' -%}
+      {%- endif -%}
+
+      <div class="hero-title-block">
+        <h1 class="product-name">{{ p.title }}</h1>
+        <p class="product-tagline">{{ tagline }}</p>
+      </div>
+
+      <div class="hero-grid">
+        <div class="gallery-stack">
+          <div class="gallery-main">
+            {%- if p.featured_image -%}
+              <img class="gallery-main-img"
+                   src="{{ p.featured_image | image_url: width: 1200 }}"
+                   srcset="{{ p.featured_image | image_url: width: 600 }} 600w, {{ p.featured_image | image_url: width: 1200 }} 1200w, {{ p.featured_image | image_url: width: 1800 }} 1800w"
+                   sizes="(min-width: 768px) 50vw, 100vw"
+                   alt="{{ p.featured_image.alt | default: p.title | escape }}"
+                   loading="eager"
+                   width="{{ p.featured_image.width }}"
+                   height="{{ p.featured_image.height }}">
+            {%- else -%}
+              <div class="gallery-illustration">🌱</div>
+            {%- endif -%}
+            {%- if p.images.size > 1 -%}
+              <button class="gallery-nav gallery-nav--prev" type="button" data-gallery-prev aria-label="Previous image">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+              </button>
+              <button class="gallery-nav gallery-nav--next" type="button" data-gallery-next aria-label="Next image">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </button>
+            {%- endif -%}
+          </div>
+          {%- if p.images.size > 1 -%}
+            <div class="gallery-thumbs">
+              {%- for image in p.images limit: 8 -%}
+                <button class="gallery-thumb {% if forloop.first %}active{% endif %}" type="button"
+                        data-full-src="{{ image | image_url: width: 1200 }}"
+                        data-full-alt="{{ image.alt | default: p.title | escape }}"
+                        aria-label="View image {{ forloop.index }}">
+                  <img src="{{ image | image_url: width: 180 }}"
+                       alt="{{ image.alt | default: p.title | escape }}"
+                       loading="lazy" width="90" height="90">
+                </button>
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+        </div>
+
+        <div class="product-info">
+          {%- if review_count > 0 -%}
+            <div class="rating-row">
+              <span class="stars" aria-label="{{ rating }} out of 5">★★★★★</span>
+              <a href="#judgeme-reviews" class="rating-link">{{ rating }} ({{ review_count }} reviews)</a>
+            </div>
+          {%- endif -%}
+
+          <div class="activity-row">
+            {%- render 'gb-bought-today' -%}
+            {%- if days_to_ferment != blank -%}
+              <div class="item"><span>⚡</span><span>{{ days_subtitle | default: 'Sprouts ready in' }} <strong>{{ days_to_ferment }} days</strong></span></div>
+            {%- endif -%}
+            {%- if activity != blank -%}
+              {%- for item in activity -%}
+                {%- assign parts = item | split: '|' -%}
+                <div class="item"><span>{{ parts[0] }}</span><span>{{ parts[1] }}</span></div>
+              {%- endfor -%}
+            {%- endif -%}
+          </div>
+
+          {%- if benefits != blank -%}
+            <div class="benefits-block">
+              <div class="label">Why this kit</div>
+              <div class="benefits-grid">
+                {%- for b in benefits -%}
+                  {%- assign parts = b | split: '|' -%}
+                  {%- comment -%} Shopify file_reference list Drops don't support [i] indexing — pluck via nested loop {%- endcomment -%}
+                  {%- assign target_idx = forloop.index0 -%}
+                  {%- assign mf_icon = nil -%}
+                  {%- if mf_hero_icons -%}
+                    {%- for ic in mf_hero_icons -%}
+                      {%- if forloop.index0 == target_idx -%}{%- assign mf_icon = ic -%}{%- endif -%}
+                    {%- endfor -%}
+                  {%- endif -%}
+                  {%- assign icon_src = mf_icon | image_url: width: 56 -%}
+                  {%- if icon_src == blank -%}{%- assign icon_src = mf_icon.url -%}{%- endif -%}
+                  {%- if icon_src == blank -%}{%- assign icon_src = mf_icon.src -%}{%- endif -%}
+                  <div class="benefit-item">
+                    <span class="benefit-icon{% if icon_src != blank %} benefit-icon--img{% endif %}">
+                      {%- if icon_src != blank -%}
+                        <span class="kit-icon-svg" data-svg-src="{{ icon_src }}" aria-hidden="true"></span>
+                        <img class="kit-icon-img" src="{{ icon_src }}" alt="" loading="lazy" width="24" height="24">
+                      {%- else -%}
+                        {{ parts[0] }}
+                      {%- endif -%}
+                    </span>
+                    <span>{{ parts[1] }}</span>
+                  </div>
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endif -%}
+
+          {%- form 'product', p, id: 'sprout-product-form' -%}
+            <div class="variant-block">
+              {%- assign opt_name = p.options.first | default: 'Pack' -%}
+              <div class="variant-label">Select {{ opt_name }}</div>
+              <div class="variant-grid">
+                {%- for variant in p.variants -%}
+                  {%- assign v_tag = variant.metafields.custom.tag -%}
+                  {%- assign v_best = variant.metafields.custom.best_for -%}
+                  {%- assign is_selected = false -%}
+                  {%- if variant == p.selected_or_first_available_variant -%}{%- assign is_selected = true -%}{%- endif -%}
+                  <label class="variant{% if is_selected %} active{% endif %}{% unless variant.available %} sold-out{% endunless %}"
+                         data-variant-id="{{ variant.id }}"
+                         data-variant-price="{{ variant.price | money }}"
+                         data-variant-price-cents="{{ variant.price }}"
+                         data-variant-compare-cents="{{ variant.compare_at_price }}">
+                    <input type="radio" name="id" value="{{ variant.id }}" class="variant-input"
+                           {% if is_selected %}checked{% endif %}
+                           {% unless variant.available %}disabled{% endunless %}>
+                    {%- if v_tag != blank -%}<span class="variant-tag">{{ v_tag }}</span>{%- endif -%}
+                    <span class="variant-radio"></span>
+                    <div class="variant-pack">{{ variant.title | upcase }}</div>
+                    {%- if v_best != blank -%}
+                      <div class="variant-rationale">
+                        <div class="vr-row"><span class="vr-label">BEST FOR</span><span class="vr-text">{{ v_best }}</span></div>
+                      </div>
+                    {%- endif -%}
+                    <div class="variant-price">
+                      <span>{{ variant.price | money }}</span>
+                      {%- if variant.compare_at_price > variant.price -%}
+                        <span class="variant-compare">{{ variant.compare_at_price | money }}</span>
+                      {%- endif -%}
+                    </div>
+                    {%- if variant.compare_at_price > variant.price -%}
+                      <span class="variant-save">You save {{ variant.compare_at_price | minus: variant.price | money }}</span>
+                    {%- endif -%}
+                    {%- unless variant.available -%}
+                      <span class="variant-sold-out">Sold out</span>
+                    {%- endunless -%}
+                  </label>
+                {%- endfor -%}
+              </div>
+
+              {%- if size_chart != blank or p.metafields.custom.help_note != blank -%}
+                <div class="variant-help-note">
+                  <span class="vhn-text">{{ p.metafields.custom.help_note | default: 'Choose the pack that fits your household.' }}</span>
+                  {%- if size_chart != blank -%}
+                    <button type="button" class="vhn-link" data-open-size-modal>Jar Size Chart →</button>
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+
+              {%- if companion -%}
+                {%- assign other_capacity = companion.metafields.custom.jar_capacity | default: 'other capacity' -%}
+                <a href="{{ companion.url }}" class="companion-link">
+                  Looking for the {{ other_capacity }} jar? View {{ companion.title }} →
+                </a>
+              {%- endif -%}
+            </div>
+
+            <button type="submit" name="add" class="atc-btn" data-atc
+                    data-product-id="{{ p.id }}"
+                    data-product-title="{{ p.title | escape }}"
+                    data-product-image="{{ p.featured_image | image_url: width: 200 }}"
+                    data-product-price="{{ p.price }}"
+                    data-product-url="{{ p.url }}"
+                    {% unless p.available %}disabled{% endunless %}>
+              {%- if p.available -%}ADD TO CART{%- else -%}SOLD OUT{%- endif -%}
+            </button>
+          {%- endform -%}
+
+          <div class="trust-strip">
+            {%- if hero_trust != blank -%}
+              {%- for t in hero_trust -%}
+                <div class="item"><span class="check">✓</span> {{ t }}</div>
+              {%- endfor -%}
+            {%- else -%}
+              <div class="item"><span class="check">✓</span> Free Shipping</div>
+              <div class="item"><span class="check">✓</span> Sprouting-grade seeds</div>
+              <div class="item"><span class="check">✓</span> FSSAI Licensed</div>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {%- comment %} ============== BLOCK-DRIVEN SECTIONS ============== {% endcomment -%}
+  {%- liquid
+    assign trust_blocks = section.blocks | where: 'type', 'trust_card'
+    assign step_blocks = section.blocks | where: 'type', 'step'
+    assign compare_blocks = section.blocks | where: 'type', 'comparison_row'
+    assign benefit_blocks = section.blocks | where: 'type', 'benefit'
+    assign reel_blocks = section.blocks | where: 'type', 'reel'
+    assign component_blocks = section.blocks | where: 'type', 'box_component'
+    assign review_blocks = section.blocks | where: 'type', 'review'
+    assign faq_blocks = section.blocks | where: 'type', 'faq'
+    assign cross_blocks = section.blocks | where: 'type', 'cross_sell_product'
+  -%}
+
+  {%- comment %} 2. TRUST ROW — metaobject list overrides blocks {% endcomment -%}
+  {%- if mf_trust_cards != blank or trust_blocks.size > 0 -%}
+    <section class="trust-row-section">
+      <div class="container">
+        <div class="trust-row-grid">
+          {%- if mf_trust_cards != blank -%}
+            {%- for tc in mf_trust_cards -%}
+              <div class="tr-card">
+                <div class="tr-icon">
+                  {%- if tc.icon != blank -%}
+                    <img src="{{ tc.icon | image_url: width: 88 }}" alt="{{ tc.heading | escape }}" loading="lazy" width="44" height="44" class="tr-icon-img">
+                  {%- endif -%}
+                </div>
+                <div class="tr-h">{{ tc.heading }}</div>
+                <div class="tr-d">{{ tc.description }}</div>
+              </div>
+            {%- endfor -%}
+          {%- else -%}
+            {%- for block in trust_blocks -%}
+              {%- assign target_idx = forloop.index0 -%}
+              {%- assign mf_icon = nil -%}
+              {%- if mf_trust_icons -%}{%- for ic in mf_trust_icons -%}{%- if forloop.index0 == target_idx -%}{%- assign mf_icon = ic -%}{%- endif -%}{%- endfor -%}{%- endif -%}
+              <div class="tr-card" {{ block.shopify_attributes }}>
+                <div class="tr-icon">
+                  {%- if mf_icon != blank -%}
+                    <img src="{{ mf_icon | image_url: width: 88 }}" alt="{{ block.settings.heading | escape }}" loading="lazy" width="44" height="44" class="tr-icon-img">
+                  {%- elsif block.settings.icon_image != blank -%}
+                    <img src="{{ block.settings.icon_image | image_url: width: 88 }}" alt="{{ block.settings.heading | escape }}" loading="lazy" width="44" height="44" class="tr-icon-img">
+                  {%- else -%}
+                    {{ block.settings.icon }}
+                  {%- endif -%}
+                </div>
+                <div class="tr-h">{{ block.settings.heading }}</div>
+                <div class="tr-d">{{ block.settings.description }}</div>
+              </div>
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment %} 3. HOW TO MAKE — metaobject list overrides blocks {% endcomment -%}
+  {%- if mf_steps != blank or step_blocks.size > 0 -%}
+    <section class="how-make-section">
+      <div class="container">
+        <div class="section-header centered">
+          <div class="eyebrow">{{ section.settings.how_eyebrow }}</div>
+          <h2>{{ section.settings.how_heading }}<br><em>{{ section.settings.how_heading_em }}</em></h2>
+        </div>
+        {%- assign how_video = mf_how_video | default: section.settings.how_video -%}
+        <div class="how-make-grid">
+          <div class="hm-video-hero">
+            {%- if how_video != blank -%}
+              {{ how_video | video_tag: image_size: '1100x', controls: true, loop: true, muted: true, autoplay: false }}
+            {%- elsif section.settings.how_poster != blank -%}
+              <img src="{{ section.settings.how_poster | image_url: width: 1200 }}" alt="How to make sprouts" loading="lazy" width="1200" height="1200">
+            {%- endif -%}
+            {%- if section.settings.how_pill != blank -%}
+              <span class="hm-watch-pill">{{ section.settings.how_pill }}</span>
+            {%- endif -%}
+          </div>
+          <div class="hm-steps">
+            {%- if mf_steps != blank -%}
+              {%- for step in mf_steps -%}
+                <div class="hm-step">
+                  <div class="hm-num">
+                    {%- if step.icon != blank -%}
+                      <img src="{{ step.icon | image_url: width: 72 }}" alt="{{ step.title | escape }}" loading="lazy" width="36" height="36" class="hm-num-img">
+                    {%- else -%}
+                      {{ forloop.index }}
+                    {%- endif -%}
+                  </div>
+                  <div class="hm-step-body">
+                    <div class="hm-title">{{ step.title }}</div>
+                    <div class="hm-desc">{{ step.description }}</div>
+                  </div>
+                </div>
+              {%- endfor -%}
+            {%- else -%}
+              {%- for block in step_blocks -%}
+                {%- assign target_idx = forloop.index0 -%}
+                {%- assign mf_icon = nil -%}
+                {%- if mf_step_icons -%}{%- for ic in mf_step_icons -%}{%- if forloop.index0 == target_idx -%}{%- assign mf_icon = ic -%}{%- endif -%}{%- endfor -%}{%- endif -%}
+                <div class="hm-step" {{ block.shopify_attributes }}>
+                  <div class="hm-num">
+                    {%- if mf_icon != blank -%}
+                      <img src="{{ mf_icon | image_url: width: 72 }}" alt="{{ block.settings.title | escape }}" loading="lazy" width="36" height="36" class="hm-num-img">
+                    {%- elsif block.settings.icon_image != blank -%}
+                      <img src="{{ block.settings.icon_image | image_url: width: 72 }}" alt="{{ block.settings.title | escape }}" loading="lazy" width="36" height="36" class="hm-num-img">
+                    {%- else -%}
+                      {{ forloop.index }}
+                    {%- endif -%}
+                  </div>
+                  <div class="hm-step-body">
+                    <div class="hm-title">{{ block.settings.title }}</div>
+                    <div class="hm-desc">{{ block.settings.description }}</div>
+                  </div>
+                </div>
+              {%- endfor -%}
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment %} 4. COMPARISON — metaobject list overrides blocks {% endcomment -%}
+  {%- if mf_compare_rows != blank or compare_blocks.size > 0 -%}
+    <section class="myth-section">
+      <div class="container">
+        <div class="myth-header">
+          <div class="eyebrow">{{ section.settings.compare_eyebrow }}</div>
+          <h2>{{ section.settings.compare_heading }}<br><em>{{ section.settings.compare_heading_em }}</em></h2>
+          {%- assign compare_intro = mf_compare_intro | default: section.settings.compare_intro -%}
+          {%- if compare_intro != blank -%}
+            <p style="margin-top:18px;">{{ compare_intro }}</p>
+          {%- endif -%}
+        </div>
+        {%- assign cmp_left  = mf_compare_left  | default: section.settings.compare_left_image -%}
+        {%- assign cmp_right = mf_compare_right | default: section.settings.compare_right_image -%}
+        <div class="compare-block">
+          <div class="compare-images">
+            <div class="compare-image">
+              {%- if cmp_left != blank -%}
+                <img src="{{ cmp_left | image_url: width: 800 }}" alt="{{ section.settings.compare_left_label }}" loading="lazy" width="800" height="600">
+              {%- else -%}{{ section.settings.compare_left_emoji }}{%- endif -%}
+            </div>
+            <div class="compare-image">
+              {%- if cmp_right != blank -%}
+                <img src="{{ cmp_right | image_url: width: 800 }}" alt="{{ section.settings.compare_right_label }}" loading="lazy" width="800" height="600">
+              {%- else -%}{{ section.settings.compare_right_emoji }}{%- endif -%}
+            </div>
+          </div>
+          <div class="compare-labels">
+            <span>{{ section.settings.compare_left_label }}</span>
+            <span>{{ section.settings.compare_right_label }}</span>
+          </div>
+          <div class="compare-table">
+            {%- if mf_compare_rows != blank -%}
+              {%- for row in mf_compare_rows -%}
+                <div class="compare-row">
+                  <div class="compare-cell left">
+                    <div class="h">{{ row.left_heading }}</div>
+                    <div class="s">{{ row.left_subtext }}</div>
+                  </div>
+                  <div class="compare-cell right">
+                    <div class="h">{{ row.right_heading }}</div>
+                    <div class="s">{{ row.right_subtext }}</div>
+                  </div>
+                </div>
+              {%- endfor -%}
+            {%- else -%}
+              {%- for block in compare_blocks -%}
+                <div class="compare-row" {{ block.shopify_attributes }}>
+                  <div class="compare-cell left">
+                    <div class="h">{{ block.settings.left_h }}</div>
+                    <div class="s">{{ block.settings.left_s }}</div>
+                  </div>
+                  <div class="compare-cell right">
+                    <div class="h">{{ block.settings.right_h }}</div>
+                    <div class="s">{{ block.settings.right_s }}</div>
+                  </div>
+                </div>
+              {%- endfor -%}
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment %} 5. QUICK BENEFITS — metaobject list overrides blocks {% endcomment -%}
+  {%- if mf_quick_bens != blank or benefit_blocks.size > 0 -%}
+    <section class="outcomes-section">
+      <div class="container">
+        <div class="section-header centered">
+          <div class="eyebrow">{{ section.settings.benefits_eyebrow }}</div>
+          <h2>{{ section.settings.benefits_heading }}<br><em>{{ section.settings.benefits_heading_em }}</em></h2>
+        </div>
+        <div class="qb-grid">
+          {%- if mf_quick_bens != blank -%}
+            {%- for qb in mf_quick_bens -%}
+              <div class="qb-card">
+                <div class="qb-icon">
+                  {%- if qb.icon != blank -%}
+                    <img src="{{ qb.icon | image_url: width: 112 }}" alt="{{ qb.heading | escape }}" loading="lazy" width="56" height="56" class="qb-icon-img">
+                  {%- endif -%}
+                </div>
+                <div class="qb-h">{{ qb.heading }}</div>
+                <div class="qb-d">{{ qb.description }}</div>
+              </div>
+            {%- endfor -%}
+          {%- else -%}
+            {%- for block in benefit_blocks -%}
+              {%- assign target_idx = forloop.index0 -%}
+              {%- assign mf_icon = nil -%}
+              {%- if mf_benefit_icons -%}{%- for ic in mf_benefit_icons -%}{%- if forloop.index0 == target_idx -%}{%- assign mf_icon = ic -%}{%- endif -%}{%- endfor -%}{%- endif -%}
+              <div class="qb-card" {{ block.shopify_attributes }}>
+                <div class="qb-icon">
+                  {%- if mf_icon != blank -%}
+                    <img src="{{ mf_icon | image_url: width: 112 }}" alt="{{ block.settings.heading | escape }}" loading="lazy" width="56" height="56" class="qb-icon-img">
+                  {%- elsif block.settings.icon_image != blank -%}
+                    <img src="{{ block.settings.icon_image | image_url: width: 112 }}" alt="{{ block.settings.heading | escape }}" loading="lazy" width="56" height="56" class="qb-icon-img">
+                  {%- else -%}
+                    {{ block.settings.icon }}
+                  {%- endif -%}
+                </div>
+                <div class="qb-h">{{ block.settings.heading }}</div>
+                <div class="qb-d">{{ block.settings.description }}</div>
+              </div>
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment %} 6. REELS — featured_reels (metaobject) > quinn_embed > manual blocks {% endcomment -%}
+  {%- if mf_reels != blank or section.settings.quinn_embed != blank or reel_blocks.size > 0 -%}
+    <section class="reels-section">
+      <div class="container">
+        <div class="section-header">
+          <div class="eyebrow">{{ section.settings.reels_eyebrow }}</div>
+          <h2>{{ section.settings.reels_heading }}<br><em>{{ section.settings.reels_heading_em }}</em></h2>
+        </div>
+        {%- if mf_reels != blank -%}
+          <div class="reels-grid">
+            {%- for reel in mf_reels -%}
+              <div class="reels-tile">
+                {%- if reel.video != blank -%}
+                  {{ reel.video | video_tag: image_size: '600x', controls: false, loop: true, muted: true, autoplay: true }}
+                {%- elsif reel.poster != blank -%}
+                  <img src="{{ reel.poster | image_url: width: 600 }}" alt="{{ reel.caption | default: reel.author_handle | default: 'Customer reel' | escape }}" loading="lazy" width="600" height="1067">
+                {%- else -%}📷{%- endif -%}
+                {%- if reel.author_handle != blank -%}
+                  <span class="reels-handle">{{ reel.author_handle }}</span>
+                {%- endif -%}
+              </div>
+            {%- endfor -%}
+          </div>
+        {%- elsif section.settings.quinn_embed != blank -%}
+          <div class="reels-quinn">{{ section.settings.quinn_embed }}</div>
+        {%- else -%}
+          <div class="reels-grid">
+            {%- for block in reel_blocks -%}
+              <div class="reels-tile" {{ block.shopify_attributes }}>
+                {%- if block.settings.video != blank -%}
+                  {{ block.settings.video | video_tag: image_size: '600x', controls: false, loop: true, muted: true, autoplay: true }}
+                {%- elsif block.settings.poster != blank -%}
+                  <img src="{{ block.settings.poster | image_url: width: 600 }}" alt="{{ block.settings.caption | default: 'Customer reel' | escape }}" loading="lazy" width="600" height="1067">
+                {%- else -%}📷{%- endif -%}
+              </div>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment %} 7. WHAT'S IN THE BOX — metaobject list overrides blocks {% endcomment -%}
+  {%- if mf_components != blank or component_blocks.size > 0 -%}
+    <section class="box-section">
+      <div class="container">
+        <div class="section-header">
+          <div class="eyebrow">{{ section.settings.box_eyebrow }}</div>
+          <h2>{{ section.settings.box_heading }}<br><em>{{ section.settings.box_heading_em }}</em></h2>
+        </div>
+        {%- assign box_img  = mf_box_image | default: section.settings.box_image -%}
+        {%- assign box_note = mf_box_note  | default: section.settings.box_note -%}
+        <div class="box-grid">
+          <div class="box-image">
+            {%- if box_img != blank -%}
+              <img src="{{ box_img | image_url: width: 1200 }}" alt="What is in the box" loading="lazy" width="1200" height="750">
+            {%- else -%}🫙{%- endif -%}
+          </div>
+          <div>
+            <div class="box-pills">
+              {%- if mf_components != blank -%}
+                {%- for c in mf_components -%}
+                  <div class="box-pill">
+                    <span class="bp-icon">
+                      {%- if c.icon != blank -%}
+                        <img src="{{ c.icon | image_url: width: 56 }}" alt="{{ c.name | escape }}" loading="lazy" width="28" height="28" class="bp-icon-img">
+                      {%- else -%}
+                        {{ forloop.index }}
+                      {%- endif -%}
+                    </span>
+                    <span class="bp-name">{{ c.name }}</span>
+                    <span class="bp-sub">{{ c.description }}</span>
+                  </div>
+                {%- endfor -%}
+              {%- else -%}
+                {%- for block in component_blocks -%}
+                  <div class="box-pill" {{ block.shopify_attributes }}>
+                    <span class="bp-icon">
+                      {%- if block.settings.icon_image != blank -%}
+                        <img src="{{ block.settings.icon_image | image_url: width: 56 }}" alt="{{ block.settings.name | escape }}" loading="lazy" width="28" height="28" class="bp-icon-img">
+                      {%- else -%}
+                        {{ forloop.index }}
+                      {%- endif -%}
+                    </span>
+                    <span class="bp-name">{{ block.settings.name }}</span>
+                    <span class="bp-sub">{{ block.settings.description }}</span>
+                  </div>
+                {%- endfor -%}
+              {%- endif -%}
+            </div>
+            {%- if box_note != blank -%}
+              <p class="box-note">{{ box_note }}</p>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment %} 8. UGC REVIEWS — metaobject list overrides blocks {% endcomment -%}
+  {%- if mf_reviews != blank or review_blocks.size > 0 -%}
+    <section class="reviews-section">
+      <div class="container">
+        <div class="section-header">
+          <div class="eyebrow">{{ section.settings.reviews_eyebrow }}</div>
+          <h2>{{ section.settings.reviews_heading }}<br><em>{{ section.settings.reviews_heading_em }}</em></h2>
+        </div>
+        <div class="reviews-grid">
+          {%- if mf_reviews != blank -%}
+            {%- for review in mf_reviews limit: 6 -%}
+              <div class="review-card">
+                <div class="rev-content">
+                  <h3 class="rev-title">"{{ review.quote }}"</h3>
+                  <div class="rev-foot">
+                    <div class="rev-stars">★★★★★</div>
+                    <div class="rev-name">{{ review.name }}</div>
+                    <div class="rev-meta">{{ review.meta }}</div>
+                  </div>
+                </div>
+                <div class="rev-photo">
+                  {%- if review.photo != blank -%}
+                    <img src="{{ review.photo | image_url: width: 800 }}" alt="{{ review.name }}" loading="lazy" width="800" height="800">
+                  {%- else -%}
+                    <span class="photo-placeholder">📷</span>
+                  {%- endif -%}
+                </div>
+              </div>
+            {%- endfor -%}
+          {%- else -%}
+            {%- for block in review_blocks -%}
+              <div class="review-card" {{ block.shopify_attributes }}>
+                <div class="rev-content">
+                  <h3 class="rev-title">"{{ block.settings.quote }}"</h3>
+                  <div class="rev-foot">
+                    <div class="rev-stars">★★★★★</div>
+                    <div class="rev-name">{{ block.settings.name }}</div>
+                    <div class="rev-meta">{{ block.settings.meta }}</div>
+                  </div>
+                </div>
+                <div class="rev-photo">
+                  {%- if block.settings.photo != blank -%}
+                    <img src="{{ block.settings.photo | image_url: width: 800 }}" alt="{{ block.settings.name }}" loading="lazy" width="800" height="800">
+                  {%- else -%}
+                    <span class="photo-placeholder">📷</span>
+                  {%- endif -%}
+                </div>
+              </div>
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment %} 9. FAQ — metaobject list overrides blocks {% endcomment -%}
+  {%- if mf_faqs != blank or faq_blocks.size > 0 -%}
+    <section class="faq-section">
+      <div class="container">
+        <div class="section-header centered">
+          <div class="eyebrow">{{ section.settings.faq_eyebrow }}</div>
+          <h2>{{ section.settings.faq_heading }}<br><em>{{ section.settings.faq_heading_em }}</em></h2>
+        </div>
+        <div class="faq-list">
+          {%- if mf_faqs != blank -%}
+            {%- for f in mf_faqs -%}
+              <div class="faq-item {% if forloop.first %}open{% endif %}" data-faq>
+                <div class="faq-q">
+                  <span>{{ f.question }}</span>
+                  <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-a">{{ f.answer | newline_to_br }}</div>
+              </div>
+            {%- endfor -%}
+          {%- else -%}
+            {%- for block in faq_blocks -%}
+              <div class="faq-item {% if forloop.first %}open{% endif %}" data-faq {{ block.shopify_attributes }}>
+                <div class="faq-q">
+                  <span>{{ block.settings.question }}</span>
+                  <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-a">{{ block.settings.answer }}</div>
+              </div>
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment %} 10. CROSS-SELL {% endcomment -%}
+  {%- assign show_cross = false -%}
+  {%- if cross_sell_products != blank or cross_blocks.size > 0 or section.settings.cross_collection != blank -%}
+    {%- assign show_cross = true -%}
+  {%- endif -%}
+  {%- if show_cross -%}
+    <section class="cross-section">
+      <div class="container">
+        <div class="section-header">
+          <div class="eyebrow">{{ section.settings.cross_eyebrow }}</div>
+          <h2>{{ section.settings.cross_heading }}<br><em>{{ section.settings.cross_heading_em }}</em></h2>
+        </div>
+        <div class="cs-grid">
+          {%- if cross_sell_products != blank -%}
+            {%- for cp in cross_sell_products limit: 3 -%}
+              {%- render 'sprout_cs_card', p: cp, eyebrow: nil, description: nil -%}
+            {%- endfor -%}
+          {%- elsif cross_blocks.size > 0 -%}
+            {%- for block in cross_blocks -%}
+              {%- if block.settings.product != blank -%}
+                {%- render 'sprout_cs_card', p: block.settings.product, eyebrow: block.settings.eyebrow, description: block.settings.description, attrs: block.shopify_attributes -%}
+              {%- endif -%}
+            {%- endfor -%}
+          {%- elsif section.settings.cross_collection.products.size > 0 -%}
+            {%- for cp in section.settings.cross_collection.products limit: 3 -%}
+              {%- render 'sprout_cs_card', p: cp -%}
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment %} 11. JUDGE.ME {% endcomment -%}
+  {%- if section.settings.show_judgeme -%}
+    <section class="judgeme-section" id="judgeme-reviews">
+      <div class="container">
+        <div class="section-header centered">
+          <div class="eyebrow">{{ section.settings.judgeme_eyebrow }}</div>
+          <h2>
+            {%- if review_count > 0 %}{{ review_count }} {% endif -%}
+            {{ section.settings.judgeme_heading }}<br><em>{{ section.settings.judgeme_heading_em }}</em>
+          </h2>
+        </div>
+        {%- if section.settings.judgeme_embed != blank -%}
+          {{ section.settings.judgeme_embed }}
+        {%- else -%}
+          <div class="jdgm-widget jdgm-review-widget" data-id="{{ p.id }}"></div>
+        {%- endif -%}
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment %} ============== JAR SIZE MODAL ============== {% endcomment -%}
+  {%- if size_chart != blank -%}
+    <div class="size-modal" id="jar-size-modal" data-size-modal>
+      <div class="size-modal-card">
+        <button type="button" class="size-modal-close" data-close-size-modal aria-label="Close">×</button>
+        <div class="size-modal-eyebrow">JAR SIZE COMPARISON</div>
+        <h3 class="size-modal-title">{{ jar_capacity }} sprout maker.</h3>
+        <div class="size-modal-image">
+          {{ size_chart | image_url: width: 1200 | image_tag: loading: 'lazy', alt: 'Sprout maker jar size comparison' }}
+        </div>
+        <p class="size-modal-caption">Shown next to a standard 250ml drinking glass for scale.</p>
+      </div>
+    </div>
+  {%- endif -%}
+
+</div>
+
+<script>
+  (function () {
+    function initSproutPDP(scope) {
+      var root = scope || document;
+      var pdp = root.querySelector ? (root.matches && root.matches('.sprout-pdp') ? root : root.querySelector('.sprout-pdp')) : null;
+      if (!pdp) return;
+
+      // FAQ accordion
+      pdp.querySelectorAll('[data-faq]').forEach(function (item) {
+        if (item.dataset.bound) return;
+        item.dataset.bound = '1';
+        item.addEventListener('click', function () { item.classList.toggle('open'); });
+      });
+
+      // Jar size modal
+      var modal = pdp.querySelector('[data-size-modal]');
+      if (modal && !modal.dataset.bound) {
+        modal.dataset.bound = '1';
+        pdp.querySelectorAll('[data-open-size-modal]').forEach(function (btn) {
+          btn.addEventListener('click', function () { modal.classList.add('open'); });
+        });
+        modal.addEventListener('click', function (e) {
+          if (e.target === modal || (e.target.closest && e.target.closest('[data-close-size-modal]'))) {
+            modal.classList.remove('open');
+          }
+        });
+      }
+
+      // Variant picker
+      var grid = pdp.querySelector('.variant-grid');
+      var atcPrice = pdp.querySelector('[data-atc-price]');
+      if (grid && !grid.dataset.bound) {
+        grid.dataset.bound = '1';
+        grid.addEventListener('change', function (e) {
+          if (!e.target.classList.contains('variant-input')) return;
+          grid.querySelectorAll('.variant').forEach(function (v) { v.classList.remove('active'); });
+          var card = e.target.closest('.variant');
+          if (!card) return;
+          card.classList.add('active');
+          if (atcPrice && card.dataset.variantPrice) atcPrice.textContent = card.dataset.variantPrice;
+          try {
+            var url = new URL(window.location.href);
+            url.searchParams.set('variant', e.target.value);
+            history.replaceState({}, '', url);
+          } catch (err) {}
+        });
+      }
+
+      // Gallery thumb → main image swap, plus prev/next/keyboard/swipe nav
+      var mainImg = pdp.querySelector('.gallery-main-img');
+      var thumbs = pdp.querySelectorAll('.gallery-thumb');
+      function activateThumb(t) {
+        var s = t.getAttribute('data-full-src');
+        var a = t.getAttribute('data-full-alt');
+        if (!s || !mainImg) return;
+        mainImg.removeAttribute('srcset'); mainImg.removeAttribute('sizes');
+        mainImg.setAttribute('src', s); if (a) mainImg.setAttribute('alt', a);
+        thumbs.forEach(function (x) { x.classList.remove('active'); });
+        t.classList.add('active');
+        try { t.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' }); } catch (_) {}
+      }
+      function step(delta) {
+        if (!thumbs.length) return;
+        var current = 0;
+        thumbs.forEach(function (x, i) { if (x.classList.contains('active')) current = i; });
+        var next = (current + delta + thumbs.length) % thumbs.length;
+        activateThumb(thumbs[next]);
+      }
+      if (mainImg && thumbs.length) {
+        thumbs.forEach(function (thumb) {
+          if (thumb.dataset.bound) return;
+          thumb.dataset.bound = '1';
+          thumb.addEventListener('click', function (e) { e.preventDefault(); activateThumb(thumb); });
+        });
+        var prevBtn = pdp.querySelector('[data-gallery-prev]');
+        var nextBtn = pdp.querySelector('[data-gallery-next]');
+        if (prevBtn && !prevBtn.dataset.bound) { prevBtn.dataset.bound = '1'; prevBtn.addEventListener('click', function (e) { e.preventDefault(); step(-1); }); }
+        if (nextBtn && !nextBtn.dataset.bound) { nextBtn.dataset.bound = '1'; nextBtn.addEventListener('click', function (e) { e.preventDefault(); step(1); }); }
+        var galleryMain = pdp.querySelector('.gallery-main');
+        if (galleryMain && !galleryMain.dataset.bound) {
+          galleryMain.dataset.bound = '1';
+          galleryMain.setAttribute('tabindex', '0');
+          galleryMain.addEventListener('keydown', function (e) {
+            if (e.key === 'ArrowLeft')  { e.preventDefault(); step(-1); }
+            if (e.key === 'ArrowRight') { e.preventDefault(); step(1); }
+          });
+          var touchStartX = null;
+          galleryMain.addEventListener('touchstart', function (e) { touchStartX = e.touches[0].clientX; }, { passive: true });
+          galleryMain.addEventListener('touchend', function (e) {
+            if (touchStartX === null) return;
+            var dx = e.changedTouches[0].clientX - touchStartX;
+            if (Math.abs(dx) > 40) step(dx < 0 ? 1 : -1);
+            touchStartX = null;
+          }, { passive: true });
+        }
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function () { initSproutPDP(); });
+    } else {
+      initSproutPDP();
+    }
+    // Re-init when the section reloads in the Theme Editor
+    document.addEventListener('shopify:section:load', function (e) { initSproutPDP(e.target); });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Sprout Maker — PDP",
+  "tag": "section",
+  "class": "section--sprout-pdp",
+  "max_blocks": 50,
+  "settings": [
+    { "type": "header", "content": "Hero" },
+    { "type": "checkbox", "id": "show_breadcrumb", "label": "Show breadcrumb", "default": true },
+
+    { "type": "header", "content": "How to Make" },
+    { "type": "text", "id": "how_eyebrow", "label": "Eyebrow", "default": "HOW TO MAKE" },
+    { "type": "text", "id": "how_heading", "label": "Heading", "default": "4 STEPS." },
+    { "type": "text", "id": "how_heading_em", "label": "Heading (highlighted)", "default": "FRESH SPROUTS." },
+    { "type": "video", "id": "how_video", "label": "Demo video" },
+    { "type": "image_picker", "id": "how_poster", "label": "Poster image (fallback)" },
+    { "type": "text", "id": "how_pill", "label": "Pill text", "default": "▶ WATCH · 60 SEC" },
+
+    { "type": "header", "content": "Comparison" },
+    { "type": "text", "id": "compare_eyebrow", "label": "Eyebrow", "default": "WHY UPGRADE" },
+    { "type": "text", "id": "compare_heading", "label": "Heading", "default": "SPROUT MAKER" },
+    { "type": "text", "id": "compare_heading_em", "label": "Heading (highlighted)", "default": "VS TRADITIONAL CLOTH." },
+    { "type": "textarea", "id": "compare_intro", "label": "Intro paragraph" },
+    { "type": "image_picker", "id": "compare_left_image", "label": "Left image (cloth method)" },
+    { "type": "image_picker", "id": "compare_right_image", "label": "Right image (sprout maker)" },
+    { "type": "text", "id": "compare_left_emoji", "label": "Left emoji fallback", "default": "🧺" },
+    { "type": "text", "id": "compare_right_emoji", "label": "Right emoji fallback", "default": "🫙" },
+    { "type": "text", "id": "compare_left_label", "label": "Left column label", "default": "CLOTH METHOD" },
+    { "type": "text", "id": "compare_right_label", "label": "Right column label", "default": "SPROUT MAKER" },
+
+    { "type": "header", "content": "Quick Benefits" },
+    { "type": "text", "id": "benefits_eyebrow", "label": "Eyebrow", "default": "QUICK BENEFITS" },
+    { "type": "text", "id": "benefits_heading", "label": "Heading", "default": "WHY SPROUTS ARE" },
+    { "type": "text", "id": "benefits_heading_em", "label": "Heading (highlighted)", "default": "NUTRITIONAL POWERHOUSES." },
+
+    { "type": "header", "content": "Reels (Quinn UGC)" },
+    { "type": "text", "id": "reels_eyebrow", "label": "Eyebrow", "default": "REAL CUSTOMERS" },
+    { "type": "text", "id": "reels_heading", "label": "Heading", "default": "SPROUTS IN" },
+    { "type": "text", "id": "reels_heading_em", "label": "Heading (highlighted)", "default": "REAL KITCHENS." },
+    { "type": "html", "id": "quinn_embed", "label": "Quinn embed code", "info": "Paste the Quinn UGC widget snippet. If set, it replaces the manual reel blocks below." },
+
+    { "type": "header", "content": "What's in the Box" },
+    { "type": "text", "id": "box_eyebrow", "label": "Eyebrow", "default": "WHAT'S IN THE BOX" },
+    { "type": "text", "id": "box_heading", "label": "Heading", "default": "3 PARTS." },
+    { "type": "text", "id": "box_heading_em", "label": "Heading (highlighted)", "default": "ONE KIT." },
+    { "type": "image_picker", "id": "box_image", "label": "Box / kit image" },
+    { "type": "textarea", "id": "box_note", "label": "Note", "default": "Just add water and a kitchen counter. The kit handles the rest." },
+
+    { "type": "header", "content": "UGC Reviews" },
+    { "type": "text", "id": "reviews_eyebrow", "label": "Eyebrow", "default": "REAL RESULTS" },
+    { "type": "text", "id": "reviews_heading", "label": "Heading", "default": "WHAT OUR" },
+    { "type": "text", "id": "reviews_heading_em", "label": "Heading (highlighted)", "default": "CUSTOMERS SAY." },
+
+    { "type": "header", "content": "FAQ" },
+    { "type": "text", "id": "faq_eyebrow", "label": "Eyebrow", "default": "QUESTIONS?" },
+    { "type": "text", "id": "faq_heading", "label": "Heading", "default": "COMMON" },
+    { "type": "text", "id": "faq_heading_em", "label": "Heading (highlighted)", "default": "QUESTIONS." },
+
+    { "type": "header", "content": "Cross-sell" },
+    { "type": "text", "id": "cross_eyebrow", "label": "Eyebrow", "default": "PAIR IT WITH" },
+    { "type": "text", "id": "cross_heading", "label": "Heading", "default": "COMPLETE THE" },
+    { "type": "text", "id": "cross_heading_em", "label": "Heading (highlighted)", "default": "SPROUT KITCHEN." },
+    { "type": "collection", "id": "cross_collection", "label": "Fallback collection", "info": "Used if product has no cross_sell_products metafield and no Cross-sell blocks." },
+
+    { "type": "header", "content": "Judge.me" },
+    { "type": "checkbox", "id": "show_judgeme", "label": "Show Judge.me section", "default": true },
+    { "type": "text", "id": "judgeme_eyebrow", "label": "Eyebrow", "default": "ALL REVIEWS" },
+    { "type": "text", "id": "judgeme_heading", "label": "Heading", "default": "VERIFIED" },
+    { "type": "text", "id": "judgeme_heading_em", "label": "Heading (highlighted)", "default": "CUSTOMER REVIEWS." },
+    { "type": "html", "id": "judgeme_embed", "label": "Custom embed (optional)" }
+  ],
+  "blocks": [
+    {
+      "type": "trust_card",
+      "name": "Trust card",
+      "settings": [
+        { "type": "image_picker", "id": "icon_image", "label": "Icon image", "info": "Overrides emoji if set" },
+        { "type": "text", "id": "icon", "label": "Icon (emoji fallback)", "default": "🌱" },
+        { "type": "text", "id": "heading", "label": "Heading" },
+        { "type": "textarea", "id": "description", "label": "Description" }
+      ]
+    },
+    {
+      "type": "step",
+      "name": "How-to step",
+      "settings": [
+        { "type": "image_picker", "id": "icon_image", "label": "Step icon image", "info": "Optional. Replaces the number badge." },
+        { "type": "text", "id": "title", "label": "Step title" },
+        { "type": "textarea", "id": "description", "label": "Step description" }
+      ]
+    },
+    {
+      "type": "comparison_row",
+      "name": "Comparison row",
+      "settings": [
+        { "type": "text", "id": "left_h", "label": "Left heading" },
+        { "type": "textarea", "id": "left_s", "label": "Left subtext" },
+        { "type": "text", "id": "right_h", "label": "Right heading" },
+        { "type": "textarea", "id": "right_s", "label": "Right subtext" }
+      ]
+    },
+    {
+      "type": "benefit",
+      "name": "Quick benefit",
+      "settings": [
+        { "type": "image_picker", "id": "icon_image", "label": "Icon image", "info": "Overrides emoji if set" },
+        { "type": "text", "id": "icon", "label": "Icon (emoji fallback)", "default": "💪" },
+        { "type": "text", "id": "heading", "label": "Heading" },
+        { "type": "textarea", "id": "description", "label": "Description" }
+      ]
+    },
+    {
+      "type": "reel",
+      "name": "UGC reel",
+      "settings": [
+        { "type": "video", "id": "video", "label": "Vertical 9:16 video" },
+        { "type": "image_picker", "id": "poster", "label": "Poster (fallback)" },
+        { "type": "text", "id": "caption", "label": "Caption" }
+      ]
+    },
+    {
+      "type": "box_component",
+      "name": "Box component",
+      "settings": [
+        { "type": "image_picker", "id": "icon_image", "label": "Component icon", "info": "Optional. Replaces the number badge." },
+        { "type": "text", "id": "name", "label": "Name" },
+        { "type": "textarea", "id": "description", "label": "Description" }
+      ]
+    },
+    {
+      "type": "review",
+      "name": "Review",
+      "settings": [
+        { "type": "textarea", "id": "quote", "label": "Headline quote" },
+        { "type": "text", "id": "name", "label": "Name" },
+        { "type": "text", "id": "meta", "label": "Age, city · Persona" },
+        { "type": "image_picker", "id": "photo", "label": "Photo" }
+      ]
+    },
+    {
+      "type": "faq",
+      "name": "FAQ",
+      "settings": [
+        { "type": "text", "id": "question", "label": "Question" },
+        { "type": "richtext", "id": "answer", "label": "Answer" }
+      ]
+    },
+    {
+      "type": "cross_sell_product",
+      "name": "Cross-sell product",
+      "settings": [
+        { "type": "product", "id": "product", "label": "Product" },
+        { "type": "text", "id": "eyebrow", "label": "Eyebrow override" },
+        { "type": "textarea", "id": "description", "label": "Description override" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Sprout Maker — PDP" }]
+}
+{% endschema %}

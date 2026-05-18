@@ -1,0 +1,17 @@
+{%- comment %}
+  Renders shared chrome (assets + per-product CSS variables) for a Leo refactor section.
+  Each section calls this once at the top. Shopify dedupes the stylesheet/script tags
+  across the page automatically.
+
+  Usage:
+    {%- render 'leo_kit_chrome' -%}
+{% endcomment -%}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+{{ 'fermentation-kit.css' | asset_url | stylesheet_tag }}
+{{ 'fermentation-kit-leo.css' | asset_url | stylesheet_tag }}
+{{ 'pdp-addon-block.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'leo-pdp.js' | asset_url }}" defer></script>
+<script src="{{ 'pdp-addon-block.js' | asset_url }}" defer></script>

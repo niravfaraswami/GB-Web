@@ -1,0 +1,22 @@
+{%- comment -%}
+  fkv3-color-cascade — sets per-product theme accent CSS variables.
+  Render once per section. Mirrors the monolith preamble.
+{%- endcomment -%}
+{%- liquid
+  assign accent      = product.metafields.custom.theme_accent      | default: '#C24528'
+  assign accent_dark = product.metafields.custom.theme_accent_dark | default: '#8E2E1A'
+  assign accent_soft = product.metafields.custom.theme_accent_soft | default: '#FCE5DE'
+  assign accent_contrast       = product.metafields.custom.theme_accent_contrast       | default: '#FFF6F2'
+  assign accent_secondary      = product.metafields.custom.theme_accent_secondary      | default: '#DBEDDF'
+  assign accent_secondary_dark = product.metafields.custom.theme_accent_secondary_dark | default: '#1F4332'
+-%}
+<style>
+  .ferment-pdp {
+    --kit-color: {{ accent }};
+    --kit-color-dark: {{ accent_dark }};
+    --kit-color-soft: {{ accent_soft }};
+    --kit-contrast: {{ accent_contrast }};
+    --kit-secondary: {{ accent_secondary }};
+    --kit-secondary-dark: {{ accent_secondary_dark }};
+  }
+</style>

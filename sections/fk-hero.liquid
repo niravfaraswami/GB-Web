@@ -1,0 +1,295 @@
+{{ 'fermentation-kit.css' | asset_url | stylesheet_tag }}
+{{ 'fermentation-kit-v2.css' | asset_url | stylesheet_tag }}
+{{ 'fermentation-kit-v2.js' | asset_url | script_tag }}
+
+{%- liquid
+  assign p = product
+  assign tagline         = p.metafields.custom.hero_tagline | default: 'Make authentic, gut-loving ferments at home.'
+  assign save_badge      = p.metafields.custom.discount_badge
+  assign rating          = p.metafields.custom.rating | default: 4.8
+  assign review_count    = p.metafields.custom.review_count | default: 0
+  assign days_subtitle   = p.metafields.custom.days_subtitle
+  assign days_to_ferment = p.metafields.custom.days_to_ferment
+  assign capacity_label  = p.metafields.custom.jar_capacity | default: p.metafields.custom.capacity
+  assign size_chart      = p.metafields.custom.jar_size_chart_image | default: p.metafields.custom.size_chart_image
+  assign companion       = p.metafields.custom.companion_size_product.value
+  assign hero_trust      = p.metafields.custom.hero_trust_strip.value
+  assign activity        = p.metafields.custom.activity_items.value
+  assign benefits        = p.metafields.custom.benefits_items.value
+  assign mf_hero_icons   = p.metafields.custom.hero_benefits_icons.value
+  assign coupon_text     = p.metafields.custom.coupon_text
+  assign coupon_code     = p.metafields.custom.coupon_code
+  assign help_note       = p.metafields.custom.help_note
+  assign hero_description = p.metafields.custom.hero_description
+  assign mf_components   = p.metafields.custom.featured_components.value
+  assign best_for        = p.metafields.custom.best_for.value
+-%}
+{%- if section.settings.show_section -%}
+  <section class="fk-page ferment-pdp fk-hero-section pdp-hero" style="background:{{ section.settings.section_bg }}">
+    {%- render 'fk-color-cascade' -%}
+    <div class="container">
+      {%- if section.settings.show_breadcrumb -%}
+        {%- render 'gb-breadcrumb' -%}
+      {%- endif -%}
+
+      <div class="hero-title-block">
+        <h1 class="product-name">{{ p.title }}</h1>
+        <p class="product-tagline">{{ tagline }}</p>
+      </div>
+
+      <div class="hero-grid">
+        <div class="gallery-stack">
+          <div class="gallery-main">
+            {%- if p.featured_image -%}
+              <img class="gallery-main-img"
+                   src="{{ p.featured_image | image_url: width: 1200 }}"
+                   srcset="{{ p.featured_image | image_url: width: 600 }} 600w, {{ p.featured_image | image_url: width: 1200 }} 1200w, {{ p.featured_image | image_url: width: 1800 }} 1800w"
+                   sizes="(min-width: 768px) 50vw, 100vw"
+                   alt="{{ p.featured_image.alt | default: p.title | escape }}"
+                   loading="eager"
+                   width="{{ p.featured_image.width }}"
+                   height="{{ p.featured_image.height }}">
+            {%- else -%}
+              <div class="gallery-illustration">🫙</div>
+            {%- endif -%}
+            {%- if p.images.size > 1 -%}
+              <button class="gallery-nav gallery-nav--prev" type="button" data-gallery-prev aria-label="Previous image">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+              </button>
+              <button class="gallery-nav gallery-nav--next" type="button" data-gallery-next aria-label="Next image">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </button>
+            {%- endif -%}
+          </div>
+          {%- if p.images.size > 1 -%}
+            <div class="gallery-thumbs">
+              {%- for image in p.images limit: 8 -%}
+                <button class="gallery-thumb {% if forloop.first %}active{% endif %}" type="button"
+                        data-full-src="{{ image | image_url: width: 1200 }}"
+                        data-full-alt="{{ image.alt | default: p.title | escape }}"
+                        aria-label="View image {{ forloop.index }}">
+                  <img src="{{ image | image_url: width: 180 }}" alt="{{ image.alt | default: p.title | escape }}" loading="lazy" width="90" height="90">
+                </button>
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+        </div>
+
+        <div class="product-info">
+          {%- if review_count > 0 -%}
+            <div class="rating-row">
+              <span class="stars" aria-label="{{ rating }} out of 5">★★★★★</span>
+              <a href="#judgeme-reviews" class="rating-link">{{ rating }} ({{ review_count }} reviews)</a>
+            </div>
+          {%- endif -%}
+
+          {%- if days_to_ferment != blank or capacity_label != blank -%}
+            <div class="hero-pills-row">
+              {%- if days_to_ferment != blank -%}
+                <span class="hero-pill"><strong>{{ days_to_ferment }}</strong>{% if days_subtitle != blank %} <span>{{ days_subtitle }}</span>{% endif %}</span>
+              {%- endif -%}
+              {%- if capacity_label != blank -%}
+                <span class="hero-pill"><strong>{{ capacity_label }}</strong></span>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+
+          <div class="activity-row">
+            {%- render 'gb-bought-today' -%}
+            {%- if activity != blank -%}
+              {%- for item in activity -%}
+                {%- assign parts = item | split: '|' -%}
+                <div class="item"><span>{{ parts[0] }}</span><span>{{ parts[1] }}</span></div>
+              {%- endfor -%}
+            {%- endif -%}
+          </div>
+
+          {%- if benefits != blank -%}
+            <div class="benefits-block">
+              <div class="label">Benefits</div>
+              <div class="benefits-grid">
+                {%- for b in benefits -%}
+                  {%- assign target_idx = forloop.index0 -%}
+                  {%- assign parts = b | split: '|' -%}
+                  {%- assign label = parts[1] | default: parts[0] -%}
+                  {%- assign has_emoji_prefix = false -%}
+                  {%- if parts.size > 1 -%}{%- assign has_emoji_prefix = true -%}{%- endif -%}
+                  {%- assign mf_icon = nil -%}
+                  {%- if mf_hero_icons -%}
+                    {%- for ic in mf_hero_icons -%}
+                      {%- if forloop.index0 == target_idx -%}{%- assign mf_icon = ic -%}{%- endif -%}
+                    {%- endfor -%}
+                  {%- endif -%}
+                  {%- assign icon_src = mf_icon | image_url: width: 48 -%}
+                  {%- if icon_src == blank -%}{%- assign icon_src = mf_icon.url -%}{%- endif -%}
+                  {%- if icon_src == blank -%}{%- assign icon_src = mf_icon.src -%}{%- endif -%}
+                  <div class="benefit-item">
+                    <span class="benefit-icon{% if icon_src != blank %} benefit-icon--img{% endif %}">
+                      {%- if icon_src != blank -%}
+                        <span class="kit-icon-svg" data-svg-src="{{ icon_src }}" aria-hidden="true"></span>
+                        <img class="kit-icon-img" src="{{ icon_src }}" alt="" loading="lazy" width="24" height="24">
+                      {%- elsif has_emoji_prefix -%}{{ parts[0] }}{%- endif -%}
+                    </span>
+                    <span>{{ label }}</span>
+                  </div>
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endif -%}
+
+          {%- form 'product', p, id: 'ferment-product-form' -%}
+            <div class="variant-block">
+              {%- assign opt_name = p.options.first | default: 'Pack' -%}
+              {%- if p.variants.size > 1 -%}
+                <div class="variant-label">Select {{ opt_name }}</div>
+                <div class="variant-grid variant-grid--{{ p.variants.size }}">
+                  {%- for variant in p.variants -%}
+                    {%- assign v_tag = variant.metafields.custom.tag -%}
+                    {%- assign v_best = variant.metafields.custom.best_for -%}
+                    {%- assign v_img = variant.metafields.custom.variant_illustration | default: variant.image -%}
+                    {%- assign is_selected = false -%}
+                    {%- if variant == p.selected_or_first_available_variant -%}{%- assign is_selected = true -%}{%- endif -%}
+                    <label class="variant{% if is_selected %} active{% endif %}{% unless variant.available %} sold-out{% endunless %}"
+                           data-variant-id="{{ variant.id }}"
+                           data-variant-price="{{ variant.price | money }}"
+                           data-variant-price-cents="{{ variant.price }}"
+                           data-variant-compare-cents="{{ variant.compare_at_price }}">
+                      <input type="radio" name="id" value="{{ variant.id }}" class="variant-input"
+                             {% if is_selected %}checked{% endif %}
+                             {% unless variant.available %}disabled{% endunless %}>
+                      {%- if v_tag != blank -%}<span class="variant-tag">{{ v_tag }}</span>{%- endif -%}
+                      <span class="variant-radio"></span>
+                      <div class="variant-pack">{{ variant.title | upcase }}</div>
+                      {%- if v_img != blank -%}
+                        <div class="variant-illustration">
+                          <img src="{{ v_img | image_url: width: 320 }}" alt="{{ variant.title }}" loading="lazy" width="160" height="120">
+                        </div>
+                      {%- endif -%}
+                      {%- if v_best != blank -%}
+                        <div class="variant-rationale">
+                          <div class="vr-row"><span class="vr-label">BEST FOR</span><span class="vr-text">{{ v_best }}</span></div>
+                        </div>
+                      {%- endif -%}
+                      <div class="variant-price">
+                        <span>{{ variant.price | money }}</span>
+                        {%- if variant.compare_at_price > variant.price -%}
+                          <span class="variant-compare">{{ variant.compare_at_price | money }}</span>
+                        {%- endif -%}
+                      </div>
+                      {%- if variant.compare_at_price > variant.price -%}
+                        <span class="variant-save">You save {{ variant.compare_at_price | minus: variant.price | money }}</span>
+                      {%- endif -%}
+                    </label>
+                  {%- endfor -%}
+                </div>
+              {%- else -%}
+                <input type="hidden" name="id" value="{{ p.selected_or_first_available_variant.id }}">
+              {%- endif -%}
+
+              {%- if size_chart != blank or help_note != blank -%}
+                <div class="variant-help-note">
+                  <span class="vhn-text">{{ help_note | default: 'Choose the pack that fits your household.' }}</span>
+                  {%- if size_chart != blank -%}
+                    <button type="button" class="vhn-link" data-open-size-modal>Jar Size Chart →</button>
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+
+              {%- if companion -%}
+                {%- assign other_capacity = companion.metafields.custom.jar_capacity | default: companion.metafields.custom.capacity | default: 'other size' -%}
+                <a href="{{ companion.url }}" class="companion-link">
+                  Looking for the {{ other_capacity }} version? View {{ companion.title }} →
+                </a>
+              {%- endif -%}
+            </div>
+
+            <button type="submit" name="add" class="atc-btn" data-atc
+                    data-product-id="{{ p.id }}"
+                    data-product-title="{{ p.title | escape }}"
+                    data-product-image="{{ p.featured_image | image_url: width: 200 }}"
+                    data-product-price="{{ p.price }}"
+                    data-product-url="{{ p.url }}"
+                    {% unless p.available %}disabled{% endunless %}>
+              {%- if p.available -%}ADD TO CART{%- else -%}SOLD OUT{%- endif -%}
+            </button>
+          {%- endform -%}
+
+          <div class="trust-strip">
+            {%- if hero_trust != blank -%}
+              {%- for t in hero_trust -%}
+                <div class="item"><span class="check">✓</span> {{ t }}</div>
+              {%- endfor -%}
+            {%- else -%}
+              <div class="item"><span class="check">✓</span> Secure Payment</div>
+              <div class="item"><span class="check">✓</span> Free Shipping</div>
+              <div class="item"><span class="check">✓</span> FSSAI Licensed</div>
+            {%- endif -%}
+          </div>
+
+          {%- if coupon_text != blank or coupon_code != blank -%}
+            <div class="coupon-bar" data-coupon>
+              <span>{{ coupon_text }}</span>
+              {%- if coupon_code != blank -%}
+                <button type="button" class="code" data-coupon-code data-clip="{{ coupon_code }}">{{ coupon_code }}</button>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+
+          {%- if hero_description != blank or p.description != blank or mf_components != blank -%}
+            <div class="hero-accordions">
+              {%- assign desc_html = hero_description | default: p.description -%}
+              {%- if desc_html != blank -%}
+                <div class="hero-acc-item" data-acc>
+                  <div class="hero-acc-q"><span>Description</span><span class="hero-acc-toggle">+</span></div>
+                  <div class="hero-acc-a">
+                    <div class="hero-acc-inner">
+                      {{ desc_html }}
+                      {%- if best_for != blank -%}
+                        <div class="hero-best-for">
+                          {%- for bf in best_for -%}
+                            <span class="hero-best-chip">{{ bf.label | default: bf.name | default: bf }}</span>
+                          {%- endfor -%}
+                        </div>
+                      {%- endif -%}
+                    </div>
+                  </div>
+                </div>
+              {%- endif -%}
+              {%- if mf_components != blank -%}
+                <div class="hero-acc-item" data-acc>
+                  <div class="hero-acc-q"><span>What's Inside</span><span class="hero-acc-toggle">+</span></div>
+                  <div class="hero-acc-a">
+                    <div class="hero-acc-inner">
+                      <ul>
+                        {%- for c in mf_components -%}
+                          <li><strong>{{ c.name }}</strong>{% if c.description != blank %} — {{ c.description }}{% endif %}</li>
+                        {%- endfor -%}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {%- render 'fk-jar-size-modal' -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "FK — Hero",
+  "tag": "section",
+  "class": "fk-hero-section",
+  "settings": [
+    { "type": "checkbox", "id": "show_section", "label": "Show section", "default": true },
+    { "type": "color", "id": "section_bg", "label": "Section background", "default": "#ffffff" },
+    { "type": "checkbox", "id": "show_breadcrumb", "label": "Show breadcrumb", "default": true }
+  ],
+  "presets": [ { "name": "FK — Hero" } ],
+  "enabled_on": { "templates": ["product"] }
+}
+{% endschema %}

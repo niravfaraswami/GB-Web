@@ -1,0 +1,189 @@
+/* =====================================================================
+   PDP Add-On Block · v2 — selection-only checkboxes, batch commit
+   =====================================================================
+   Row layout:
+
+     [ checkbox 18 px ] [ thumb 40 px ] [ name (1fr) ] [ price stack ] [ %-badge ]
+
+   The label-wrapped row toggles a hidden checkbox; the visual
+   `.addon-checkbox` span paints the kit-color fill when :checked.
+   The main ATC's submit handler reads every checked checkbox and
+   batch-adds them along with the main variant — see
+   `assets/pdp-addon-block.js`.
+   ===================================================================== */
+.addon-block {
+  margin-top: 12px;
+  background: var(--white, #FFFFFF);
+  border: 1px solid var(--border-soft, #F0EBDD);
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+
+.addon-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  padding: 0 2px;
+}
+.addon-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--kit-color-dark, #1F1F1D);
+}
+.addon-head .rule {
+  flex: 1;
+  height: 1px;
+  background: var(--border-soft, #F0EBDD);
+}
+
+.addon-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.addon-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border: 1px solid var(--border, #E8E3D5);
+  border-radius: 10px;
+  background: var(--cream, #FFF9EE);
+  transition: background 0.18s ease, border-color 0.18s ease;
+  cursor: pointer;
+  user-select: none;
+}
+.addon-row.selected {
+  background: var(--kit-color-soft, #FDE8EF);
+  border-color: var(--kit-color, #B83265);
+}
+
+/* Hidden native checkbox — preserves accessibility + label-click parity */
+.addon-checkbox-input {
+  position: absolute;
+  width: 0; height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Visual checkbox — filled with kit color on selection */
+.addon-checkbox {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  border: 1.5px solid var(--text-soft, #888780);
+  background: var(--white, #FFFFFF);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: transparent;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  flex-shrink: 0;
+}
+.addon-row.selected .addon-checkbox {
+  background: var(--kit-color, #B83265);
+  border-color: var(--kit-color, #B83265);
+  color: #FFFFFF;
+}
+
+.addon-thumb {
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  background: var(--kit-color-soft, #FDE8EF);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  overflow: hidden;
+  border: 1px solid rgba(31, 31, 29, 0.04);
+  flex-shrink: 0;
+}
+.addon-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.addon-row.selected .addon-thumb { background: var(--white, #FFFFFF); }
+
+.addon-name {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: -0.005em;
+  color: var(--text, #1F1F1D);
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Right cluster — price + percentage badge pinned to the row's right edge */
+.addon-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+.addon-price {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 15px;
+  color: var(--text, #1F1F1D);
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+/* Percentage badge — small kit-color-soft pill, "{pct}% / OFF" stacked */
+.addon-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  min-width: 38px;
+  padding: 4px 6px;
+  background: var(--kit-color-soft, #FDE8EF);
+  color: var(--kit-color-dark, #921F4E);
+  border-radius: 7px;
+  white-space: nowrap;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.addon-badge-pct {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 12px;
+  letter-spacing: -0.01em;
+}
+.addon-badge-off {
+  font-family: 'DM Mono', monospace;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  margin-top: 1px;
+}
+.addon-row.selected .addon-badge {
+  background: var(--white, #FFFFFF);
+}
+
+.addon-row.disabled { opacity: 0.5; cursor: not-allowed; }
+.addon-row.disabled .addon-checkbox { background: var(--cream-deeper, #F5EDD8); }
+
+@media (max-width: 480px) {
+  .addon-block { padding: 10px 12px; border-radius: 10px; }
+  .addon-row { gap: 8px; padding: 7px 8px; }
+  .addon-checkbox { width: 16px; height: 16px; }
+  .addon-thumb { width: 36px; height: 36px; font-size: 20px; }
+  .addon-name { font-size: 12px; }
+  .addon-right { gap: 6px; }
+  .addon-price { font-size: 14px; }
+  .addon-badge { min-width: 34px; padding: 3px 5px; }
+  .addon-badge-pct { font-size: 11px; }
+  .addon-badge-off { font-size: 7.5px; }
+}

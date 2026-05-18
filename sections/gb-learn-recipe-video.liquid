@@ -1,0 +1,61 @@
+{%- render 'leo_kit_chrome' -%}
+
+{%- liquid
+  assign yt_id = article.metafields.custom.video_youtube_id | default: section.settings.youtube_id
+  assign yt_title = article.metafields.custom.video_title | default: section.settings.video_title
+
+  # If a Video section is present in the body, scan it for a YouTube link.
+  if yt_id == blank
+    capture body_html
+      render 'gb-recipe-body-section', section_name: 'video', section_aliases: 'video|watch|walkthrough'
+    endcapture
+    assign body_html = body_html | strip
+    # Try multiple URL patterns: youtu.be/<id> and youtube.com/watch?v=<id>
+    if body_html contains 'youtu.be/'
+      assign id_part = body_html | split: 'youtu.be/' | last
+      assign yt_id = id_part | split: '"' | first | split: ' ' | first | split: '<' | first | split: '?' | first | split: '&' | first | strip
+    elsif body_html contains 'v='
+      assign id_part = body_html | split: 'v=' | last
+      assign yt_id = id_part | split: '"' | first | split: ' ' | first | split: '<' | first | split: '&' | first | strip
+    elsif body_html contains 'embed/'
+      assign id_part = body_html | split: 'embed/' | last
+      assign yt_id = id_part | split: '"' | first | split: '?' | first | split: '<' | first | strip
+    endif
+  endif
+-%}
+
+{%- if yt_id != blank -%}
+  <section class="recipe-section" id="{{ section.settings.anchor | default: 'video' }}" {%- render 'leo_kit_attrs' -%}>
+    <div class="container">
+      {%- if section.settings.heading != blank -%}<h2>{{ section.settings.heading }}</h2>{%- endif -%}
+      {%- if section.settings.sub != blank -%}<div class="section-sub">{{ section.settings.sub }}</div>{%- endif -%}
+      <div class="video-block">
+        <div class="video-thumb" data-youtube-id="{{ yt_id }}" data-gb-video-thumb>
+          <div class="video-play">▶</div>
+          {%- if yt_title != blank -%}<div class="video-title-overlay">{{ yt_title }}</div>{%- endif -%}
+        </div>
+      </div>
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "GB · Learn Recipe Video",
+  "tag": "section",
+  "class": "gb-learn-recipe-video-wrap",
+  "settings": [
+    { "type": "text", "id": "anchor", "label": "Anchor ID", "default": "video" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Watch the walkthrough" },
+    { "type": "text", "id": "sub", "label": "Sub-heading", "default": "Full method on YouTube." },
+    { "type": "text", "id": "youtube_id", "label": "YouTube video ID (fallback if metafield empty)", "info": "Just the ID part — e.g. 'dQw4w9WgXcQ'" },
+    { "type": "text", "id": "video_title", "label": "Video title overlay (fallback)" },
+    { "type": "header", "content": "Spacing & Typography" },
+    { "type": "range", "id": "pad_top_d", "label": "Padding top — desktop (px)", "min": 0, "max": 200, "step": 4, "default": 64 },
+    { "type": "range", "id": "pad_bot_d", "label": "Padding bottom — desktop (px)", "min": 0, "max": 200, "step": 4, "default": 64 },
+    { "type": "range", "id": "pad_top_m", "label": "Padding top — mobile (px)", "min": 0, "max": 120, "step": 4, "default": 48 },
+    { "type": "range", "id": "pad_bot_m", "label": "Padding bottom — mobile (px)", "min": 0, "max": 120, "step": 4, "default": 48 }
+  ],
+  "presets": [{ "name": "GB · Learn Recipe Video" }]
+}
+{% endschema %}

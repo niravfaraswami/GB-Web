@@ -1,0 +1,68 @@
+{{ 'sprout-maker.css' | asset_url | stylesheet_tag }}
+{{ 'sprout-maker-v2.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign p = product
+  assign cross_sell_products = p.metafields.custom.cross_sell_products.value
+  assign cross_blocks = section.blocks | where: 'type', 'cross_sell_product'
+
+  assign show_cross = false
+  if cross_sell_products != blank or cross_blocks.size > 0 or section.settings.cross_collection != blank
+    assign show_cross = true
+  endif
+-%}
+
+{%- if show_cross -%}
+  <section class="cross-section sprout-pdp-v2" data-kit="sprouts">
+    <div class="container">
+      <div class="section-header">
+        <div class="eyebrow">{{ section.settings.cross_eyebrow }}</div>
+        <h2>{{ section.settings.cross_heading }}<br><em>{{ section.settings.cross_heading_em }}</em></h2>
+      </div>
+      <div class="cs-grid">
+        {%- if cross_sell_products != blank -%}
+          {%- for cp in cross_sell_products limit: 3 -%}
+            {%- render 'sprout_cs_card', p: cp, eyebrow: nil, description: nil -%}
+          {%- endfor -%}
+        {%- elsif cross_blocks.size > 0 -%}
+          {%- for block in cross_blocks -%}
+            {%- if block.settings.product != blank -%}
+              {%- render 'sprout_cs_card', p: block.settings.product, eyebrow: block.settings.eyebrow, description: block.settings.description, attrs: block.shopify_attributes -%}
+            {%- endif -%}
+          {%- endfor -%}
+        {%- elsif section.settings.cross_collection.products.size > 0 -%}
+          {%- for cp in section.settings.cross_collection.products limit: 3 -%}
+            {%- render 'sprout_cs_card', p: cp -%}
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "SM v2 · Cross-sell",
+  "tag": "section",
+  "class": "section--sm-v2-cross",
+  "max_blocks": 6,
+  "settings": [
+    { "type": "text", "id": "cross_eyebrow", "label": "Eyebrow", "default": "PAIR IT WITH" },
+    { "type": "text", "id": "cross_heading", "label": "Heading", "default": "COMPLETE THE" },
+    { "type": "text", "id": "cross_heading_em", "label": "Heading (highlighted)", "default": "SPROUT KITCHEN." },
+    { "type": "collection", "id": "cross_collection", "label": "Fallback collection", "info": "Used if product has no cross_sell_products metafield and no Cross-sell blocks." }
+  ],
+  "blocks": [
+    {
+      "type": "cross_sell_product",
+      "name": "Cross-sell product",
+      "settings": [
+        { "type": "product", "id": "product", "label": "Product" },
+        { "type": "text", "id": "eyebrow", "label": "Eyebrow override" },
+        { "type": "textarea", "id": "description", "label": "Description override" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "SM v2 · Cross-sell" }]
+}
+{% endschema %}

@@ -1,0 +1,127 @@
+{%- render 'leo_kit_chrome' -%}
+
+{%- liquid
+  assign content_blocks = section.blocks
+  assign section_block_count = 0
+  for b in content_blocks
+    if b.type == 'article_section'
+      assign section_block_count = section_block_count | plus: 1
+    endif
+  endfor
+-%}
+
+<div class="article-body-wrap" {%- render 'leo_kit_attrs' -%}>
+  <div class="container">
+    {%- if section.settings.show_toc -%}
+      <aside class="article-toc">
+        <div class="article-toc-h">{{ section.settings.toc_label | default: 'In This Article' }}</div>
+        <ul id="toc-list">
+          {%- for block in content_blocks -%}
+            {%- if block.type == 'article_section' and block.settings.heading != blank and block.settings.anchor_id != blank -%}
+              <li><a href="#{{ block.settings.anchor_id }}">{{ block.settings.heading }}</a></li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+      </aside>
+    {%- endif -%}
+
+    <article class="article-body{% unless section.settings.show_toc %} article-body--full{% endunless %}" id="article-body">
+      {%- if article.content != blank and section.settings.show_article_content -%}
+        <div class="article-section">
+          {{ article.content }}
+        </div>
+      {%- endif -%}
+
+      {%- for block in content_blocks -%}
+        {%- case block.type -%}
+          {%- when 'article_section' -%}
+            <section class="article-section" id="{{ block.settings.anchor_id }}" {{ block.shopify_attributes }}>
+              {%- if block.settings.heading != blank -%}<h2>{{ block.settings.heading }}</h2>{%- endif -%}
+              {{ block.settings.body }}
+            </section>
+
+          {%- when 'pull_quote' -%}
+            <blockquote class="pull-quote" {{ block.shopify_attributes }}>{{ block.settings.text }}</blockquote>
+
+          {%- when 'inline_callout' -%}
+            {%- assign cp = block.settings.product -%}
+            <div class="inline-callout" {{ block.shopify_attributes }}>
+              <div class="ic-img" style="background: {{ block.settings.bg_color | default: 'var(--kit-color)' }};">
+                {%- if cp.featured_image -%}
+                  <img src="{{ cp.featured_image | image_url: width: 128 }}" alt="{{ cp.title | escape }}" width="64" height="64">
+                {%- elsif block.settings.emoji != blank -%}
+                  {{ block.settings.emoji }}
+                {%- elsif cp.metafields.custom.emoji != blank -%}
+                  {{ cp.metafields.custom.emoji }}
+                {%- else -%}🫙{%- endif -%}
+              </div>
+              <div class="ic-body">
+                <div class="ic-eyebrow">{{ block.settings.eyebrow | default: 'FROM OUR SHOP' }}</div>
+                <div class="ic-name">{{ block.settings.name_override | default: cp.title }}</div>
+                {%- assign desc = block.settings.desc_override | default: cp.metafields.custom.short_desc -%}
+                {%- if desc != blank -%}<div class="ic-desc">{{ desc }}</div>{%- endif -%}
+              </div>
+              <a href="{{ cp.url | default: '#' }}" class="ic-cta">
+                <span class="ic-price">{{ cp.price | money | default: block.settings.price_override }}</span>
+                <span class="ic-link">Shop now →</span>
+              </a>
+            </div>
+
+          {%- when 'sources' -%}
+            <div class="sources-block" {{ block.shopify_attributes }}>
+              <div class="sources-h">{{ block.settings.heading | default: 'Sources & Further Reading' }}</div>
+              <ol>
+                {%- assign lines = block.settings.items | newline_to_br | split: '<br />' -%}
+                {%- for line in lines -%}
+                  {%- assign t = line | strip -%}
+                  {%- if t != blank -%}<li>{{ t }}</li>{%- endif -%}
+                {%- endfor -%}
+              </ol>
+            </div>
+        {%- endcase -%}
+      {%- endfor -%}
+    </article>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "GB · Learn Blog Body",
+  "tag": "section",
+  "class": "gb-learn-blog-body-wrap",
+  "settings": [
+    { "type": "checkbox", "id": "show_toc", "label": "Show table of contents (TOC) sidebar", "default": true },
+    { "type": "text", "id": "toc_label", "label": "TOC heading", "default": "In This Article" },
+    { "type": "checkbox", "id": "show_article_content", "label": "Render Shopify article content (article.content) before blocks", "default": false, "info": "Tick this only if you want to use Shopify's article rich-text editor in addition to the blocks below." },
+    { "type": "header", "content": "Spacing & Typography" },
+    { "type": "range", "id": "pad_top_d", "label": "Padding top — desktop (px)", "min": 0, "max": 200, "step": 4, "default": 64 },
+    { "type": "range", "id": "pad_bot_d", "label": "Padding bottom — desktop (px)", "min": 0, "max": 200, "step": 4, "default": 96 },
+    { "type": "range", "id": "pad_top_m", "label": "Padding top — mobile (px)", "min": 0, "max": 120, "step": 4, "default": 48 },
+    { "type": "range", "id": "pad_bot_m", "label": "Padding bottom — mobile (px)", "min": 0, "max": 120, "step": 4, "default": 64 }
+  ],
+  "blocks": [
+    { "type": "article_section", "name": "Section (with heading)", "limit": 30, "settings": [
+      { "type": "text", "id": "heading", "label": "H2 heading" },
+      { "type": "text", "id": "anchor_id", "label": "Anchor ID (for TOC link, e.g. 'basics')", "info": "Lowercase, no spaces. Used in the URL fragment." },
+      { "type": "richtext", "id": "body", "label": "Body content (rich text)" }
+    ]},
+    { "type": "pull_quote", "name": "Pull quote", "limit": 8, "settings": [
+      { "type": "richtext", "id": "text", "label": "Quote text" }
+    ]},
+    { "type": "inline_callout", "name": "Inline product callout", "limit": 8, "settings": [
+      { "type": "product", "id": "product", "label": "Product" },
+      { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "FROM OUR SHOP" },
+      { "type": "text", "id": "name_override", "label": "Name override (optional)" },
+      { "type": "textarea", "id": "desc_override", "label": "Description override (optional)" },
+      { "type": "text", "id": "price_override", "label": "Price text override (optional)" },
+      { "type": "text", "id": "emoji", "label": "Emoji fallback (when product image missing)" },
+      { "type": "color", "id": "bg_color", "label": "Image tile background color", "default": "#FF7300" }
+    ]},
+    { "type": "sources", "name": "Sources & references", "limit": 1, "settings": [
+      { "type": "text", "id": "heading", "label": "Heading", "default": "Sources & Further Reading" },
+      { "type": "textarea", "id": "items", "label": "Sources (one per line, can include HTML for italics)" }
+    ]}
+  ],
+  "presets": [{ "name": "GB · Learn Blog Body" }]
+}
+{% endschema %}

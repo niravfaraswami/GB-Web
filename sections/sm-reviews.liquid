@@ -1,0 +1,89 @@
+{{ 'sprout-maker.css' | asset_url | stylesheet_tag }}
+{{ 'sprout-maker-v2.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign p = product
+  assign mf_reviews = p.metafields.custom.featured_reviews.value
+  assign review_blocks = section.blocks | where: 'type', 'review'
+-%}
+
+{%- if mf_reviews != blank or review_blocks.size > 0 -%}
+  <section class="reviews-section sprout-pdp-v2" data-kit="sprouts">
+    <div class="container">
+      <div class="section-header">
+        <div class="eyebrow">{{ section.settings.reviews_eyebrow }}</div>
+        <h2>{{ section.settings.reviews_heading }}<br><em>{{ section.settings.reviews_heading_em }}</em></h2>
+      </div>
+      <div class="reviews-grid">
+        {%- if mf_reviews != blank -%}
+          {%- for review in mf_reviews limit: 6 -%}
+            <div class="review-card">
+              <div class="rev-content">
+                <h3 class="rev-title">"{{ review.quote }}"</h3>
+                <div class="rev-foot">
+                  <div class="rev-stars">★★★★★</div>
+                  <div class="rev-name">{{ review.name }}</div>
+                  <div class="rev-meta">{{ review.meta }}</div>
+                </div>
+              </div>
+              <div class="rev-photo">
+                {%- if review.photo != blank -%}
+                  <img src="{{ review.photo | image_url: width: 800 }}" alt="{{ review.name }}" loading="lazy" width="800" height="800">
+                {%- else -%}
+                  <span class="photo-placeholder">📷</span>
+                {%- endif -%}
+              </div>
+            </div>
+          {%- endfor -%}
+        {%- else -%}
+          {%- for block in review_blocks -%}
+            <div class="review-card" {{ block.shopify_attributes }}>
+              <div class="rev-content">
+                <h3 class="rev-title">"{{ block.settings.quote }}"</h3>
+                <div class="rev-foot">
+                  <div class="rev-stars">★★★★★</div>
+                  <div class="rev-name">{{ block.settings.name }}</div>
+                  <div class="rev-meta">{{ block.settings.meta }}</div>
+                </div>
+              </div>
+              <div class="rev-photo">
+                {%- if block.settings.photo != blank -%}
+                  <img src="{{ block.settings.photo | image_url: width: 800 }}" alt="{{ block.settings.name }}" loading="lazy" width="800" height="800">
+                {%- else -%}
+                  <span class="photo-placeholder">📷</span>
+                {%- endif -%}
+              </div>
+            </div>
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "SM v2 · UGC Reviews",
+  "tag": "section",
+  "class": "section--sm-v2-reviews",
+  "max_blocks": 12,
+  "settings": [
+    { "type": "text", "id": "reviews_eyebrow", "label": "Eyebrow", "default": "REAL RESULTS" },
+    { "type": "text", "id": "reviews_heading", "label": "Heading", "default": "WHAT OUR" },
+    { "type": "text", "id": "reviews_heading_em", "label": "Heading (highlighted)", "default": "CUSTOMERS SAY." }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Review",
+      "settings": [
+        { "type": "textarea", "id": "quote", "label": "Headline quote" },
+        { "type": "text", "id": "name", "label": "Name" },
+        { "type": "text", "id": "meta", "label": "Age, city · Persona" },
+        { "type": "image_picker", "id": "photo", "label": "Photo" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "SM v2 · UGC Reviews" }]
+}
+{% endschema %}

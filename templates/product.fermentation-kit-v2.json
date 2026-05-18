@@ -1,0 +1,38 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "kit-switcher": { "type": "fk-kit-switcher", "settings": {} },
+    "hero":         { "type": "fk-hero", "settings": {} },
+    "trust-row":    { "type": "fk-trust-row", "settings": {} },
+    "how-make":     { "type": "fk-how-make", "settings": {} },
+    "myth":         { "type": "fk-myth", "settings": {} },
+    "outcomes":     { "type": "fk-outcomes", "settings": {} },
+    "reels":        { "type": "fk-reels", "settings": {} },
+    "box":          { "type": "fk-box", "settings": {} },
+    "airlock":      { "type": "fk-airlock-spotlight", "settings": {} },
+    "reviews":      { "type": "fk-reviews", "settings": {} },
+    "timeline":     { "type": "fk-timeline", "settings": {} },
+    "itk":          { "type": "fk-itk", "settings": {} },
+    "zoe":          { "type": "fk-zoe-science", "settings": {} },
+    "eat":          { "type": "fk-eat", "settings": {} },
+    "recipes":      { "type": "fk-recipes", "settings": {} },
+    "faq":          { "type": "fk-faq", "settings": {} },
+    "cross-sell":   { "type": "fk-cross-sell", "settings": {} },
+    "judgeme":      { "type": "fk-judgeme", "settings": {} }
+  },
+  "order": [
+    "kit-switcher", "hero", "trust-row", "how-make", "myth",
+    "outcomes", "reels", "box", "airlock", "reviews",
+    "timeline", "itk", "zoe", "eat", "recipes",
+    "faq", "cross-sell", "judgeme"
+  ]
+}
+

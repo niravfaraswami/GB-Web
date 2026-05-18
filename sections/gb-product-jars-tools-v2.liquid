@@ -1,0 +1,951 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+{%- liquid
+  assign p = product
+  assign cm = p.metafields.custom
+
+  # Consolidated to custom.* namespace — same fields the kit PDPs use.
+  # No more parallel gutbasket.tools.* duplicates.
+  assign category_label = cm.category_label | default: section.settings.default_category_label | default: 'TOOL'
+  assign tagline        = cm.hero_tagline   | default: section.settings.default_tagline | default: p.description | strip_html | truncatewords: 28
+
+  assign features_h1    = cm.features_h1    | default: section.settings.features_h1    | default: 'Built for fermentation.'
+  assign features_intro = cm.features_intro | default: section.settings.features_intro | default: 'Most kitchen jars weren’t designed for fermentation. This one is.'
+  assign compatible_with = cm.compatible_with | default: section.settings.compatible_with
+
+  # Accent — reuse the existing kit theme_accent triple from custom.*
+  assign kit_color      = cm.theme_accent      | default: section.settings.kit_color      | default: '#4F7C57'
+  assign kit_color_dark = cm.theme_accent_dark | default: section.settings.kit_color_dark | default: '#3F6346'
+  assign kit_color_soft = cm.theme_accent_soft | default: section.settings.kit_color_soft | default: '#D8E4DC'
+
+  assign rating         = cm.rating | default: section.settings.default_rating
+  assign review_count   = cm.review_count
+
+  # Features list: reuse the existing Kit Quick Benefit metaobject list.
+  # Each entry needs: heading | name, description, icon (file) | icon_emoji.
+  assign features_data    = cm.featured_quick_benefits.value
+  # Specs: new custom.specs JSON metafield (no existing metaobject fits the simple label/value shape)
+  assign specs_data       = cm.specs.value
+  # Use cases: reuse the existing Kit Consumption Method metaobject list.
+  # Each entry needs: heading | title, description | body, icon (file) | icon_emoji.
+  assign use_cases_data   = cm.featured_consumption_methods.value
+  assign cross_sell_coll  = collections[section.settings.cross_sell_collection]
+
+  # ============ v2 metafield reads (jars-tools-v2 brief) ============
+  assign short_name        = cm.short_name | default: cm.product_name_short
+  assign discount_badge    = cm.discount_badge
+  assign capacity          = cm.capacity | default: cm.jar_capacity
+  assign hero_trust        = cm.hero_trust_strip.value
+  assign hero_description  = cm.hero_description
+  assign mf_components     = cm.featured_components.value
+  assign mf_care           = cm.care_instructions.value
+  assign warranty_note     = cm.warranty_note
+  assign mf_faq_h          = cm.faq_h
+  assign mf_faqs           = cm.featured_faqs.value
+  assign mf_reviews_h      = cm.reviews_h
+  assign mf_reviews        = cm.featured_reviews.value
+  assign mf_cross_sell     = cm.cross_sell_products.value
+  assign mf_cart_addons    = cm.cart_addon_ids.value
+  assign mf_seo_title      = cm.seo_title_override
+  assign mf_seo_desc       = cm.seo_description_override
+  assign mf_uses_h         = cm.uses_h
+  assign mf_hero_bullets   = cm.hero_bullets
+  assign has_mf_faqs = false
+  if mf_faqs and mf_faqs.size > 0
+    assign has_mf_faqs = true
+  endif
+  assign has_mf_reviews = false
+  if mf_reviews and mf_reviews.size > 0
+    assign has_mf_reviews = true
+  endif
+  assign has_mf_components = false
+  if mf_components and mf_components.size > 0
+    assign has_mf_components = true
+  endif
+  assign has_mf_care = false
+  if mf_care and mf_care.size > 0
+    assign has_mf_care = true
+  endif
+  assign has_mf_cross = false
+  if mf_cross_sell and mf_cross_sell.size > 0
+    assign has_mf_cross = true
+  endif
+-%}
+
+<style>
+  #gb-jt-{{ section.id }} {
+    --jt-white: #FFFFFF;
+    --jt-cream: #FFF9EE;
+    --jt-cream-deeper: #F5EDD8;
+    --jt-border: #E8E3D5;
+    --jt-border-soft: #F0EBDD;
+    --jt-ink: #1F1F1D;
+    --jt-all-in-one: #2B2218;
+    --jt-text: #1F1F1D;
+    --jt-text-muted: #5C4D3F;
+    --jt-text-soft: #888780;
+    --kit-color: {{ kit_color }};
+    --kit-color-dark: {{ kit_color_dark }};
+    --kit-color-soft: {{ kit_color_soft }};
+  }
+
+  #gb-jt-{{ section.id }} {
+    font-family: 'DM Sans', system-ui, sans-serif;
+    color: var(--jt-text);
+    background: var(--jt-cream);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  #gb-jt-{{ section.id }} *, #gb-jt-{{ section.id }} *::before, #gb-jt-{{ section.id }} *::after { box-sizing: border-box; }
+  #gb-jt-{{ section.id }} a { text-decoration: none; color: inherit; }
+  #gb-jt-{{ section.id }} img { max-width: 100%; display: block; }
+  #gb-jt-{{ section.id }} button { font-family: inherit; cursor: pointer; border: none; background: none; }
+  #gb-jt-{{ section.id }} h1, #gb-jt-{{ section.id }} h2, #gb-jt-{{ section.id }} h3, #gb-jt-{{ section.id }} h4 {
+    font-family: 'Montserrat', sans-serif; letter-spacing: -0.015em; line-height: 1.1;
+  }
+  #gb-jt-{{ section.id }} .jt-container { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+
+  /* ========= HERO ========= */
+  #gb-jt-{{ section.id }} .pdp-hero { background: var(--jt-white); padding: 16px 0 80px; }
+  #gb-jt-{{ section.id }} .breadcrumb { padding: 16px 0; font-size: 13px; color: var(--jt-text-muted); border-bottom: 1px solid var(--jt-border-soft); }
+  #gb-jt-{{ section.id }} .breadcrumb a { color: var(--jt-text-muted); }
+  #gb-jt-{{ section.id }} .breadcrumb a:hover { color: var(--kit-color); }
+  #gb-jt-{{ section.id }} .hero-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 56px; margin-top: 32px; }
+  #gb-jt-{{ section.id }} .gallery-stack { display: flex; flex-direction: column; gap: 14px; }
+  #gb-jt-{{ section.id }} .gallery-main {
+    background: var(--kit-color-soft); border-radius: 16px; aspect-ratio: 1;
+    position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center;
+  }
+  #gb-jt-{{ section.id }} .gallery-main img { width: 100%; height: 100%; object-fit: cover; }
+  #gb-jt-{{ section.id }} .gallery-main .save-badge {
+    position: absolute; top: 16px; left: 16px; background: var(--jt-ink); color: var(--jt-cream);
+    padding: 5px 10px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 0.04em; z-index: 2;
+  }
+  #gb-jt-{{ section.id }} .gallery-thumbs { display: flex; gap: 10px; overflow-x: auto; }
+  #gb-jt-{{ section.id }} .gallery-thumb {
+    flex: 0 0 90px; height: 90px; background: var(--jt-cream);
+    border: 2px solid var(--jt-border-soft); border-radius: 10px; cursor: pointer;
+    overflow: hidden; padding: 0;
+  }
+  #gb-jt-{{ section.id }} .gallery-thumb img { width: 100%; height: 100%; object-fit: cover; }
+  #gb-jt-{{ section.id }} .gallery-thumb.active { border-color: var(--kit-color); }
+
+  #gb-jt-{{ section.id }} .product-info { padding-top: 8px; }
+  #gb-jt-{{ section.id }} .rating-row { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--jt-text-muted); margin-bottom: 14px; }
+  #gb-jt-{{ section.id }} .stars { color: #DDA738; font-size: 15px; letter-spacing: 1px; }
+  #gb-jt-{{ section.id }} .rating-link { color: var(--jt-text-muted); text-decoration: underline; text-underline-offset: 2px; }
+  #gb-jt-{{ section.id }} .product-name {
+    font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 32px;
+    letter-spacing: -0.02em; color: var(--jt-text); margin-bottom: 14px; text-transform: uppercase;
+  }
+  #gb-jt-{{ section.id }} .product-tagline { font-size: 16px; color: var(--jt-text-muted); line-height: 1.55; margin-bottom: 24px; }
+  #gb-jt-{{ section.id }} .category-chip {
+    display: inline-block; background: var(--kit-color-soft); color: var(--kit-color-dark);
+    font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 4px 10px; border-radius: 999px; margin-bottom: 10px;
+  }
+
+  #gb-jt-{{ section.id }} .activity-row { display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; font-size: 13px; color: var(--jt-text-muted); }
+  #gb-jt-{{ section.id }} .activity-row .item { display: flex; align-items: center; gap: 8px; }
+  #gb-jt-{{ section.id }} .activity-row .dot { width: 8px; height: 8px; border-radius: 50%; background: #5DBC52; }
+
+  #gb-jt-{{ section.id }} .single-price-block {
+    background: var(--jt-white); border: 2px solid var(--kit-color); border-radius: 14px;
+    padding: 22px 24px; margin-bottom: 16px;
+    display: flex; align-items: center; justify-content: space-between; gap: 18px;
+  }
+  #gb-jt-{{ section.id }} .single-price-amount {
+    font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 32px;
+    color: var(--kit-color-dark); letter-spacing: -0.02em; line-height: 1;
+  }
+  #gb-jt-{{ section.id }} .single-price-compare { font-size: 14px; color: var(--jt-text-soft); text-decoration: line-through; margin-left: 10px; font-weight: 400; }
+  #gb-jt-{{ section.id }} .single-price-save { display: block; font-size: 12px; color: var(--jt-ink); font-weight: 600; margin-top: 4px; }
+  #gb-jt-{{ section.id }} .single-price-tag {
+    background: var(--jt-ink); color: var(--jt-cream); padding: 8px 14px; border-radius: 999px;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  #gb-jt-{{ section.id }} .single-price-tag.sold-out { background: #B33A2A; }
+
+  #gb-jt-{{ section.id }} .atc-btn {
+    width: 100%; background: var(--jt-all-in-one); color: var(--jt-cream); padding: 18px;
+    border-radius: 999px; font-weight: 700; font-size: 14px; letter-spacing: 0.12em;
+    text-transform: uppercase; margin-top: 8px; transition: background 0.15s;
+  }
+  #gb-jt-{{ section.id }} .atc-btn:hover:not([disabled]) { background: var(--jt-ink); }
+  #gb-jt-{{ section.id }} .atc-btn[disabled] { background: #888; cursor: not-allowed; opacity: 0.7; }
+
+  #gb-jt-{{ section.id }} .trust-strip {
+    display: flex; justify-content: center; gap: 24px; margin-top: 14px;
+    font-size: 12px; color: var(--jt-text-muted); flex-wrap: wrap;
+  }
+  #gb-jt-{{ section.id }} .trust-strip .item { display: flex; align-items: center; gap: 6px; }
+  #gb-jt-{{ section.id }} .trust-strip .check {
+    display: inline-flex; width: 14px; height: 14px; align-items: center; justify-content: center;
+    background: #5DBC52; color: white; font-size: 9px; border-radius: 3px; font-weight: 800;
+  }
+
+  /* ========= SECTIONS ========= */
+  #gb-jt-{{ section.id }} .jt-section { padding: 80px 0; background: var(--jt-white); }
+  #gb-jt-{{ section.id }} .jt-section + .jt-section { border-top: 1px solid var(--jt-border-soft); }
+  #gb-jt-{{ section.id }} .jt-section.alt { background: var(--jt-cream); }
+  #gb-jt-{{ section.id }} .jt-section.accent { background: var(--kit-color-soft); }
+
+  #gb-jt-{{ section.id }} .section-header { margin-bottom: 56px; max-width: 720px; }
+  #gb-jt-{{ section.id }} .section-header.centered { text-align: center; margin-left: auto; margin-right: auto; }
+  #gb-jt-{{ section.id }} .eyebrow {
+    font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--kit-color); font-weight: 600; margin-bottom: 14px;
+  }
+  #gb-jt-{{ section.id }} .jt-section h2 {
+    font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 44px;
+    letter-spacing: -0.02em; color: var(--jt-text); text-transform: uppercase;
+  }
+  #gb-jt-{{ section.id }} .jt-section h2 em { font-style: normal; color: var(--kit-color); }
+  #gb-jt-{{ section.id }} .section-header p { font-size: 16px; color: var(--jt-text-muted); margin-top: 16px; line-height: 1.6; }
+
+  /* ========= FEATURES ========= */
+  #gb-jt-{{ section.id }} .feature-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  #gb-jt-{{ section.id }} .feature-card { background: var(--jt-white); border: 1px solid var(--jt-border-soft); border-radius: 14px; padding: 28px 22px; text-align: center; }
+  #gb-jt-{{ section.id }} .feature-icon {
+    width: 48px; height: 48px; border-radius: 50%;
+    background: var(--kit-color-soft); color: var(--kit-color);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; margin: 0 auto 14px; font-weight: 800;
+  }
+  #gb-jt-{{ section.id }} .feature-h { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 13px; margin-bottom: 6px; text-transform: uppercase; }
+  #gb-jt-{{ section.id }} .feature-d { font-size: 12px; color: var(--jt-text-muted); line-height: 1.5; }
+
+  /* ========= SPECS ========= */
+  #gb-jt-{{ section.id }} .specs-table { background: var(--jt-white); border: 1px solid var(--jt-border-soft); border-radius: 14px; overflow: hidden; }
+  #gb-jt-{{ section.id }} .specs-row { display: grid; grid-template-columns: 1fr 1.5fr; border-bottom: 1px solid var(--jt-border-soft); }
+  #gb-jt-{{ section.id }} .specs-row:last-child { border-bottom: none; }
+  #gb-jt-{{ section.id }} .specs-cell { padding: 14px 22px; font-size: 13px; }
+  #gb-jt-{{ section.id }} .specs-cell.label {
+    background: var(--jt-cream); font-family: 'DM Mono', monospace; font-weight: 700;
+    letter-spacing: 0.06em; font-size: 11px; text-transform: uppercase; color: var(--jt-text-muted);
+  }
+  #gb-jt-{{ section.id }} .specs-cell.value { font-weight: 600; color: var(--jt-text); }
+  #gb-jt-{{ section.id }} .compatible-strip {
+    margin-top: 32px; padding: 22px 28px; background: var(--kit-color-soft);
+    border-radius: 12px; border-left: 4px solid var(--kit-color);
+  }
+  #gb-jt-{{ section.id }} .compatible-eyebrow {
+    font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--kit-color-dark); font-weight: 700; margin-bottom: 8px;
+  }
+  #gb-jt-{{ section.id }} .compatible-text { font-size: 14px; color: var(--jt-text); line-height: 1.55; }
+
+  /* ========= USES ========= */
+  #gb-jt-{{ section.id }} .uses-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  #gb-jt-{{ section.id }} .use-card { background: var(--jt-white); border-radius: 14px; overflow: hidden; border: 1px solid var(--jt-border-soft); }
+  #gb-jt-{{ section.id }} .use-img {
+    height: 120px; background: var(--kit-color-soft);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 44px; color: var(--kit-color);
+  }
+  #gb-jt-{{ section.id }} .use-body { padding: 16px; }
+  #gb-jt-{{ section.id }} .use-h { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 13px; margin-bottom: 4px; text-transform: uppercase; }
+  #gb-jt-{{ section.id }} .use-d { font-size: 12px; color: var(--jt-text-muted); line-height: 1.5; }
+
+  /* ========= REVIEWS ========= */
+  #gb-jt-{{ section.id }} .reviews-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  #gb-jt-{{ section.id }} .review-card {
+    background: var(--jt-white); border-radius: 14px; overflow: hidden;
+    display: grid; grid-template-rows: auto 1fr auto;
+    border: 1px solid var(--jt-border-soft);
+    box-shadow: 0 2px 10px rgba(43, 31, 26, 0.04);
+  }
+  #gb-jt-{{ section.id }} .review-photo {
+    height: 200px; background: var(--jt-cream-deeper);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 64px; color: var(--jt-text-soft); opacity: 0.55;
+  }
+  #gb-jt-{{ section.id }} .review-photo img { width: 100%; height: 100%; object-fit: cover; opacity: 1; }
+  #gb-jt-{{ section.id }} .review-body { padding: 22px; }
+  #gb-jt-{{ section.id }} .review-stars { color: #DDA738; font-size: 16px; letter-spacing: 1.5px; margin-bottom: 8px; }
+  #gb-jt-{{ section.id }} .review-h { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 17px; color: var(--jt-text); line-height: 1.3; margin-bottom: 10px; }
+  #gb-jt-{{ section.id }} .review-author { display: flex; align-items: center; gap: 10px; padding: 16px 22px; background: var(--jt-cream); font-size: 13px; }
+  #gb-jt-{{ section.id }} .review-avatar {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: var(--kit-color); color: var(--jt-white);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 14px;
+  }
+  #gb-jt-{{ section.id }} .review-name { font-weight: 700; color: var(--jt-text); }
+  #gb-jt-{{ section.id }} .review-sub { font-size: 12px; color: var(--jt-text-muted); }
+
+  /* ========= FAQ ========= */
+  #gb-jt-{{ section.id }} .faq-grid { display: grid; grid-template-columns: 1fr; gap: 10px; max-width: 760px; margin: 0 auto; }
+  #gb-jt-{{ section.id }} .faq-item { background: var(--jt-white); border: 1px solid var(--jt-border-soft); border-radius: 12px; padding: 18px 22px; cursor: pointer; }
+  #gb-jt-{{ section.id }} .faq-q { display: flex; align-items: center; justify-content: space-between; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 15px; color: var(--jt-text); }
+  #gb-jt-{{ section.id }} .faq-toggle {
+    width: 24px; height: 24px; border-radius: 50%;
+    background: var(--jt-cream); color: var(--kit-color);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; flex-shrink: 0; margin-left: 14px; transition: transform 0.15s;
+  }
+  #gb-jt-{{ section.id }} .faq-item.open .faq-toggle { transform: rotate(45deg); }
+  #gb-jt-{{ section.id }} .faq-a { margin-top: 14px; font-size: 14px; color: var(--jt-text-muted); line-height: 1.6; display: none; }
+  #gb-jt-{{ section.id }} .faq-item.open .faq-a { display: block; }
+
+  /* ========= CROSS SELL ========= */
+  #gb-jt-{{ section.id }} .crosssell-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  #gb-jt-{{ section.id }} .cs-card {
+    background: var(--jt-white); border-radius: 14px; overflow: hidden;
+    border: 1px solid var(--jt-border-soft);
+    box-shadow: 0 2px 10px rgba(43, 31, 26, 0.04);
+    display: grid; grid-template-rows: auto 1fr;
+  }
+  #gb-jt-{{ section.id }} .cs-img {
+    height: 140px; display: flex; align-items: center; justify-content: center;
+    font-size: 48px; color: var(--jt-cream); position: relative;
+    background: var(--kit-color);
+  }
+  #gb-jt-{{ section.id }} .cs-img img { width: 100%; height: 100%; object-fit: cover; }
+  #gb-jt-{{ section.id }} .cs-pill {
+    position: absolute; top: 12px; left: 12px;
+    background: var(--jt-ink); color: var(--jt-cream);
+    font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.08em;
+    padding: 3px 8px; border-radius: 4px; font-weight: 700; z-index: 1;
+  }
+  #gb-jt-{{ section.id }} .cs-body { padding: 18px; }
+  #gb-jt-{{ section.id }} .cs-eyebrow { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--jt-text-muted); margin-bottom: 6px; }
+  #gb-jt-{{ section.id }} .cs-h { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 14px; color: var(--jt-text); margin-bottom: 10px; line-height: 1.3; }
+  #gb-jt-{{ section.id }} .cs-price { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 16px; color: var(--jt-text); }
+
+  /* ========= MOBILE ========= */
+  @media (max-width: 768px) {
+    #gb-jt-{{ section.id }} .hero-grid { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+    #gb-jt-{{ section.id }} .hero-grid > * { min-width: 0; max-width: 100%; }
+    #gb-jt-{{ section.id }} .product-name { font-size: 26px; word-wrap: break-word; }
+    #gb-jt-{{ section.id }} .jt-section h2 { font-size: 28px; }
+    #gb-jt-{{ section.id }} .jt-section { padding: 56px 0; }
+    #gb-jt-{{ section.id }} .feature-grid,
+    #gb-jt-{{ section.id }} .uses-grid,
+    #gb-jt-{{ section.id }} .crosssell-grid { grid-template-columns: repeat(2, 1fr); }
+    /* Reviews become a horizontal scroll-carousel on mobile so the
+       cards don't stack into a long vertical list. Each card sits at
+       ~82% width with a scroll-snap so swipes land cleanly. */
+    #gb-jt-{{ section.id }} .reviews-grid {
+      display: flex;
+      grid-template-columns: none;
+      gap: 14px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding: 0 18px;
+      margin: 0 -18px;
+    }
+    #gb-jt-{{ section.id }} .reviews-grid::-webkit-scrollbar { display: none; }
+    #gb-jt-{{ section.id }} .reviews-grid .review-card {
+      flex: 0 0 82%;
+      max-width: 320px;
+      scroll-snap-align: start;
+    }
+    #gb-jt-{{ section.id }} .single-price-block { padding: 18px 18px; }
+    #gb-jt-{{ section.id }} .single-price-amount { font-size: 26px; }
+    #gb-jt-{{ section.id }} .specs-row { grid-template-columns: 1fr; }
+    #gb-jt-{{ section.id }} .specs-cell.label { padding: 10px 18px; }
+  }
+</style>
+
+<div id="gb-jt-{{ section.id }}" data-section-id="{{ section.id }}">
+
+  {%- comment -%} ============== 1. HERO ============== {%- endcomment -%}
+  <section class="pdp-hero">
+    <div class="jt-container">
+      {%- render 'gb-breadcrumb' -%}
+
+      <div class="hero-grid">
+        <div class="gallery-stack">
+          <div class="gallery-main">
+            {%- if p.featured_image -%}
+              <img src="{{ p.featured_image | image_url: width: 1000 }}" alt="{{ p.title | escape }}" id="jt-main-image-{{ section.id }}">
+            {%- else -%}
+              <div style="font-size:120px;opacity:.4;color:var(--kit-color);">🫙</div>
+            {%- endif -%}
+          </div>
+          {%- if p.images.size > 1 -%}
+            <div class="gallery-thumbs">
+              {%- for img in p.images limit: 6 -%}
+                <button type="button" class="gallery-thumb{% if forloop.first %} active{% endif %}" data-full="{{ img | image_url: width: 1000 }}">
+                  <img src="{{ img | image_url: width: 200 }}" alt="">
+                </button>
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+        </div>
+
+        <div class="product-info">
+          <span class="category-chip">{{ category_label }}</span>
+          {%- if rating != blank -%}
+            <div class="rating-row">
+              <span class="stars">★★★★★</span>
+              <span class="rating-link">{{ rating }}{% if review_count != blank %} ({{ review_count }} reviews){% endif %}</span>
+            </div>
+          {%- endif -%}
+          <h1 class="product-name">{{ p.title }}</h1>
+          {%- if tagline != blank -%}
+            <p class="product-tagline">{{ tagline }}</p>
+          {%- endif -%}
+
+          <div class="activity-row">
+            {%- render 'gb-bought-today' -%}
+            {%- if mf_hero_bullets != blank -%}
+              {%- for b in mf_hero_bullets -%}
+                <div class="item"><span>{{ b }}</span></div>
+              {%- endfor -%}
+            {%- else -%}
+              {%- for blk in section.blocks -%}
+                {%- if blk.type == 'activity' -%}
+                  <div class="item" {{ blk.shopify_attributes }}><span>{{ blk.settings.icon }}</span><span>{{ blk.settings.text }}</span></div>
+                {%- endif -%}
+              {%- endfor -%}
+            {%- endif -%}
+          </div>
+
+          <div class="single-price-block">
+            <div>
+              <div class="single-price-amount">
+                <span>{{ p.price | money_without_trailing_zeros }}</span>
+                {%- if p.compare_at_price > p.price -%}
+                  <span class="single-price-compare">{{ p.compare_at_price | money_without_trailing_zeros }}</span>
+                {%- endif -%}
+              </div>
+              {%- if p.compare_at_price > p.price -%}
+                <span class="single-price-save">You save {{ p.compare_at_price | minus: p.price | money_without_trailing_zeros }}</span>
+              {%- endif -%}
+            </div>
+            <span class="single-price-tag{% unless p.available %} sold-out{% endunless %}">
+              {%- if p.available -%}IN STOCK{%- else -%}SOLD OUT{%- endif -%}
+            </span>
+          </div>
+
+          {%- assign jt_form_id = 'jt-product-form-' | append: section.id -%}
+          {%- form 'product', p, id: jt_form_id, class: 'jt-atc-form' -%}
+            <input type="hidden" name="id" value="{{ p.selected_or_first_available_variant.id }}">
+            <button type="submit" name="add" class="atc-btn" data-atc
+                    data-variant-id="{{ p.selected_or_first_available_variant.id }}"
+                    data-product-id="{{ p.id }}"
+                    data-product-title="{{ p.title | escape }}"
+                    data-product-image="{{ p.featured_image | image_url: width: 200 }}"
+                    data-product-price="{{ p.price }}"
+                    data-product-url="{{ p.url }}"
+                    {% unless p.available %}disabled{% endunless %}>
+              {%- if p.available -%}ADD TO CART{%- else -%}SOLD OUT{%- endif -%}
+            </button>
+          {%- endform -%}
+
+          <div class="trust-strip">
+            {%- assign has_trust = false -%}
+            {%- for blk in section.blocks -%}
+              {%- if blk.type == 'trust' -%}
+                {%- assign has_trust = true -%}
+                <div class="item" {{ blk.shopify_attributes }}><span class="check">✓</span> {{ blk.settings.text }}</div>
+              {%- endif -%}
+            {%- endfor -%}
+            {%- unless has_trust -%}
+              <div class="item"><span class="check">✓</span> Food-grade</div>
+              <div class="item"><span class="check">✓</span> Lifetime use</div>
+              <div class="item"><span class="check">✓</span> FSSAI Licensed</div>
+            {%- endunless -%}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} ============== 2. WHY THIS DESIGN ============== {%- endcomment -%}
+  <section class="jt-section accent">
+    <div class="jt-container">
+      <div class="section-header">
+        <div class="eyebrow">WHY THIS DESIGN</div>
+        <h2>{{ features_h1 }}</h2>
+        {%- if features_intro != blank -%}<p>{{ features_intro }}</p>{%- endif -%}
+      </div>
+      <div class="feature-grid">
+        {%- if features_data != blank -%}
+          {%- for f in features_data -%}
+            {%- assign f_h = f.heading | default: f.name | default: f.title -%}
+            {%- assign f_d = f.description | default: f.body | default: f.sub -%}
+            {%- assign f_icon_emoji = f.icon_emoji -%}
+            {%- assign f_icon = f.icon -%}
+            <div class="feature-card">
+              <div class="feature-icon">
+                {%- if f_icon != blank -%}<img src="{{ f_icon | image_url: width: 80 }}" alt="" width="40" height="40">
+                {%- else -%}{{ f_icon_emoji | default: '◇' }}{%- endif -%}
+              </div>
+              <div class="feature-h">{{ f_h }}</div>
+              <div class="feature-d">{{ f_d }}</div>
+            </div>
+          {%- endfor -%}
+        {%- else -%}
+          {%- for blk in section.blocks -%}
+            {%- if blk.type == 'feature' -%}
+              <div class="feature-card" {{ blk.shopify_attributes }}>
+                <div class="feature-icon">{{ blk.settings.icon | default: '◇' }}</div>
+                <div class="feature-h">{{ blk.settings.heading }}</div>
+                <div class="feature-d">{{ blk.settings.description }}</div>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} ============== 3. SPECS + COMPATIBLE ============== {%- endcomment -%}
+  <section class="jt-section">
+    <div class="jt-container">
+      <div class="section-header">
+        <div class="eyebrow">SPECIFICATIONS</div>
+        <h2>{{ section.settings.specs_heading | default: 'Every <em>detail</em>, measured.' }}</h2>
+      </div>
+      <div class="specs-table">
+        {%- if specs_data != blank -%}
+          {%- for s in specs_data -%}
+            <div class="specs-row">
+              <div class="specs-cell label">{{ s[0] }}</div>
+              <div class="specs-cell value">{{ s[1] }}</div>
+            </div>
+          {%- endfor -%}
+        {%- else -%}
+          {%- for blk in section.blocks -%}
+            {%- if blk.type == 'spec' -%}
+              <div class="specs-row" {{ blk.shopify_attributes }}>
+                <div class="specs-cell label">{{ blk.settings.label }}</div>
+                <div class="specs-cell value">{{ blk.settings.value }}</div>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+
+      {%- if compatible_with != blank -%}
+        <div class="compatible-strip">
+          <div class="compatible-eyebrow">WORKS WITH</div>
+          <div class="compatible-text">{{ compatible_with }}</div>
+        </div>
+      {%- endif -%}
+    </div>
+  </section>
+
+  {%- comment -%} ============== 4. USE CASES ============== {%- endcomment -%}
+  <section class="jt-section alt">
+    <div class="jt-container">
+      <div class="section-header">
+        <div class="eyebrow">FOUR USES</div>
+        {%- if mf_uses_h != blank -%}
+          <h2>{{ mf_uses_h }}</h2>
+        {%- else -%}
+          <h2>{{ section.settings.uses_heading | default: 'Not just for <em>one thing</em>.' }}</h2>
+        {%- endif -%}
+      </div>
+      <div class="uses-grid">
+        {%- if use_cases_data != blank -%}
+          {%- for u in use_cases_data -%}
+            {%- assign u_h = u.heading | default: u.title -%}
+            {%- assign u_d = u.description | default: u.body -%}
+            {%- assign u_icon_emoji = u.icon_emoji -%}
+            {%- assign u_icon = u.icon | default: u.image -%}
+            <div class="use-card">
+              <div class="use-img">
+                {%- if u_icon != blank -%}<img src="{{ u_icon | image_url: width: 200 }}" alt="" width="60" height="60">
+                {%- else -%}{{ u_icon_emoji | default: '◆' }}{%- endif -%}
+              </div>
+              <div class="use-body"><div class="use-h">{{ u_h }}</div><div class="use-d">{{ u_d }}</div></div>
+            </div>
+          {%- endfor -%}
+        {%- else -%}
+          {%- for blk in section.blocks -%}
+            {%- if blk.type == 'use_case' -%}
+              <div class="use-card" {{ blk.shopify_attributes }}>
+                <div class="use-img">{{ blk.settings.icon | default: '◆' }}</div>
+                <div class="use-body"><div class="use-h">{{ blk.settings.heading }}</div><div class="use-d">{{ blk.settings.description }}</div></div>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} ============== 5. REVIEWS ============== {%- endcomment -%}
+  <section class="jt-section">
+    <div class="jt-container">
+      <div class="section-header">
+        <div class="eyebrow">REPEAT BUYERS</div>
+        {%- if mf_reviews_h != blank -%}
+          <h2>{{ mf_reviews_h }}</h2>
+        {%- else -%}
+          <h2>{{ section.settings.reviews_heading | default: 'Why they <em>stock multiple</em>.' }}</h2>
+        {%- endif -%}
+      </div>
+      <div class="reviews-grid">
+        {%- if has_mf_reviews -%}
+          {%- for r in mf_reviews -%}
+            <div class="review-card">
+              <div class="review-photo">
+                {%- if r.photo != blank -%}
+                  <img src="{{ r.photo | image_url: width: 600 }}" alt="{{ r.name | escape }}">
+                {%- else -%}📷{%- endif -%}
+              </div>
+              <div class="review-body">
+                <div class="review-stars">★★★★★</div>
+                <div class="review-h">{{ r.quote }}</div>
+              </div>
+              <div class="review-author">
+                <div class="review-avatar">{{ r.name | slice: 0 | upcase }}</div>
+                <div><div class="review-name">{{ r.name }}</div><div class="review-sub">{{ r.meta }}</div></div>
+              </div>
+            </div>
+          {%- endfor -%}
+        {%- else -%}
+          {%- for blk in section.blocks -%}
+            {%- if blk.type == 'review' -%}
+              <div class="review-card" {{ blk.shopify_attributes }}>
+                <div class="review-photo">
+                  {%- if blk.settings.photo != blank -%}
+                    <img src="{{ blk.settings.photo | image_url: width: 600 }}" alt="">
+                  {%- else -%}📷{%- endif -%}
+                </div>
+                <div class="review-body">
+                  <div class="review-stars">★★★★★</div>
+                  <div class="review-h">{{ blk.settings.headline }}</div>
+                </div>
+                <div class="review-author">
+                  <div class="review-avatar">{{ blk.settings.name | slice: 0 | upcase }}</div>
+                  <div><div class="review-name">{{ blk.settings.name }}</div><div class="review-sub">{{ blk.settings.meta }}</div></div>
+                </div>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} ============== 6. FAQ ============== {%- endcomment -%}
+  <section class="jt-section alt">
+    <div class="jt-container">
+      <div class="section-header centered">
+        <div class="eyebrow">QUESTIONS?</div>
+        {%- if mf_faq_h != blank -%}
+          <h2>{{ mf_faq_h }}</h2>
+        {%- else -%}
+          <h2>{{ section.settings.faq_heading | default: 'Common <em>questions</em>.' }}</h2>
+        {%- endif -%}
+      </div>
+      <div class="faq-grid">
+        {%- if has_mf_faqs -%}
+          {%- for f in mf_faqs -%}
+            <div class="faq-item{% if forloop.first %} open{% endif %}">
+              <div class="faq-q"><span>{{ f.question }}</span><span class="faq-toggle">+</span></div>
+              <div class="faq-a">{{ f.answer }}</div>
+            </div>
+          {%- endfor -%}
+        {%- else -%}
+          {%- assign first_faq = true -%}
+          {%- for blk in section.blocks -%}
+            {%- if blk.type == 'faq' -%}
+              <div class="faq-item{% if first_faq %} open{% endif %}" {{ blk.shopify_attributes }}>
+                <div class="faq-q"><span>{{ blk.settings.question }}</span><span class="faq-toggle">+</span></div>
+                <div class="faq-a">{{ blk.settings.answer }}</div>
+              </div>
+              {%- assign first_faq = false -%}
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} ============== 6b. CARE + WARRANTY (v2 metafields) ============== {%- endcomment -%}
+  {%- if has_mf_care or warranty_note != blank -%}
+    <section class="jt-section">
+      <div class="jt-container">
+        <div class="section-header centered">
+          <div class="eyebrow">CARE & WARRANTY</div>
+        </div>
+        {%- if has_mf_care -%}
+          <ul class="jt-care-list">
+            {%- for line in mf_care -%}
+              {%- assign t = line | strip -%}
+              {%- if t != blank -%}<li>{{ t }}</li>{%- endif -%}
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+        {%- if warranty_note != blank -%}
+          <div class="jt-warranty-note">{{ warranty_note }}</div>
+        {%- endif -%}
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment -%} ============== 7. CROSS SELL ============== {%- endcomment -%}
+  {%- if cross_sell_coll != blank -%}
+    <section class="jt-section">
+      <div class="jt-container">
+        <div class="section-header">
+          <div class="eyebrow">PAIR WITH</div>
+          <h2>{{ section.settings.cross_sell_heading | default: 'Build a <em>fermentation kit</em>.' }}</h2>
+        </div>
+        <div class="crosssell-grid">
+          {%- assign shown = 0 -%}
+          {%- for cp in cross_sell_coll.products -%}
+            {%- if cp.id != p.id and cp.available and shown < 4 -%}
+              {%- assign cp_label = cp.metafields.custom.category_label | default: 'JAR' -%}
+              {%- assign cp_color = cp.metafields.custom.theme_accent | default: '#4F7C57' -%}
+              <a href="{{ cp.url }}" class="cs-card">
+                <div class="cs-img" style="background: {{ cp_color }};">
+                  <span class="cs-pill">{{ cp_label }}</span>
+                  {%- if cp.featured_image -%}
+                    <img src="{{ cp.featured_image | image_url: width: 600 }}" alt="{{ cp.title | escape }}">
+                  {%- endif -%}
+                </div>
+                <div class="cs-body">
+                  <div class="cs-eyebrow">{{ cp_label }}</div>
+                  <div class="cs-h">{{ cp.title }}</div>
+                  <div class="cs-price">From {{ cp.price | money_without_trailing_zeros }}</div>
+                </div>
+              </a>
+              {%- assign shown = shown | plus: 1 -%}
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+</div>
+
+<script>
+(function() {
+  var root = document.getElementById('gb-jt-{{ section.id }}');
+  if (!root) return;
+
+  // FAQ accordion
+  root.querySelectorAll('.faq-item').forEach(function(item) {
+    var q = item.querySelector('.faq-q');
+    if (!q) return;
+    q.addEventListener('click', function() { item.classList.toggle('open'); });
+  });
+
+  // Gallery thumb swap
+  var main = root.querySelector('#jt-main-image-{{ section.id }}');
+  root.querySelectorAll('.gallery-thumb').forEach(function(thumb) {
+    thumb.addEventListener('click', function() {
+      root.querySelectorAll('.gallery-thumb').forEach(function(t) { t.classList.remove('active'); });
+      thumb.classList.add('active');
+      if (main && thumb.dataset.full) main.src = thumb.dataset.full;
+    });
+  });
+
+  // ATC: intercept submit, add via fetch, open cart drawer
+  function openCartDrawer() {
+    if (window.GBCartDrawer && typeof window.GBCartDrawer.open === 'function') {
+      window.GBCartDrawer.open();
+      return;
+    }
+    var drawer = document.querySelector('cart-drawer-component');
+    if (!drawer) { window.location.href = '/cart'; return; }
+    var tryOpen = function() {
+      if (typeof drawer.open === 'function') { drawer.open(); return true; }
+      if (typeof drawer.showDialog === 'function') { drawer.showDialog(); return true; }
+      var trigger = drawer.querySelector('[data-testid="cart-drawer-trigger"]');
+      if (trigger) { trigger.click(); return true; }
+      return false;
+    };
+    if (tryOpen()) return;
+    if (window.customElements) {
+      customElements.whenDefined('cart-drawer-component').then(function() {
+        if (!tryOpen()) window.location.href = '/cart';
+      });
+    } else {
+      window.location.href = '/cart';
+    }
+  }
+
+  var form = root.querySelector('.jt-atc-form');
+  if (form) {
+    form.addEventListener('submit', function(ev) {
+      var btn = form.querySelector('[data-atc]');
+      if (!btn || btn.hasAttribute('disabled')) return;
+      ev.preventDefault();
+      var origLabel = btn.textContent;
+      btn.textContent = 'Adding…';
+      btn.setAttribute('disabled', 'disabled');
+      if (window.GBCartDrawer && typeof window.GBCartDrawer.open === 'function') {
+        window.GBCartDrawer.open();
+        if (typeof window.GBCartDrawer.previewAdd === 'function' && btn.dataset.variantId) {
+          window.GBCartDrawer.previewAdd({
+            variant_id: parseInt(btn.dataset.variantId, 10),
+            product_id: parseInt(btn.dataset.productId || '0', 10),
+            title: btn.dataset.productTitle,
+            image: btn.dataset.productImage,
+            price: parseInt(btn.dataset.productPrice || '0', 10),
+            url: btn.dataset.productUrl,
+            quantity: 1
+          });
+        }
+      }
+      var fd = new FormData(form);
+      fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+        body: fd
+      })
+      .then(function(r) {
+        if (!r.ok) return r.json().then(function(e) { return Promise.reject(e); });
+        return r.json();
+      })
+      .then(function() { return fetch('/cart.js').then(function(r) { return r.json(); }); })
+      .then(function(cart) {
+        btn.textContent = 'Added ✓';
+        setTimeout(function() { btn.textContent = origLabel; btn.removeAttribute('disabled'); }, 1500);
+        document.dispatchEvent(new CustomEvent('cart:update', {
+          bubbles: true,
+          detail: { resource: cart, sourceId: 'gb-product-jars-tools', data: { source: 'jt-pdp', itemCount: cart && cart.item_count } }
+        }));
+        if (!(window.GBCartDrawer && typeof window.GBCartDrawer.open === 'function')) {
+          openCartDrawer();
+        }
+      })
+      .catch(function() {
+        btn.textContent = 'Try again';
+        setTimeout(function() { btn.textContent = origLabel; btn.removeAttribute('disabled'); }, 1800);
+      });
+    });
+  }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "GB · Jars & Tools (v2)",
+  "tag": "section",
+  "settings": [
+    { "type": "header", "content": "Identity" },
+    { "type": "text",  "id": "default_category_label", "label": "Default category chip",
+      "default": "TOOL", "info": "Override per-product via metafield custom.category_label" },
+    { "type": "text",  "id": "default_tagline", "label": "Default tagline",
+      "info": "Override per-product via metafield custom.hero_tagline" },
+    { "type": "number", "id": "default_bought_today", "label": "Default 'bought today' count" },
+    { "type": "text",   "id": "default_rating", "label": "Default rating (e.g. 4.86)", "default": "4.86" },
+
+    { "type": "header", "content": "Accent colors (overridden by product metafield)" },
+    { "type": "color",  "id": "kit_color",      "label": "Kit color",      "default": "#4F7C57" },
+    { "type": "color",  "id": "kit_color_dark", "label": "Kit color dark", "default": "#3F6346" },
+    { "type": "color",  "id": "kit_color_soft", "label": "Kit color soft", "default": "#D8E4DC" },
+
+    { "type": "header", "content": "Features section" },
+    { "type": "text",  "id": "features_h1",    "label": "Heading",  "default": "Built for real fermentation." },
+    { "type": "textarea", "id": "features_intro", "label": "Intro",
+      "default": "Most jars in your kitchen weren’t designed for fermentation. This one is." },
+
+    { "type": "header", "content": "Specs section" },
+    { "type": "text",  "id": "specs_heading", "label": "Heading", "default": "Every <em>detail</em>, measured." },
+    { "type": "textarea", "id": "compatible_with", "label": "Compatible-with strip text" },
+
+    { "type": "header", "content": "Use cases" },
+    { "type": "text",  "id": "uses_heading", "label": "Heading", "default": "Not just for <em>one thing</em>." },
+
+    { "type": "header", "content": "Reviews" },
+    { "type": "text",  "id": "reviews_heading", "label": "Heading", "default": "Why they <em>stock multiple</em>." },
+
+    { "type": "header", "content": "FAQ" },
+    { "type": "text",  "id": "faq_heading", "label": "Heading", "default": "Common <em>questions</em>." },
+
+    { "type": "header", "content": "Cross-sell" },
+    { "type": "text", "id": "cross_sell_heading", "label": "Heading", "default": "Build a <em>fermentation kit</em>." },
+    { "type": "collection", "id": "cross_sell_collection", "label": "Pull from collection",
+      "info": "Defaults to /collections/jars-and-tools if empty." }
+  ],
+  "blocks": [
+    { "type": "trust", "name": "Trust strip item", "limit": 4,
+      "settings": [ { "type": "text", "id": "text", "label": "Text", "default": "Food-grade" } ] },
+    { "type": "activity", "name": "Activity row item", "limit": 6,
+      "settings": [
+        { "type": "text", "id": "icon", "label": "Icon (emoji)", "default": "♻️" },
+        { "type": "text", "id": "text", "label": "Text", "default": "Lifetime use · zero plastic degradation" }
+      ] },
+    { "type": "feature", "name": "Feature card", "limit": 4,
+      "settings": [
+        { "type": "text", "id": "icon", "label": "Icon character", "default": "◇" },
+        { "type": "text", "id": "heading", "label": "Heading", "default": "WIDE MOUTH" },
+        { "type": "textarea", "id": "description", "label": "Description", "default": "Fits whole vegetables — sliced cabbage, large mango chunks, full carrots." }
+      ] },
+    { "type": "spec", "name": "Specs row", "limit": 8,
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "Capacity" },
+        { "type": "text", "id": "value", "label": "Value", "default": "2 L (66 fl oz)" }
+      ] },
+    { "type": "use_case", "name": "Use case card", "limit": 4,
+      "settings": [
+        { "type": "text", "id": "icon", "label": "Icon (emoji)", "default": "🥬" },
+        { "type": "text", "id": "heading", "label": "Heading", "default": "FERMENT KITS" },
+        { "type": "textarea", "id": "description", "label": "Description", "default": "Achaar, kanji, kimchi, vegetable ferments" }
+      ] },
+    { "type": "review", "name": "Review card", "limit": 6,
+      "settings": [
+        { "type": "image_picker", "id": "photo", "label": "Photo (optional)" },
+        { "type": "text", "id": "headline", "label": "Headline", "default": "Solid glass, doesn’t break in the dishwasher" },
+        { "type": "text", "id": "name", "label": "Name", "default": "Sameer V." },
+        { "type": "text", "id": "meta", "label": "Sub-line", "default": "(35, Mumbai)" }
+      ] },
+    { "type": "faq", "name": "FAQ item", "limit": 12,
+      "settings": [
+        { "type": "text", "id": "question", "label": "Question", "default": "How do I clean it?" },
+        { "type": "richtext", "id": "answer", "label": "Answer", "default": "<p>Dishwasher safe (top rack). Or hand wash with hot water + mild soap.</p>" }
+      ] }
+  ],
+  "presets": [
+    {
+      "name": "GB · Jars & Tools (v2)",
+      "category": "Product",
+      "blocks": [
+        { "type": "trust", "settings": { "text": "Food-grade" } },
+        { "type": "trust", "settings": { "text": "Lifetime use" } },
+        { "type": "trust", "settings": { "text": "FSSAI Licensed" } },
+
+        { "type": "activity", "settings": { "icon": "♻️", "text": "Lifetime use · zero plastic degradation" } },
+        { "type": "activity", "settings": { "icon": "🧼", "text": "Dishwasher safe · easy clean" } },
+
+        { "type": "feature", "settings": { "icon": "⊕", "heading": "WIDE MOUTH", "description": "Fits whole vegetables — sliced cabbage, large mango chunks, full carrots." } },
+        { "type": "feature", "settings": { "icon": "◇", "heading": "BOROSILICATE", "description": "Heat-stable, doesn’t crack with temperature swings." } },
+        { "type": "feature", "settings": { "icon": "△", "heading": "AIRLOCK READY", "description": "Standard thread accepts our airlock and others." } },
+        { "type": "feature", "settings": { "icon": "◎", "heading": "LIFETIME", "description": "Glass + steel lid · no plastic to degrade · use for years." } },
+
+        { "type": "spec", "settings": { "label": "Capacity",        "value": "2 L (66 fl oz)" } },
+        { "type": "spec", "settings": { "label": "Material",        "value": "Borosilicate glass · BPA-free" } },
+        { "type": "spec", "settings": { "label": "Mouth Width",     "value": "90mm · wide for chunky vegetables" } },
+        { "type": "spec", "settings": { "label": "Compatibility",   "value": "Standard airlock + glass weight" } },
+        { "type": "spec", "settings": { "label": "Dishwasher Safe", "value": "Yes — both jar and lid" } },
+        { "type": "spec", "settings": { "label": "Microwave Safe",  "value": "Yes (without lid)" } },
+
+        { "type": "use_case", "settings": { "icon": "🥬", "heading": "FERMENT KITS", "description": "Achaar, kanji, kimchi, vegetable ferments" } },
+        { "type": "use_case", "settings": { "icon": "🌱", "heading": "SPROUTING",    "description": "Mesh-lid swap converts to sprouter" } },
+        { "type": "use_case", "settings": { "icon": "🥒", "heading": "PICKLING",     "description": "Salt-only fermented pickles" } },
+        { "type": "use_case", "settings": { "icon": "❄️", "heading": "STORAGE",      "description": "After fermentation: keeps in fridge" } },
+
+        { "type": "review", "settings": { "headline": "Got two more for my second batch", "name": "Aditi G.", "meta": "(28, Goa)" } },
+        { "type": "review", "settings": { "headline": "Solid glass, doesn’t break in the dishwasher", "name": "Sameer V.", "meta": "(35, Mumbai)" } },
+        { "type": "review", "settings": { "headline": "Use it for everything, not just fermenting", "name": "Lakshmi R.", "meta": "(45, Chennai)" } },
+
+        { "type": "faq", "settings": { "question": "Why borosilicate glass instead of regular glass?", "answer": "<p>Borosilicate handles temperature swings better — pour hot brine in, transfer to fridge, no cracking. Regular glass cracks under thermal shock.</p>" } },
+        { "type": "faq", "settings": { "question": "Will it fit my existing kit?", "answer": "<p>Yes if you have a GutBasket kit. For other brands, the wide-mouth thread is standard — fits 90% of mason jar accessories.</p>" } },
+        { "type": "faq", "settings": { "question": "How do I clean it?", "answer": "<p>Dishwasher safe (top rack). Or hand wash with hot water + mild soap. For stuck-on residue, soak overnight with baking soda.</p>" } },
+        { "type": "faq", "settings": { "question": "Lifetime use — how long is &quot;lifetime&quot;?", "answer": "<p>As long as the glass doesn’t break. We’ve had customers using their original jars for 4+ years.</p>" } },
+        { "type": "faq", "settings": { "question": "Is the lid airtight?", "answer": "<p>Yes when sealed properly. For active fermentation, attach an airlock instead — the airtight lid will pressurise from CO2 buildup.</p>" } },
+        { "type": "faq", "settings": { "question": "Microwave safe?", "answer": "<p>Yes — without the lid. Borosilicate handles microwave heat. Don’t microwave with the metal lid attached.</p>" } },
+        { "type": "faq", "settings": { "question": "Replacement parts?", "answer": "<p>Lids and grommets are sold separately. Glass jar is replaced under warranty for manufacturing defects.</p>" } },
+        { "type": "faq", "settings": { "question": "Storage when not in use?", "answer": "<p>Air-dry completely before storing. Stack with lids loose to avoid trapping moisture.</p>" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

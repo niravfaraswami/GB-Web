@@ -1,0 +1,348 @@
+{%- render 'leo_kit_chrome' -%}
+
+{%- liquid
+  assign p = product
+  assign mf_rows = p.metafields.custom.featured_comparison_rows.value
+  assign mf_myth_eyebrow = p.metafields.custom.myth_eyebrow
+  assign mf_myth_h1 = p.metafields.custom.myth_h1
+  assign mf_myth_h2 = p.metafields.custom.myth_h2
+  assign mf_comparison_intro = p.metafields.custom.comparison_intro
+  assign mf_compare_left = p.metafields.custom.compare_left_label
+  assign mf_compare_right = p.metafields.custom.compare_right_label
+  assign stacks_row_blocks = section.blocks | where: 'type', 'stacks_row'
+  assign has_mf = false
+  if mf_rows and mf_rows.size > 0
+    assign has_mf = true
+  endif
+-%}
+
+{%- if has_mf or stacks_row_blocks.size > 0 or mf_myth_h1 != blank -%}
+  <section class="stacks-section ferment-pdp-leo" {%- render 'leo_kit_attrs' -%}>
+    <div class="container">
+      <div class="section-header centered">
+        {%- assign stacks_eyebrow = mf_myth_eyebrow | default: section.settings.stacks_eyebrow -%}
+        {%- if stacks_eyebrow != blank -%}<div class="eyebrow">{{ stacks_eyebrow }}</div>{%- endif -%}
+        {%- if mf_myth_h1 != blank or mf_myth_h2 != blank -%}
+          <h2>{{ mf_myth_h1 }}{%- if mf_myth_h2 != blank %} <em>{{ mf_myth_h2 }}</em>{%- endif -%}</h2>
+        {%- else -%}
+          <h2>{{ section.settings.stacks_heading }} <em>{{ section.settings.stacks_heading_em }}</em></h2>
+        {%- endif -%}
+        {%- assign stacks_intro = mf_comparison_intro | default: section.settings.stacks_intro -%}
+        {%- if stacks_intro != blank -%}<p>{{ stacks_intro }}</p>{%- endif -%}
+      </div>
+
+      <div class="stacks-table-wrap">
+        <div class="stacks-table">
+          <div class="st-head">
+            <div class="st-h-cell st-h-label">&nbsp;</div>
+            <div class="st-h-cell st-h-kit">{{ mf_compare_left | default: section.settings.stacks_col_kit | default: 'GutBasket Kit' }}</div>
+            <div class="st-h-cell">{{ mf_compare_right | default: section.settings.stacks_col_3 | default: 'Traditional Homemade' }}</div>
+            <div class="st-h-cell">{{ section.settings.stacks_col_4 | default: 'Probiotic Capsule' }}</div>
+          </div>
+
+          {%- if has_mf -%}
+            {%- for r in mf_rows -%}
+              <div class="st-row">
+                <div class="st-cell st-cell-label">{{ r.label }}</div>
+                <div class="st-cell st-cell-kit">
+                  {%- if r.kit_mark == 'yes' -%}<span class="st-mark st-mark-yes"></span>
+                  {%- elsif r.kit_mark == 'no' -%}<span class="st-mark st-mark-no"></span>{%- endif -%}
+                  {{ r.kit_text }}
+                </div>
+                <div class="st-cell st-cell-other">
+                  {%- if r.col3_mark == 'yes' -%}<span class="st-mark st-mark-yes"></span>
+                  {%- elsif r.col3_mark == 'no' -%}<span class="st-mark st-mark-no"></span>{%- endif -%}
+                  {{ r.col3_text }}
+                </div>
+                <div class="st-cell st-cell-other">
+                  {%- if r.col4_mark == 'yes' -%}<span class="st-mark st-mark-yes"></span>
+                  {%- elsif r.col4_mark == 'no' -%}<span class="st-mark st-mark-no"></span>{%- endif -%}
+                  {{ r.col4_text }}
+                </div>
+              </div>
+            {%- endfor -%}
+          {%- else -%}
+            {%- for block in stacks_row_blocks -%}
+              <div class="st-row" {{ block.shopify_attributes }}>
+                <div class="st-cell st-cell-label">{{ block.settings.label }}</div>
+                <div class="st-cell st-cell-kit">
+                  {%- if block.settings.kit_mark == 'yes' -%}<span class="st-mark st-mark-yes"></span>
+                  {%- elsif block.settings.kit_mark == 'no' -%}<span class="st-mark st-mark-no"></span>{%- endif -%}
+                  {{ block.settings.kit_text }}
+                </div>
+                <div class="st-cell st-cell-other">
+                  {%- if block.settings.col3_mark == 'yes' -%}<span class="st-mark st-mark-yes"></span>
+                  {%- elsif block.settings.col3_mark == 'no' -%}<span class="st-mark st-mark-no"></span>{%- endif -%}
+                  {{ block.settings.col3_text }}
+                </div>
+                <div class="st-cell st-cell-other">
+                  {%- if block.settings.col4_mark == 'yes' -%}<span class="st-mark st-mark-yes"></span>
+                  {%- elsif block.settings.col4_mark == 'no' -%}<span class="st-mark st-mark-no"></span>{%- endif -%}
+                  {{ block.settings.col4_text }}
+                </div>
+              </div>
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Leo · Stacks",
+  "tag": "section",
+  "class": "leo-stacks-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "stacks_eyebrow",
+      "label": "Eyebrow",
+      "default": "SIDE BY SIDE"
+    },
+    {
+      "type": "text",
+      "id": "stacks_heading",
+      "label": "Heading",
+      "default": "HOW THIS KIT"
+    },
+    {
+      "type": "text",
+      "id": "stacks_heading_em",
+      "label": "Heading (highlighted)",
+      "default": "STACKS UP."
+    },
+    {
+      "type": "textarea",
+      "id": "stacks_intro",
+      "label": "Intro",
+      "default": "Against what you'd otherwise buy or do. No spin — every row is verifiable."
+    },
+    {
+      "type": "text",
+      "id": "stacks_col_kit",
+      "label": "Column 2 — kit label",
+      "default": "GutBasket Kit"
+    },
+    {
+      "type": "text",
+      "id": "stacks_col_3",
+      "label": "Column 3 — label",
+      "default": "Traditional Homemade"
+    },
+    {
+      "type": "text",
+      "id": "stacks_col_4",
+      "label": "Column 4 — label",
+      "default": "Probiotic Capsule"
+    },
+    {
+      "type": "header",
+      "content": "Spacing & Typography"
+    },
+    {
+      "type": "range",
+      "id": "pad_top_d",
+      "label": "Padding top — desktop (px)",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "pad_bot_d",
+      "label": "Padding bottom — desktop (px)",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "pad_top_m",
+      "label": "Padding top — mobile (px)",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "pad_bot_m",
+      "label": "Padding bottom — mobile (px)",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "mar_top_d",
+      "label": "Margin top — desktop (px)",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "mar_bot_d",
+      "label": "Margin bottom — desktop (px)",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "mar_top_m",
+      "label": "Margin top — mobile (px)",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "mar_bot_m",
+      "label": "Margin bottom — mobile (px)",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_size_d",
+      "label": "Eyebrow font size — desktop (px)",
+      "min": 9,
+      "max": 32,
+      "step": 1,
+      "default": 22
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_size_m",
+      "label": "Eyebrow font size — mobile (px)",
+      "min": 9,
+      "max": 24,
+      "step": 1,
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "heading_size_d",
+      "label": "Heading font size — desktop (px)",
+      "min": 18,
+      "max": 80,
+      "step": 2,
+      "default": 44
+    },
+    {
+      "type": "range",
+      "id": "heading_size_m",
+      "label": "Heading font size — mobile (px)",
+      "min": 16,
+      "max": 60,
+      "step": 2,
+      "default": 30
+    }
+  ],
+  "blocks": [
+    {
+      "type": "stacks_row",
+      "name": "Comparison row",
+      "limit": 12,
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Row label"
+        },
+        {
+          "type": "select",
+          "id": "kit_mark",
+          "label": "Kit cell mark",
+          "options": [
+            {
+              "value": "none",
+              "label": "None"
+            },
+            {
+              "value": "yes",
+              "label": "✓ Yes"
+            },
+            {
+              "value": "no",
+              "label": "✕ No"
+            }
+          ],
+          "default": "yes"
+        },
+        {
+          "type": "text",
+          "id": "kit_text",
+          "label": "Kit cell text"
+        },
+        {
+          "type": "select",
+          "id": "col3_mark",
+          "label": "Col 3 cell mark",
+          "options": [
+            {
+              "value": "none",
+              "label": "None"
+            },
+            {
+              "value": "yes",
+              "label": "✓ Yes"
+            },
+            {
+              "value": "no",
+              "label": "✕ No"
+            }
+          ],
+          "default": "none"
+        },
+        {
+          "type": "text",
+          "id": "col3_text",
+          "label": "Col 3 cell text"
+        },
+        {
+          "type": "select",
+          "id": "col4_mark",
+          "label": "Col 4 cell mark",
+          "options": [
+            {
+              "value": "none",
+              "label": "None"
+            },
+            {
+              "value": "yes",
+              "label": "✓ Yes"
+            },
+            {
+              "value": "no",
+              "label": "✕ No"
+            }
+          ],
+          "default": "none"
+        },
+        {
+          "type": "text",
+          "id": "col4_text",
+          "label": "Col 4 cell text"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Leo · Stacks"
+    }
+  ]
+}
+{% endschema %}

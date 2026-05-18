@@ -1,0 +1,70 @@
+{%- liquid
+  assign p = product
+  assign mf_consumption = p.metafields.custom.featured_consumption_methods.value
+  assign eat_h = p.metafields.custom.eat_h
+  assign dosage_amount = p.metafields.custom.dosage_amount
+  assign dosage_label = p.metafields.custom.dosage_label
+  assign dosage_caption = p.metafields.custom.dosage_caption
+-%}
+{%- if section.settings.show_section -%}
+  {%- if mf_consumption == blank or mf_consumption.size == 0 -%}
+    {%- if dosage_amount == blank -%}
+      {%- comment -%} No eat data — hide section {%- endcomment -%}
+    {%- endif -%}
+  {%- endif -%}
+  {%- if mf_consumption != blank or dosage_amount != blank -%}
+    <section class="fk-page ferment-pdp fk-eat-section eat-section" style="background:{{ section.settings.section_bg }}">
+      {%- render 'fk-color-cascade' -%}
+      <div class="container">
+        <div class="section-header">
+          <div class="eyebrow">{{ section.settings.eat_eyebrow | default: 'HOW TO' }}</div>
+          {%- if eat_h != blank -%}
+            <h2>{{ eat_h }}</h2>
+          {%- else -%}
+            <h2>{{ section.settings.eat_heading | default: 'HOW TO' }} <em>{{ section.settings.eat_heading_em | default: 'ENJOY IT' }}</em>{{ section.settings.eat_heading_tail | default: ' DAILY' }}</h2>
+          {%- endif -%}
+        </div>
+        {%- if mf_consumption != blank -%}
+          <div class="eat-grid">
+            {%- for c in mf_consumption -%}
+              <div class="eat-card">
+                <div class="eat-img">
+                  {%- if c.image != blank -%}<img src="{{ c.image | image_url: width: 480 }}" alt="{{ c.heading | escape }}" loading="lazy" width="480" height="300">{%- endif -%}
+                </div>
+                <div class="eat-body">
+                  <div class="eat-h">{{ c.heading }}</div>
+                  <div class="eat-d">{{ c.description }}</div>
+                </div>
+              </div>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+        {%- if dosage_amount != blank -%}
+          <div class="spoons-strip">
+            <div class="spoons-num">{{ dosage_amount }}</div>
+            {%- if dosage_label != blank -%}<div class="spoons-label">{{ dosage_label }}</div>{%- endif -%}
+            {%- if dosage_caption != blank -%}<div class="spoons-cap">{{ dosage_caption }}</div>{%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
+    </section>
+  {%- endif -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "FK — How to enjoy",
+  "tag": "section",
+  "class": "fk-eat-section",
+  "settings": [
+    { "type": "checkbox", "id": "show_section", "label": "Show section", "default": true },
+    { "type": "color", "id": "section_bg", "label": "Section background", "default": "#ffffff" },
+    { "type": "text", "id": "eat_eyebrow", "label": "Eyebrow", "default": "HOW TO" },
+    { "type": "text", "id": "eat_heading", "label": "Heading fallback", "default": "HOW TO" },
+    { "type": "text", "id": "eat_heading_em", "label": "Heading (em) fallback", "default": "ENJOY IT" },
+    { "type": "text", "id": "eat_heading_tail", "label": "Heading (tail) fallback", "default": " DAILY" }
+  ],
+  "presets": [ { "name": "FK — How to enjoy" } ],
+  "enabled_on": { "templates": ["product"] }
+}
+{% endschema %}

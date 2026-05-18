@@ -1,0 +1,26 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "gb-article-main",
+      "settings": {
+        "toc_label": "In This Article",
+        "cta_eyebrow": "READY TO START?",
+        "cta_title": "Try lacto-fermentation hands-on.",
+        "cta_desc": "Our beginner kits come with pre-measured spice mixes, the right jar, an airlock, and a glass weight. No guessing. No failed batches.",
+        "cta_button": "Shop Now →",
+        "related_eyebrow": "KEEP READING",
+        "related_heading": "Related articles"
+      }
+    }
+  },
+  "order": ["main"]
+}

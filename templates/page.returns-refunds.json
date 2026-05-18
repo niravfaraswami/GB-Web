@@ -1,0 +1,125 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "gb-content-page",
+      "blocks": {
+        "hero": {
+          "type": "hero",
+          "settings": {
+            "eyebrow": "SUPPORT · 03",
+            "title": "7-day no-question returns. 100% refund on damaged or defective.",
+            "subtitle": "<p>Four-step process. Five working days end-to-end. Edge cases documented.</p>"
+          }
+        },
+        "process": {
+          "type": "features",
+          "settings": {
+            "heading": "Four steps. Five working days end-to-end.",
+            "item_1_icon": "01",
+            "item_1_title": "Message us",
+            "item_1_desc": "WhatsApp +91 78619 40110 with your order number, the item, and the reason. Photo helps if it's damaged.",
+            "item_2_icon": "02",
+            "item_2_title": "We arrange pickup",
+            "item_2_desc": "Free reverse pickup via Delhivery or Bluedart. Scheduled within 24 hours. You keep the original packaging.",
+            "item_3_icon": "03",
+            "item_3_title": "We inspect",
+            "item_3_desc": "Item arrives at our Gandhinagar workshop within 2–4 working days. Inspection same-day. We'll WhatsApp you confirmation."
+          }
+        },
+        "eligible": {
+          "type": "features",
+          "settings": {
+            "heading": "What we take back.",
+            "item_1_icon": "✅",
+            "item_1_title": "Damaged in transit",
+            "item_1_desc": "Broken jar, ripped pouch, leaking spice mix. Free pickup, full refund or replacement (your choice).",
+            "item_2_icon": "✅",
+            "item_2_title": "Defective batch",
+            "item_2_desc": "Spoiled before opening, mouldy on first ferment, smells off. We send a replacement first, pickup the original after.",
+            "item_3_icon": "✅",
+            "item_3_title": "Wrong item shipped",
+            "item_3_desc": "We packed the wrong kit. Free pickup, free expedited reshipment of the right one."
+          }
+        },
+        "ineligible": {
+          "type": "features",
+          "settings": {
+            "heading": "What we can't take back.",
+            "item_1_icon": "❌",
+            "item_1_title": "Opened spice mixes",
+            "item_1_desc": "Once opened, spice mixes can't be re-sold for safety reasons. Try the recipe and message us if it's not working — we usually replace.",
+            "item_2_icon": "❌",
+            "item_2_title": "Past 7 days from delivery",
+            "item_2_desc": "Standard return window is 7 days. After that, we still help with defects (manufacturing issues are warrantied for 90 days).",
+            "item_3_icon": "❌",
+            "item_3_title": "Failed personal ferment",
+            "item_3_desc": "If your batch went wrong because of room temperature, salt error, etc., that's a recipe issue not a kit defect. Message us — we'll troubleshoot. Refund is case-by-case."
+          }
+        },
+        "timelines": {
+          "type": "features",
+          "settings": {
+            "heading": "How long until the money is back.",
+            "item_1_icon": "💳",
+            "item_1_title": "UPI / Card",
+            "item_1_desc": "1–3 working days from refund initiation. Razorpay processes most within 24 hours; bank settlement is the variable.",
+            "item_2_icon": "🏦",
+            "item_2_title": "Net banking / Bank transfer",
+            "item_2_desc": "3–7 working days. Slowest: PSU banks (SBI, BoI). Fastest: HDFC, ICICI, Axis.",
+            "item_3_icon": "💵",
+            "item_3_title": "COD",
+            "item_3_desc": "Bank transfer to the account you provide on the WhatsApp pickup confirmation. 3–5 working days from pickup."
+          }
+        },
+        "edge_cases": {
+          "type": "faq",
+          "settings": {
+            "heading": "Edge cases",
+            "intro": "<p>Stuff that doesn't fit a normal flow. If yours isn't here, message us.</p>",
+            "q_1": "I lost the original packaging. Can I still return?",
+            "a_1": "<p>Yes for damaged/defective items — wrap in any sturdy box. For change-of-mind returns, original packaging is ideal but we accept reasonable alternatives if items are otherwise unmarked.</p>",
+            "q_2": "I received the order 10 days ago. Is it too late?",
+            "a_2": "<p>Standard returns close at 7 days. But if it's a manufacturing defect or arrived damaged and you didn't open immediately, we still process within 30 days of delivery — message us with photos.</p>",
+            "q_3": "I want to exchange one kit for another instead of refunding.",
+            "a_3": "<p>Yes — message us before pickup. We'll arrange the swap in one trip. Price difference billed/refunded separately.</p>",
+            "q_4": "My subscription auto-shipped a kit I don't want this month.",
+            "a_4": "<p>Message within 48 hours of charge — we cancel the dispatch, full refund. If it has shipped, we treat it as a normal change-of-mind return (free pickup, refund minus reverse-ship).</p>"
+          }
+        },
+        "cta_contact": {
+          "type": "contact",
+          "settings": {
+            "icon": "💬",
+            "title": "Start a return on WhatsApp",
+            "desc": "Have your order number ready. Photos help if it's damaged.",
+            "button_label": "Open chat",
+            "button_link": "https://wa.me/917861940110?text=Hi%2C%20I%20want%20to%20return%20an%20order",
+            "open_new_tab": true
+          }
+        }
+      },
+      "block_order": [
+        "hero",
+        "process",
+        "eligible",
+        "ineligible",
+        "timelines",
+        "edge_cases",
+        "cta_contact"
+      ],
+      "settings": {}
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

@@ -1,0 +1,26 @@
+{%- comment -%}
+  recipe-book-faq-item
+  Single accordion row in the FAQ section.
+
+  Params:
+    q       — question text (string)
+    a       — answer HTML (string; may contain markup)
+    is_open — boolean. If true, .open class + aria-expanded=true on load.
+    index   — zero-based index (for analytics).
+{%- endcomment -%}
+{%- assign open_class = '' -%}
+{%- if is_open -%}{%- assign open_class = ' open' -%}{%- endif -%}
+{%- assign uid = 'rb-faq-' | append: index | append: '-' | append: section.id -%}
+<div class="faq-item{{ open_class }}" data-faq-index="{{ index }}">
+  <button
+    type="button"
+    class="faq-q"
+    aria-expanded="{% if is_open %}true{% else %}false{% endif %}"
+    aria-controls="{{ uid }}"
+    onclick="window.RecipeBookV1 && window.RecipeBookV1.toggleFaq(this)"
+  >
+    <span>{{ q }}</span>
+    <span class="faq-toggle" aria-hidden="true">+</span>
+  </button>
+  <div class="faq-a" id="{{ uid }}" role="region">{{ a }}</div>
+</div>

@@ -1,0 +1,153 @@
+{%- comment -%}
+  Section 09 · Postbiotic teaser — Ink-background, email signup
+  Source ref: gutbasket-home-page.html lines 2434-2450
+  Form posts via Shopify customer-tag pattern.
+{%- endcomment -%}
+
+<section class="gb-postbio">
+  <div class="gb-postbio-container">
+    <div class="gb-postbio-card">
+      {%- if section.settings.eyebrow != blank -%}
+        <div class="gb-postbio-eyebrow">
+          {%- if section.settings.show_pulse -%}<span class="gb-postbio-pulse"></span>{%- endif -%}
+          <span>{{ section.settings.eyebrow }}</span>
+        </div>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="gb-postbio-h2">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+      {%- if section.settings.lead != blank -%}
+        <div class="gb-postbio-lead">{{ section.settings.lead }}</div>
+      {%- endif -%}
+
+      {%- form 'customer', class: 'gb-postbio-form' -%}
+        <input type="hidden" name="contact[tags]" value="{{ section.settings.signup_tag | default: 'postbiotic-waitlist' }}">
+        <input type="email" name="contact[email]" placeholder="{{ section.settings.email_placeholder | default: 'your@email.com' }}" aria-label="Email" required>
+        <button type="submit" class="gb-btn">{{ section.settings.cta_label | default: 'Notify me' }}</button>
+      {%- endform -%}
+
+      {%- if section.settings.trust_text != blank -%}
+        <p class="gb-postbio-trust">{{ section.settings.trust_text }}</p>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+.gb-postbio {
+  --c-cream: #FFF9EE;
+  --c-ink: #1F1F1D;
+  --c-action: #FF7300;
+  background: var(--c-ink);
+  color: var(--c-cream);
+  padding: 72px 0;
+}
+.gb-postbio-container { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+.gb-postbio-card { max-width: 760px; margin: 0 auto; text-align: center; }
+.gb-postbio-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 249, 238, 0.7);
+  margin-bottom: 24px;
+}
+.gb-postbio-pulse {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--c-action);
+  animation: gb-postbio-pulse 1.6s infinite;
+}
+@keyframes gb-postbio-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.55; transform: scale(1.25); }
+}
+.gb-postbio-h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: clamp(34px, 4.6vw, 52px);
+  color: var(--c-cream);
+  margin: 0 0 18px;
+  letter-spacing: -0.02em;
+}
+.gb-postbio-h2 em { font-style: italic; font-weight: 700; color: var(--c-action); }
+.gb-postbio-lead {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 17.5px;
+  color: rgba(255, 249, 238, 0.78);
+  margin: 0 auto 32px;
+  line-height: 1.55;
+  max-width: 580px;
+}
+.gb-postbio-form {
+  display: flex;
+  gap: 8px;
+  max-width: 460px;
+  margin: 0 auto;
+}
+.gb-postbio-form input {
+  flex: 1;
+  padding: 14px 18px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  border: 1px solid rgba(255, 249, 238, 0.2);
+  background: rgba(255, 249, 238, 0.06);
+  color: var(--c-cream);
+  border-radius: 999px;
+  outline: none;
+  min-width: 0;
+}
+.gb-postbio-form input::placeholder { color: rgba(255, 249, 238, 0.5); }
+.gb-postbio-form input:focus { border-color: var(--c-action); }
+.gb-postbio-form .gb-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 24px;
+  background: var(--c-action);
+  color: #fff;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+.gb-postbio-form .gb-btn:hover { background: #E66800; transform: translateY(-1px); }
+.gb-postbio-trust {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: rgba(255, 249, 238, 0.55);
+  margin: 16px 0 0;
+  letter-spacing: 0.06em;
+}
+@media (max-width: 600px) {
+  .gb-postbio-form { flex-direction: column; }
+  .gb-postbio-form .gb-btn { justify-content: center; }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "GB · Home Postbiotic",
+  "tag": "section",
+  "class": "gb-postbio-wrap",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Coming this quarter" },
+    { "type": "checkbox", "id": "show_pulse", "label": "Show pulse dot", "default": true },
+    { "type": "text", "id": "heading", "label": "Heading (use <em>)", "default": "India's first shelf-stable <em>fermented</em> gut tonic." },
+    { "type": "richtext", "id": "lead", "label": "Lead", "default": "<p>Kanji postbiotic tonic — ready to drink, no fermenting required. Same gut benefits, in a 200ml bottle. Be the first to know when it ships.</p>" },
+    { "type": "text", "id": "email_placeholder", "label": "Email placeholder", "default": "your@email.com" },
+    { "type": "text", "id": "cta_label", "label": "CTA label", "default": "Notify me" },
+    { "type": "text", "id": "signup_tag", "label": "Customer tag (Shopify)", "info": "Customers who sign up get this tag in admin so you can segment them.", "default": "postbiotic-waitlist" },
+    { "type": "text", "id": "trust_text", "label": "Trust line", "default": "No spam · early-bird pricing for subscribers · launching Q3 2026" }
+  ],
+  "presets": [{ "name": "GB · Home Postbiotic" }]
+}
+{% endschema %}

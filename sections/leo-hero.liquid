@@ -1,0 +1,592 @@
+{%- render 'leo_kit_chrome' -%}
+
+{%- liquid
+  assign p = product
+  assign tagline       = p.metafields.custom.hero_tagline | default: 'Make authentic, gut-loving ferments at home.'
+  assign rating        = p.metafields.custom.rating | default: 4.8
+  assign review_count  = p.metafields.custom.review_count | default: 0
+  assign capacity_label = p.metafields.custom.jar_capacity | default: p.metafields.custom.capacity
+  assign size_chart    = p.metafields.custom.jar_size_chart_image | default: p.metafields.custom.size_chart_image
+  assign companion     = p.metafields.custom.companion_size_product.value
+  assign hero_trust    = p.metafields.custom.hero_trust_strip.value
+  assign coupon_text   = p.metafields.custom.coupon_text
+  assign coupon_code   = p.metafields.custom.coupon_code
+  assign discount_badge = p.metafields.custom.discount_badge | default: section.settings.discount_badge
+  assign short_name    = p.metafields.custom.short_name | default: p.metafields.custom.product_name_short
+
+  assign mf_benefits   = p.metafields.custom.hero_benefits_icons.value
+  assign mf_benefit_items = p.metafields.custom.benefits_items.value
+  assign hero_benefit_blocks = section.blocks | where: 'type', 'hero_benefit'
+  assign accordion_blocks    = section.blocks | where: 'type', 'hero_accordion_tab'
+-%}
+
+<section class="pdp-hero ferment-pdp-leo" {%- render 'leo_kit_attrs' -%}>
+  <div class="container">
+    {%- if section.settings.show_breadcrumb -%}
+      {%- render 'gb-breadcrumb' -%}
+    {%- endif -%}
+
+    <div class="hero-title-block">
+      <h1 class="product-name">{{ p.title }}</h1>
+      <p class="product-tagline">{{ tagline }}</p>
+    </div>
+
+    <div class="hero-grid">
+      <div class="gallery-stack">
+        <div class="gallery-main">
+          {%- if p.featured_image -%}
+            <img class="gallery-main-img"
+                 src="{{ p.featured_image | image_url: width: 1200 }}"
+                 srcset="{{ p.featured_image | image_url: width: 600 }} 600w, {{ p.featured_image | image_url: width: 1200 }} 1200w, {{ p.featured_image | image_url: width: 1800 }} 1800w"
+                 sizes="(min-width: 768px) 50vw, 100vw"
+                 alt="{{ p.featured_image.alt | default: p.title | escape }}"
+                 loading="eager"
+                 width="{{ p.featured_image.width }}"
+                 height="{{ p.featured_image.height }}">
+          {%- else -%}
+            <div class="gallery-illustration">🫙</div>
+          {%- endif -%}
+          {%- if p.images.size > 1 -%}
+            <button class="gallery-nav gallery-nav--prev" type="button" data-gallery-prev aria-label="Previous image">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            </button>
+            <button class="gallery-nav gallery-nav--next" type="button" data-gallery-next aria-label="Next image">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
+          {%- endif -%}
+        </div>
+        {%- if p.images.size > 1 -%}
+          <div class="gallery-thumbs">
+            {%- for image in p.images limit: 8 -%}
+              <button class="gallery-thumb {% if forloop.first %}active{% endif %}" type="button"
+                      data-full-src="{{ image | image_url: width: 1200 }}"
+                      data-full-alt="{{ image.alt | default: p.title | escape }}"
+                      aria-label="View image {{ forloop.index }}">
+                <img src="{{ image | image_url: width: 180 }}" alt="{{ image.alt | default: p.title | escape }}" loading="lazy" width="90" height="90">
+              </button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      <div class="product-info">
+        {%- if review_count > 0 -%}
+          <div class="rating-row">
+            <span class="stars" aria-label="{{ rating }} out of 5">★★★★★</span>
+            <a href="#judgeme-reviews" class="rating-link">{{ rating }} ({{ review_count }} reviews)</a>
+          </div>
+        {%- endif -%}
+
+        <div class="activity-row">
+          {%- render 'gb-bought-today' -%}
+        </div>
+
+        {%- comment -%}
+          Benefits — read from two parallel metafields per the spec:
+            custom.benefits_items       (list.single_line_text_field) — labels
+            custom.hero_benefits_icons  (list.file_reference)         — SVG icons
+          Index-aligned: items[i] pairs with icons[i].
+          Items may be plain text OR "emoji|text" (legacy format from kits).
+          Falls back to Theme Editor `hero_benefit` blocks if neither metafield is set.
+        {%- endcomment -%}
+
+        {%- if mf_benefit_items.size > 0 or mf_benefits.size > 0 or hero_benefit_blocks.size > 0 -%}
+          <div class="benefits-block">
+            <div class="label">Benefits</div>
+            <div class="benefits-grid">
+              {%- if mf_benefit_items.size > 0 -%}
+                {%- for raw in mf_benefit_items -%}
+                  {%- comment -%} mf_benefits is a file_reference list Drop; Shopify's [i] indexing returns blank on these Drops. Use a nested loop to pluck the i-th element. {%- endcomment -%}
+                  {%- assign target_idx = forloop.index0 -%}
+                  {%- assign mf_icon = nil -%}
+                  {%- if mf_benefits -%}
+                    {%- for ic in mf_benefits -%}
+                      {%- if forloop.index0 == target_idx -%}{%- assign mf_icon = ic -%}{%- endif -%}
+                    {%- endfor -%}
+                  {%- endif -%}
+                  {%- assign icon_src = mf_icon | image_url: width: 56 -%}
+                  {%- if icon_src == blank -%}{%- assign icon_src = mf_icon.url -%}{%- endif -%}
+                  {%- if icon_src == blank -%}{%- assign icon_src = mf_icon.src -%}{%- endif -%}
+                  {%- if icon_src == blank -%}{%- assign icon_src = mf_icon.preview_image.src -%}{%- endif -%}
+                  {%- assign parts = raw | split: '|' -%}
+                  {%- if parts.size > 1 -%}
+                    {%- assign emoji = parts[0] | strip -%}
+                    {%- assign label = parts[1] | strip -%}
+                  {%- else -%}
+                    {%- assign emoji = '' -%}
+                    {%- assign label = raw | strip -%}
+                  {%- endif -%}
+                  <div class="benefit-item">
+                    <span class="benefit-icon-svg{% if icon_src != blank %} benefit-icon-svg--img{% endif %}">
+                      {%- if icon_src != blank -%}
+                        <span class="kit-icon-svg" data-svg-src="{{ icon_src }}" aria-hidden="true"></span>
+                        <img class="kit-icon-img" src="{{ icon_src }}" alt="" loading="lazy" width="28" height="28">
+                      {%- elsif emoji != blank -%}{{ emoji }}{%- endif -%}
+                    </span>
+                    <span>{{ label }}</span>
+                  </div>
+                {%- endfor -%}
+              {%- else -%}
+                {%- for block in hero_benefit_blocks -%}
+                  {%- assign target_idx = forloop.index0 -%}
+                  {%- assign mf_icon = nil -%}
+                  {%- if mf_benefits -%}
+                    {%- for ic in mf_benefits -%}
+                      {%- if forloop.index0 == target_idx -%}{%- assign mf_icon = ic -%}{%- endif -%}
+                    {%- endfor -%}
+                  {%- endif -%}
+                  {%- assign icon_src = mf_icon | image_url: width: 56 -%}
+                  {%- if icon_src == blank -%}{%- assign icon_src = mf_icon.url -%}{%- endif -%}
+                  {%- if icon_src == blank -%}{%- assign icon_src = mf_icon.src -%}{%- endif -%}
+                  <div class="benefit-item" {{ block.shopify_attributes }}>
+                    <span class="benefit-icon-svg{% if icon_src != blank %} benefit-icon-svg--img{% endif %}">
+                      {%- if icon_src != blank -%}
+                        <span class="kit-icon-svg" data-svg-src="{{ icon_src }}" aria-hidden="true"></span>
+                        <img class="kit-icon-img" src="{{ icon_src }}" alt="" loading="lazy" width="28" height="28">
+                      {%- elsif block.settings.icon_svg != blank -%}{%- render 'kit_icon', icon: block.settings.icon_svg, size: 28 -%}
+                      {%- elsif block.settings.icon_emoji != blank -%}{{ block.settings.icon_emoji }}{%- endif -%}
+                    </span>
+                    <span>{{ block.settings.label }}</span>
+                  </div>
+                {%- endfor -%}
+              {%- endif -%}
+            </div>
+          </div>
+        {%- endif -%}
+
+        {%- form 'product', p, id: 'ferment-product-form' -%}
+          <div class="variant-block">
+            {%- assign opt_name = p.options.first | default: 'Pack' -%}
+            {%- if p.variants.size > 1 -%}
+              <div class="variant-label">Select Pack</div>
+              <div class="variant-grid variant-grid--{{ p.variants.size }}" role="radiogroup" aria-label="Select pack">
+                {%- for variant in p.variants -%}
+                  {%- assign v_tag = variant.metafields.custom.tag -%}
+                  {%- assign v_best = variant.metafields.custom.best_for -%}
+                  {%- assign v_img = variant.metafields.custom.variant_illustration | default: variant.image | default: p.featured_image -%}
+                  {%- assign is_selected = false -%}
+                  {%- if variant == p.selected_or_first_available_variant -%}{%- assign is_selected = true -%}{%- endif -%}
+                  <div class="variant-wrap">
+                    {%- if v_tag != blank -%}<span class="variant-badge">{{ v_tag }}</span>{%- endif -%}
+                    <label class="variant{% if is_selected %} active{% endif %}{% unless variant.available %} sold-out{% endunless %}"
+                           data-variant-id="{{ variant.id }}"
+                           data-variant-price="{{ variant.price | money }}"
+                           data-variant-price-cents="{{ variant.price }}"
+                           data-variant-compare-cents="{{ variant.compare_at_price }}"
+                           role="radio"
+                           aria-checked="{% if is_selected %}true{% else %}false{% endif %}"
+                           tabindex="0">
+                      <input type="radio" name="id" value="{{ variant.id }}" class="variant-input"
+                             {% if is_selected %}checked{% endif %}
+                             {% unless variant.available %}disabled{% endunless %}>
+                      <span class="variant-check" aria-hidden="true">
+                        <svg viewBox="0 0 12 12" fill="none"><polyline points="2.5,6 5,8.5 9.5,3.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                      </span>
+                      <div class="variant-pack">{{ variant.title }}</div>
+                      {%- if v_best != blank -%}
+                        <div class="variant-descriptor">{{ v_best }}</div>
+                      {%- endif -%}
+                      {%- if v_img != blank -%}
+                        <div class="variant-illustration">
+                          <img src="{{ v_img | image_url: width: 320 }}" alt="{{ variant.title }}" loading="lazy" width="160" height="120">
+                        </div>
+                      {%- endif -%}
+                      <div class="variant-price">
+                        <span>{{ variant.price | money_without_trailing_zeros | replace: 'Rs. ', '₹' | replace: 'Rs.', '₹' }}</span>
+                        {%- if variant.compare_at_price > variant.price -%}
+                          <span class="variant-compare">{{ variant.compare_at_price | money_without_trailing_zeros | replace: 'Rs. ', '₹' | replace: 'Rs.', '₹' }}</span>
+                        {%- endif -%}
+                      </div>
+                      {%- if variant.compare_at_price > variant.price -%}
+                        <div class="variant-save">SAVE {{ variant.compare_at_price | minus: variant.price | money_without_trailing_zeros | replace: 'Rs. ', '₹' | replace: 'Rs.', '₹' }}/-</div>
+                      {%- endif -%}
+                    </label>
+                  </div>
+                {%- endfor -%}
+              </div>
+            {%- else -%}
+              {%- assign v = p.selected_or_first_available_variant -%}
+              <input type="hidden" name="id" value="{{ v.id }}">
+              <div class="single-variant-price">
+                <span class="single-variant-price-now">{{ v.price | money }}</span>
+                {%- if v.compare_at_price > v.price -%}
+                  <span class="single-variant-price-was">{{ v.compare_at_price | money }}</span>
+                  <span class="single-variant-price-save">You save {{ v.compare_at_price | minus: v.price | money }}</span>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+
+            {%- if size_chart != blank or p.metafields.custom.help_note != blank -%}
+              <div class="variant-help-note">
+                <span class="vhn-text">{{ p.metafields.custom.help_note | default: 'Choose the pack that fits your household.' }}</span>
+                {%- if size_chart != blank -%}
+                  <button type="button" class="vhn-link" data-open-size-modal>Jar Size Chart →</button>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+
+            {%- if companion -%}
+              {%- assign other_capacity = companion.metafields.custom.jar_capacity | default: companion.metafields.custom.capacity | default: 'other size' -%}
+              <a href="{{ companion.url }}" class="companion-link">
+                Looking for the {{ other_capacity }} version? View {{ companion.title }} →
+              </a>
+            {%- endif -%}
+          </div>
+
+          <button type="submit" name="add" class="atc-btn" data-atc {% unless p.available %}disabled{% endunless %}>
+            {%- if p.available -%}ADD TO CART{%- else -%}SOLD OUT{%- endif -%}
+          </button>
+        {%- endform -%}
+
+        {%- render 'pdp-addon-block' -%}
+
+        <div class="trust-strip trust-strip--leo">
+          {%- assign t1_icon = section.settings.trust_1_icon -%}
+          {%- assign t1_text = section.settings.trust_1_text -%}
+          {%- assign t2_icon = section.settings.trust_2_icon -%}
+          {%- assign t2_text = section.settings.trust_2_text -%}
+          {%- assign t3_icon = section.settings.trust_3_icon -%}
+          {%- assign t3_text = section.settings.trust_3_text -%}
+          {%- comment -%}
+            Precedence: per-product metafield (hero_trust_strip) wins over
+            section settings. Section settings live on the template, so
+            without this flip every product on the same template would
+            render an identical strip — defeating the point of having a
+            per-product metafield.
+
+            Icons stay template-level (trust_1_icon / trust_2_icon /
+            trust_3_icon on section settings) and are index-aligned to
+            the metafield items. One icon set per template, text per
+            product. Items beyond the 3 icons fall back to the check
+            glyph.
+          {%- endcomment -%}
+          {%- if hero_trust != blank -%}
+            {%- for t in hero_trust limit: 3 -%}
+              {%- assign idx = forloop.index -%}
+              {%- assign icon_key = 'trust_' | append: idx | append: '_icon' -%}
+              {%- assign ti = section.settings[icon_key] -%}
+              <div class="item">
+                {%- if ti != blank -%}{%- render 'kit_icon', icon: ti, size: 14, extra: 'trust-strip-icon' -%}{%- else -%}<span class="check">✓</span>{%- endif -%}
+                <span>{{ t }}</span>
+              </div>
+            {%- endfor -%}
+          {%- elsif t1_text != blank or t2_text != blank or t3_text != blank -%}
+            {%- if t1_text != blank -%}
+              <div class="item">
+                {%- if t1_icon != blank -%}{%- render 'kit_icon', icon: t1_icon, size: 14, extra: 'trust-strip-icon' -%}{%- else -%}<span class="check">✓</span>{%- endif -%}
+                <span>{{ t1_text }}</span>
+              </div>
+            {%- endif -%}
+            {%- if t2_text != blank -%}
+              <div class="item">
+                {%- if t2_icon != blank -%}{%- render 'kit_icon', icon: t2_icon, size: 14, extra: 'trust-strip-icon' -%}{%- else -%}<span class="check">✓</span>{%- endif -%}
+                <span>{{ t2_text }}</span>
+              </div>
+            {%- endif -%}
+            {%- if t3_text != blank -%}
+              <div class="item">
+                {%- if t3_icon != blank -%}{%- render 'kit_icon', icon: t3_icon, size: 14, extra: 'trust-strip-icon' -%}{%- else -%}<span class="check">✓</span>{%- endif -%}
+                <span>{{ t3_text }}</span>
+              </div>
+            {%- endif -%}
+          {%- else -%}
+            <div class="item"><span class="check">✓</span> Secure Payment</div>
+            <div class="item"><span class="check">✓</span> Free Shipping</div>
+            <div class="item"><span class="check">✓</span> FSSAI Licensed</div>
+          {%- endif -%}
+        </div>
+
+        {%- if coupon_text != blank or coupon_code != blank -%}
+          <div class="coupon-bar">
+            <span>{{ coupon_text }}</span>
+            {%- if coupon_code != blank -%}<span class="code">{{ coupon_code }}</span>{%- endif -%}
+          </div>
+        {%- endif -%}
+
+        {%- liquid
+          assign mf_hero_accordions = p.metafields.custom.hero_accordions.value
+          assign has_mf_accordions = false
+          if mf_hero_accordions and mf_hero_accordions.size > 0
+            assign has_mf_accordions = true
+          endif
+        -%}
+        {%- if has_mf_accordions -%}
+          <div class="hero-accordion">
+            {%- for acc in mf_hero_accordions -%}
+              {%- liquid
+                assign is_open = false
+                if acc.is_default_open == true or acc.is_default_open == 'true'
+                  assign is_open = true
+                endif
+              -%}
+              <div class="hero-accordion-item{% if is_open %} is-open{% endif %}" data-accordion>
+                <button class="hero-accordion-trigger" type="button" aria-expanded="{% if is_open %}true{% else %}false{% endif %}">
+                  <span class="hero-accordion-label">{{ acc.title }}</span>
+                  <span class="hero-accordion-toggle" aria-hidden="true"></span>
+                </button>
+                <div class="hero-accordion-panel">{{ acc.body | newline_to_br }}</div>
+              </div>
+            {%- endfor -%}
+          </div>
+        {%- elsif accordion_blocks.size > 0 -%}
+          <div class="hero-accordion">
+            {%- for block in accordion_blocks -%}
+              {%- liquid
+                assign body_html = block.settings.body
+                assign mf_key = block.settings.metafield_key | strip
+                if mf_key != blank
+                  assign mf_val = p.metafields.custom[mf_key]
+                  if mf_val != blank
+                    assign body_html = mf_val
+                  endif
+                endif
+              -%}
+              <div class="hero-accordion-item{% if block.settings.default_open %} is-open{% endif %}" data-accordion {{ block.shopify_attributes }}>
+                <button class="hero-accordion-trigger" type="button" aria-expanded="{% if block.settings.default_open %}true{% else %}false{% endif %}">
+                  <span class="hero-accordion-label">{{ block.settings.label }}</span>
+                  <span class="hero-accordion-toggle" aria-hidden="true"></span>
+                </button>
+                <div class="hero-accordion-panel">{{ body_html }}</div>
+              </div>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{%- if size_chart != blank -%}
+  <div class="size-modal" id="jar-size-modal" data-size-modal>
+    <div class="size-modal-card">
+      <button type="button" class="size-modal-close" data-close-size-modal aria-label="Close">×</button>
+      <div class="size-modal-eyebrow">JAR SIZE COMPARISON</div>
+      <h3 class="size-modal-title">{{ capacity_label | default: p.title }}</h3>
+      <div class="size-modal-image"><img src="{{ size_chart | image_url: width: 1200 }}" alt="Size chart" loading="lazy" width="1200" height="900"></div>
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Leo · Hero",
+  "tag": "section",
+  "class": "leo-hero-section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_breadcrumb",
+      "label": "Show breadcrumb",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Trust strip (below ATC, single row)"
+    },
+    {
+      "type": "image_picker",
+      "id": "trust_1_icon",
+      "label": "Item 1 — icon (SVG)"
+    },
+    {
+      "type": "text",
+      "id": "trust_1_text",
+      "label": "Item 1 — text",
+      "default": "Secure Payment"
+    },
+    {
+      "type": "image_picker",
+      "id": "trust_2_icon",
+      "label": "Item 2 — icon (SVG)"
+    },
+    {
+      "type": "text",
+      "id": "trust_2_text",
+      "label": "Item 2 — text",
+      "default": "Free Shipping"
+    },
+    {
+      "type": "image_picker",
+      "id": "trust_3_icon",
+      "label": "Item 3 — icon (SVG)"
+    },
+    {
+      "type": "text",
+      "id": "trust_3_text",
+      "label": "Item 3 — text",
+      "default": "FSSAI Licensed"
+    },
+    {
+      "type": "header",
+      "content": "Spacing & Typography"
+    },
+    {
+      "type": "range",
+      "id": "pad_top_d",
+      "label": "Padding top — desktop (px)",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "pad_bot_d",
+      "label": "Padding bottom — desktop (px)",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "pad_top_m",
+      "label": "Padding top — mobile (px)",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "pad_bot_m",
+      "label": "Padding bottom — mobile (px)",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "mar_top_d",
+      "label": "Margin top — desktop (px)",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "mar_bot_d",
+      "label": "Margin bottom — desktop (px)",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "mar_top_m",
+      "label": "Margin top — mobile (px)",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "mar_bot_m",
+      "label": "Margin bottom — mobile (px)",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_size_d",
+      "label": "Eyebrow font size — desktop (px)",
+      "min": 9,
+      "max": 32,
+      "step": 1,
+      "default": 22
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_size_m",
+      "label": "Eyebrow font size — mobile (px)",
+      "min": 9,
+      "max": 24,
+      "step": 1,
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "heading_size_d",
+      "label": "Heading font size — desktop (px)",
+      "min": 18,
+      "max": 80,
+      "step": 2,
+      "default": 44
+    },
+    {
+      "type": "range",
+      "id": "heading_size_m",
+      "label": "Heading font size — mobile (px)",
+      "min": 16,
+      "max": 60,
+      "step": 2,
+      "default": 30
+    }
+  ],
+  "blocks": [
+    {
+      "type": "hero_benefit",
+      "name": "Hero benefit",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon_svg",
+          "label": "Icon (SVG)"
+        },
+        {
+          "type": "text",
+          "id": "icon_emoji",
+          "label": "Icon emoji (fallback)"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label"
+        }
+      ]
+    },
+    {
+      "type": "hero_accordion_tab",
+      "name": "Hero accordion tab",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Tab label"
+        },
+        {
+          "type": "richtext",
+          "id": "body",
+          "label": "Tab body (fallback)",
+          "info": "Used when the linked product metafield is empty."
+        },
+        {
+          "type": "text",
+          "id": "metafield_key",
+          "label": "Product metafield key (custom namespace)",
+          "info": "Optional. If set, product.metafields.custom.{key} overrides the body."
+        },
+        {
+          "type": "checkbox",
+          "id": "default_open",
+          "label": "Open by default",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Leo · Hero"
+    }
+  ]
+}
+{% endschema %}

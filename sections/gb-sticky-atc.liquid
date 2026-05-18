@@ -1,0 +1,336 @@
+{%- comment -%}
+  GB Sticky ATC — site-wide on product pages.
+  Mounted from layout/theme.liquid behind {% if request.page_type == 'product' %}.
+{%- endcomment -%}
+
+{%- if section.settings.enabled -%}
+  {%- liquid
+    assign p = product
+    assign cta_label = section.settings.cta_label | default: 'Add to cart'
+    assign name_truncate = section.settings.name_truncate | default: 28
+    assign show_delay = section.settings.show_delay | default: 600
+    assign up_threshold = section.settings.up_threshold | default: 30
+    assign desktop_visible = section.settings.show_on_desktop
+    assign price = p.selected_or_first_available_variant.price | default: p.price
+    assign compare = p.selected_or_first_available_variant.compare_at_price | default: p.compare_at_price
+  -%}
+
+  <style>
+    .gb-sticky-atc {
+      position: fixed;
+      left: 0; right: 0; bottom: 0;
+      z-index: 980;
+      background: var(--white, #FFFFFF);
+      border-top: 1px solid var(--border-soft, #F0EBDD);
+      box-shadow: 0 -8px 24px rgba(31, 31, 29, 0.08);
+      padding: 10px 14px;
+      padding-bottom: max(10px, env(safe-area-inset-bottom));
+      transform: translateY(120%);
+      transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+      visibility: hidden;
+      font-family: 'DM Sans', system-ui, sans-serif;
+    }
+    .gb-sticky-atc.is-visible { transform: translateY(0); visibility: visible; }
+    .gb-sticky-atc-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 48px minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+    }
+    .gb-sticky-atc-img {
+      width: 48px; height: 48px;
+      border-radius: 10px;
+      object-fit: cover;
+      background: var(--cream, #FFF9EE);
+    }
+    .gb-sticky-atc-info { min-width: 0; }
+    .gb-sticky-atc-name {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      color: var(--ink, #1F1F1D);
+      line-height: 1.25;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .gb-sticky-atc-price {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 13px;
+      color: var(--ink, #1F1F1D);
+      margin-top: 2px;
+    }
+    .gb-sticky-atc-compare {
+      color: var(--text-soft, #888780);
+      text-decoration: line-through;
+      font-size: 11px;
+      margin-left: 6px;
+      font-weight: 500;
+    }
+    .gb-sticky-atc-btn {
+      background: var(--all-in-one, #2B2218);
+      color: var(--cream, #FFF9EE);
+      border: none;
+      padding: 12px 22px;
+      border-radius: 999px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.18s;
+      min-height: 44px;
+    }
+    .gb-sticky-atc-btn:hover:not([disabled]) { background: var(--ink, #1F1F1D); }
+    .gb-sticky-atc-btn[disabled] { opacity: 0.6; cursor: not-allowed; }
+
+    {% unless desktop_visible %}
+      @media (min-width: 769px) {
+        .gb-sticky-atc { display: none; }
+      }
+    {% endunless %}
+
+    @media (prefers-reduced-motion: reduce) {
+      .gb-sticky-atc { transition: none; }
+    }
+  </style>
+
+  <div class="gb-sticky-atc"
+       data-gb-sticky-atc
+       data-up-threshold="{{ up_threshold }}"
+       data-show-delay="{{ show_delay }}"
+       aria-hidden="true">
+    <div class="gb-sticky-atc-inner">
+      {%- if p.featured_image -%}
+        <img class="gb-sticky-atc-img"
+             src="{{ p.featured_image | image_url: width: 160 }}"
+             alt="{{ p.title | escape }}"
+             width="48" height="48" loading="lazy">
+      {%- else -%}
+        <span class="gb-sticky-atc-img"></span>
+      {%- endif -%}
+      <div class="gb-sticky-atc-info">
+        <div class="gb-sticky-atc-name">{{ p.title | truncate: name_truncate }}</div>
+        <div class="gb-sticky-atc-price">
+          <span data-gb-sticky-price>{{ price | money_without_trailing_zeros }}</span>
+        </div>
+      </div>
+      <button type="button"
+              class="gb-sticky-atc-btn"
+              data-gb-sticky-atc-trigger
+              data-variant-id="{{ p.selected_or_first_available_variant.id }}"
+              data-product-id="{{ p.id }}"
+              data-product-title="{{ p.title | escape }}"
+              data-product-image="{{ p.featured_image | image_url: width: 200 }}"
+              data-product-price="{{ price }}"
+              data-product-url="{{ p.url }}"
+              {% unless p.available %}disabled{% endunless %}
+              aria-label="Add to cart">
+        {%- if p.available -%}{{ cta_label }}{%- else -%}Sold out{%- endif -%}
+      </button>
+    </div>
+  </div>
+
+  <script>
+  (function() {
+    var bar = document.querySelector('.gb-sticky-atc');
+    if (!bar) return;
+
+    // Don't render twice if a template-specific sticky bar is already in the DOM
+    var existingOther = document.querySelector('[data-sticky-atc]:not([data-gb-sticky-atc])');
+    if (existingOther) { bar.remove(); return; }
+
+    var upThreshold = parseInt(bar.dataset.upThreshold, 10) || 30;
+    var showDelay   = parseInt(bar.dataset.showDelay, 10)   || 600;
+
+    var lastY = window.scrollY;
+    var upAccum = 0;
+    var showTimer = null;
+
+    function showBar() {
+      bar.classList.add('is-visible');
+      bar.setAttribute('aria-hidden', 'false');
+    }
+    function hideBar() {
+      bar.classList.remove('is-visible');
+      bar.setAttribute('aria-hidden', 'true');
+    }
+
+    // Hide whenever the main ATC button is on-screen — sticky is redundant there
+    var mainAtcCandidates = document.querySelectorAll('[data-atc], .product-form__submit, button[name="add"]');
+    var mainAtcOnScreen = false;
+    if (mainAtcCandidates.length && 'IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) {
+          if (e.target.dataset._gbsObserved !== '1') return;
+          if (e.isIntersecting) mainAtcOnScreen = true;
+          else mainAtcOnScreen = isAnyMainAtcOnScreen();
+          if (mainAtcOnScreen) { hideBar(); upAccum = 0; }
+        });
+      }, { threshold: 0.01 });
+      mainAtcCandidates.forEach(function(el) { el.dataset._gbsObserved = '1'; io.observe(el); });
+      function isAnyMainAtcOnScreen() {
+        var any = false;
+        mainAtcCandidates.forEach(function(el) {
+          var r = el.getBoundingClientRect();
+          if (r.top < window.innerHeight && r.bottom > 0) any = true;
+        });
+        return any;
+      }
+    }
+
+    window.addEventListener('scroll', function() {
+      var y = window.scrollY;
+      var dy = y - lastY;
+      lastY = y;
+
+      if (dy < 0) {
+        upAccum += -dy;
+        if (upAccum >= upThreshold && !mainAtcOnScreen && y > 200) {
+          clearTimeout(showTimer);
+          showTimer = setTimeout(showBar, showDelay);
+        }
+      } else if (dy > 0) {
+        upAccum = 0;
+        clearTimeout(showTimer);
+        hideBar();
+      }
+    }, { passive: true });
+
+    // ATC click — open the GB cart drawer and add via the same flow
+    var btn = bar.querySelector('[data-gb-sticky-atc-trigger]');
+
+    // Sync sticky bar to PDP variant picker. The bar renders once at
+    // page-load with p.selected_or_first_available_variant data — when
+    // the user clicks a different variant radio, update the bar's
+    // displayed price + compare and the button's data-variant-id /
+    // data-product-price so the actual ATC adds the right variant.
+    function moneyDisplay(cents) {
+      if (cents == null || isNaN(cents)) return '';
+      var n = parseInt(cents, 10);
+      var rupees = Math.floor(n / 100);
+      var paise = n % 100;
+      // Indian grouping: last 3 digits, then groups of 2
+      var s = String(rupees);
+      var last3 = s.slice(-3);
+      var rest = s.slice(0, -3);
+      if (rest) last3 = ',' + last3;
+      rest = rest.replace(/\B(?=(\d{2})+(?!\d))/g, ',');
+      var intStr = rest + last3;
+      return '₹' + intStr + (paise ? '.' + String(paise).padStart(2, '0') : '');
+    }
+    function syncToVariant(label) {
+      if (!label || !btn) return;
+      var vid = parseInt(label.getAttribute('data-variant-id') || '0', 10);
+      if (!vid) return;
+      var priceCents = parseInt(label.getAttribute('data-variant-price-cents') || '0', 10);
+      btn.setAttribute('data-variant-id', vid);
+      if (priceCents) btn.setAttribute('data-product-price', priceCents);
+      // Try to also pick up the variant's illustration image if the
+      // picker exposes one — fall back to whatever's already set.
+      var illImg = label.querySelector('.variant-illustration img');
+      if (illImg && illImg.getAttribute('src')) {
+        btn.setAttribute('data-product-image', illImg.getAttribute('src'));
+        var stickyImg = bar.querySelector('img.gb-sticky-atc-img');
+        if (stickyImg) stickyImg.setAttribute('src', illImg.getAttribute('src'));
+      }
+      var priceEl = bar.querySelector('[data-gb-sticky-price]');
+      if (priceEl) {
+        // Prefer the formatted string from the variant label (matches
+        // theme money format exactly). Fallback to building our own.
+        var fmt = label.getAttribute('data-variant-price');
+        priceEl.textContent = fmt || moneyDisplay(priceCents);
+      }
+    }
+    // Initial sync — in case the page rendered with a different variant
+    // pre-selected than `selected_or_first_available_variant` (e.g. URL
+    // ?variant= param). Safe no-op when nothing matches.
+    var initialChecked = document.querySelector('input[type="radio"][name="id"]:checked');
+    if (initialChecked) {
+      var initialLabel = initialChecked.closest('label.variant');
+      if (initialLabel) syncToVariant(initialLabel);
+    }
+    document.addEventListener('change', function(e) {
+      var input = e.target;
+      if (!input || !input.matches || !input.matches('input[type="radio"][name="id"]')) return;
+      var label = input.closest('label.variant');
+      if (label) syncToVariant(label);
+    });
+
+    if (btn) {
+      btn.addEventListener('click', function(ev) {
+        ev.preventDefault();
+        if (btn.hasAttribute('disabled')) return;
+        var variantId = parseInt(btn.dataset.variantId, 10);
+        if (!variantId) return;
+
+        var origLabel = btn.textContent;
+        btn.setAttribute('disabled', 'disabled');
+        btn.textContent = 'Adding…';
+
+        if (window.GBCartDrawer && typeof window.GBCartDrawer.open === 'function') {
+          window.GBCartDrawer.open();
+          if (typeof window.GBCartDrawer.previewAdd === 'function') {
+            window.GBCartDrawer.previewAdd({
+              variant_id: variantId,
+              product_id: parseInt(btn.dataset.productId || '0', 10),
+              title: btn.dataset.productTitle,
+              image: btn.dataset.productImage,
+              price: parseInt(btn.dataset.productPrice || '0', 10),
+              url: btn.dataset.productUrl,
+              quantity: 1
+            });
+          }
+        }
+
+        fetch('/cart/add.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({ id: variantId, quantity: 1 })
+        })
+          .then(function(r) {
+            if (!r.ok) return r.json().then(function(e) { return Promise.reject(e); });
+            return fetch('/cart.js').then(function(r2) { return r2.json(); });
+          })
+          .then(function(cart) {
+            btn.removeAttribute('disabled');
+            btn.textContent = origLabel;
+            document.dispatchEvent(new CustomEvent('cart:update', {
+              bubbles: true,
+              detail: { resource: cart, sourceId: 'gb-sticky-atc', data: { source: 'gb-sticky-atc', itemCount: cart && cart.item_count } }
+            }));
+          })
+          .catch(function() {
+            btn.removeAttribute('disabled');
+            btn.textContent = origLabel;
+          });
+      });
+    }
+  })();
+  </script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "GB · Sticky ATC",
+  "tag": "section",
+  "settings": [
+    { "type": "checkbox", "id": "enabled", "label": "Enable sticky add-to-cart bar", "default": true },
+    { "type": "text", "id": "cta_label", "label": "Button label", "default": "Add to cart" },
+    { "type": "checkbox", "id": "show_on_desktop", "label": "Also show on desktop", "default": false,
+      "info": "Off by default — sticky ATC is most valuable on mobile." },
+    { "type": "range", "id": "name_truncate", "label": "Truncate product name to (chars)",
+      "min": 12, "max": 40, "step": 1, "default": 28 },
+    { "type": "header", "content": "Show / hide behaviour" },
+    { "type": "range", "id": "up_threshold", "label": "Scroll-up distance to trigger (px)",
+      "min": 10, "max": 80, "step": 5, "default": 30,
+      "info": "Cumulative upward scroll required before the bar slides in." },
+    { "type": "range", "id": "show_delay", "label": "Delay after scroll pause (ms)",
+      "min": 100, "max": 2000, "step": 50, "default": 600 }
+  ]
+}
+{% endschema %}

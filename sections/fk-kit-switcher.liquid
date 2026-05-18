@@ -1,0 +1,90 @@
+{%- comment -%}
+  fk-kit-switcher — sticky pill nav above hero with the 5 FK kits.
+  Active state on the current product. Hardcoded handles for stability.
+{%- endcomment -%}
+{%- liquid
+  assign current_handle = product.handle
+  assign kit_handles = 'kanji-making-kit,probiotic-achaar-making-kit,kimchi-making-kit,vegetable-fermentation-kit,aam-panna-making-kit,ultimate-fermentation-kit' | split: ','
+  assign kit_labels = 'Kanji,Achaar,Kimchi,Veggie,Aam Panna,All-In-One' | split: ','
+-%}
+{%- if section.settings.show_section -%}
+  <section class="fk-page ferment-pdp fk-kit-switcher-section" style="background:{{ section.settings.section_bg }}">
+    {%- render 'fk-color-cascade' -%}
+    <div class="container">
+      <div class="fk-kit-switcher" role="tablist" aria-label="Fermentation kits">
+        {%- for handle in kit_handles -%}
+          {%- assign label = kit_labels[forloop.index0] -%}
+          {%- assign target = all_products[handle] -%}
+          {%- if target.handle != '' -%}
+            {%- assign is_active = false -%}
+            {%- if handle == current_handle -%}{%- assign is_active = true -%}{%- endif -%}
+            <a class="fk-kit-pill{% if is_active %} is-active{% endif %}"
+               href="{{ target.url }}"
+               aria-current="{% if is_active %}page{% else %}false{% endif %}"
+               role="tab"
+               tabindex="0">{{ label }}</a>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </section>
+
+  <style>
+    .fk-kit-switcher-section {
+      position: sticky;
+      top: 0;
+      z-index: 90;
+      padding: 10px 0;
+      background: var(--kit-color-soft, #fff);
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+    .fk-kit-switcher {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding: 4px 0;
+    }
+    .fk-kit-switcher::-webkit-scrollbar { display: none; }
+    .fk-kit-pill {
+      flex-shrink: 0;
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text, #1F1F1D);
+      background: rgba(255,255,255,0.7);
+      border: 1px solid rgba(0,0,0,0.08);
+      transition: background 120ms ease, color 120ms ease, border-color 120ms ease;
+      text-decoration: none;
+    }
+    .fk-kit-pill:hover {
+      background: var(--kit-color, #FF7300);
+      color: #fff;
+      border-color: var(--kit-color, #FF7300);
+    }
+    .fk-kit-pill.is-active {
+      background: var(--kit-color, #FF7300);
+      color: #fff;
+      border-color: var(--kit-color, #FF7300);
+      font-weight: 700;
+    }
+  </style>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "FK — Kit switcher",
+  "tag": "section",
+  "class": "fk-kit-switcher-wrap",
+  "settings": [
+    { "type": "checkbox", "id": "show_section", "label": "Show section", "default": true },
+    { "type": "color", "id": "section_bg", "label": "Section background", "default": "#ffffff" }
+  ],
+  "presets": [ { "name": "FK — Kit switcher" } ],
+  "enabled_on": { "templates": ["product"] }
+}
+{% endschema %}

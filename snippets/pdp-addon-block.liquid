@@ -1,0 +1,99 @@
+{%- comment -%}
+  PDP Add-On Block · v2 — selection-only, batch-commit via main ATC
+  =========================================================================
+  Renders below the main ATC on a PDP. Up to two rows. Tapping a row
+  toggles a checkbox (visual only); clicking the main ATC batch-adds
+  the selected variant + every checked add-on in a single
+  `/cart/add.js` items call.
+
+  Pilot scope: fermentation-kit-refactor (leo template).
+
+  Required parent metafield:
+    product.metafields.custom.pdp_addon_ids   (list.product_reference)
+
+  Per-addon metafields:
+    custom.addon_label         (single_line_text) — preferred row label, ≤30 chars
+    custom.short_name          (single_line_text) — secondary label
+    custom.addon_discount_pct  (number_integer)   — discount % (default 10)
+
+  Hidden entirely when no add-ons are configured.
+
+  Discount chip is visual — the actual cart price reduction is wired
+  in Shopify Admin → Discounts (one automatic % discount per add-on
+  product, combinations enabled).
+{%- endcomment -%}
+
+{%- liquid
+  assign addons = product.metafields.custom.pdp_addon_ids.value
+  if addons == blank
+    assign addon_count = 0
+  else
+    assign addon_count = addons.size
+  endif
+  assign parent_name_short = product.metafields.custom.product_name_short | default: product.metafields.custom.short_name | default: product.title
+-%}
+
+{%- if addon_count > 0 -%}
+<div class="addon-block"
+     data-addon-block
+     data-parent-id="{{ product.id }}"
+     data-product-name-short="{{ parent_name_short | escape }}">
+  <div class="addon-head">
+    <span class="addon-eyebrow">Pairs perfectly</span>
+    <span class="rule" aria-hidden="true"></span>
+  </div>
+
+  <div class="addon-list" role="list">
+    {%- for addon in addons limit: 2 -%}
+      {%- liquid
+        assign variant = addon.selected_or_first_available_variant
+        assign pct = addon.metafields.custom.addon_discount_pct | default: 10
+        assign full_price = variant.price
+        assign saved = full_price | times: pct | divided_by: 100
+        assign discounted = full_price | minus: saved
+        assign label = addon.metafields.custom.addon_label | default: addon.metafields.custom.short_name | default: addon.title
+        assign in_stock = variant.available
+      -%}
+      <label class="addon-row{% unless in_stock %} disabled{% endunless %}"
+             role="listitem"
+             data-addon-id="{{ addon.id }}"
+             data-variant-id="{{ variant.id }}"
+             data-discount-pct="{{ pct }}">
+
+        <input type="checkbox"
+               class="addon-checkbox-input"
+               data-addon-checkbox
+               {% if in_stock == false %}disabled{% endif %}>
+
+        <span class="addon-checkbox" aria-hidden="true">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <path d="M2 6.2L4.8 9L10 3.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+
+        <div class="addon-thumb" aria-hidden="true">
+          {%- if addon.featured_image -%}
+            <img src="{{ addon.featured_image | image_url: width: 88 }}"
+                 srcset="{{ addon.featured_image | image_url: width: 88 }} 1x, {{ addon.featured_image | image_url: width: 176 }} 2x"
+                 alt=""
+                 loading="lazy"
+                 width="40" height="40">
+          {%- else -%}
+            <span class="addon-thumb-fallback">📦</span>
+          {%- endif -%}
+        </div>
+
+        <div class="addon-name">{{ label | escape }}</div>
+
+        <div class="addon-right">
+          <span class="addon-price">{{ discounted | money_without_trailing_zeros | replace: 'Rs. ', '₹' | replace: 'Rs.', '₹' }}</span>
+          <span class="addon-badge" aria-label="{{ pct }} percent off">
+            <span class="addon-badge-pct">{{ pct }}%</span>
+            <span class="addon-badge-off">OFF</span>
+          </span>
+        </div>
+      </label>
+    {%- endfor -%}
+  </div>
+</div>
+{%- endif -%}

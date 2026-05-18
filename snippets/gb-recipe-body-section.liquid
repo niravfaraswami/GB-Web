@@ -1,0 +1,41 @@
+{%- comment -%}
+  Extracts a named section from article.content by <h2> heading.
+
+  Usage:
+    {%- capture parsed -%}
+      {%- render 'gb-recipe-body-section', section_name: 'ingredients' -%}
+    {%- endcapture -%}
+
+  The `section_name` parameter is matched case-insensitively against
+  the heading text. Aliases supported via the section_aliases pipe-
+  separated parameter (e.g. 'method|steps|how-to').
+
+  Returns the inner HTML between this <h2> and the next <h2>, with
+  surrounding whitespace stripped. If the heading isn't found, returns
+  an empty string.
+{%- endcomment -%}
+
+{%- liquid
+  assign body = article.content | default: ''
+  assign aliases_string = section_aliases | default: section_name
+  assign aliases = aliases_string | downcase | split: '|'
+  assign chunks = body | split: '<h2'
+  assign found = ''
+  for chunk in chunks
+    if chunk contains '</h2>'
+      assign hdr_parts = chunk | split: '</h2>'
+      assign hdr_inner = hdr_parts[0] | split: '>' | last | strip_html | downcase | strip
+      assign rest = hdr_parts[1] | default: ''
+      for alias in aliases
+        assign clean_alias = alias | strip
+        if hdr_inner == clean_alias
+          assign found = rest
+          break
+        endif
+      endfor
+      if found != ''
+        break
+      endif
+    endif
+  endfor
+-%}{{- found | strip -}}

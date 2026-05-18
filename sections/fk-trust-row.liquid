@@ -1,0 +1,42 @@
+{%- liquid
+  assign p = product
+  assign mf_trust_cards = p.metafields.custom.featured_trust_cards.value
+-%}
+{%- if section.settings.show_section -%}
+  {%- if mf_trust_cards == blank or mf_trust_cards.size == 0 -%}
+    {%- comment -%} No trust cards — hide section {%- endcomment -%}
+  {%- else -%}
+    <section class="fk-page ferment-pdp fk-trust-row-section trust-row-section" style="background:{{ section.settings.section_bg }}">
+      {%- render 'fk-color-cascade' -%}
+      <div class="container">
+        <div class="trust-row-grid">
+          {%- for tc in mf_trust_cards -%}
+            <div class="tr-card">
+              <div class="tr-icon">
+                {%- if tc.icon != blank -%}
+                  {%- render 'kit_icon', icon: tc.icon, size: 44, alt: '', extra: 'tr-icon-img' -%}
+                {%- endif -%}
+              </div>
+              <div class="tr-h">{{ tc.heading }}</div>
+              <div class="tr-d">{{ tc.description }}</div>
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "FK — Trust row",
+  "tag": "section",
+  "class": "fk-trust-row-section",
+  "settings": [
+    { "type": "checkbox", "id": "show_section", "label": "Show section", "default": true },
+    { "type": "color", "id": "section_bg", "label": "Section background", "default": "#ffffff" }
+  ],
+  "presets": [ { "name": "FK — Trust row" } ],
+  "enabled_on": { "templates": ["product"] }
+}
+{% endschema %}

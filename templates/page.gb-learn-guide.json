@@ -1,0 +1,106 @@
+{
+  "sections": {
+    "main": {
+      "type": "gb-learn-guide",
+      "settings": {
+        "fallback_title": "Your Guide Title",
+        "fallback_subtitle": "A clear one-line description of what this guide covers and who it's for.",
+        "fallback_category": "FERMENTATION 101",
+        "fallback_duration": "~3 hours · spread over 30 days",
+        "fallback_level": "Absolute Beginner",
+        "fallback_format": "Self-paced",
+        "sidebar_label": "Sections",
+        "complete_title": "You finished the guide!",
+        "complete_desc": "You now have what you need to put this into practice. The kit below makes it stupid-simple to start.",
+        "cta_eyebrow": "PUT IT INTO PRACTICE",
+        "cta_title": "Get the kit and start your first batch this weekend.",
+        "cta_desc": "Pre-measured spice mixes, the right jar, an airlock, and a recipe book that includes everything from this guide.",
+        "cta_name_override": "All-in-One Fermentation Kit",
+        "cta_price_override": "From ₹2,999",
+        "cta_label": "Shop Now →"
+      },
+      "blocks": {
+        "p-1": {
+          "type": "pane",
+          "settings": {
+            "title": "Why fermentation?",
+            "duration": "12 min",
+            "intro": "<p>Quick orientation: what fermentation is, why it's been a kitchen staple for thousands of years, and what you're actually going to do over the next 30 days.</p>",
+            "lesson": "<p>Fermentation is one of the oldest food-preservation techniques humans have. Salt, water, vegetables, and time — that's the recipe. The bacteria already living on the food do the work.</p><p><strong>Why it matters now:</strong> live cultures, easy on the gut, vastly cheaper than store-bought probiotics, and connects you to a kitchen craft your grandparents probably used.</p>",
+            "takeaways_label": "Key Takeaways",
+            "takeaways": "Fermentation = controlled bacterial preservation\nLactic acid bacteria do the work, not heat or chemicals\nTraditional in every food culture: kimchi, sauerkraut, kanji, dosa\nLive cultures are the active ingredient",
+            "action_label": "Your next action",
+            "action_text": "<p>Pick the ferment you want to make first. Most beginners go with cabbage (sauerkraut) or carrots — both are very forgiving.</p>"
+          }
+        },
+        "p-2": {
+          "type": "pane",
+          "settings": {
+            "title": "Set up your kit",
+            "duration": "8 min",
+            "intro": "<p>What you need physically. The kit covers everything; this section shows you what each piece does and how to clean it.</p>",
+            "lesson": "<p>Your kit ships with a fermentation jar, an airlock lid, a glass weight, and pre-measured spice mixes. Wash everything once with hot soapy water and air dry — no need for sterilisation chemicals.</p><p><strong>The airlock</strong> lets CO₂ out (so the jar doesn't explode) but keeps oxygen out (so mould can't grow). It's the single most important piece.</p>",
+            "takeaways_label": "Key Takeaways",
+            "takeaways": "Wash with soap + hot water (no sterilisation needed)\nAirlock = CO₂ out, oxygen blocked\nGlass weight keeps vegetables submerged\nKitchen counter at 22–25°C is the right environment",
+            "action_label": "Your next action",
+            "action_text": "<p>Wash your kit and set it on a counter where it can sit undisturbed for 5–7 days. Out of direct sunlight.</p>"
+          }
+        },
+        "p-3": {
+          "type": "pane",
+          "settings": {
+            "title": "Your first batch",
+            "duration": "20 min",
+            "intro": "<p>Start with the simplest possible ferment: shredded cabbage with salt. This walks you through it.</p>",
+            "lesson": "<p>Shred 1kg cabbage. Add 20g salt (2%). Massage by hand for 5 minutes — your goal is wet cabbage with brine forming. Pack into the jar, push down so the brine covers everything, drop in the glass weight, seal with the airlock.</p><p>Set on the counter. Wait 5–7 days. Taste from day 5; refrigerate when you like the flavour.</p>",
+            "takeaways_label": "Key Takeaways",
+            "takeaways": "1kg cabbage → 20g salt (2% by weight)\nMassage 5 min until brine forms\nKeep vegetables submerged\nTaste daily from day 5; refrigerate when ready",
+            "action_label": "Your next action",
+            "action_text": "<p>Make the batch today. Note the date. Set a reminder for day 5 to check.</p>"
+          }
+        },
+        "p-4": {
+          "type": "pane",
+          "settings": {
+            "title": "Read the signs",
+            "duration": "10 min",
+            "intro": "<p>What's normal vs what's gone wrong. The single most important troubleshooting skill is knowing what success looks like.</p>",
+            "lesson": "<p><strong>Day 1–2:</strong> quiet. A few bubbles, brine cloudy, smells like raw cabbage.</p><p><strong>Day 3–5:</strong> active. Clear bubbles rising, brine cloudy, smells tangy and slightly funky.</p><p><strong>Day 5–7:</strong> settling. Bubble production slows, smell mellows.</p><p><strong>Bad signs:</strong> fuzzy mould (any colour), sliminess, strong rotten smell. Throw it out — don't try to save a bad batch.</p>",
+            "takeaways_label": "Key Takeaways",
+            "takeaways": "Cloudy brine + bubbles = healthy ferment\nTangy-funky smell = good\nFuzzy mould = bad, throw out\nWhite scum on surface (kahm yeast) = harmless, scrape off",
+            "action_label": "Your next action",
+            "action_text": "<p>Check your batch. Take a photo each day so you can see the progression.</p>"
+          }
+        },
+        "p-5": {
+          "type": "pane",
+          "settings": {
+            "title": "Daily routine",
+            "duration": "6 min",
+            "intro": "<p>Once you have your first batch in the fridge, here's the routine that keeps fermentation in your life forever.</p>",
+            "lesson": "<p>Eat 1–2 tablespoons a day with meals. Once you finish a batch, start the next one the same day — that way you always have one fermenting and one in the fridge.</p><p>Vary the vegetables: cabbage, carrots, beetroot, kohlrabi, radishes. Add spices to taste. Swap salts (sea salt vs Himalayan vs kosher) and notice the flavour change.</p>",
+            "takeaways_label": "Key Takeaways",
+            "takeaways": "1–2 tbsp a day with meals\nKeep one batch fermenting + one in fridge\nVary vegetables every batch\nDocument your favourites",
+            "action_label": "Your next action",
+            "action_text": "<p>Start your second batch with a different vegetable. Note what you change.</p>"
+          }
+        },
+        "p-6": {
+          "type": "pane",
+          "settings": {
+            "title": "Going further",
+            "duration": "10 min",
+            "intro": "<p>You've made a successful batch. Here's where to go next: more complex ferments, dairy ferments, sourdough, fermented drinks.</p>",
+            "lesson": "<p><strong>Vegetable ferments:</strong> kimchi, achaar, beetroot kvass, hot sauce.</p><p><strong>Dairy ferments:</strong> yogurt, kefir, paneer-style cheese.</p><p><strong>Drink ferments:</strong> water kefir, kombucha, kanji, jun.</p><p><strong>Sourdough:</strong> wild-yeast bread that takes the principles you've learned and applies them to grain.</p><p>Pick one. Don't try to do all of these at once. Each is its own learning curve.</p>",
+            "takeaways_label": "Key Takeaways",
+            "takeaways": "Master one ferment before adding another\nDifferent ferments use different cultures\nSpecific kits exist for each (kimchi, kefir, kanji, sourdough)\nPace yourself — fermentation is a craft, not a sprint",
+            "action_label": "Your next action",
+            "action_text": "<p>Pick the ferment you most want to learn next. Order the kit. Stop reading; start making.</p>"
+          }
+        }
+      },
+      "block_order": ["p-1","p-2","p-3","p-4","p-5","p-6"]
+    }
+  },
+  "order": ["main"]
+}

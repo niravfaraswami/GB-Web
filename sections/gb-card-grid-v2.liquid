@@ -1,0 +1,291 @@
+{%- render 'leo_kit_chrome' -%}
+
+{%- liquid
+  assign p = product
+  assign mf_why_eyebrow = p.metafields.custom.why_eyebrow
+  assign mf_why_heading = p.metafields.custom.why_heading
+  assign mf_why_intro = p.metafields.custom.why_intro
+  # Primary: the "why" cards. Legacy: featured_components (older
+  # products still on the kit_consumable shape). The
+  # featured_trust_cards metafield is now exclusively owned by
+  # fk-trust-row — don't read it here.
+  assign mf_items = p.metafields.custom.featured_quick_benefits.value
+  if mf_items == blank or mf_items.size == 0
+    assign mf_items = p.metafields.custom.featured_components.value
+  endif
+  assign card_blocks = section.blocks | where: 'type', 'card'
+  assign has_mf = false
+  if mf_items and mf_items.size > 0
+    assign has_mf = true
+  endif
+  assign card_eyebrow = mf_why_eyebrow | default: section.settings.eyebrow
+  assign card_heading = mf_why_heading | default: section.settings.heading
+  assign card_intro = mf_why_intro | default: section.settings.intro
+-%}
+
+{%- if has_mf or card_blocks.size > 0 or card_heading != blank -%}
+  <section class="gb-card-grid-section ferment-pdp-leo" data-cols="{{ section.settings.columns | default: 4 }}" {%- render 'leo_kit_attrs' -%}>
+    <div class="container">
+      {%- if card_heading != blank or card_eyebrow != blank -%}
+        <div class="section-header centered">
+          {%- if card_eyebrow != blank -%}<div class="eyebrow">{{ card_eyebrow }}</div>{%- endif -%}
+          {%- if card_heading != blank -%}<h2>{{ card_heading }} {%- if section.settings.heading_em != blank %}<em>{{ section.settings.heading_em }}</em>{%- endif -%}{{ section.settings.heading_tail }}</h2>{%- endif -%}
+          {%- if card_intro != blank -%}<p>{{ card_intro }}</p>{%- endif -%}
+        </div>
+      {%- endif -%}
+
+      <div class="gb-card-grid">
+        {%- if has_mf -%}
+          {%- for c in mf_items -%}
+            {%- assign cicon = c.icon -%}
+            {%- assign cemoji = c.icon_emoji -%}
+            {%- assign isrc = cicon | image_url: width: 56 -%}
+            {%- if isrc == blank -%}{%- assign isrc = cicon.url -%}{%- endif -%}
+            {%- if isrc == blank -%}{%- assign isrc = cicon.src -%}{%- endif -%}
+            <div class="gb-card-grid-item">
+              {%- if isrc != blank or cemoji != blank -%}
+                <div class="gb-card-grid-icon">
+                  {%- if isrc != blank -%}
+                    <span class="kit-icon-svg gb-card-icon-svg" data-svg-src="{{ isrc }}" aria-hidden="true"></span>
+                    <img class="kit-icon-img" src="{{ isrc }}" alt="" loading="lazy" width="28" height="28">
+                  {%- elsif cemoji != blank -%}{{ cemoji }}{%- endif -%}
+                </div>
+              {%- endif -%}
+              {%- if c.label != blank -%}<div class="gb-card-grid-label">{{ c.label }}</div>{%- endif -%}
+              {%- assign chead = c.heading | default: c.name | default: c.title -%}
+              {%- if chead != blank -%}<div class="gb-card-grid-h">{{ chead }}</div>{%- endif -%}
+              {%- assign cdesc = c.description | default: c.body | default: c.sub -%}
+              {%- if cdesc != blank -%}<div class="gb-card-grid-d">{{ cdesc }}</div>{%- endif -%}
+            </div>
+          {%- endfor -%}
+        {%- else -%}
+          {%- for block in card_blocks -%}
+            {%- assign bsrc = block.settings.icon_svg | image_url: width: 56 -%}
+            {%- if bsrc == blank -%}{%- assign bsrc = block.settings.icon_svg.url -%}{%- endif -%}
+            {%- if bsrc == blank -%}{%- assign bsrc = block.settings.icon_svg.src -%}{%- endif -%}
+            <div class="gb-card-grid-item" {{ block.shopify_attributes }}>
+              {%- if bsrc != blank or block.settings.icon_emoji != blank -%}
+                <div class="gb-card-grid-icon">
+                  {%- if bsrc != blank -%}
+                    <span class="kit-icon-svg gb-card-icon-svg" data-svg-src="{{ bsrc }}" aria-hidden="true"></span>
+                    <img class="kit-icon-img" src="{{ bsrc }}" alt="" loading="lazy" width="28" height="28">
+                  {%- elsif block.settings.icon_emoji != blank -%}{{ block.settings.icon_emoji }}{%- endif -%}
+                </div>
+              {%- endif -%}
+              {%- if block.settings.label != blank -%}<div class="gb-card-grid-label">{{ block.settings.label }}</div>{%- endif -%}
+              {%- if block.settings.heading != blank -%}<div class="gb-card-grid-h">{{ block.settings.heading }}</div>{%- endif -%}
+              {%- if block.settings.description != blank -%}<div class="gb-card-grid-d">{{ block.settings.description }}</div>{%- endif -%}
+            </div>
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "GB · Card Grid (v2)",
+  "tag": "section",
+  "class": "gb-card-grid-wrap",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "WHY THIS PRODUCT"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "heading_em",
+      "label": "Heading (highlighted)"
+    },
+    {
+      "type": "text",
+      "id": "heading_tail",
+      "label": "Heading (tail)"
+    },
+    {
+      "type": "textarea",
+      "id": "intro",
+      "label": "Intro paragraph"
+    },
+    {
+      "type": "select",
+      "id": "columns",
+      "label": "Columns (desktop)",
+      "options": [
+        {
+          "value": "2",
+          "label": "2 columns"
+        },
+        {
+          "value": "3",
+          "label": "3 columns"
+        },
+        {
+          "value": "4",
+          "label": "4 columns"
+        }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "header",
+      "content": "Spacing & Typography"
+    },
+    {
+      "type": "range",
+      "id": "pad_top_d",
+      "label": "Padding top — desktop (px)",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "pad_bot_d",
+      "label": "Padding bottom — desktop (px)",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "pad_top_m",
+      "label": "Padding top — mobile (px)",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "pad_bot_m",
+      "label": "Padding bottom — mobile (px)",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "mar_top_d",
+      "label": "Margin top — desktop (px)",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "mar_bot_d",
+      "label": "Margin bottom — desktop (px)",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "mar_top_m",
+      "label": "Margin top — mobile (px)",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "mar_bot_m",
+      "label": "Margin bottom — mobile (px)",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_size_d",
+      "label": "Eyebrow font size — desktop (px)",
+      "min": 9,
+      "max": 32,
+      "step": 1,
+      "default": 22
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_size_m",
+      "label": "Eyebrow font size — mobile (px)",
+      "min": 9,
+      "max": 24,
+      "step": 1,
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "heading_size_d",
+      "label": "Heading font size — desktop (px)",
+      "min": 18,
+      "max": 80,
+      "step": 2,
+      "default": 44
+    },
+    {
+      "type": "range",
+      "id": "heading_size_m",
+      "label": "Heading font size — mobile (px)",
+      "min": 16,
+      "max": 60,
+      "step": 2,
+      "default": 30
+    }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Card",
+      "limit": 12,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon_svg",
+          "label": "Icon (SVG)"
+        },
+        {
+          "type": "text",
+          "id": "icon_emoji",
+          "label": "Icon emoji (fallback)"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label / pill (optional)"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "GB · Card Grid (v2)"
+    }
+  ]
+}
+{% endschema %}

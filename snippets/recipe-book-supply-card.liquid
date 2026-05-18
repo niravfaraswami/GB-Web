@@ -1,0 +1,35 @@
+{%- comment -%}
+  recipe-book-supply-card
+  Card used inside .supplies-rail (for non-bundle products) and inside
+  the "Books in this bundle" rail when reused for bundle_books.
+
+  Params:
+    supply — product reference (required). If null, the snippet is a no-op.
+
+  Renders:
+    <a class="supply-card" href={url}>
+      thumb · name · price · "Add" CTA
+    </a>
+{%- endcomment -%}
+{%- if supply -%}
+  <a
+    href="{{ supply.url }}"
+    class="supply-card"
+    data-supply-product-id="{{ supply.id }}"
+    aria-label="View {{ supply.title | escape }}"
+  >
+    <div class="supply-thumb">
+      {%- if supply.featured_image -%}
+        <img
+          src="{{ supply.featured_image | image_url: width: 320 }}"
+          alt="{{ supply.featured_image.alt | default: supply.title | escape }}"
+          loading="lazy"
+          width="160" height="160"
+        >
+      {%- endif -%}
+    </div>
+    <div class="supply-name">{{ supply.title }}</div>
+    <div class="supply-price">{{ supply.price | money_without_trailing_zeros }}</div>
+    <div class="supply-cta">Add →</div>
+  </a>
+{%- endif -%}

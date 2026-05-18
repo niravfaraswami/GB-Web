@@ -1,0 +1,217 @@
+{%- comment -%}
+  Section 04 · Collections — circle grid
+  Source ref: gutbasket-home-page.html lines 1725-1768
+{%- endcomment -%}
+
+<section class="gb-coll">
+  <div class="gb-coll-container">
+    {%- if section.settings.eyebrow != blank or section.settings.heading != blank -%}
+      <div class="gb-coll-header">
+        {%- if section.settings.eyebrow != blank -%}
+          <span class="gb-coll-eyebrow">{{ section.settings.eyebrow }}</span>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <h2 class="gb-coll-h2">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="gb-coll-grid">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign tile_theme = block.settings.theme | default: 'kanji'
+          assign img = block.settings.image
+          assign link = block.settings.link | default: '#'
+        -%}
+        <a href="{{ link }}"
+           class="gb-coll-tile gb-coll-tile--{{ tile_theme }}"
+           {%- if block.settings.tab_id != blank %} data-tab="{{ block.settings.tab_id }}"{%- endif %}
+           {{ block.shopify_attributes }}>
+          <div class="gb-coll-photo"
+               {%- if img %} style="background-image: url('{{ img | image_url: width: 600 }}');"{%- endif %}></div>
+          <div class="gb-coll-label">{{ block.settings.label }}</div>
+        </a>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+.gb-coll {
+  --c-cream: #FFF9EE;
+  --c-text: #1F1F1D;
+  --c-text-muted: #5C4D3F;
+  --c-ink: #1F1F1D;
+  --c-kanji: #8B1F40;
+  --c-achaar: #C8552A;
+  --c-sprout: #3F7754;
+  --c-kefir: #6FA095;
+  --c-inulin: #15BA97;
+  --c-aam-panna: #DDA738;
+  background: var(--c-cream);
+  padding: 64px 0;
+}
+.gb-coll-container {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+.gb-coll-header {
+  text-align: center;
+  margin: 0 auto 36px;
+  max-width: 720px;
+}
+.gb-coll-eyebrow {
+  display: inline-block;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--c-text-muted);
+  margin-bottom: 10px;
+}
+.gb-coll-h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: clamp(28px, 3.4vw, 38px);
+  margin: 0 0 10px;
+  letter-spacing: -0.02em;
+  color: var(--c-text);
+}
+.gb-coll-h2 em {
+  font-style: italic;
+  font-weight: 700;
+  color: var(--c-kanji);
+}
+.gb-coll-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px 28px;
+  max-width: 540px;
+  margin: 0 auto;
+}
+.gb-coll-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 14px;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+}
+.gb-coll-photo {
+  width: 100%;
+  aspect-ratio: 1/1;
+  border-radius: 50%;
+  background-size: 115%;
+  background-position: center;
+  background-repeat: no-repeat;
+  box-shadow: 0 10px 28px rgba(43, 31, 26, 0.14);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-size 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+.gb-coll-photo::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px rgba(43, 31, 26, 0.06);
+  pointer-events: none;
+}
+.gb-coll-tile:hover .gb-coll-photo {
+  transform: scale(1.05);
+  box-shadow: 0 16px 36px rgba(43, 31, 26, 0.2);
+  background-size: 125%;
+}
+.gb-coll-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--c-text);
+  line-height: 1.25;
+  letter-spacing: -0.005em;
+}
+.gb-coll-tile--fermentation .gb-coll-photo { background-color: var(--c-kanji); }
+.gb-coll-tile--sprouts      .gb-coll-photo { background-color: var(--c-sprout); }
+.gb-coll-tile--prebiotic    .gb-coll-photo { background-color: var(--c-inulin); }
+.gb-coll-tile--dairy        .gb-coll-photo { background-color: var(--c-kefir); }
+.gb-coll-tile--refills      .gb-coll-photo { background-color: var(--c-achaar); }
+.gb-coll-tile--baking       .gb-coll-photo { background-color: var(--c-aam-panna); }
+.gb-coll-tile--jars         .gb-coll-photo { background-color: var(--c-ink); }
+.gb-coll-tile--books        .gb-coll-photo { background-color: var(--c-kanji); }
+@media (max-width: 768px) {
+  .gb-coll-grid { gap: 22px 14px; max-width: 100%; }
+  .gb-coll-label { font-size: 12px; font-weight: 500; }
+}
+{% endstylesheet %}
+
+<script>
+(function() {
+  document.querySelectorAll('.gb-coll-tile').forEach(function(tile) {
+    tile.addEventListener('click', function(e) {
+      var tabId = tile.dataset.tab;
+      // Always intercept the click — never navigate to a collection page from
+      // home. If the tile has a tab_id, dispatch the scroll+activate event;
+      // otherwise we still suppress navigation (no-op).
+      e.preventDefault();
+      if (!tabId) return;
+      document.dispatchEvent(new CustomEvent('gb:select-tab', { detail: { tab: tabId } }));
+    });
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "GB · Home Collections",
+  "tag": "section",
+  "class": "gb-coll-wrap",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Shop by collection" },
+    { "type": "text", "id": "heading", "label": "Heading (use <em> for emphasis)", "default": "Find your gut-health <em>starting point.</em>" }
+  ],
+  "blocks": [
+    {
+      "type": "tile",
+      "name": "Tile",
+      "limit": 12,
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Tile image (square)" },
+        { "type": "text", "id": "label", "label": "Label", "default": "Collection" },
+        { "type": "url", "id": "link", "label": "Fallback link (used if no matching tab below)" },
+        { "type": "text", "id": "tab_id", "label": "Scroll-to tab ID", "info": "Matches a tab_id in the GB Shop Tabs section. If set, click scrolls + activates that tab instead of following the link." },
+        { "type": "select", "id": "theme", "label": "Background color theme",
+          "options": [
+            { "value": "fermentation", "label": "Fermentation (kanji maroon)" },
+            { "value": "sprouts",      "label": "Sprouts (green)" },
+            { "value": "prebiotic",    "label": "Prebiotic (teal)" },
+            { "value": "dairy",        "label": "Dairy (sage)" },
+            { "value": "refills",      "label": "Refills (terracotta)" },
+            { "value": "baking",       "label": "Baking (mustard)" },
+            { "value": "jars",         "label": "Jars (ink)" },
+            { "value": "books",        "label": "Books (maroon)" }
+          ],
+          "default": "fermentation" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "GB · Home Collections",
+      "blocks": [
+        { "type": "tile", "settings": { "label": "Fermentation Kits", "theme": "fermentation", "tab_id": "fermentation" } },
+        { "type": "tile", "settings": { "label": "Sprouts Kit",       "theme": "sprouts",      "tab_id": "sprouts" } },
+        { "type": "tile", "settings": { "label": "Prebiotic Powders", "theme": "prebiotic",    "tab_id": "prebiotic" } },
+        { "type": "tile", "settings": { "label": "Dairy Cultures",    "theme": "dairy",        "tab_id": "dairy" } },
+        { "type": "tile", "settings": { "label": "Spice Refills",     "theme": "refills",      "tab_id": "refills" } },
+        { "type": "tile", "settings": { "label": "Baking",            "theme": "baking",       "tab_id": "baking" } },
+        { "type": "tile", "settings": { "label": "Jars & Tools",      "theme": "jars",         "tab_id": "jars" } },
+        { "type": "tile", "settings": { "label": "Recipe Books",      "theme": "books",        "tab_id": "books" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

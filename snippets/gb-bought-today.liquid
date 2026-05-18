@@ -1,0 +1,80 @@
+{%- comment -%}
+  gb-bought-today — dynamic "X people bought this today" counter.
+
+  Renders an .item placeholder with data attrs that gb-bought-today.js
+  reads to compute a per-product count that:
+   - Resets at midnight IST
+   - Grows throughout the day along a weighted curve (low overnight,
+     ramps morning, peaks early evening, tapers at night)
+   - Ends the IST day at the target range for the product's category
+   - Stays consistent for the same product on the same day across
+     refreshes (seeded by handle + IST date), but differs from product
+     to product within its category range
+
+  Categories + daily targets (live in gb-bought-today.js):
+    best         100–150   Kanji Kit, Achaar Kit, Sprout Maker (700ml + 1L)
+    kit          ~50       Other ferment kits (excluding All-in-One)
+    kanji-refill ~30       Kanji spice-mix / supplies products
+    refill-other ~20       Other refills + prebiotic powders
+    culture      5–10      Kefir grain products
+    jars-tools   3–8       Jars, tools, accessories
+    default      10–20     Anything that doesn't match (baking, books, etc.)
+{%- endcomment -%}
+{%- liquid
+  assign best_handles = 'kanji-making-kit,sprout-making-jar,sprout-maker-1-l,probiotic-achaar-making-kit'
+  assign bt_cat = 'default'
+
+  if best_handles contains product.handle
+    assign bt_cat = 'best'
+  endif
+
+  if bt_cat == 'default'
+    assign h = product.handle
+    if h contains 'kanji-spice-mix' or h contains 'kanji-supplies' or h contains 'kanji-refill'
+      assign bt_cat = 'kanji-refill'
+    endif
+  endif
+
+  if bt_cat == 'default'
+    for c in product.collections
+      if c.handle == 'cultures'
+        assign bt_cat = 'culture'
+        break
+      endif
+    endfor
+  endif
+
+  if bt_cat == 'default'
+    for c in product.collections
+      if c.handle == 'fermentation-kits'
+        if product.handle != 'ultimate-fermentation-kit'
+          assign bt_cat = 'kit'
+        endif
+        break
+      endif
+    endfor
+  endif
+
+  if bt_cat == 'default'
+    for c in product.collections
+      if c.handle == 'spice-mix-supplies' or c.handle == 'prebiotic'
+        assign bt_cat = 'refill-other'
+        break
+      endif
+    endfor
+  endif
+
+  if bt_cat == 'default'
+    for c in product.collections
+      if c.handle == 'jars-and-tools'
+        assign bt_cat = 'jars-tools'
+        break
+      endif
+    endfor
+  endif
+-%}
+<div class="item">
+  <span class="dot"></span>
+  <span><strong data-bought-today data-bought-category="{{ bt_cat }}" data-bought-handle="{{ product.handle }}">0</strong> people bought this today</span>
+</div>
+{{ 'gb-bought-today.js' | asset_url | script_tag }}

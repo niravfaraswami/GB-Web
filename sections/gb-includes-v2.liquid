@@ -1,0 +1,261 @@
+{%- render 'leo_kit_chrome' -%}
+
+{%- liquid
+  assign p = product
+
+  # Per-product metafield overrides win over section settings.
+  # Mirrors the box_note / help_note pattern already wired below.
+  # Bullets metafields are multi_line_text_field — the existing
+  # newline_to_br | split: '<br />' loop further down handles them
+  # identically to the section setting.
+  assign mf_box_pill     = p.metafields.custom.box_pill
+  assign mf_box_heading  = p.metafields.custom.box_heading
+  assign mf_box_bullets  = p.metafields.custom.box_bullets
+  assign mf_box_note     = p.metafields.custom.box_note
+  assign mf_help_pill    = p.metafields.custom.help_pill
+  assign mf_help_heading = p.metafields.custom.help_heading
+  assign mf_help_bullets = p.metafields.custom.help_bullets
+  assign mf_help_note    = p.metafields.custom.help_note
+
+  assign left_pill     = mf_box_pill     | default: section.settings.left_pill
+  assign left_heading  = mf_box_heading  | default: section.settings.left_heading
+  assign left_bullets  = mf_box_bullets  | default: section.settings.left_bullets
+  assign left_note     = mf_box_note     | default: section.settings.left_note
+  assign right_pill    = mf_help_pill    | default: section.settings.right_pill
+  assign right_heading = mf_help_heading | default: section.settings.right_heading
+  assign right_bullets = mf_help_bullets | default: section.settings.right_bullets
+  assign right_note    = mf_help_note    | default: section.settings.right_note
+-%}
+
+{%- if left_heading != blank or right_heading != blank or left_note != blank or right_note != blank or left_bullets != blank or right_bullets != blank -%}
+  <section class="gb-includes-section ferment-pdp-leo" {%- render 'leo_kit_attrs' -%}>
+    <div class="container">
+      <div class="section-header centered">
+        {%- if section.settings.eyebrow != blank -%}<div class="eyebrow">{{ section.settings.eyebrow }}</div>{%- endif -%}
+        {%- if section.settings.heading != blank -%}<h2>{{ section.settings.heading }} <em>{{ section.settings.heading_em }}</em></h2>{%- endif -%}
+      </div>
+
+      <div class="gb-includes-grid">
+        <div class="gb-includes-block gb-includes-yes">
+          {%- if left_pill != blank -%}<div class="gb-includes-pill">{{ left_pill }}</div>{%- endif -%}
+          {%- if left_heading != blank -%}<div class="gb-includes-h">{{ left_heading }}</div>{%- endif -%}
+          {%- if left_bullets != blank -%}
+            <ul class="gb-includes-list">
+              {%- assign lines = left_bullets | newline_to_br | split: '<br />' -%}
+              {%- for line in lines -%}{%- assign t = line | strip -%}{%- if t != blank -%}<li>{{ t }}</li>{%- endif -%}{%- endfor -%}
+            </ul>
+          {%- endif -%}
+          {%- if left_note != blank -%}<div class="gb-includes-note">{{ left_note }}</div>{%- endif -%}
+        </div>
+        <div class="gb-includes-block gb-includes-need">
+          {%- if right_pill != blank -%}<div class="gb-includes-pill">{{ right_pill }}</div>{%- endif -%}
+          {%- if right_heading != blank -%}<div class="gb-includes-h">{{ right_heading }}</div>{%- endif -%}
+          {%- if right_bullets != blank -%}
+            <ul class="gb-includes-list">
+              {%- assign lines = right_bullets | newline_to_br | split: '<br />' -%}
+              {%- for line in lines -%}{%- assign t = line | strip -%}{%- if t != blank -%}<li>{{ t }}</li>{%- endif -%}{%- endfor -%}
+            </ul>
+          {%- endif -%}
+          {%- if right_note != blank -%}<div class="gb-includes-note">{{ right_note }}</div>{%- endif -%}
+        </div>
+      </div>
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "GB · Includes (v2)",
+  "tag": "section",
+  "class": "gb-includes-wrap",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "WHAT YOU GET, WHAT YOU NEED"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "EVERYTHING IN"
+    },
+    {
+      "type": "text",
+      "id": "heading_em",
+      "label": "Heading (highlighted)",
+      "default": "THE BAG."
+    },
+    {
+      "type": "header",
+      "content": "Left block (Included)"
+    },
+    {
+      "type": "text",
+      "id": "left_pill",
+      "label": "Left pill label",
+      "default": "INCLUDED"
+    },
+    {
+      "type": "text",
+      "id": "left_heading",
+      "label": "Left heading",
+      "default": "What's in the pack"
+    },
+    {
+      "type": "textarea",
+      "id": "left_bullets",
+      "label": "Left bullets (one per line)"
+    },
+    {
+      "type": "textarea",
+      "id": "left_note",
+      "label": "Left note (small print)"
+    },
+    {
+      "type": "header",
+      "content": "Right block (Needed)"
+    },
+    {
+      "type": "text",
+      "id": "right_pill",
+      "label": "Right pill label",
+      "default": "YOU'LL NEED"
+    },
+    {
+      "type": "text",
+      "id": "right_heading",
+      "label": "Right heading",
+      "default": "What you'll need at home"
+    },
+    {
+      "type": "textarea",
+      "id": "right_bullets",
+      "label": "Right bullets (one per line)"
+    },
+    {
+      "type": "textarea",
+      "id": "right_note",
+      "label": "Right note (small print)"
+    },
+    {
+      "type": "header",
+      "content": "Spacing & Typography"
+    },
+    {
+      "type": "range",
+      "id": "pad_top_d",
+      "label": "Padding top — desktop (px)",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "pad_bot_d",
+      "label": "Padding bottom — desktop (px)",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "pad_top_m",
+      "label": "Padding top — mobile (px)",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "pad_bot_m",
+      "label": "Padding bottom — mobile (px)",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "mar_top_d",
+      "label": "Margin top — desktop (px)",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "mar_bot_d",
+      "label": "Margin bottom — desktop (px)",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "mar_top_m",
+      "label": "Margin top — mobile (px)",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "mar_bot_m",
+      "label": "Margin bottom — mobile (px)",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_size_d",
+      "label": "Eyebrow font size — desktop (px)",
+      "min": 9,
+      "max": 32,
+      "step": 1,
+      "default": 22
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_size_m",
+      "label": "Eyebrow font size — mobile (px)",
+      "min": 9,
+      "max": 24,
+      "step": 1,
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "heading_size_d",
+      "label": "Heading font size — desktop (px)",
+      "min": 18,
+      "max": 80,
+      "step": 2,
+      "default": 44
+    },
+    {
+      "type": "range",
+      "id": "heading_size_m",
+      "label": "Heading font size — mobile (px)",
+      "min": 16,
+      "max": 60,
+      "step": 2,
+      "default": 30
+    }
+  ],
+  "presets": [
+    {
+      "name": "GB · Includes (v2)"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,49 @@
+{%- liquid
+  assign p = product
+  assign review_count = p.metafields.custom.review_count | default: 0
+-%}
+{%- if section.settings.show_judgeme -%}
+  <div data-kit="fermentation" class="ferment-pdp fkv3-judgeme-wrap">
+    <section class="judgeme-section" id="judgeme-reviews" {%- render 'fkv3-section-attrs' -%}>
+      <div class="container">
+        <div class="section-header">
+          <div class="eyebrow">{{ section.settings.judgeme_eyebrow }}</div>
+          <h2>{% if review_count > 0 %}{{ review_count }} {% endif %}{{ section.settings.judgeme_heading }} <em>{{ section.settings.judgeme_heading_em }}</em></h2>
+        </div>
+        {%- if section.settings.judgeme_embed != blank -%}{{ section.settings.judgeme_embed }}
+        {%- else -%}<div class="jdgm-widget jdgm-review-widget" data-id="{{ p.id }}"></div>{%- endif -%}
+      </div>
+    </section>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "FK v3 — Judge.me",
+  "tag": "section",
+  "class": "fkv3-judgeme-wrap",
+  "settings": [
+    { "type": "checkbox", "id": "show_judgeme", "label": "Show Judge.me section", "default": true },
+    { "type": "color", "id": "section_bg", "label": "Section background", "default": "#ffffff" },
+    { "type": "text", "id": "judgeme_eyebrow", "label": "Eyebrow", "default": "ALL REVIEWS" },
+    { "type": "text", "id": "judgeme_heading", "label": "Heading", "default": "VERIFIED" },
+    { "type": "text", "id": "judgeme_heading_em", "label": "Heading (em)", "default": "REVIEWS" },
+    { "type": "html", "id": "judgeme_embed", "label": "Custom embed (optional)" }
+  ,
+    { "type": "header", "content": "Spacing & Typography" },
+    { "type": "range", "id": "pad_top_d", "label": "Padding top — desktop (px)", "min": 0, "max": 200, "step": 4, "default": 80 },
+    { "type": "range", "id": "pad_bot_d", "label": "Padding bottom — desktop (px)", "min": 0, "max": 200, "step": 4, "default": 80 },
+    { "type": "range", "id": "pad_top_m", "label": "Padding top — mobile (px)", "min": 0, "max": 120, "step": 4, "default": 56 },
+    { "type": "range", "id": "pad_bot_m", "label": "Padding bottom — mobile (px)", "min": 0, "max": 120, "step": 4, "default": 56 },
+    { "type": "range", "id": "mar_top_d", "label": "Margin top — desktop (px)", "min": 0, "max": 100, "step": 4, "default": 0 },
+    { "type": "range", "id": "mar_bot_d", "label": "Margin bottom — desktop (px)", "min": 0, "max": 100, "step": 4, "default": 0 },
+    { "type": "range", "id": "mar_top_m", "label": "Margin top — mobile (px)", "min": 0, "max": 80, "step": 4, "default": 0 },
+    { "type": "range", "id": "mar_bot_m", "label": "Margin bottom — mobile (px)", "min": 0, "max": 80, "step": 4, "default": 0 },
+    { "type": "range", "id": "eyebrow_size_d", "label": "Eyebrow font size — desktop (px)", "min": 0, "max": 32, "step": 1, "default": 22 },
+    { "type": "range", "id": "eyebrow_size_m", "label": "Eyebrow font size — mobile (px)", "min": 0, "max": 24, "step": 1, "default": 14 },
+    { "type": "range", "id": "heading_size_d", "label": "Heading font size — desktop (px)", "min": 0, "max": 80, "step": 2, "default": 44 },
+    { "type": "range", "id": "heading_size_m", "label": "Heading font size — mobile (px)", "min": 0, "max": 60, "step": 2, "default": 30 }],
+  "presets": [ { "name": "FK v3 — Judge.me" } ],
+  "enabled_on": { "templates": ["product"] }
+}
+{% endschema %}

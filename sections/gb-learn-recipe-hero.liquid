@@ -1,0 +1,135 @@
+{%- render 'leo_kit_chrome' -%}
+
+{%- liquid
+  assign cat_label = article.metafields.custom.category_label | default: section.settings.fallback_category
+  assign subtitle = article.excerpt | default: article.metafields.custom.subtitle | default: section.settings.fallback_subtitle
+  assign hero_emoji = article.metafields.custom.hero_emoji | default: section.settings.fallback_emoji
+  assign tags_meta = article.metafields.custom.dietary_tags
+  assign tag_blocks = section.blocks | where: 'type', 'dietary_tag'
+  assign meta_blocks = section.blocks | where: 'type', 'meta_item'
+  assign jump_blocks = section.blocks | where: 'type', 'jump_link'
+-%}
+
+<section class="recipe-hero" {%- render 'leo_kit_attrs' -%}>
+  <div class="container">
+    <div>
+      {%- if cat_label != blank -%}
+        <div class="cat-pill">
+          <span class="dot"></span><span>{{ cat_label }}</span>
+        </div>
+      {%- endif -%}
+      <h1>{{ article.title | default: section.settings.fallback_title }}</h1>
+      {%- if subtitle != blank -%}<p class="recipe-subtitle">{{ subtitle }}</p>{%- endif -%}
+      <div class="dietary-tags">
+        {%- if tags_meta != blank -%}
+          {%- for t in tags_meta -%}<span class="dietary-tag">{{ t }}</span>{%- endfor -%}
+        {%- elsif tag_blocks.size > 0 -%}
+          {%- for block in tag_blocks -%}<span class="dietary-tag" {{ block.shopify_attributes }}>{{ block.settings.label }}</span>{%- endfor -%}
+        {%- endif -%}
+      </div>
+    </div>
+    <div class="recipe-hero-image">
+      {%- if article.image -%}
+        <img src="{{ article.image | image_url: width: 1200 }}" alt="{{ article.title | escape }}" loading="eager" width="900" height="900">
+      {%- elsif hero_emoji != blank -%}
+        {{ hero_emoji }}
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{%- liquid
+  assign mf_prep   = article.metafields.custom.prep_time
+  assign mf_ferm   = article.metafields.custom.ferment_time
+  assign mf_total  = article.metafields.custom.total_time
+  assign mf_yield  = article.metafields.custom.yield
+  assign mf_diff   = article.metafields.custom.difficulty
+  assign mf_cuis   = article.metafields.custom.cuisine
+  assign has_mf_meta = false
+  if mf_prep != blank or mf_ferm != blank or mf_total != blank or mf_yield != blank or mf_diff != blank or mf_cuis != blank
+    assign has_mf_meta = true
+  endif
+-%}
+
+{%- if has_mf_meta -%}
+  <div class="recipe-meta-strip">
+    <div class="container">
+      {%- if mf_prep != blank -%}
+        <div class="meta-item"><div class="meta-icon">⏱</div><div class="meta-label">PREP</div><div class="meta-value">{{ mf_prep }}</div></div>
+      {%- endif -%}
+      {%- if mf_ferm != blank -%}
+        <div class="meta-item"><div class="meta-icon">🫙</div><div class="meta-label">FERMENT</div><div class="meta-value">{{ mf_ferm }}</div></div>
+      {%- endif -%}
+      {%- if mf_total != blank -%}
+        <div class="meta-item"><div class="meta-icon">⌛</div><div class="meta-label">TOTAL</div><div class="meta-value">{{ mf_total }}</div></div>
+      {%- endif -%}
+      {%- if mf_yield != blank -%}
+        <div class="meta-item"><div class="meta-icon">🍽</div><div class="meta-label">YIELD</div><div class="meta-value">{{ mf_yield }}</div></div>
+      {%- endif -%}
+      {%- if mf_diff != blank -%}
+        <div class="meta-item"><div class="meta-icon">📊</div><div class="meta-label">DIFFICULTY</div><div class="meta-value">{{ mf_diff }}</div></div>
+      {%- endif -%}
+      {%- if mf_cuis != blank -%}
+        <div class="meta-item"><div class="meta-icon">🌍</div><div class="meta-label">CUISINE</div><div class="meta-value">{{ mf_cuis }}</div></div>
+      {%- endif -%}
+    </div>
+  </div>
+{%- elsif meta_blocks.size > 0 -%}
+  <div class="recipe-meta-strip">
+    <div class="container">
+      {%- for block in meta_blocks -%}
+        <div class="meta-item" {{ block.shopify_attributes }}>
+          {%- if block.settings.icon != blank -%}<div class="meta-icon">{{ block.settings.icon }}</div>{%- endif -%}
+          <div class="meta-label">{{ block.settings.label }}</div>
+          <div class="meta-value">{{ block.settings.value }}</div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+{%- endif -%}
+
+{%- if jump_blocks.size > 0 -%}
+  <nav class="jump-nav">
+    <div class="container">
+      {%- for block in jump_blocks -%}
+        <a class="jump-link" href="#{{ block.settings.anchor }}" {{ block.shopify_attributes }}>{{ block.settings.label }}</a>
+      {%- endfor -%}
+    </div>
+  </nav>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "GB · Learn Recipe Hero",
+  "tag": "section",
+  "class": "gb-learn-recipe-hero-wrap",
+  "settings": [
+    { "type": "text", "id": "fallback_title", "label": "Fallback title", "default": "Recipe title" },
+    { "type": "textarea", "id": "fallback_subtitle", "label": "Fallback subtitle" },
+    { "type": "text", "id": "fallback_category", "label": "Fallback category label", "default": "FERMENTATION 101" },
+    { "type": "text", "id": "fallback_emoji", "label": "Fallback hero emoji", "default": "🥭" },
+    { "type": "header", "content": "Spacing & Typography" },
+    { "type": "range", "id": "pad_top_d", "label": "Padding top — desktop (px)", "min": 0, "max": 200, "step": 4, "default": 56 },
+    { "type": "range", "id": "pad_bot_d", "label": "Padding bottom — desktop (px)", "min": 0, "max": 200, "step": 4, "default": 48 },
+    { "type": "range", "id": "pad_top_m", "label": "Padding top — mobile (px)", "min": 0, "max": 120, "step": 4, "default": 40 },
+    { "type": "range", "id": "pad_bot_m", "label": "Padding bottom — mobile (px)", "min": 0, "max": 120, "step": 4, "default": 32 },
+    { "type": "range", "id": "heading_size_d", "label": "H1 size — desktop (px)", "min": 24, "max": 80, "step": 2, "default": 44 },
+    { "type": "range", "id": "heading_size_m", "label": "H1 size — mobile (px)", "min": 20, "max": 60, "step": 2, "default": 32 }
+  ],
+  "blocks": [
+    { "type": "dietary_tag", "name": "Dietary tag (e.g. Vegan)", "limit": 6, "settings": [
+      { "type": "text", "id": "label", "label": "Label", "default": "Vegan" }
+    ]},
+    { "type": "meta_item", "name": "Meta item", "limit": 6, "settings": [
+      { "type": "text", "id": "icon", "label": "Icon (emoji or text)", "default": "⏱" },
+      { "type": "text", "id": "label", "label": "Label", "default": "PREP" },
+      { "type": "text", "id": "value", "label": "Value", "default": "20 min" }
+    ]},
+    { "type": "jump_link", "name": "Jump-nav link", "limit": 6, "settings": [
+      { "type": "text", "id": "label", "label": "Label", "default": "Ingredients" },
+      { "type": "text", "id": "anchor", "label": "Anchor (without #)", "default": "ingredients" }
+    ]}
+  ],
+  "presets": [{ "name": "GB · Learn Recipe Hero" }]
+}
+{% endschema %}

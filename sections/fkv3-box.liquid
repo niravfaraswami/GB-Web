@@ -1,0 +1,119 @@
+{%- liquid
+  assign p = product
+  assign mf_components = p.metafields.custom.featured_components.value
+  assign mf_box_image = p.metafields.custom.box_image
+  assign mf_box_note = p.metafields.custom.box_note
+  assign mf_box_h1 = p.metafields.custom.box_h1
+  assign mf_box_h2 = p.metafields.custom.box_h2
+  assign component_blocks = section.blocks | where: 'type', 'box_component'
+
+  if mf_components != blank
+    assign comp_count = mf_components.size
+  else
+    assign comp_count = component_blocks.size
+  endif
+
+  # Split mode (desktop only): when > 6 components, the right column
+  # holds only the first 4 (2x2 grid stretching to image height) and
+  # items 5..N flow into a full-width row below the image. Stops the
+  # image's negative-space problem with many components.
+  assign split_mode = false
+  if comp_count > 6
+    assign split_mode = true
+  endif
+  assign top_limit = comp_count
+  if split_mode
+    assign top_limit = 4
+    assign bottom_count = comp_count | minus: 4
+  endif
+-%}
+{%- if mf_components != blank or component_blocks.size > 0 -%}
+  <div data-kit="fermentation" class="ferment-pdp fkv3-box-wrap">
+    <section class="box-section" {%- render 'fkv3-section-attrs' -%}>
+      <div class="container">
+        <div class="section-header">
+          <div class="eyebrow">{{ section.settings.box_eyebrow }}</div>
+          {%- if mf_box_h1 != blank or mf_box_h2 != blank -%}
+            <h2>{{ mf_box_h1 }}<br><em>{{ mf_box_h2 }}</em></h2>
+          {%- else -%}
+            <h2>{{ section.settings.box_heading }}<br><em>{{ section.settings.box_heading_em }}</em></h2>
+          {%- endif -%}
+        </div>
+        {%- assign box_img = mf_box_image | default: section.settings.box_image -%}
+        {%- assign bnote = mf_box_note | default: section.settings.box_note -%}
+        <div class="box-grid{% if split_mode %} box-grid--split{% endif %}">
+          <div class="box-image">{%- if box_img != blank -%}<img src="{{ box_img | image_url: width: 1200 }}" alt="What is in the box" loading="lazy" width="1200" height="750">{%- else -%}🫙{%- endif -%}</div>
+
+          <div class="box-pills">
+            {%- if mf_components != blank -%}
+              {%- for c in mf_components -%}
+                {%- if forloop.index > top_limit -%}{%- break -%}{%- endif -%}
+                <div class="box-pill"><span class="bp-icon">{%- if c.icon != blank -%}{%- render 'kit_icon', icon: c.icon, size: 28, extra: 'bp-icon-img' -%}{%- else -%}{{ forloop.index }}{%- endif -%}</span><span class="bp-name">{{ c.name }}</span><span class="bp-sub">{{ c.description }}</span></div>
+              {%- endfor -%}
+            {%- else -%}
+              {%- for block in component_blocks -%}
+                {%- if forloop.index > top_limit -%}{%- break -%}{%- endif -%}
+                <div class="box-pill" {{ block.shopify_attributes }}><span class="bp-icon">{%- if block.settings.icon_image != blank -%}{%- render 'kit_icon', icon: block.settings.icon_image, size: 28, extra: 'bp-icon-img' -%}{%- else -%}{{ forloop.index }}{%- endif -%}</span><span class="bp-name">{{ block.settings.name }}</span><span class="bp-sub">{{ block.settings.description }}</span></div>
+              {%- endfor -%}
+            {%- endif -%}
+          </div>
+
+          {%- if split_mode -%}
+            <div class="box-pills-bottom" style="--bottom-cols: {{ bottom_count }};">
+              {%- if mf_components != blank -%}
+                {%- for c in mf_components offset: 4 -%}
+                  {%- assign global_idx = forloop.index | plus: 4 -%}
+                  <div class="box-pill"><span class="bp-icon">{%- if c.icon != blank -%}{%- render 'kit_icon', icon: c.icon, size: 28, extra: 'bp-icon-img' -%}{%- else -%}{{ global_idx }}{%- endif -%}</span><span class="bp-name">{{ c.name }}</span><span class="bp-sub">{{ c.description }}</span></div>
+                {%- endfor -%}
+              {%- else -%}
+                {%- for block in component_blocks offset: 4 -%}
+                  {%- assign global_idx = forloop.index | plus: 4 -%}
+                  <div class="box-pill" {{ block.shopify_attributes }}><span class="bp-icon">{%- if block.settings.icon_image != blank -%}{%- render 'kit_icon', icon: block.settings.icon_image, size: 28, extra: 'bp-icon-img' -%}{%- else -%}{{ global_idx }}{%- endif -%}</span><span class="bp-name">{{ block.settings.name }}</span><span class="bp-sub">{{ block.settings.description }}</span></div>
+                {%- endfor -%}
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        </div>
+        {%- if bnote != blank -%}<p class="box-note">{{ bnote }}</p>{%- endif -%}
+      </div>
+    </section>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "FK v3 — Box",
+  "tag": "section",
+  "class": "fkv3-box-wrap",
+  "settings": [
+    { "type": "color", "id": "section_bg", "label": "Section background", "default": "#ffffff" },
+    { "type": "text", "id": "box_eyebrow", "label": "Eyebrow", "default": "WHAT'S IN THE BOX" },
+    { "type": "text", "id": "box_heading", "label": "Heading", "default": "EVERYTHING YOU NEED" },
+    { "type": "text", "id": "box_heading_em", "label": "Heading (em)", "default": "TO FERMENT." },
+    { "type": "image_picker", "id": "box_image", "label": "Box / kit image" },
+    { "type": "textarea", "id": "box_note", "label": "Note" }
+  ,
+    { "type": "header", "content": "Spacing & Typography" },
+    { "type": "range", "id": "pad_top_d", "label": "Padding top — desktop (px)", "min": 0, "max": 200, "step": 4, "default": 80 },
+    { "type": "range", "id": "pad_bot_d", "label": "Padding bottom — desktop (px)", "min": 0, "max": 200, "step": 4, "default": 80 },
+    { "type": "range", "id": "pad_top_m", "label": "Padding top — mobile (px)", "min": 0, "max": 120, "step": 4, "default": 56 },
+    { "type": "range", "id": "pad_bot_m", "label": "Padding bottom — mobile (px)", "min": 0, "max": 120, "step": 4, "default": 56 },
+    { "type": "range", "id": "mar_top_d", "label": "Margin top — desktop (px)", "min": 0, "max": 100, "step": 4, "default": 0 },
+    { "type": "range", "id": "mar_bot_d", "label": "Margin bottom — desktop (px)", "min": 0, "max": 100, "step": 4, "default": 0 },
+    { "type": "range", "id": "mar_top_m", "label": "Margin top — mobile (px)", "min": 0, "max": 80, "step": 4, "default": 0 },
+    { "type": "range", "id": "mar_bot_m", "label": "Margin bottom — mobile (px)", "min": 0, "max": 80, "step": 4, "default": 0 },
+    { "type": "range", "id": "eyebrow_size_d", "label": "Eyebrow font size — desktop (px)", "min": 0, "max": 32, "step": 1, "default": 22 },
+    { "type": "range", "id": "eyebrow_size_m", "label": "Eyebrow font size — mobile (px)", "min": 0, "max": 24, "step": 1, "default": 14 },
+    { "type": "range", "id": "heading_size_d", "label": "Heading font size — desktop (px)", "min": 0, "max": 80, "step": 2, "default": 44 },
+    { "type": "range", "id": "heading_size_m", "label": "Heading font size — mobile (px)", "min": 0, "max": 60, "step": 2, "default": 30 }],
+  "blocks": [
+    { "type": "box_component", "name": "Box component", "limit": 12, "settings": [
+      { "type": "image_picker", "id": "icon_image", "label": "Component icon" },
+      { "type": "text", "id": "name", "label": "Name" },
+      { "type": "textarea", "id": "description", "label": "Description" }
+    ]}
+  ],
+  "presets": [ { "name": "FK v3 — Box" } ],
+  "enabled_on": { "templates": ["product"] }
+}
+{% endschema %}

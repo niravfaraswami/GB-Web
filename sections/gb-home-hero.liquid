@@ -1,0 +1,421 @@
+{%- comment -%}
+  Section 03 · Hero carousel — full-bleed cinematic banner
+  Source ref: gutbasket-home-page.html lines 1674-1722
+{%- endcomment -%}
+
+{%- liquid
+  assign autoplay_seconds = section.settings.autoplay_seconds
+  assign hd = section.settings.headline_size_desktop | default: 56
+  assign hm = section.settings.headline_size_mobile | default: 32
+  assign sd = section.settings.sub_size_desktop | default: 17
+  assign sm = section.settings.sub_size_mobile | default: 13
+  assign ovw_d = section.settings.overlay_width_desktop | default: 44
+  assign ovw_m = section.settings.overlay_width_mobile | default: 88
+  assign ov_left_d = section.settings.overlay_left_desktop | default: 6
+  assign ov_left_m = section.settings.overlay_left_mobile | default: 6
+  assign cta_px = section.settings.cta_padding_x | default: 24
+  assign cta_py = section.settings.cta_padding_y | default: 12
+  assign cta_fs = section.settings.cta_font_size | default: 13
+  assign cta_px_m = section.settings.cta_padding_x_mobile | default: cta_px
+  assign cta_py_m = section.settings.cta_padding_y_mobile | default: cta_py
+  assign cta_fs_m = section.settings.cta_font_size_mobile | default: cta_fs
+  assign gap_h = section.settings.gap_after_headline | default: 18
+  assign gap_s = section.settings.gap_after_sub | default: 24
+  assign gap_h_m = section.settings.gap_after_headline_mobile | default: 12
+  assign gap_s_m = section.settings.gap_after_sub_mobile | default: 16
+  assign min_h_m = section.settings.min_height_mobile | default: 0
+-%}
+
+{%- capture hero_style -%}
+--gb-hero-h-d: {{ hd }}px;
+--gb-hero-h-m: {{ hm }}px;
+--gb-hero-s-d: {{ sd }}px;
+--gb-hero-s-m: {{ sm }}px;
+--gb-hero-ovw-d: {{ ovw_d }}%;
+--gb-hero-ovw-m: {{ ovw_m }}%;
+--gb-hero-ov-left-d: {{ ov_left_d }}%;
+--gb-hero-ov-left-m: {{ ov_left_m }}%;
+--gb-hero-cta-px: {{ cta_px }}px;
+--gb-hero-cta-py: {{ cta_py }}px;
+--gb-hero-cta-fs: {{ cta_fs }}px;
+--gb-hero-cta-px-m: {{ cta_px_m }}px;
+--gb-hero-cta-py-m: {{ cta_py_m }}px;
+--gb-hero-cta-fs-m: {{ cta_fs_m }}px;
+--gb-hero-gap-h-d: {{ gap_h }}px;
+--gb-hero-gap-s-d: {{ gap_s }}px;
+--gb-hero-gap-h-m: {{ gap_h_m }}px;
+--gb-hero-gap-s-m: {{ gap_s_m }}px;
+{%- if min_h_m > 0 -%}--gb-hero-min-h-m: {{ min_h_m }}px;{%- endif -%}
+{%- endcapture -%}
+
+<section class="gb-hero" id="gb-hero-{{ section.id }}" data-autoplay="{{ autoplay_seconds }}" style="{{ hero_style | strip_newlines }}">
+  <div class="gb-hero-track" id="gb-hero-track-{{ section.id }}">
+    {%- for block in section.blocks -%}
+      {%- liquid
+        assign theme_class = block.settings.theme | default: 'kanji'
+        assign bg_image = block.settings.image
+      -%}
+      <div class="gb-hero-slide gb-hero--{{ theme_class }}"
+           {%- if bg_image %} style="background-image: url('{{ bg_image | image_url: width: 2400 }}');"{%- endif %}
+           {{ block.shopify_attributes }}>
+        <div class="gb-hero-overlay">
+          {%- if block.settings.headline != blank -%}
+            <h1 class="gb-hero-headline">{{ block.settings.headline }}</h1>
+          {%- endif -%}
+          {%- if block.settings.sub != blank -%}
+            <div class="gb-hero-sub">{{ block.settings.sub }}</div>
+          {%- endif -%}
+          {%- if block.settings.cta_label != blank -%}
+            <div class="gb-hero-action">
+              <a href="{{ block.settings.cta_link | default: '#' }}" class="gb-btn gb-hero-cta">{{ block.settings.cta_label }}</a>
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+    {%- endfor -%}
+  </div>
+
+  {%- if section.blocks.size > 1 -%}
+    <button class="gb-hero-arrow gb-hero-arrow--prev" aria-label="Previous slide" data-hero-nav="-1">‹</button>
+    <button class="gb-hero-arrow gb-hero-arrow--next" aria-label="Next slide" data-hero-nav="1">›</button>
+
+    <div class="gb-hero-dots" role="tablist" aria-label="Hero slides">
+      {%- for block in section.blocks -%}
+        <button class="gb-hero-dot {% if forloop.first %}is-active{% endif %}"
+                data-slide="{{ forloop.index0 }}"
+                aria-label="Slide {{ forloop.index }}"></button>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+</section>
+
+{% stylesheet %}
+.gb-hero {
+  --c-action: #FF7300;
+  --c-ink: #1F1F1D;
+  --c-cream: #FFF9EE;
+  --c-text: #1F1F1D;
+  --c-text-muted: #5C4D3F;
+  --c-kanji: #8B1F40;
+  --c-kanji-soft: #F4DBE2;
+  --c-achaar: #C8552A;
+  --c-achaar-soft: #F8DCCB;
+  --c-sprout: #3F7754;
+  --c-sprout-soft: #DCEBDF;
+  padding: 0;
+  background: var(--c-cream);
+  position: relative;
+  overflow: hidden;
+}
+.gb-hero-track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-snap-stop: always;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  scroll-behavior: smooth;
+}
+.gb-hero-track::-webkit-scrollbar { display: none; }
+.gb-hero-slide {
+  flex: 0 0 100%;
+  scroll-snap-align: start;
+  position: relative;
+  aspect-ratio: 16 / 9;
+  background-size: cover;
+  background-position: center right;
+  background-repeat: no-repeat;
+}
+.gb-hero-slide::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 249, 238, 0.55) 0%,
+    rgba(255, 249, 238, 0.35) 30%,
+    rgba(255, 249, 238, 0.15) 50%,
+    rgba(255, 249, 238, 0) 60%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+.gb-hero--kanji  { background-color: var(--c-kanji-soft); }
+.gb-hero--achaar { background-color: var(--c-achaar-soft); }
+.gb-hero--sprout { background-color: var(--c-sprout-soft); }
+.gb-hero-overlay {
+  position: absolute;
+  top: 50%;
+  left: var(--gb-hero-ov-left-d, 6%);
+  transform: translateY(-50%);
+  width: var(--gb-hero-ovw-d, 44%);
+  max-width: 560px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.gb-hero-headline {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: var(--gb-hero-h-d, 56px);
+  line-height: 0.95;
+  letter-spacing: -0.025em;
+  margin: 0 0 var(--gb-hero-gap-h-d, 18px);
+  color: var(--c-ink);
+}
+.gb-hero-headline em {
+  font-style: italic;
+  font-weight: 700;
+}
+.gb-hero--kanji  .gb-hero-headline em { color: var(--c-kanji); }
+.gb-hero--achaar .gb-hero-headline em { color: var(--c-achaar); }
+.gb-hero--sprout .gb-hero-headline em { color: var(--c-sprout); }
+.gb-hero-sub {
+  font-family: 'DM Sans', sans-serif;
+  font-size: var(--gb-hero-s-d, 17px);
+  color: var(--c-text-muted);
+  line-height: 1.5;
+  margin: 0 0 var(--gb-hero-gap-s-d, 24px);
+  max-width: 440px;
+}
+.gb-hero-sub strong { color: var(--c-text); font-weight: 700; }
+.gb-hero-action {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.gb-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 28px;
+  background: var(--c-action);
+  color: #fff;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  text-decoration: none;
+  border-radius: 999px;
+  transition: background 0.15s ease, transform 0.15s ease;
+  border: none;
+  cursor: pointer;
+}
+.gb-btn:hover { background: #E66800; transform: translateY(-1px); color: #fff; }
+.gb-hero-cta {
+  padding: var(--gb-hero-cta-py, 12px) var(--gb-hero-cta-px, 24px);
+  font-size: var(--gb-hero-cta-fs, 13px);
+}
+.gb-hero-dots {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+  z-index: 5;
+  padding: 6px 10px;
+  background: rgba(255, 249, 238, 0.85);
+  backdrop-filter: blur(8px);
+  border-radius: 999px;
+}
+.gb-hero-dot {
+  width: 28px;
+  height: 4px;
+  background: rgba(31, 31, 29, 0.18);
+  border-radius: 2px;
+  transition: width 0.25s ease, background 0.25s ease;
+  cursor: pointer;
+  border: none;
+  padding: 0;
+}
+.gb-hero-dot.is-active {
+  width: 44px;
+  background: var(--c-ink);
+}
+.gb-hero-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: var(--c-ink);
+  z-index: 5;
+  cursor: pointer;
+  border: 1px solid #E8E3D5;
+  box-shadow: 0 1px 3px rgba(43, 31, 26, 0.04), 0 4px 16px rgba(43, 31, 26, 0.04);
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+.gb-hero-arrow:hover {
+  transform: translateY(-50%) scale(1.06);
+  background: #fff;
+}
+.gb-hero-arrow--prev { left: 16px; }
+.gb-hero-arrow--next { right: 16px; }
+@media (max-width: 768px) {
+  .gb-hero-arrow { display: none; }
+  /* Keep 16:9 ratio on mobile (matches desktop) unless merchant sets a min-height */
+  .gb-hero-slide {
+    min-height: var(--gb-hero-min-h-m, 0);
+  }
+  .gb-hero-overlay {
+    width: var(--gb-hero-ovw-m, 88%);
+    left: var(--gb-hero-ov-left-m, 6%);
+    max-width: none;
+  }
+  .gb-hero-headline {
+    font-size: var(--gb-hero-h-m, 28px);
+    margin-bottom: var(--gb-hero-gap-h-m, 10px);
+  }
+  .gb-hero-sub {
+    font-size: var(--gb-hero-s-m, 12px);
+    margin-bottom: var(--gb-hero-gap-s-m, 12px);
+  }
+  .gb-hero-cta {
+    padding: var(--gb-hero-cta-py-m, var(--gb-hero-cta-py, 10px)) var(--gb-hero-cta-px-m, var(--gb-hero-cta-px, 20px));
+    font-size: var(--gb-hero-cta-fs-m, var(--gb-hero-cta-fs, 12px));
+  }
+  .gb-hero-dots { bottom: 8px; padding: 4px 7px; }
+  .gb-hero-dot { width: 16px; height: 3px; }
+  .gb-hero-dot.is-active { width: 26px; }
+}
+{% endstylesheet %}
+
+<script>
+(function() {
+  var section = document.getElementById('gb-hero-{{ section.id }}');
+  if (!section) return;
+  var track = document.getElementById('gb-hero-track-{{ section.id }}');
+  if (!track) return;
+  var dots = section.querySelectorAll('.gb-hero-dot');
+  var arrows = section.querySelectorAll('[data-hero-nav]');
+  var slideCount = track.children.length;
+  if (slideCount < 2) return;
+  var index = 0;
+  var autoTimer = null;
+  var autoplay = parseInt(section.dataset.autoplay, 10) || 0;
+
+  function goTo(i) {
+    index = (i + slideCount) % slideCount;
+    track.scrollTo({ left: track.clientWidth * index, behavior: 'smooth' });
+    dots.forEach(function(d, di) { d.classList.toggle('is-active', di === index); });
+  }
+  function startAuto() {
+    if (!autoplay) return;
+    stopAuto();
+    autoTimer = setInterval(function() { goTo(index + 1); }, autoplay * 1000);
+  }
+  function stopAuto() { if (autoTimer) clearInterval(autoTimer); autoTimer = null; }
+
+  dots.forEach(function(d, di) {
+    d.addEventListener('click', function() { goTo(di); stopAuto(); startAuto(); });
+  });
+  arrows.forEach(function(a) {
+    a.addEventListener('click', function() {
+      var step = parseInt(a.dataset.heroNav, 10) || 1;
+      goTo(index + step);
+      stopAuto(); startAuto();
+    });
+  });
+  track.addEventListener('scroll', function() {
+    var i = Math.round(track.scrollLeft / track.clientWidth);
+    if (i !== index) {
+      index = i;
+      dots.forEach(function(d, di) { d.classList.toggle('is-active', di === index); });
+    }
+  }, { passive: true });
+
+  startAuto();
+})();
+</script>
+
+{% schema %}
+{
+  "name": "GB · Home Hero",
+  "tag": "section",
+  "class": "gb-hero-wrap",
+  "settings": [
+    { "type": "range", "id": "autoplay_seconds", "label": "Autoplay interval (seconds, 0 = off)", "min": 0, "max": 15, "step": 1, "default": 6 },
+
+    { "type": "header", "content": "Typography — desktop" },
+    { "type": "range", "id": "headline_size_desktop", "label": "Headline size (desktop)", "min": 28, "max": 80, "step": 2, "default": 56, "unit": "px" },
+    { "type": "range", "id": "sub_size_desktop", "label": "Sub-line size (desktop)", "min": 12, "max": 24, "step": 1, "default": 17, "unit": "px" },
+    { "type": "range", "id": "gap_after_headline", "label": "Space below headline (desktop)", "min": 0, "max": 48, "step": 2, "default": 18, "unit": "px" },
+    { "type": "range", "id": "gap_after_sub", "label": "Space below sub-line (desktop)", "min": 0, "max": 48, "step": 2, "default": 24, "unit": "px" },
+
+    { "type": "header", "content": "Typography — mobile" },
+    { "type": "range", "id": "headline_size_mobile", "label": "Headline size (mobile)", "min": 18, "max": 56, "step": 1, "default": 32, "unit": "px" },
+    { "type": "range", "id": "sub_size_mobile", "label": "Sub-line size (mobile)", "min": 11, "max": 20, "step": 1, "default": 13, "unit": "px" },
+    { "type": "range", "id": "gap_after_headline_mobile", "label": "Space below headline (mobile)", "min": 0, "max": 32, "step": 1, "default": 12, "unit": "px" },
+    { "type": "range", "id": "gap_after_sub_mobile", "label": "Space below sub-line (mobile)", "min": 0, "max": 32, "step": 1, "default": 16, "unit": "px" },
+    { "type": "range", "id": "min_height_mobile", "label": "Mobile slide min-height (0 = match desktop 16:9)", "min": 0, "max": 700, "step": 20, "default": 0, "unit": "px" },
+
+    { "type": "header", "content": "Overlay placement" },
+    { "type": "range", "id": "overlay_width_desktop", "label": "Overlay width (desktop, % of slide)", "min": 30, "max": 70, "step": 1, "default": 44, "unit": "%" },
+    { "type": "range", "id": "overlay_width_mobile", "label": "Overlay width (mobile, % of slide)", "min": 50, "max": 95, "step": 1, "default": 88, "unit": "%" },
+    { "type": "range", "id": "overlay_left_desktop", "label": "Overlay left offset (desktop, %)", "min": 0, "max": 20, "step": 1, "default": 6, "unit": "%" },
+    { "type": "range", "id": "overlay_left_mobile", "label": "Overlay left offset (mobile, %)", "min": 0, "max": 20, "step": 1, "default": 6, "unit": "%" },
+
+    { "type": "header", "content": "CTA button" },
+    { "type": "range", "id": "cta_padding_y",        "label": "CTA vertical padding (desktop)",   "min": 0,  "max": 30, "step": 1, "default": 12, "unit": "px" },
+    { "type": "range", "id": "cta_padding_y_mobile", "label": "CTA vertical padding (mobile)",    "min": 0,  "max": 30, "step": 1, "default": 12, "unit": "px" },
+    { "type": "range", "id": "cta_padding_x",        "label": "CTA horizontal padding (desktop)", "min": 6,  "max": 60, "step": 1, "default": 24, "unit": "px" },
+    { "type": "range", "id": "cta_padding_x_mobile", "label": "CTA horizontal padding (mobile)",  "min": 6,  "max": 60, "step": 1, "default": 24, "unit": "px" },
+    { "type": "range", "id": "cta_font_size",        "label": "CTA font size (desktop)",          "min": 6,  "max": 24, "step": 1, "default": 13, "unit": "px" },
+    { "type": "range", "id": "cta_font_size_mobile", "label": "CTA font size (mobile)",           "min": 6,  "max": 24, "step": 1, "default": 13, "unit": "px" }
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "limit": 8,
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Background image (16:9)" },
+        { "type": "select", "id": "theme", "label": "Color theme",
+          "options": [
+            { "value": "kanji",  "label": "Kanji (maroon)" },
+            { "value": "achaar", "label": "Achaar (terracotta)" },
+            { "value": "sprout", "label": "Sprout (green)" }
+          ],
+          "default": "kanji" },
+        { "type": "richtext", "id": "headline", "label": "Headline (use <em> for emphasis)", "default": "<p>Make India's<br>Original<br><em>Probiotic</em> Drink</p>" },
+        { "type": "richtext", "id": "sub", "label": "Sub-line", "default": "<p>Carrot, beetroot, mustard. Three days. <strong>Real Lactobacillus</strong> in every glass.</p>" },
+        { "type": "text", "id": "cta_label", "label": "CTA label", "default": "Shop Kanji kit" },
+        { "type": "url", "id": "cta_link", "label": "CTA link" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "GB · Home Hero",
+      "settings": { "autoplay_seconds": 6 },
+      "blocks": [
+        { "type": "slide", "settings": {
+          "theme": "kanji",
+          "headline": "<p>Make India's<br>Original<br><em>Probiotic</em> Drink</p>",
+          "sub": "<p>Carrot, beetroot, mustard. Three days. <strong>Real Lactobacillus</strong> in every glass.</p>",
+          "cta_label": "Shop Kanji kit"
+        }},
+        { "type": "slide", "settings": {
+          "theme": "achaar",
+          "headline": "<p>Make Probiotic<br><em>Oil-Free</em><br>Achaar</p>",
+          "sub": "<p>Naturally probiotic achaar. Just <strong>spice mix, salt, and time.</strong></p>",
+          "cta_label": "Shop Achaar kit"
+        }},
+        { "type": "slide", "settings": {
+          "theme": "sprout",
+          "headline": "<p>Fresh<br>Sprouts in<br><em>3 Days</em></p>",
+          "sub": "<p>Sprout maker + four seed varieties. <strong>No mush, no smell</strong> — clean sprouts on tap.</p>",
+          "cta_label": "Shop Sprouts kit"
+        }}
+      ]
+    }
+  ]
+}
+{% endschema %}

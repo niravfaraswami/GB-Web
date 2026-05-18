@@ -1,0 +1,103 @@
+{%- liquid
+  assign p = product
+  assign mf_science_cards = p.metafields.custom.featured_science_cards.value
+  assign mf_airlock_h = p.metafields.custom.airlock_spotlight_h
+  assign science_card_blocks = section.blocks | where: 'type', 'science_card'
+
+  comment
+    Two-card vs one-card layout
+    -----------------------------
+    Per the v3 design tweak: when only ONE science card is present
+    (e.g. products with only an Airlock and no Glass Weight), render
+    it full-width. Default is two-column when two cards present.
+  endcomment
+  assign card_count = 0
+  if mf_science_cards != blank
+    assign card_count = mf_science_cards.size
+  elsif science_card_blocks.size > 0
+    assign card_count = science_card_blocks.size
+  endif
+  assign single_card = false
+  if card_count == 1
+    assign single_card = true
+  endif
+-%}
+{%- if card_count > 0 -%}
+  <div data-kit="fermentation" class="ferment-pdp fkv3-airlock-wrap">
+    <section class="science-section airlock-spotlight-section fkv3-airlock-section{% if single_card %} fkv3-airlock-section--single{% endif %}" {%- render 'fkv3-section-attrs' -%}>
+      <div class="container">
+        <div class="section-header">
+          <div class="eyebrow">{{ section.settings.science_eyebrow }}</div>
+          {%- if mf_airlock_h != blank -%}<h2>{{ mf_airlock_h }}</h2>
+          {%- else -%}<h2>{{ section.settings.science_heading }}<br><em>{{ section.settings.science_heading_em }}</em>{{ section.settings.science_heading_tail }}</h2>{%- endif -%}
+        </div>
+        <div class="ag-grid{% if single_card %} ag-grid--single{% endif %}">
+          {%- if mf_science_cards != blank -%}
+            {%- for s in mf_science_cards -%}
+              <div class="ag-card">
+                <div class="ag-image">{%- if s.image != blank -%}<img src="{{ s.image | image_url: width: 1200 }}" alt="{{ s.name | escape }}" loading="lazy" width="1200" height="700">{%- endif -%}</div>
+                <div class="ag-body">
+                  <div class="ag-name">{{ s.name }}</div>
+                  {%- if s.what_it_does != blank -%}<div class="ag-label">WHAT IT DOES</div><div class="ag-text">{{ s.what_it_does }}</div>{%- endif -%}
+                  {%- if s.why_it_matters != blank -%}<div class="ag-label">WHY IT MATTERS</div><div class="ag-text">{{ s.why_it_matters }}</div>{%- endif -%}
+                  {%- if s.chip != blank -%}<div class="ag-chip">{{ s.chip }}</div>{%- endif -%}
+                </div>
+              </div>
+            {%- endfor -%}
+          {%- else -%}
+            {%- for block in science_card_blocks -%}
+              <div class="ag-card" {{ block.shopify_attributes }}>
+                <div class="ag-image">{%- if block.settings.image != blank -%}<img src="{{ block.settings.image | image_url: width: 1200 }}" alt="{{ block.settings.name | escape }}" loading="lazy" width="1200" height="700">{%- endif -%}</div>
+                <div class="ag-body">
+                  <div class="ag-name">{{ block.settings.name }}</div>
+                  {%- if block.settings.what_it_does != blank -%}<div class="ag-label">WHAT IT DOES</div><div class="ag-text">{{ block.settings.what_it_does }}</div>{%- endif -%}
+                  {%- if block.settings.why_it_matters != blank -%}<div class="ag-label">WHY IT MATTERS</div><div class="ag-text">{{ block.settings.why_it_matters }}</div>{%- endif -%}
+                  {%- if block.settings.chip != blank -%}<div class="ag-chip">{{ block.settings.chip }}</div>{%- endif -%}
+                </div>
+              </div>
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+      </div>
+    </section>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "FK v3 — Airlock",
+  "tag": "section",
+  "class": "fkv3-airlock-wrap",
+  "settings": [
+    { "type": "color", "id": "section_bg", "label": "Section background", "default": "#ffffff" },
+    { "type": "text", "id": "science_eyebrow", "label": "Eyebrow", "default": "SCIENCE-BACKED DESIGN" },
+    { "type": "text", "id": "science_heading", "label": "Heading", "default": "BUILT FOR" },
+    { "type": "text", "id": "science_heading_em", "label": "Heading (em)", "default": "PERFECT" },
+    { "type": "text", "id": "science_heading_tail", "label": "Heading (tail)", "default": " FERMENTS." }
+  ,
+    { "type": "header", "content": "Spacing & Typography" },
+    { "type": "range", "id": "pad_top_d", "label": "Padding top — desktop (px)", "min": 0, "max": 200, "step": 4, "default": 80 },
+    { "type": "range", "id": "pad_bot_d", "label": "Padding bottom — desktop (px)", "min": 0, "max": 200, "step": 4, "default": 80 },
+    { "type": "range", "id": "pad_top_m", "label": "Padding top — mobile (px)", "min": 0, "max": 120, "step": 4, "default": 56 },
+    { "type": "range", "id": "pad_bot_m", "label": "Padding bottom — mobile (px)", "min": 0, "max": 120, "step": 4, "default": 56 },
+    { "type": "range", "id": "mar_top_d", "label": "Margin top — desktop (px)", "min": 0, "max": 100, "step": 4, "default": 0 },
+    { "type": "range", "id": "mar_bot_d", "label": "Margin bottom — desktop (px)", "min": 0, "max": 100, "step": 4, "default": 0 },
+    { "type": "range", "id": "mar_top_m", "label": "Margin top — mobile (px)", "min": 0, "max": 80, "step": 4, "default": 0 },
+    { "type": "range", "id": "mar_bot_m", "label": "Margin bottom — mobile (px)", "min": 0, "max": 80, "step": 4, "default": 0 },
+    { "type": "range", "id": "eyebrow_size_d", "label": "Eyebrow font size — desktop (px)", "min": 0, "max": 32, "step": 1, "default": 22 },
+    { "type": "range", "id": "eyebrow_size_m", "label": "Eyebrow font size — mobile (px)", "min": 0, "max": 24, "step": 1, "default": 14 },
+    { "type": "range", "id": "heading_size_d", "label": "Heading font size — desktop (px)", "min": 0, "max": 80, "step": 2, "default": 44 },
+    { "type": "range", "id": "heading_size_m", "label": "Heading font size — mobile (px)", "min": 0, "max": 60, "step": 2, "default": 30 }],
+  "blocks": [
+    { "type": "science_card", "name": "Science card", "limit": 4, "settings": [
+      { "type": "image_picker", "id": "image", "label": "Image" },
+      { "type": "text", "id": "name", "label": "Name" },
+      { "type": "textarea", "id": "what_it_does", "label": "What it does" },
+      { "type": "textarea", "id": "why_it_matters", "label": "Why it matters" },
+      { "type": "text", "id": "chip", "label": "Chip / pill text" }
+    ]}
+  ],
+  "presets": [ { "name": "FK v3 — Airlock" } ],
+  "enabled_on": { "templates": ["product"] }
+}
+{% endschema %}

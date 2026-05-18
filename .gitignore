@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+*.pyo
+.DS_Store
+
+# Theme zip uploads (transient, never commit)
+horizon*.zip
+*.theme.zip

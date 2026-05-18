@@ -1,0 +1,32 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "type": "footer",
+  "name": "Footer",
+  "sections": {
+    "gb_footer": {
+      "type": "gb-home-footer",
+      "settings": {
+        "brand_name": "GutBasket",
+        "brand_suffix": "®",
+        "tagline": "<p>Live, gut-friendly ferments. Made at home,  full of probiotics — with kits that actually work.</p>",
+        "fssai": "FSSAI · 10021021000439",
+        "instagram": "https://instagram.com/gutbasket",
+        "facebook": "https://facebook.com/gutbasket",
+        "youtube": "https://youtube.com/@gutbasket",
+        "copyright": "© 2026 GutBasket Foods Pvt. Ltd. ·",
+        "tagline_short": ""
+      }
+    }
+  },
+  "order": [
+    "gb_footer"
+  ]
+}

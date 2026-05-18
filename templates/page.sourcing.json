@@ -1,0 +1,93 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "gb-content-page",
+      "blocks": {
+        "hero": {
+          "type": "hero",
+          "settings": {
+            "eyebrow": "OUR STORY · 03",
+            "title": "We source like food scientists, ship like a home cook.",
+            "subtitle": "<p>Three rules, fifteen partners, three quality checks per batch. No shortcuts on what goes in the jar.</p>"
+          }
+        },
+        "rules": {
+          "type": "features",
+          "settings": {
+            "heading": "How we decide where things come from.",
+            "item_1_icon": "01",
+            "item_1_title": "Traceable to a single batch",
+            "item_1_desc": "Every spice mix, every salt, every culture is sourced from a named lot. We log farm/supplier, harvest or production date, and lab-test reference for each. If we can't trace it, we don't ship it.",
+            "item_2_icon": "02",
+            "item_2_title": "No irradiation, no fumigation",
+            "item_2_desc": "Irradiation kills bacteria — including the LAB we want. Standard \"clean\" treatments (ethylene oxide, methyl bromide) leave residues. We use cold storage, sealed packaging, and short supply chains instead.",
+            "item_3_icon": "03",
+            "item_3_title": "Indian-first, then world-best",
+            "item_3_desc": "Mustard from Kheda. Carrots from Punjab. Salt from Tuticorin. We import only when no Indian supplier exists at the quality we need (gochugaru from Korea, DVS yogurt cultures from Denmark)."
+          }
+        },
+        "provenance": {
+          "type": "features",
+          "settings": {
+            "heading": "The fifteen partners behind the kits.",
+            "item_1_icon": "🌾",
+            "item_1_title": "Black mustard seeds (rai)",
+            "item_1_desc": "Grown in Kheda district, Gujarat. Whole-pressed and stone-ground in our workshop within 7 days of receipt. Used in achaar, kanji, vegetable spice mixes.",
+            "item_2_icon": "🥕",
+            "item_2_title": "Black carrots (kala gajar)",
+            "item_2_desc": "Sourced from Punjab winter harvest (Nov–Feb). Frozen at -18°C within 12 hours of harvest, used as concentrate or whole for kanji kits.",
+            "item_3_icon": "🧂",
+            "item_3_title": "Sea salt (non-iodised)",
+            "item_3_desc": "Solar-evaporated from Tuticorin, Tamil Nadu. Iodine kills LAB — we exclude iodised salt entirely. Particle size 0.4–0.8mm for even brine."
+          }
+        },
+        "quality": {
+          "type": "features",
+          "settings": {
+            "heading": "Every batch is tested three times.",
+            "item_1_icon": "🧪",
+            "item_1_title": "Microbiological",
+            "item_1_desc": "Total viable count, presence of pathogens (Salmonella, Listeria, E. coli), water activity. NABL-accredited lab in Ahmedabad, results in 7 working days.",
+            "item_2_icon": "📊",
+            "item_2_title": "Composition",
+            "item_2_desc": "Salt percentage, moisture content, particle size, pH (where applicable). Confirms each batch matches the formulation. Done in-house with calibrated meters.",
+            "item_3_icon": "👃",
+            "item_3_title": "Sensory",
+            "item_3_desc": "Two-person blind tasting against our reference batch. Catches anything the instruments miss — off-aromas, oxidation, texture changes. Done at packout, before sealing."
+          }
+        },
+        "cta_certs": {
+          "type": "cta",
+          "settings": {
+            "theme": "dark",
+            "eyebrow": "NEXT",
+            "title": "See the licenses and certifications.",
+            "desc": "FSSAI, ISO 22000, HACCP, GMP, APEDA — the full filing.",
+            "button_label": "Certifications →",
+            "button_link": "/pages/fssai-certifications"
+          }
+        }
+      },
+      "block_order": [
+        "hero",
+        "rules",
+        "provenance",
+        "quality",
+        "cta_certs"
+      ],
+      "settings": {}
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

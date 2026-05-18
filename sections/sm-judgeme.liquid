@@ -1,0 +1,42 @@
+{{ 'sprout-maker.css' | asset_url | stylesheet_tag }}
+{{ 'sprout-maker-v2.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign p = product
+  assign review_count = p.metafields.custom.review_count | default: 0
+-%}
+
+{%- if section.settings.show_judgeme -%}
+  <section class="judgeme-section sprout-pdp-v2" id="judgeme-reviews" data-kit="sprouts">
+    <div class="container">
+      <div class="section-header centered">
+        <div class="eyebrow">{{ section.settings.judgeme_eyebrow }}</div>
+        <h2>
+          {%- if review_count > 0 %}{{ review_count }} {% endif -%}
+          {{ section.settings.judgeme_heading }}<br><em>{{ section.settings.judgeme_heading_em }}</em>
+        </h2>
+      </div>
+      {%- if section.settings.judgeme_embed != blank -%}
+        {{ section.settings.judgeme_embed }}
+      {%- else -%}
+        <div class="jdgm-widget jdgm-review-widget" data-id="{{ p.id }}"></div>
+      {%- endif -%}
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "SM v2 · Judge.me",
+  "tag": "section",
+  "class": "section--sm-v2-judgeme",
+  "settings": [
+    { "type": "checkbox", "id": "show_judgeme", "label": "Show Judge.me section", "default": true },
+    { "type": "text", "id": "judgeme_eyebrow", "label": "Eyebrow", "default": "ALL REVIEWS" },
+    { "type": "text", "id": "judgeme_heading", "label": "Heading", "default": "VERIFIED" },
+    { "type": "text", "id": "judgeme_heading_em", "label": "Heading (highlighted)", "default": "CUSTOMER REVIEWS." },
+    { "type": "html", "id": "judgeme_embed", "label": "Custom embed (optional)" }
+  ],
+  "presets": [{ "name": "SM v2 · Judge.me" }]
+}
+{% endschema %}

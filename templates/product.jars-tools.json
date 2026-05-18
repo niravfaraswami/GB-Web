@@ -1,0 +1,82 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "gb-product-jars-tools",
+      "settings": {
+        "default_category_label": "JAR",
+        "default_tagline": "Wide-mouth glass jar with airlock-ready lid. The hero of your fermentation kitchen.",
+        "default_bought_today": 0,
+        "default_rating": "4.86",
+        "kit_color": "#4F7C57",
+        "kit_color_dark": "#3F6346",
+        "kit_color_soft": "#D8E4DC",
+        "features_h1": "Built for fermentation.",
+        "features_intro": "Most jars in your kitchen weren’t designed for fermentation. This one is. Wide mouth fits chunks. Smooth interior makes cleaning easy. Lid threads accept airlocks. Glass holds shape over years of use.",
+        "specs_heading": "Every <em>detail</em>, measured.",
+        "compatible_with": "Probiotic Achaar Kit · Kanji Making Kit · Aam Panna Kit · Vegetable Fermentation Kit · Kimchi Making Kit · Sprouts Maker Kit",
+        "uses_heading": "Not just for <em>one thing</em>.",
+        "reviews_heading": "Why they <em>stock multiple</em>.",
+        "faq_heading": "Common <em>questions</em>.",
+        "cross_sell_heading": "Build a <em>fermentation kit</em>.",
+        "cross_sell_collection": "jars-and-tools"
+      },
+      "blocks": {
+        "trust-1": { "type": "trust", "settings": { "text": "Food-grade" } },
+        "trust-2": { "type": "trust", "settings": { "text": "Lifetime use" } },
+        "trust-3": { "type": "trust", "settings": { "text": "FSSAI Licensed" } },
+
+        "activity-1": { "type": "activity", "settings": { "icon": "♻️", "text": "Lifetime use · zero plastic degradation" } },
+        "activity-2": { "type": "activity", "settings": { "icon": "🧼", "text": "Dishwasher safe · easy clean" } },
+
+        "feature-1": { "type": "feature", "settings": { "icon": "⊕", "heading": "WIDE MOUTH", "description": "Fits whole vegetables — sliced cabbage, large mango chunks, full carrots." } },
+        "feature-2": { "type": "feature", "settings": { "icon": "◇", "heading": "BOROSILICATE", "description": "Heat-stable, doesn’t crack with temperature swings." } },
+        "feature-3": { "type": "feature", "settings": { "icon": "△", "heading": "AIRLOCK READY", "description": "Standard thread accepts our airlock and others." } },
+        "feature-4": { "type": "feature", "settings": { "icon": "◎", "heading": "LIFETIME", "description": "Glass + steel lid · no plastic to degrade · use for years." } },
+
+        "spec-1": { "type": "spec", "settings": { "label": "Capacity",        "value": "2 L (66 fl oz)" } },
+        "spec-2": { "type": "spec", "settings": { "label": "Material",        "value": "Borosilicate glass · BPA-free" } },
+        "spec-3": { "type": "spec", "settings": { "label": "Mouth Width",     "value": "90mm · wide for chunky vegetables" } },
+        "spec-4": { "type": "spec", "settings": { "label": "Compatibility",   "value": "Standard airlock + glass weight" } },
+        "spec-5": { "type": "spec", "settings": { "label": "Dishwasher Safe", "value": "Yes — both jar and lid" } },
+        "spec-6": { "type": "spec", "settings": { "label": "Microwave Safe",  "value": "Yes (without lid)" } },
+
+        "use-1": { "type": "use_case", "settings": { "icon": "🥬", "heading": "FERMENT KITS", "description": "Achaar, kanji, kimchi, vegetable ferments" } },
+        "use-2": { "type": "use_case", "settings": { "icon": "🌱", "heading": "SPROUTING",    "description": "Mesh-lid swap converts to sprouter" } },
+        "use-3": { "type": "use_case", "settings": { "icon": "🥒", "heading": "PICKLING",     "description": "Salt-only fermented pickles" } },
+        "use-4": { "type": "use_case", "settings": { "icon": "❄️", "heading": "STORAGE",      "description": "After fermentation: keeps in fridge" } },
+
+        "review-1": { "type": "review", "settings": { "headline": "Got two more for my second batch", "name": "Aditi G.", "meta": "(28, Goa)" } },
+        "review-2": { "type": "review", "settings": { "headline": "Solid glass, doesn’t break in the dishwasher", "name": "Sameer V.", "meta": "(35, Mumbai)" } },
+        "review-3": { "type": "review", "settings": { "headline": "Use it for everything, not just fermenting", "name": "Lakshmi R.", "meta": "(45, Chennai)" } },
+
+        "faq-1": { "type": "faq", "settings": { "question": "Why borosilicate glass instead of regular glass?", "answer": "<p>Borosilicate handles temperature swings better — pour hot brine in, transfer to fridge, no cracking. Regular glass cracks under thermal shock.</p>" } },
+        "faq-2": { "type": "faq", "settings": { "question": "Will it fit my existing kit?", "answer": "<p>Yes if you have a GutBasket kit. For other brands, the wide-mouth thread is standard — fits 90% of mason jar accessories.</p>" } },
+        "faq-3": { "type": "faq", "settings": { "question": "How do I clean it?", "answer": "<p>Dishwasher safe (top rack). Or hand wash with hot water + mild soap. For stuck-on residue, soak overnight with baking soda.</p>" } },
+        "faq-4": { "type": "faq", "settings": { "question": "Lifetime use — how long is &quot;lifetime&quot;?", "answer": "<p>As long as the glass doesn’t break. We’ve had customers using their original jars for 4+ years.</p>" } },
+        "faq-5": { "type": "faq", "settings": { "question": "Is the lid airtight?", "answer": "<p>Yes when sealed properly. For active fermentation, attach an airlock instead — the airtight lid will pressurise from CO2 buildup.</p>" } },
+        "faq-6": { "type": "faq", "settings": { "question": "Microwave safe?", "answer": "<p>Yes — without the lid. Borosilicate handles microwave heat. Don’t microwave with the metal lid attached.</p>" } },
+        "faq-7": { "type": "faq", "settings": { "question": "Replacement parts?", "answer": "<p>Lids and grommets are sold separately. Glass jar is replaced under warranty for manufacturing defects.</p>" } },
+        "faq-8": { "type": "faq", "settings": { "question": "Storage when not in use?", "answer": "<p>Air-dry completely before storing. Stack with lids loose to avoid trapping moisture.</p>" } }
+      },
+      "block_order": [
+        "trust-1","trust-2","trust-3",
+        "activity-1","activity-2",
+        "feature-1","feature-2","feature-3","feature-4",
+        "spec-1","spec-2","spec-3","spec-4","spec-5","spec-6",
+        "use-1","use-2","use-3","use-4",
+        "review-1","review-2","review-3",
+        "faq-1","faq-2","faq-3","faq-4","faq-5","faq-6","faq-7","faq-8"
+      ]
+    }
+  },
+  "order": ["main"]
+}
