@@ -3722,3 +3722,17 @@ body.gb-fcm-open { overflow: hidden; }
   border-color: transparent;
   transform: translateY(-1px);
 }
+
+/* =====================================================================
+   FAQ list — left-aligned, full container width.
+   Base CSS constrains `.faq-list` to 800px wide and centres it with
+   auto margins. On the leo template the rest of the page content
+   spans the container's full width, so the centred 800px FAQ block
+   stuck out as a narrow strip. Strip the max-width and auto margins.
+   ===================================================================== */
+[data-template="leo"] .faq-list {
+  max-width: none;
+  margin-top: 32px;
+  margin-left: 0;
+  margin-right: 0;
+}
