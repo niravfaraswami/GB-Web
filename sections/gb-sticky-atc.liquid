@@ -117,9 +117,6 @@
         <div class="gb-sticky-atc-name">{{ p.title | truncate: name_truncate }}</div>
         <div class="gb-sticky-atc-price">
           <span data-gb-sticky-price>{{ price | money_without_trailing_zeros }}</span>
-          {%- if compare > price -%}
-            <span class="gb-sticky-atc-compare">{{ compare | money_without_trailing_zeros }}</span>
-          {%- endif -%}
         </div>
       </div>
       <button type="button"
@@ -231,7 +228,6 @@
       var vid = parseInt(label.getAttribute('data-variant-id') || '0', 10);
       if (!vid) return;
       var priceCents = parseInt(label.getAttribute('data-variant-price-cents') || '0', 10);
-      var compareCents = parseInt(label.getAttribute('data-variant-compare-cents') || '0', 10);
       btn.setAttribute('data-variant-id', vid);
       if (priceCents) btn.setAttribute('data-product-price', priceCents);
       // Try to also pick up the variant's illustration image if the
@@ -248,19 +244,6 @@
         // theme money format exactly). Fallback to building our own.
         var fmt = label.getAttribute('data-variant-price');
         priceEl.textContent = fmt || moneyDisplay(priceCents);
-      }
-      var compareWrap = bar.querySelector('.gb-sticky-atc-compare');
-      var showCompare = compareCents > priceCents;
-      if (showCompare) {
-        if (!compareWrap) {
-          compareWrap = document.createElement('span');
-          compareWrap.className = 'gb-sticky-atc-compare';
-          var priceBlock = bar.querySelector('.gb-sticky-atc-price');
-          if (priceBlock) priceBlock.appendChild(compareWrap);
-        }
-        compareWrap.textContent = moneyDisplay(compareCents);
-      } else if (compareWrap) {
-        compareWrap.remove();
       }
     }
     // Initial sync — in case the page rendered with a different variant
