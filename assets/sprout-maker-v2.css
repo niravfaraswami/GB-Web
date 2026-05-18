@@ -1,13 +1,18 @@
 /* =====================================================================
    sprout-maker-v2.css
    Overrides + additions on top of sprout-maker.css for the v2 PDP
-   template (product.sprout-maker-v2.json). Loaded alongside the base
-   sprout-maker.css so anything not overridden here inherits as-is.
+   template (product.sprout-maker-v2.json).
 
-   Scoping: every v2 section root carries the `sprout-pdp-v2` class
-   alongside its base section class (e.g. <section class="myth-section
-   sprout-pdp-v2">). That guarantees these rules apply ONLY on the v2
-   template and never on the existing v1 PDP.
+   Every v2 section root carries `data-kit="sprouts"` AND
+   `sprout-pdp-v2` classes:
+
+     <section class="myth-section sprout-pdp-v2" data-kit="sprouts">
+
+   `data-kit="sprouts"` makes the base sprout-maker.css rules apply
+   (eyebrow font + colour, h2 styling, h2 em split colour, container
+   max-width and padding). `sprout-pdp-v2` is the hook for the
+   overrides below — applied only on v2 so the v1 template is
+   untouched.
    ===================================================================== */
 
 /* ----- White-overlay fix on PDP images ------------------------------ */
@@ -34,24 +39,50 @@
   opacity: 0.7;
 }
 
-/* ----- Container consistency ---------------------------------------- */
-/* Multiple Shopify sections share the same .container selector but the
-   base CSS doesn't define a single source-of-truth for max-width and
-   horizontal padding — it relies on the parent .sprout-pdp wrapper
-   inherited from the v1 single-section template. v2 has no shared
-   parent, so pin these explicitly on every v2 section to keep left
-   and right margins identical across sections. */
-.sprout-pdp-v2 .container {
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 24px;
-  padding-right: 24px;
-  box-sizing: border-box;
+/* ----- How-to-make: right column matches video height --------------- */
+/* The base `.how-make-grid` already uses `align-items: stretch`, so
+   the right column visually stretches to match the video's height,
+   but the 4 step cards stack at the top with their natural heights
+   and leave whitespace at the bottom. Distribute them with
+   space-between so they fill the full height the video occupies. */
+.sprout-pdp-v2 .hm-steps {
+  justify-content: space-between;
+  height: 100%;
 }
+.sprout-pdp-v2 .hm-step {
+  flex: 1;
+}
+
+/* ----- FAQ: left-aligned + full width ------------------------------- */
+/* Base CSS centres the FAQ section header and constrains the FAQ list
+   to 800px wide, also centred. v2 left-aligns the header (we already
+   dropped the `.centered` class on the section-header) and removes
+   the 800px constraint so questions span the same container width as
+   the rest of the page content. */
+.sprout-pdp-v2 .faq-list {
+  max-width: none;
+  margin-top: 32px;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+/* ----- Mobile carousel left-padding fix ----------------------------- */
+/* The base mobile rules let horizontal carousels (Quick Benefits,
+   Reels, UGC Reviews) extend edge-to-edge with `margin: 16px -18px`
+   relative to a container that uses `padding: 0 18px`. The first
+   card's *visible* left edge ends up at 18px from the viewport — same
+   as the heading's left edge. Matches by default thanks to the
+   data-kit selector on v2 sections (which makes `[data-kit="sprouts"]
+   .container` apply); these rules just re-assert the same numbers in
+   case any v1 override drifts. */
 @media (max-width: 768px) {
-  .sprout-pdp-v2 .container {
-    padding-left: 16px;
-    padding-right: 16px;
+  .sprout-pdp-v2.outcomes-section .qb-grid,
+  .sprout-pdp-v2.reels-section .reels-grid,
+  .sprout-pdp-v2.reviews-section .reviews-grid {
+    padding-left: 18px;
+    padding-right: 18px;
+    margin-left: -18px;
+    margin-right: -18px;
+    scroll-padding-left: 18px;
   }
 }
